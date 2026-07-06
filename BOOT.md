@@ -183,13 +183,18 @@ understood; a list of banned sources would not protect against the next stale on
   the anti-reconstruction-drift record. Standing cautions bind (dead branches,
   name collisions/glossary, provisional modulus, audit-trees-not-maps).
   Opened on Will's go; lean prereg (predictions + falsification gates) at
-  `campaigns/G12_sensor_set/PREREG.md`. **Stage 0 — RC-6 + RC-7 CLEAN; RC-8 open.**
-  RC-7 shape moment (`verification/recert_shape_moment.py`, byte-stable ×2 `d63a6549`;
-  [SR] I.6 quintuple 147/153/24/0/0 Σ=324 two routes; n≤4 threshold; K-3 silent).
-  RC-6 numerator tower (`verification/recert_numerator_tower.py`, byte-stable ×2
-  `3f147859`; PE.0 keystone −2/7,−6/7,1/3,4 retrodicted; self-fault blindness EXACT by
-  factor-through-Hc identity; scale-invariant via P(tg)=P(g); K-1/K-2 silent). RC-8
-  localization is the last Stage-0 gate.
+  `campaigns/G12_sensor_set/PREREG.md`. **Stage 0 CLOSED — RC-6/RC-7/RC-8 all CLEAN,
+  byte-stable ×2, K-1..K-6 silent:**
+  · RC-7 shape moment (`verification/recert_shape_moment.py` `d63a6549`; [SR] I.6
+    quintuple 147/153/24/0/0 Σ=324 two routes; n≤4 dimension threshold re-derived).
+  · RC-6 numerator tower (`verification/recert_numerator_tower.py` `3f147859`; PE.0
+    keystone −2/7,−6/7,1/3,4; self-fault blindness EXACT by factor-through-Hc identity;
+    scale-invariant via P(tg)=P(g); ν/W-prod −1/49 name-collision flagged).
+  · RC-8 localization (`verification/recert_localization.py` `f09444462`; support
+    theorem {S:dΔ_S/dt≠0}={S⊇e*} exact, moved-support family; ⊆ structural).
+  **NEXT: Stage A — A-010 `CHANNEL_ISOTROPIC` record + per-sensor two-route reference
+  values pinned + gate_04 vocab 7→8; then Stage B `src/cella/sensors.py`, Stage C
+  `tests/gate_12.py`.**
   Note for the session: `verification/` scripts carry the certified formulas
   (transport, normal form, F1/F3, role channels) — cite and re-use those, import
   nothing else.
