@@ -63,8 +63,14 @@ understood; a list of banned sources would not protect against the next stale on
   wedge cross-term `(w_ij/2)[H_jj/(g_j g'_j) − H_ii/(g_i g'_i)]` exact-total,
   radial/wedge decomposition [STRUCTURAL], diag-only contamination, gauge-at-
   defective-base = genuine damage, **attribution theorem: rho_M* = ΣE + G_e(Σa),
-  R-ledger pure**. **Next open task: Stage C — adversarial battery
-  (multiplicative-escape, quotient-carrier, defective-parameter interleavings).**
+  R-ledger pure**. **STAGE C CLOSED ALL-PASS** (prereg `003b91bd` frozen; 29/29 ×2
+  `3008bef7`; kills silent; one battery-construction defect caught pre-close and
+  fixed in ink — vacuous verdict row): asymmetry law (d stays R / e generates M),
+  NO multiplicative escape, quotient additive at fixed base + F1 crosses base
+  drift, owned holonomy at the mixed tier, false-alarm/miss pair caught.
+  **G0.2 CONJECTURE: DEMONSTRATED on the covered class. Next open task: implement
+  `residue.py` + `observation.py` from the settled design; certify at gates
+  G0.1–G0.4; update ADMISSIONS A-002 on completion.**
 - Remote: `github.com/Vilhelm82/Cella_Framework` (private), push with Will's
   session token — token is never stored in repo, config, or memory.
 
