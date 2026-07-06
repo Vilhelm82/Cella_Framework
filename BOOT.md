@@ -194,3 +194,13 @@ understood; a list of banned sources would not protect against the next stale on
 Bank results immediately, by object (the campaign dir or `verification/`); byte-stable
 ×2 on anything verdict-bearing; update this file's Current state block and the
 consuming ADMISSIONS record in the same breath; commit and push before session close.
+
+**Environment runbook (case law 2026-07-06, two false-mismatch scares in one boot):**
+(1) Pin convention is `python3 <script> | sha256sum` — the trailing newline is part
+of the hashed stream; hashing a command-substitution capture (`$(...)`) strips it and
+yields a DIFFERENT sha. A "mismatch" found that way is a harness artifact: recompute
+pipe-style before triaging. (2) `recert_normal_form.py` and `recert_role_channels.py`
+require sympy (declared in their docstrings); in a sandbox without it they emit an
+ImportError traceback that is itself byte-stable ×2 — byte-stability of a crash is
+not a certificate. Check exit codes from the actual pipeline stage, not from a
+wrapper, and install sympy to a persistent path if the environment resets per call.
