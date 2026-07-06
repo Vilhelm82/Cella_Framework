@@ -13,18 +13,42 @@ the next open task from the repo alone — never from memory or chat recall.**
    with its case law.
 5. The active campaign's BRIEF (currently `campaigns/G02_two_species_account/`).
 
-## Standing rulings (Will, 2026-07-06 — in force until displaced in ink)
+## Why prior work is never copied blindly (mechanisms, not rules)
 
-- **This repo is standalone.** Zero code import from any previous repository, ever.
-- **Cella supersedes the V4 program at every facet (or is planned to).** The old repo
-  (`Lloyd_Engine_V4`) is a *reference and R&D feeder only* — mathematics is cited and
-  then RE-PROVEN here (rule 3) before it bears load. R&D priorities it feeds:
-  codim≥2 systems, global completeness, deficit rows (see `LEVER_AUDIT.md`).
-- **THE WARP is stale** — superseded per c001's OUT ruling; its questions reverted to
-  OPEN and are inherited fresh by the G0.2 campaign. **Do not read or cite it.**
+None of the following is a ban resting on authority — each names the mechanism that
+makes blind copying a live risk. The protection holds only while the mechanism is
+understood; a list of banned sources would not protect against the next stale one.
+
+- **Truth in the old program is non-local.** A document there can be internally
+  perfect — ratified, pinned, byte-stable — and globally false, because supersession
+  lives in *other* files (OUT clauses, correction registries, later rulings). No
+  artifact carries its own currency. Therefore a prior artifact has **zero evidentiary
+  weight on its face**; its value is exhausted by (a) the questions it names and
+  (b) pinned claims to retrodict under rule 3. Case law: the WARP close read as
+  flawless and had been flagged for re-ask, nine days later, in a different campaign's
+  ledger.
+- **Copying imports frames, not just facts.** Origin artifacts encode origin
+  constraints: trust machinery this build rejected (status currency, sign-off chains),
+  patches for substrate problems that no longer exist, fossilized errors whose
+  corrections live elsewhere (the OG ratio law circulated long after it was
+  falsifiable). Anchoring is the subtle half: an answer absorbed as an answer displaces
+  the derivation that would have caught it if wrong — even a *correct* copy costs the
+  check.
+- **`Lloyd_Engine_V4`: not wrong — entangled.** Its gradings are denominated in a
+  trust currency (ratification) this repo does not honor; the mathematics survives as
+  mathematics, re-provable from scratch. Read it for **what to test**, never for
+  **what is true**. It feeds R&D questions: codim≥2 systems, global completeness,
+  deficit rows (`LEVER_AUDIT.md`).
+- **THE WARP: disputed at origin.** Its central claims were flagged by its own program
+  for re-ask (c001 OUT clause) and the re-ask never ran; its open questions are already
+  inherited by `campaigns/G02_two_species_account/`. Nothing remains to extract —
+  reading it is pure anchoring risk on a disputed answer.
+- **The generalization (the load-bearing line):** the test is never "is this source on
+  a list" — it is "has this claim been re-proven here." Any source whose truth is
+  non-local and whose grading rides rejected currency has these properties — including
+  this repo's own older documents, which is why rule 3 applies to our history too.
 - **No sign-off queues.** Nothing waits on Will; cases close by dominance argument
-  (ADMISSIONS) or by re-run (verification/). Anything claiming "ratified/accepted"
-  status — including in this repo's own history — is a claim to re-verify, not a fact.
+  (ADMISSIONS) or by re-run (verification/).
 
 ## Current state (update this block in-session, every session)
 
