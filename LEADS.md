@@ -3,6 +3,12 @@
 **Origin:** differenced 2026-07-06 from the forward-looking document *Exact Role-Channel
 Geometry* (2026-06-26) against everything now standing (the 2026-06-28 papers, the
 in-repo certificate bank RC-1..RC-4, Layer 0, and the old program's dashboard).
+**Updated 2026-07-06 (same day, later session):** after review of the two R&D briefs
+in `Reference_Material/` — LEAD-1 gains four staked conjecture candidates, LEAD-7
+added (n=3 complementarity lift), paper track fenced at the bottom. Read
+`Reference_Material/README.md` (the currency banner + a caught labeling error)
+before citing anything from that folder. Queue order unchanged: nothing opens
+before G1.0.
 **Discipline:** leads are questions, not claims. When work starts on one, it gets a
 campaign brief with frozen prereg; any prior formula it leans on passes the
 re-verification rule first; any artifact it introduces passes admission. Ranked by
@@ -24,6 +30,16 @@ mixed-bidegree region; "minimal coupling degree p to reach depth r" is open.
 two-variable Vandermonde extraction (the RC-1 harness pattern generalizes directly);
 sweep for recurrences across (p,q), forced vanishings, and the signature of the
 channel quadratic form (the n=3 Lorentzian (2,1) as the base case).
+**Staked conjecture candidates (folded 2026-07-06 from the R&D briefs):** the prereg
+should stake at least one as a killable claim before the sweep widens —
+(C1) Pascal-type coefficient recurrence across (p,q); (C2) signature law generalizing
+the n=3 Lorentzian (2,1) coupling form; (C3) Specht-depth threshold — which mixed
+bidegrees see which representation depth; (C4) forced vanishing for low p below a
+depth threshold.
+**Calibration discipline:** the "mapped edges" (depth-theorem column, r=2 row, parity
+boundary) carry old-program `[CONTAINER]` substrate — no surviving artifacts. The edge
+instances used (n=4,5; r=2,3) are re-derived as calibration rows inside the same
+battery, never cited.
 **Note:** natural first Cella discovery-loop campaign after Layer 1 opens.
 
 ## LEAD-2 — Role singularities (the stratum classification theorem)
@@ -87,6 +103,50 @@ operation-DAG (a gate), or only discoverable by attempting it (an experiment)?
 **Discriminating test:** define the predicate fresh over Layer-0 observation-map
 chains; prove the biconditional on the rational-op class with an independent referee;
 locate the wall (transcendental boundary) honestly.
+
+## LEAD-7 — The n=3 DBP metric and complementarity lift (h_3)
+
+**Status:** OPEN — added 2026-07-06 from the updated R&D brief (`Reference_Material/`);
+the GTD/DBP paper's own named open problem, and the continuation of the LEVER Tier-2
+GTD row (the physics-novelty channel).
+**The question:** at n=2 the DBP metric `g_DBP = -h^(-1)`, `h = Σ_i κ_{c,i} dE_i ⊗ dE_i`
+is established with the complementarity law (GTD-II: order-2 poles on transition loci;
+DBP: order-3 poles on generic role boundaries, order-4 where reflection-fixed). At n=3
+each output chart carries several off-diagonal couplings, so h must be generalized.
+Does a canonical h_3 exist?
+**Canonicity constraints (all six bind):** (1) exact reduction to the n=2 construction;
+(2) S3-symmetry on the three roles; (3) factors through the carrier O, never raw H;
+(4) controlled sign/definiteness on the physical Kerr-Newman wedge; (5) degenerates or
+blows up exactly on the role-boundary divisors T=0, Ω=0, Φ_e=0; (6) testable against
+the Kerr-Newman Davies surface D3.
+**Prerequisite (binding, before any Stage A):** RC-5 — the n=2 spine re-verified
+in-repo (channel-inverse metric; pole-order law 2/3/4; complementarity across
+Kerr/RN/vdW). None of it currently carries an in-repo certificate; the origin is the
+GTD paper only. The RN/vdW symbolic-coefficient work (paper track, below) folds into
+this prerequisite naturally.
+**Exit ramp (stated now, not improvised later):** if no candidate survives the six
+constraints, the deliverable is the obstruction theorem — nonexistence of a canonical
+S3-equivariant lift is a result, not a failure.
+**Discriminating test:** enumerate S3-equivariant bilinear forms on O; screen by
+constraints (1)–(5); survivors go to the exact Kerr-Newman battery and the D3
+complementarity test, pole orders and leading coefficients recorded.
+
+---
+
+## Paper track (fenced — not engine R&D; must not set queue priorities)
+
+Two write-up candidates identified 2026-07-06. Both are graded in old-program currency;
+anything load-bearing is re-derived before publication (for both, the origin substrate
+is `[CONTAINER]` — ephemeral scripts never persisted, so re-verification means
+re-derivation, not re-run):
+
+- **Arithmetic note** — total DBP curvature as a non-CM elliptic period (j = 128; the
+  j(s) landscape; CM ladder; the aliasing triple resolved by branch configuration).
+- **RN/vdW symbolic coefficients** — close the leading Laurent coefficients at the RN
+  and van der Waals boundaries beside the Kerr closed forms; hardens the n=2
+  complementarity law and feeds LEAD-7's RC-5 prerequisite.
+
+Disposition per LEVER Tier 3 stands: credibility by publication, not by product.
 
 ---
 

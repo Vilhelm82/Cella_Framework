@@ -109,11 +109,23 @@ understood; a list of banned sources would not protect against the next stale on
   A-007's discipline: exact reference values + blindness statement per sensor.
   Note for the session: `verification/` scripts carry the certified formulas
   (transport, normal form, F1/F3) — cite and re-use those, import nothing else.
-- **Discovery queue: `LEADS.md`** (differenced 2026-07-06 from the *Exact
-  Role-Channel Geometry* forward document) — six ranked leads; LEAD-1 (the
-  κ_{r;p,q} grid) is the flagged originality candidate and the natural first
-  discovery-loop campaign after Layer 1. Coverage report for the originating
-  session: `reports/REVIEW_Exact_Role_Channel_Geometry.md`.
+- **Discovery queue: `LEADS.md`** — seven ranked leads (updated 2026-07-06, second
+  session, after review of the two R&D briefs in `Reference_Material/`): LEAD-1
+  (κ_{r;p,q} grid) now carries four staked conjecture candidates C1–C4 plus a
+  calibration rule (re-derive the [CONTAINER]-substrate edges in-battery, never cite);
+  **LEAD-7 added** — the n=3 DBP metric/complementarity lift, six canonicity
+  constraints, RC-5 prerequisite (n=2 GTD spine re-verified in-repo), obstruction-
+  theorem exit ramp; paper track fenced at the bottom of LEADS (arithmetic note,
+  RN/vdW coefficients — must not set queue priorities). `Reference_Material/README.md`
+  is the currency banner: contents untracked by design, [CONTAINER] items (depth
+  theorem, dimension threshold, arithmetic, two-state witness) have NO surviving
+  artifacts — re-derivation, not re-run — and it records the doc-1 keystone-triple
+  labeling error caught against RC-1 (the certified triple is (−1/49, −3/49, +1/49);
+  self carries the total, not interaction). Queue order unchanged: nothing opens
+  before G1.0. Session verification sweep 2026-07-06 (second session): full gate
+  suite + RC-1..RC-4 re-run from scratch, all exit 0, byte-stable ×2, all shas
+  matching pins. Coverage report for the originating session:
+  `reports/REVIEW_Exact_Role_Channel_Geometry.md`.
 - Remote: `github.com/Vilhelm82/Cella_Framework` (private), push with Will's
   session token — token is never stored in repo, config, or memory.
 
