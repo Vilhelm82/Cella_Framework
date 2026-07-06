@@ -109,6 +109,11 @@ understood; a list of banned sources would not protect against the next stale on
   A-007's discipline: exact reference values + blindness statement per sensor.
   Note for the session: `verification/` scripts carry the certified formulas
   (transport, normal form, F1/F3) — cite and re-use those, import nothing else.
+- **Discovery queue: `LEADS.md`** (differenced 2026-07-06 from the *Exact
+  Role-Channel Geometry* forward document) — six ranked leads; LEAD-1 (the
+  κ_{r;p,q} grid) is the flagged originality candidate and the natural first
+  discovery-loop campaign after Layer 1. Coverage report for the originating
+  session: `reports/REVIEW_Exact_Role_Channel_Geometry.md`.
 - Remote: `github.com/Vilhelm82/Cella_Framework` (private), push with Will's
   session token — token is never stored in repo, config, or memory.
 
