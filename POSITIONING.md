@@ -5,6 +5,42 @@ reference only, per the admission rule. **Discipline: every category claim below
 sits at a boundary carries a prior-art obligation. Prior art is an oracle, not a gate —
 but no claim ships publicly before its sweep.**
 
+## Motivation — the rest of the room (Will, 2026-07-06)
+
+Picture an area of mathematics as a dark room. Someone walks in, finds a result —
+Goldman 2005, say — and the result is valid and sound. They walk out and close the
+door: *nothing left to find in here.* Cella targets the rest of the room.
+
+Stated rigorously, the rest of the room exists for a reason, not a hope: **classical
+results are complete relative to the question that was asked, and the question carries
+a symmetry group.** Goldman completely answers "what is the curvature of an implicit
+surface?" — a question posed up to the full rotation group, under which any
+decomposition of the total is gauge noise, correctly discarded. The room *is* empty
+under that equivalence. It stops being empty when you enter carrying structure the
+classical question deliberately quotients away — a role frame, a channel identity, an
+account — because under the finer equivalence that structure justifies, previously
+identical things become distinguishable. **The dark half of the room is what a finer
+equivalence can see; applications routinely carry finer structure than the theorems
+that serve them.** Every strong result in this program's corpus has that shape: the
+three channels behind Goldman's scalar; the shape moment behind the σ-spectrum; the
+GTD complementarity law; the parity law behind a normalization nobody looked at twice.
+The classical object is a quotient; the dark half is the fiber.
+
+The discipline that keeps this from being a boast: **most rooms, re-entered, turn out
+to have been fully mapped** — the base rate of genuinely dark rooms is low. This
+program has case law on both sides: a structure-law claim correctly retreated to
+KNOWN-adjacent when the sweep hit the minimum-rank literature (the room was mapped),
+and the three-channel decomposition itself (the room had more). Same method, opposite
+verdicts, both certified — which is exactly what makes the positive verdicts credible.
+The engine's edge is not optimism about the base rate; it is that the deficit audit
+makes re-entry *cheap and honest*, so many rooms can be checked and only the ones with
+a derived, witnessed, completed deficit get claimed.
+
+And the door gets closed on one's own behalf too, not just the field's: this program
+lived inside Goldman's ceiling for entire campaigns (BOOT.md, the Goldman seam). The
+engine can target the rest of the room for mathematics at large because it was forged
+catching that exact failure in its own house.
+
 ## The three structural weaknesses of incumbent tools
 
 Existing FDD stacks (single-channel thresholds, PCA/T²/SPE, DPCA, ICA, one-class SVM,
