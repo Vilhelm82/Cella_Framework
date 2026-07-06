@@ -124,6 +124,13 @@ in-repo (channel-inverse metric; pole-order law 2/3/4; complementarity across
 Kerr/RN/vdW). None of it currently carries an in-repo certificate; the origin is the
 GTD paper only. The RN/vdW symbolic-coefficient work (paper track, below) folds into
 this prerequisite naturally.
+**PRICED 2026-07-06 (`reports/RC5_SCOPING.md`):** no tower obstruction — π absorbs
+by frame rescale, the radical closes (fixture demonstrated exact-ℚ end-to-end
+through K[g^DBP] at (σ,J)=(8,6)); frame subtlety recorded (structure tier in ℚ vs
+retrodiction tier in ℚ(π)); route: truncated Taylor jets over ℚ incl. boundary
+Laurent orders; est. 1–2 sessions. Two origin flags RC-5 must not cite: paper
+eq. (28) [pending verification run], Mahanta m_sg=0 reading [confirm vs. source].
+LEAD-7 is now tractability-competitive with LEAD-1; the choice is novelty-axis only.
 **Exit ramp (stated now, not improvised later):** if no candidate survives the six
 constraints, the deliverable is the obstruction theorem — nonexistence of a canonical
 S3-equivariant lift is a result, not a failure.

@@ -124,14 +124,23 @@ understood; a list of banned sources would not protect against the next stale on
   the even sector — LEAD-4's discrimination is now battery-armed machinery.
   Retrodictions banked: gate_03 σ₁² = 72/343 (sign now fixed −6/49·√14);
   RC-1 saddle K_G = −1/9 cross-route.
+- **RC-5 SCOPING SPIKE DONE (2026-07-06, `reports/RC5_SCOPING.md`).** Verdict:
+  NO tower obstruction — π absorbs by frame rescale (S = 2πσ ⟹ Christodoulou
+  polynomial), and the full n=2 DBP pipeline (4-jet → channels → A_c → g^DBP →
+  Gaussian curvature) closed exact-ℚ end-to-end at the rational Kerr fixture
+  (σ,J) = (8,6), M = 5/2; general rational fixtures close in ℚ(√d), d = M², one
+  radical. Frame subtlety banked: rescaled-frame numbers are a different gauge —
+  the paper's pinned coefficients retrodict in ℚ(π), not by rescale. Ten-claim
+  RC-5 obligation table enumerated with origin tiers; two origin items flagged
+  DO-NOT-CITE (paper eq. 28 pending-at-origin; Mahanta m_sg=0 reading
+  unconfirmed). Route: truncated Taylor jets over ℚ (the spike's method) incl.
+  boundary Laurent orders; est. 1–2 sessions. **LEAD-7 now
+  tractability-competitive with LEAD-1 — the discovery-queue choice after
+  Layer 1 is novelty-axis only, Will's call.**
 - **NEXT OPEN TASK: G1.2 — the sensor set** (numerator tower, shape moment,
   localization channels, each admitted per A-007 with blindness statement +
   exact reference values; `CHANNEL_ISOTROPIC` enters by record at its first
-  use there, per A-008/A-009). **Approved side task (Will, 2026-07-06): the
-  RC-5 scoping spike** — bounded: enumerate the exact n=2 GTD/DBP claims LEAD-7
-  leans on and test tower computability (ℚ ∪ ℚ(√q), one radical per context)
-  on one exact Kerr fixture; outcome prices LEAD-7 vs LEAD-1. Tower failure =
-  A-003 displacement finding — bank it, never stretch the tower silently.
+  use there, per A-008/A-009).
   Note for the session: `verification/` scripts carry the certified formulas
   (transport, normal form, F1/F3, role channels) — cite and re-use those, import
   nothing else.
