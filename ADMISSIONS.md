@@ -298,6 +298,55 @@ declared PREREG P9 — its stdout pin `3775a7fb` proved invariant under the fix,
 the tripwire fired as designed (pre-edit assertion fails under the grown vocabulary).
 **Status: ESTABLISHED — implemented and certified.**
 
+## A-010 — Refusal token for the fingerprint rank-drop stratum: `CHANNEL_ISOTROPIC`
+
+**Origin:** admission A-008 names `CHANNEL_ISOTROPIC` (`Λ_ρ = 0`: fingerprint rank drop)
+for admission at its first engine use; RC-4 (`verification/recert_role_channels.py`,
+`3d7ed1bf`) certifies its mathematical content — faithfulness determinant
+`det = 8·Λ_P·Λ_D·Λ_S / q0⁶` and both degeneration strata witnessed. First engine use is
+the **G1.2 fingerprint sensor**, not G1.0's carrier (A-009 deliberately deferred it).
+Reference only, never a dependency.
+**Need:** the fingerprint sensor factors through the role-channel map whose faithfulness
+is `det = 8·Λ_P·Λ_D·Λ_S / q0⁶`. Where a role-channel anisotropy `Λ_ρ` vanishes the map
+drops rank: distinct states become fingerprint-indistinguishable. The sensor may neither
+return a value there (it would certify a separation it cannot make — the false-collision
+failure the faithfulness certificate exists to prevent) nor crash. It is a diagnostic
+finding: *the fingerprint cannot separate here, and here is which channel went isotropic.*
+**Criterion:** A-004's — no silent garbage, no crash, every refusal classifiable and
+renderable, the stratum carries its diagnostic content. Sharpened by the named downstream
+consumer (the LEAD-2 valuation campaign's Stage-E stratum atlas,
+`reports/LEAD2_Role_Singularity_Valuation_Brief.md`): the refusal must be
+**content-bearing** — it names *which* `Λ_ρ` vanished (P, D, or S) and carries the
+rank-drop witness (the collapsed direction), never a bare flag.
+**Alternatives and why each loses:**
+- *Reuse `ROLE_CHART_UNAVAILABLE`* — wrong typing: that token is the `a=0`/`b=0`
+  role-singular stratum (a reading-direction chart does not exist); `CHANNEL_ISOTROPIC`
+  is `Λ_ρ=0` on a perfectly good chart where the *fingerprint* loses faithfulness. RC-4
+  witnesses the two loci separately; conflating them discards which failure occurred.
+- *Return the rank-deficient value anyway* — certifies separation that does not exist;
+  the exact false-negative-on-collision A-008's faithfulness certificate guards against.
+- *Generic `INDETERMINATE` / bare flag* — discards which channel went isotropic and the
+  rank-drop witness, the content the LEAD-2 atlas consumes; a bare flag makes the stratum
+  atlas unbuildable.
+- *Exceptions / `None`* — banned by the engine's definition (A-004).
+**Plain rendering (closed-vocabulary discipline, no raw token in any plain register):**
+`CHANNEL_ISOTROPIC` → "one of the role channels is isotropic here (its anisotropy Λ went
+to zero), so the fingerprint cannot tell these states apart; the affected channel and the
+collapsed direction are named."
+**Displacement:** a certified refinement of the `Λ_ρ=0` stratum into typed sub-strata
+(which states collide; or a higher-order fingerprint that separates part of the current
+locus) with distinct diagnostic content.
+**Obligations:** G1.2 Stage B/C — the token wired at the fingerprint sensor with **both
+strata witnessed** (`Λ_ρ=0` rank drop AND the `a=0`/`b=0` `ROLE_CHART_UNAVAILABLE` chart
+failure); the refusal names the vanished channel + rank-drop witness through cells and
+certificates; the closed vocabulary grows **7 → 8** (`gate_04` count assertion updated in
+the same commit, stdout pin `3775a7fb` expected invariant — the count lives in the
+assertion, P9 precedent); refusal precedence pinned against the existing strata. Certified
+at `tests/gate_12.py`, byte-stable ×2.
+**Status: ESTABLISHED (admission case closed; mathematical content certified in-repo by
+RC-4 — faithfulness det + both strata witnessed). Engine wiring + vocabulary growth 7→8
+are the open obligation, gated at G1.2 Stage B/C.**
+
 ---
 
 *Ledger discipline: append-only; displaced records stay visible with successors named.
