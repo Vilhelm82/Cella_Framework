@@ -100,16 +100,28 @@ understood; a list of banned sources would not protect against the next stale on
   A-004 discipline). LEVER_AUDIT fingerprint witness re-based + monodromy row
   re-scored (gcd law; same-S₃ PROVEN independent); POSITIONING GTD row → instance
   complete. Layer-1 sessions: RC-4 joins RC-2/RC-3 as citable certified formulas.
-- **NEXT OPEN TASK (fresh session, Will's instruction): open LAYER 1 — G1.0, jets
-  and the carrier.** Build on Layer 0 cells/certificates only. Binding constraints
-  from the DESIGN FREEZE: constraint inputs typed as BLOCKS (codim-1 refuses
-  len > 1 with `CODIM_UNSUPPORTED` — token to be admitted by record first);
-  carrier O extracted from H directly (general-n formula, certified RC-2);
-  channel recovery is an n=3 cross-check only; generic-n linear algebra
-  throughout; certificates state their tier. Geometry enters via admission
-  A-007's discipline: exact reference values + blindness statement per sensor.
+- **LAYER 1 OPEN — G1.0 CLOSED ALL-PASS (2026-07-06, second session).**
+  `tests/gate_10.py` 42/42 ×2 (`4af1adca`) against frozen prereg `45947aa47e22f736`
+  (committed pre-implementation); campaign record `campaigns/G10_jets_carrier/`.
+  Delivered: `src/cella/jet.py` (Jet2 + ConstraintBlock, generic n, exact tower),
+  `src/cella/carrier.py` (carrier O from H directly per RC-2; gauge-normal form
+  with Im(G_g) preimage witness; labeled n=3 channel cross-check, n=3-fenced;
+  TIER string on certificates), A-009 tokens live (`CODIM_UNSUPPORTED`,
+  `ROLE_CHART_UNAVAILABLE`; vocabulary now 7; gate_04 assertion updated per
+  PREREG P9, stdout pin `3775a7fb` unchanged). Purity wired: R-epochs leave O
+  fixed, M-defects move it, M-correction recovers truth's O. Mutants bite,
+  kills silent. A-008 G1.0 obligation and all A-009 obligations DISCHARGED.
+- **NEXT OPEN TASK: G1.1 — the invariant tower** (σ tower + channel accounts on
+  the analytical surface corpus, exact where the parity law says exact), under
+  the same freeze rules. **Approved side task (Will, 2026-07-06): the RC-5
+  scoping spike** — bounded, half a session: enumerate the exact n=2 GTD/DBP
+  claims LEAD-7 leans on and test tower computability (ℚ ∪ ℚ(√q), one radical
+  per context) on one exact Kerr fixture; outcome prices LEAD-7 vs LEAD-1 for
+  the first discovery campaign after Layer 1. If the tower fails to hold, that
+  is an A-003 displacement finding — bank it, do not stretch the tower silently.
   Note for the session: `verification/` scripts carry the certified formulas
-  (transport, normal form, F1/F3) — cite and re-use those, import nothing else.
+  (transport, normal form, F1/F3, role channels) — cite and re-use those, import
+  nothing else.
 - **Discovery queue: `LEADS.md`** — seven ranked leads (updated 2026-07-06, second
   session, after review of the two R&D briefs in `Reference_Material/`): LEAD-1
   (κ_{r;p,q} grid) now carries four staked conjecture candidates C1–C4 plus a

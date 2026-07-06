@@ -31,9 +31,11 @@ def check(name, ok):
 
 # 1 — the closed vocabulary renders plainly, and only admitted tokens exist
 renders = [Refusal(t, "test stratum").plain() for t in VOCABULARY]
+# Vocabulary count: 5 at G0.4 close; 7 since A-009 (G1.0 — CODIM_UNSUPPORTED,
+# ROLE_CHART_UNAVAILABLE). Update declared in advance: G1.0 PREREG P9.
 check("G0.4 every token renders plain language (no raw token, no underscores)",
       all(t not in txt and "_" not in txt for t, txt in zip(VOCABULARY, renders))
-      and len(renders) == len(PLAIN) == 5)
+      and len(renders) == len(PLAIN) == 7)
 try:
     Refusal("MADE_UP_TOKEN", "x")
     closed = False

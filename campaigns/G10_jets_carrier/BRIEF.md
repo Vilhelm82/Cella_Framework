@@ -1,7 +1,9 @@
 # G1.0 CAMPAIGN — jets and the carrier (Layer 1 opens)
 
-**Status:** OPEN · drafted 2026-07-06 · governed by the three standing rules and the
-DESIGN FREEZE (ROADMAP). This is an engine gate with a certification battery, not a
+**Status:** CLOSED ALL-PASS 2026-07-06 · `tests/gate_10.py` 42/42 ×2 (`4af1adca`)
+against PREREG `45947aa47e22f736`; kills silent; mutants bite; Layer-0 suite green ×2
+after the declared gate_04 assertion update (stdout pin unchanged) ·
+governed by the three standing rules and the DESIGN FREEZE (ROADMAP). This is an engine gate with a certification battery, not a
 discovery campaign: the mathematics is already certified in-repo (RC-1/RC-2/RC-4);
 what is certified here is the implementation and its refusal boundaries.
 

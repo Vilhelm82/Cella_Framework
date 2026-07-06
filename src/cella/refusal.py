@@ -21,6 +21,9 @@ VOCABULARY = (
     "BELOW_DETECTION",
     "UNRECOVERABLE",
     "INDETERMINATE",
+    # A-009 (G1.0, Layer 1 entry):
+    "CODIM_UNSUPPORTED",
+    "ROLE_CHART_UNAVAILABLE",
 )
 
 PLAIN = {
@@ -29,6 +32,11 @@ PLAIN = {
     "BELOW_DETECTION": "any real signal here is smaller than what was discarded",
     "UNRECOVERABLE": "the true object is not reconstructible from this observation",
     "INDETERMINATE": "the inputs do not determine this quantity at all",
+    "CODIM_UNSUPPORTED": "this computation covers a single constraint; a system "
+                         "of constraints was given and is not yet supported",
+    "ROLE_CHART_UNAVAILABLE": "the surface cannot be solved for one of its "
+                              "variables here, so that reading direction does "
+                              "not exist",
 }
 
 

@@ -35,6 +35,17 @@ uncertified can exist above this layer.
 
 - **G1.0 — jets and the carrier.** Gauge-normal form as canonical representation;
   carrier extraction certified against hand-pinned exact references.
+  *CLOSED 2026-07-06 — `tests/gate_10.py` 42/42 ×2 (`4af1adca`) against the frozen
+  prereg (`campaigns/G10_jets_carrier/PREREG.md`, `45947aa47e22f736`, frozen and
+  committed before any implementation code): 19 hand-derived O pins at n=3,4,5;
+  gauge-invariance sweep through the API; normal form canonical with exact Im(G_g)
+  preimage witness; A-009 tokens first-class through cells and certificates with
+  refusal precedence pinned; purity wiring against the two-species account (U1–U3);
+  labeled n=3 channel cross-check, n=3-fenced by contract; three mutants bite
+  (Goldman-flatten with total preserved, dropped gauge-killing term, label swap).
+  Kill conditions K-1..K-3 armed, none fired. gate_04 vocabulary assertion 5 → 7
+  per PREREG P9; its stdout pin `3775a7fb` unchanged (count lives in the assertion,
+  not the output) — full Layer-0 suite green ×2 post-change.*
 - **G1.1 — the invariant tower.** σ tower + channel accounts on the analytical surface
   corpus (sphere, cylinder, saddle, torus, monkey saddle…), exact where the parity law
   says exact.

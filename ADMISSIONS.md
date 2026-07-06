@@ -247,8 +247,11 @@ relations, A_c three equivalent forms + telescoping, faithfulness determinant
 `8·Λ_P·Λ_D·Λ_S / q0^6`, exact-ℚ closure (t-denominators are pure a-powers), keystone
 pins (A_c = 42793/1555848; K_G = −3/49 cross-route against recert_transport_law),
 orbit action realized on the channels (t: P↔D, s: D↔S), and both degeneration strata
-witnessed. Remaining at gates: G1.0 — wire as the n=3 cross-check of the general-n
-carrier path; G1.2 — sensor entry with blindness statement. **Token naming (A-004
+witnessed. Remaining at gates: G1.0 — DISCHARGED 2026-07-06
+(`src/cella/carrier.py::channels_n3_crosscheck`, n=3-fenced, labeled per the
+label-convention case law; certified `tests/gate_10.py` P4, keystone triple
+retrodicted against RC-1/RC-4); G1.2 — sensor entry with blindness statement, still
+gated. **Token naming (A-004
 discipline):** this record names `ROLE_CHART_UNAVAILABLE` (role-singular stratum:
 a = 0 or b = 0) and `CHANNEL_ISOTROPIC` (Λ_ρ = 0: fingerprint rank drop) for admission
 to the closed vocabulary at their first engine use; RC-4 certifies their mathematical
@@ -287,10 +290,13 @@ first engine use is the G1.2 fingerprint sensor, not G1.0's carrier; it enters b
 own record then.
 **Displacement:** a certified refinement of either stratum into typed sub-strata with
 distinct diagnostic content.
-**Obligations:** G1.0 — both tokens exercised through cells and certificates in
-`tests/gate_10.py`; `tests/gate_04.py` vocabulary count updated 5 → 7 and re-pinned
-(declared in the G1.0 prereg before the battery runs).
-**Status: ESTABLISHED.**
+**Obligations: DISCHARGED 2026-07-06** — both tokens exercised through cells and
+certificates (`tests/gate_10.py` P5/P7, 42/42 ×2 `4af1adca`); refusal precedence
+pinned (block shape before gradient strata; all-zero gradient stays
+`SINGULAR_GRADIENT`); `tests/gate_04.py` count assertion updated 5 → 7 per the
+declared PREREG P9 — its stdout pin `3775a7fb` proved invariant under the fix, and
+the tripwire fired as designed (pre-edit assertion fails under the grown vocabulary).
+**Status: ESTABLISHED — implemented and certified.**
 
 ---
 
