@@ -87,6 +87,33 @@ Also recovered from the same July-2 sweep's destination:
 orbit_probe, theorem_8_1_role_jet_probe}.py` — runnable origin probes that
 never made it into this folder's original doc copies.
 
+### Full-tree loss audit (2026-07-06, final tally)
+
+Method: pycache-orphan sweep (67 orphans) classified against git history
+(incl. `--all` and 6 dangling commits), tree duplicates, and `_attic` zip
+indexes. Basename-level matching — a "recoverable" copy is not guaranteed
+byte-identical to what was deleted.
+
+- **Committed git history: fully intact.** Nothing was ever lost FROM git.
+  Six dangling commits exist (five c001-era WIP stashes of June 23, one
+  pre-sync backup of 2026-07-02 21:28 that captured tracked files only).
+- **58 of 67 orphans recoverable** (tracked deletions, duplicate dirs, or
+  `_attic` zips).
+- **9 files TRULY LOST from the untracked layer** — all with surviving
+  bytecode (that is how they were detected): the constant_hunt trio + its two
+  tests, and four task003/task009a projection-protocol tests. Content-level
+  recovery of the constant_hunt trio is above; full decompile-grade
+  reconstruction is possible from the `.pyc` copies banked in
+  `old_program_sources/constant_hunt_bytecode/`.
+- **Invisible-loss floor:** this method only sees Python that was once
+  imported. Known additional losses with NO trace: the `dbp_four_role_calc_log`
+  diary (only its drift ledger survives in `_audit/`). The [CONTAINER]-tier
+  scripts (f1_*, trap_*, ladder, h2_walls, mono_galois) were never on this
+  machine at all — ephemeral-container casualties, not repo losses.
+- **Standing fix (Will's rule, generalized):** V4 is a frozen reference repo —
+  one `git add -A` preservation commit there would make the entire surviving
+  untracked layer permanent and end this loss class outright.
+
 ## Label-convention case law (2026-07-06 — RETRACTION of the "Known error" section
 ## that briefly stood here, commit 2ed5142)
 
