@@ -1,7 +1,8 @@
 # G1.1 CAMPAIGN — the invariant tower
 
-**Status:** OPEN · drafted 2026-07-06 · engine gate under the three standing rules +
-DESIGN FREEZE. Mathematics inputs: RC-1 (channels, cross-route), RC-2 (normal form /
+**Status:** CLOSED ALL-PASS 2026-07-06 · `tests/gate_11.py` 32/32 ×2 (`0eec790b`)
+against PREREG `b736cfb9d88e6957`; kills silent; mutants bite; full suite green ×2 ·
+engine gate under the three standing rules + DESIGN FREEZE. Mathematics inputs: RC-1 (channels, cross-route), RC-2 (normal form /
 projection identities), gate_03 (QSqrt + the parity retrodiction), A-003 (the parity
 law as tower optimality). The parity law itself enters here OPERATIONALLY (type-level
 enforcement); its full analytic derivation in-repo remains an obligation noted at

@@ -111,14 +111,27 @@ understood; a list of banned sources would not protect against the next stale on
   PREREG P9, stdout pin `3775a7fb` unchanged). Purity wired: R-epochs leave O
   fixed, M-defects move it, M-correction recovers truth's O. Mutants bite,
   kills silent. A-008 G1.0 obligation and all A-009 obligations DISCHARGED.
-- **NEXT OPEN TASK: G1.1 — the invariant tower** (σ tower + channel accounts on
-  the analytical surface corpus, exact where the parity law says exact), under
-  the same freeze rules. **Approved side task (Will, 2026-07-06): the RC-5
-  scoping spike** — bounded, half a session: enumerate the exact n=2 GTD/DBP
-  claims LEAD-7 leans on and test tower computability (ℚ ∪ ℚ(√q), one radical
-  per context) on one exact Kerr fixture; outcome prices LEAD-7 vs LEAD-1 for
-  the first discovery campaign after Layer 1. If the tower fails to hold, that
-  is an A-003 displacement finding — bank it, do not stretch the tower silently.
+- **G1.1 CLOSED ALL-PASS (2026-07-06, second session).** `tests/gate_11.py`
+  32/32 ×2 (`0eec790b`) vs frozen prereg `b736cfb9d88e6957`
+  (`campaigns/G11_invariant_tower/`). Delivered: `src/cella/tower.py` — σ tower
+  generic-n (sign convention pinned: S = −(1/√q)·PHP), parity law enforced at
+  the TYPE level (even ℚ / odd QSqrt at radicand q / rational only by square-q
+  or zero), σ₂ cross-routed to the labeled channel sum on all eligible n=3
+  corpus rows, gauge invariance identical (P kills the gauge image — mechanism,
+  not sweep luck), chart/regularity asymmetry pinned (cylinder: tower computes,
+  carrier refuses `ROLE_CHART_UNAVAILABLE`), purity U1–U3 wired. **The odd
+  sector is live in the engine**; the sign-flip mutant is provably invisible to
+  the even sector — LEAD-4's discrimination is now battery-armed machinery.
+  Retrodictions banked: gate_03 σ₁² = 72/343 (sign now fixed −6/49·√14);
+  RC-1 saddle K_G = −1/9 cross-route.
+- **NEXT OPEN TASK: G1.2 — the sensor set** (numerator tower, shape moment,
+  localization channels, each admitted per A-007 with blindness statement +
+  exact reference values; `CHANNEL_ISOTROPIC` enters by record at its first
+  use there, per A-008/A-009). **Approved side task (Will, 2026-07-06): the
+  RC-5 scoping spike** — bounded: enumerate the exact n=2 GTD/DBP claims LEAD-7
+  leans on and test tower computability (ℚ ∪ ℚ(√q), one radical per context)
+  on one exact Kerr fixture; outcome prices LEAD-7 vs LEAD-1. Tower failure =
+  A-003 displacement finding — bank it, never stretch the tower silently.
   Note for the session: `verification/` scripts carry the certified formulas
   (transport, normal form, F1/F3, role channels) — cite and re-use those, import
   nothing else.

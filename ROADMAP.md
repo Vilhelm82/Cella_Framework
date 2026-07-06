@@ -49,6 +49,18 @@ uncertified can exist above this layer.
 - **G1.1 — the invariant tower.** σ tower + channel accounts on the analytical surface
   corpus (sphere, cylinder, saddle, torus, monkey saddle…), exact where the parity law
   says exact.
+  *CLOSED 2026-07-06 — `tests/gate_11.py` 32/32 ×2 (`0eec790b`) against frozen prereg
+  (`campaigns/G11_invariant_tower/PREREG.md`, `b736cfb9d88e6957`, committed
+  pre-implementation): 7-surface corpus (keystone, sphere, cylinder, saddle,
+  ellipsoid, monkey saddle, n=4 sphere) with pins derived by two independent exact
+  routes + retrodictions of gate_03's σ₁² = 72/343 and RC-1's saddle K_G = −1/9;
+  parity law enforced at the TYPE level (even ℚ, odd QSqrt at radicand q, rational
+  only by square-q/zero theorem); σ₂ cross-routed to the labeled channel sum on
+  every eligible n=3 row; gauge invariance identical (P kills the gauge image);
+  chart/regularity asymmetry pinned (cylinder: tower computes, carrier refuses);
+  odd sector live in the engine for the first time; sign-flip mutant proven
+  invisible to the even sector — the LEAD-4 discrimination, now battery-armed.
+  Kills K-1..K-3 silent.*
 - **G1.2 — the sensor set.** Numerator tower, shape moment, localization channels, each
   admitted per A-007 with blindness statement + exact reference values.
 
