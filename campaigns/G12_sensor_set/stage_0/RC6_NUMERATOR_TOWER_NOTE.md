@@ -17,7 +17,7 @@ P = I - g g^T / q,   q = g.g
 
 Battery values `e_top(P Hc P) = -2/7`, `e_top(P H P) = -6/7`, `ratio = 1/3`, `Delta_c = 4`.
 
-> **Correction (in ink, per G0.3 — supersedes the earlier "name-collision" read).**
+> **Correction (supersedes the earlier "name-collision" read; prior wording in git history).**
 > `-2/7` and `-6/7` are the battery's **un-normalized** `e_top`, each `= q·(certified)`
 > with `q=14`. The **certified** invariants are the curvature-side
 > `K_G = e_top(P H P)/q = -3/49` and `kc = e_top(P Hc P)/q = -1/49`, and

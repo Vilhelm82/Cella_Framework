@@ -189,7 +189,7 @@ understood; a list of banned sources would not protect against the next stale on
     quintuple 147/153/24/0/0 Σ=324 two routes; n≤4 dimension threshold re-derived).
   · RC-6 numerator tower (`verification/recert_numerator_tower.py` `3f147859`;
     self-fault blindness EXACT by factor-through-Hc identity; scale-invariant via
-    P(tg)=P(g). Normalization resolved in ink: certified curvature K_G=−3/49, kc=−1/49
+    P(tg)=P(g). Normalization corrected (prior wording in git): certified curvature K_G=−3/49, kc=−1/49
     = e_top/q [weight −2]; battery's −2/7,−6/7 = q× = weight-0 numerators.
     K_G=e_top(PHP)/q verified as an identity on 3 surfaces).
   · RC-8 localization (`verification/recert_localization.py` `f09444462`; support
