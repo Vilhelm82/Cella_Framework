@@ -54,6 +54,39 @@ claims, so nothing above rests on an unchecked map:
   `results/bigraded_jet` (rounding jets) is NOT the κ bigraded grid. Use
   `old_program_sources/30_GLOSSARY_DISAMBIGUATION.md` before trusting any name.
 
+### constant_hunt forensics (2026-07-06, late — "what happened to the work")
+
+Cause established: the constant_hunt sources were **never committed** (unlike
+`dbp_involution`, which was — commit `c31c8a9`); they lived untracked and were
+deleted 2026-07-02 ~21:28 during the `Build_Docs/reference` reorganization sweep
+(directory mtime; not moved — full-tree name search empty; `__pycache__` left
+behind). The old program's own history thus contains the bank-everything lesson:
+untracked working files do not survive reorganizations.
+
+Content recovered from bytecode (unmarshalled, not executed; copies in
+`old_program_sources/constant_hunt_bytecode/`):
+
+- `dbp_total_curvature`: **the origin program had the boundary route** —
+  `compute_gauss_curve_certificate`, "the boundary Gauss-curve geodesic
+  curvature certificate" for the asymptotic-cone normal curve
+  `C_+(φ) = (2cosφ, cosφ−1, 2sinφ)/L, L² = cos²φ − 2cosφ + 5`, in the same
+  (1±√2)/2 eigenframe. This independently CORROBORATES the −2L Cohn-Vossen
+  reduction found blind in `reports/arithmetic_track/ADDENDUM_2026-07-06`
+  and likely names the third of [SR]'s "three independent routes."
+  **ARITH-I Stage A gains an origin retrodiction target** (the C_+ curve pins).
+- `alt_scalar`: the Stage-A flag ladder — per-flag r=2 coupling-density
+  numerator `−Λ_{k,{i,j}}²`, `Λ = (−x_ij + x_ik + x_jk)/2` on pair carriers.
+- `run_constant_hunt`: prereg-generating runner ("NO-DECIMAL-WORSHIP" bench);
+  note its `elliptic_modulus_probe` used m = (√2−1)² = 3−2√2 as a
+  "provisional, user-supplied lead" — NOT the certified modulus (2−√2)/4.
+  Treat any m = 3−2√2 residue in origin notes as the provisional lead, not
+  the identification.
+
+Also recovered from the same July-2 sweep's destination:
+`old_program_sources/{gauge_channel_transport_probe, theorem_8_1_curvature_
+orbit_probe, theorem_8_1_role_jet_probe}.py` — runnable origin probes that
+never made it into this folder's original doc copies.
+
 ## Label-convention case law (2026-07-06 — RETRACTION of the "Known error" section
 ## that briefly stood here, commit 2ed5142)
 
