@@ -1,4 +1,12 @@
 """
+*** SUPERSEDED OBJECT (Will, 2026-07-06): this file integrates the AUXILIARY
+1/q-weighted density -e_3(P Hc P)/q^{5/2} and gets -2 pi^2/5. That is NOT the
+standard r=3 channel (which is /q^{3/2}, giving -2 pi^2/sqrt5). See
+CORRECTION_2026-07-06_channel_normalization.md and arith_i_stageB_proof.py
+(f2f851ea) for the corrected constant. The EXACTNESS VERDICT (nonzero -> not exact)
+stands for both objects; only the value/character changed. Kept as the (correct)
+computation of the auxiliary density and the K_GK=2pi^2 machinery control. ***
+
 ARITH-I STAGE B — the r=3 exactness VERDICT (T-B resolved). FRESH, zero-import.
 numpy (declared). Deterministic grid integration -> byte-stable.
 

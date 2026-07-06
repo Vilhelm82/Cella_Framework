@@ -1,3 +1,13 @@
+> **CORRECTED 2026-07-06 (Will).** The value below (`−2π²/5`) was computed for the
+> *auxiliary* 1/q-weighted density `−e_3(P Hc P)/q^{5/2}`, not the standard channel.
+> The standard r=3 channel is `κ_{3;3,0}=−e_3(P Hc P)/q^{3/2}` and its constant is
+> **`∫_S κ_{3;3,0} dA = −2π²/√5`** (scale-invariant; odd-parity `√5`), machine-checked
+> `arith_i_stageB_proof.py` `f2f851ea`. See
+> `CORRECTION_2026-07-06_channel_normalization.md`. **The exactness verdict (NOT exact)
+> and the reframing (compact ellipsoid, not an elliptic period) are UNCHANGED** — only
+> the value and its character (π²-rational → π²·√5-irrational) change. Read the value
+> statements below as `−2π²/√5`.
+
 # ARITH-I Stage B — the r=3 exactness VERDICT (T-B / T-C resolved)
 
 **Date:** 2026-07-06. **PREREG** `32f2fb3a`. **Certificate:**

@@ -320,19 +320,23 @@ understood; a list of banned sources would not protect against the next stale on
   THIRD outcome: neither C1 (higher Cohn-Vossen/exact — FALSE) nor C2 (interior period
   — wrong character). The BRIEF's dichotomy was premised on the non-compact n=3 2-surface
   (CALC-24 Part A "species change" confirmed). K-3 not triggered.
-- **ARITH-I r=3 CONSTANT PROVEN EXACT (2026-07-06).** `arith_i_stageB_proof.py` 8/8 ×2
-  (`b3314de7`); handoff `campaigns/ARITH_I_higher_cohn_vossen/SYMBOLIC_PROOF_HANDOFF.md`.
-  `∫_S κ_{3;3,0} dA = −2π²/(5c)` — symbolic, machine-checked (matches the numeric verdict
-  to 10 digits). Proof: Gauss map `ν=g/√q` (diffeo S→S³, convex) ⟹ `∫κ dA=∫_{S³}φ dΩ`,
-  `φ=κ/K_GK`; compression lemma `e_3(P A P)=νᵀadj(A)ν` with `adj(H)=5I−J, adj(Hc)=3I−J`
-  ⟹ `e_3(PHP)=5−σ², e_3(PHcP)=3−σ²` (σ=Σν_i); constraint ⟹ `q=10c/(5−σ²)`, the (5−σ²)
-  CANCELS ⟹ `φ=−(3−σ²)/(10c)`; S³ moments `∫(3−σ²)=4π²` ⟹ `−2π²/(5c)`. The channel
-  constant is fixed entirely by the first spherical moment of the all-ones direction —
-  no elliptic input (structural reason it's a π²-rational). **General n (top order
-  r=n−1) DERIVED: ratio `=−(n−2)/(2c(n+1))`** — this CORRECTS the earlier `−1/(n+1)`
-  guess (coincidence at n=4 only; verify n=5 → −1/4 to bank). r=3-fixed-varying-n>4 is a
-  separate open thread. **ARITH-I: Stage A COMPLETE + Stage B CLOSED (r=3 constant
-  PROVEN) —
+- **ARITH-I r=3 STANDARD channel constant PROVEN = −2π²/√5 (2026-07-06; CORRECTED per
+  Will).** `arith_i_stageB_proof.py` 6/6 ×2 (`f2f851ea`); handoff
+  `SYMBOLIC_PROOF_HANDOFF.md`; case law
+  `CORRECTION_2026-07-06_channel_normalization.md`. **Correction:** the earlier `−2π²/5`
+  was the AUXILIARY 1/q-weighted density `−e_3(P Hc P)/q^{5/2}`; the STANDARD channel is
+  `−e_3(P Hc P)/q^{3/2}` (bordered identity `det[[Hc,g],[gᵀ,0]]=−q·e_3(P Hc P)` ⟹ grid
+  power lands as `q^{3/2}`, = engine `/q^{r/2}`; retrodicts `κ_c=−1/49` at r=2). **`∫_S
+  κ_{3;3,0} dA = −2π²/√5`** (scale-invariant, all c) — machine-checked. Proof: Gauss map
+  ⟹ `∫κ dA=∫_{S³}φ dΩ`, `φ=−e_3(PHcP)/e_3(PHP)=−(3−σ²)/(5−σ²)` (σ=Σν_i; adj(H)=5I−J,
+  adj(Hc)=3I−J); the (5−σ²) does NOT cancel ⟹ `∫_{S³}dΩ/(5−σ²)=π²(1−1/√5)` (from
+  `∫dθ/(1+4cos²θ)=π/√5`) ⟹ `−2π²/√5`. The `√5=√(n+1)` is the odd-r PARITY factor (the
+  aux 1/q had washed it out → spurious rational). **Tells banked:** odd-r constant must
+  carry `√q`; density must be scale-invariant — check both before integrating.
+  **Exactness verdict UNCHANGED** (`≠0` → not exact; compact-ellipsoid reframing stands;
+  π²·algebraic-irrational, not an elliptic period). General-n (r=n−1) formulas
+  `−(n−2)/(2(n+1))`/`−1/(n+1)` VOID (aux-normalized) — redo owed (expect `√(n+1)`).
+  **ARITH-I: Stage A COMPLETE + Stage B CLOSED (r=3 constant PROVEN −2π²/√5) —
   campaign's central r=2/r=3 questions both resolved. NEXT OPEN TASK: engine queue is
   Will's call (ARITH-I follow-ups are paper-track; the −1/(n+1) conjecture + symbolic
   −2π²/5 are the natural continuation if reprioritized).**

@@ -187,19 +187,23 @@ machinery validated (K_G control primitive recovered); **normalization load-bear
 "r=2 = end data" premise); `H°=Hc` offdiag confirmed (r=3 is the genuine channel
 question). r=3 premise LIVE. **Gate singular: OPEN B-1 (n=4/n=6 family) is the ONLY
 blocker to the r=3 verdict.**
-**STAGE B CLOSED — r=3 exactness RESOLVED** (`arith_i_stageB_verdict.py` `843a7689`,
-3/3 ×2; note `STAGE_B_VERDICT.md`; OPEN B-1 resolved from surfaced refs). The canonical
-n=4 surface `F=Σy_i²+Σy_iy_j−c` is a COMPACT ELLIPSOID (`M=(I+J)/2` pos. def.), so
-exact ⟺ ∫=0. **VERDICT: `∫_S κ_{3;3,0} dA = −2π²/(5c) ≠ 0` → NOT EXACT**, value a
-**π²-rational** (rational multiple of vol(S³)=`∫K_GK` control), NOT an elliptic period.
-Resolves T-B/T-C with a THIRD outcome: C1 (higher Cohn-Vossen/exact) FALSE, C2 (interior
-period) wrong character — the dichotomy was premised on the non-compact n=3 2-surface
-(CALC-24 Part A species-change confirmed). K-3 not triggered.
-**Open follow-ups (paper-track):** the staked `ratio=−1/(n+1)` general-n conjecture
-(numeric); a symbolic proof of `−2π²/5` (via v1.1 §I.3b Johnson closed form or S₄
-symmetry); prior-art sweep (Chern–Lashof, Gauss–Kronecker of symmetric quadrics,
-Willmore). The transcendence vein lives on the non-compact n=3 side, not n≥4.
-**LEAD-8: both central questions resolved — Stage A COMPLETE, Stage B CLOSED.**
+**STAGE B CLOSED — r=3 exactness RESOLVED** (proof `arith_i_stageB_proof.py`
+`f2f851ea`, 6/6 ×2; note `STAGE_B_VERDICT.md`; OPEN B-1 from surfaced refs). The
+canonical n=4 surface `F=Σy_i²+Σy_iy_j−c` is a COMPACT ELLIPSOID (`M=(I+J)/2` pos.
+def.), so exact ⟺ ∫=0. **VERDICT: `∫_S κ_{3;3,0} dA = −2π²/√5 ≠ 0` → NOT EXACT.**
+*(CORRECTED per Will: earlier `−2π²/5` was the AUXILIARY 1/q-weighted density
+`−e_3(P Hc P)/q^{5/2}`; the STANDARD channel is `/q^{3/2}` — bordered identity
+`det[[Hc,g],[gᵀ,0]]=−q·e_3(PHcP)`; see `CORRECTION_2026-07-06_channel_normalization.md`.)*
+The value is **π²·(1/√5)**, an algebraic-irrational (odd-r parity `√5=√(n+1)`), NOT an
+elliptic period. Proof: Gauss map ⟹ `∫κ=∫_{S³}φ`, `φ=−(3−σ²)/(5−σ²)` (no cancellation),
+`∫_{S³}dΩ/(5−σ²)=π²(1−1/√5)`. Resolves T-B/T-C with a THIRD outcome (C1 exact FALSE, C2
+period wrong character; CALC-24 Part A species-change). K-3 not triggered. Tells banked:
+odd-r constant must carry `√q`, density must be scale-invariant.
+**Open follow-ups (paper-track):** general-n (r=n−1) redo (aux formulas VOID; expect
+`√(n+1)`); r=3-fixed-n>4; prior-art sweep. Transcendence vein lives on the non-compact
+n=3 side.
+**LEAD-8: both central questions resolved — Stage A COMPLETE, Stage B CLOSED (r=3
+constant = −2π²/√5).**
 **What is banked:** total curvature = −2 × asymptotic-link arc length [EMPIRICAL,
 19 digits; modulus identity a²_max = k² exact]; K_G = −12/q² derived in-session;
 polar-dual candidate REFUTED by discriminating test; the grid normalization makes
