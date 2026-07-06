@@ -198,9 +198,12 @@ understood; a list of banned sources would not protect against the next stale on
   `stage_a/NORMALIZATION.md`, byte-stable `7bf1b0c9`): channel is
   `kappa_r = e_r(P Hc P)/q^(r/2)`, r=2..n−1 — F→tF-invariant; keystone
   `kappa_2=−1/49`=cert kc; parity r-even ℚ / r-odd ℚ(√q) matches A-003; naive `/q`
-  control fires at r≠2. Resolves −2/7 (= e_2 unnormalized). Remaining Stage A: A-010
-  `CHANNEL_ISOTROPIC` record + per-sensor reference values (gated) + gate_04 7→8; then
-  Stage B `src/cella/sensors.py`, Stage C `tests/gate_12.py`.**
+  control fires at r≠2. Resolves −2/7 (= e_2 unnormalized). A-010 `CHANNEL_ISOTROPIC`
+  ESTABLISHED (ADMISSIONS). Reference values pinned (`stage_a/REFERENCE_VALUES.md`,
+  gated): κ_2 == certified kc on keystone/sphere/saddle (numerator channel = coupling
+  channel, identity); σ_2 == K_G; cross-route holds; cylinder P-route computes / O-route
+  refuses; shape+localization are n≥4 (RC-7/RC-8 anchors). Remaining Stage A: gate_04
+  7→8. Then Stage B `src/cella/sensors.py`, Stage C `tests/gate_12.py`.**
   Note for the session: `verification/` scripts carry the certified formulas
   (transport, normal form, F1/F3, role channels) — cite and re-use those, import
   nothing else.
