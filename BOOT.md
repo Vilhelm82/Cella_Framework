@@ -58,8 +58,13 @@ understood; a list of banned sources would not protect against the next stale on
   ALL-PASS** (prereg pin `ce44136c` frozen pre-battery; 27/27 ×2 `a90f4cbf`; kills
   silent; mutants bite): **T-A holds** — canonical two-species account, reconstruction,
   purity, pedigree↔splitting interconversion `alpha = rho_R + a*(rho_M)`, zero
-  holonomy of the exact class. **Next open task: Stage B — closed form for
-  `O_{g+E}(H) − O_g(H)` and the cross-term attribution claim.**
+  holonomy of the exact class. **STAGE B CLOSED ALL-PASS** (prereg `984b967d`
+  frozen pre-battery; 36/36 ×2 `7b155a2b`; kills silent): staked closed forms held —
+  wedge cross-term `(w_ij/2)[H_jj/(g_j g'_j) − H_ii/(g_i g'_i)]` exact-total,
+  radial/wedge decomposition [STRUCTURAL], diag-only contamination, gauge-at-
+  defective-base = genuine damage, **attribution theorem: rho_M* = ΣE + G_e(Σa),
+  R-ledger pure**. **Next open task: Stage C — adversarial battery
+  (multiplicative-escape, quotient-carrier, defective-parameter interleavings).**
 - Remote: `github.com/Vilhelm82/Cella_Framework` (private), push with Will's
   session token — token is never stored in repo, config, or memory.
 
