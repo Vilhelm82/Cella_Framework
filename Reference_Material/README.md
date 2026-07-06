@@ -25,6 +25,35 @@ The two R&D briefs (`DBP_RnD_Directions_*.md`) grade their priority boards in th
 dashboard's currency ("done", "settled", "retired"). Read them for questions and
 campaign shapes only; their status labels have zero evidentiary weight here.
 
+## Artifact audit against the FULL Lloyd_Engine_V4 tree (2026-07-06, late)
+
+The V4 root became reachable only at the end of 2026-07-06 (mount was nested at
+`DBP Engine Dev` all day — see BOOT runbook). Full-tree audit of the substrate
+claims, so nothing above rests on an unchecked map:
+
+- **CONFIRMED ABSENT (re-derivation, not re-run):** depth-theorem scripts
+  (`f1_*.py`, CALC-31..35), arithmetic-landscape scripts (`ladder.py`,
+  `h2_walls.py`, `mono_galois.py`, `trap_*.py`), the CALC-30 two-state witness
+  script, any CALC-26/27 (dimension threshold) script, and the
+  `dbp_four_role_calc_log` diary itself (only its drift ledger survives, in
+  `_audit/`). Searched: tree + `_attic/*.zip` + `scratch/`.
+- **DEGRADED (worse than the map claimed):** `evals/constant_hunt/` — the
+  substrate map's [EVAL] tier for the total-curvature constant — now holds
+  BYTECODE ONLY (`__pycache__/*.cpython-314.pyc`; sources gone). Even the
+  "persistent evals" tier rots. The constant itself is unaffected here: it is
+  independently certified in-repo (closed-form retrodiction + the Cohn-Vossen
+  −2L route, `reports/arithmetic_track/`).
+- **CONFIRMED PRESENT (retrodiction-grade, copied to `old_program_sources/`):**
+  `evals/dbp_involution/` with sources incl. the independent Specht referee
+  (`rep_utils.py`); the ENG2 fault-semantics campaign (numerator tower +
+  triangle localization, with frozen fixtures and sha pins); the shape_witness
+  campaign records; `portfolio/10_DBP_STANDING_RESULTS.md` (diff against this
+  folder's copy before first citation — possibly newer).
+- **NAME-COLLISION WARNING:** V4 reuses names across program eras —
+  `f1_f2_natural_phase` (float formats) is NOT the depth-theorem `f1_*`;
+  `results/bigraded_jet` (rounding jets) is NOT the κ bigraded grid. Use
+  `old_program_sources/30_GLOSSARY_DISAMBIGUATION.md` before trusting any name.
+
 ## Label-convention case law (2026-07-06 — RETRACTION of the "Known error" section
 ## that briefly stood here, commit 2ed5142)
 

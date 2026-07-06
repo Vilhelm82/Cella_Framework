@@ -227,3 +227,11 @@ require sympy (declared in their docstrings); in a sandbox without it they emit 
 ImportError traceback that is itself byte-stable ×2 — byte-stability of a crash is
 not a certificate. Check exit codes from the actual pipeline stage, not from a
 wrapper, and install sympy to a persistent path if the environment resets per call.
+(3) **Mount reconciliation at boot** (added after the V4 root sat unreachable all
+day behind a nested mount and nobody noticed until G1.2 needed it): enumerate the
+actually-connected folders at boot and reconcile against the boot message's
+expectations — the same retrodiction pattern as the state block. A folder listed in
+config but absent live is a drift alarm, not a detail. (4) Artifact-audit corollary
+(2026-07-06): even origin [EVAL]-tier artifacts rot (constant_hunt survives as
+bytecode only). Substrate maps are claims; audit the tree, not the map — full
+verdict in `Reference_Material/README.md`.
