@@ -159,6 +159,15 @@ understood; a list of banned sources would not protect against the next stale on
   the weights become outputs; CALC-24 register becomes theorems) + the staked
   exactness question at r = 3 (higher Cohn-Vossen vs interior periods), kills
   designed, prereg to be frozen at open. LEAD-8 entered in LEADS.
+- **LEAD-2 strengthened + valuation brief banked (2026-07-06, third session —
+  closing a chat-only gap caught by the fresh session's boot cross-check):**
+  external Role-Singularity Valuation Law brief banked verbatim with an
+  overriding provenance header (`reports/LEAD2_Role_Singularity_Valuation_
+  Brief.md`); LEAD-2 now carries the theorem-shaped target, staked killable
+  claims (3 / 4 / 2m+1 / 2m+2), the anti-target to kill (Specht-dimension =
+  pole order), kill set K-C1..K-C9, and the RC-5 double-duty note (one recert
+  now feeds LEAD-2 AND LEAD-7). Bank-everything rule added to the write
+  protocol below.
 - **NEXT OPEN TASK: G1.2 — the sensor set** (numerator tower, shape moment,
   localization channels, each admitted per A-007 with blindness statement +
   exact reference values; `CHANNEL_ISOTROPIC` enters by record at its first
@@ -194,6 +203,14 @@ understood; a list of banned sources would not protect against the next stale on
 Bank results immediately, by object (the campaign dir or `verification/`); byte-stable
 ×2 on anything verdict-bearing; update this file's Current state block and the
 consuming ADMISSIONS record in the same breath; commit and push before session close.
+
+**Bank-everything rule (Will, 2026-07-06, after a chat-only pending item was lost
+across a session boundary):** chat is not a ledger. Any result, review verdict,
+refutation, or queue item that should survive the session gets banked before close —
+as a closed record or as an OPEN work item with its missing piece named. A scoped GO
+limits what CLOSES; it never limits what gets WRITTEN DOWN. "Awaiting go" is not a
+state this repo holds (no sign-off queues) — the repo-legal form of a pending
+decision is an OPEN record naming the decision as the missing work.
 
 **Environment runbook (case law 2026-07-06, two false-mismatch scares in one boot):**
 (1) Pin convention is `python3 <script> | sha256sum` — the trailing newline is part

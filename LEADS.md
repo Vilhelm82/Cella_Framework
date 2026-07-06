@@ -54,6 +54,22 @@ the role orbit across the boundary — stratum transitions as diagnostics, not e
 accounts on both sides plus the blow-up rate; does each stratum type have a
 characteristic channel signature? (Physics-adjacent payoff: folds, caustics,
 horizons, phase boundaries — after the mathematics earns it.)
+**THEOREM-SHAPED TARGET (banked 2026-07-06 from the external valuation brief —
+`reports/LEAD2_Role_Singularity_Valuation_Brief.md`, provenance header governs):**
+the Role-Singularity Valuation Law — pole order of R[g_DBP] at a role boundary =
+valuation ledger + symmetry correction; representation theory only LABELS which
+component enters the ledger. Staked killable claims for the LEAD2_VALUATION_I
+prereg: generic simple role boundary (v(a) = 1) → pole order 3; reflection-fixed
+simple boundary → 4; higher-m candidates 2m+1 / 2m+2 [UNPROVEN — the diagonal toy
+model derives only the generic ladder; the reflection case needs the exact
+Brioschi ledger with transverse-pole cancellation]. **Anti-target to kill, never
+to prove:** "pole order = dimension of the lost Specht module." Kill set K-C1..K-C9
+as designed in the brief (K-C7 = the label-convention case law; K-C9 = the
+coordinate-artifact triage, which requires the frame split from RC5_SCOPING).
+**Prerequisite shared with LEAD-7:** RC-5 (the n=2 GTD/DBP spine) now feeds BOTH
+leads — its ROI doubled; whichever lead opens first, RC-5 runs once and serves two.
+Stage-B engine already demonstrated: the scoping spike's truncated Taylor jets
+over ℚ extract Laurent orders without full CAS curvature.
 
 ## LEAD-3 — Channel topology (coupling-graph classification)
 
