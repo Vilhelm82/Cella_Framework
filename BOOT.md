@@ -137,6 +137,16 @@ understood; a list of banned sources would not protect against the next stale on
   boundary Laurent orders; est. 1–2 sessions. **LEAD-7 now
   tractability-competitive with LEAD-1 — the discovery-queue choice after
   Layer 1 is novelty-axis only, Will's call.**
+- **Arithmetic track CLOSED OFF (2026-07-06, Will's GO):**
+  `reports/arithmetic_track/DUAL_CONSTANT_CLOSEOFF.md` + certification script and
+  byte-stable ×2 report (20/20 gates, sha `c0d95b48bdcc6dc6`). Headlines: dual-CPV
+  constant certified 220 digits (originating PDF wrong from digit 40 — singular-path
+  ellippi precision loss, case law banked); Stage-1 residue theorem PROVEN
+  (P·Res = 4, offsets ±4πi/8πi, minpoly proof); regular no-CPV closed form; period
+  identities; Legendre curve is j = 10976, 2-isogenous to j = 128, duality = period
+  swap under λ ↦ 1−λ; "period-lattice completion" REFUTED as stated (PSLQ over
+  ℚ(2^(1/4)), validated controls); Stage-2 bilinear program OPEN as the paper's
+  remaining mathematics. Paper-track fence holds: no engine priority changed.
 - **NEXT OPEN TASK: G1.2 — the sensor set** (numerator tower, shape moment,
   localization channels, each admitted per A-007 with blindness statement +
   exact reference values; `CHANNEL_ISOTROPIC` enters by record at its first

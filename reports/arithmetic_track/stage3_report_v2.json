@@ -1,0 +1,147 @@
+{
+    "stage_3a_exact": {
+        "G1_bare_residue_squared": {
+            "passed": true,
+            "actual_simplified": "24 + 17*sqrt(2)",
+            "expected": "24 + 17*sqrt(2)",
+            "difference_simplified": "0"
+        },
+        "G2_weighted_residue_squared": {
+            "passed": true,
+            "actual_simplified": "16",
+            "expected": "16",
+            "difference_simplified": "0"
+        },
+        "G3a_weighted_residue_equals_4_signed": {
+            "passed": true,
+            "method": "minimal_polynomial",
+            "detail": "x - 4"
+        },
+        "G3b_residue_antisymmetry": {
+            "passed": true,
+            "actual_simplified": "0",
+            "expected": "0",
+            "difference_simplified": "0"
+        },
+        "G3c_branch_offsets_derived": {
+            "passed": true,
+            "one_sided_offset": "continuation - CPV = sign * i*pi * (P*Res_bare) = sign * 4*pi*i",
+            "two_sided_jump": "between the two continuations: 2*pi*i * (P*Res_bare) = 8*pi*i",
+            "derived_from": "G3a"
+        },
+        "G6_lambda_product": {
+            "passed": true,
+            "actual_simplified": "1/8",
+            "expected": "1/8",
+            "difference_simplified": "0"
+        },
+        "G6_lambda_dual_is_one_minus_lambda": {
+            "passed": true,
+            "actual_simplified": "sqrt(2)/4 + 1/2",
+            "expected": "sqrt(2)/4 + 1/2",
+            "difference_simplified": "0"
+        },
+        "G7_legendre_j": {
+            "passed": true,
+            "actual_simplified": "10976",
+            "expected": "10976",
+            "difference_simplified": "0"
+        },
+        "G8_phi2_isogeny": {
+            "passed": true,
+            "actual_simplified": "0",
+            "expected": "0",
+            "difference_simplified": "0"
+        },
+        "G10_interchange_parameter_m_over_n": {
+            "passed": true,
+            "actual_simplified": "-2 + 2*sqrt(2)",
+            "expected": "-2 + 2*sqrt(2)",
+            "difference_simplified": "0"
+        },
+        "H1_x0_squared": {
+            "passed": true,
+            "actual_simplified": "-16 + 12*sqrt(2)",
+            "expected": "-16 + 12*sqrt(2)",
+            "difference_simplified": "0"
+        },
+        "H2_one_minus_x0_squared": {
+            "passed": true,
+            "actual_simplified": "17 - 12*sqrt(2)",
+            "expected": "17 - 12*sqrt(2)",
+            "difference_simplified": "0"
+        },
+        "H3_one_minus_m_x0_squared": {
+            "passed": true,
+            "actual_simplified": "3 - 2*sqrt(2)",
+            "expected": "3 - 2*sqrt(2)",
+            "difference_simplified": "0"
+        },
+        "H4_n_times_unit": {
+            "passed": true,
+            "actual_simplified": "sqrt(2)/8",
+            "expected": "sqrt(2)/8",
+            "difference_simplified": "0"
+        }
+    },
+    "stage_3b_numerical": {
+        "G4_two_route_CPV_Pi": {
+            "passed": true,
+            "actual_diff": "3.228488485115523616811126917705021342032e-136",
+            "tolerance": "1.0e-130",
+            "cpv_pi_interchange": "-4.67826592165063908614377494851287184072661176718846253807540433202811985387384406292348956801923083807896856531359888773092966291555632868717651682268688893495228350243065279478505",
+            "cpv_pi_contour_real": "-4.67826592165063908614377494851287184072661176718846253807540433202811985387384406292348956801923083807896856531359888773092966291555632836432766831113452725383959173192851859153775",
+            "contour_bare_imag_over_pi": "-6.93120700602302137227700181661428732603905332681859028230991",
+            "note": "independent routes; real part is CPV, imag records branch offset"
+        },
+        "G3_weighted_branch_offset_numeric": {
+            "passed": true,
+            "actual_diff": "5.579863801427757222782274504871172342474e-137",
+            "tolerance": "1.0e-120",
+            "weighted_imag_over_pi": "4.0"
+        },
+        "G5_certified_dual_CPV_pin": {
+            "passed": true,
+            "actual_diff": "1.789650254947855234358772042148949751182e-220",
+            "tolerance": "1.0e-170",
+            "dual_cpv": "-3.988001085974558097719762257539087379694121855552360291347972820374382044301620084374998184536780571825905599613640469999524934769838194516297015969913667980232572633733216813738631005097537291913139724257892149600355947",
+            "pin_tail": "9694121855552360291",
+            "scope": "two-route certified only to the G4 floor (3.2285e-136); single-route (regular interchange, dps-stable) beyond that"
+        },
+        "G9a_omega1_vs_2_74_Kprimary": {
+            "passed": true,
+            "actual_diff": "0.0",
+            "tolerance": "1.0e-230",
+            "omega1_true": "5.49470747979643571814444952669274096834857094652866804247121",
+            "omega1_imag_leak": "4.7552e-370"
+        },
+        "G9b_Im_omega2_vs_minus_2_34_Kdual": {
+            "passed": true,
+            "actual_diff": "0.0",
+            "tolerance": "1.0e-230",
+            "Im_omega2_true": "-4.03646165391166743031364665090106358720182250526089672661874"
+        },
+        "G9c_rhombic_Re_omega2_is_half_omega1": {
+            "passed": true,
+            "actual_diff": "0.0",
+            "tolerance": "1.0e-230",
+            "Re_omega2_true": "2.7473537398982178590722247633463704841742854732643340212356"
+        }
+    },
+    "parameters": {
+        "n_dual": "1/2 + 3*sqrt(2)/8",
+        "m_dual_k_squared": "sqrt(2)/4 + 1/2",
+        "P_prefactor_on_Pi": "2**(1/4)*(8 - 6*sqrt(2))",
+        "x0_squared": "-16 + 12*sqrt(2)",
+        "res_bare_expected": "2**(1/4)*(-3 - 2*sqrt(2))",
+        "weighted_residue": "4 (signed, by G3a)",
+        "lambda_primary": "1/2 - sqrt(2)/4",
+        "lambda_dual": "sqrt(2)/4 + 1/2"
+    },
+    "overall": {
+        "passed": true,
+        "exact_gates_passed": true,
+        "numerical_gates_passed": true,
+        "note": "v2: no tautology rows, no hardcoded PASS, no naive ellippi(n>1,m) anywhere; period controls are real gates."
+    }
+}

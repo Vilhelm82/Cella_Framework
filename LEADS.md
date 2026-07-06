@@ -149,6 +149,15 @@ re-derivation, not re-run):
 
 - **Arithmetic note** — total DBP curvature as a non-CM elliptic period (j = 128; the
   j(s) landscape; CM ladder; the aliasing triple resolved by branch configuration).
+  **Dual-constant companion CLOSED OFF 2026-07-06** (`reports/arithmetic_track/`):
+  certified 220-digit CPV pin (two-route to 1e−136; originating PDF's tail wrong from
+  digit 40), Stage-1 residue theorem PROVEN (P·Res = 4; offsets ±4πi/8πi; minpoly
+  machine proof), regular no-CPV closed form, period identities
+  ω₁ = 2^(7/4)K(k²) / Im ω₂ = −2^(3/4)K(k′²), λ(1−λ) = 1/8 ⟹ j = 10976 Legendre
+  curve, 2-isogenous to j = 128 (Φ₂ = 0), duality = period swap; "lattice completion"
+  REFUTED as stated, third-kind module version OPEN (Stage 2: bilinears through the
+  isogeny). Precision case law banked: never certify from singular-path
+  special-function evaluations.
 - **RN/vdW symbolic coefficients** — close the leading Laurent coefficients at the RN
   and van der Waals boundaries beside the Kerr closed forms; hardens the n=2
   complementarity law and feeds LEAD-7's RC-5 prerequisite.
