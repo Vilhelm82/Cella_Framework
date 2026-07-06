@@ -180,7 +180,14 @@ at n=3 by rank); r=3 density confirmed a real object at n=4.
 surviving [CONTAINER] material and the exactness answer depends on it — pin it (DBP
 n-general form / reconstruct the depth-theorem canonical family / coordinate LEAD-1)
 before the r=3 verdict. Will's call or a derivation gate; not guessed.
-**Then:** Route1 ansatz search + Route2 bump deformation, K-3 armed. YES → higher
+**Stage B session 2** (`arith_i_stageB_s2.py` `3c18c25e`, 4/4 ×2; note
+`ARITH_I_STAGE_B_SESSION2.md`): r=2 channel exactness RESOLVED — `kc=(P²/3)K_G=−4P²/q²`;
+machinery validated (K_G control primitive recovered); **normalization load-bearing** —
+σ-channel not exact, **grid channel EXACT** with explicit primitive (reproduces A5's
+"r=2 = end data" premise); `H°=Hc` offdiag confirmed (r=3 is the genuine channel
+question). r=3 premise LIVE. **Gate singular: OPEN B-1 (n=4/n=6 family) is the ONLY
+blocker to the r=3 verdict.**
+**Then:** Route1 ansatz (validated at r=2) + Route2 bump, K-3 armed. YES → higher
 Cohn-Vossen (new theorem; prior-art sweep owed: Chern–Lashof, total absolute
 curvature). NO → r≥3 constants are interior periods (`j_λ(s)` + family isogeny banked
 for the transcendence branch C2).

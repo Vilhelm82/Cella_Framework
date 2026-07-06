@@ -275,6 +275,24 @@ understood; a list of banned sources would not protect against the next stale on
   canonical family / coordinate with LEAD-1/GRID_I) is load-bearing — Will's call or a
   derivation gate before the r=3 Route1/Route2 verdict. **NEXT: resolve OPEN B-1, then
   run the r=3 exactness verdict.** Nothing guessed; K-3 belongs to the verdict run.
+- **ARITH-I STAGE B session 2 (2026-07-06): r=2 channel exactness resolved,
+  normalization pinned, machinery validated.** `arith_i_stageB_s2.py` 4/4 ×2
+  (`3c18c25e`); note `ARITH_I_STAGE_B_SESSION2.md`. **(SBC-1)** structure:
+  `kc = e_2(P Hc P)/q = −4P²/q² = (P²/3)·K_G` — channel density = curvature × height²/3,
+  NOT proportional to K_G, so its exactness is a real question. **(SBC-2)** machinery
+  validated: the Route-1 ansatz recovers the Gauss–Bonnet primitive
+  `η_K=−2P(S dD−D dS)/(√q·w)` (control). **(SBC-3) normalization is LOAD-BEARING:** the
+  σ-channel `−2P/q^{3/2}` has NO algebraic primitive (deg≤4, w & w²) — not exact; the
+  GRID channel `−2P/q^{5/2}` (the normalization A5/BRIEF actually uses) is **EXACT**.
+  **(SBC-4)** explicit grid-channel primitive
+  `η_c=(2P/9)(3DS²+30D+S³+9S)/(q^{3/2}w) dD + (2P/9)(−3D²S−DS²+15D+6S)/(q^{3/2}w) dS`,
+  `dη_c=density` verified — **reproduces A5's premise** ("r=2 constant is end data
+  because the density is exact"). **H° = offdiag channel Hessian Hc CONFIRMED** (not
+  full H → r=3 is the genuine channel question, not trivial Gauss–Kronecker). r=3
+  premise now LIVE, machinery+normalization validated. **Gate unchanged & singular:
+  OPEN B-1 (the n=4/n=6 family) is the ONLY thing before the r=3 verdict.** Next: run
+  r=3 ansatz on several natural n=4 quadrics to test family-robustness of the verdict,
+  or pin the family (Will's call / DBP source / depth-theorem reconstruction).
   Note for the session: `verification/` scripts carry the certified formulas
   (transport, normal form, F1/F3, role channels) — cite and re-use those, import
   nothing else.
