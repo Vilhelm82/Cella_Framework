@@ -105,11 +105,13 @@ K-4  n = (4−3√2)/8 does not emerge from the Stage-A algebra → the Booth
 
 ## STOP CONDITIONS
 
-Two sessions per stage, hard. Stage A overrun → close keystone-only (still a full
-result: n derived, constants as outputs) and park the family tier with the blocker
-named. Stage B unresolved both routes → park with the ansatz space exhausted
-documented — the question is then known to need real cohomology machinery, which
-is itself worth knowing.
+**VOID — "two sessions per stage, hard" was fabricated (never authored by Will);
+see `CORRECTION_2026-07-06_fabricated_stop_condition.md`.** Standing rule (Will,
+2026-07-06): spend as much time as required for the best possible outcome on each
+stage. There is no per-stage session budget. A stage ends when its mathematics is
+done or a *real* blocker is named and banked (e.g. Stage B unresolved both routes →
+the finding is "needs real cohomology machinery", itself worth banking) — never on a
+turn count. Keystone-only is a fallback for a genuine blocker, not a scheduled exit.
 
 ## NOVELTY PAYOFF
 

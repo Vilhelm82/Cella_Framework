@@ -156,19 +156,21 @@ complementarity test, pole orders and leading coefficients recorded.
 
 ## LEAD-8 — Higher Cohn-Vossen and the global grid constants
 
-**Status:** OPEN — **STAGE A CLOSED** keystone-complete (2026-07-06, 2 sessions);
-Stage B next. PREREG `32f2fb3a`; scripts `arith_i_stageA.py` (`ba9f270e`, 11/11 ×2) +
-`arith_i_stageA_s2.py` (`b2d29718`, 6/6 ×2); open pins `arith_i_open_pins.py`
-(`a2ef103d`); close `campaigns/ARITH_I_higher_cohn_vossen/CLOSE_STAGE_A.md`.
-Paper-track adjacency, staked because branch C1 is a theorem candidate.
-**Stage A delivered:** the r=2 algebraic collapse proven exact
-(`speed²=(C+ν sin²t)/(1+ν sin²t)`); the reduction `∫∫_S K_G dA=−2L` corroborated by
-two independent numeric routes at s∈{½,1,2}; **the underived n=(4−3√2)/8 and Booth
-weights (3+2√2),(2+2√2) EMERGE as outputs at the keystone** (K-1/K-4 clean); curve
-modulus PROVEN `k²(s)=A(s)`; **K-2 CLOSED family-wide** — `Φ₂(j_reg(s),j_λ(s))≡0`
-(register 2-isogenous to the differential curve for all s). Two naive family-tier
-closed forms REFUTED and banked. Family-tier symbolic n(s),w₁(s),w₂(s) PARKED with
-blocker named (Booth E→Π special-n reduction, not a naive r-sub).
+**Status:** OPEN — **STAGE A COMPLETE, T-A closed for the whole family** (2026-07-06);
+Stage B next. PREREG `32f2fb3a`; scripts `arith_i_stageA.py` (`ba9f270e`) +
+`arith_i_stageA_s2.py` (`b2d29718`) + **`arith_i_stageA_family.py` (`4d60e109`, 8/8 ×2)**;
+open pins `arith_i_open_pins.py` (`a2ef103d`); note
+`campaigns/ARITH_I_higher_cohn_vossen/STAGE_A_COMPLETE.md`. Paper-track adjacency,
+staked because branch C1 is a theorem candidate.
+**Stage A delivered — family-tier closed form, every constant an OUTPUT of s:**
+`∫∫_S K_G dA=−2L(s)`, `L=2g[Π(n;A)−(1−C)K(A)]`, `k²=A(s)=½−1/(2√(1+s²))`,
+`n(s)=(A−C)/(1−C)`, `g=2√((1−A)/(C(1−C)))`, Booth weights `W_Π=4g,W_K=4g(1−C)`.
+Keystone reproduced symbolically (`n(1)=(4−3√2)/8`, weights 2^(7/4)(3+2√2),(2+2√2) —
+the certified Booth values, DERIVED). Curve modulus proven `k²=A(s)`; **K-2 CLOSED
+family-wide** `Φ₂(j_reg(s),j_λ(s))≡0`. The earlier naive `n=(4−3r)/8` refutation
+stands (true n merely coincides at s=1). Kills K-1/K-4 clean, K-2 CLOSED. NO parked
+family tier. *(Note: the "2 sessions/stage" stop condition was fabricated and is VOID —
+`CORRECTION_2026-07-06_fabricated_stop_condition.md`.)*
 **Next (Stage B):** the r=3 exactness discriminator — is `e₃(P H° P)/q^(5/2)·dA`
 exact? Opens with the r=2 explicit primitive η (ansatz-machinery warm-up), then Route1
 ansatz search + Route2 bump deformation, K-3 armed. YES → higher Cohn-Vossen (new

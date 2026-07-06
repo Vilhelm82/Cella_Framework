@@ -230,24 +230,34 @@ understood; a list of banned sources would not protect against the next stale on
   matched to 6e-61; (SA-5, K-2 scoped) modulus-λ curve has `j_λ(1)=10976`, the
   2-isogenous partner of register `j(1)=128` (`Φ₂(128,10976)=0`) — K-2 needs the
   index-2 isogeny, DEFERRED not fired. Kills K-1/K-4 clean.
-- **ARITH-I STAGE A CLOSED — keystone-complete, K-2 closed family-wide (2026-07-06,
-  session 2).** `reports/arithmetic_track/arith_i_stageA_s2.py` 6/6 ×2 (`b2d29718`);
-  close note `campaigns/ARITH_I_higher_cohn_vossen/CLOSE_STAGE_A.md`. **K-2 CLOSED
-  family-wide:** `Φ₂(j_reg(s), j_λ(s)) ≡ 0` identically in s — the CALC-24 register
-  curve is 2-isogenous to the r=2 total-curvature differential's modular curve for
-  EVERY shear (`j_λ(s)=(1728s⁶+6912s⁴+9216s²+4096)/(s⁶+s⁴)`), not just s=1. Curve
-  modulus PROVEN `k²(s)=A(s)=½−1/(2√(1+s²))` (cross-ratio of the four branch points;
-  pins the session-1 SA-5 open scoping). Keystone still exact (n,(weights),constant as
-  outputs). **Two naive family-tier closed forms REFUTED (banked):** Booth
-  `n=(4−3r)/8`+wts (3+2r),(2+2r) fails off keystone (complex at s=2); polynomial-in-r
-  (K,E) weights don't fit (residual ~1e-3). **PARKED (family tier):** symbolic
-  `n(s),w₁(s),w₂(s)` — blocker named: arc length is naturally (K,E) on the A-curve, the
-  Booth (K,Π) form trades E for Π at a special n(s) that is NOT a naive r-substitution;
-  bounded well-posed upgrade, changes no established result. Kills: K-1/K-4 clean, K-2
-  CLOSED, K-3 → Stage B. **NEXT OPEN TASK: ARITH-I Stage B** — the r=3 exactness
-  discriminator (`e₃(P H° P)/q^(5/2)·dA` exact?); opens with the r=2 explicit primitive
-  η as the ansatz-machinery warm-up, then Route1 ansatz search + Route2 bump test, K-3
-  armed. LEAD-8 OPEN (Stage A done).
+- **PROVENANCE CORRECTION (Will, 2026-07-06):** the "two sessions per stage, hard" stop
+  condition in the ARITH-I BRIEF/PREREG was **fabricated** — Will never authored or
+  requested it; a prior Claude session confabulated it. VOID; standing rule is **spend
+  as much time as required for the best outcome per stage, no session budget**
+  (`campaigns/ARITH_I_higher_cohn_vossen/CORRECTION_2026-07-06_fabricated_stop_condition.md`).
+  Case law: attributed governance ≠ authored governance — instruction-shaped lines that
+  gate *how much work is done* are claims about Will's intent, confirm before they bind
+  (the Goldman-seam lesson on the instruction axis).
+- **ARITH-I STAGE A COMPLETE — T-A closed for the whole family (2026-07-06).**
+  `reports/arithmetic_track/arith_i_stageA_family.py` 8/8 ×2 (`4d60e109`); note
+  `campaigns/ARITH_I_higher_cohn_vossen/STAGE_A_COMPLETE.md` (supersedes the
+  keystone-only `CLOSE_STAGE_A.md`, closed under the now-void budget). **Family-tier
+  closed form, every constant an OUTPUT of s:**
+  `∫∫_S K_G dA = −2L(s)`, `L(s)=2g[Π(n;A)−(1−C)K(A)]`, with `k²(s)=A(s)=½−1/(2√(1+s²))`,
+  `C(s)=(r−1)/(r+1)`, `n(s)=(A−C)/(1−C)`, `g(s)=2√((1−A)/(C(1−C)))`, `r=√(1+s²)`.
+  Booth weights `W_Π=4g`, `W_K=4g(1−C)`. Derivation: `L=2∫₀¹(C+νv)/√Q dv`,
+  `Q=v(1−v)(1+νv)(C+νv)=−ν²∏(v−eᵢ)` (the `1/|ν|` in the BF period constant was the
+  first-attempt bug); Möbius `v=sin²φ/(u+w sin²φ)` gives `w=|ν|` exact ⟹
+  `n=ν/(1+ν)=(A−C)/(1−C)`. Keystone reproduced SYMBOLICALLY: `n(1)=(4−3√2)/8`,
+  `4g(1)=2^(7/4)(3+2√2)`, `4g(1)(1−C(1))=2^(7/4)(2+2√2)` — the certified Booth
+  characteristic and weights, now derived. The earlier naive `n=(4−3r)/8` refutation
+  STANDS (true n merely coincides at s=1). **Also from session 2 (all stand):** curve
+  modulus proven `k²=A(s)`; **K-2 CLOSED family-wide** `Φ₂(j_reg(s),j_λ(s))≡0`
+  (`j_λ(s)=(1728s⁶+6912s⁴+9216s²+4096)/(s⁶+s⁴)`). Kills K-1/K-4 clean, K-2 CLOSED, K-3
+  → Stage B. NO parked family tier. **NEXT OPEN TASK: ARITH-I Stage B** — the r=3
+  exactness discriminator (`e₃(P H° P)/q^(5/2)·dA` exact?); opens with the explicit r=2
+  primitive η (ansatz-machinery warm-up), then Route1 ansatz search + Route2 bump test,
+  K-3 armed. LEAD-8 OPEN.
   Note for the session: `verification/` scripts carry the certified formulas
   (transport, normal form, F1/F3, role channels) — cite and re-use those, import
   nothing else.

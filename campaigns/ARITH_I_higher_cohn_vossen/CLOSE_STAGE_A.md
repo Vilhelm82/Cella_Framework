@@ -1,4 +1,13 @@
-# ARITH-I — Stage A CLOSE (keystone-complete, K-2 closed family-wide)
+> **SUPERSEDED 2026-07-06 by `STAGE_A_COMPLETE.md`.** This note closed Stage A
+> "keystone-only" under the "two sessions per stage, hard" stop condition, which was
+> later found to be fabricated (never authored by Will) and VOID — see
+> `CORRECTION_2026-07-06_fabricated_stop_condition.md`. Once the constraint was lifted
+> the family-tier closed form was finished the same session
+> (`arith_i_stageA_family.py`, `4d60e109`): `n(s)=(A−C)/(1−C)`, weights `4g`,
+> `4g(1−C)`, modulus `A(s)`. The "family tier PARKED" verdict below is OBSOLETE; all
+> other content (K-2 identity, modulus proof, the refuted naive forms) stands.
+
+# ARITH-I — Stage A CLOSE (keystone-complete, K-2 closed family-wide) [SUPERSEDED]
 
 **Date:** 2026-07-06 (two sessions, the hard stop-condition budget). **PREREG:**
 `32f2fb3a`. **Open pins:** `verification/arith_i_open_pins.py` `a2ef103d` (15/15 ×2).
