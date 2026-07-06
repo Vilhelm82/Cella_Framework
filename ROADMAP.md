@@ -51,6 +51,34 @@ certified under the schema. Failing a kill condition is a finding, not a failure
   detections on ≥5-channel data.**
 - **G3.3 — cross-method comparison + the six deliverable documents** (stages 7, 9).
 
+## DESIGN FREEZE — containment rules
+
+These bind the build the way the admission standard binds introductions. Purpose: every
+planned R&D outcome lands with blast radius zero or confined to interfaces shaped here.
+
+1. **Two-ledger accounts.** The M and R ledgers never mix in composition. Their
+   unification under one algebra is a certification target (G0.2) — never a dependency
+   of any consuming code. If G0.2 refutes unification, a theorem changes status; no
+   code breaks.
+2. **Parameterized radicand.** `QSqrt` is `a + b·√r` for arbitrary positive non-square
+   rational `r`. Never hardcode `r = g·g` — multi-constraint normalization may want
+   Gram determinants, and a parameterized radicand absorbs that without a touch.
+3. **Block interfaces, generic n.** Every constraint input is typed as a block (list of
+   constraints); codim-1 implementations refuse blocks of length > 1 with a typed
+   `CODIM_UNSUPPORTED` refusal — the API can always express what the theory cannot yet
+   compute. Carrier extraction reads O from H directly (proven for general n); channel
+   recovery is an n=3 cross-check, not the pathway. All isotypic/projector linear
+   algebra is written for general n, never n=3 hardcoded.
+4. **Scoped certificate claims.** Every completeness or identity claim states its tier
+   (local/global; codim-1/system) in the certificate itself. Claims extend or gain
+   qualifiers as R&D lands; they are never retracted.
+
+**STOP-LINE.** Do not build: system-level (codim ≥ 2) fitting semantics — that is
+exactly what the E2 theory determines, and anything invented there now is a guess
+wearing code; cascade/monodromy machinery beyond token vocabulary — [interpretation]
+tier until the transfer conjecture is tested. The build and the R&D converge at this
+seam by design instead of colliding.
+
 ## Standing constraints
 
 - Standalone: zero code import from any previous repository, ever.
