@@ -307,8 +307,25 @@ understood; a list of banned sources would not protect against the next stale on
   Gauss–Kronecker = end-data by Gauss-map degree; the CHANNEL density is the nontrivial
   T-B question). Density concrete (e_3=−4/7,q=7 at (1,0,0,0)); symbolic e_3 blows up so
   **the verdict route is point-sampling the ansatz over ℚ** (depth-theorem method).
-  **NEXT OPEN TASK: run the r=3 exactness verdict** — point-sampling ansatz `dω=κ dV` on
-  the n=4 3-manifold, r=2 grid primitive (`3c18c25e`) as control, K-3 armed.
+  the r=3 exactness verdict — next.
+- **ARITH-I STAGE B CLOSED — r=3 exactness RESOLVED (2026-07-06).**
+  `reports/arithmetic_track/arith_i_stageB_verdict.py` 3/3 ×2 (`843a7689`); note
+  `campaigns/ARITH_I_higher_cohn_vossen/STAGE_B_VERDICT.md`. **KEY:** the canonical n=4
+  surface `F=Σy_i²+Σ_{i<j}y_iy_j−c` has `M=(I+J)/2` positive definite → it's a COMPACT
+  ELLIPSOID (≅S³), not a hyperboloid. On a compact oriented 3-manifold a top-form is
+  exact ⟺ ∫=0. **VERDICT: `∫_S κ_{3;3,0} dA = −2π²/(5c) ≠ 0` → NOT EXACT** (control
+  `∫K_GK dA=2π²=vol(S³)` validates the machinery). Ratio `∫κ/∫K_GK=−1/(5c)` (−1/5 at
+  c=1, −1/10 at c=2 confirmed, −0.2000000 to 7 digits). **The value is a π²-RATIONAL
+  (rational multiple of vol(S³)), NOT an elliptic period** → resolves T-B/T-C with a
+  THIRD outcome: neither C1 (higher Cohn-Vossen/exact — FALSE) nor C2 (interior period
+  — wrong character). The BRIEF's dichotomy was premised on the non-compact n=3 2-surface
+  (CALC-24 Part A "species change" confirmed). K-3 not triggered. Staked conjecture:
+  ratio `=−1/(n+1)` general n (numeric, unproven); symbolic proof of −2π²/5 (via §I.3b
+  Johnson closed form or S₄ symmetry) + prior-art sweep (Chern–Lashof, Gauss–Kronecker,
+  Willmore) are the open follow-ups. **ARITH-I: Stage A COMPLETE + Stage B CLOSED —
+  campaign's central r=2/r=3 questions both resolved. NEXT OPEN TASK: engine queue is
+  Will's call (ARITH-I follow-ups are paper-track; the −1/(n+1) conjecture + symbolic
+  −2π²/5 are the natural continuation if reprioritized).**
   Note for the session: `verification/` scripts carry the certified formulas
   (transport, normal form, F1/F3, role channels) — cite and re-use those, import
   nothing else.
