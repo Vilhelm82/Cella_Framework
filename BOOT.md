@@ -53,10 +53,11 @@ understood; a list of banned sources would not protect against the next stale on
 ## Current state (update this block in-session, every session)
 
 - Layer 0: **G0 CLOSED** (`Cell` real; `tests/gate_zero.py` green). G0.1–G0.4 open.
-- Active campaign: **G0.2 two-species account** — Stage 0 gate: RC-1 **CLEAN**
-  (transport, 71/71 ×2 `d370daae`); RC-2 **CLEAN** (normal form SYMBOLIC n=3,4,5,
-  27/27 ×2 `b21992f3` + general-n note in `stage_0/`); **RC-3 (holonomy instance)
-  OWED — the next open task.** Stage A (direct-sum theorem) opens when RC-3 is clean.
+- Active campaign: **G0.2 two-species account** — **Stage 0 GATE CLEAN** (RC-1
+  transport 71/71 ×2 `d370daae`; RC-2 normal form SYMBOLIC n=3,4,5 27/27 ×2
+  `b21992f3`; RC-3 holonomy 21/21 ×2 `e4765c7c`, finding: zero holonomy ≠ flat —
+  commuting class = account equality). **Stage A (direct-sum theorem) is OPEN —
+  the next open task.** Clause (iii) may now cite the owned-holonomy law.
 - Remote: `github.com/Vilhelm82/Cella_Framework` (private), push with Will's
   session token — token is never stored in repo, config, or memory.
 

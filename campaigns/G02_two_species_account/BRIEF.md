@@ -47,9 +47,9 @@ account pair `(rho_M, rho_R)` and the splitting `Sym_3 = Im(G_g) ⊕ carrier`.
 |---|---|---|
 | RC-1 | Transport law: K_G invariance, ker-Sigma, four pinned gauge rows, O gauge-invariance + linearity (fixture tier), group-element witness | **CLEAN** — `verification/recert_transport_law.py`, 71/71, byte-stable ×2 (`d370daae`) |
 | RC-2 | Normal form, symbolic tier: `H_perp` uniqueness, `O` = complete same-g invariant, rank/kernel/direct-sum — fresh symbolic derivation at n=3,4,5 + general-n note | **CLEAN** — `verification/recert_normal_form.py`, 27/27, byte-stable ×2 (`b21992f3`); note: `stage_0/RC2_NORMAL_FORM_NOTE.md` |
-| RC-3 | Account holonomy instance: commutator-as-account-gap re-certified from fresh code on a small fixture, before clause (iii) cites it | OWED |
+| RC-3 | Account holonomy instance: commutator-as-account-gap re-certified from fresh code on a small fixture, before clause (iii) cites it | **CLEAN** — `verification/recert_holonomy.py`, 21/21, ×2 (`e4765c7c`); note: `stage_0/RC3_HOLONOMY_NOTE.md`; finding: zero holonomy ≠ flat — the commuting class is defined by account equality, not op exactness |
 
-**Gate: Stage A does not open until RC-2 and RC-3 are CLEAN.**
+**Gate: Stage A does not open until RC-2 and RC-3 are CLEAN. → GATE CLEAN 2026-07-06; Stage A OPEN.**
 
 ## Stage A — the exact-parameter theorem (provable core)
 
