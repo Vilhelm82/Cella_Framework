@@ -147,6 +147,18 @@ understood; a list of banned sources would not protect against the next stale on
   swap under λ ↦ 1−λ; "period-lattice completion" REFUTED as stated (PSLQ over
   ℚ(2^(1/4)), validated controls); Stage-2 bilinear program OPEN as the paper's
   remaining mathematics. Paper-track fence holds: no engine priority changed.
+- **Arithmetic-track addendum banked + ARITH-I PARKED (2026-07-06, late):**
+  same-day results appended (`reports/arithmetic_track/ADDENDUM_2026-07-06_
+  reduction.md`): K_G = −12/q² derived in-session (det B = 4·(D²+DS+P²), one
+  line); total curvature = −2 × spherical-conic link length [EMPIRICAL 19
+  digits, a²_max = k² exact]; polar-dual conic candidate REFUTED by test
+  (elegance ≠ evidence, again); grid-normalization convergence: ALL global
+  ∫∫κ_{r;p,q} dA exist on the quadric. Campaign
+  `campaigns/ARITH_I_higher_cohn_vossen/BRIEF.md` written hot and **PARKED —
+  opens after G1.2**: first-principles reduction with symbolic shear (n and
+  the weights become outputs; CALC-24 register becomes theorems) + the staked
+  exactness question at r = 3 (higher Cohn-Vossen vs interior periods), kills
+  designed, prereg to be frozen at open. LEAD-8 entered in LEADS.
 - **NEXT OPEN TASK: G1.2 — the sensor set** (numerator tower, shape moment,
   localization channels, each admitted per A-007 with blindness statement +
   exact reference values; `CHANNEL_ISOTROPIC` enters by record at its first

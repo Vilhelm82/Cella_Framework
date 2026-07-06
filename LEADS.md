@@ -138,6 +138,28 @@ S3-equivariant lift is a result, not a failure.
 constraints (1)–(5); survivors go to the exact Kerr-Newman battery and the D3
 complementarity test, pole orders and leading coefficients recorded.
 
+## LEAD-8 — Higher Cohn-Vossen and the global grid constants
+
+**Status:** PARKED-OPEN — full campaign brief written 2026-07-06 while context was
+hot (`campaigns/ARITH_I_higher_cohn_vossen/BRIEF.md`); **opens after G1.2** per
+Will's parking instruction. Paper-track adjacency, staked as a lead because branch
+C1 is a theorem candidate, not a write-up.
+**What is banked:** total curvature = −2 × asymptotic-link arc length [EMPIRICAL,
+19 digits; modulus identity a²_max = k² exact]; K_G = −12/q² derived in-session;
+polar-dual candidate REFUTED by discriminating test; the grid normalization makes
+∫∫ κ_{r;p,q} dA converge for EVERY slot on the quadric (the global grid constants
+exist). See `reports/arithmetic_track/ADDENDUM_2026-07-06_reduction.md`.
+**The question:** for r = 2 the constant is end data because the density is exact
+(Gauss–Bonnet's real content). Is `e_3(P H° P)/q^(5/2)·dA` exact on the quadric?
+YES → higher Cohn-Vossen for channel densities (new theorem; prior-art sweep owed:
+Chern–Lashof, total absolute curvature). NO → the r ≥ 3 constants are interior
+periods — the transcendence vein opens with concrete objects.
+**Discriminating test:** primitive-ansatz linear algebra + bump-deformation
+numeric corroboration (K-3 in the brief makes the pair bite).
+**Also delivers:** the underived characteristic n = (4−3√2)/8 as an output;
+the CALC-24 j(s) register as theorems (symbolic-shear derivation); the natural
+home for the dual constant's Stage-2 geometric referent.
+
 ---
 
 ## Paper track (fenced — not engine R&D; must not set queue priorities)
