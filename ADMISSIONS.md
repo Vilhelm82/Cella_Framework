@@ -93,8 +93,15 @@ moved.
 **Displacement:** none available at the substrate level — the transport law is proven.
 If G0.2 refutes single-account composition of M and R, the account splits into two
 ledgers *visibly*; the species survives, the algebra bends.
-**Obligations:** G0.2 — the two-species composition conjecture, certified or refuted.
-**Status: ESTABLISHED** (substrate proven; composition scoped to G0.2).
+**Obligations: DISCHARGED 2026-07-06.** The composition conjecture was resolved by the
+G0.2 campaign (`campaigns/G02_two_species_account/` — Stages 0/A/B/C, frozen preregs,
+byte-stable ×2, conjecture DEMONSTRATED on the covered class: order-2 slot,
+translations, rational data, fixed/drifting base crossed by F1), and the
+implementation certified at gates G0.1/G0.2 (`tests/gate_01.py` 7/7, `tests/gate_02.py`
+13/13, both ×2). Key laws now in code: attribution by criterion (`fold_into_m`),
+two-epoch boundary guard, owned holonomy (`holonomy_gap`).
+**Status: ESTABLISHED — composition resolved positive on the covered class;
+outside-class maps remain fenced (T_token territory).**
 
 ## A-003 — The exact number tower ℚ ∪ ℚ(√q)
 

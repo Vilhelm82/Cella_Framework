@@ -68,9 +68,13 @@ understood; a list of banned sources would not protect against the next stale on
   fixed in ink — vacuous verdict row): asymmetry law (d stays R / e generates M),
   NO multiplicative escape, quotient additive at fixed base + F1 crosses base
   drift, owned holonomy at the mixed tier, false-alarm/miss pair caught.
-  **G0.2 CONJECTURE: DEMONSTRATED on the covered class. Next open task: implement
-  `residue.py` + `observation.py` from the settled design; certify at gates
-  G0.1–G0.4; update ADMISSIONS A-002 on completion.**
+  **G0.2 CONJECTURE: DEMONSTRATED on the covered class.**
+- **`residue.py` IMPLEMENTED and certified: gates G0.1 CLOSED (7/7 ×2 `13e19bc7`)
+  and G0.2 CLOSED (13/13 ×2 `2d0bde4f`)** — two-ledger Account, R = group parameter
+  with epoch boundaries, `fold_into_m` attribution, `holonomy_gap` owned. A-002
+  obligations DISCHARGED. **Next open task: G0.3 (QSqrt exact tower) and G0.4
+  (refusals + two-register certificate emitter, `observation.py` wiring) — the
+  last two gates of Layer 0.**
 - Remote: `github.com/Vilhelm82/Cella_Framework` (private), push with Will's
   session token — token is never stored in repo, config, or memory.
 

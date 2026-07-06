@@ -9,12 +9,15 @@ certified under the schema. Failing a kill condition is a finding, not a failure
   true object exactly on the rational-op class, and `tests/gate_zero.py` goes green.
   *CLOSED 2026-07-06 — first consequence of the self-ratifying admission standard
   (A-001 ESTABLISHED). Float rejection and immutability verified adversarially.*
-- **G0.1 — residue algebra, species M.** Measurement defects compose across two chained
-  observation maps; the composed account reconstructs exactly.
-- **G0.2 — residue algebra, species R.** Representation defects (gauge motion) compose,
-  their invisible subspace is enforced at type level, and a mixed M+R chain keeps the two
-  species separated in the account. *This certifies the A-002 design conjecture — or
-  refutes it, which reshapes Layer 0 and is worth knowing immediately.*
+- **G0.1 — residue algebra, species M.** *CLOSED 2026-07-06* — `tests/gate_01.py`
+  7/7 ×2 (`13e19bc7`): scalar + matrix carriers, multiplicative chains additive with
+  current-input residues, original-truth mutant fails by exactly `T·δ₁δ₂`.
+- **G0.2 — residue algebra, species R + single account.** *CLOSED 2026-07-06* —
+  certified twice over: the mathematics by the G0.2 campaign (Stages 0/A/B/C, frozen
+  preregs, conjecture DEMONSTRATED on the covered class) and the implementation by
+  `tests/gate_02.py` 13/13 ×2 (`2d0bde4f`): 720-ordering account uniqueness through
+  the API, attribution fold, two-epoch law with boundary guard, asymmetry law,
+  owned holonomy with nonzero witness.
 - **G0.3 — number tower.** ℚ(√q) arithmetic exact; no float constructor reachable from
   any verdict path.
 - **G0.4 — refusals + certificate.** Every stub emits schema-conformant certificates;
