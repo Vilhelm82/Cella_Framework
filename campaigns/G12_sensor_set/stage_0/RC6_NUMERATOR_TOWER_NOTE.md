@@ -15,13 +15,21 @@ P = I - g g^T / q,   q = g.g
 
 ## PE.0 keystone retrodiction  (n=3, g=(3,1,2), H=[[2,1,0],[1,0,0],[0,0,2]])
 
-`kappa_c = -2/7`, `Kh = -6/7`, `ratio = 1/3`, `Delta_c = 4`. Independent route:
-SHADOW_LAW keystone `q=14, |Mg|^2=10 ⟹ Delta_c = 14-10 = 4 ⟹ kappa_c = 4/(-14) = -2/7`.
+Battery values `e_top(P Hc P) = -2/7`, `e_top(P H P) = -6/7`, `ratio = 1/3`, `Delta_c = 4`.
 
-> **Name-collision flag (brief caution).** The fixture's `anchors` field
-> `kappa_c=-1/49, K_G=-3/49` is the ν/W-prod **channel** normalization (RC-4 keystone
-> triple), a *different coordinate* from the raw `e_top(P Hc P) = -2/7` the battery
-> asserts. Retrodicted the battery's raw value; the ν-channel is flagged, not conflated.
+> **Correction (in ink, per G0.3 — supersedes the earlier "name-collision" read).**
+> `-2/7` and `-6/7` are the battery's **un-normalized** `e_top`, each `= q·(certified)`
+> with `q=14`. The **certified** invariants are the curvature-side
+> `K_G = e_top(P H P)/q = -3/49` and `kc = e_top(P Hc P)/q = -1/49`, and
+> `K_G = e_top(P H P)/q` is an **identity** — verified on three distinct surfaces this
+> run (keystone `-3/49`, saddle `x3-x1x2` `-1/9`, coupling+ `1/12`), cross-routed to the
+> RC-1/RC-4 certified values. **Scaling weight:** under `g→tg` the raw `e_top` is
+> **weight 0 (scale-invariant)**; `K_G, kc` are **weight -2** (`~1/t²`). So the battery's
+> `-2/7 / -6/7` are the scale-invariant *numerators*, NOT the curvature; the
+> `fixtures_eng2` `anchors` field `(-1/49, -3/49)` is the certified curvature (and was
+> right). Engine consequence: the sensor picks its weight deliberately — weight-0
+> `e_top` carries the claim-(iii) scale invariance; weight-2 `e_top/q` is what
+> cross-routes to the certified `K_G` bank at Stage C.
 
 ## Dominance over the OG ratio — three clauses
 
@@ -36,9 +44,12 @@ under S1, S2. The ratio `kappa_c/Kh` **fails** blindness: `Kh` reads the diagona
 the ratio" is false (PE.4); the corrected invariant is the numerator.
 
 **(iii) Scale invariance without the quotient [PROVEN].** `P(tg) = I − t²gg^T/(t²q) =
-P(g)` for all `t≠0`, so `kappa_c = e_top(P Hc P)` is scale-invariant on its own.
-Certified: `P(tg)==P(g)` and `kappa_c(tg,H)==kappa_c(g,H)` exactly at `t=2,3,5/3`, every
-fixture. The OG got scale invariance only via the ratio; the numerator needs no denominator.
+P(g)` for all `t≠0`, so the **raw coupling numerator** `e_top(P Hc P)` (weight 0) is
+scale-invariant on its own — this is exactly why no `K_G` quotient is needed. Certified:
+`P(tg)==P(g)` and `e_top(P Hc P)(tg,H)==e_top(P Hc P)(g,H)` exactly at `t=2,3,5/3`, every
+fixture. Contrast: the curvature-normalized channel `kc = e_top/q` is weight -2 and *does*
+scale; the OG ratio `kc/K_G` cancels the two weight-2 factors to recover invariance. The
+numerator reaches invariance one step earlier — no denominator at all.
 
 **(i) Coupling sensitivity [demonstrated].** Under `F1 (H01 += t)` and `F2` (generic
 coupling), `kappa_c` is non-constant and `d/dt[kappa_c/Kh] ≠ 0` at every fixture — same

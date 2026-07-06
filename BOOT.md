@@ -187,9 +187,11 @@ understood; a list of banned sources would not protect against the next stale on
   byte-stable ×2, K-1..K-6 silent:**
   · RC-7 shape moment (`verification/recert_shape_moment.py` `d63a6549`; [SR] I.6
     quintuple 147/153/24/0/0 Σ=324 two routes; n≤4 dimension threshold re-derived).
-  · RC-6 numerator tower (`verification/recert_numerator_tower.py` `3f147859`; PE.0
-    keystone −2/7,−6/7,1/3,4; self-fault blindness EXACT by factor-through-Hc identity;
-    scale-invariant via P(tg)=P(g); ν/W-prod −1/49 name-collision flagged).
+  · RC-6 numerator tower (`verification/recert_numerator_tower.py` `3f147859`;
+    self-fault blindness EXACT by factor-through-Hc identity; scale-invariant via
+    P(tg)=P(g). Normalization resolved in ink: certified curvature K_G=−3/49, kc=−1/49
+    = e_top/q [weight −2]; battery's −2/7,−6/7 = q× = weight-0 numerators.
+    K_G=e_top(PHP)/q verified as an identity on 3 surfaces).
   · RC-8 localization (`verification/recert_localization.py` `f09444462`; support
     theorem {S:dΔ_S/dt≠0}={S⊇e*} exact, moved-support family; ⊆ structural).
   **NEXT: Stage A — A-010 `CHANNEL_ISOTROPIC` record + per-sensor two-route reference
