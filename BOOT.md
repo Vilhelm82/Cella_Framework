@@ -11,7 +11,7 @@ the next open task from the repo alone — never from memory or chat recall.**
 3. `ROADMAP.md` — gates + the DESIGN FREEZE (four containment rules, stop-line).
 4. `ADMISSIONS.md` — what is established, what is OPEN, and the re-verification rule
    with its case law.
-5. The active campaign's BRIEF (currently `campaigns/G02_two_species_account/`).
+5. The active campaign's BRIEF (currently `campaigns/G12_sensor_set/`).
 
 ## Why prior work is never copied blindly (mechanisms, not rules)
 
@@ -168,9 +168,9 @@ understood; a list of banned sources would not protect against the next stale on
   pole order), kill set K-C1..K-C9, and the RC-5 double-duty note (one recert
   now feeds LEAD-2 AND LEAD-7). Bank-everything rule added to the write
   protocol below.
-- **NEXT OPEN TASK: G1.2 — the sensor set** (numerator tower, shape moment,
-  localization channels, each admitted per A-007 with blindness statement +
-  exact reference values; `CHANNEL_ISOTROPIC` enters by record at its first
+- **G1.2 OPEN — IN PROGRESS (Will's go, 2026-07-06): the sensor set** (numerator
+  tower, shape moment, localization channels, each admitted per A-007 with blindness
+  statement + exact reference values; `CHANNEL_ISOTROPIC` enters by record at its first
   use there, per A-008/A-009). **Draft brief banked 2026-07-06, third session
   (`campaigns/G12_sensor_set/BRIEF.md`, prereg NOT frozen — freezes at open on
   Will's go).** **REPRICED 2026-07-06 (late), post nested-mount recovery:** the
@@ -182,7 +182,11 @@ understood; a list of banned sources would not protect against the next stale on
   Stage 0 = RC-6..RC-8 retrodiction, est. ~2 sessions; diary first-forms are
   the anti-reconstruction-drift record. Standing cautions bind (dead branches,
   name collisions/glossary, provisional modulus, audit-trees-not-maps).
-  Sole open input: Will's go; prereg freezes at open.
+  Opened on Will's go; lean prereg (predictions + falsification gates) at
+  `campaigns/G12_sensor_set/PREREG.md`. **Stage 0 — RC-7 shape moment CLEAN**
+  (`verification/recert_shape_moment.py`, byte-stable ×2 `d63a6549`; [SR] I.6
+  quintuple 147/153/24/0/0 Σ=324 retrodicted two routes; n≤4 dimension threshold
+  re-derived; K-3 silent). RC-6 numerator tower + RC-8 localization OPEN.
   Note for the session: `verification/` scripts carry the certified formulas
   (transport, normal form, F1/F3, role channels) — cite and re-use those, import
   nothing else.
