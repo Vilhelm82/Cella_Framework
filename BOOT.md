@@ -229,10 +229,25 @@ understood; a list of banned sources would not protect against the next stale on
   EMERGE from the algebra — the underived characteristic is now an OUTPUT — Booth form
   matched to 6e-61; (SA-5, K-2 scoped) modulus-λ curve has `j_λ(1)=10976`, the
   2-isogenous partner of register `j(1)=128` (`Φ₂(128,10976)=0`) — K-2 needs the
-  index-2 isogeny, DEFERRED not fired. **NEXT (Stage A session 2):** symbolic-s weight
-  extraction n(s),w₁(s),w₂(s) (family tier EMPIRICAL until then; k²(s)=A(s) already
-  closed); close K-2 with the isogeny; exhibit the Gauss–Bonnet 1-form explicitly.
-  Kills K-1/K-4 clean, K-2 scoped, K-3 is Stage B. LEAD-8 → OPEN.
+  index-2 isogeny, DEFERRED not fired. Kills K-1/K-4 clean.
+- **ARITH-I STAGE A CLOSED — keystone-complete, K-2 closed family-wide (2026-07-06,
+  session 2).** `reports/arithmetic_track/arith_i_stageA_s2.py` 6/6 ×2 (`b2d29718`);
+  close note `campaigns/ARITH_I_higher_cohn_vossen/CLOSE_STAGE_A.md`. **K-2 CLOSED
+  family-wide:** `Φ₂(j_reg(s), j_λ(s)) ≡ 0` identically in s — the CALC-24 register
+  curve is 2-isogenous to the r=2 total-curvature differential's modular curve for
+  EVERY shear (`j_λ(s)=(1728s⁶+6912s⁴+9216s²+4096)/(s⁶+s⁴)`), not just s=1. Curve
+  modulus PROVEN `k²(s)=A(s)=½−1/(2√(1+s²))` (cross-ratio of the four branch points;
+  pins the session-1 SA-5 open scoping). Keystone still exact (n,(weights),constant as
+  outputs). **Two naive family-tier closed forms REFUTED (banked):** Booth
+  `n=(4−3r)/8`+wts (3+2r),(2+2r) fails off keystone (complex at s=2); polynomial-in-r
+  (K,E) weights don't fit (residual ~1e-3). **PARKED (family tier):** symbolic
+  `n(s),w₁(s),w₂(s)` — blocker named: arc length is naturally (K,E) on the A-curve, the
+  Booth (K,Π) form trades E for Π at a special n(s) that is NOT a naive r-substitution;
+  bounded well-posed upgrade, changes no established result. Kills: K-1/K-4 clean, K-2
+  CLOSED, K-3 → Stage B. **NEXT OPEN TASK: ARITH-I Stage B** — the r=3 exactness
+  discriminator (`e₃(P H° P)/q^(5/2)·dA` exact?); opens with the r=2 explicit primitive
+  η as the ansatz-machinery warm-up, then Route1 ansatz search + Route2 bump test, K-3
+  armed. LEAD-8 OPEN (Stage A done).
   Note for the session: `verification/` scripts carry the certified formulas
   (transport, normal form, F1/F3, role channels) — cite and re-use those, import
   nothing else.
