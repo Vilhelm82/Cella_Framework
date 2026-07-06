@@ -56,3 +56,11 @@ Each sensor factors through the carrier `O` (certified G1.0), never raw `H`. Reu
 certified bank (RC-1 keystone triple `kc=-1/49, kint=-3/49, ks=+1/49`; RC-4
 `A_c=42793/1555848`, det `8·Λ_P·Λ_D·Λ_S/q0^6`; gate_11 `σ₂↔channel sums`); import
 nothing else. Name collisions → consult `30_GLOSSARY_DISAMBIGUATION.md` first.
+
+## Stage A declaration — gate_04 vocabulary 7 → 8 (P9 precedent)
+
+Admitting `CHANNEL_ISOTROPIC` (A-010) grows the closed refusal vocabulary 7 → 8. At
+Stage B the `tests/gate_04.py` count assertion updates 7 → 8 in the same commit as the
+sensor wiring; its stdout pin `3775a7fb` is expected invariant (the count lives in the
+assertion, not the output); the tripwire must fire pre-edit; the full Layer-0/1 suite
+re-runs green ×2 at Stage C close.

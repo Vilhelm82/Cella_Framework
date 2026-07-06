@@ -54,6 +54,15 @@ asymmetry gate_11 P3 pins for the σ tower vs the carrier — the numerator towe
   not re-derived; the faithfulness det `8·Λ_P·Λ_D·Λ_S/q0⁶` and the `Λ_ρ=0` stratum
   (A-010) are Stage B/C.
 
+## Per-sensor n-scope
+
+| sensor | n-scope | witness tier | fence |
+|---|---|---|---|
+| Numerator tower `κ_r` | generic-n (all n≥3), parity-typed | n=3 `kc=−1/49` cross-routed; odd rungs (n≥4) in `ℚ(√q)` | none |
+| Shape moment | generic-n projectors; content `S^(n−2,2)` is n≥4 | n=4 retrodicted (quintuple 147/153/24/0); n≥5 threshold re-derived | absent at n=3 |
+| Localization | generic-n (triangle decomposition); non-trivial n≥4 | n≥4 support theorem (PE.5) | trivial at n=3 |
+| Fingerprint (faithfulness det) | **n=3-fenced** (A-008 certified scope) | keystone `A_c = 42793/1555848` | n=3 only; strata `CHANNEL_ISOTROPIC` / `ROLE_CHART_UNAVAILABLE` |
+
 ## Pins
 
 ```
