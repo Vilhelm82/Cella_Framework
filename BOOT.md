@@ -171,7 +171,13 @@ understood; a list of banned sources would not protect against the next stale on
 - **NEXT OPEN TASK: G1.2 — the sensor set** (numerator tower, shape moment,
   localization channels, each admitted per A-007 with blindness statement +
   exact reference values; `CHANNEL_ISOTROPIC` enters by record at its first
-  use there, per A-008/A-009).
+  use there, per A-008/A-009). **Draft brief banked 2026-07-06, third session
+  (`campaigns/G12_sensor_set/BRIEF.md`, prereg NOT frozen — freezes at open on
+  Will's go).** Re-scope finding: the three sensor definitions have NO in-repo
+  source at any tier — Stage 0 is source reconstruction + re-derivation
+  (RC-6..RC-8), incl. the n=5 dimension-threshold witness ([CONTAINER]
+  substrate). Open input for Will, named in the brief: sensor source papers
+  into `Reference_Material/` (est. 2 sessions) vs from-scratch (est. 3).
   Note for the session: `verification/` scripts carry the certified formulas
   (transport, normal form, F1/F3, role channels) — cite and re-use those, import
   nothing else.
