@@ -183,10 +183,13 @@ understood; a list of banned sources would not protect against the next stale on
   the anti-reconstruction-drift record. Standing cautions bind (dead branches,
   name collisions/glossary, provisional modulus, audit-trees-not-maps).
   Opened on Will's go; lean prereg (predictions + falsification gates) at
-  `campaigns/G12_sensor_set/PREREG.md`. **Stage 0 — RC-7 shape moment CLEAN**
-  (`verification/recert_shape_moment.py`, byte-stable ×2 `d63a6549`; [SR] I.6
-  quintuple 147/153/24/0/0 Σ=324 retrodicted two routes; n≤4 dimension threshold
-  re-derived; K-3 silent). RC-6 numerator tower + RC-8 localization OPEN.
+  `campaigns/G12_sensor_set/PREREG.md`. **Stage 0 — RC-6 + RC-7 CLEAN; RC-8 open.**
+  RC-7 shape moment (`verification/recert_shape_moment.py`, byte-stable ×2 `d63a6549`;
+  [SR] I.6 quintuple 147/153/24/0/0 Σ=324 two routes; n≤4 threshold; K-3 silent).
+  RC-6 numerator tower (`verification/recert_numerator_tower.py`, byte-stable ×2
+  `3f147859`; PE.0 keystone −2/7,−6/7,1/3,4 retrodicted; self-fault blindness EXACT by
+  factor-through-Hc identity; scale-invariant via P(tg)=P(g); K-1/K-2 silent). RC-8
+  localization is the last Stage-0 gate.
   Note for the session: `verification/` scripts carry the certified formulas
   (transport, normal form, F1/F3, role channels) — cite and re-use those, import
   nothing else.
