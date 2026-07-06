@@ -209,8 +209,30 @@ understood; a list of banned sources would not protect against the next stale on
   gate_10 re-pinned `372a7f54`; A-007/A-008/A-010 discharged; four mutants bite.
   Correction banked: the numerator tower is the coupling channel kc — self-fault-blind +
   F→tF-invariant, but gauge-COVARIANT (not -invariant; the gauge-invariants are A_c/K_G).
-  Close: `campaigns/G12_sensor_set/CLOSE.md`. NEXT OPEN TASK: ARITH_I (parked, opens after
-  G1.2) — `campaigns/ARITH_I_higher_cohn_vossen/BRIEF.md`.**
+  Close: `campaigns/G12_sensor_set/CLOSE.md`.**
+- **ARITH-I OPENED (2026-07-06) — Stage A session 1 CLEAN.** Parked campaign opened per
+  BOOT next-task. Open pins re-derived fresh, zero-import, byte-stable ×2
+  (`verification/arith_i_open_pins.py`, 15/15, `a2ef103d`): family self-check at s=1,
+  `det B = 4(D²+DS+P²)` ⟹ det B ≡ 12 on F=0, `K_G = −3/49` at q=14, cone eigenvalues
+  (1±√2)/2 & 1, `a²_max = k² = (2−√2)/4`, keystone constant by TWO routes (closed form
+  vs direct link arc length, agree <1e-60), CALC-24 register self-consistency at four
+  shears. General-s consequence banked: `det B = 4s²(D²+sDS+P²)`, `K_G = −12s²/q²`.
+  PREREG frozen pre-battery (`campaigns/ARITH_I_higher_cohn_vossen/PREREG.md`,
+  `32f2fb3a`): family `F_s = D²+sDS+P²−3` pinned, kills K-1..K-4 armed. **Stage A
+  session 1** (`reports/arithmetic_track/arith_i_stageA.py`, 11/11 ×2 `ba9f270e`;
+  note `ARITH_I_STAGE_A_SESSION1.md`): (SA-1) link-ellipse semi-axes `A(s)=½−1/(2√(1+s²))`
+  =k², `C(s)` closed-form; (SA-2) the algebraic collapse proven exact —
+  `speed²=(C+ν sin²t)/(1+ν sin²t)`, ν=(A−C)/(1−A) — the r=2 primitive; (SA-3) the
+  reduction `∫∫_S K_G dA = −2L` corroborated at s∈{½,1,2} by two independent routes
+  (direct surface curvature 2D quadrature vs link arc length) to ~17 digits; (SA-4,
+  K-4 checkpoint clean) at the keystone `n=(4−3√2)/8` and weights (3+2√2),(2+2√2)
+  EMERGE from the algebra — the underived characteristic is now an OUTPUT — Booth form
+  matched to 6e-61; (SA-5, K-2 scoped) modulus-λ curve has `j_λ(1)=10976`, the
+  2-isogenous partner of register `j(1)=128` (`Φ₂(128,10976)=0`) — K-2 needs the
+  index-2 isogeny, DEFERRED not fired. **NEXT (Stage A session 2):** symbolic-s weight
+  extraction n(s),w₁(s),w₂(s) (family tier EMPIRICAL until then; k²(s)=A(s) already
+  closed); close K-2 with the isogeny; exhibit the Gauss–Bonnet 1-form explicitly.
+  Kills K-1/K-4 clean, K-2 scoped, K-3 is Stage B. LEAD-8 → OPEN.
   Note for the session: `verification/` scripts carry the certified formulas
   (transport, normal form, F1/F3, role channels) — cite and re-use those, import
   nothing else.

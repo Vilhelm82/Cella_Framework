@@ -156,10 +156,20 @@ complementarity test, pole orders and leading coefficients recorded.
 
 ## LEAD-8 — Higher Cohn-Vossen and the global grid constants
 
-**Status:** PARKED-OPEN — full campaign brief written 2026-07-06 while context was
-hot (`campaigns/ARITH_I_higher_cohn_vossen/BRIEF.md`); **opens after G1.2** per
-Will's parking instruction. Paper-track adjacency, staked as a lead because branch
-C1 is a theorem candidate, not a write-up.
+**Status:** OPEN — campaign opened 2026-07-06 (after G1.2), PREREG frozen `32f2fb3a`,
+**Stage A session 1 CLEAN** (`reports/arithmetic_track/arith_i_stageA.py` 11/11 ×2
+`ba9f270e`; note `ARITH_I_STAGE_A_SESSION1.md`; open pins
+`verification/arith_i_open_pins.py` `a2ef103d`). Paper-track adjacency, staked as a
+lead because branch C1 is a theorem candidate, not a write-up.
+**Session-1 delivered:** the r=2 algebraic collapse proven exact
+(`speed²=(C+ν sin²t)/(1+ν sin²t)`); the reduction `∫∫_S K_G dA = −2L` corroborated at
+s∈{½,1,2} by two independent numeric routes (now stronger than the banked 19-digit
+EMPIRICAL single-shear); **the underived n=(4−3√2)/8 and the Booth weights (3+2√2),
+(2+2√2) EMERGE as outputs at the keystone** (K-4 checkpoint clean); K-2 scoped — the
+modulus-λ curve is `j_λ(1)=10976`, 2-isogenous to register `j(1)=128`.
+**Remaining (Stage A s2):** symbolic-s n(s),w₁(s),w₂(s) (family tier EMPIRICAL until
+then; k²(s)=A(s) closed); close K-2 with the index-2 isogeny; exhibit the
+Gauss–Bonnet 1-form. Then Stage B (the r=3 exactness discriminator).
 **What is banked:** total curvature = −2 × asymptotic-link arc length [EMPIRICAL,
 19 digits; modulus identity a²_max = k² exact]; K_G = −12/q² derived in-session;
 polar-dual candidate REFUTED by discriminating test; the grid normalization makes
