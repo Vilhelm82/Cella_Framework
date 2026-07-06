@@ -106,10 +106,22 @@ byte-identical to what was deleted.
   reconstruction is possible from the `.pyc` copies banked in
   `old_program_sources/constant_hunt_bytecode/`.
 - **Invisible-loss floor:** this method only sees Python that was once
-  imported. Known additional losses with NO trace: the `dbp_four_role_calc_log`
-  diary (only its drift ledger survives in `_audit/`). The [CONTAINER]-tier
-  scripts (f1_*, trap_*, ladder, h2_walls, mono_galois) were never on this
-  machine at all — ephemeral-container casualties, not repo losses.
+  imported. The [CONTAINER]-tier scripts (f1_*, trap_*, ladder, h2_walls,
+  mono_galois) were never on this machine at all — ephemeral-container
+  casualties, not repo losses.
+- **CALC-LOG DIARY RECOVERED (2026-07-06, Will's external copies):**
+  `old_program_sources/Calc_logs/` — four cumulative snapshots; **v8 is the
+  complete diary, all 36 entries CALC-01..CALC-36** (~152KB of derivation
+  history vs the dashboard's ~16KB of state). The dashboard does NOT subsume
+  it: per its own header it is "STATE, not history" — the diary carries the
+  derivations (CALC-26 dimension threshold: ~156 lines vs a 4-line [SR] row),
+  first-form definitions (the anti-reconstruction-drift record for G1.2),
+  dead branches and re-openings (what NOT to re-run), the CALC-31..35 depth
+  entries (partial substitute for the lost [CONTAINER] scripts), and the
+  CALC-23/24/25 arithmetic entries (extra ARITH-I retrodiction targets).
+  The earlier snapshots (v1/v2/v3) enable revision-diffing against v8 —
+  the drift ledger documented that entries were sometimes silently revised,
+  and the snapshot series is how to catch it.
 - **Standing fix (Will's rule, generalized):** V4 is a frozen reference repo —
   one `git add -A` preservation commit there would make the entire surviving
   untracked layer permanent and end this loss class outright.
