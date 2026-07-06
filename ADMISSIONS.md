@@ -256,6 +256,42 @@ content now.
 **Status: ESTABLISHED (mathematics recertified in-repo; engine wiring gated at
 G1.0/G1.2).**
 
+## A-009 — Two refusal tokens for Layer 1 entry: `CODIM_UNSUPPORTED`, `ROLE_CHART_UNAVAILABLE`
+
+**Origin:** design freeze rule 3 (ROADMAP) names `CODIM_UNSUPPORTED`; admission A-008
+names `ROLE_CHART_UNAVAILABLE` for admission at first engine use. First engine use is
+G1.0 (this record precedes that use, per A-004 discipline).
+**Need:** G1.0's carrier API has two scope boundaries that are findings, not crashes:
+(1) constraint blocks of length > 1 — the API can express what the codim-1 theory
+cannot yet compute (stop-line: no invented system semantics); (2) a gradient with a
+zero component — the surface cannot be solved for that variable, the corresponding
+output chart does not exist (the general-n form of RC-4's F5 locus, where every
+t-denominator is a power of the vanishing component).
+**Criterion:** A-004's — no silent garbage, no crash paths, every refusal classifiable
+and renderable, strata carry their diagnostic content.
+**Alternatives and why each loses:**
+- *Reuse `SINGULAR_GRADIENT` for the component-zero stratum* — provably wrong typing:
+  `SINGULAR_GRADIENT` is ∇F = 0 (no surface direction at all); a component zero with
+  ∇F ≠ 0 has a perfectly good surface, just no chart in that direction. Conflating
+  them discards exactly the stratum content the token exists to carry.
+- *Generic `INDETERMINATE`* — discards which roles failed; the diagnostic value IS the
+  named component set.
+- *Exceptions / None* — banned by the engine's definition (A-004).
+**Plain renderings (closed-vocabulary discipline, no raw token in any plain register):**
+- `CODIM_UNSUPPORTED` → "this computation covers a single constraint; a system of
+  constraints was given and is not yet supported"
+- `ROLE_CHART_UNAVAILABLE` → "the surface cannot be solved for one of its variables
+  here, so that reading direction does not exist"
+**Deliberately NOT admitted here:** `CHANNEL_ISOTROPIC` (also named by A-008) — its
+first engine use is the G1.2 fingerprint sensor, not G1.0's carrier; it enters by its
+own record then.
+**Displacement:** a certified refinement of either stratum into typed sub-strata with
+distinct diagnostic content.
+**Obligations:** G1.0 — both tokens exercised through cells and certificates in
+`tests/gate_10.py`; `tests/gate_04.py` vocabulary count updated 5 → 7 and re-pinned
+(declared in the G1.0 prereg before the battery runs).
+**Status: ESTABLISHED.**
+
 ---
 
 *Ledger discipline: append-only; displaced records stay visible with successors named.
