@@ -239,4 +239,14 @@ expectations — the same retrodiction pattern as the state block. A folder list
 config but absent live is a drift alarm, not a detail. (4) Artifact-audit corollary
 (2026-07-06): even origin [EVAL]-tier artifacts rot (constant_hunt survives as
 bytecode only). Substrate maps are claims; audit the tree, not the map — full
-verdict in `Reference_Material/README.md`.
+verdict in `Reference_Material/README.md`. (5) **Certificate re-run policy (Will,
+2026-07-06, after two full sweeps in one day burned real money re-executing
+standing certificates):** certification happens ONCE; trust attaches to the
+re-runnable certificate, not to re-running it. Certificates re-run only when:
+(a) code they certify changed, (b) their result is about to bear load in a NEW
+derivation or prereg, or (c) a mismatch is suspected. Boot integrity check =
+git state + pins on file, NOT re-execution. A boot message requesting a full
+sweep contradicts this runbook — flag it as drift and run only what (a)–(c)
+justify. Corollary for cost: batch verification into single calls with compact
+verdict-line output; long sessions pay a context tax on every tool call —
+prefer short sessions off this file over marathon sessions.
