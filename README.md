@@ -2,7 +2,7 @@
 
 Exact residue accounting engine — the diagnostic engine rebuilt clean on Cella foundations.
 
-**Author:** William Lloyd · **Started:** 2026-07-06 · **Status:** Layer 0 scaffold; Gate 0 open (failing by design until the first primitive is real).
+**Author:** William Lloyd · **Started:** 2026-07-06 · **Status:** Layer 0 in progress; Gate 0 CLOSED (the cell is real); G0.1–G0.4 open.
 
 ## What this is
 
@@ -20,10 +20,12 @@ confidence — never a bare number.
 1. **Standalone / zero import.** Nothing is imported or copied wholesale from previous
    work. No exceptions for convenience.
 2. **The admission rule.** Before anything from previous work is introduced — a design,
-   a formula, a document, a test corpus — it gets an admission record in
-   `ADMISSIONS.md` explaining **why we are using it** and **what its best shape/format
-   is here** (which is rarely its original shape). It enters only after that record is
-   approved, and it enters in the improved form, not the original.
+   a formula, a document, a test corpus — its record in `ADMISSIONS.md` must close the
+   case: **why the engine needs it, why nothing we hold now or could derive with bounded
+   additional work beats it, and what would displace it.** Records self-ratify when the
+   case is closed — the answer must be obvious from the record; nothing waits on
+   sign-off. A case that cannot close is a named work item, and displacement is by
+   evidence: present the dominating alternative and the old record falls.
 
 ## Layer map
 

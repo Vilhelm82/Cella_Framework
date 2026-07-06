@@ -7,7 +7,8 @@ certified under the schema. Failing a kill condition is a finding, not a failure
 
 - **G0 — first primitive is real.** `Cell` round-trips: value ⊕ residue reconstructs the
   true object exactly on the rational-op class, and `tests/gate_zero.py` goes green.
-  *Open. Failing by design.*
+  *CLOSED 2026-07-06 — first consequence of the self-ratifying admission standard
+  (A-001 ESTABLISHED). Float rejection and immutability verified adversarially.*
 - **G0.1 — residue algebra, species M.** Measurement defects compose across two chained
   observation maps; the composed account reconstructs exactly.
 - **G0.2 — residue algebra, species R.** Representation defects (gauge motion) compose,

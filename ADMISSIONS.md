@@ -1,116 +1,198 @@
 # ADMISSIONS — the introduction ledger
 
-**The rule (standing, Will, 2026-07-06):** nothing gets introduced or copied wholesale
-from previous work until we have explained **why we are using it** and **how it is in its
-best shape/format possible**. This file is where that explanation lives. An artifact
-enters the repo only after its record here reads ADMITTED, and it enters in the improved
-form the record describes — never the original form.
+**The standard (Will, 2026-07-06, superseding the sign-off form):** nothing is introduced
+from previous work until its record proves it is the correct addition — **why the engine
+needs it, and why nothing we hold now, or could derive with bounded additional work,
+beats it.** If that cannot be answered, there is more work to do, and the record names
+that work. Records **self-ratify when the case is closed** — the answer must be obvious
+from the record itself. No sign-off queue exists.
+
+**Statuses.**
+- **OPEN** — case not yet closed; the missing work is named. A work item, not a request.
+- **ESTABLISHED** — case closed; the artifact may be built. Scope stated exactly.
+- **DISPLACED** — a better artifact won under the same standard. The record stays
+  visible, successor named. Displacement is by evidence only: present the dominating
+  alternative and the old record falls. This replaces authority with challenge.
 
 **Record template**
 
 ```
-ID:           A-###
-Artifact:     what is being admitted
-Origin:       where it came from (repo/doc/paper — reference only, never a dependency)
-Why:          the reason this engine needs it
-Best shape:   the form it should take HERE, and what must change from the origin form
-Status:       PROPOSED → ADMITTED (Will) → SUPERSEDED
+ID / Artifact / Origin (reference only, never a dependency)
+Need:          why the engine requires this capability at all
+Criterion:     the properties that decide what "best" means here
+Alternatives:  every live option — held now or derivable with bounded work — and
+               why each loses on the criterion
+Displacement:  the evidence that would displace this record
+Obligations:   what the harness must still certify, and at which gate
+Status:        OPEN | ESTABLISHED | DISPLACED
 ```
-
-Statuses move only on Will's word. PROPOSED artifacts may be discussed but not committed
-as content.
 
 ---
 
-## A-001 — The Cella primitives (cell, observation map, composable residue)
+## A-001 — The cell, the observation map, composable residue
 
-- **Origin:** Cella Foundational Design Document v0.1-draft (2026-06-13). Reference only.
-- **Why:** they are the foundation itself — the typed-residue account is what makes every
-  downstream verdict exact-or-refused instead of approximately-trusted.
-- **Best shape:** re-authored as executable interface contracts in `src/cella/`
-  (not prose): `Cell`, `ObservationMap`, `Residue`. The origin doc's honesty grading
-  carries over — the two claims it marks as INFERENCE (the sum-typed token form and
-  general residue composability) are implemented as **contracts the harness must
-  certify**, not as assumed facts. The origin document itself is not copied in; this
-  record plus the code contracts replace it.
-- **Status:** PROPOSED
+**Origin:** Cella Foundational Design Document v0.1 (2026-06-13). Reference only.
+**Need:** the engine's defining output is exact-or-typed-refusal with a reconstructive
+account. That requires a result object that carries its own account.
+**Criterion:** simultaneously — (1) exact reconstruction of the true object where
+possible, (2) typed non-recovery where not, (3) defects compose across chained
+operations so a whole pipeline has one derivable account.
+**Alternatives and why each loses:**
+- *Floats + tolerances* — fails all three; it is the failure mode this engine exists
+  against.
+- *Interval/ball arithmetic* — enclosure, not reconstruction (fails 1); no typed
+  non-recovery semantics (fails 2); widens under dependency where exact residues
+  compose without widening on the covered class.
+- *Higher precision (arbitrary-precision floats)* — relocates the defect, never
+  types or recovers it (fails 1, 2).
+- *Fully symbolic computation* — cannot represent the defect of a lossy observation at
+  all (measured data has no symbolic truth to hold), unbounded cost (fails 3 in
+  practice).
+- *Derivable-with-work* — any object satisfying (1)–(3) **is** a cell under another
+  name; the criterion forces the definition.
+**Displacement:** an account object meeting (1)–(3) with a strictly larger covered class
+or strictly lower cost.
+**Obligations:** G0.1 — composition certified on the rational-op class. Sum-typed token
+form certified or split (G0.4). These are certification targets, not assumptions —
+the design doc itself graded them INFERENCE and this record preserves that.
+**Status: ESTABLISHED.**
 
-## A-002 — The second residue species (representation defect / gauge residue)
+## A-002 — The second residue species (representation defect, R)
 
-- **Origin:** the post-pivot geometry results (transport law; gauge-normal form). Cited
-  as mathematics — theorems stand independent of any prior engine.
-- **Why:** it is the new primitive the geometry work delivered: representation choice is
-  an observation map whose defect is exactly typed and composable (zero-sum residue
-  against an invariant total). Cells carrying both species can distinguish *data
-  changed* / *representation changed* / *computation lost something* — the false-positive
-  taxonomy the Validation Programme's interference stage exists to untangle.
-- **Best shape:** a second `Residue` species in the same algebra, with its declared
-  invisible subspace, plus a Layer-0 certification target: both species compose under one
-  account. The composition claim is a design conjecture until the harness certifies it.
-- **Status:** PROPOSED
+**Origin:** the transport law and gauge-normal form. Cited as mathematics.
+**Need:** the engine must distinguish *the data changed* from *the representation
+changed* — the false-positive taxonomy (recalibration, units, chart choice) that
+interference testing exists to untangle.
+**Criterion:** type-level separation of information-bearing defect (M) from
+zero-information motion (R), losing neither the invariant nor the explanation of what
+moved.
+**Alternatives and why each loses:**
+- *Type gauge motion as measurement error (M)* — provably wrong typing: the transport
+  law says invariants are untouched, so gauge motion carries zero information about the
+  state; conflation makes every recalibration look like a fault.
+- *Eager quotient (store only invariants, discard the representative)* — loses the
+  account: "representation changed, not data" becomes unverifiable, and the
+  representative carries the role semantics (the declared frame is the physical
+  section, not junk).
+- *No typing (incumbent practice)* — the taxonomy collapses; ad hoc normalization.
+**Displacement:** none available at the substrate level — the transport law is proven.
+If G0.2 refutes single-account composition of M and R, the account splits into two
+ledgers *visibly*; the species survives, the algebra bends.
+**Obligations:** G0.2 — the two-species composition conjecture, certified or refuted.
+**Status: ESTABLISHED** (substrate proven; composition scoped to G0.2).
 
 ## A-003 — The exact number tower ℚ ∪ ℚ(√q)
 
-- **Origin:** the parity law (even-order invariants rational; odd-order carry exactly one
-  √q). Cited as mathematics.
-- **Why:** it lets the entire invariant tower — including the odd, bending-sensitive
-  sector — live in exact arithmetic with no floats in any verdict path.
-- **Best shape:** a two-rung exact numeric type (`Fraction`, and `a + b·√q` pairs with
-  exact arithmetic), implemented fresh in `src/cella/qsqrt.py`.
-- **Status:** PROPOSED
+**Origin:** the parity law. Cited as mathematics.
+**Need:** no float on any verdict path, across the *entire* invariant tower — including
+the odd, bending-sensitive extrinsic sector.
+**Criterion:** exact arithmetic covering every invariant the engine emits; minimal
+machinery.
+**Alternatives and why each loses:**
+- *ℚ only* — provably insufficient: odd-order invariants carry √q, and that sector is
+  the derived defence to the isometric-bending attack.
+- *General algebraic number fields / symbolic radicals* — provably unnecessary: the
+  parity law shows nothing beyond one √q ever occurs in the tower. Generality buys
+  cost for zero covered objects.
+- *Ball arithmetic over ℝ* — enclosure, not exactness (see A-001).
+**The parity law is itself the optimality proof: two rungs are necessary (ℚ fails) and
+sufficient (nothing above √q occurs).**
+**Displacement:** an invariant entering the engine whose value provably leaves ℚ(√q) —
+that would be a mathematical finding first and a tower extension second.
+**Obligations:** G0.3 — exact arithmetic certified; no float constructor reachable from
+verdict paths.
+**Status: ESTABLISHED.**
 
 ## A-004 — Stratum-typed refusals
 
-- **Origin:** the refuse-not-lie discipline and the singular-strata typing leads;
-  origin engines' Morse/degeneracy classification. Cited as design precedent.
-- **Why:** degeneracy is a stratum, not a failure. A refusal that names its stratum
-  (zero gradient, vanishing normal coordinate, rank-deficient fit, umbilic) is a
-  diagnostic output; a NaN is a liability.
-- **Best shape:** a closed token vocabulary in `src/cella/refusal.py`, each token
-  carrying the stratum classification and the plain-language reason used by the
-  certificate. Vocabulary grows only by admission record.
-- **Status:** PROPOSED
+**Origin:** refuse-not-lie discipline; degeneracy-as-stratum leads. Design precedent.
+**Need:** degenerate inputs are diagnostic findings (lockstep channels, vanishing
+gradients), and the certificate must render every non-result in plain language.
+**Criterion:** no silent garbage, no crash paths; every refusal classifiable and
+renderable; strata carry their diagnostic content.
+**Alternatives and why each loses:**
+- *NaN / None / exceptions* — silent garbage or crash; both banned by the engine's
+  definition.
+- *Flat error codes* — discard the stratum content, which is exactly the diagnostic
+  value of a degeneracy.
+- *Confidence scores in place of refusal* — smuggles statistics into the computation
+  layer; violates the layer separation.
+**Displacement:** none — the criterion admits only this form. Vocabulary grows by
+new records, each token with its plain rendering.
+**Obligations:** G0.4 — refusal paths produce schema-conformant certificates; every
+token renders.
+**Status: ESTABLISHED.**
 
-## A-005 — The Validation Programme ("Sniff Test Architecture", Kessler v1.0, 2026-04-07)
+## A-005 — The Validation Programme (Kessler v1.0, 2026-04-07)
 
-- **Origin:** `Validation Programme.md` (uploaded 2026-07-06). Reference only.
-- **Why:** it is the acceptance harness — nine staged, hard-gated questions from
-  mathematical ground truth to operational robustness, with benchmark corpus, blind
-  protocol, and adversarial stage already designed.
-- **Best shape:** re-authored (not copied) when Layer 3 opens: sensor references updated
-  to the corrected invariant set (numerator tower, carrier, shape moment, localization
-  channels); the exactness/statistics separation made explicit per stage (Cella certifies
-  computation; statistics judge detection); metamorphic relations MR-3/MR-4 rewritten as
-  identity checks since they are now theorems. Stage structure and gates unchanged.
-- **Status:** PROPOSED
+**Origin:** `Validation Programme.md`. Reference only.
+**Need:** an acceptance harness whose stages are cumulative hard gates, or the engine's
+claims are self-graded.
+**Criterion:** staged coverage of the forced question sequence — is the maths right →
+how small a change is visible → what corrupts it → does it detect real faults → blind →
+what breaks it → versus incumbents → self-consistent → deployable.
+**Alternatives and why each loses:**
+- *Derive a fresh programme* — the nine questions are near-forced by the claim
+  structure; a fresh derivation reproduces them at the cost of losing the imported
+  cross-domain discipline (interference protocol, LoD, blind protocol, adversarial
+  stage) already encoded.
+- *Ad hoc per-dataset testing* — no gates, no cumulative validity, no limitation
+  disclosure; the incumbent failure mode.
+**Best shape:** re-authored at Layer 3 with corrected sensors, exactness/statistics
+separation per stage, and metamorphic relations MR-3/MR-4 as identity checks (now
+theorems).
+**Displacement:** stage *structure* — by a demonstrated gap the nine questions miss;
+stage *parameters* (thresholds, corpora) — evidence-bound and expected to move.
+**Status: ESTABLISHED (structure; parameters evidence-bound).**
 
-## A-006 — The OG method portfolio as capability contract
+## A-006 — The capability contract (origin method inventory)
 
-- **Origin:** `Lloyd_Method_Portfolio.xlsx` (uploaded 2026-07-06). Reference only.
-- **Why:** the clean rebuild must not silently lose capabilities. The 37-method
-  inventory is the checklist this engine is graded against at Layer 3.
-- **Best shape:** a `CAPABILITY_CONTRACT.md` table (method → planned equivalent → status)
-  authored fresh at Layer 3 opening; includes the origin sheet's own gap list (entity
-  segmentation, cross-file compare, streaming mode, per-variable sweep profiles). No
-  origin code enters.
-- **Status:** PROPOSED
+**Origin:** `Lloyd_Method_Portfolio.xlsx`. Reference only.
+**Need:** a clean rebuild's classic failure is silently shipping without capabilities
+the old engine had.
+**Criterion:** an enumerable checklist the rebuild is graded against; completeness of
+inventory.
+**Alternatives and why each loses:** *rebuild from memory* — the documented drift
+failure mode; *no contract* — silent loss, discovered by users. The origin inventory is
+the only complete method census that exists (37 methods + its own gap list).
+**Displacement:** a demonstrated inventory error (method missing from the census).
+**Obligations:** `CAPABILITY_CONTRACT.md` authored fresh at G3.0; no origin code enters.
+**Status: ESTABLISHED.**
 
 ## A-007 — The corrected invariant sensor set
 
-- **Origin:** post-pivot mathematics: numerator coupling tower (self-fault-blind,
-  scale-invariant), gauge-normal carrier O (complete order-2 invariant), shape moment
-  (mandatory at n ≥ 5 by the dimension threshold), triangle localization channels
-  (faulted-edge recovery), branch-typed inversion (monodromy). Cited as mathematics.
-- **Why:** these replace the origin engines' sensors where the mathematics proved them
-  wrong (the ratio law) or incomplete (scalar spectra at n ≥ 5), and add localization,
-  which no prior engine had.
-- **Best shape:** fresh Layer-1 derivation notes with exact reference values on the
-  analytical test surfaces, then implementations certified against those references.
-  Each sensor enters with its blindness statement (what it provably cannot see) alongside
-  its sensitivity statement.
-- **Status:** PROPOSED
+**Origin:** post-pivot mathematics (numerator tower; carrier; shape moment; triangle
+localization; parity). Cited as mathematics.
+**Need:** the engine's sensors, each shipping invariance group + blindness set +
+completeness scope.
+**Criterion:** recalibration-proof (invariant), complete at declared scope, exactly
+computable, blindness derivable.
+**Why nothing beats it — the dominance cases, one per sensor:**
+- *Carrier O* — the normal-form theorem forces every invariant sensor to factor
+  through O. The carrier is not one choice among alternatives; it is the
+  coordinatization of **all** invariant sensors at order 2. Competitors are either
+  functions of O or provably non-invariant.
+- *Numerator tower* — strictly dominates the ratio sensor it corrects: same coupling
+  sensitivity, exact (not approximate) self-fault blindness, scale invariance without
+  the quotient. Proven.
+- *Shape moment* — scalars are provably insufficient at n ≥ 5 (dimension threshold);
+  the isotypic moment set captures exactly the invariant content at its degree. A
+  better degree-2 sensor cannot exist; it could only be a different basis of the same
+  content.
+- *Localization channels* — proven support inclusion ({moved} = {S ⊇ e*}); the
+  alternative (contribution-style attribution) has no support theorem.
+**Scope stated exactly:** mathematical dominance on the regular locus at declared order/
+degree. **Not claimed:** empirical dominance on real data — that question is routed to
+armed kill conditions at G3.1 (A/B rerun) and G3.2 (shape-moment wager), and the global
+completeness tier remains OPEN as successor work (portfolio priority #2).
+**Displacement:** per sensor, by a certified counterexample inside its stated scope, or
+by a completed global tier changing the completeness statement.
+**Obligations:** G1.2 — each sensor enters with exact reference values + its blindness
+statement.
+**Status: ESTABLISHED (mathematical scope); empirical scope gated, kills armed.**
 
 ---
 
-*Ledger discipline: append-only. A superseded record stays visible with its successor
-named. If an artifact is used anywhere without a record here, that is a defect.*
+*Ledger discipline: append-only; displaced records stay visible with successors named.
+An artifact used anywhere without a record here is a defect. A record that cannot close
+its case stays OPEN with its missing work named — OPEN records are the R&D queue.*
