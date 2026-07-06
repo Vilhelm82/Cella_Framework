@@ -34,10 +34,12 @@ from __future__ import annotations
 
 from fractions import Fraction
 
+from .qsqrt import QSqrt
+
 SPECIES_M = "M"
 SPECIES_R = "R"
 
-_SCALARS = (Fraction, int)
+_SCALARS = (Fraction, int, QSqrt)   # the exact tower: Q and Q(sqrt r)
 
 
 def _validate_exact(x, ctx="payload"):
@@ -55,8 +57,10 @@ def _validate_exact(x, ctx="payload"):
 
 
 def madd(x, y):
-    """Exact addition on the free Q-module (scalars and nested tuples)."""
+    """Exact addition on the free module over the tower (Q and Q(sqrt r))."""
     if isinstance(x, _SCALARS) and isinstance(y, _SCALARS):
+        if isinstance(x, QSqrt) or isinstance(y, QSqrt):
+            return x + y                      # QSqrt handles exact coercion
         return Fraction(x) + Fraction(y)
     if isinstance(x, tuple) and isinstance(y, tuple) and len(x) == len(y):
         return tuple(madd(a, b) for a, b in zip(x, y))
@@ -65,6 +69,8 @@ def madd(x, y):
 
 def msub(x, y):
     if isinstance(x, _SCALARS) and isinstance(y, _SCALARS):
+        if isinstance(x, QSqrt) or isinstance(y, QSqrt):
+            return x - y
         return Fraction(x) - Fraction(y)
     if isinstance(x, tuple) and isinstance(y, tuple) and len(x) == len(y):
         return tuple(msub(a, b) for a, b in zip(x, y))

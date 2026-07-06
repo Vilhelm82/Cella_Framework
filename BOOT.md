@@ -69,12 +69,22 @@ understood; a list of banned sources would not protect against the next stale on
   NO multiplicative escape, quotient additive at fixed base + F1 crosses base
   drift, owned holonomy at the mixed tier, false-alarm/miss pair caught.
   **G0.2 CONJECTURE: DEMONSTRATED on the covered class.**
-- **`residue.py` IMPLEMENTED and certified: gates G0.1 CLOSED (7/7 ×2 `13e19bc7`)
-  and G0.2 CLOSED (13/13 ×2 `2d0bde4f`)** — two-ledger Account, R = group parameter
-  with epoch boundaries, `fold_into_m` attribution, `holonomy_gap` owned. A-002
-  obligations DISCHARGED. **Next open task: G0.3 (QSqrt exact tower) and G0.4
-  (refusals + two-register certificate emitter, `observation.py` wiring) — the
-  last two gates of Layer 0.**
+- **LAYER 0 COMPLETE (2026-07-06).** All five gates closed, each byte-stable ×2:
+  G0 (`Cell`), G0.1 (`13e19bc7`), G0.2 (`2d0bde4f`), G0.3 (`f169a4ed`, QSqrt tower,
+  parity retrodiction σ₁²=72/343), G0.4 (`3775a7fb`, refusals first-class,
+  two-register Certificate with double-run emission law, ObservationMap
+  refuse-not-lie). A-001..A-004 obligations ALL DISCHARGED. Run the suite:
+  `python3 tests/gate_zero.py && ... gate_01/02/03/04.py` — all exit 0.
+- **NEXT OPEN TASK (fresh session, Will's instruction): open LAYER 1 — G1.0, jets
+  and the carrier.** Build on Layer 0 cells/certificates only. Binding constraints
+  from the DESIGN FREEZE: constraint inputs typed as BLOCKS (codim-1 refuses
+  len > 1 with `CODIM_UNSUPPORTED` — token to be admitted by record first);
+  carrier O extracted from H directly (general-n formula, certified RC-2);
+  channel recovery is an n=3 cross-check only; generic-n linear algebra
+  throughout; certificates state their tier. Geometry enters via admission
+  A-007's discipline: exact reference values + blindness statement per sensor.
+  Note for the session: `verification/` scripts carry the certified formulas
+  (transport, normal form, F1/F3) — cite and re-use those, import nothing else.
 - Remote: `github.com/Vilhelm82/Cella_Framework` (private), push with Will's
   session token — token is never stored in repo, config, or memory.
 

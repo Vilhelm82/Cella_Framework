@@ -18,11 +18,18 @@ certified under the schema. Failing a kill condition is a finding, not a failure
   `tests/gate_02.py` 13/13 ×2 (`2d0bde4f`): 720-ordering account uniqueness through
   the API, attribution fold, two-epoch law with boundary guard, asymmetry law,
   owned holonomy with nonzero witness.
-- **G0.3 — number tower.** ℚ(√q) arithmetic exact; no float constructor reachable from
-  any verdict path.
-- **G0.4 — refusals + certificate.** Every stub emits schema-conformant certificates;
-  refusal paths produce refusal certificates, never exceptions or NaN; plain register
-  renders for every token in the vocabulary.
+- **G0.3 — number tower.** *CLOSED 2026-07-06* — `tests/gate_03.py` 14/14 ×2
+  (`f169a4ed`): exact field arithmetic at fixed radicand, square/nonpositive guards,
+  one-sqrt-per-context, `__float__` raises, parity retrodiction `σ₁² = 72/343`.
+- **G0.4 — refusals + certificate.** *CLOSED 2026-07-06* — `tests/gate_04.py` 12/12 ×2
+  (`3775a7fb`): closed vocabulary renders plainly, value AND refusal paths emit
+  schema-conformant certificates (refuse-not-lie through composition), double-run
+  emission law (nondeterminism cannot certify), QSqrt flows through cells/records,
+  NaN blocked at the cell boundary.
+
+**LAYER 0 COMPLETE (2026-07-06).** Five gates closed (`G0, G0.1–G0.4`), every one
+byte-stable ×2, on mathematics certified in-repo by the G0.2 campaign. Nothing
+uncertified can exist above this layer.
 
 ## Layer 1 — the geometric substrate
 

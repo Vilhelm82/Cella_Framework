@@ -121,9 +121,9 @@ machinery.
 sufficient (nothing above √q occurs).**
 **Displacement:** an invariant entering the engine whose value provably leaves ℚ(√q) —
 that would be a mathematical finding first and a tower extension second.
-**Obligations:** G0.3 — exact arithmetic certified; no float constructor reachable from
-verdict paths.
-**Status: ESTABLISHED.**
+**Obligations: DISCHARGED 2026-07-06** — gate G0.3 closed (`tests/gate_03.py`,
+14/14 ×2): exact arithmetic, guards, float exclusion, parity retrodiction.
+**Status: ESTABLISHED — implemented and certified.**
 
 ## A-004 — Stratum-typed refusals
 
@@ -141,9 +141,10 @@ renderable; strata carry their diagnostic content.
   layer; violates the layer separation.
 **Displacement:** none — the criterion admits only this form. Vocabulary grows by
 new records, each token with its plain rendering.
-**Obligations:** G0.4 — refusal paths produce schema-conformant certificates; every
-token renders.
-**Status: ESTABLISHED.**
+**Obligations: DISCHARGED 2026-07-06** — gate G0.4 closed (`tests/gate_04.py`,
+12/12 ×2): refusals first-class through cells, composition, and certificates; every
+token renders plainly; the double-run emission law enforced in code.
+**Status: ESTABLISHED — implemented and certified.**
 
 ## A-005 — The Validation Programme (Kessler v1.0, 2026-04-07)
 

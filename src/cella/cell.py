@@ -1,84 +1,75 @@
 """The cell: a computed result that carries its own account.
 
-Admission: A-001 (ESTABLISHED — the dominance case is in ADMISSIONS.md; the
-criterion forces this object: exact reconstruction where possible, typed
-non-recovery where not, composable defects).
+Admission A-001 (ESTABLISHED). Gates: G0 (closed — first round-trip),
+G0.4 (refusal cells; tower values).
 
 Contract
 --------
-A Cell is (value, residue). The defining identity, checked not assumed:
+A Cell is (value, residue):
 
-    value ⊕ residue == TRUE OBJECT
+    value ⊕ residue == TRUE OBJECT          (residue on the exact tower), or
+    residue is a Refusal                    (value is None; the cell names
+                                             exactly why no truth is
+                                             recoverable — never NaN, never
+                                             an exception)
 
-- ``value`` and ``residue`` live on the exact tower (Fraction / int now;
-  QSqrt joins at Gate G0.3).
-- ``reconstruct()`` returns the true object exactly. Never a guess.
+- values/residues live on the exact tower: Fraction, int, QSqrt, or nested
+  tuples thereof. Floats are TypeErrors, not warnings.
+- ``reconstruct()`` returns the true object exactly, or the Refusal.
 - Cells are immutable.
-- No float enters a Cell on any verdict path — a float argument is a
-  TypeError, not a warning (tolerance-leak is a type error here).
-
-Current scope (grows by gate, never silently):
-- G0 (closed): exact residues on the rational-op class.
-- G0.1: residues become Residue objects with species and composition.
-- G0.3: QSqrt values join the tower.
-- G0.4: refusal cells — until then ``is_refusal()`` is honestly False,
-  because no Refusal can yet be constructed.
 """
 
 from __future__ import annotations
 
-from fractions import Fraction
-
-_EXACT_TYPES = (Fraction, int)
+from .refusal import Refusal
+from .residue import _validate_exact, madd
 
 
 class Cell:
-    """(value, residue) on the exact tower. Gate G0: closed."""
+    """(value, residue) on the exact tower, or a refusal cell."""
 
     __slots__ = ("_value", "_residue")
 
     def __init__(self, value, residue):
-        for name, x in (("value", value), ("residue", residue)):
-            if isinstance(x, (float, complex)):
-                raise TypeError(
-                    f"{name} is {type(x).__name__}: floats are forbidden on "
-                    "verdict paths (exact tower only)"
-                )
-            if not isinstance(x, _EXACT_TYPES):
-                raise TypeError(
-                    f"{name} must be exact (Fraction or int), got {type(x).__name__}"
-                )
-        object.__setattr__(self, "_value", Fraction(value))
-        object.__setattr__(self, "_residue", Fraction(residue))
+        if isinstance(residue, Refusal):
+            if value is not None:
+                raise ValueError("a refusal cell carries no value — the "
+                                 "refusal stands where the value would be")
+        else:
+            _validate_exact(value, "value")
+            _validate_exact(residue, "residue")
+        object.__setattr__(self, "_value", value)
+        object.__setattr__(self, "_residue", residue)
 
-    def __setattr__(self, name, val):  # immutability
+    def __setattr__(self, *_):
         raise AttributeError("Cell is immutable")
 
     @property
-    def value(self) -> Fraction:
-        """The representable value — what a lossy observation reported."""
+    def value(self):
+        """The representable value; None iff this is a refusal cell."""
         return self._value
 
     @property
-    def residue(self) -> Fraction:
-        """The typed defect — what the observation discarded, kept exactly."""
+    def residue(self):
+        """The typed defect — exact leftover, or the Refusal."""
         return self._residue
 
-    def reconstruct(self) -> Fraction:
-        """The true object, exactly: value ⊕ residue."""
-        return self._value + self._residue
-
     def is_refusal(self) -> bool:
-        """Refusal cells land at Gate G0.4; no Refusal is constructible yet."""
-        return False
+        return isinstance(self._residue, Refusal)
 
-    def __eq__(self, other) -> bool:
+    def reconstruct(self):
+        """The true object exactly — or the Refusal. Never a guess."""
+        if self.is_refusal():
+            return self._residue
+        return madd(self._value, self._residue)
+
+    def __eq__(self, other):
         if not isinstance(other, Cell):
             return NotImplemented
         return self._value == other._value and self._residue == other._residue
 
-    def __hash__(self) -> int:
+    def __hash__(self):
         return hash((self._value, self._residue))
 
-    def __repr__(self) -> str:
+    def __repr__(self):
         return f"Cell(value={self._value!r}, residue={self._residue!r})"
