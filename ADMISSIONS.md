@@ -214,6 +214,48 @@ by a completed global tier changing the completeness statement.
 statement.
 **Status: ESTABLISHED (mathematical scope); empirical scope gated, kills armed.**
 
+## A-008 — The active role layer at n=3 (role charts, named channels, A_c, faithful fingerprint)
+
+**Origin:** "The Active Role-Jet Orbit Calculus for Constraint-Surface Roles" (W. Lloyd,
+2026-06-28, foundational); "Role-Channel Anisotropy of DBP Surfaces" and "Two Geometric
+Readings of a Thermodynamic Surface" (companions, 2026-06-28). Reference only, never a
+dependency.
+**Need:** the Tier-1 fingerprint lever and G1.0's n=3 cross-check need the layer that
+says *which chart* a channel was read in, *why* the unordered channel triple is
+chart-independent (the orbit theorem), *when* the fingerprint map is faithful, and
+*which strata refuse*. Without it, channel values are chart-relative numbers with no
+identity semantics.
+**Criterion:** chart-independence proven, not assumed; faithfulness with an explicit
+closed-form degeneration locus; exact-ℚ computable on the regular locus (a closure
+theorem, not hope); every failure a typed stratum.
+**Alternatives and why each loses:**
+- *Single-chart channels* — provably chart-relative (RC-4 F3: the triple permutes under
+  active recharting; any fixed slot moves).
+- *Ratio diagnostics* — the refuted ratio law; strictly dominated by the numerator
+  tower (A-007).
+- *Ad-hoc symmetrization (max/mean over charts)* — loses the faithfulness certificate;
+  distinct states can collide with no witness of when.
+- *Derivable-with-work* — the orbit theorem forces any invariant of the order-2
+  coupling data to factor through this carrier; a competitor is either a function of it
+  or provably non-invariant.
+**Displacement:** a certified counterexample to faithfulness off the loci Λ_ρ = 0
+within the stated scope (order 2, regular locus, n=3), or a witness with strictly
+larger domain.
+**Obligations:** mathematics DISCHARGED 2026-07-06 —
+`verification/recert_role_channels.py` CLEAN 19/19 ×2 (`3d7ed1bf`): active S3
+relations, A_c three equivalent forms + telescoping, faithfulness determinant
+`8·Λ_P·Λ_D·Λ_S / q0^6`, exact-ℚ closure (t-denominators are pure a-powers), keystone
+pins (A_c = 42793/1555848; K_G = −3/49 cross-route against recert_transport_law),
+orbit action realized on the channels (t: P↔D, s: D↔S), and both degeneration strata
+witnessed. Remaining at gates: G1.0 — wire as the n=3 cross-check of the general-n
+carrier path; G1.2 — sensor entry with blindness statement. **Token naming (A-004
+discipline):** this record names `ROLE_CHART_UNAVAILABLE` (role-singular stratum:
+a = 0 or b = 0) and `CHANNEL_ISOTROPIC` (Λ_ρ = 0: fingerprint rank drop) for admission
+to the closed vocabulary at their first engine use; RC-4 certifies their mathematical
+content now.
+**Status: ESTABLISHED (mathematics recertified in-repo; engine wiring gated at
+G1.0/G1.2).**
+
 ---
 
 *Ledger discipline: append-only; displaced records stay visible with successors named.

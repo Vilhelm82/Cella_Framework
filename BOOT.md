@@ -75,6 +75,18 @@ understood; a list of banned sources would not protect against the next stale on
   two-register Certificate with double-run emission law, ObservationMap
   refuse-not-lie). A-001..A-004 obligations ALL DISCHARGED. Run the suite:
   `python3 tests/gate_zero.py && ... gate_01/02/03/04.py` — all exit 0.
+- **Layer-1 prep (2026-07-06): RC-4 CLEAN** (`verification/recert_role_channels.py`,
+  19/19 ×2 `3d7ed1bf`) — the active role layer recertified in-repo from the
+  2026-06-28 papers (origins in A-008; values retrodicted, never trusted): active S₃
+  relations symbolic; A_c three equivalent forms + telescoping; **faithfulness
+  det = 8·Λ_P·Λ_D·Λ_S / q0⁶**; exact-ℚ closure (t-denominators are pure a-powers,
+  degrees [1,1,3,3,3]); keystone pins incl. **A_c = 42793/1555848** and K_G = −3/49
+  cross-route against recert_transport_law; orbit action realized on channels
+  (t: P↔D, s: D↔S); isotropy + role-singular strata witnessed. **A-008 ESTABLISHED**
+  (names the two G1-era tokens `ROLE_CHART_UNAVAILABLE`, `CHANNEL_ISOTROPIC` per
+  A-004 discipline). LEVER_AUDIT fingerprint witness re-based + monodromy row
+  re-scored (gcd law; same-S₃ PROVEN independent); POSITIONING GTD row → instance
+  complete. Layer-1 sessions: RC-4 joins RC-2/RC-3 as citable certified formulas.
 - **NEXT OPEN TASK (fresh session, Will's instruction): open LAYER 1 — G1.0, jets
   and the carrier.** Build on Layer 0 cells/certificates only. Binding constraints
   from the DESIGN FREEZE: constraint inputs typed as BLOCKS (codim-1 refuses
