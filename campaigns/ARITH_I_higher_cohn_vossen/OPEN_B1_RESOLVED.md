@@ -7,6 +7,28 @@ reference document is not in the repo and I'll surface it."* This note records w
 they pin (re-verification still applies: values below are retrodiction targets to
 re-derive in-repo, never trusted on their face).
 
+## Reference currency (checked 2026-07-06, Will's prompt)
+
+- **Standing results — use V4 `portfolio/10_DBP_STANDING_RESULTS.md` = v1.1 CANONICAL**
+  (grounded S-2026-07-02, committed 2026-07-05; header states "supersedes v1.0"). The
+  copy Will *uploaded* is **v1.0 (2026-07-01) — STALE**; do not cite it. v1.1 adds,
+  among others, **§I.3a/I.3b — a closed form for the coupling channel** directly useful
+  here (avoids the symbolic `e_3` blowup):
+  ```
+  Δ_c^(n)(h) = q·Σ_e h_e² − |H_c·g|²                 (= −q·e_2(P H_c P), general n)
+  Q_ν = Σ_{|S|=3} T_S·(2I−J)_S ,  T_S = 1/∏_{m∉S} g_m²
+  shadow(Q_ν) = s(g)·[(n−2)I − A₁·Johnson J(n,2)] ,  s(g)=e_3(g²)/(C(n,3)·e_n(g²))
+  ```
+  (n=3 member = the transport law's Lorentzian `2I−J`, signature (2,1)). Also new in
+  v1.1: the n=5 explicit witness, V.1a (minimal Weierstrass `Y²=X³−X²+X−1`, j=128), and
+  V.4a/V.4b (wreath-law rederivations). Nothing I banked conflicts with v1.1.
+- **Calc log — v8 is the latest** (no v9 anywhere; genuinely absent from V4 — only its
+  drift ledger survives — so the upload was needed). v1.1 of the standing results is
+  newer than the diary and supersedes it on conflict.
+- **Consequence:** read the general-n coupling-channel structure from v1.1 §I.3b and the
+  `Λ·Λ·Λ` construction (CALC-32/33), not from the stale v1.0. The closed forms sidestep
+  the symbolic blowup and give the general-n structure the r=3 verdict wants.
+
 ## What the references pin
 
 **1. The density `κ_{r;p,q}` (CALC-15/15a).** The channel density is
