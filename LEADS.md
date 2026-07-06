@@ -171,12 +171,19 @@ family-wide** `Φ₂(j_reg(s),j_λ(s))≡0`. The earlier naive `n=(4−3r)/8` re
 stands (true n merely coincides at s=1). Kills K-1/K-4 clean, K-2 CLOSED. NO parked
 family tier. *(Note: the "2 sessions/stage" stop condition was fabricated and is VOID —
 `CORRECTION_2026-07-06_fabricated_stop_condition.md`.)*
-**Next (Stage B):** the r=3 exactness discriminator — is `e₃(P H° P)/q^(5/2)·dA`
-exact? Opens with the r=2 explicit primitive η (ansatz-machinery warm-up), then Route1
-ansatz search + Route2 bump deformation, K-3 armed. YES → higher Cohn-Vossen (new
-theorem; prior-art sweep owed: Chern–Lashof, total absolute curvature). NO → r≥3
-constants are interior periods (`j_λ(s)` + family isogeny are banked inputs for the
-transcendence branch C2).
+**Stage B session 1 done** (`arith_i_stageB_s1.py` `6ed1232a`, 5/5 ×2; note
+`ARITH_I_STAGE_B_SESSION1.md`): r=2 explicit primitive exhibited & verified exact
+(`η=−N₃(N₁dN₂−N₂dN₁)/(N₁²+N₂²)`, Gauss-map pullback, `dη=K_G dA`; the owed
+Gauss–Bonnet 1-form + r=3 ansatz template); **PROVEN r=3 needs n≥4** (`e_3(P Hc P)≡0`
+at n=3 by rank); r=3 density confirmed a real object at n=4.
+**GATE — OPEN B-1:** the specific ARITH-I n=4/n=6 quadric family is not fixed by
+surviving [CONTAINER] material and the exactness answer depends on it — pin it (DBP
+n-general form / reconstruct the depth-theorem canonical family / coordinate LEAD-1)
+before the r=3 verdict. Will's call or a derivation gate; not guessed.
+**Then:** Route1 ansatz search + Route2 bump deformation, K-3 armed. YES → higher
+Cohn-Vossen (new theorem; prior-art sweep owed: Chern–Lashof, total absolute
+curvature). NO → r≥3 constants are interior periods (`j_λ(s)` + family isogeny banked
+for the transcendence branch C2).
 **What is banked:** total curvature = −2 × asymptotic-link arc length [EMPIRICAL,
 19 digits; modulus identity a²_max = k² exact]; K_G = −12/q² derived in-session;
 polar-dual candidate REFUTED by discriminating test; the grid normalization makes

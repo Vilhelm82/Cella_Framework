@@ -258,6 +258,23 @@ understood; a list of banned sources would not protect against the next stale on
   exactness discriminator (`e₃(P H° P)/q^(5/2)·dA` exact?); opens with the explicit r=2
   primitive η (ansatz-machinery warm-up), then Route1 ansatz search + Route2 bump test,
   K-3 armed. LEAD-8 OPEN.
+- **ARITH-I STAGE B session 1 (2026-07-06): setup + r=2 primitive + the gate.**
+  `reports/arithmetic_track/arith_i_stageB_s1.py` 5/5 ×2 (`6ed1232a`); note
+  `ARITH_I_STAGE_B_SESSION1.md`. Density pinned:
+  `κ_{r;r,0}=(−1)^r e_r(P Hc P)/q^((r+2)/2)`, Hc=offdiag(H). **(SBB-1) r=3 needs n≥4,
+  PROVEN:** `rank(P Hc P)≤n−1`, so `e_3≡0` identically on the n=3 keystone — the r=3
+  question lives on the n≥4 (Specht-full n≥6) quadric, structural not optional.
+  **(SBB-2) r=2 explicit primitive, exact:** `η=−N₃(N₁dN₂−N₂dN₁)/(N₁²+N₂²)` (Gauss-map
+  pullback of the S² area-form primitive), `dη=K_G dA` (8 exact rational points;
+  residual factors 6(P/P−1)=0); only singularity N₁=N₂=0 = asymptotic directions where
+  −2L localizes — the owed Gauss–Bonnet 1-form + the r=3 ansatz template. **(SBB-3)**
+  r=3 density is a real object at n=4 (nonzero, sample 21/31). **GATE — OPEN B-1
+  (routed, not guessed):** the specific ARITH-I n=4/n=6 quadric family is NOT fixed by
+  surviving [CONTAINER] material and the exactness answer depends on it; pinning it
+  (DBP n-general form if Will holds the source / reconstruct the depth-theorem
+  canonical family / coordinate with LEAD-1/GRID_I) is load-bearing — Will's call or a
+  derivation gate before the r=3 Route1/Route2 verdict. **NEXT: resolve OPEN B-1, then
+  run the r=3 exactness verdict.** Nothing guessed; K-3 belongs to the verdict run.
   Note for the session: `verification/` scripts carry the certified formulas
   (transport, normal form, F1/F3, role channels) — cite and re-use those, import
   nothing else.
