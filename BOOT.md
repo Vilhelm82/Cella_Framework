@@ -290,9 +290,25 @@ understood; a list of banned sources would not protect against the next stale on
   because the density is exact"). **H° = offdiag channel Hessian Hc CONFIRMED** (not
   full H → r=3 is the genuine channel question, not trivial Gauss–Kronecker). r=3
   premise now LIVE, machinery+normalization validated. **Gate unchanged & singular:
-  OPEN B-1 (the n=4/n=6 family) is the ONLY thing before the r=3 verdict.** Next: run
-  r=3 ansatz on several natural n=4 quadrics to test family-robustness of the verdict,
-  or pin the family (Will's call / DBP source / depth-theorem reconstruction).
+  OPEN B-1 (the n=4/n=6 family) is the ONLY thing before the r=3 verdict.**
+- **ARITH-I OPEN B-1 RESOLVED (2026-07-06, Will surfaced the missing refs).** Standing
+  rule adopted: **search V4 first for any doc; pause for Will only if truly absent** (the
+  calc log v8 was genuinely absent from V4 — only its drift ledger survives; standing
+  results + self-glue + `active_role_channel_carrier` ARE in V4). Refs pin (note
+  `campaigns/ARITH_I_higher_cohn_vossen/OPEN_B1_RESOLVED.md`): density `κ_{r;p,q}` =
+  `t^p u^q` coeff of bordered minors of `M=tH_c+uH_s`, norm `q^{(r+2)/2}`; **CALC-15a
+  confirms `H°=H_c` offdiag** (full bordered Hessian = the Gauss–Kronecker object the
+  paper rules out) — validates Stage B s2 SBC-3. r=3 density (CALC-32/33): `κ_{3;3,0}`
+  per (chart k,3-subset jlm) `= Λ_{k,jl}Λ_{k,jm}Λ_{k,lm}/q^{5/2}`. **Canonical n=4
+  surface (CALC-04/24): `F=Σy_i²+Σ_{i<j}y_iy_j−c`.** **REFRAMING (CALC-24 Part A):** the
+  elliptic-period/2-surface structure is BONDED to n=3; for n≥4 the surface is
+  (n−1)-dim, integral changes species (Gauss–Kronecker/Chern–Gauss–Bonnet) — the r≥3
+  grid integral is NOT the 2-surface elliptic period the addendum imagined (full
+  Gauss–Kronecker = end-data by Gauss-map degree; the CHANNEL density is the nontrivial
+  T-B question). Density concrete (e_3=−4/7,q=7 at (1,0,0,0)); symbolic e_3 blows up so
+  **the verdict route is point-sampling the ansatz over ℚ** (depth-theorem method).
+  **NEXT OPEN TASK: run the r=3 exactness verdict** — point-sampling ansatz `dω=κ dV` on
+  the n=4 3-manifold, r=2 grid primitive (`3c18c25e`) as control, K-3 armed.
   Note for the session: `verification/` scripts carry the certified formulas
   (transport, normal form, F1/F3, role channels) — cite and re-use those, import
   nothing else.

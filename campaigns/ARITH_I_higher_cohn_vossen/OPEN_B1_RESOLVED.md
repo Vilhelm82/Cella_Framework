@@ -80,9 +80,34 @@ functions) with algebraic coefficients (`q`-power / azimuthal-factor denominator
 solve `dω = κ_{3;3,0} dV` by linear algebra; the r=2 grid-channel primitive
 (`3c18c25e`) is the validated template. Route 2 = bump deformation, K-3 armed.
 
+## Density is concrete — calibration (pointwise exact ℚ, in-repo re-derivation)
+
+`e_3(P Hc P)` and `q=|Hy|²` on the canonical n=4 surface (`H=I+J`), evaluated exactly:
+
+```
+y=(1,0,0,0):  e_3 = −4/7,     q = 7      → −e_3/q² = 4/343
+y=(1,2,−1,1): e_3 = −42/61,   q = 61
+y=(2,−1,1,3): e_3 = −26/33,   q = 165
+y=(1,1,1,½):  e_3 = −304/307, q = 307/4
+```
+
+`κ_{3;3,0} = −e_3/q^{5/2}` is a well-defined nonzero density (the r=3 object is real,
+confirming Stage B s1 SBB-3 on the canonical surface). **Method note:** the *symbolic*
+`e_3(P Hc P)` over the surface blows up sympy's `cancel` (repeated hangs), but the
+*pointwise* exact-ℚ value is instant — so the exactness verdict is tractable by
+**point-sampling the ansatz** (evaluate `dω` and `κ` at many rational surface points,
+solve the linear system over ℚ; a validated inconsistency = not exact, a solution =
+exact). This is the same GF(p)/ℚ point-rank method the depth theorem used (CALC-32/33),
+and it sidesteps the symbolic blowup. The r=2 grid-channel primitive (`3c18c25e`) is the
+control to embed.
+
 ## Status
 
-OPEN B-1 CLOSED (surface + density pinned from the references, re-derivation to
-follow). Reframing banked. Next: retrodict the density on the n=4 surface (recover the
-CALC-32 realization / a keystone-consistent value as the calibration anchor), then run
-the r=3 exactness verdict.
+**OPEN B-1 CLOSED.** Surface pinned (`F=Σy_i²+Σ_{i<j}y_iy_j−c`), density pinned
+(`κ_{3;3,0}=−e_3(P Hc P)/q^{5/2}`, `H°=Hc` confirmed), normalization pinned (grid),
+reframing banked (r≥3 is a ≥3-manifold Gauss–Kronecker-species object, not the
+2-surface elliptic period), density confirmed concrete with calibration values.
+**Next (the r=3 verdict):** the point-sampling ansatz for `dω=κ dV` on the 3-manifold,
+K_G/r=2 control embedded, K-3 armed with a bump corroboration — run as a focused step
+(the symbolic route is intractable in the current environment; point-sampling is the
+route).
