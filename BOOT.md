@@ -173,11 +173,16 @@ understood; a list of banned sources would not protect against the next stale on
   exact reference values; `CHANNEL_ISOTROPIC` enters by record at its first
   use there, per A-008/A-009). **Draft brief banked 2026-07-06, third session
   (`campaigns/G12_sensor_set/BRIEF.md`, prereg NOT frozen — freezes at open on
-  Will's go).** Re-scope finding: the three sensor definitions have NO in-repo
-  source at any tier — Stage 0 is source reconstruction + re-derivation
-  (RC-6..RC-8), incl. the n=5 dimension-threshold witness ([CONTAINER]
-  substrate). Open input for Will, named in the brief: sensor source papers
-  into `Reference_Material/` (est. 2 sessions) vs from-scratch (est. 3).
+  Will's go).** **REPRICED 2026-07-06 (late), post nested-mount recovery:** the
+  no-source finding was a mount artifact — retrodiction-grade anchors for ALL
+  THREE sensors now banked in `Reference_Material/old_program_sources/` and
+  verified this session (ENG2 prereg `0c11ef30` + freeze pins exact; PE.5
+  support theorem verbatim, n≥4 fixtures — RC-8 no-anchor finding WITHDRAWN;
+  [SR] I.6 quintuple 147/153/24/0 Parseval 324; diary v8 complete CALC-01..36).
+  Stage 0 = RC-6..RC-8 retrodiction, est. ~2 sessions; diary first-forms are
+  the anti-reconstruction-drift record. Standing cautions bind (dead branches,
+  name collisions/glossary, provisional modulus, audit-trees-not-maps).
+  Sole open input: Will's go; prereg freezes at open.
   Note for the session: `verification/` scripts carry the certified formulas
   (transport, normal form, F1/F3, role channels) — cite and re-use those, import
   nothing else.

@@ -5,16 +5,23 @@ bank-everything rule: this record is the repo-legal form of the pending decision
 **PREREG is NOT frozen.** It freezes at open, on Will's go, after the open inputs
 below are resolved. Governed by the three standing rules.
 
-**Correction over the first draft of this plan (chat-only, this session's boot
-report):** that draft assumed the sensor mathematics existed somewhere citable and
-under-priced Stage 0. Re-scoped against the full repo state: **no document in this
-repo — tracked or reference-tier — carries the definitions of the numerator tower,
-the shape moment, or the localization channels.** The only in-repo statements are
-A-007's dominance-case summaries and LEVER_AUDIT rows, both status-labels in origin
-currency (claims, never evidence). The currency banner additionally marks the
-dimension threshold (CALC-26/27) as having **no in-repo certificate** and the depth
-theorem as **[CONTAINER]** — no surviving artifact anywhere. Re-verification here
-means **re-derivation, not re-run.**
+**Correction history (kept in ink; each supersedes the last):**
+1. *Chat-only first draft (boot report):* assumed sensor mathematics existed
+   somewhere citable; under-priced Stage 0.
+2. *First banked draft (1fb6c88):* found NO in-repo source at any tier for the
+   three sensor definitions; priced Stage 0 as from-scratch re-derivation
+   (est. 3 sessions without sources).
+3. *REPRICED after the nested-mount incident resolved (this revision):* the finding
+   in (2) was an artifact of the mount, not the archive — the full V4 tree audit
+   plus Will's external calc-log copies recovered retrodiction-grade sources for
+   ALL THREE sensors, banked in `Reference_Material/old_program_sources/`
+   (see the README's three audit sections). Origin pins verified by this session's
+   own runs: `PREREG_ENG2.md` = `0c11ef30…` exact; its internal freeze pins
+   (fixtures, SHADOW_LAW_THEOREM) match; the [SR] I.6 isotypic quintuple and diary
+   entries CALC-01..36 located (incl. CALC-25 — header-format grep artifact caught
+   and owned, per the day's audit-the-harness case law). Origin currency discipline
+   unchanged: these are **retrodiction targets, never evidence** — every claim
+   re-proves in-repo before load-bearing use.
 
 ## Campaign goal
 
@@ -50,19 +57,29 @@ degeneration strata `ROLE_CHART_UNAVAILABLE` (a=0 / b=0) and `CHANNEL_ISOTROPIC`
 (Λ_ρ = 0, rank drop). Generic-n block interfaces per design-freeze rule 3;
 fingerprint n=3-fenced per A-008's certified scope.
 
-## Stage 0 — sensor source reconstruction + recert (the long pole)
+## Stage 0 — sensor recert, retrodiction-grade (REPRICED)
 
-The G0.2 Stage-0 pattern, but harder: definitions themselves are Stage-0 outputs.
-Each recert pins the definition in a fresh note, derives the dominance properties
-in-repo, and certifies reference values byte-stable ×2.
+The G0.2 Stage-0 pattern proper: fresh code, exact ℚ, byte-stable ×2, origin values
+retrodicted never trusted. Definitions still get fresh in-repo notes, but each now
+has a first-form origin record to retrodict against — the anti-reconstruction-drift
+defence is the record, not vigilance.
 
-| ID | Input | What must close |
-|---|---|---|
-| RC-6 | Numerator tower | Definition pinned fresh; self-fault blindness PROVEN (exact zero); scale invariance PROVEN; sensitivity vs ratio sensor demonstrated on fixtures |
-| RC-7 | Shape moment | Isotypic moment definition pinned; **dimension-threshold witness re-derived at n=5** (two states, all scalar invariants equal, moments differ) — [CONTAINER] substrate, fresh derivation only |
-| RC-8 | Localization channels | Definition pinned; support theorem re-proven on the covered class; moved-support fixture family constructed |
+| ID | Input | Origin anchors (retrodiction targets only) | What must close |
+|---|---|---|---|
+| RC-6 | Numerator tower | ENG2 fault-semantics campaign: `PREREG_ENG2.md` (`0c11ef30`, verified), frozen fixtures + sha pins, `eng2_battery.py`, `CL_ENG2_FAULT_SEMANTICS.md` (records `b6c3e0e6` ×2), `SHADOW_LAW_THEOREM.md`; `DBP_Curvature_Role_Reduction.md` | Definition pinned fresh; self-fault blindness PROVEN (exact zero); scale invariance PROVEN; sensitivity vs ratio sensor demonstrated; ENG2 fixture values retrodicted |
+| RC-7 | Shape moment | `rep_utils.py` (independent Specht referee) + dbp_involution stage scripts; **hard pin: [SR] I.6 isotypic quintuple — ΔA norms triv 147 / std 153 / (2,2) 24 / sgn 0, Parseval Σ=324** (n=4 witness, CALC-30); CALC-08/11/12/13/26/27/30 diary first-forms | Isotypic moment definition pinned against the first-forms; the n=4 witness retrodicted against the quintuple; the n≥5 dimension-threshold statement re-derived (CALC-26/27 derivations as guide — diary carries ~156 lines; scripts remain [CONTAINER]-absent) |
+| RC-8 | Localization channels | **PREREG_ENG2 row PE.5 states the support theorem** — `{S : d/dt Δ_S ≠ 0} = {S ⊇ e*}` with pinned fixtures n ≥ 4 (verified verbatim this session; the earlier no-anchor finding is WITHDRAWN) | Support theorem re-proven on the covered class; PE.5 fixtures retrodicted; moved-support family constructed |
 
-**Gate: Stage A does not open until RC-6..RC-8 are CLEAN.**
+**Gate: Stage A does not open until RC-6..RC-8 are CLEAN. Estimate: ~2 sessions,
+retrodiction across all three sensors.**
+
+**Standing cautions binding on Stage 0 (all in ink in the Reference_Material
+README):** the diary's dead branches are a do-not-re-run list, not a to-do list;
+V4 name collisions (`f1_*`, `bigraded_jet` mean different things across eras —
+consult `30_GLOSSARY_DISAMBIGUATION.md` before trusting any name); any
+m = 3−2√2 modulus in origin notes is the provisional lead, NOT the certified
+(2−√2)/4; origin [EVAL] labels rot (constant_hunt is bytecode-only) — audit trees,
+never maps.
 
 ## Stage A — admissions + prereg freeze
 
@@ -105,20 +122,24 @@ made engine-structural).
 ## Corpus
 
 G1.1 seven-surface corpus (keystone, sphere, cylinder, saddle, ellipsoid, monkey
-saddle, n=4 sphere) **plus**: one n=5 fixture (mandatory — the shape-moment dominance
-case is empty without the threshold witness), a moved-support family for
-localization, and a Λ_ρ = 0 fixture cross-routed to RC-4's witnessed stratum.
+saddle, n=4 sphere) **plus**: the n=4 two-state witness fixture retrodicting the
+I.6 isotypic quintuple (the shape-moment sensor's hard pin); a fixture for the
+re-derived n≥5 dimension-threshold statement (pinned at freeze from the RC-7
+derivation — the dominance case "scalars insufficient at n≥5" is empty without
+it); the ENG2/PE.5 moved-support fixtures (n≥4) for localization; and a Λ_ρ = 0
+fixture cross-routed to RC-4's witnessed stratum.
 
 ## Expected failure modes
 
-Definitions reconstructed subtly differently from the origin mathematics and pinned
-as if canonical (Stage-0 notes must state the defining properties, not just formulas
-— a wrong reconstruction that satisfies the staked dominance claims is a different,
-possibly better sensor, and the discrepancy is a finding, not a silent swap);
-blindness tested as "small" instead of exact zero; the n=5 witness chosen
-non-generically so scalar coincidence is accidental rather than forced; fingerprint
-claims quietly extended past the n=3 fence; slot-label discipline lapsing in new
-stdout.
+Reconstruction drift is now DEFENDED, not just watched: Stage-0 definitions pin
+against the diary first-forms (CALC-08/11/12/13/26/27/30) and the ENG2/involution
+sources — a mismatch with the origin record is a finding either way (origin error
+or reconstruction error; decided by derivation, not by pedigree). Remaining live
+modes: blindness tested as "small" instead of exact zero; a threshold fixture
+chosen non-generically so scalar coincidence is accidental rather than forced;
+fingerprint claims quietly extended past the n=3 fence; slot-label discipline
+lapsing in new stdout; a V4 name collision smuggling the wrong-era object into a
+retrodiction (glossary consulted first, every time).
 
 ## Kill conditions (armed)
 
@@ -126,8 +147,9 @@ stdout.
 K-1: two-route reference-value disagreement -> pin or formula wrong; halt, triage.
 K-2: a sensor responds nonzero on its stated blindness set -> that sensor's A-007
      dominance case becomes a displacement candidate; finding, not embarrassment.
-K-3: no n=5 witness pair exists after honest search -> the dimension threshold is
-     refuted or mis-stated; shape-moment scope shrinks in ink.
+K-3: the n=4 witness fails to retrodict the I.6 quintuple, or the re-derived
+     dimension threshold refutes "scalars insufficient at n>=5" -> the
+     shape-moment dominance case is wrong or mis-stated; scope shrinks in ink.
 K-4: support-theorem counterexample on the covered class -> localization enters
      detection-tier only, or not at all.
 K-5: CHANNEL_ISOTROPIC mistype (computes through the locus / refuses off it).
@@ -158,11 +180,10 @@ also the substrate LEAD-2's stratum atlas consumes.
 ## OPEN INPUTS (the decision this record names as missing work)
 
 1. **Will's go** to open the campaign and freeze the prereg.
-2. **Sensor source documents:** do the post-pivot papers defining the three sensors
-   exist as documents Will can drop into `Reference_Material/` (reference-only,
-   untracked, questions-and-retrodiction-targets currency)? With sources, Stage 0 is
-   retrodiction against named targets (~1 session; est. 2 total). Without, Stage 0
-   is from-scratch derivation with only A-007's one-line summaries as anchors
-   (est. 3 sessions total, and the reconstruction-drift failure mode above is live).
-3. **Per-sensor n-scope table** (generic-n vs n=3-fenced vs n=5-witnessed) — drafted
-   in Stage A from the certified scopes, pinned at freeze.
+2. ~~Sensor source documents~~ **RESOLVED 2026-07-06 (late):** recovered by the
+   full-V4-tree audit + Will's external calc-log copies after the nested-mount
+   incident; banked untracked in `Reference_Material/old_program_sources/`.
+   Stage 0 is retrodiction across all three sensors, est. ~2 sessions total.
+3. **Per-sensor n-scope table** (generic-n vs n=3-fenced; witness tiers n=4
+   retrodicted / n≥5 re-derived) — drafted in Stage A from the certified scopes,
+   pinned at freeze.
