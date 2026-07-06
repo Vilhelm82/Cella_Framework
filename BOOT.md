@@ -194,9 +194,13 @@ understood; a list of banned sources would not protect against the next stale on
     K_G=e_top(PHP)/q verified as an identity on 3 surfaces).
   · RC-8 localization (`verification/recert_localization.py` `f09444462`; support
     theorem {S:dΔ_S/dt≠0}={S⊇e*} exact, moved-support family; ⊆ structural).
-  **NEXT: Stage A — A-010 `CHANNEL_ISOTROPIC` record + per-sensor two-route reference
-  values pinned + gate_04 vocab 7→8; then Stage B `src/cella/sensors.py`, Stage C
-  `tests/gate_12.py`.**
+  **Stage A OPEN. Numerator-tower normalization pinned (gated,
+  `stage_a/NORMALIZATION.md`, byte-stable `7bf1b0c9`): channel is
+  `kappa_r = e_r(P Hc P)/q^(r/2)`, r=2..n−1 — F→tF-invariant; keystone
+  `kappa_2=−1/49`=cert kc; parity r-even ℚ / r-odd ℚ(√q) matches A-003; naive `/q`
+  control fires at r≠2. Resolves −2/7 (= e_2 unnormalized). Remaining Stage A: A-010
+  `CHANNEL_ISOTROPIC` record + per-sensor reference values (gated) + gate_04 7→8; then
+  Stage B `src/cella/sensors.py`, Stage C `tests/gate_12.py`.**
   Note for the session: `verification/` scripts carry the certified formulas
   (transport, normal form, F1/F3, role channels) — cite and re-use those, import
   nothing else.
