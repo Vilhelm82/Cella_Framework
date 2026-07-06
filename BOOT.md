@@ -34,6 +34,19 @@ understood; a list of banned sources would not protect against the next stale on
   falsifiable). Anchoring is the subtle half: an answer absorbed as an answer displaces
   the derivation that would have caught it if wrong — even a *correct* copy costs the
   check.
+- **The Goldman seam (case law, root cause — Will, 2026-07-06).** The old Cella
+  curvature seam accidentally used the classical single-scalar K_G (Goldman 2005)
+  instead of the derived three-channel decomposition. It was never *wrong* — every
+  value-level check passed — which is exactly why it survived across campaigns
+  (including the WARP): **correct numbers do not get audited for missing structure.**
+  Each session inherited the seam as settled and designed inside its ceiling; the
+  damage was scope narrowing, not a bad value. A third mechanism, distinct from
+  staleness and from falsified laws: a correct classical default acting as a silent
+  scope ceiling. Standing guard here: verification pins carry CHANNEL CONTENT, never
+  totals alone (RC-1 channel triple; RC-4 role triple + A_c; the two-route keystone
+  gate at −3/49 with its sign-carrying interaction channel) — a single-scalar
+  reimplementation cannot pass verification, so this failure is unconstructible,
+  not policed.
 - **`Lloyd_Engine_V4`: not wrong — entangled.** Its gradings are denominated in a
   trust currency (ratification) this repo does not honor; the mathematics survives as
   mathematics, re-provable from scratch. Read it for **what to test**, never for
@@ -52,8 +65,7 @@ understood; a list of banned sources would not protect against the next stale on
 
 ## Current state (update this block in-session, every session)
 
-- Layer 0: **G0 CLOSED** (`Cell` real; `tests/gate_zero.py` green). G0.1–G0.4 open.
-- Active campaign: **G0.2 two-species account** — Stage 0 GATE CLEAN (RC-1 `d370daae`,
+- Campaign record: **G0.2 two-species account** — Stage 0 GATE CLEAN (RC-1 `d370daae`,
   RC-2 `b21992f3`, RC-3 `e4765c7c`; finding: zero holonomy ≠ flat). **STAGE A CLOSED
   ALL-PASS** (prereg pin `ce44136c` frozen pre-battery; 27/27 ×2 `a90f4cbf`; kills
   silent; mutants bite): **T-A holds** — canonical two-species account, reconstruction,
