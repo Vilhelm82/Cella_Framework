@@ -65,8 +65,9 @@ understood; a list of banned sources would not protect against the next stale on
 
 ## Current state (update this block in-session, every session)
 
-- Campaign record: **G0.2 two-species account** — Stage 0 GATE CLEAN (RC-1 `d370daae`,
-  RC-2 `b21992f3`, RC-3 `e4765c7c`; finding: zero holonomy ≠ flat). **STAGE A CLOSED
+- Campaign record: **G0.2 two-species account** — Stage 0 GATE CLEAN (RC-1 `d370daae`
+  — re-pinned `4ad5a6eb` 2026-07-06, T1/T6 stdout slot-labels hardened in ink, values
+  unchanged; RC-2 `b21992f3`, RC-3 `e4765c7c`; finding: zero holonomy ≠ flat). **STAGE A CLOSED
   ALL-PASS** (prereg pin `ce44136c` frozen pre-battery; 27/27 ×2 `a90f4cbf`; kills
   silent; mutants bite): **T-A holds** — canonical two-species account, reconstruction,
   purity, pedigree↔splitting interconversion `alpha = rho_R + a*(rho_M)`, zero
@@ -119,10 +120,13 @@ understood; a list of banned sources would not protect against the next stale on
   RN/vdW coefficients — must not set queue priorities). `Reference_Material/README.md`
   is the currency banner: contents untracked by design, [CONTAINER] items (depth
   theorem, dimension threshold, arithmetic, two-state witness) have NO surviving
-  artifacts — re-derivation, not re-run — and it records the doc-1 keystone-triple
-  labeling error caught against RC-1 (the certified triple is (−1/49, −3/49, +1/49);
-  self carries the total, not interaction). Queue order unchanged: nothing opens
-  before G1.0. Session verification sweep 2026-07-06 (second session): full gate
+  artifacts — re-derivation, not re-run — and it records the keystone channel-label
+  CASE LAW (corrected in ink 2026-07-06: `channels()` returns (kc, kint, ks);
+  certified labels kc=−1/49, kint=−3/49, ks=+1/49 — pure channels cancel, interaction
+  carries K_G; doc-1's sentence CONFIRMED; this session's first banner note had the
+  labels backwards from an unlabeled stdout read, caught by external review; RC-1
+  re-pinned `4ad5a6eb`, never quote a channel tuple without slot labels). Queue order
+  unchanged: nothing opens before G1.0. Session verification sweep 2026-07-06 (second session): full gate
   suite + RC-1..RC-4 re-run from scratch, all exit 0, byte-stable ×2, all shas
   matching pins. Coverage report for the originating session:
   `reports/REVIEW_Exact_Role_Channel_Geometry.md`.

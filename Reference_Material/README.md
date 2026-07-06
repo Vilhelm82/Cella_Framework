@@ -25,27 +25,35 @@ The two R&D briefs (`DBP_RnD_Directions_*.md`) grade their priority boards in th
 dashboard's currency ("done", "settled", "retired"). Read them for questions and
 campaign shapes only; their status labels have zero evidentiary weight here.
 
-## Known error (caught 2026-07-06 against RC-1)
+## Label-convention case law (2026-07-06 — RETRACTION of the "Known error" section
+## that briefly stood here, commit 2ed5142)
 
-`DBP_RnD_Directions_Exact_Role_Channel_Geometry.md` claims for the keystone:
-
-```
-doc:   (kappa_c, kappa_s, kappa_int) = (-1/49, +1/49, -3/49)
-       "pure channels cancel; the surviving curvature is interaction curvature"
-```
-
-The in-repo certificate contradicts the labeling:
+An earlier revision of this banner claimed doc 1's keystone triple was mislabeled.
+**That note was itself the error and is retracted.** Resolution from source
+(`verification/recert_transport_law.py`) plus fresh structural discriminators
+(hollow Hessian ⟹ all curvature lands in the coupling slot; diagonal Hessian ⟹ all
+in the self slot):
 
 ```
-RC-1 (verification/recert_transport_law.py, d370daae, re-run clean 2026-07-06):
-       (kappa_c, kappa_s, kappa_int) = (-1/49, -3/49, +1/49)
+channels() returns (kappa_c, kappa_INT, kappa_s) — interaction in the MIDDLE slot.
+Keystone, certified labels:
+    kappa_c   = -1/49
+    kappa_int = -3/49
+    kappa_s   = +1/49
+kappa_c + kappa_s = 0 ;  K_G = kappa_int = -3/49
 ```
 
-Same multiset, permuted labels. Under the certified naming, coupling + interaction
-cancel and the **self** channel carries −3/49; the interaction channel is the
-sign-carrying +1/49 (BOOT's "sign-carrying interaction channel"). The doc's narrative
-sentence does not survive the pin. Any quotation of the keystone triple into Cella
-uses RC-1's labels.
+Doc 1's statement — "pure channels cancel; the surviving curvature is interaction
+curvature" — is **CONFIRMED** under the certified naming (consistent with BOOT's
+standing "sign-carrying interaction channel"). The retracted note had read RC-1's
+then-unlabeled T1 stdout line positionally as (c, s, int); T4's labeled rows were
+always correct in (kc, ks, kint) order, deliberately reordered in the source.
+
+Standing rule from this incident: **never quote a channel tuple without slot
+labels.** RC-1's stdout was hardened in ink the same day (T1/T6 lines now carry
+labels; pin re-based `d370daae` → `4ad5a6eb`, 71/71 ×2, all values unchanged).
+The collision was flagged for source-level re-check by external review before the
+mislabeling propagated further.
 
 ## Source-of-truth order
 

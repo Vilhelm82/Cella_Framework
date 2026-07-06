@@ -53,7 +53,17 @@ def c2_density(g, H, t, u):
 
 
 def channels(g, H):
-    """(kappa_c, kappa_int, kappa_s) exact; K_G = their sum."""
+    """(kappa_c, kappa_int, kappa_s) exact; K_G = their sum.
+
+    TUPLE-ORDER HAZARD (case law 2026-07-06): this returns (c, INT, s) —
+    interaction in the MIDDLE slot. The origin transport doc writes triples
+    as (kc, ks, kint). Never print or compare this tuple without slot labels:
+    an unlabeled T1 print was read positionally as (c, s, int) and the
+    mislabeling reached a banked doc before being caught (same day, by
+    external review against the T4 rows). Slot semantics are structurally
+    forced: hollow H (zero diagonal) -> all curvature in slot 0; diagonal H
+    -> all in slot 2.
+    """
     q = sum(x * x for x in g)
     f0 = c2_density(g, H, Q(0), Q(1))
     f1 = c2_density(g, H, Q(1), Q(1))
@@ -102,7 +112,7 @@ GAUGES = [
 
 # T1 — pinned exact values (claims from origin docs, retrodicted fresh)
 kc, ki, ks = channels(KEY_G, KEY_H)
-check("T1 keystone channels (-1/49, -3/49, 1/49)",
+check("T1 keystone channels (kc,kint,ks)=(-1/49, -3/49, 1/49)",
       (kc, ki, ks) == (Q(-1, 49), Q(-3, 49), Q(1, 49)))
 check("T1 keystone K_G = -3/49", kc + ki + ks == Q(-3, 49))
 for name, g, H in FIXTURES[1:3]:
@@ -121,6 +131,8 @@ for name, g, H in FIXTURES:
         check(f"T3 shift sums to 0 [{name}] a={tuple(map(str, a))}", sum(dC) == 0)
 
 # T4 — the origin transport doc's four pinned rows (kappa_c, kappa_s, kappa_int)
+# NOTE: channels() returns (c, i, s); the pinned rows are (c, s, i) — the
+# reorder below is deliberate and the printed labels are correct.
 PINNED_ROWS = {
     (Q(1), Q(0), Q(0)): (Q(-1, 49), Q(4, 49), Q(-6, 49)),
     (Q(0), Q(1), Q(0)): (Q(-1, 49), Q(2, 7), Q(-16, 49)),
@@ -154,7 +166,7 @@ d = lambda a: tuple(m - b for m, b in zip(channels(KEY_G, gauge(KEY_G, KEY_H, a)
 d1, d2, d12 = d(a1), d(a2), d(a12)
 sum_sep = tuple(x + y for x, y in zip(d1, d2))
 check("T6 channel displacements do NOT add (witness)", d12 != sum_sep,
-      f"dC(a1+a2)={tuple(map(str,d12))} vs dC(a1)+dC(a2)={tuple(map(str,sum_sep))}")
+      f"dC[c,int,s](a1+a2)={tuple(map(str,d12))} vs dC(a1)+dC(a2)={tuple(map(str,sum_sep))}")
 
 print()
 if FAILS:
