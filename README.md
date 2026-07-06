@@ -15,7 +15,7 @@ they live on, compute invariant coupling diagnostics on it, and emit a **certifi
 verdict** — computed exactly, refused with a typed reason, or detected with a stated
 confidence — never a bare number.
 
-## The two standing rules
+## The three standing rules
 
 1. **Standalone / zero import.** Nothing is imported or copied wholesale from previous
    work. No exceptions for convenience.
@@ -26,6 +26,11 @@ confidence — never a bare number.
    case is closed — the answer must be obvious from the record; nothing waits on
    sign-off. A case that cannot close is a named work item, and displacement is by
    evidence: present the dominating alternative and the old record falls.
+3. **The re-verification rule.** No prior result is trusted on documentary status —
+   "ratified", "proven", "certified" in an origin document are claims, not evidence.
+   Every mathematical input is re-proven inside this repo (fresh code, byte-stable ×2,
+   `verification/`) before it bears load. Trust attaches to re-runnable certificates,
+   never to labels or memory.
 
 ## Layer map
 

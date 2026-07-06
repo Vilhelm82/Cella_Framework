@@ -7,9 +7,24 @@ beats it.** If that cannot be answered, there is more work to do, and the record
 that work. Records **self-ratify when the case is closed** — the answer must be obvious
 from the record itself. No sign-off queue exists.
 
+**THE RE-VERIFICATION RULE (Will, 2026-07-06).** No prior result enters on documentary
+status. "ACCEPTED", "RATIFIED", "PROVEN", "CERTIFIED" in an origin document are
+**claims, never evidence** — statuses hinge on humans, and humans are mistake-prone.
+Before any prior mathematical result bears load here, it is **re-proven inside this
+repo**: computational claims re-run from fresh code (never copied) against the stated
+values, byte-stable ×2; symbolic identities re-derived; analytic theorems re-derived in
+fresh notes. Once re-proven, the result carries its own certificate *here*, and future
+sessions trust the re-runnable certificate — not the origin label, not memory, not
+anyone's acceptance. Re-verification artifacts live in `verification/` and are named in
+the consuming record. A result cited anywhere without an in-repo certificate is a
+defect. (Case law: the WARP citation of 2026-07-06 — internally ratified, externally
+stale; caught by Will, not by process. This rule makes that catch structural.)
+
 **Statuses.**
 - **OPEN** — case not yet closed; the missing work is named. A work item, not a request.
 - **ESTABLISHED** — case closed; the artifact may be built. Scope stated exactly.
+  *Mathematical inputs cited by the record additionally require in-repo
+  re-certification before first load-bearing use (re-verification rule above).*
 - **DISPLACED** — a better artifact won under the same standard. The record stays
   visible, successor named. Displacement is by evidence only: present the dominating
   alternative and the old record falls. This replaces authority with challenge.
