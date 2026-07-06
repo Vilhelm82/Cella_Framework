@@ -168,7 +168,7 @@ understood; a list of banned sources would not protect against the next stale on
   pole order), kill set K-C1..K-C9, and the RC-5 double-duty note (one recert
   now feeds LEAD-2 AND LEAD-7). Bank-everything rule added to the write
   protocol below.
-- **G1.2 OPEN — IN PROGRESS (Will's go, 2026-07-06): the sensor set** (numerator
+- **G1.2 CLOSED (2026-07-06): the sensor set** (numerator
   tower, shape moment, localization channels, each admitted per A-007 with blindness
   statement + exact reference values; `CHANNEL_ISOTROPIC` enters by record at its first
   use there, per A-008/A-009). **Draft brief banked 2026-07-06, third session
@@ -202,8 +202,15 @@ understood; a list of banned sources would not protect against the next stale on
   ESTABLISHED (ADMISSIONS). Reference values pinned (`stage_a/REFERENCE_VALUES.md`,
   gated): κ_2 == certified kc on keystone/sphere/saddle (numerator channel = coupling
   channel, identity); σ_2 == K_G; cross-route holds; cylinder P-route computes / O-route
-  refuses; shape+localization are n≥4 (RC-7/RC-8 anchors). Remaining Stage A: gate_04
-  7→8. Then Stage B `src/cella/sensors.py`, Stage C `tests/gate_12.py`.**
+  refuses; shape+localization are n≥4 (RC-7/RC-8 anchors).
+  **G1.2 CLOSED — `tests/gate_12.py` byte-stable ×2 (`adf6316f`), full Layer-0/1 suite
+  green ×2; `src/cella/sensors.py` (numerator tower / shape / localization / fingerprint).
+  `CHANNEL_ISOTROPIC` admitted (A-010), vocab 7→8, gate_04 pin `3775a7fb` invariant (P9),
+  gate_10 re-pinned `372a7f54`; A-007/A-008/A-010 discharged; four mutants bite.
+  Correction banked: the numerator tower is the coupling channel kc — self-fault-blind +
+  F→tF-invariant, but gauge-COVARIANT (not -invariant; the gauge-invariants are A_c/K_G).
+  Close: `campaigns/G12_sensor_set/CLOSE.md`. NEXT OPEN TASK: ARITH_I (parked, opens after
+  G1.2) — `campaigns/ARITH_I_higher_cohn_vossen/BRIEF.md`.**
   Note for the session: `verification/` scripts carry the certified formulas
   (transport, normal form, F1/F3, role channels) — cite and re-use those, import
   nothing else.

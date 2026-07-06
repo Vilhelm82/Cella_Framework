@@ -210,8 +210,9 @@ armed kill conditions at G3.1 (A/B rerun) and G3.2 (shape-moment wager), and the
 completeness tier remains OPEN as successor work (portfolio priority #2).
 **Displacement:** per sensor, by a certified counterexample inside its stated scope, or
 by a completed global tier changing the completeness statement.
-**Obligations:** G1.2 — each sensor enters with exact reference values + its blindness
-statement.
+**Obligations: DISCHARGED 2026-07-06** — G1.2 closed (`tests/gate_12.py`,
+`src/cella/sensors.py`): each sensor ships exact reference values + its blindness
+statement; numerator tower `kappa_2 == kc`, exact self-fault blindness; four mutants bite.
 **Status: ESTABLISHED (mathematical scope); empirical scope gated, kills armed.**
 
 ## A-008 — The active role layer at n=3 (role charts, named channels, A_c, faithful fingerprint)
@@ -343,9 +344,11 @@ certificates; the closed vocabulary grows **7 → 8** (`gate_04` count assertion
 the same commit, stdout pin `3775a7fb` expected invariant — the count lives in the
 assertion, P9 precedent); refusal precedence pinned against the existing strata. Certified
 at `tests/gate_12.py`, byte-stable ×2.
-**Status: ESTABLISHED (admission case closed; mathematical content certified in-repo by
-RC-4 — faithfulness det + both strata witnessed). Engine wiring + vocabulary growth 7→8
-are the open obligation, gated at G1.2 Stage B/C.**
+**Status: ESTABLISHED — certified. Engine wiring DISCHARGED 2026-07-06:
+`CHANNEL_ISOTROPIC` wired at the fingerprint sensor (`src/cella/sensors.py`), both strata
+witnessed, the refusal names the isotropic channel; vocabulary grown 7 → 8 (`gate_04`
+count assertion updated, stdout pin `3775a7fb` invariant per P9; `gate_10` re-pinned
+`372a7f54`); certified `tests/gate_12.py`, byte-stable ×2 (`adf6316f`).**
 
 ---
 

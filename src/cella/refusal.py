@@ -24,6 +24,8 @@ VOCABULARY = (
     # A-009 (G1.0, Layer 1 entry):
     "CODIM_UNSUPPORTED",
     "ROLE_CHART_UNAVAILABLE",
+    # A-010 (G1.2, fingerprint sensor entry):
+    "CHANNEL_ISOTROPIC",
 )
 
 PLAIN = {
@@ -37,6 +39,9 @@ PLAIN = {
     "ROLE_CHART_UNAVAILABLE": "the surface cannot be solved for one of its "
                               "variables here, so that reading direction does "
                               "not exist",
+    "CHANNEL_ISOTROPIC": "one of the role channels is isotropic here (its "
+                         "anisotropy went to zero), so the fingerprint cannot "
+                         "tell these states apart; the affected channel is named",
 }
 
 

@@ -63,6 +63,15 @@ uncertified can exist above this layer.
   Kills K-1..K-3 silent.*
 - **G1.2 — the sensor set.** Numerator tower, shape moment, localization channels, each
   admitted per A-007 with blindness statement + exact reference values.
+  *CLOSED 2026-07-06 — `tests/gate_12.py` byte-stable ×2 (`adf6316f`), full Layer-0/1
+  suite green ×2. `src/cella/sensors.py`: numerator tower (`kappa_r = e_r(P Hc P)/q^(r/2)`,
+  parity-typed, `kappa_2 == certified kc`, exact self-fault blindness, F→tF
+  scale-invariant), shape moment (isotypic; `(n-2,2)` absent n=3 / present n=4),
+  localization (support theorem `{S:dΔ≠0}={S⊇e*}` + moved family), fingerprint
+  (`A_c = 42793/1555848`, both strata, n=3-fenced). `CHANNEL_ISOTROPIC` admitted (A-010),
+  vocabulary 7→8, `gate_04` pin `3775a7fb` invariant (P9), `gate_10` re-pinned
+  `372a7f54`; four mutants bite; A-007/A-008 G1.2 obligations discharged. Campaign
+  `campaigns/G12_sensor_set/` (Stage-0 recerts, Stage-A pins, `CLOSE.md`).*
 
 ## Layer 2 — the time-series bridge
 

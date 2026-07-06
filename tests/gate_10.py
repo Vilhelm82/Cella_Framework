@@ -149,8 +149,9 @@ r4 = carrier(blk(P4, (Q(0), Q(2), Q(0), Q(1)), H4))
 check("P5 R4 two components zero -> ROLE_CHART_UNAVAILABLE naming {0, 2}",
       r4.is_refusal() and r4.residue.token == "ROLE_CHART_UNAVAILABLE"
       and "{0, 2}" in r4.residue.stratum)
-check("P5 vocabulary grew to 7 and both new tokens render plainly (A-009)",
-      len(VOCABULARY) == len(PLAIN) == 7
+check("P5 vocabulary count == PLAIN, tokens render plainly (A-009 +2 at G1.0; "
+      "A-010 +CHANNEL_ISOTROPIC at G1.2 => 8)",
+      len(VOCABULARY) == len(PLAIN) == 8
       and all(t not in Refusal(t, "s").plain()
               and "_" not in Refusal(t, "s").plain().replace("(stratum: s).", "")
               for t in ("CODIM_UNSUPPORTED", "ROLE_CHART_UNAVAILABLE")))
