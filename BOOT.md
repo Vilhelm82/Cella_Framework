@@ -319,10 +319,20 @@ understood; a list of banned sources would not protect against the next stale on
   (rational multiple of vol(S³)), NOT an elliptic period** → resolves T-B/T-C with a
   THIRD outcome: neither C1 (higher Cohn-Vossen/exact — FALSE) nor C2 (interior period
   — wrong character). The BRIEF's dichotomy was premised on the non-compact n=3 2-surface
-  (CALC-24 Part A "species change" confirmed). K-3 not triggered. Staked conjecture:
-  ratio `=−1/(n+1)` general n (numeric, unproven); symbolic proof of −2π²/5 (via §I.3b
-  Johnson closed form or S₄ symmetry) + prior-art sweep (Chern–Lashof, Gauss–Kronecker,
-  Willmore) are the open follow-ups. **ARITH-I: Stage A COMPLETE + Stage B CLOSED —
+  (CALC-24 Part A "species change" confirmed). K-3 not triggered.
+- **ARITH-I r=3 CONSTANT PROVEN EXACT (2026-07-06).** `arith_i_stageB_proof.py` 8/8 ×2
+  (`b3314de7`); handoff `campaigns/ARITH_I_higher_cohn_vossen/SYMBOLIC_PROOF_HANDOFF.md`.
+  `∫_S κ_{3;3,0} dA = −2π²/(5c)` — symbolic, machine-checked (matches the numeric verdict
+  to 10 digits). Proof: Gauss map `ν=g/√q` (diffeo S→S³, convex) ⟹ `∫κ dA=∫_{S³}φ dΩ`,
+  `φ=κ/K_GK`; compression lemma `e_3(P A P)=νᵀadj(A)ν` with `adj(H)=5I−J, adj(Hc)=3I−J`
+  ⟹ `e_3(PHP)=5−σ², e_3(PHcP)=3−σ²` (σ=Σν_i); constraint ⟹ `q=10c/(5−σ²)`, the (5−σ²)
+  CANCELS ⟹ `φ=−(3−σ²)/(10c)`; S³ moments `∫(3−σ²)=4π²` ⟹ `−2π²/(5c)`. The channel
+  constant is fixed entirely by the first spherical moment of the all-ones direction —
+  no elliptic input (structural reason it's a π²-rational). **General n (top order
+  r=n−1) DERIVED: ratio `=−(n−2)/(2c(n+1))`** — this CORRECTS the earlier `−1/(n+1)`
+  guess (coincidence at n=4 only; verify n=5 → −1/4 to bank). r=3-fixed-varying-n>4 is a
+  separate open thread. **ARITH-I: Stage A COMPLETE + Stage B CLOSED (r=3 constant
+  PROVEN) —
   campaign's central r=2/r=3 questions both resolved. NEXT OPEN TASK: engine queue is
   Will's call (ARITH-I follow-ups are paper-track; the −1/(n+1) conjecture + symbolic
   −2π²/5 are the natural continuation if reprioritized).**
