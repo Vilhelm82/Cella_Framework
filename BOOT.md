@@ -79,9 +79,11 @@ understood; a list of banned sources would not protect against the next stale on
   Schwarzschild corner, order 2 / Newton wedge; Test 10 = general parity-fixed normal form
   `R=−m(m+5)/B x⁻⁴`, the reusable lemma behind 3/4/4). Formal proof paper
   `paper/lead7_kn_n3_dbp_metric.tex`; report `reports/LEAD7_retrodiction_n3.md`; brief
-  `campaigns/LEAD7_dbp_metric/BRIEF.md`; lead entry `LEADS.md`. Optional remaining (LEVER
-  payoff, sets no queue priority): replace the Test 5 numeric order fits with the exact Laurent
-  lemmas; physics-novelty writeup.
+  `campaigns/LEAD7_dbp_metric/BRIEF.md`; lead entry `LEADS.md`. **Order law now FULLY SYMBOLIC**
+  (no fitted exponents): extremal 3 via generic δ⁻³ Laurent lemma + A₂>0 (A₂ = δ²-coeff of G_S
+  identically, T7-e) + C_ext<0 (Test 8); reflection 4 via −m(m+5)/B at m=2 (Test 10) + B≠0.
+  Test 5's high-precision fits are a cross-check, not the source. Optional remaining (LEVER
+  payoff, sets no queue priority): physics-novelty writeup.
   **CASE LAW (metric-normalization, 2026-07-07):** the DBP chart norm is `q_i=1+|∇f_i|²` — the
   graph "1+" is canonical (n=2 `q0=1+a²+b²`, recert_gtd_dbp_n2.py), NOT an accidental factor. A
   handed-off gate script dropped it to `|∇f|²` and certified the wrong metric; caught only by

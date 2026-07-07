@@ -494,7 +494,11 @@ Lemma~\ref{lem:generic} applies (with $x=\delta$). The collapsing coefficient is
 A_2=\left.\frac{(4U+U_J^2+U_Q^2)^2}{4U}\Big(\frac1{U_J^2}+\frac1{U_Q^2}\Big)\right|_{S=\Sext}>0,
 \label{eq:A2}
 \end{equation}
-(the $U_S^2$ term of $q_S$ drops since $U_S=0$ at extremality), and
+the $U_S^2$ term of $q_S$ dropping since $U_S=0$ at extremality. That this closed form is
+\emph{identically} the $\delta^2$--Taylor coefficient of $G_S$ is certified symbolically
+(\texttt{lead7\_test7}); the $U_{SS}$ cancels between $(U_S/\delta)^2$ and
+$D_{S,\cdot}=U_{SS}U_\cdot$, which is why $A_2$ is free of $A_3$ and of $U_{SS}$. Positivity is
+immediate: \eqref{eq:A2} is a sum of positive terms. The extremal coefficient is then
 \begin{equation}
 \Rext=\frac1{A_2}\Big(\frac{P_1}{P_0}+\frac{R_1}{R_0}\Big)
 =\frac1{A_2}\left.\partial_S\log(G_JG_Q)\right|_{S=\Sext}.
@@ -518,6 +522,17 @@ $t=S/(\pi Q^2)>1$ the last factor equals $Q^{10}\pi^3\big[1+t+\pi^2t^2\,h(t)\big
 $h(t)=t^3+5t^2+3t-9$; since $h(1)=0$ and $h'(t)=3t^2+10t+3>0$, one has $h(t)>0$ for $t>1$, so
 the bracket is a sum of positive terms.
 \end{proposition}
+
+\begin{remark}[Interlock]
+\label{rem:interlock}
+The degree--ten factor of \eqref{eq:denext} is exactly the numerator factor carried by
+$R_0=G_Q|_{\Sext}$ (certificate \texttt{lead7\_test7}): the same object whose positivity
+Prop.~\ref{prop:denpos} settles via $h$ controls both the extremal denominator and the transverse
+metric value $P_0,R_0>0$ that Lemma~\ref{lem:generic} needs. The order--$3$ conclusion is thus
+entirely symbolic: Lemma~\ref{lem:generic} (the $\delta^{-3}$ normal form) together with
+$A_2>0$ \eqref{eq:A2} and $\Rext<0$ (Prop.~\ref{prop:W}) give exact order $3$ at every open
+point, with no fitted exponent.
+\end{remark}
 
 \subsection{Extremal transverse monotonicity}
 \label{sec:gate}
@@ -689,7 +704,8 @@ All exact claims are machine--checked and reproducible:
 \texttt{lead7\_test4} (mass--role zeros $=$ role divisors; Thm.~\ref{thm:clean}),
 \texttt{lead7\_test5} (orders, high precision),
 \texttt{lead7\_test6} (reflection coefficients $C_\Omega,C_\Phi$),
-\texttt{lead7\_test7} (generic lemma, $A_2$, rational $\Rext$, denominator),
+\texttt{lead7\_test7} (generic $\delta^{-3}$ lemma, $A_2$ identically the $\delta^2$--coefficient
+of $G_S$, rational $\Rext$, denominator, interlock),
 \texttt{lead7\_test8\_extremal\_gate\_graphnorm} (full--edge extremal transverse monotonicity
 $W<0$ for the graph--normalized metric: $L_{\mathrm{ext}}=-P/D$ with $D$ a product of nine
 coefficient--positive factors, $P=Aq^2+Bq+C$ with $B,C$ coefficient--positive and $A>0$ by two

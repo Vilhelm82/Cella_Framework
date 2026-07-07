@@ -134,8 +134,10 @@ closed form (`C_Ω`, `C_Φ` via the universal −14/B identity; `C_ext` rational
 the extremal `N_ext` gate is **CLOSED** — `C_ext<0` at every open point of `T=0`
 (`verification/lead7_test8_extremal_gate_graphnorm.py`, full-edge coefficient-positivity
 certificate, byte-stable ×2). Formal proof paper: `paper/lead7_kn_n3_dbp_metric.tex`. Report:
-`reports/LEAD7_retrodiction_n3.md`. Remaining (optional, LEVER payoff): replace the Test 5
-numeric order fits with the exact Laurent lemmas, and the physics-novelty writeup.
+`reports/LEAD7_retrodiction_n3.md`. Order law now **fully symbolic** (no fitted exponents):
+extremal order-3 via the generic δ⁻³ Laurent lemma + A₂>0 (A₂ = δ²-coeff of G_S identically) +
+C_ext<0; reflection order-4 via the `−m(m+5)/B` normal form at m=2 (Tests 7,8,10). Remaining
+(optional, LEVER payoff): the physics-novelty writeup.
 
 **[Historical] Status:** OPEN — campaign opened 2026-07-07 (`campaigns/LEAD7_dbp_metric/BRIEF.md`).
 GTD/DBP paper's own named open problem; the physics-novelty channel (LEVER Tier-2 GTD

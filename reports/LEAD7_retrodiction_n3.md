@@ -14,16 +14,17 @@ exact-partial 3D Ricci validated in Test 2 (flat ℝ³→0, 3-sphere →6/a²). 
 `W₊={S,J,Q>0, U_S>0}` (Test 4). This is the KN analogue of the paper's n=2 RC-5 retrodiction
 tier (`C_ext`, `C_sch`).
 
-## The order law (Test 5, certified)
+## The order law (SYMBOLIC — no fitted exponents)
 
-`R[g_F(u=0)]` diverges at the three role divisors with **exact integer** pole orders, at
-high precision at `W₊`-interior points:
+`R[g_F(u=0)]` diverges at the three role divisors with **exact integer** pole orders. Both
+orders now follow from closed-form Laurent normal forms, not numeric fits (Test 5's
+high-precision fits are a consistency cross-check, not the source):
 
-| divisor | coordinate | order | type |
-|---|---|---|---|
-| extremal `T=0` | `δ = S − S_ext`, `S_ext=π√(4J²+Q⁴)` | **3** | generic |
-| `Ω=0` | `J` | **4** | reflection-fixed |
-| `Φ_e=0` | `Q` | **4** | reflection-fixed |
+| divisor | coordinate | order | type | how it's fixed (symbolic) |
+|---|---|---|---|---|
+| extremal `T=0` | `δ = S − S_ext`, `S_ext=π√(4J²+Q⁴)` | **3** | generic | generic Laurent δ⁻³ lemma (Test 7 T7-a) + `A₂>0` (T7-e: `A₂` = δ²-coeff of `G_S` identically, a sum of positives) + `C_ext<0` (Test 8) |
+| `Ω=0` | `J` | **4** | reflection-fixed | `−m(m+5)/B` lemma at `m=2` (Test 10) + `B_J>0` (Test 6) |
+| `Φ_e=0` | `Q` | **4** | reflection-fixed | `−m(m+5)/B` lemma at `m=2` (Test 10) + `B_Q>0` (Test 6) |
 
 This is the n=3 realization of the paper's Result-6 law (order-3 generic / order-4
 reflection-fixed), now with **both** charge reflections (`Ω=0`, `Φ_e=0`) as the
@@ -194,17 +195,15 @@ All in `lead7_test9` (exact-partial curvature, clean ×2; the κ's are exact sym
 |---|---|
 | metric identified & u=0 selection | **proven** (Test 3 + Test 4 structural) |
 | interior-cleanliness (no spurious poles) | **theorem** (Test 4, on `W₊`) |
-| pole **orders** 3/4/4 | numeric (high-precision fits, Test 5); the reflection orders follow symbolically from the general `−m(m+5)/B` lemma at `m=2` + `B≠0` (Tests 6,10) |
+| pole **orders** 3/4/4 | **symbolic** — extremal 3 via generic δ⁻³ lemma (Test 7 T7-a) + `A₂>0` (T7-e) + `C_ext<0` (Test 8); reflection 4 via `−m(m+5)/B` at `m=2` (Test 10) + `B≠0` (Test 6). Test 5 high-precision fits are a cross-check, not the source |
 | reflection-fixed **coefficients** `C_Ω`, `C_Φ` | **exact closed form** (Test 6), matched to curvature; `= −14/B` = the `m=2` case of `−m(m+5)/B` |
-| extremal **coefficient** `C_ext` | **exact closed form** (Test 7); order-3 at **all** open points — `N_ext` gate **closed** (Test 8) |
+| extremal **coefficient** `C_ext` | **exact closed form** (Test 7), matches curvature to ~10⁻¹³; `A₂` = δ²-coeff of `G_S` identically (T7-e); order-3 at **all** open points — `N_ext` gate **closed** (Test 8) |
 | **parity-fixed normal form** `R=−m(m+5)/B·x⁻⁴` | **theorem** (Test 10, first-principles Ricci `m=1,2,3`); amplitude-independent; the reusable lemma behind 3/4/4 |
 | **double-reflection corner** (Schwarzschild) | order **exactly 2** (mildest boundary point), Newton wedge `max(4a−2,4−2a)`, closed-form metric limits, nonzero mixed term (Test 9) |
 
-The exact closed forms are established and match direct curvature. The extremal `N_ext` sign
-gate is now **closed** (Test 8, full-edge coefficient-positivity certificate): the retrodiction
-is fully symbolic for the coefficients and orders, with the extremal pole order-3 at every open
-point of `T=0`. The one remaining tidy-up (not affecting any exact value) is to replace the
-numeric order fits (Test 5) with the exact symbolic Laurent lemmas — the generic order-3 lemma
-`(P₁/P₀+R₁/R₀)/A₂` and the corrected reflection `−14/B` (transverse `x⁻²`) lemma — applied to
-the rational metric; the reflection orders already follow symbolically from the `−14/B` lemma +
-`B≠0` (Test 6), and all coefficient values are exact.
+**Fully symbolic — no fitted exponents survive.** Both boundary types stand on closed-form
+Laurent normal forms: reflection faces on `−m(m+5)/B` (Test 10), the extremal edge on
+`C_ext = A₂⁻¹∂_S log(G_JG_Q)|_ext < 0` (Test 7 structural identity + T7-e `A₂` identification +
+Test 8 sign). All three leading coefficients are exact closed forms matching direct curvature;
+the orders 3/4/4 follow symbolically. Test 5's high-precision order fits are retained only as an
+independent numeric cross-check. (Optional remaining, LEVER payoff: the physics-novelty writeup.)

@@ -105,9 +105,11 @@ established at every open point (gate closed, Test 8). Combined with the metric 
 (Test 3), u=0 selection + interior-cleanliness theorem (Test 4), the n=3 DBP metric
 g_F(u=0) = mass-charge inverse-channel metric is fully established and its complementarity
 law fully retrodicted. LEAD-7 central question resolved. Formal proof paper drafted
-(`paper/lead7_kn_n3_dbp_metric.tex`). Remaining (optional, LEVER payoff): lift the
-metric-identification/orders from EMPIRICAL to a closed-form proof (replace Test 5 numeric
-fits with the exact Laurent lemmas), and the physics-novelty writeup.
+(`paper/lead7_kn_n3_dbp_metric.tex`). **ORDERS NOW FULLY SYMBOLIC (no fitted exponents):**
+extremal order-3 via generic δ⁻³ Laurent lemma (T7-a) + A₂>0 (T7-e: A₂ = δ²-coeff of G_S
+identically, sum of positives) + C_ext<0 (Test 8); reflection order-4 via −m(m+5)/B at m=2
+(Test 10) + B≠0 (Test 6). Test 5's high-precision fits are now a cross-check, not the source.
+Remaining (optional, LEVER payoff): the physics-novelty writeup.
 
 ## Candidate D (output-channel norm inverse) — TEST 1/2 VERDICT (2026-07-07)
 

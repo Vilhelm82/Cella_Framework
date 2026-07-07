@@ -166,8 +166,37 @@ for (Jv, Qv) in [(mp.mpf(3), mp.mpf(1)), (mp.mpf(2), mp.mpf('1.5'))]:
 check("T7-d.C_ext_vs_curvature", okc,
       "assembled rational C_ext(S,Q) = direct high-precision curvature (Richardson)")
 
+# ---- T7-e: A2 IS the delta^2 Taylor coefficient of the actual metric G_S (symbolic) ----
+# The generic Laurent lemma (T7-a) uses "A2" = leading coeff of the collapsing component.
+# Here we CERTIFY that this equals the closed form eq.(A2): the U_SS cancels between
+# (U_S/delta)^2 and D_{S,.}=U_SS U_. , which is why A2 is free of A3 / U_SS.
+USS = sp.diff(U, S, 2)
+DSJ = USS*UJ - US*USJ
+DSQ = USS*UQ - US*USQ
+normS = US**2 + 4*U + UJ**2 + UQ**2
+GS = normS**2 * US**2/(4*U) * (1/DSJ**2 + 1/DSQ**2)
+dsym = sp.symbols('delta', positive=True)
+Sext = pi*sp.sqrt(4*J**2 + Q**4)
+coeff_d2 = sp.limit(GS.subs(S, Sext + dsym)/dsym**2, dsym, 0)   # delta^2 coeff of G_S
+check("T7-e.A2_is_delta2_coeff", sp.simplify(coeff_d2 - A2.subs(S, Sext)) == 0,
+      "delta^2-coefficient of G_S == eq.(A2) identically (=> A2>0 as a sum of positive terms)")
+
+# ---- T7-f: R0=g_QQ|ext carries the degree-10 extremal-denominator factor (interlock) ----
+gQQ_ext = sp.cancel(gQQ.subs(J**2, (S**2 - pi**2*Q**4)/(4*pi**2))
+                        .subs(J, sp.sqrt((S**2 - pi**2*Q**4)/(4*pi**2))))
+beast = (Q**10*pi**3 + Q**8*S*pi**2 - 9*Q**6*S**2*pi**3 + 3*Q**4*S**3*pi**2
+         + 5*Q**2*S**4*pi + S**5)
+nQ, _ = sp.fraction(sp.together(gQQ_ext))
+rem_n = sp.rem(sp.Poly(sp.expand(nQ), S), sp.Poly(sp.expand(beast), S))
+tt = sp.symbols('t', positive=True)
+h_t = tt**3 + 5*tt**2 + 3*tt - 9
+beast_id = sp.simplify(sp.factor(beast.subs(S, pi*Q**2*tt)/(Q**10*pi**3)) - (1 + tt + pi**2*tt**2*h_t))
+check("T7-f.R0_carries_degree10_beast", rem_n == 0 and beast_id == 0,
+      "g_QQ|ext numerator has the extremal-denominator factor; beast/(Q^10 pi^3)=1+t+pi^2 t^2 h(t), "
+      "h=t^3+5t^2+3t-9>0 on t>1 (positivity inherited from the C_ext denominator machinery)")
+
 # ---- verdict ----
-ntot = 4
+ntot = 6
 if FAILS:
     print(f"VERDICT: FAIL ({len(FAILS)}): {', '.join(FAILS)}")
     raise SystemExit(1)
@@ -176,6 +205,8 @@ print(f"VERDICT: LEAD-7 TEST 7 CLEAN -- {ntot}/{ntot}. The extremal (order-3) po
       f"from the structural identity C_ext = (1/A2)(P1/P0 + R1/R0) with A2 = "
       f"(4U+U_J^2+U_Q^2)^2/(4U)(1/U_J^2+1/U_Q^2), built rationally (implicit couplings are "
       f"radical-free) and evaluated on the extremal surface J^2=(S^2-pi^2 Q^4)/(4pi^2); "
-      f"matched to direct curvature to high precision. With Tests 5 & 6 the n=3 "
-      f"complementarity retrodiction is COMPLETE: orders 3/4/4 and all three leading "
-      f"coefficients (extremal + both reflection-fixed) in exact closed form.")
+      f"matched to direct curvature to high precision. The order-3 structure is SYMBOLIC: "
+      f"T7-a (generic Laurent delta^-3 lemma) + T7-e (A2 IS the delta^2 coeff of G_S, so "
+      f"A2>0 as a sum of positive terms) + C_ext<0 on the whole open edge (Test 8) => order "
+      f"exactly 3, no fitted exponent. With Tests 6 & 10 (reflection order 4 via -m(m+5)/B) "
+      f"the n=3 order law 3/4/4 and all three leading coefficients are closed-form/symbolic.")
