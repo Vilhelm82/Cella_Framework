@@ -13,33 +13,48 @@ SET-UP. Kerr-Newman graph M^2 = U(S,J,Q),  U = S/(4pi) + pi J^2/S + Q^2/2 + pi Q
 charges E=(S,J,Q). Each output chart E_i = f_i(M, E_j, E_k) solves M^2=U for E_i. Its
 mass-charge couplings are the mixed second partials Lambda_{i,{M,j}} = d^2 E_i/dM dE_j.
 
+DOMAIN (corrected). The theorem holds on the OUTER PHYSICAL wedge
+    W_+ = {S,J,Q > 0,  U_S > 0}  =  {S,J,Q > 0,  S^2 > pi^2(4 J^2 + Q^4)},
+equivalently the outer-horizon branch S = S_+ = pi(2M^2 - Q^2 + 2 sqrt(disc)), disc>0.
+NOT {S,J,Q>0, disc>0} alone: disc>0 also covers the INNER branch S=S_- where U_S<0, on
+which a numerator can vanish in the interior (see T4-e / Will's counterexample). U_S>0 is
+positive Hawking temperature; W_+ is the thermodynamically physical region.
+
 UNIFORM FORMULA (implicit differentiation of M^2=U; chart-independent):
     E_{i,M}   = 2M / U_i                         (diverges on the NATIVE role divisor U_i=0)
     Lambda_{i,{M,j}} = E_{i,Mj} = 2M (U_ii U_j - U_i U_ij) / U_i^3 .
 So the coupling's pole is the native divisor U_i=0; its ZERO is the numerator
     N_{ij} = U_ii U_j - U_i U_ij = 0.
 
-THEOREM (this file certifies the pieces). On the physical wedge
-W = {S,J,Q > 0, disc = M^4 - M^2 Q^2 - J^2 > 0} (equivalently U_S > 0):
+THEOREM (this file certifies the pieces). On W_+, every mass-charge coupling
+Lambda_{i,{M,j}} is finite and nonzero; in the closure of W_+ every numerator zero and
+every native pole of the mass-charge couplings is supported on
+    {J=0} u {Q=0} u {U_S=0}  =  {Omega=0} u {Phi_e=0} u {T=0}.
+Certified pieces:
   (a) [uniform formula] Lambda_{i,{M,j}} from the implicit formula equals the explicit
       chart differentiation of f_i  (numeric, all three charts).
   (b) [factorization] each of the six numerators N_{ij} factors as
-          N_{ij} = (charge factor: J or Q, or a U_S-term) x (manifestly POSITIVE bracket),
+          N_{ij} = (charge factor: J or Q, or a U_S-term) x (POSITIVE bracket),
       an exact symbolic identity.
-  (c) [positivity of U_S] U_S = sqrt(disc)/S_+ >= 0 on the outer branch, = 0 iff disc=0
+  (c) [positivity of U_S] U_S = sqrt(disc)/S_+ > 0 on W_+ (outer branch), = 0 iff disc=0
       (extremal), via the horizon Vieta relations S_+ S_- = pi^2(4J^2+Q^4), S_+ - S_- =
       4 pi sqrt(disc).
-  (d) [all-positive coefficients] each bracket, with U_S replaced by a nonnegative
-      placeholder, is a polynomial in the POSITIVE variables (S,J,Q,U_S,pi) with all
-      coefficients >= 0.
-Hence in the OPEN interior (J,Q>0, U_S>0) every N_{ij} > 0: the mass-charge couplings are
-finite and nonzero there. Their zero loci in the closure lie in {J=0} u {Q=0} u {U_S=0},
-i.e. EXACTLY the role divisors Omega=0, Phi_e=0, T=0.
+  (d) [nonnegative coefficients] after clearing positive powers of S, each bracket is a
+      polynomial with NONNEGATIVE coefficients in the strictly positive variables
+      (S,J,Q,U_S,pi); equivalently a positive monomial denominator times a
+      nonnegative-coefficient polynomial. So each bracket > 0 on W_+.
+  (e) [domain is sharp] inner-branch counterexample: at (S,J,Q)=(pi sqrt3/2, 1/4, 1),
+      disc=1/48>0 but U_S<0 and N_{J,S}=0 -- excluded by W_+, admitted by {disc>0}.
+EXTREMAL ROLE (corrected). Generic U_S=0 (T=0) is NOT a numerator zero; N_{J,S}, N_{Q,S}
+vanish only where U_S=0 AND (J=0 or Q=0) (codim-2 corners). T=0 enters as the NATIVE POLE
+divisor of the entropy-chart couplings through the U_S^3 denominator.
+Hence on W_+ (J,Q,U_S>0) every N_{ij} > 0: the mass-charge couplings are finite and nonzero.
 
-CONSEQUENCE. g_F(u=0)_{ii} = q_i^2 * sum_{mass-charge j} 1/Lambda_{i,{M,j}}^2 is finite,
-smooth and positive-definite on the interior (no 1/Lambda^2 pole), so its curvature is
-finite there. All curvature divergences of g_F(u=0) sit on the role boundaries -- the
-interior-cleanliness of Test 3 is now a theorem, not a scan.
+CONSEQUENCE (analytic). Each Lambda_{i,{M,j}} is analytic, finite and nonzero on W_+, so
+each 1/Lambda^2 is analytic on W_+; with q_i>0 every diagonal g_{ii} is positive and
+analytic, so det(g)=prod g_{ii} != 0 on W_+. Therefore g^{-1}, the Christoffel symbols, and
+the curvature tensor/scalar are finite analytic functions on W_+: no interior curvature
+singularity. The interior-cleanliness of Test 3 is now a theorem, not a scan.
 """
 import sympy as sp
 import mpmath as mp
@@ -120,8 +135,8 @@ vieta = (sp.simplify(Sp*Sm - pi**2*(4*J**2 + Q**4)) == 0 and
          sp.simplify(Sp - Sm - 4*pi*sp.sqrt(disc)) == 0)
 Us_closed = sp.simplify(Us - (S**2 - pi**2*(4*J**2 + Q**4))/(4*pi*S**2)) == 0
 Us_at_Sp = sp.simplify(((Sp**2 - pi**2*(4*J**2 + Q**4))/(4*pi*Sp**2)) - sp.sqrt(disc)/Sp) == 0
-check("T4-c.U_S_nonneg", vieta and Us_closed and Us_at_Sp,
-      "U_S = sqrt(disc)/S_+ >= 0 (Vieta: S_+ S_- = pi^2(4J^2+Q^4), S_+ - S_- = 4pi sqrt(disc)); =0 iff extremal")
+check("T4-c.U_S_positive", vieta and Us_closed and Us_at_Sp,
+      "U_S = sqrt(disc)/S_+ > 0 on W_+ (Vieta: S_+ S_- = pi^2(4J^2+Q^4), S_+ - S_- = 4pi sqrt(disc)); =0 iff extremal")
 
 # ---- (d) each bracket has all-nonnegative coefficients over positive vars (S,J,Q,us,pi) ----
 # strip the leading charge factor, clear the S-denominator, expand -> Poly; all coeffs >= 0.
@@ -140,30 +155,46 @@ for k, b in brackets.items():
     if any(c < 0 for c in poly.coeffs()):
         allpos = False
 check("T4-d.brackets_positive", allpos,
-      "every bracket = sum of positive-coefficient monomials in (S,J,Q,U_S,pi) => bracket > 0 in the wedge")
+      "after clearing positive S-powers, every bracket has NONNEGATIVE coefficients in "
+      "the strictly positive (S,J,Q,U_S,pi) => bracket > 0 on W_+")
 
-# ---- conclusion: interior zero-locus is exactly the role divisors ----
+# ---- (e) DOMAIN IS SHARP: inner-branch counterexample (why W_+, not {disc>0}) ----
+# at (S,J,Q) = (pi sqrt3/2, 1/4, 1): disc = 1/48 > 0 but U_S < 0 (inner branch) and
+# N_{J,S} = 0. So {disc>0} admits an interior numerator zero; {U_S>0}=W_+ excludes it.
+cx = {S: pi*sp.sqrt(3)/2, J: sp.Rational(1, 4), Q: sp.Integer(1)}
+NJS_cx = sp.simplify(N['J,S'].subs(cx))
+Us_cx = sp.simplify(Us.subs(cx))
+Ucx = U.subs(cx); disc_cx = sp.simplify(Ucx**2 - Ucx*1 - sp.Rational(1, 16))
+check("T4-e.domain_sharp",
+      NJS_cx == 0 and Us_cx < 0 and disc_cx > 0,
+      f"inner-branch pt (pi*sqrt3/2,1/4,1): N_JS=0, U_S={sp.nsimplify(Us_cx)}<0, disc={disc_cx}>0 "
+      f"=> {{disc>0}} is too big; W_+={{U_S>0}} is the correct (sharp) domain")
+
+# ---- conclusion: on W_+ the zero-locus is exactly the role divisors ----
 # N_{S,J},N_{Q,J} ~ J*(+)  -> zero iff J=0 (Omega=0);
 # N_{S,Q},N_{J,Q} ~ Q*(+)  -> zero iff Q=0 (Phi_e=0);
-# N_{J,S}=(2pi/S)U_S+4pi^2 J^2/S^3, N_{Q,S}=(..)U_S+(+)Q^4  -> zero iff U_S=0 AND J(or Q)=0.
-# With U_S>0, J,Q>0 in the open interior, ALL six N_{ij} > 0: no interior zeros.
-zero_loci_ok = (FAILS == [])   # the four verified pieces (a)-(d) establish it
+# N_{J,S}=(2pi/S)U_S+4pi^2 J^2/S^3, N_{Q,S}=(..)U_S+(+)Q^4 -> zero iff U_S=0 AND J(or Q)=0
+#   (codim-2 corners); generic U_S=0/T=0 is the NATIVE POLE (U_i^3), not a numerator zero.
+# On W_+ (U_S>0, J,Q>0) ALL six N_{ij} > 0: no interior zeros.
+zero_loci_ok = (FAILS == [])   # pieces (a)-(e) establish it
 check("T4.theorem", zero_loci_ok,
-      "THEOREM: mass-charge coupling zeros = role divisors {J=0}u{Q=0}u{extremal}; "
-      "no interior zeros => g_F(u=0) has no interior curvature singularity")
+      "THEOREM (on W_+): mass-charge coupling zeros/native poles supported exactly on "
+      "{J=0}u{Q=0}u{U_S=0} = Omega=0 u Phi_e=0 u T=0; no interior zeros => g_F(u=0) is "
+      "analytic positive-definite on W_+ => finite analytic curvature (no interior singularity)")
 
 # ---- verdict ----
-ntot = 6 + 1 + 1 + 1 + 1  # 6 factorizations + a + c + d + theorem
+ntot = 6 + 1 + 1 + 1 + 1 + 1  # 6 factorizations + a + c + d + e + theorem
 if FAILS:
     print(f"VERDICT: FAIL ({len(FAILS)}): {', '.join(FAILS)}")
     raise SystemExit(1)
-print(f"VERDICT: LEAD-7 TEST 4 CLEAN -- {ntot}/{ntot}. THEOREM (symbolic): the six "
+print(f"VERDICT: LEAD-7 TEST 4 CLEAN -- {ntot}/{ntot}. THEOREM (symbolic) on the OUTER "
+      f"PHYSICAL wedge W_+ = {{S,J,Q>0, U_S>0}} = {{S^2 > pi^2(4J^2+Q^4)}} (outer horizon "
+      f"S=S_+, NOT {{disc>0}} which also admits the inner branch -- T4-e): the six "
       f"mass-charge couplings Lambda_{{i,{{M,j}}}} = 2M(U_ii U_j - U_i U_ij)/U_i^3 have "
-      f"numerators that factor as (charge/U_S factor) x (positive bracket); with "
-      f"U_S = sqrt(disc)/S_+ > 0 in the open wedge, every numerator is strictly positive "
-      f"there. Hence the mass-charge coupling zeros are EXACTLY the role divisors "
-      f"Omega=0 (J=0), Phi_e=0 (Q=0), T=0 (extremal, as the native pole) -- no interior "
-      f"zeros. The Candidate-F(u=0) metric therefore has NO interior curvature "
-      f"singularity: Test 3's interior-cleanliness is upgraded from a finite scan to a "
-      f"theorem. Remaining for full certification: exact pole-coefficient retrodiction "
-      f"(KN analogue of the n=2 RC-5 tier).")
+      f"numerators that factor as (charge/U_S factor) x (nonneg-coefficient bracket); with "
+      f"U_S = sqrt(disc)/S_+ > 0 on W_+, every numerator is strictly positive there. Hence "
+      f"the mass-charge coupling zeros and native poles are supported EXACTLY on the role "
+      f"divisors Omega=0 (J=0), Phi_e=0 (Q=0), T=0 (extremal, native pole via U_i^3) -- no "
+      f"interior zeros. So g_F(u=0) is analytic positive-definite on W_+ with finite "
+      f"analytic curvature: Test 3's interior-cleanliness is a theorem. Remaining: exact "
+      f"pole-coefficient retrodiction (KN analogue of the n=2 RC-5 tier).")

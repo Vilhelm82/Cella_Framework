@@ -4,20 +4,31 @@
 byte-stable ×2, SYMBOLIC). Upgrades the interior-cleanliness of the Candidate-F(u=0) metric
 (`reports/LEAD7_test3_candF_n3.md`) from a finite numerical scan to a proof.
 
-## Statement
+## Domain (corrected)
 
 Let the Kerr-Newman graph be `M² = U(S,J,Q)`,
-`U = S/(4π) + πJ²/S + Q²/2 + πQ⁴/(4S)`, on the physical wedge
-`W = {S,J,Q > 0, disc := M⁴ − M²Q² − J² > 0}`. Each output chart `E_i = f_i(M, E_j, E_k)`
-solves `M²=U` for `E_i`; its **mass-charge couplings** are the mixed second partials
-`Λ_{i,{M,j}} = ∂²E_i/∂M∂E_j` (pairs joining the graph value `M` to one charge `E_j`).
+`U = S/(4π) + πJ²/S + Q²/2 + πQ⁴/(4S)`. The theorem holds on the **outer physical wedge**
+```
+W₊ = {S,J,Q > 0, U_S > 0} = {S,J,Q > 0, S² > π²(4J²+Q⁴)},
+```
+equivalently the outer-horizon branch `S = S₊ = π(2M²−Q²+2√disc)`, `disc>0`. **Not**
+`{S,J,Q>0, disc>0}` alone: `disc>0` also contains the **inner** branch `S=S₋` where
+`U_S<0`, on which a numerator can vanish in the interior (see the counterexample below).
+`U_S>0` is positive Hawking temperature; `W₊` is the thermodynamically physical region and
+the domain on which the metric `g_F(u=0)` lives.
 
-**Theorem.** On `W`, every mass-charge coupling `Λ_{i,{M,j}}` is finite and nonzero. Its
-zero locus in `W̄` is contained in the union of role divisors
-`{J=0} ∪ {Q=0} ∪ {disc=0}`, i.e. exactly `Ω=0 ∪ Φ_e=0 ∪ T=0`. Consequently the mass-charge
-inverse-channel metric `g_F(u=0)_{ii} = q_i²·Σ_{mass-charge j} 1/Λ_{i,{M,j}}²` has **no
-interior curvature singularity** — all its curvature divergences lie on the role
-boundaries.
+## Statement
+
+Each output chart `E_i = f_i(M, E_j, E_k)` solves `M²=U` for `E_i`; its **mass-charge
+couplings** are the mixed second partials `Λ_{i,{M,j}} = ∂²E_i/∂M∂E_j` (pairs joining the
+graph value `M` to one charge `E_j`).
+
+**Theorem.** On `W₊`, every mass-charge coupling `Λ_{i,{M,j}}` is finite and nonzero. In
+the closure `W̄₊`, every numerator zero **and** every native pole of the mass-charge
+couplings is supported on
+`{J=0} ∪ {Q=0} ∪ {U_S=0} = Ω=0 ∪ Φ_e=0 ∪ T=0`. Consequently the mass-charge inverse-channel
+metric `g_F(u=0)_{ii} = q_i²·Σ_{mass-charge j} 1/Λ_{i,{M,j}}²` has **no interior curvature
+singularity** — all its curvature divergences lie on the role boundaries.
 
 ## Proof (as certified)
 
@@ -40,28 +51,46 @@ for all six couplings (numeric, max mismatch ~10⁻³⁷). *(cert: T4-a)*
 | `Λ_{Q,{M,S}}` | `(1+3πQ²/S)U_S + πQ⁴(1+πQ²/S)/S²` | U_S=0 ∧ Q=0 |
 | `Λ_{Q,{M,J}}` | `(2πJ/S)·(1+3πQ²/S)` | J=0 (Ω=0) |
 
-**3. Positivity of `U_S`.** By the horizon Vieta relations (cert T4-c):
+**3. Positivity of `U_S` on `W₊`.** By the horizon Vieta relations (cert T4-c):
 `S_± = π(2M²−Q² ± 2√disc)` are the two roots of the entropy quadratic, with
-`S_+S_− = π²(4J²+Q⁴)` and `S_+−S_− = 4π√disc`. Hence on the outer branch
+`S_+S_− = π²(4J²+Q⁴)` and `S_+−S_− = 4π√disc`. Hence on the outer branch `S=S₊`
 ```
-U_S = [S² − π²(4J²+Q⁴)]/(4πS²) = √disc / S_+  ≥ 0,   with equality ⇔ disc=0 (extremal).
+U_S = [S² − π²(4J²+Q⁴)]/(4πS²) = √disc / S_+  > 0   on W₊,   = 0 ⇔ disc=0 (extremal).
 ```
 
-**4. All-positive brackets.** Each bracket in the table, with `U_S` treated as a
-nonnegative symbol, is a polynomial in the strictly-positive variables `(S,J,Q,U_S,π)`
-with all coefficients `≥ 0` (cert T4-d). So each bracket is `> 0` throughout `W`.
+**4. Nonnegative-coefficient brackets.** After clearing positive powers of `S`, each
+bracket in the table is a polynomial with **nonnegative** coefficients in the strictly
+positive variables `(S,J,Q,U_S,π)` — equivalently, a positive monomial denominator times a
+nonnegative-coefficient polynomial (cert T4-d). So each bracket is `> 0` on `W₊`.
 
-**Conclusion.** In the open interior (`J,Q>0`, and `U_S>0` since `disc>0`), each numerator
-`N_{ij}` is a product/sum of strictly-positive quantities, hence `> 0`. So no mass-charge
-coupling vanishes in the interior; the zeros occur only on the boundary faces
-`{J=0}` (Ω=0), `{Q=0}` (Φ_e=0), or the corners `{U_S=0}∩{·}` (extremal). The extremal
-divisor `T=0` additionally appears as the native **pole** of the entropy-chart couplings
-(`U_S³` in the denominator). ∎
+**Role of the extremal divisor (corrected).** Generic `U_S=0` (`T=0`) is **not** a
+numerator zero: `N_{J,S}` and `N_{Q,S}` vanish only where `U_S=0` **and** (`J=0` or `Q=0`),
+i.e. codim-2 corners. `T=0` enters as the **native pole** of the entropy-chart couplings,
+through the `U_i³ = U_S³` denominator of the uniform formula.
 
-Since `g_F(u=0)` is a sum of `1/Λ²` terms with the `Λ` finite and nonzero on the interior,
-the metric is smooth and positive-definite there, and its curvature (a rational function of
-the metric and its derivatives) is finite. The interior-cleanliness observed numerically in
-Test 3 is therefore exact.
+**Conclusion.** On `W₊` (`J,Q>0`, `U_S>0`), each numerator `N_{ij}` is a product/sum of
+strictly-positive quantities, hence `> 0`. So no mass-charge coupling vanishes in `W₊`;
+numerator zeros occur only on the boundary faces `{J=0}` (Ω=0), `{Q=0}` (Φ_e=0), or the
+corners `{U_S=0}∩{·}` (extremal), and the extremal divisor appears additionally as the
+native pole. ∎
+
+**Curvature (analytic).** Each `Λ_{i,{M,j}}` is analytic, finite and nonzero on `W₊`, so
+each `1/Λ²` is analytic on `W₊`. Since `q_i>0` in the interior, every diagonal entry
+`g_{ii}` is positive and analytic, hence `det(g)=∏_i g_{ii} ≠ 0` on `W₊`. Therefore `g⁻¹`,
+the Christoffel symbols, and the curvature tensor/scalar are finite analytic functions on
+`W₊`, so no interior curvature singularity occurs. The interior-cleanliness observed
+numerically in Test 3 is therefore exact.
+
+## Why the domain must be `W₊` (inner-branch counterexample)
+
+`{disc>0}` is **too big** — it admits an interior numerator zero on the inner branch. At
+```
+S = π√3/2,  J = 1/4,  Q = 1  ⟹  M² = U = 1/2 + 1/√3,  disc = 1/48 > 0,
+```
+one has `U_S = −1/(6π) < 0` (inner branch) and `N_{J,S} = (S²+4π²J²−π²Q⁴)/(2S³) = 0`. This
+point satisfies `disc>0` but is excluded by `W₊ = {U_S>0}`. So the theorem must be stated on
+`W₊`, not on `{disc>0}` (cert T4-e). This is exactly the physical/unphysical split: the
+outer horizon has `T>0` (`U_S>0`), the inner horizon `T<0`.
 
 ## What this closes, and what remains
 

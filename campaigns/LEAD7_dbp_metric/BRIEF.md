@@ -35,14 +35,18 @@ NEXT (EMPIRICAL→certified): prove mass-charge zeros = role divisors exactly; e
 coefficients (KN retrodiction tier).
 
 **UPDATE — mass-charge zeros = role divisors PROVEN** (`verification/lead7_test4_masscharge_zeros.py`,
-10/10 ×2, symbolic; report `reports/LEAD7_masscharge_zeros_theorem.md`). Uniform implicit
+11/11 ×2, symbolic; report `reports/LEAD7_masscharge_zeros_theorem.md`). Uniform implicit
 formula `Λ_{i,{M,j}} = 2M(U_ii U_j − U_i U_ij)/U_i³`; the six numerators factor as
-(charge/U_S factor)×(all-positive bracket); `U_S = √disc/S_+ > 0` in the open wedge (horizon
-Vieta). Hence every mass-charge coupling is strictly nonzero in the interior — its zeros are
-EXACTLY `{J=0}=Ω=0`, `{Q=0}=Φ_e=0`, `{disc=0}=T=0`. So `g_F(u=0)` has **no interior
-curvature singularity** — Test 3's interior-cleanliness is now a theorem, and the u=0
-selection is structural (the charge-charge couplings, excluded at u=0, are the ones with
-interior zeros = LEAD-2 isotropy strata). REMAINING: exact pole coefficients (KN
+(charge/U_S factor)×(nonneg-coefficient bracket); `U_S = √disc/S_+ > 0` on the **outer
+physical wedge** `W₊ = {S,J,Q>0, U_S>0} = {S²>π²(4J²+Q⁴)}` (horizon Vieta). Domain is
+`W₊`, NOT `{disc>0}` — the latter includes the inner branch (`U_S<0`) where a numerator can
+vanish interiorly (counterexample `(π√3/2,1/4,1)`, cert T4-e). On `W₊` every mass-charge
+coupling is strictly nonzero — its zeros/native-poles are supported EXACTLY on `{J=0}=Ω=0`,
+`{Q=0}=Φ_e=0`, `{U_S=0}=T=0` (extremal enters as the native `U_i³` pole, not a numerator
+zero). So `g_F(u=0)` is analytic positive-definite on `W₊` ⟹ finite analytic curvature ⟹
+**no interior curvature singularity** — Test 3's interior-cleanliness is now a theorem, and
+the u=0 selection is structural (the charge-charge couplings, excluded at u=0, are the ones
+with interior zeros = LEAD-2 isotropy strata). REMAINING: exact pole coefficients (KN
 retrodiction tier), the only piece of the n=3 complementarity still at numeric tier.
 
 ## Candidate D (output-channel norm inverse) — TEST 1/2 VERDICT (2026-07-07)
