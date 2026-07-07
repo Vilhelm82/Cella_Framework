@@ -8,6 +8,32 @@ Source: `Reference_Material/gtd_vs_dbp.pdf` (re-verification rule: origin is cla
 evidence). Prerequisite RC-5 structure tier: `verification/recert_gtd_dbp_n2.py`
 (`d047d21b`, 11/11, byte-stable ×2).
 
+## Candidate F (mass-charge inverse-channel) — LIKELY THE n=3 DBP METRIC (2026-07-07)
+
+Will surfaced `Reference_Material/LEAD7_Candidate_F_Elementary_Pair_Channel_Inverse_Metric.md`
+(invert-before-sum, fixing D's zero-blind aggregation). Ran Test 3
+(`verification/lead7_test3_candF_n3.py`; report `reports/LEAD7_test3_candF_n3.md`):
+
+- **F(u=1)** (full invert-before-sum) FIXES D's failure: R diverges on ALL THREE role
+  boundaries with the **paper order law** — extremal order 3 (generic), Ω=0 & Φ_e=0 order 4
+  (reflection-fixed). BUT it has a **spurious interior curvature pole** where the
+  charge-charge coupling `Λ_{Q,{Se,J}}=0` (interior, ≠ Davies) — the doc's §8 failure.
+- **F(u=0)** (mass-charge couplings only) reproduces the **FULL complementarity AND is
+  interior-clean**: orders 3/4/4, R finite on Davies D3, no spurious interior poles
+  (scanned M∈{1.5,2,3}, ~1300 pts + direct coupling zero-hunts). Reduces to A at n=2.
+- **u=0 is UNIQUELY selected**: u>0 → interior pole; u<0 → not positive-definite. Only u=0
+  is both interior-clean and pos-def, and it keeps every boundary divergence (all in the
+  mass-charge sector).
+
+**LEAD-7 CENTRAL QUESTION ANSWERED (numerical/EMPIRICAL tier): YES, a canonical n=3 DBP
+metric exists — the mass-charge inverse-channel metric**
+`g_DBP,ii = q_i² · Σ_{mass-charge pairs ρ of chart i} 1/Λ_{i,ρ}²`. Not the norm-inverse (D,
+too coarse), not the pullback (B, wrong valuation), not full invert-before-sum (F u>0, too
+sharp — interior poles). Selection rule banked: **zero-sensitive at the mass-charge channel
+level, exclude the charge-charge couplings** (their zeros are LEAD-2 isotropy strata).
+NEXT (EMPIRICAL→certified): prove mass-charge zeros = role divisors exactly; exact pole
+coefficients (KN retrodiction tier).
+
 ## Candidate D (output-channel norm inverse) — TEST 1/2 VERDICT (2026-07-07)
 
 Will surfaced `Reference_Material/LEAD7_Candidate_D_Output_Channel_Norm_Inverse_Metric.md`
