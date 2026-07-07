@@ -65,22 +65,39 @@ two role divisors meet — the reflection-face pole "heals" into the generic ext
 the corner. (The `(2πJ + S)²` factor in `C_Φ` is the `J→−J` reflection image, always
 present.)
 
-## Extremal coefficient (order 3) — high precision, closed form open
+## Extremal coefficient (order 3) — EXACT closed form (Test 7)
 
-The extremal divisor is a `√disc` branch point (not a reflection face), so the `−14/B`
-identity does not apply; only the entropy component collapses (`g_SS ~ δ²`), the others
-stay finite, and the pole is odd order 3. Leading coefficients `C_ext(J,Q) = lim_{δ→0}
-R·δ³` (high precision):
+The extremal edge is *not* a reflection face: in `(S,J,Q)` coordinates the metric is
+analytic (`M=√U` is smooth), only the entropy component collapses (`g_SS ~ A₂δ²`,
+`δ=S−S_ext`), the others stay finite, and the pole is odd order 3. A symbolic Laurent
+expansion gives the structural identity
 
-| (J, Q) | `S_ext` | `C_ext` |
-|---|---|---|
-| (3, 1) | 19.1096 | −0.06497050672 |
-| (2, 1) | 12.9531 | −0.05296128512 |
-| (3, 2) | 22.6543 | −0.000862697853 |
-| (2, 1.5) | — | −0.00415193621 |
+```
+C_ext = (1/A₂)·(P₁/P₀ + R₁/R₀) = (1/A₂)·∂_S ln(g_JJ·g_QQ)|_{S_ext},
+```
 
-Its exact closed form is the remaining open sub-item of the n=3 retrodiction (a
-branch-point Laurent computation, structurally harder than the reflection faces).
+with `P₀,P₁ = g_JJ, ∂_S g_JJ` and `R₀,R₁ = g_QQ, ∂_S g_QQ` at extremal (the odd order
+comes exactly from the linear-`δ` terms `P₁,R₁`). The collapsing coefficient has the same
+shape as the reflection `B`:
+
+```
+A₂ = (4U + U_J² + U_Q²)²/(4U) · (1/U_J² + 1/U_Q²)   at extremal.
+```
+
+**Rationality.** The implicit-formula couplings `Λ = 2M(U_ii U_a − U_i U_ia)/U_i³`
+(`M²=U`) are *rational* in `(S,J,Q,π)` — the radicals only lived in the chart functions,
+not the couplings — so `g_JJ, g_QQ`, their `S`-derivatives and `A₂` are rational, and on
+the extremal surface `J²=(S²−π²Q⁴)/(4π²)` the whole coefficient is a **rational function
+of `(S,Q,π)`**. Its denominator factors as
+
+```
+den ∝ Q²π·(3Q²π+S)·(Q⁴π+Q²S−Q²π+S)·(Q⁴π²+4Q²S²π²−2Q²Sπ+S²)
+      ·(Q⁴π²+Q²Sπ−Q²π²+2S²+Sπ)³·(Q¹⁰π³+Q⁸Sπ²−9Q⁶S²π³+3Q⁴S³π²+5Q²S⁴π+S⁵),
+```
+
+with a long (degree 14 in `S`, 28 in `Q`) polynomial numerator. Verified against direct
+high-precision curvature. Sample values (on the extremal surface, in `(S,Q)`): `C_ext(20,1)
+= −0.0660176096`, `C_ext(30,1) = −0.0727822594`, `C_ext(20,2) = −0.000549074077`.
 
 ## Status of the n=3 complementarity
 
@@ -90,7 +107,8 @@ branch-point Laurent computation, structurally harder than the reflection faces)
 | interior-cleanliness (no spurious poles) | **theorem** (Test 4, on `W₊`) |
 | pole **orders** 3/4/4 | **certified** (Test 5) |
 | reflection-fixed **coefficients** `C_Ω`, `C_Φ` | **exact closed form** (Test 6) |
-| extremal **coefficient** `C_ext` | high-precision numeric; closed form open |
+| extremal **coefficient** `C_ext` | **exact closed form** (Test 7) |
 
-The n=3 DBP complementarity law is now established for `g_F(u=0)` at the coefficient level
-on the reflection-fixed divisors, with only the generic-edge coefficient left to close.
+The n=3 DBP complementarity retrodiction is **complete** for `g_F(u=0)`: the pole orders
+(3/4/4) and all three leading coefficients (both reflection-fixed and the extremal edge)
+are certified in exact closed form.

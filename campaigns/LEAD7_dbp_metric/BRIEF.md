@@ -57,8 +57,20 @@ reflection-face leading coefficient = −14/B, B = leading coeff of the collapsi
 component, symbolic): C_Ω(S,Q) = −3584 Q²S⁵π³(πQ²−S)²/[...], C_Φ(S,J) = −14336
 J²S⁵π⁵(2πJ−S)²(2πJ+S)²(4π²J²+S²)/[...], matched to direct curvature to ~20 digits; corner
 factors (πQ²−S)², (2πJ−S)² vanish on the divisor corners (Ω=0∩extremal, Φ_e=0∩extremal).
-REMAINING: only the extremal (order-3, branch-point) coefficient C_ext(J,Q) closed form
-(high-precision numeric in hand); everything else of the n=3 complementarity is certified.
+**Extremal coefficient CLOSED (`lead7_test7_extremal_coeff_n3.py`):** C_ext(S,Q) is an
+EXACT rational function of (S,Q,π), via the structural identity C_ext=(1/A₂)∂_S ln(g_JJ g_QQ)
+at extremal with A₂=(4U+U_J²+U_Q²)²/(4U)(1/U_J²+1/U_Q²) (same shape as the reflection B).
+Key: the implicit-formula couplings are RADICAL-FREE (rational in S,J,Q,π), so g_JJ,g_QQ and
+A₂ are rational and on the extremal surface J²=(S²−π²Q⁴)/(4π²) the whole coefficient is
+rational; verified vs direct curvature.
+
+**n=3 COMPLEMENTARITY RETRODICTION COMPLETE:** orders 3/4/4 AND all three leading
+coefficients (C_Ω, C_Φ, C_ext) in exact closed form. Combined with the metric identification
+(Test 3), u=0 selection + interior-cleanliness theorem (Test 4), the n=3 DBP metric
+g_F(u=0) = mass-charge inverse-channel metric is fully established and its complementarity
+law fully retrodicted. LEAD-7 central question resolved. Remaining (optional, LEVER payoff):
+lift the metric-identification/orders from EMPIRICAL to a closed-form proof, and the
+physics-novelty writeup.
 
 ## Candidate D (output-channel norm inverse) — TEST 1/2 VERDICT (2026-07-07)
 
