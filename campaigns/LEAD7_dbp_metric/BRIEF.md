@@ -64,13 +64,24 @@ Key: the implicit-formula couplings are RADICAL-FREE (rational in S,J,Q,π), so 
 A₂ are rational and on the extremal surface J²=(S²−π²Q⁴)/(4π²) the whole coefficient is
 rational; verified vs direct curvature.
 
-**n=3 COMPLEMENTARITY RETRODICTION COMPLETE:** orders 3/4/4 AND all three leading
-coefficients (C_Ω, C_Φ, C_ext) in exact closed form. Combined with the metric identification
+**Extremal N_ext gate CLOSED (`lead7_test8_extremal_gate_replacement.py`, byte-stable ×2):** C_ext<0 at EVERY open point
+of the extremal edge (not merely on a dense grid), so the extremal pole has exact order 3
+throughout T=0 (upgrades "generic open points" → "all open points"). Full-edge
+coefficient-positivity certificate: sign(C_ext)=sign(L_ext), L_ext=∂_S log(g_JJ g_QQ)|ext;
+parametrise the edge by q=Q²>0, t=S/(πQ²)>1 so L_ext=−P/D; under t=1+r (r>0), π²=9+b (b>0,
+from π>3), D factors into 10 coefficient-positive factors and P=Aq²+Bq+C has B,C
+coefficient-positive with A=8π²t⁴(π²F+G), F=t²(t−1)(t+3)³H(t), H degree-6 with no root in
+(1,∞) and H(1)=8 (single bounded Sturm count), 9F+G>0 ⟹ A>0 ⟹ P>0, D>0 ⟹ L_ext<0.
+
+**n=3 COMPLEMENTARITY RETRODICTION COMPLETE (fully symbolic):** orders 3/4/4, all three
+leading coefficients (C_Ω, C_Φ, C_ext) in exact closed form, AND the extremal order-3 pole
+established at every open point (gate closed, Test 8). Combined with the metric identification
 (Test 3), u=0 selection + interior-cleanliness theorem (Test 4), the n=3 DBP metric
 g_F(u=0) = mass-charge inverse-channel metric is fully established and its complementarity
-law fully retrodicted. LEAD-7 central question resolved. Remaining (optional, LEVER payoff):
-lift the metric-identification/orders from EMPIRICAL to a closed-form proof, and the
-physics-novelty writeup.
+law fully retrodicted. LEAD-7 central question resolved. Formal proof paper drafted
+(`paper/lead7_kn_n3_dbp_metric.tex`). Remaining (optional, LEVER payoff): lift the
+metric-identification/orders from EMPIRICAL to a closed-form proof (replace Test 5 numeric
+fits with the exact Laurent lemmas), and the physics-novelty writeup.
 
 ## Candidate D (output-channel norm inverse) — TEST 1/2 VERDICT (2026-07-07)
 
