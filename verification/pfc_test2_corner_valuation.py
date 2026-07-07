@@ -22,10 +22,14 @@ order-2 corner); (iii) at a facet-parallel (balanced) direction the whole facet 
 the leading coefficient collects the entire facet -- a genuine mixed/front-face term that
 neither single face resolves.
 
-SUBTLETY (why raw metric weights are not enough). The correct input is the single-FACE data,
-not the leading monomial weights of the metric components: a pure single-monomial ("toric")
-metric is NON-GENERIC and its curvature poles are milder (extra cancellation). Face data
-encodes the generic structure.
+EQUIVALENT INPUTS. The corner vertices are determined equally by the single-FACE data
+(orders p_x,p_y + residue weights r_x,r_y) or by the raw metric monomial weights (p_i,q_i) of
+the collapsing components, via the explicit map V=(-(p_i+2),-q_i) etc. (p_x=p_1+2, r_y=-q_1;
+proven in pfc_test3). A single-monomial ("toric") germ with the CORRECT weights already
+realises the polytope -- it is generic. The genuine cancellation condition is A=0 / B=0
+(explicit polynomials in the weights; pfc_test3), plus activation of the spectator vertex.
+[An earlier version of PFC4-d swapped the x,y weights and wrongly reported the toric germ as
+non-generic; corrected here and in pfc_test3.]
 
 KN (m=2) dictionary: Omega=0 and Phi_e=0 are order-4 parity-fixed faces with residues
 C_Omega ~ Q^2, C_Phi ~ J^2 (lead7_test6/9), i.e. p_x=p_y=4, r_x=r_y=2, giving vertices
@@ -137,19 +141,24 @@ check("PFC4c.synthetic_43", fok and rok and (px, py) == (4, 3),
       "support-function reconstruction matches direct curvature (rule is NOT KN-specific)")
 
 # =====================================================================
-# PFC4-d : genericity -- pure single-monomial (toric) metric is non-generic
+# PFC4-d : the single-monomial germ with CORRECT weights realises the polytope
+# (CORRECTION: an earlier version of this check swapped the x,y weights of g_Q,g_J and
+#  wrongly concluded the toric germ was "non-generic". With the correct assignment
+#  g_Q=g_x~x^2 y^-2, g_J=g_y~x^-2 y^2 the single-monomial germ reproduces the KN wedge
+#  exactly. The general vertex rule V=(-(p_i+2),-q_i) etc. and the true cancellation
+#  condition A=0/B=0 are PROVEN in pfc_test3.)
 # =====================================================================
-print("\n== PFC4-d: genericity -- raw single-monomial weights give a milder (wrong) wedge ==")
-# KN corner weights G_S~x^-6, G_J~x^-2 y^2, G_Q~x^2 y^-2, as PURE monomials:
-Rtoric = scal_expr([s*x**(-6), s*x**(-2)*y**2, s*x**2*y**(-2)], [s, x, y])
-# clear x,y denominators (Rtoric is a Laurent polynomial in x,y over the s-units): exponents via x^N y^N
+print("\n== PFC4-d: single-monomial germ with CORRECT weights realises the KN polytope ==")
+# correct KN corner weights: g_S~x^-6, g_Q=g_x~x^2 y^-2, g_J=g_y~x^-2 y^2
+Rtoric = scal_expr([s*x**(-6), s*x**2*y**(-2), s*x**(-2)*y**2], [s, x, y])
 Ntor = 8
 Ptor = sp.Poly(sp.expand(sp.cancel(Rtoric*x**Ntor*y**Ntor)), x, y)
 polar = set((i - Ntor, j - Ntor) for (i, j) in Ptor.monoms())
 m_toric = sp.simplify(support([(u, v) for (u, v) in polar if u < 0 or v < 0], 1, a))
-check("PFC4d.toric_nongeneric", sp.simplify(m_toric - mKN) != 0,
-      f"pure-toric wedge {m_toric} != face-data wedge {mKN} (agree only at a=1); "
-      "raw metric weights are non-generic -- FACE data is the correct valuation input")
+check("PFC4d.toric_correct_weights", sp.simplify(m_toric - mKN) == 0,
+      f"single-monomial germ (correct weights) wedge {m_toric} = KN wedge {mKN}; the germ is "
+      "generic -- raw weights determine the vertices via V=(-(p+2),-q) (= face data). The true "
+      "cancellation condition is A=0/B=0 (proven in pfc_test3), not 'toric non-genericity'.")
 
 print()
 if not FAILS:
@@ -159,8 +168,9 @@ if not FAILS:
           "the KN Schwarzschild corner (from certified face data = lead7_test9 wedge), for "
           "synthetic (4,4) and (4,3) corners by direct curvature (rule is dimension/order "
           "general, not KN-specific), with the corner order dropping below both faces, the "
-          "balanced facet giving the mixed/front-face coefficient, and the genericity subtlety "
-          "(raw monomial weights are non-generic; face data is the correct input). OPEN "
+          "balanced facet giving the mixed/front-face coefficient, and the single-monomial germ "
+          "(correct weights) realising the polytope (the general vertex rule + cancellation "
+          "condition A=0/B=0 are proven in pfc_test3). OPEN "
           "(campaign body): general proof of the vertex rule with cancellation conditions, and "
           "codimension >= 3.")
 else:

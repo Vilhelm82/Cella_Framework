@@ -95,9 +95,15 @@ understood; a list of banned sources would not protect against the next stale on
   corner order = support function of a Newton polytope with vertices `(−p_x,r_y),(r_x,−p_y)` from
   the two single-face orders/residue weights; KN from certified face data → the `lead7_test9`
   wedge; synthetic (4,4),(4,3) validated by direct curvature; corner drops below both faces;
-  balanced facet ⟹ front-face (mixed) coefficient; raw monomial weights non-generic. FRONTIER:
-  general vertex-rule proof + cancellation condition + codim ≥3. Legs test: watch whether the
-  same local laws recur across other ensembles/surfaces.
+  balanced facet ⟹ front-face (mixed) coefficient. **VERTEX RULE PROVEN**
+  (`pfc_test3_vertex_rule.py` ×2, closed symbolic identity): polar support =
+  `V_1=(−(p_1+2),−q_1), V_2=(−p_2,−(q_2+2)), V_0=(−p_0,−q_0)`, explicit coeffs `A/(2h_1),B/(2h_2)`
+  + s-jet; cancellation = `A=0/B=0`; face data ≡ raw weights. **CASE LAW (2026-07-07):** an
+  earlier `pfc_test2` "toric non-generic" claim was a swapped-x,y-weight bug — the single-monomial
+  germ (correct weights) realises the polytope; corrected in ink (verify a valuation model
+  against direct curvature with the RIGHT labeling before banking a genericity claim). FRONTIER:
+  codim ≥3 + front-face classification. Legs test: watch whether the same local laws recur across
+  other ensembles/surfaces.
   **CASE LAW (metric-normalization, 2026-07-07):** the DBP chart norm is `q_i=1+|∇f_i|²` — the
   graph "1+" is canonical (n=2 `q0=1+a²+b²`, recert_gtd_dbp_n2.py), NOT an accidental factor. A
   handed-off gate script dropped it to `|∇f|²` and certified the wrong metric; caught only by

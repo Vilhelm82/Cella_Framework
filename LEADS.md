@@ -183,8 +183,8 @@ complementarity test, pole orders and leading coefficients recorded.
 
 ## LEAD-9 — PFC: parity-fixed inverse-channel local curvature calculus
 
-**Status:** OPEN — **PFC-1/2/3 DONE; PFC-4 OPENED with its opening result** (2026-07-07); the
-PFC-4 general proof (arbitrary germs + cancellation condition, codim ≥3) is the frontier.
+**Status:** OPEN — **PFC-1/2/3 DONE; PFC-4 opening result + general vertex-rule proof DONE**
+(2026-07-07); PFC-4 codim ≥3 + front-face classification is the frontier.
 Campaign `campaigns/PFC_local_calculus/BRIEF.md`. Spun out of LEAD-7: extract the reusable
 LOCAL theorem before the project sprawls into case studies. The shift — from "Kerr-Newman
 produced C=−14/B" to "parity-fixed inverse-channel geometry has a dimension-general local
@@ -202,9 +202,13 @@ order along a corner path = support function of a Newton polytope with vertices 
 `(r_x,−p_y)` from the two single-face orders/residue weights; `m(a)=max(p_x a_x−r_y a_y,
 p_y a_y−r_x a_x)`. KN from certified face data → the `lead7_test9` wedge; synthetic (4,4),(4,3)
 validated by direct curvature; corner order drops below both faces; balanced facet ⟹ front-face
-(mixed) coefficient; raw monomial weights non-generic (face data is the input). PREREG
-`campaigns/PFC_local_calculus/PREREG_PFC4_corner.md`. **Frontier:** general vertex-rule proof +
-cancellation condition + codim ≥3 + front-face classification. **The legs test:** if the same local laws recur
+(mixed) coefficient. **VERTEX RULE PROVEN** (`pfc_test3_vertex_rule.py` ×2, closed symbolic
+identity): polar support = `V_1=(−(p_1+2),−q_1), V_2=(−p_2,−(q_2+2)), V_0=(−p_0,−q_0)` with
+explicit coeffs `A/(2h_1), B/(2h_2)`, s-jet `C_0`; cancellation = `A=0/B=0`; face data ≡ raw
+weights (`p_x=p_1+2` …). CORRECTION: earlier "toric non-generic" claim was a swapped-weight bug —
+the single-monomial germ (correct weights) realises the polytope. PREREG
+`campaigns/PFC_local_calculus/PREREG_PFC4_corner.md`. **Frontier:** codim ≥3 + front-face
+classification. **The legs test:** if the same local laws recur
 across black-hole chemistry, cavity ensembles, ordinary thermodynamics, and non-thermodynamic
 implicit surfaces, DBP is a normal-form calculus, not a metric that worked once.
 

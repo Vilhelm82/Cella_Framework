@@ -139,13 +139,39 @@ one face and the vertex the balanced direction, so $\min_a m(a)$ can drop \emph{
 single--face orders: two order--$4$ faces can meet at an order--$2$ corner. (ii) At a
 facet--parallel (balanced) direction the whole facet is optimal, so the leading coefficient
 collects the entire facet---a projective \emph{front--face coefficient} that neither single face
-resolves. (iii) The correct input is the single--\emph{face} data, not the leading monomial
-weights of the metric components: a pure single--monomial (``toric'') germ is non--generic and
-gives a strictly milder wedge. The rule is verified for synthetic $(4,4)$ and $(4,3)$ corners by
-direct curvature (certificate \texttt{pfc\_test2}); the Kerr--Newman Schwarzschild corner below
-is the $p_x{=}p_y{=}4$, $r_x{=}r_y{=}2$ instance, reproducing the wedge $\max(4a-2,4-2a)$ from
-certified face data. The general corner theorem---the vertex rule for arbitrary germs with its
-cancellation condition, and codimension $\ge3$---is the open body of this program.
+resolves. (iii) The face data and the raw metric weights are \emph{equivalent} inputs, related
+by the explicit shift below; a single--monomial germ with the correct weights already realises
+the polytope. The rule is verified for synthetic $(4,4)$ and $(4,3)$ corners by direct curvature
+(certificate \texttt{pfc\_test2}).
+
+The vertex rule is a closed identity. Write the collapsing germ in weight form,
+$g_i=h_i(s)\,x^{p_i}y^{q_i}\,u_i$ with $u_i$ a corner unit ($i=0$ spectator, $1,2$ the two
+coordinates $x,y$).
+
+\begin{theorem}[Corner vertex rule]
+\label{thm:vertex}
+The polar part of $R$ near the corner is supported on at most the three monomials
+\[
+V_1=(-(p_1+2),-q_1),\quad V_2=(-p_2,-(q_2+2)),\quad V_0=(-p_0,-q_0),
+\]
+with coefficients $A(p_0,p_1,p_2)/(2h_1)$, $B(q_0,q_1,q_2)/(2h_2)$, and an $s$--jet $C_0$, where
+\[
+A=-p_0^2+p_0p_1-p_0p_2+2p_0+p_1p_2-p_2^2+2p_2,
+\]
+$B$ the same in the $q$'s, and $C_0$ depends only on $(h_i,h_i',h_i'')$. The corner order is the
+support function of the polar, nonzero--coefficient vertices. Thus $p_x=p_1+2$, $p_y=q_2+2$,
+$r_x=-p_2$, $r_y=-q_1$, giving $V_1=(-p_x,r_y)$, $V_2=(r_x,-p_y)$ of Prop.~\ref{prop:corner}. A
+vertex disappears exactly when its coefficient vanishes ($A=0$, $B=0$, or a degenerate
+$s$--jet)---the precise cancellation condition---and the spectator vertex $V_0$ contributes only
+when it is polar ($p_0>0$ or $q_0>0$).
+\end{theorem}
+
+The theorem is proved by an exact scalar--curvature computation with symbolic weights
+(certificate \texttt{pfc\_test3}); unit factors leave the vertices, hence the order, unchanged.
+For Kerr--Newman ($g_S\sim x^{-6}$, $g_Q\sim x^2y^{-2}$, $g_J\sim x^{-2}y^2$) the spectator
+$V_0=(6,0)$ is non--polar, $A=-84\ne0$, $B=-12\ne0$, so the polytope is $\{V_1,V_2\}=\{(-4,2),
+(2,-4)\}$ and $m(a)=\max(4a-2,4-2a)$. Codimension $\ge3$ (a Newton polytope in $\mathbb R^k$)
+and the front--face coefficient classification remain open.
 
 %======================================================================
 \section{Kerr--Newman as the $m=2$ application}
@@ -180,8 +206,9 @@ The pure normal form (Thm.~\ref{thm:pure}, first--principles Ricci for $m=1,\dot
 symbolic--in--$m$ warped reduction), the asymptotic parity face (Cor.~\ref{cor:asymp}), and the
 generic collapse (Prop.~\ref{prop:generic}) are machine--checked in
 \texttt{verification/pfc\_test1\_local\_normal\_forms.py}; the codimension--$2$ corner
-valuation (Prop.~\ref{prop:corner}) in \texttt{verification/pfc\_test2\_corner\_valuation.py}.
-Both are run twice with identical output. The Kerr--Newman instances are in
-\texttt{lead7\_test6,7,8,9,10}.
+valuation (Prop.~\ref{prop:corner}) in \texttt{verification/pfc\_test2\_corner\_valuation.py};
+and the corner vertex rule (Thm.~\ref{thm:vertex}, closed symbolic identity) in
+\texttt{verification/pfc\_test3\_vertex\_rule.py}. All are run twice with identical output. The
+Kerr--Newman instances are in \texttt{lead7\_test6,7,8,9,10}.
 
 \end{document}

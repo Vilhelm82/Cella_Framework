@@ -35,20 +35,26 @@ face has `R` even in `x`, killing `x⁻³` and forcing order 4.
   `R=(1/A)Σ_α(P_{α1}/P_{α0})x⁻³+O(x⁻²)`. **DONE** (`pfc_test1`, `m=2,3`): order 3, coeff from
   the transverse first drift, independent of `A₃,A₄,P_{α2}`. Explains why generic faces are
   order 3 and parity-fixed faces order 4 — it is exactly parity.
-- **PFC-4 — Corner blow-up theory.** *(OPENED 2026-07-07; opening result DONE, general proof
-  OPEN.)* PREREG `PREREG_PFC4_corner.md`. **Codim-2 corner-valuation theorem:** two faces with
-  single-face orders `p_x,p_y` and corner-residue weights `r_x,r_y` give a polar Newton polytope
-  with vertices `v_x=(−p_x,r_y)`, `v_y=(r_x,−p_y)`, and the order along `x=ρε^{a_x}, y=ε^{a_y}`
-  is the **support function** `m(a)=max(p_x a_x−r_y a_y, p_y a_y−r_x a_x)`. **DONE**
-  (`verification/pfc_test2_corner_valuation.py`, byte-stable ×2): KN corner from CERTIFIED face
-  data (`C_Ω~Q²`, `C_Φ~J²`, order 4) reproduces the `lead7_test9` wedge `max(4a−2,4−2a)`;
-  synthetic `(4,4)` and `(4,3)` corners validated by direct curvature (rule is NOT KN-specific);
-  corner order DROPS below both faces; at the balanced (facet-parallel) direction the whole
-  facet is optimal, so the leading coefficient is a facet sum — the KN mixed term `M` explained
-  as the front-face coefficient. **Key subtlety:** the correct input is FACE data, not raw metric
-  monomial weights — a pure single-monomial ("toric") metric is non-generic and gives a milder
-  (wrong) wedge. **OPEN body:** general proof of the vertex rule with the cancellation condition;
-  codimension ≥3; the front-face coefficient classification.
+- **PFC-4 — Corner blow-up theory.** *(OPENED 2026-07-07; opening result + general vertex-rule
+  proof DONE; codim ≥3 OPEN.)* PREREG `PREREG_PFC4_corner.md`. **Codim-2 corner-valuation
+  theorem:** two faces with single-face orders `p_x,p_y` and corner-residue weights `r_x,r_y`
+  give a polar Newton polytope with vertices `v_x=(−p_x,r_y)`, `v_y=(r_x,−p_y)`, and the order
+  along `x=ρε^{a_x}, y=ε^{a_y}` is the **support function** `m(a)=max(p_x a_x−r_y a_y,
+  p_y a_y−r_x a_x)`. Opening result `verification/pfc_test2_corner_valuation.py` (×2): KN from
+  CERTIFIED face data → `lead7_test9` wedge; synthetic (4,4),(4,3) by direct curvature; corner
+  drops below both faces; balanced facet ⟹ front-face coefficient (the KN mixed term `M`).
+  **GENERAL VERTEX RULE PROVEN** (`verification/pfc_test3_vertex_rule.py`, ×2) as a closed
+  symbolic identity: for `g_i=h_i(s)x^{p_i}y^{q_i}u_i`, the polar part of R is supported on
+  exactly `V_1=(−(p_1+2),−q_1)`, `V_2=(−p_2,−(q_2+2))`, `V_0=(−p_0,−q_0)` with EXPLICIT
+  coefficients `A(p_0,p_1,p_2)/(2h_1)`, `B(q_0,q_1,q_2)/(2h_2)`, and an s-jet `C_0`;
+  `A=−p_0²+p_0p_1−p_0p_2+2p_0+p_1p_2−p_2²+2p_2`. Face data and raw weights are EQUIVALENT
+  (`p_x=p_1+2`, `r_y=−q_1`, …). **Cancellation condition:** a vertex disappears iff its
+  coefficient vanishes (`A=0`, `B=0`, or degenerate s-jet); the spectator vertex `V_0`
+  contributes only when polar (`p_0>0` or `q_0>0`). Unit factors leave the vertices/order fixed
+  (generic germs, not just monomials). **CORRECTION:** an earlier `pfc_test2` check swapped the
+  x,y weights and wrongly claimed the single-monomial ("toric") germ was non-generic — with the
+  correct weights it realises the polytope; fixed in ink. **OPEN body:** codimension ≥3 (Newton
+  polytope in ℝ^k); the front-face coefficient classification.
 
 ## Kerr-Newman as the m=2 application (the dictionary)
 

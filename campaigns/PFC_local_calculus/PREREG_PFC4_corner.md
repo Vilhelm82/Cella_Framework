@@ -31,9 +31,11 @@ and the order along `x=ρ ε^{a_x}, y=ε^{a_y}` is the **support function**
 3. **Milder-corner phenomenon.** `min_a m(a)` can be strictly below `min(p_x,p_y)`.
 4. **Front-face coefficient.** At a facet-parallel (balanced) direction the whole facet is
    optimal, so the leading coefficient is a facet sum (a genuine mixed term neither face sees).
-5. **Genericity condition.** The correct input is the face data; a pure single-monomial
-   ("toric") metric is non-generic and yields a milder (wrong) wedge — the theorem must say when
-   the generic polytope applies (no accidental cancellation).
+5. **Cancellation condition.** The theorem must give the exact locus where a vertex disappears
+   (its coefficient vanishes). [NOTE, corrected 2026-07-07: an early draft mis-stated this as
+   "the single-monomial toric germ is non-generic" — that was a labeling error (swapped x,y
+   weights). With correct weights the single-monomial germ realises the polytope; raw weights
+   and face data are equivalent inputs. The true condition is `A=0 / B=0`, below.]
 
 ## Method
 
@@ -48,14 +50,20 @@ and the order along `x=ρ ε^{a_x}, y=ε^{a_y}` is the **support function**
 ## Status
 
 **OPENING RESULT — DONE** (`verification/pfc_test2_corner_valuation.py`, byte-stable ×2):
-criteria 1–5 verified for KN (from certified face data → the Test 9 wedge) and for synthetic
-`(4,4)` and `(4,3)` corners (direct curvature); the toric non-genericity is exhibited. The
-corner order drops below both faces (order-4/order-4 → order-2; order-4/order-3 → order-2).
+criteria 1–4 verified for KN (from certified face data → the Test 9 wedge) and for synthetic
+`(4,4)` and `(4,3)` corners (direct curvature). The corner order drops below both faces
+(order-4/order-4 → order-2; order-4/order-3 → order-2).
+
+**GENERAL VERTEX RULE — PROVEN** (`verification/pfc_test3_vertex_rule.py`, byte-stable ×2). As a
+closed symbolic identity, for `g_i=h_i(s)x^{p_i}y^{q_i}u_i` the polar part of R is supported on
+exactly `V_1=(−(p_1+2),−q_1)`, `V_2=(−p_2,−(q_2+2))`, `V_0=(−p_0,−q_0)` with EXPLICIT
+coefficients `A(p_0,p_1,p_2)/(2h_1)`, `B(q_0,q_1,q_2)/(2h_2)`, and an s-jet `C_0`;
+`A=−p_0²+p_0p_1−p_0p_2+2p_0+p_1p_2−p_2²+2p_2`. Criterion 1 (reduction to face data) holds because
+`p_x=p_1+2`, `r_y=−q_1`, etc.; criterion 5 (cancellation) is exactly `A=0 / B=0` (or degenerate
+s-jet), plus `V_0` polar iff `p_0>0` or `q_0>0`. Unit factors leave the vertices/order fixed, so
+the rule holds for generic germs, not just monomials.
 
 **OPEN (campaign body):**
-- **General proof** of the vertex rule `v = (residue-weight, −face-order)` for arbitrary
-  diagonal inverse-channel germs (not case-by-case), with the precise **cancellation condition**
-  under which the generic polytope holds (the toric counterexample shows it can fail).
 - **Codimension ≥ 3** corners (Newton polytope in `ℝ^k`, `k≥3`).
 - **Front-face coefficient classification** — the facet-sum "projective" coefficient as a
   function of the balanced-direction data (the KN mixed term `M` is the `k=2` instance).
