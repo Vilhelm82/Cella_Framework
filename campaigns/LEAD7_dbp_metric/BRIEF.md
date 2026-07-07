@@ -8,6 +8,34 @@ Source: `Reference_Material/gtd_vs_dbp.pdf` (re-verification rule: origin is cla
 evidence). Prerequisite RC-5 structure tier: `verification/recert_gtd_dbp_n2.py`
 (`d047d21b`, 11/11, byte-stable ×2).
 
+## Candidate D (output-channel norm inverse) — TEST 1/2 VERDICT (2026-07-07)
+
+Will surfaced `Reference_Material/LEAD7_Candidate_D_Output_Channel_Norm_Inverse_Metric.md`
+(the direct n=3 generalization of the paper's diagonal metric A: per output chart,
+`C_i(t)=[Λ²_{M,j}+Λ²_{M,k}+t·Λ²_{j,k}]/q_i²`, `g_D,ii=1/C_i`). Ran Tests 1 & 2.
+
+- **Test 1** (`verification/lead7_test1_candD_n2.py`, 6/6 ×2): D reduces **exactly** to the
+  paper metric A at n=2 (`g_D,ii=1/C_i=−1/κ_c,i`), the weight `t` is structurally absent
+  (no charge-charge pair at n=2), and `R[g_D]` reproduces the paper's order law
+  (extremal 3, Schwarzschild 4, finite on Davies). Constraint (1) holds.
+- **Test 2** (`verification/lead7_test2_candD_n3.py`, 9/9 ×2; report
+  `reports/LEAD7_test2_candD_n3.md`): D_Frob (t=1) on Kerr-Newman
+  `M²=S/4π+πJ²/S+Q²/2+πQ⁴/4S` — **correct n=2 lift** (exact t-independent Q→0 reduction to
+  Kerr by Q-parity; positive-definite; `g~F²` role-boundary collapse; curvature diverges
+  on extremal T=0), but its intrinsic curvature (Ricci scalar AND Kretschmann, exact
+  partials, formula validated on flat/sphere) is **FINITE on the reflection-fixed faces
+  Ω=0 (J=0) and Φ_e=0 (Q=0)**. The t-scan (t=0,½,1,2,5) shows the miss is **not repairable
+  by t**. So the diagonal `D(t)` family does NOT reproduce the full three-boundary
+  complementarity — it diverges on only 1 of 3 physical role boundaries.
+
+**Consequence:** this confirms the doc's own fallback — the diagonal ansatz is too weak; the
+missing divergences live in the off-diagonal/interaction structure `D` discards. LEAD-7
+routes to **Candidate E (pair-channel tensor)** with a charge-charge incidence form in
+`dE_j−dE_k`. Mapped to the kill-list this is **K-2-adjacent** (the non-descent of the
+complementarity to a canonical *diagonal* S₃-equivariant lift is itself a result). The
+banked LEAD-7 guard held decisively: judge by R[g]/K, never by metric collapse — the metric
+DOES collapse on all three faces, but the curvature does not.
+
 ## The metric design decision (Will's flag, 2026-07-07) — UPDATED after the pole check
 
 **POLE-ORDER VERDICT (`reports/LEAD7_pole_orders.md`):** the head-to-head is decided at
