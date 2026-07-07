@@ -104,11 +104,25 @@ with a long (degree 14 in `S`, 28 in `Q`) polynomial numerator `N_ext`. Verified
 direct high-precision curvature. Sample values (on the extremal surface, in `(S,Q)`):
 `C_ext(20,1) = −0.0660176096`, `C_ext(30,1) = −0.0727822594`, `C_ext(20,2) = −0.000549074077`.
 
-**Open gate (honest caveat).** The denominator of `C_ext` is positive on the open edge
-(`S>πQ²`); the numerator `N_ext` has *not* been sign-certified there. So the pole is order 3
-at every open extremal point **where `N_ext≠0`** — i.e. generically. Proving `N_ext` has
-fixed nonzero sign on `{Q>0, S>πQ²}` (or exhibiting its zero locus) would upgrade "generic
-open points" to "all open points" of `T=0`. This is the one remaining proof obligation.
+**The `N_ext` gate — reduced to a one-variable Sturm count (`verification/lead7_test8`).**
+The pole is order 3 wherever `N_ext≠0`. Three reductions turn "everywhere" into a bounded
+root-count:
+1. *Sign reduction:* since `A₂>0`, `g_JJ|ext>0`, `g_QQ|ext>0`,
+   `sign(C_ext) = sign(∂_S log(g_JJ g_QQ))|_ext` — the gate is exactly *"`g_JJ·g_QQ` is
+   strictly decreasing in `S` at the extremal surface"* (drops the `A₂` division and the huge
+   numerator).
+2. *Homogeneity:* KN scaling `(S,J,Q)→(λ²S,λ²J,λQ)` makes this sign homogeneous, so the whole
+   edge reduces to the `Q=1` slice.
+3. *Sturm:* on `Q=1`, `S=πσ` (edge `σ>1`), the numerator is a univariate polynomial in `σ`
+   after stripping a positive `π`-power; Sturm counts its real roots on `σ>1`.
+
+**Status.** Numerically the gate holds decisively — `C_ext<0` on a dense edge grid, at the
+corner limit `S→πQ²⁺`, and for `S≫πQ²` (no sign change; Test 8 gate G0). The sign identity
+(G1) and homogeneity (G2) are verified. The univariate Sturm step (G3) is a bounded symbolic
+computation deferred to a run without a short timeout (the degree-14/28 `expand`/`cancel`
+exceeds this environment's ~10-min wall). A zero edge-root count upgrades the extremal
+theorem from "generic open points" to "all open points of `T=0`", completing the fully
+symbolic retrodiction.
 
 ## Status of the n=3 complementarity
 

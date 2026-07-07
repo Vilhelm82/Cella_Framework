@@ -424,10 +424,35 @@ at which $N_{\mathrm{ext}}\neq0$; see \S\ref{sec:gate}.
 
 Theorem~\ref{thm:law} gives order $3$ on the extremal edge \emph{wherever
 $N_{\mathrm{ext}}\neq0$}. To upgrade ``generic open points'' to ``all open points'' it remains
-to certify the sign of $N_{\mathrm{ext}}$ on $\{Q>0,\ S>\pi Q^2\}$.
+to certify the sign of $N_{\mathrm{ext}}$ on $\{Q>0,\ S>\pi Q^2\}$. Three reductions make this
+a one--variable root--count.
 
-% <<NEXT_GATE_STATUS>>  --- to be filled from the reduction (scaling to one variable + Sturm,
-% or CAD / SOS if genuinely bivariate).
+\emph{Sign reduction.} Since $A_2>0$ and $P_0=G_J|_{\Som}>0$, $R_0=G_Q|_{\Som}>0$,
+\eqref{eq:Cext} gives
+\begin{equation}
+\sgn\Rext=\sgn\!\Big(\frac{P_1}{P_0}+\frac{R_1}{R_0}\Big)
+=\sgn\big(\partial_S\log(G_JG_Q)\big)\big|_{S=\Som}.
+\end{equation}
+Thus the gate is equivalent to the geometric statement: \emph{the product $G_JG_Q$ of the two
+non--collapsing metric entries is strictly decreasing in $S$ at the extremal surface.} This
+removes the $A_2$--division and the large numerator, leaving a much smaller rational object.
+
+\emph{Homogeneity.} Under $(S,J,Q)\mapsto(\lambda^2S,\lambda^2J,\lambda Q)$ the quantity
+$\partial_S\log(G_JG_Q)|_{\Som}$ scales as a fixed power of $\lambda$; hence its sign on the
+whole edge equals its sign on the one--parameter $Q=1$ slice.
+
+\emph{One--variable root count.} On $Q=1$, with $S=\pi\sigma$ (edge $\sigma>1$), the numerator
+of $\partial_S\log(G_JG_Q)|_{\Som}$ is, after removing a positive power of $\pi$, a univariate
+polynomial in $\sigma$; Sturm's theorem counts its real roots on $\sigma>1$. A root count of
+zero, together with one sign sample, certifies the fixed sign and closes the gate.
+
+\emph{Status.} The numerical smoke test is unambiguous: $\Rext<0$ on a dense edge grid, on
+the corner limit $S\to\pi Q^2{}^+$, and for $S\gg\pi Q^2$ (no sign change; certificate
+\texttt{lead7\_test8}, gate G0). The exact sign identity and the homogeneity reduction are
+verified (G1, G2). The univariate Sturm step (G3) is a bounded symbolic computation left to a
+run without a short timeout; when it returns zero edge--roots the extremal theorem upgrades
+to ``all open points of $T=0$'', making the $n=3$ complementarity retrodiction fully symbolic
+on all three role divisors.
 
 %======================================================================
 \section{Discussion}
