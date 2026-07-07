@@ -194,9 +194,17 @@ D_{i,a}=U_{ii}U_a-U_iU_{ia},
 \label{eq:couplings}
 \end{equation}
 The mass--role pairs $\{M,a\}$ use $D_{i,a}$. The role--role pair $\{a,b\}$ uses the mixed
-second partial $\partial^2 f_i/\partial E_a\partial E_b$ of the output chart (a rational
-function of the second jet of $U$); it enters only the discarded channel at $u=0$ and plays no
-part in any theorem below. The three output charts of \eqref{eq:U} are solved explicitly in
+second partial of the output chart, obtained from $M^2=U$ by implicit differentiation at fixed
+$M$:
+\begin{equation}
+\Lambda_{i,\{a,b\}}=\frac{\partial^2 f_i}{\partial E_a\partial E_b}
+=-\frac{D_{i,\{a,b\}}}{U_i^3},\qquad
+D_{i,\{a,b\}}=U_i^2U_{ab}-U_i\big(U_aU_{ib}+U_bU_{ia}\big)+U_aU_bU_{ii}.
+\label{eq:rr}
+\end{equation}
+This channel enters $g_F(u)$ only through the weight $u$ and is discarded at $u=0$; it plays no
+part in any theorem below except that its interior zero locus is a channel--isotropy stratum
+(Prop.~\ref{prop:chargezero}). The three output charts of \eqref{eq:U} are solved explicitly in
 Appendix~\ref{app:charts}.
 
 \paragraph{The family $g_F(u)$.}
@@ -304,10 +312,16 @@ vanishes in the open interior. Certificate \texttt{lead7\_test4}.
 
 \begin{proposition}[Role--role interior zero]
 \label{prop:chargezero}
-The $Q$--chart role--role coupling $\Lambda_{Q,\{S,J\}}$ vanishes on an interior curve of
-$\Wp$. On the $M=2$ slice this occurs at $J\approx0.826$, $Q\approx1.699$ (with
-$S=\Sp\approx28.266$, so $\mathrm{disc}/M^4\approx0.236$); on the same $M,J$ slice the Davies
-point occurs at $Q\approx1.656$. The two loci are distinct: the role--role zero is a
+By \eqref{eq:rr} with $U_{JQ}=0$, the $Q$--chart role--role coupling is
+$\Lambda_{Q,\{S,J\}}=-D_{Q,\{S,J\}}/U_Q^3$ with
+\[
+D_{Q,\{S,J\}}=-\frac{J\big(12\pi^3J^2Q^2+4\pi^2J^2S+3\pi^3Q^6+5\pi^2Q^4S+\pi Q^2S^2-S^3\big)}
+{2S^4}.
+\]
+The bracket has indefinite sign (through the $-S^3$ term), so $\Lambda_{Q,\{S,J\}}$ vanishes on
+an interior curve of $\Wp$. On the $M=2$ slice this occurs at $J\approx0.826$, $Q\approx1.699$
+(with $S=\Sp\approx28.266$, so $\mathrm{disc}/M^4\approx0.236$); on the same $M,J$ slice the
+Davies point occurs at $Q\approx1.656$. The two loci are distinct: the role--role zero is a
 channel--isotropy stratum, not a role boundary.
 \end{proposition}
 
@@ -517,11 +531,15 @@ J=\sqrt{M^4-M^2Q^2-w^2}\ (w=\tfrac{S}{2\pi}-M^2+\tfrac{Q^2}{2}),
 \[
 Q=\sqrt{-\tfrac{S}{\pi}+\tfrac2\pi\sqrt{\pi S M^2-\pi^2J^2}}.
 \]
-The role--role coupling of chart $i$ (roles $\{a,b\}$) is the mixed second partial
-$\partial^2 f_i/\partial E_a\partial E_b$, obtained from $M^2=U$ by implicit differentiation;
-it is rational in the second jet of $U$. This channel enters $g_F(u)$ only through the weight
-$u$ and is discarded at $u=0$; its interior zero locus (Prop.~\ref{prop:chargezero}) is a
-channel--isotropy stratum.
+The role--role numerators \eqref{eq:rr} are, with $U_{JQ}=0$ for Kerr--Newman,
+\begin{align*}
+D_{S,\{J,Q\}}&=\tfrac{JQ\,(4\pi^2J^2+\pi^2Q^4+2\pi Q^2S+S^2)}{2S^4},\\
+D_{J,\{S,Q\}}&=-\tfrac{Q\,(\pi Q^2-S)(4\pi^2J^2+\pi^2Q^4+2\pi Q^2S+S^2)}{2S^4},\\
+D_{Q,\{S,J\}}&=-\tfrac{J\,(12\pi^3J^2Q^2+4\pi^2J^2S+3\pi^3Q^6+5\pi^2Q^4S+\pi Q^2S^2-S^3)}{2S^4}.
+\end{align*}
+Only $D_{Q,\{S,J\}}$ has indefinite sign, giving the interior isotropy stratum of
+Prop.~\ref{prop:chargezero}. The identity $\Lambda_{i,\{a,b\}}=-D_{i,\{a,b\}}/U_i^3$ against the
+explicit chart mixed partials is checked in certificate \texttt{lead7\_test4}.
 
 \section{Certificates}
 \label{app:certs}

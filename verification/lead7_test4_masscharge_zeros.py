@@ -129,6 +129,29 @@ for (m, jj, q) in pts:
 check("T4-a.uniform_formula", max_mismatch < mp.mpf('1e-30'),
       f"implicit formula = explicit chart couplings, all 3 charts (max mismatch {mp.nstr(max_mismatch,3)})")
 
+# ---- (a2) role-role coupling: Lambda_{i,{a,b}} = -D_{i,{a,b}}/U_i^3, ----
+#      D_{i,{a,b}} = U_i^2 U_ab - U_i(U_a U_ib + U_b U_ia) + U_a U_b U_ii  (implicit diff, fixed M).
+#      Verified against the explicit mixed partial d^2 f_i/dEa dEb of each chart function.
+def Ud(*vs):
+    e = U
+    for v in vs:
+        e = sp.diff(e, v)
+    return e
+def Drr(i, a, b):
+    return Ud(i)**2*Ud(a, b) - Ud(i)*(Ud(a)*Ud(i, b) + Ud(b)*Ud(i, a)) + Ud(a)*Ud(b)*Ud(i, i)
+rr_expl = {  # (chart fn, output role i, other roles a,b, the two other-role symbols)
+    'S': (fS, S, J, Q, J, Q), 'J': (fJ, J, S, Q, S, Q), 'Q': (fQ, Q, S, J, S, J)}
+rr_mm = mp.mpf(0)
+for iname, (f, i, a, b, ea, eb) in rr_expl.items():
+    Lexpl = sp.lambdify((M, S, J, Q, pi), sp.diff(f, ea, eb), 'mpmath')
+    Limpl = sp.lambdify((S, J, Q, pi), (-Drr(i, a, b)/Ud(i)**3).subs(M, Mval), 'mpmath')
+    for (m, jj, q) in pts:
+        s = fS_n(m, jj, q, mp.pi)
+        rr_mm = max(rr_mm, abs(Lexpl(m, s, jj, q, mp.pi) - Limpl(s, jj, q, mp.pi)))
+check("T4-a2.rolerole_formula", rr_mm < mp.mpf('1e-30'),
+      f"Lambda_{{i,{{a,b}}}} = -D_{{i,{{a,b}}}}/U_i^3 = explicit d^2 f/dEa dEb, all 3 charts "
+      f"(max mismatch {mp.nstr(rr_mm,3)}); D_Q,{{S,J}} has indefinite sign => interior isotropy stratum")
+
 # ---- (c) U_S = sqrt(disc)/S_+ >= 0, zero iff extremal (Vieta) ----
 Sp = pi*(2*M**2 - Q**2 + 2*sp.sqrt(disc)); Sm = pi*(2*M**2 - Q**2 - 2*sp.sqrt(disc))
 vieta = (sp.simplify(Sp*Sm - pi**2*(4*J**2 + Q**4)) == 0 and
@@ -183,7 +206,7 @@ check("T4.theorem", zero_loci_ok,
       "analytic positive-definite on W_+ => finite analytic curvature (no interior singularity)")
 
 # ---- verdict ----
-ntot = 6 + 1 + 1 + 1 + 1 + 1  # 6 factorizations + a + c + d + e + theorem
+ntot = 6 + 1 + 1 + 1 + 1 + 1 + 1  # 6 factorizations + a + a2(role-role) + c + d + e + theorem
 if FAILS:
     print(f"VERDICT: FAIL ({len(FAILS)}): {', '.join(FAILS)}")
     raise SystemExit(1)
