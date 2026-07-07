@@ -34,6 +34,17 @@ level, exclude the charge-charge couplings** (their zeros are LEAD-2 isotropy st
 NEXT (EMPIRICAL→certified): prove mass-charge zeros = role divisors exactly; exact pole
 coefficients (KN retrodiction tier).
 
+**UPDATE — mass-charge zeros = role divisors PROVEN** (`verification/lead7_test4_masscharge_zeros.py`,
+10/10 ×2, symbolic; report `reports/LEAD7_masscharge_zeros_theorem.md`). Uniform implicit
+formula `Λ_{i,{M,j}} = 2M(U_ii U_j − U_i U_ij)/U_i³`; the six numerators factor as
+(charge/U_S factor)×(all-positive bracket); `U_S = √disc/S_+ > 0` in the open wedge (horizon
+Vieta). Hence every mass-charge coupling is strictly nonzero in the interior — its zeros are
+EXACTLY `{J=0}=Ω=0`, `{Q=0}=Φ_e=0`, `{disc=0}=T=0`. So `g_F(u=0)` has **no interior
+curvature singularity** — Test 3's interior-cleanliness is now a theorem, and the u=0
+selection is structural (the charge-charge couplings, excluded at u=0, are the ones with
+interior zeros = LEAD-2 isotropy strata). REMAINING: exact pole coefficients (KN
+retrodiction tier), the only piece of the n=3 complementarity still at numeric tier.
+
 ## Candidate D (output-channel norm inverse) — TEST 1/2 VERDICT (2026-07-07)
 
 Will surfaced `Reference_Material/LEAD7_Candidate_D_Output_Channel_Norm_Inverse_Metric.md`
