@@ -181,6 +181,26 @@ S3-equivariant lift is a result, not a failure.
 constraints (1)–(5); survivors go to the exact Kerr-Newman battery and the D3
 complementarity test, pole orders and leading coefficients recorded.
 
+## LEAD-9 — PFC: parity-fixed inverse-channel local curvature calculus
+
+**Status:** OPEN — **PFC-1/2/3 DONE** (2026-07-07); PFC-4 (corner valuation) is the frontier.
+Campaign `campaigns/PFC_local_calculus/BRIEF.md`. Spun out of LEAD-7: extract the reusable
+LOCAL theorem before the project sprawls into case studies. The shift — from "Kerr-Newman
+produced C=−14/B" to "parity-fixed inverse-channel geometry has a dimension-general local
+curvature calculus," with KN/RN-AdS/Kerr-AdS/cavity ensembles as APPLICATIONS.
+**Classification (one collapsing coord x, m transverse fibre dirs):** generic quadratic
+collapse (transverse finite, parity-breaking) ⟹ order 3, coeff `(1/A)Σ∂_x log P_α`;
+parity-fixed reflection (transverse ~x⁻², even in x) ⟹ order 4, coeff **−m(m+5)/B** (amplitudes
+forgotten); higher-codim corners ⟹ Newton-polygon wedge. `m(m+5)=6m+m(m−1)` = radial focusing +
+transverse fibre shear; m=2 (3D state space) ⟹ 14. **Certified for general m**
+(`verification/pfc_test1_local_normal_forms.py`, byte-stable ×2: first-principles Ricci m=1..4,
+symbolic-m warped reduction, parity kills x⁻³, generic order-3). Note
+`paper/pfc_normal_forms.tex`. KN is the m=2 instance (T=0 generic; Ω=0,Φ_e=0 parity-fixed −14/B;
+corner PFC-4). **Frontier (PFC-4):** the general corner-valuation theorem (KN Schwarzschild
+corner `lead7_test9` is the worked instance). **The legs test:** if the same local laws recur
+across black-hole chemistry, cavity ensembles, ordinary thermodynamics, and non-thermodynamic
+implicit surfaces, DBP is a normal-form calculus, not a metric that worked once.
+
 ## LEAD-8 — Higher Cohn-Vossen and the global grid constants
 
 **Status:** OPEN — **STAGE A COMPLETE, T-A closed for the whole family** (2026-07-06);

@@ -84,6 +84,15 @@ understood; a list of banned sources would not protect against the next stale on
   identically, T7-e) + C_ext<0 (Test 8); reflection 4 via −m(m+5)/B at m=2 (Test 10) + B≠0.
   Test 5's high-precision fits are a cross-check, not the source. Optional remaining (LEVER
   payoff, sets no queue priority): physics-novelty writeup.
+- **LEAD-9 / PFC OPENED (2026-07-07).** `campaigns/PFC_local_calculus/BRIEF.md`. The reusable
+  LOCAL theorem extracted from LEAD-7 before it sprawls: parity-fixed inverse-channel geometry
+  has a dimension-general curvature calculus, KN etc. are applications. Classification (one
+  collapsing coord x, m transverse dirs): generic collapse ⟹ order 3, coeff `(1/A)Σ∂_x log P_α`;
+  parity-fixed reflection (even, transverse ~x⁻²) ⟹ order 4, coeff **−m(m+5)/B**; corners ⟹
+  Newton wedge. **PFC-1/2/3 DONE, general m** (`verification/pfc_test1_local_normal_forms.py`,
+  byte-stable ×2). Note `paper/pfc_normal_forms.tex`. PFC-4 (general corner-valuation theorem;
+  KN Schwarzschild corner `lead7_test9` is the instance) is the OPEN frontier. Legs test: watch
+  whether the same local laws recur across other ensembles/surfaces.
   **CASE LAW (metric-normalization, 2026-07-07):** the DBP chart norm is `q_i=1+|∇f_i|²` — the
   graph "1+" is canonical (n=2 `q0=1+a²+b²`, recert_gtd_dbp_n2.py), NOT an accidental factor. A
   handed-off gate script dropped it to `|∇f|²` and certified the wrong metric; caught only by
