@@ -7,10 +7,23 @@ load in Cella until re-proven in-repo (`verification/`, fresh code, exact ℚ,
 byte-stable ×2). This folder exists to name questions and retrodiction targets, not
 truths.
 
-**Tracking policy:** the folder's contents are deliberately untracked (`.gitignore`);
-only this banner travels with the repo. The canonical record never carries origin
-artifacts — zero-import hygiene. If a document here is ever needed as a repo artifact,
-that is an introduction from previous work and takes an ADMISSIONS record first.
+**Tracking policy (CORRECTED — Will, 2026-07-07; supersedes "deliberately untracked"):**
+the folder's contents ARE tracked. Reference docs must persist across ephemeral
+container resets — the old "untracked for zero-import hygiene" policy conflated two
+different things and cost real work: it lost the docs on every reset and stalled
+sessions waiting for manual re-uploads. **Zero-import (README rule 1) governs the
+BUILD** (`src/`, `tests/`, `verification/` must be standalone, must not copy origin
+code/results). It does NOT govern *storing reference material* — the papers you
+re-verify *against*. What fences these as "claims, not evidence" is **this banner + the
+re-verification rule (rule 3)**, not their absence from git. Committing a reference PDF
+imports nothing into the build. Do NOT re-gitignore this folder. (An ADMISSIONS record
+is still required to introduce something into the BUILD as a dependency — that is a
+separate act from tracking a doc for reference.)
+
+**Currently tracked (surfaced by Will):** `gtd_vs_dbp.pdf` (GTD-vs-DBP paper, RC-5/LEAD-7
+source), `dbp_four_role_calc_log_v8.md` (the diary, latest; absent from V4),
+`DBP_STANDING_RESULTS_v1.1.md` (CANONICAL; the once-uploaded v1.0 is stale),
+`DBP_Curvature_Constants_Corrected_Formulation.md` (arithmetic-track, n=3 elliptic).
 
 ## Substrate warning
 
