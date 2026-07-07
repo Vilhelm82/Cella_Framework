@@ -1,0 +1,594 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue!55!black,citecolor=blue!55!black}
+
+% ---- certainty-tier tags (consistent across the DBP corpus) ----
+\newcommand{\Proven}{\textsf{[proven]}}
+\newcommand{\Symbolic}{\textsf{[symbolic]}}
+\newcommand{\Measured}{\textsf{[computer-verified]}}
+\newcommand{\Conj}{\textsf{[conjecture]}}
+\newcommand{\Interp}{\textsf{[interpretation]}}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\newtheorem{proposition}{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}
+
+% ---- standardised notation (see Notation note) ----
+\newcommand{\KG}{K_{G}}
+\newcommand{\Ac}{\mathcal{A}_c}
+\newcommand{\kc}{\kappa_{c}}
+\newcommand{\kint}{\kappa_{\mathrm{int}}}
+\newcommand{\ks}{\kappa_{s}}
+\newcommand{\kcrole}[1]{\kappa_{c}^{(#1)}}   % chart-indexed coupling channel
+\newcommand{\Reg}{\Omega}
+\newcommand{\jet}{j}
+
+\title{\textbf{The Active Role-Jet Orbit Calculus for Constraint-Surface Roles}}
+\author{William Lloyd}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent This paper develops the foundational calculus of \emph{Directive--Substrate--Product}
+(DBP) role data on a local three-role relation $F(D,S,P)=0$. The central object is not a passive
+permutation of coordinate labels but an \emph{active} family of charts: the same relation re-solved
+with each coordinate as output, with finite jet data transported through the resulting
+inverse-function maps. On the regular locus this active transposition is an exact birational
+representation of $S_3$ on finite jets, localised at the role denominators. The \emph{Active
+Role-Jet Orbit Theorem} identifies the resulting orbit as the canonical carrier of local DBP
+invariants: a functional is a DBP invariant exactly when it factors through the orbit quotient,
+so invariants are obtained, not postulated. The same construction yields a channel-reduction exact
+sequence in which a channel account is a gauge- and frame-relative representative over an intrinsic
+invariant quotient; in the second-order curvature case this is the three-channel Gaussian
+decomposition $\KG=\kc+\kint+\ks$. From the explicit second-jet transport we obtain the named
+output-role coupling channels $\Lambda_P,\Lambda_D,\Lambda_S$, the coupling carrier
+$O=(\kcrole{P},\kcrole{D},\kcrole{S})$, and the role anisotropy scalar $\Ac$. A faithfulness
+corollary shows the carrier map has Jacobian determinant $8\,\Lambda_P\Lambda_D\Lambda_S/q_0^6$,
+so the carrier separates active role orbits off the channel-isotropy loci. Singular points where an
+output chart cannot be solved are treated as typed strata, not removable cases. Every claim is
+tagged by certainty tier; the construction is self-contained.
+\end{abstract}
+
+\paragraph{Notation.} Throughout, $\KG$ is the Gaussian curvature. For a graph $P=f(D,S)$ we write
+the first and second jet as $(a,b,A,B,C)=(f_D,f_S,f_{DD},f_{DS},f_{SS})$ and set
+$q_0=1+a^2+b^2$; for the implicit relation $F=P-f$ one has $g=\nabla F$ and $q_0=g^{\mathsf T}g$,
+so the graph normaliser and the implicit gradient norm coincide in the graph gauge. We distinguish
+two ``three-channel'' structures and never conflate them: the channel \emph{types}
+$\kc,\kint,\ks$ (coupling, interaction, self) decompose $\KG$ \emph{within one chart}; the
+chart-indexed coupling channels $\kcrole{\rho}$, $\rho\in\{P,D,S\}$, are the coupling type evaluated
+in the three output-role \emph{charts}, and the anisotropy $\Ac$ is their spread. ``The three
+channels'' is never used unqualified.
+
+%==================================================================
+\section{Introduction: active versus passive role data}
+\label{sec:intro}
+
+Let $(D,S,P)$ denote a distinguished ordered triple of local coordinates. DBP studies a local
+relation among them by comparing the finite jets obtained when the same relation is solved with
+different coordinates as output. The basic object is therefore neither a labelled triple alone nor a
+passive permutation of a fixed derivative array; it is an active family of charts related by
+inverse-function maps.
+
+This distinction is essential. If one merely permutes coordinate labels, a symmetric expression is
+unchanged for the trivial reason that the indices were renamed; the calculation verifies covariance
+but measures no role dependence. Active role transposition is different: it changes the graph
+representative of the same local relation. The derivative coordinates then transform rationally and
+need not agree componentwise.
+
+The development below is mechanical. First, the relation is restricted to the regular locus where
+each output chart exists (\S\ref{sec:roledata}). Second, finite jets are transported by the active
+role maps, which realise an exact birational $S_3$ action (\S\ref{sec:transpose}). Third, the active
+orbit is used as the carrier for local DBP invariants (\S\ref{sec:orbit}); the quotient property of
+invariants is standard, but the explicit active action, its rational finite-jet closure, its
+separation from passive covariance, and the induced channel reduction are the content. The remaining
+sections specialise the channel reduction to curvature (\S\ref{sec:channel}), extract the named
+output-role channels and prove faithfulness of the coupling carrier (\S\ref{sec:channels-named}),
+record gauge transport (\S\ref{sec:transport}), type the singular strata (\S\ref{sec:singular}), and
+delimit scope (\S\ref{sec:scope}).
+
+%==================================================================
+\section{Local role data}
+\label{sec:roledata}
+
+\subsection{Three-role relation}
+Let $U\subset\mathbb R^3$ be open with coordinates $(D,S,P)$, let $F\in C^{r+1}(U)$, and let
+$x_0=(D_0,S_0,P_0)\in U$ satisfy $F(x_0)=0$. A local graph chart with $P$ as output is written
+$P=f(D,S)$. The implicit and graph descriptions agree on any chart in which the relevant partial of
+$F$ is nonzero. We write $\jet^r f$ for the order-$r$ jet of the graph representative and $\jet^rF$
+for the order-$r$ implicit jet.
+
+\subsection{Regular active-role locus}
+Active role transposition requires the relation to be solvable with each coordinate as output. Define
+the first-order regular role locus
+\[
+\Reg_1=\{x\in U: F(x)=0,\ F_D(x)F_S(x)F_P(x)\ne0\},
+\]
+and more generally let $\Reg_r$ denote the locus on which all output charts needed for the order-$r$
+active role object exist. In graph form $P=f(D,S)$ with $a=f_D,\ b=f_S$, full first-order active
+recharting is defined where
+\[
+a\ne0,\qquad b\ne0 .
+\]
+These are the denominators of the inverse-function maps, not technical decorations: a point outside
+the active-role locus is a singular stratum for the requested role object (\S\ref{sec:singular}).
+
+%==================================================================
+\section{Active role transposition: the birational \texorpdfstring{$S_3$}{S3}}
+\label{sec:transpose}
+
+\subsection{First-order action}
+For a graph chart $P=f(D,S)$ with $a=f_D,\ b=f_S$, the input swap $s=(D\;S)$ and the active
+transposition $t=(D\;P)$ act by
+\[
+s(a,b)=(b,a),
+\qquad
+t(a,b)=\Bigl(\tfrac1a,\,-\tfrac ba\Bigr),
+\]
+obtained by re-solving $F=0$ for $D$ as output. These satisfy
+\[
+s^2=t^2=e,\qquad (st)^3=e,
+\]
+so active role transposition is an exact birational representation of $S_3$ on the regular jet locus,
+localised at the role denominators. \Proven
+
+\subsection{Second-order generator}
+With $A=f_{DD},\ B=f_{DS},\ C=f_{SS}$, the input swap acts by
+\[
+s(a,b,A,B,C)=(b,a,C,B,A).
+\]
+Under $t=(D\;P)$ the chart $D=q(P,S)$ has
+\[
+q_P=\frac1a,\qquad q_S=-\frac ba,\qquad
+q_{PP}=-\frac{A}{a^3},\qquad
+q_{PS}=\frac{Ab-aB}{a^3},\qquad
+q_{SS}=\frac{-Ab^2+2abB-a^2C}{a^3},
+\]
+so that
+\[
+t(a,b,A,B,C)=
+\left(\frac1a,\,-\frac ba,\,-\frac{A}{a^3},\,\frac{Ab-aB}{a^3},\,
+\frac{-Ab^2+2abB-a^2C}{a^3}\right).
+\]
+The maps again satisfy the $S_3$ relations on the regular locus. The mixed second-order numerator
+$Ab-aB$ appearing in $q_{PS}$ is the source of the directive coupling channel of
+\S\ref{sec:channels-named}. Higher-order generators follow by the finite inverse-function theorem and
+the chain rule; at each finite order they are rational in the original jet, localised at the
+first-order role denominators (Appendix~\ref{app:higher}). \Proven
+
+%==================================================================
+\section{The Active Role-Jet Orbit Theorem}
+\label{sec:orbit}
+
+\begin{definition}[jet carrier]
+Let $J_r(x_0)$ be the order-$r$ jet of the chosen local graph representative at $x_0$. The active
+order-$r$ role-jet orbit is $\mathfrak R_r(x_0)=G\cdot J_r(x_0)$, where the action is active role
+recharting. Retaining the coordinate values gives the value-plus-jet orbit
+$\mathfrak R_r^{+}(x_0)=G\cdot(x_0,J_r(x_0))$.
+\end{definition}
+
+\begin{definition}[local DBP invariant]
+Let $X_r$ be the order-$r$ jet space on the regular role locus and $Y$ any target set. A functional
+$\phi:X_r\to Y$ is an order-$r$ DBP invariant if $\phi(\mathcal T_\sigma\xi)=\phi(\xi)$ for all
+$\sigma\in S_3$ wherever both sides are defined. For value-plus-jet invariants, replace $X_r$ by
+$X_r^{+}$.
+\end{definition}
+
+\begin{theorem}[Active Role-Jet Orbit Theorem]
+\label{thm:orbit}
+On the regular active-role locus, let $G=S_3$ act on $X_r$ by the active finite-jet recharting maps
+of \S\ref{sec:transpose}, and let $\pi:X_r\to X_r/G$ be the orbit quotient. Then $\phi:X_r\to Y$ is a
+local order-$r$ DBP invariant if and only if there is a unique $\psi:X_r/G\to Y$ with
+$\phi=\psi\circ\pi$. Equivalently, the value of any order-$r$ DBP invariant at $x_0$ is a function of
+the active orbit $\mathfrak R_r(x_0)=G\cdot J_r(x_0)$. The same holds for value-plus-jet functionals
+with $X_r^{+}$ and $\mathfrak R_r^{+}(x_0)$. \Proven
+\end{theorem}
+
+\begin{proof}
+The maps $\mathcal T_\sigma$ define an action of $S_3$ on the regular active-role locus. By
+definition a DBP invariant is constant on its orbits. The quotient map $\pi$ identifies exactly the
+elements lying in the same orbit; hence a functional is constant on active role orbits iff it factors
+uniquely through the quotient. The value-plus-jet statement is identical with $X_r^{+}$. The quotient
+step is formal; the mathematical content is the prior construction of the active finite-jet action,
+in which the representatives in different output roles are rational inverse-function transforms, not
+passive relabellings.
+\end{proof}
+
+%==================================================================
+\section{Consequences of the orbit carrier}
+\label{sec:consequences}
+
+\subsection{Completeness criterion}
+A finite tuple $K_r$ is a complete order-$r$ DBP kernel only if it separates the same active role
+orbits as the quotient map:
+\[
+K_r(\xi_1)=K_r(\xi_2)\quad\Longleftrightarrow\quad \pi(\xi_1)=\pi(\xi_2)
+\]
+on the intended domain. A preferred kernel cannot be assumed complete merely because its entries are
+invariant; completeness requires orbit separation. \Proven\ This criterion is the test applied to the
+coupling carrier in \S\ref{sec:faithful}.
+
+\subsection{Exact rational closure}
+If the original finite jet has entries in a field $\mathbb K$ and all active role denominators are
+nonzero, every active role-transposed jet has entries in the localisation obtained by inverting those
+denominators. In particular
+\[
+J_r(x_0)\in\mathbb Q\quad\Longrightarrow\quad G\cdot J_r(x_0)\subset\mathbb Q[\Delta^{-1}],
+\]
+where $\Delta$ is the product of the role denominators used by the active charts. \Proven\ Thus for
+exact rational input jets, active role transport is an exact rational operation on the regular locus;
+this is the statement that licenses exact-$\mathbb Q$ computation of every quantity below.
+
+\subsection{Descent classes}
+Invariants separate by the orbit data they require. \emph{Value-only} invariants descend to the
+quotient of coordinate values alone; \emph{jet-only} coupling invariants descend to the quotient of
+the jet without values; \emph{mixed} value-jet invariants require the value-plus-jet orbit
+$\mathfrak R_r^{+}$. The curvature channels of \S\ref{sec:channel} are jet-only; the power-law degree
+spectra of Appendix~\ref{app:examples} are value-only in log-role form. \Proven
+
+%==================================================================
+\section{Channel reduction}
+\label{sec:channel}
+
+\subsection{Abstract reduction law}
+Let $C_r$ be a channel-account space at order $r$ and let $\Sigma:C_r\to I_r$ be a surjective
+reduction onto an invariant range. Then
+\[
+0\longrightarrow\ker\Sigma\longrightarrow C_r\xrightarrow{\ \Sigma\ }I_r\longrightarrow0
+\]
+is exact, and $C_r/\ker\Sigma\cong I_r$ is the invariant. The fibre over a fixed value of $I_r$ is the
+channel account: a representative may move inside the fibre under chart or gauge change while the
+reduced invariant is fixed. \Proven
+
+\subsection{Curvature-channel projection}
+For a hypersurface relation $F=0$ at a regular point set $g=\nabla F$, $H=\nabla^2F$, $q=g^{\mathsf
+T}g\ne0$. In the distinguished coordinate basis split
+\[
+H=H_c+H_s,\qquad H_s=\operatorname{diag}(H),\qquad H_c=H-H_s .
+\]
+For $1\le r\le n-1$ define the channel-density polynomial
+\[
+\widehat{\mathcal C}_r(t,u)
+=(-1)^{r+1}\sum_{|I|=r+1}\det
+\begin{pmatrix}0 & g_I^{\mathsf T}\\ g_I & (tH_c+uH_s)_I\end{pmatrix}
+=\sum_{p+q=r}t^p u^q\,\widehat\kappa_{r;p,q}.
+\]
+The normalised channel curvatures are $\kappa_{r;p,q}=\widehat\kappa_{r;p,q}/q^{(r+2)/2}$, and the
+reduced elementary curvature invariant is
+\[
+\sigma_r=\sum_{p+q=r}\kappa_{r;p,q}=\frac{\widehat{\mathcal C}_r(1,1)}{q^{(r+2)/2}} .
+\]
+Thus the reduction is summation, $\Sigma:C_r\mapsto\sum_{p+q=r}\kappa_{r;p,q}=\sigma_r$: the channel
+vector is the representative, its sum is the invariant. \Proven
+
+\subsection{The three-variable Gaussian case}
+For $n=3$, $r=2$ the sum has three terms; writing $\kc=\kappa_{2;2,0}$ (the $t^2$, pure-coupling
+term), $\kint=\kappa_{2;1,1}$ (the $tu$ cross term), $\ks=\kappa_{2;0,2}$ (the $u^2$, pure-self term),
+\[
+C_2=(\kc,\kint,\ks),\qquad \KG=\kc+\kint+\ks .
+\]
+The zero-sum transport plane is $\ker\Sigma=\{(u,v,w):u+v+w=0\}$: a gauge or chart change may move the
+channel triple within the affine plane over $\KG$, but cannot change the reduced Gaussian curvature.
+\Proven
+
+\subsection{Graph-channel formula}
+For any local graph $z=h(x,y)$ with $\alpha=h_x,\ \beta=h_y$, $L=h_{xx},\ M=h_{xy},\ N=h_{yy}$ and
+$Q=1+\alpha^2+\beta^2$,
+\[
+\kc=-\frac{M^2}{Q^2},\qquad \ks=\frac{LN}{Q^2},\qquad \kint=0,\qquad
+\KG=\frac{LN-M^2}{Q^2}.
+\]
+Every graph-normalised output chart therefore has zero graph-channel interaction; interaction
+reappears in non-graph implicit gauges or under gauge transport between graph sections
+(\S\ref{sec:transport}). \Proven
+
+\subsection{Curved-ambient extension}
+The channel reduction extends to a curved ambient space through the Gauss equation, which reads
+schematically
+\[
+R^\Sigma=\overline R^{\,T}+S\wedge S,
+\]
+where $R^\Sigma$ is the intrinsic curvature of the role surface, $\overline R^{\,T}$ is the tangential
+part of the ambient background curvature, and the extrinsic term is quadratic in the shape operator
+$S$. Applying the DBP split to the shape operator, $S=S_c+S_s$, the wedge is bilinear, so
+\[
+S\wedge S=S_c\wedge S_c+\bigl(S_c\wedge S_s+S_s\wedge S_c\bigr)+S_s\wedge S_s
+=R_{cc}+R_{\mathrm{int}}+R_{ss}:
+\]
+the extrinsic contribution channelises into pure-coupling, interaction, and pure-self parts exactly as
+in the flat case. Hence
+\[
+\text{intrinsic invariant}=\text{ambient input}+\text{extrinsic DBP-channel account}. 
+\]
+\Proven\ The ambient term $\overline R^{\,T}$ is \emph{not} forced into the same self/coupling split,
+and this is a boundary of the construction with a named cause rather than a gap in it: the extrinsic
+term is a bilinear function of the shape operator and therefore splits along the role frame, whereas
+the ambient curvature is not a bilinear function of the same role data, so no channel split is
+available for it unless the application supplies a separate role frame for the ambient geometry
+itself. \Proven
+
+%==================================================================
+\section{Output-role coupling channels, anisotropy, and faithfulness}
+\label{sec:channels-named}
+
+\subsection{The three output-role charts}
+For $P=f(D,S)$ with $q_0=1+a^2+b^2$, the three output-role charts carry the channel quadruples
+$(\KG,\kc,\ks,\kint)$
+\begin{align*}
+C_P&=\Bigl(K,\ -\tfrac{B^2}{q_0^2},\ \tfrac{AC}{q_0^2},\ 0\Bigr),\\
+C_D&=\Bigl(K,\ -\tfrac{(Ab-aB)^2}{a^2q_0^2},\ \tfrac{A(Ab^2-2abB+a^2C)}{a^2q_0^2},\ 0\Bigr),\\
+C_S&=\Bigl(K,\ -\tfrac{(Ca-bB)^2}{b^2q_0^2},\ \tfrac{C(Ca^2-2abB+b^2A)}{b^2q_0^2},\ 0\Bigr),
+\end{align*}
+with the common Gaussian curvature $K=(AC-B^2)/q_0^2$. The scalar output-role curvature spectrum is
+$\operatorname{OutputRoleCurvSpec}(f)=\{C_P,C_D,C_S\}$; retaining ordered input labels gives the
+honest sixfold labelled role-jet curvature object. \Symbolic
+
+\subsection{Named coupling channels and the anisotropy scalar}
+Define the output-role mixed numerators
+\[
+\Lambda_P=B,\qquad
+\Lambda_D=\frac{Ab-aB}{a},\qquad
+\Lambda_S=\frac{Ca-bB}{b},
+\]
+so that the chart-indexed coupling channels are $\kcrole{\rho}=-\Lambda_\rho^2/q_0^2$ for
+$\rho\in\{P,D,S\}$. The coupling carrier is $O=(\kcrole{P},\kcrole{D},\kcrole{S})$. The role anisotropy
+scalar is
+\[
+\Ac=(\kcrole{P}-\kcrole{D})^2+(\kcrole{D}-\kcrole{S})^2+(\kcrole{S}-\kcrole{P})^2,
+\]
+which vanishes exactly when all three output-role coupling channels agree. \Proven\ Under the
+permutation action of the role $S_3$ on $O\in\mathbb R^3$ (permuting the three components),
+$\mathbb R^3$ splits as trivial $\oplus$ standard, and a direct computation gives
+$\Ac=3\,\lVert P_{\mathbf 2}O\rVert^2$, the squared norm of the standard-irrep part: $\Ac$ is the
+intrinsic isotropy defect of the coupling carrier. \Proven\ A product-role excess diagnostic is
+$E_P=\kcrole{P}-\tfrac12(\kcrole{D}+\kcrole{S})$, with analogues for $D$ and $S$.
+
+\subsection{Faithfulness of the coupling carrier}
+\label{sec:faithful}
+The completeness criterion (\S\ref{sec:consequences}) asks whether the carrier separates active role
+orbits. The following corollary answers this locally and ties the answer directly to the channels.
+
+\begin{corollary}[faithful coupling carrier]
+\label{cor:faithful}
+On the regular role locus, the coupling-carrier map of the second jet,
+\[
+(A,B,C)\longmapsto O=(\kcrole{P},\kcrole{D},\kcrole{S}),
+\]
+has Jacobian determinant
+\[
+\det\frac{\partial O}{\partial(A,B,C)}=\frac{8\,\Lambda_P\Lambda_D\Lambda_S}{q_0^{6}} .
+\]
+Hence the carrier map has rank $3$ wherever $\Lambda_P\Lambda_D\Lambda_S\ne0$; it is then a local
+diffeomorphism and therefore separates active role orbits locally, so by the completeness criterion
+$O$ is a complete order-$2$ coupling kernel off the channel-isotropy loci. The carrier degenerates
+exactly where a coupling numerator vanishes, i.e.\ on the loci where the corresponding channel is
+isotropic. \Symbolic
+\end{corollary}
+
+\begin{proof}
+With $\kcrole{P}=-B^2/q_0^2$, $\kcrole{D}=-(Ab-aB)^2/(a^2q_0^2)$,
+$\kcrole{S}=-(Ca-bB)^2/(b^2q_0^2)$ and $q_0$ independent of $(A,B,C)$, the Jacobian has a single
+nonzero entry in the first column (from $\kcrole{D}$) and in the third column (from $\kcrole{S}$).
+Expanding and simplifying gives the stated determinant; the factorisation is
+$8\Lambda_P\Lambda_D\Lambda_S/q_0^6$ on substituting $Ab-aB=a\Lambda_D$, $Ca-bB=b\Lambda_S$,
+$B=\Lambda_P$. Full column rank is equivalent to a nonzero determinant, and a nonzero Jacobian gives a
+local diffeomorphism, hence local orbit separation; the completeness criterion then applies. The
+identity was confirmed in exact symbolic arithmetic.
+\end{proof}
+
+Thus the carrier is faithful precisely off the isotropy loci, the same loci on which $\Ac$ records a
+collapsing coupling channel; faithfulness and anisotropy are two readings of the channel numerators.
+
+%==================================================================
+\section{Gauge transport}
+\label{sec:transport}
+
+The reduction $\Sigma$ of \S\ref{sec:channel} has a nontrivial kernel: the zero-sum plane for the
+Gaussian case. A channel representative is therefore gauge- and frame-relative, free to move inside
+the fibre over the fixed invariant. Concretely, while the graph-channel formula sets $\kint=0$ in any
+graph gauge, transport between graph sections of the same relation, or passage to a non-graph
+implicit gauge, moves weight between $\kc$, $\kint$ and $\ks$ along $\ker\Sigma$, with $\KG=\sigma_2$
+held fixed. The interaction channel is therefore live precisely when the working gauge is not a graph
+gauge; the keystone of Appendix~\ref{app:examples} exhibits an implicit relation whose entire
+curvature is carried by $\kint$. \Symbolic
+
+%==================================================================
+\section{Singular strata}
+\label{sec:singular}
+
+The active maps are defined only where their denominators are nonzero. Where a required denominator
+vanishes the corresponding output chart does not exist, and the correct object is a typed singular
+stratum, not a coerced scalar. Typical cases:
+\begin{enumerate}[itemsep=1pt,topsep=2pt]
+\item a coordinate cannot be solved locally as output;
+\item a projective normal coordinate vanishes;
+\item a curvature denominator degenerates;
+\item a requested channel representative is not defined in the chosen frame.
+\end{enumerate}
+A singular stratum may encode a symmetry, a boundary, a chart failure, or a refusal condition; in all
+cases it is part of the role-jet structure rather than an exception to be removed. \Proven
+
+%==================================================================
+\section{Scope and summary}
+\label{sec:scope}
+
+The theorem is local and finite-order: it describes order-$r$ jets near a regular point, and global
+statements require additional gluing data across charts. It is frame-relative: the channel split is
+made in the distinguished coordinate frame, so the reduced invariant may be intrinsic while a channel
+account is basis-, chart-, or gauge-relative. The theorem does not assert that every useful scalar is
+invariant; it gives a test, namely that a scalar is a DBP invariant exactly when it is constant on the
+active role orbits of the relevant datum.
+
+\medskip
+\noindent In compact form:
+\[
+\boxed{\;
+\begin{gathered}
+\text{DBP invariant data is carried by the active role-jet orbit;}\\
+\text{DBP channel data is the fibre over its invariant reduction.}
+\end{gathered}\;}
+\]
+
+%==================================================================
+\appendix
+\section{Higher-order transposition}
+\label{app:higher}
+
+The active transposition $t=(D\;P)$ on the order-$r$ jet is obtained from $D=q(P,S)$ by the finite
+inverse-function theorem: each $q$-derivative is a rational function of the original $f$-jet with
+denominators a power of $a=f_D$. The first two orders are given in \S\ref{sec:transpose}; the
+third-order reach proceeds identically, differentiating the relations
+$q_P=1/a$, $q_S=-b/a$ once more and substituting, so that every order-$r$ component lies in
+$\mathbb Q[\,\text{jet},a^{-1}]$ in agreement with \S\ref{sec:consequences}. The input swap acts at
+every order by the index transposition $D\leftrightarrow S$, e.g.\ $s(a,b,A,B,C)=(b,a,C,B,A)$ at
+order $2$. \Proven
+
+%==================================================================
+\section{Worked examples}
+\label{app:examples}
+
+\subsection{Power-law charts: value-only role spectra}
+For a power-law coupling $P=D^mS^n$ pass to log coordinates, $\log P=m\log D+n\log S$, with exponent
+normal $\ell=(-m,-n,1)$. Role transposition permutes the entries of this projective normal, giving the
+exponent-pair orbit
+\[
+\mathcal E(m,n)=\Bigl\{(m,n),(n,m),\bigl(\tfrac1m,-\tfrac nm\bigr),\bigl(-\tfrac nm,\tfrac1m\bigr),
+\bigl(-\tfrac mn,\tfrac1n\bigr),\bigl(\tfrac1n,-\tfrac mn\bigr)\Bigr\}
+\]
+and the role-degree spectrum
+\[
+\operatorname{DegSpec}(m,n)=\Bigl\{m+n,\ m+n,\ \tfrac{1-n}{m},\ \tfrac{1-n}{m},\ \tfrac{1-m}{n},\
+\tfrac{1-m}{n}\Bigr\}.
+\]
+For ordinary multiplication $P=DS$, $(m,n)=(1,1)$ gives $\operatorname{DegSpec}(1,1)=\{2,2,0,0,0,0\}$:
+the forward chart has degree $2$ while inverse charts $D=P/S$ have degree $0$ in log-role form. For
+the cubic mixed power $P=D^2S$, $(m,n)=(2,1)$ gives
+$\operatorname{DegSpec}(2,1)=\{3,3,0,0,-1,-1\}$, distinguishing it from ordinary multiplication though
+both are monomial. Scale-free exponent invariants are
+\[
+I_1^\ell=\frac{(1-m-n)(mn-m-n)}{mn},\qquad
+I_2^\ell=\frac{(1-m-n)^3}{mn},
+\]
+with exponent discriminant $\Delta_\ell=(m-n)^2(m+1)^2(n+1)^2$. \Symbolic\ At
+multiplication the coupling channel is flat, so $\Ac=0$; the keystone below is nowhere flat.
+
+\subsection{The keystone: interaction-only curvature}
+Consider the implicit relation
+\[
+F=x_1^2+x_1x_2+x_3^2-3\qquad\text{at}\qquad p=(1,1,1).
+\]
+Then $g=(3,1,2)$, $q=14$, and
+\[
+H=\begin{pmatrix}2&1&0\\1&0&0\\0&0&2\end{pmatrix}.
+\]
+The channel-density polynomial of \S\ref{sec:channel} gives
+\[
+\kc=-\tfrac1{49},\qquad \ks=\tfrac1{49},\qquad \kint=-\tfrac3{49},
+\qquad\text{so}\qquad \KG=\kc+\kint+\ks=-\tfrac3{49}.
+\]
+The coupling and self channels cancel exactly and the surviving curvature is interaction curvature.
+Any non-negative scalar proxy, or any single-channel account that omits $\kint$, cannot represent this
+object; the keystone is the discriminating witness that the three-channel decomposition is not
+reducible to a single number. \Symbolic\ (Channels confirmed in exact arithmetic against the direct
+Gauss--Kronecker value $\KG=-3/49$.)
+
+\subsection{Gauge transport on the keystone}
+A defining-function gauge $\widetilde F=\mu F$ with $\mu(p)=1$ and $a=\nabla\log\mu(p)$ fixes the
+gradient and shifts the Hessian by
+\[
+\widetilde g=g,\qquad \widetilde H=H+ga^{\mathsf T}+ag^{\mathsf T}.
+\]
+Writing the gauge vector as $a=(u,v,w)$ on the keystone surface above, the channels transport by the
+exact rational laws
+\begin{align*}
+\kc(u,v,w)&=\tfrac1{49}\bigl(12uv+6uw+18vw+6w-1\bigr),\\
+\ks(u,v,w)&=\tfrac1{49}\bigl(12uv+6uw+3u+18vw+13v+2w+1\bigr),\\
+\kint(u,v,w)&=-\tfrac1{49}\bigl(24uv+12uw+3u+36vw+13v+8w+3\bigr),
+\end{align*}
+and for every rational gauge vector
+\[
+\kc(u,v,w)+\ks(u,v,w)+\kint(u,v,w)=-\tfrac3{49}.
+\]
+The channel triple therefore moves inside the affine zero-sum plane
+$\Delta\kc+\Delta\ks+\Delta\kint=0$ while the Gaussian curvature is held fixed, concretely realising
+the kernel of the reduction $\Sigma$ (\S\ref{sec:channel}) and the gauge transport of
+\S\ref{sec:transport}. The pure coupling channel is pinned, $\kc=-\tfrac1{49}$, exactly on the locus
+\[
+w(u+3v+1)+2uv=0,
+\]
+so channel pinning is a structural condition on the gauge, not an accident: a generic gauge moves
+every channel, a special gauge fixes a chosen one. \Symbolic
+
+%==================================================================
+\section{Application patterns and working checklist}
+\label{app:patterns}
+
+The calculus is applied by supplying a role assignment and a relation and then reading the orbit and
+channel account at the order the question requires.
+\begin{itemize}[itemsep=2pt,topsep=2pt]
+\item \textbf{Generic relation.} Assign $D$ (directive, policy, or design pressure), $S$ (substrate,
+state, or resource), $P$ (product, output, or reading), and write $P=f(D,S)$ or $F(D,S,P)=0$. The role
+orbit records what survives re-solving from each role; the channel account records how the invariant
+is distributed in the chosen frame.
+\item \textbf{Sensitivity.} If only first order matters, take $(a,b)=(f_D,f_S)$ and its active orbit;
+projective role invariants diagnose role symmetry, stabilisers, and inverse-role boundaries.
+\item \textbf{Curvature.} If second-order interaction matters, take $(a,b,A,B,C)$ and read the
+output-role spectra $C_P,C_D,C_S$, with $\KG$ the reduced invariant and the channel triples the
+explanatory representatives.
+\item \textbf{Route/account.} If several routes reach the same reading, treat route choice as a
+role-structured relation; the invariant quotient is route-independent, and a loop holonomy is a
+coupling diagnostic that vanishes when routes combine additively and is nonzero when they genuinely
+interact.
+\item \textbf{Monomial scaling.} For $P=D^mS^n$, use the exponent orbit and degree spectrum to detect
+when a monomial that is simple in one role becomes inverse, neutral, or singular in another
+(Appendix~\ref{app:examples}).
+\end{itemize}
+
+\noindent A working checklist for a new application:
+\begin{center}
+\small
+\begin{tabular}{r l l}
+\hline
+& Object & Question\\
+\hline
+1 & Roles $(D,S,P)$ & What are the directive, substrate, product roles?\\
+2 & Relation & Is the local law $P=f(D,S)$ or $F(D,S,P)=0$?\\
+3 & Regular locus & Which role denominators must be nonzero?\\
+4 & Jet order $r$ & Sensitivity, curvature, or higher holonomy?\\
+5 & Active role orbit & What are the transformed role charts?\\
+6 & Candidate invariant & Does it factor through the active role quotient?\\
+7 & Channel account & Which explanatory channels are retained?\\
+8 & Reduction map & What is the invariant quotient of the account?\\
+9 & Kernel / fibre & What moves under chart or gauge while the invariant stays fixed?\\
+10 & Singular strata & What must refuse, rechart, or be typed at a boundary?\\
+\hline
+\end{tabular}
+\end{center}
+
+%==================================================================
+\section*{Provenance of claims}
+\addcontentsline{toc}{section}{Provenance of claims}
+
+The $S_3$ relations and the first- and second-order transposition formulas are explicit rational
+identities (\Proven, symbolic-CAS confirmable). Theorem~\ref{thm:orbit}, the completeness criterion,
+the exact rational closure, the channel-reduction exact sequence, the Gaussian decomposition
+$\KG=\kc+\kint+\ks$, the graph-channel formula, the bilinear curved-ambient split
+$S\wedge S=R_{cc}+R_{\mathrm{int}}+R_{ss}$ with its named ambient boundary, and the definitions and
+identities of the named channels and $\Ac=3\lVert P_{\mathbf 2}O\rVert^2$ are \Proven.
+Corollary~\ref{cor:faithful} (the carrier Jacobian determinant $8\Lambda_P\Lambda_D\Lambda_S/q_0^6$
+and rank $3$), the keystone channel values, and the keystone gauge-transport laws were established and
+confirmed in exact symbolic arithmetic, \Symbolic. The construction is self-contained: no external
+named theorem is load-bearing, and every transported quantity is exact-$\mathbb Q$ on the regular
+locus by \S\ref{sec:consequences}.
+
+\end{document}
