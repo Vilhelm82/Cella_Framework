@@ -51,8 +51,10 @@ have order $4$. The leading reflection coefficients are obtained in closed form,
 extremal coefficient is shown to be strictly negative at every open point of the extremal
 edge---so the extremal pole has exact order $3$ throughout---by proving strict transverse
 monotonicity, $\partial_S(G_JG_Q)\big|_{S=\Sext}<0$, via a full--edge coefficient--positivity
-and Sturm certificate. All algebraic identities are checked by reproducible symbolic
-certificates.
+and Sturm certificate. Throughout, the orders and coefficients are obtained not by expanding the
+(algebraically enormous) global scalar curvature but by reading local Laurent normal forms at
+each divisor---a computation of scalar--curvature valuations from the local metric germ. All
+algebraic identities are checked by reproducible symbolic certificates.
 \end{abstract}
 
 \tableofcontents
@@ -119,6 +121,18 @@ curvature $-m(m+5)x^{-4}/B$ ($m$ = transverse fibre dimension). Where the two or
 meet---the Schwarzschild corner---the balanced approach cancels them back to order $2$, the
 mildest point of the boundary, along a Newton wedge $m(a)=\max(4a-2,4-2a)$.
 \end{enumerate}
+
+\paragraph{Method: local valuations, not global expansion.}
+The global scalar curvature of $g_F$ is a single rational function of $(S,J,Q,\pi)$ of very high
+degree---the extremal coefficient's denominator alone is degree $14$ in $S$ and $28$ in $Q$
+(eq.~\eqref{eq:denext}), and the full $R$ is far larger. Locating a singular stratum inside such
+an expression by global expansion is impractical: the divisor is buried among false zeros,
+removable factors, mixed $S,J,Q,\mathrm{disc}$ terms, and cancellations. We never expand $R$
+globally. Near each role divisor the scalar curvature sees only the leading \emph{local metric
+germ}, so its pole order and leading coefficient are read off a two-- or three--term Laurent
+normal form---the reflection form $-m(m+5)/B$ and the generic $\delta^{-3}$ form---directly. The
+retrodiction is thus a computation of scalar--curvature \emph{valuations} from local normal
+forms; the enormous global curvature is never assembled.
 
 \paragraph{Reader map.}
 The argument has three steps. First, the metric is \emph{selected} by excluding interior
@@ -646,6 +660,25 @@ $\Rext$ rational in $(S,Q,\pi)$ with positive denominator and (Prop.~\ref{prop:W
 on the open edge, and $C_\Omega,C_\Phi$ given by \eqref{eq:COmega}--\eqref{eq:CPhi}.
 \end{theorem}
 
+The entire singular structure is the following table of local types---each row read from a local
+metric germ, none from the global curvature:
+\begin{center}
+\begin{tabular}{llcl}
+\hline
+divisor & local type & pole order & leading coefficient\\
+\hline
+$T=0$ (extremal) & generic collapse & $3$ &
+  $\Rext=A_2^{-1}\,\partial_S\log(G_JG_Q)|_{\Sext}<0$\\
+$\Omega=0$ (spin) & parity--fixed reflection & $4$ & $C_\Omega=-14/B_J$\\
+$\Phi_e=0$ (charge) & parity--fixed reflection & $4$ & $C_\Phi=-14/B_Q$\\
+$\Omega=\Phi_e=0$ (Schwarzschild) & double corner & wedge, $\min 2$ & mixed stratum ($\Rc$)\\
+\hline
+\end{tabular}
+\end{center}
+This table carries more information about the singular structure than the global scalar
+curvature it is extracted from---and, by \S\ref{sec:intro} (the method), is obtained without ever
+assembling that global curvature.
+
 %======================================================================
 \section{Discussion}
 \label{sec:discussion}
@@ -669,6 +702,22 @@ coefficient $14=6\cdot2+2\cdot1$ splits into radial focusing and transverse fibr
 amplitudes drop out because they only rescale a flat fibre. The two order--$4$ faces then meet
 at the Schwarzschild corner, where the balanced approach cancels back to order $2$
 (Prop.~\ref{prop:corner})---the mildest, not the wildest, point of the boundary.
+
+\paragraph{Locality, and why this is economical.}
+The practical content of the order law is that it is \emph{local}. A brute--force
+computer--algebra scalar curvature is algebraically enormous and poorly suited to identifying
+singular strata: near a divisor the genuine blow--up is hidden among false zeros, removable
+factors, mixed $J,Q,\mathrm{disc}$ terms, and cancellations, and one must hunt for the cliff.
+The present method sidesteps this by computing scalar--curvature \emph{valuations} directly from
+local metric normal forms. Each stratum's pole order and leading coefficient follow from a short
+germ---read from the table of local types in \S\ref{sec:law}, not from a global fraction---%
+because the curvature near a divisor depends only on the leading local metric, everything
+subleading contributing at strictly higher order. This locality is also what makes the
+classification \emph{portable}: the same normal forms ($-m(m+5)/B$ at a parity--fixed face, the
+generic $\delta^{-3}$ form, the corner support function of Prop.~\ref{prop:corner}) apply to any
+diagonal inverse--channel thermodynamic surface, with the fundamental relation entering only
+through the germ. A small table of local types carries more information about the singular
+structure than the global curvature it is extracted from.
 
 \appendix
 \section{The output charts and the role--role channel}
