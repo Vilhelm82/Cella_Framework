@@ -23,17 +23,22 @@ reflection-fixed pair and the extremal edge as the generic divisor.
 
 ## The universal reflection-face identity (Test 6-a, symbolic)
 
-For a diagonal 3D metric that near a reflection face is even in the small coordinate `x`,
-with the **vanishing** component `g_x = B(y,z)·x² + O(x⁴)` and the other two finite, a
-symbolic Laurent expansion of the diagonal Ricci scalar gives
+**Corrected DBP reflection normal form.** For a diagonal 3D metric that near a reflection
+face is even in the small coordinate `x`, with the **collapsing native** component
+`g_x = B(y,z)·x² + O(x⁴)` **and the two transverse components diverging as `x⁻²`**,
+`g_y = A x⁻² + O(1)`, `g_z = C x⁻² + O(1)`, a symbolic Laurent expansion of the diagonal
+Ricci scalar gives
 
 ```
 R = −14 / B(y,z) · x⁻⁴ + O(x⁻²),
 ```
 
-**independent of every other metric datum** (the two finite components and all subleading
-terms drop out). So each reflection-face coefficient is `−14` over the leading coefficient
-of the single collapsing metric component.
+depending only on `B`. **The transverse `x⁻²` poles are essential** — with *finite*
+transverse components the identity is false (`B x² dx² + dy² + dz²` is flat, `R=0`; an
+earlier draft here mis-stated the transverse components as finite). The real KN reflection
+faces do carry the transverse `x⁻²` poles (`G_S ~ A/J²` on `Ω=0`, etc.), so the lemma
+applies, and each reflection coefficient is `−14` over the collapsing component's leading
+coefficient `B`.
 
 ## Exact reflection-fixed coefficients (Test 6, certified)
 
@@ -95,9 +100,15 @@ den ∝ Q²π·(3Q²π+S)·(Q⁴π+Q²S−Q²π+S)·(Q⁴π²+4Q²S²π²−2Q²
       ·(Q⁴π²+Q²Sπ−Q²π²+2S²+Sπ)³·(Q¹⁰π³+Q⁸Sπ²−9Q⁶S²π³+3Q⁴S³π²+5Q²S⁴π+S⁵),
 ```
 
-with a long (degree 14 in `S`, 28 in `Q`) polynomial numerator. Verified against direct
-high-precision curvature. Sample values (on the extremal surface, in `(S,Q)`): `C_ext(20,1)
-= −0.0660176096`, `C_ext(30,1) = −0.0727822594`, `C_ext(20,2) = −0.000549074077`.
+with a long (degree 14 in `S`, 28 in `Q`) polynomial numerator `N_ext`. Verified against
+direct high-precision curvature. Sample values (on the extremal surface, in `(S,Q)`):
+`C_ext(20,1) = −0.0660176096`, `C_ext(30,1) = −0.0727822594`, `C_ext(20,2) = −0.000549074077`.
+
+**Open gate (honest caveat).** The denominator of `C_ext` is positive on the open edge
+(`S>πQ²`); the numerator `N_ext` has *not* been sign-certified there. So the pole is order 3
+at every open extremal point **where `N_ext≠0`** — i.e. generically. Proving `N_ext` has
+fixed nonzero sign on `{Q>0, S>πQ²}` (or exhibiting its zero locus) would upgrade "generic
+open points" to "all open points" of `T=0`. This is the one remaining proof obligation.
 
 ## Status of the n=3 complementarity
 
@@ -105,10 +116,13 @@ high-precision curvature. Sample values (on the extremal surface, in `(S,Q)`): `
 |---|---|
 | metric identified & u=0 selection | **proven** (Test 3 + Test 4 structural) |
 | interior-cleanliness (no spurious poles) | **theorem** (Test 4, on `W₊`) |
-| pole **orders** 3/4/4 | **certified** (Test 5) |
-| reflection-fixed **coefficients** `C_Ω`, `C_Φ` | **exact closed form** (Test 6) |
-| extremal **coefficient** `C_ext` | **exact closed form** (Test 7) |
+| pole **orders** 3/4/4 | numeric (high-precision fits, Test 5); the reflection orders follow symbolically from the `−14/B` lemma + `B≠0` (Test 6) |
+| reflection-fixed **coefficients** `C_Ω`, `C_Φ` | **exact closed form** (Test 6), matched to curvature |
+| extremal **coefficient** `C_ext` | **exact closed form** (Test 7); order-3 generic (pending the `N_ext` gate) |
 
-The n=3 DBP complementarity retrodiction is **complete** for `g_F(u=0)`: the pole orders
-(3/4/4) and all three leading coefficients (both reflection-fixed and the extremal edge)
-are certified in exact closed form.
+The exact closed forms are established and match direct curvature. Two items remain to make
+the retrodiction a **fully symbolic** proof (per the symbolic-proof handoff spec):
+(1) the extremal `N_ext` sign gate above; (2) replacing the numeric order fits (Test 5) with
+the exact symbolic Laurent lemmas — the generic order-3 lemma `(P₁/P₀+R₁/R₀)/A₂` and the
+corrected reflection `−14/B` (transverse `x⁻²`) lemma — applied to the rational metric. The
+coefficient values themselves are already exact.

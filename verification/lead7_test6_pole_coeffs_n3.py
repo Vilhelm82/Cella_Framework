@@ -7,13 +7,19 @@ Test 5 pinned the ORDERS (extremal 3 / Omega=0 4 / Phi_e=0 4). This file gives t
 CLOSED FORMS of the leading coefficients on the two reflection-fixed divisors, from a
 universal structural identity, and verifies them against direct high-precision curvature.
 
-UNIVERSAL IDENTITY (T6-a, symbolic). For a diagonal 3D metric that near a reflection face
-(small coordinate x, the metric even in x) has the vanishing component g_x = B(y,z) x^2 +
-O(x^4) and the other two components finite, the Ricci scalar's leading Laurent coefficient
-is
+UNIVERSAL IDENTITY (T6-a, symbolic). CORRECTED DBP reflection normal form. For a diagonal
+3D metric that near a reflection face (small coordinate x, even parity in x) has the
+COLLAPSING native component g_x = B(y,z) x^2 + O(x^4) AND the two TRANSVERSE components
+DIVERGING as x^-2,
+        g_y = A(y,z) x^-2 + O(1),   g_z = C(y,z) x^-2 + O(1),
+the Ricci scalar's leading Laurent coefficient is
         R = -14 / B(y,z) * x^{-4} + O(x^{-2}),
-independent of every other metric datum (proved by a symbolic Laurent expansion of the
-diagonal Ricci with generic even-in-x components).
+depending only on B (proved by a symbolic Laurent expansion of the diagonal Ricci; the
+ansatz below is g=[A/x^2+a0, B x^2+b4 x^4, C/x^2+c0]). The transverse x^-2 poles are
+ESSENTIAL -- with FINITE transverse components the result is false (e.g. B x^2 dx^2 + dy^2
++ dz^2 is flat, R=0). The real KN reflection faces J=0, Q=0 do carry transverse x^-2 poles
+(G_S ~ A/J^2 etc.), so the lemma applies; the collapsing-B coefficient is computed in
+closed form below.
 
 Applied to g_F(u=0) on Kerr-Newman (M^2 = U(S,J,Q)), whose vanishing component on each
 reflection face is computed in closed form from the exact mass-charge couplings
