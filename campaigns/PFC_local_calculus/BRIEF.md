@@ -35,14 +35,20 @@ face has `R` even in `x`, killing `x⁻³` and forcing order 4.
   `R=(1/A)Σ_α(P_{α1}/P_{α0})x⁻³+O(x⁻²)`. **DONE** (`pfc_test1`, `m=2,3`): order 3, coeff from
   the transverse first drift, independent of `A₃,A₄,P_{α2}`. Explains why generic faces are
   order 3 and parity-fixed faces order 4 — it is exactly parity.
-- **PFC-4 — Corner blow-up theory.** *(OPEN — the frontier.)* Multiple parity variables vanish
-  together; classify two-variable (and higher) reflection corners by a Newton-polygon /
-  valuation method that reads the leading curvature order off the germ WITHOUT a global scalar
-  expansion. The KN Schwarzschild corner `Ω=Φ_e=0` is the worked instance
-  (`verification/lead7_test9_corner.py`): along `Q=ε, J=ρε^a`, `R~ε^{−m(a)}`,
-  `m(a)=max(4a−2,4−2a)`, vertex `(1,2)` — two order-4 faces cancelling to order 2 on the
-  balanced diagonal, plus a genuine mixed-channel excess. Goal: the general theorem for which
-  the KN corner is a special case.
+- **PFC-4 — Corner blow-up theory.** *(OPENED 2026-07-07; opening result DONE, general proof
+  OPEN.)* PREREG `PREREG_PFC4_corner.md`. **Codim-2 corner-valuation theorem:** two faces with
+  single-face orders `p_x,p_y` and corner-residue weights `r_x,r_y` give a polar Newton polytope
+  with vertices `v_x=(−p_x,r_y)`, `v_y=(r_x,−p_y)`, and the order along `x=ρε^{a_x}, y=ε^{a_y}`
+  is the **support function** `m(a)=max(p_x a_x−r_y a_y, p_y a_y−r_x a_x)`. **DONE**
+  (`verification/pfc_test2_corner_valuation.py`, byte-stable ×2): KN corner from CERTIFIED face
+  data (`C_Ω~Q²`, `C_Φ~J²`, order 4) reproduces the `lead7_test9` wedge `max(4a−2,4−2a)`;
+  synthetic `(4,4)` and `(4,3)` corners validated by direct curvature (rule is NOT KN-specific);
+  corner order DROPS below both faces; at the balanced (facet-parallel) direction the whole
+  facet is optimal, so the leading coefficient is a facet sum — the KN mixed term `M` explained
+  as the front-face coefficient. **Key subtlety:** the correct input is FACE data, not raw metric
+  monomial weights — a pure single-monomial ("toric") metric is non-generic and gives a milder
+  (wrong) wedge. **OPEN body:** general proof of the vertex rule with the cancellation condition;
+  codimension ≥3; the front-face coefficient classification.
 
 ## Kerr-Newman as the m=2 application (the dictionary)
 

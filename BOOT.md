@@ -90,9 +90,14 @@ understood; a list of banned sources would not protect against the next stale on
   collapsing coord x, m transverse dirs): generic collapse ⟹ order 3, coeff `(1/A)Σ∂_x log P_α`;
   parity-fixed reflection (even, transverse ~x⁻²) ⟹ order 4, coeff **−m(m+5)/B**; corners ⟹
   Newton wedge. **PFC-1/2/3 DONE, general m** (`verification/pfc_test1_local_normal_forms.py`,
-  byte-stable ×2). Note `paper/pfc_normal_forms.tex`. PFC-4 (general corner-valuation theorem;
-  KN Schwarzschild corner `lead7_test9` is the instance) is the OPEN frontier. Legs test: watch
-  whether the same local laws recur across other ensembles/surfaces.
+  byte-stable ×2). Note `paper/pfc_normal_forms.tex`. **PFC-4 OPENED with its opening result**
+  (`verification/pfc_test2_corner_valuation.py`, ×2; PREREG `PREREG_PFC4_corner.md`): codim-2
+  corner order = support function of a Newton polytope with vertices `(−p_x,r_y),(r_x,−p_y)` from
+  the two single-face orders/residue weights; KN from certified face data → the `lead7_test9`
+  wedge; synthetic (4,4),(4,3) validated by direct curvature; corner drops below both faces;
+  balanced facet ⟹ front-face (mixed) coefficient; raw monomial weights non-generic. FRONTIER:
+  general vertex-rule proof + cancellation condition + codim ≥3. Legs test: watch whether the
+  same local laws recur across other ensembles/surfaces.
   **CASE LAW (metric-normalization, 2026-07-07):** the DBP chart norm is `q_i=1+|∇f_i|²` — the
   graph "1+" is canonical (n=2 `q0=1+a²+b²`, recert_gtd_dbp_n2.py), NOT an accidental factor. A
   handed-off gate script dropped it to `|∇f|²` and certified the wrong metric; caught only by

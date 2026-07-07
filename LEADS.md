@@ -183,7 +183,8 @@ complementarity test, pole orders and leading coefficients recorded.
 
 ## LEAD-9 — PFC: parity-fixed inverse-channel local curvature calculus
 
-**Status:** OPEN — **PFC-1/2/3 DONE** (2026-07-07); PFC-4 (corner valuation) is the frontier.
+**Status:** OPEN — **PFC-1/2/3 DONE; PFC-4 OPENED with its opening result** (2026-07-07); the
+PFC-4 general proof (arbitrary germs + cancellation condition, codim ≥3) is the frontier.
 Campaign `campaigns/PFC_local_calculus/BRIEF.md`. Spun out of LEAD-7: extract the reusable
 LOCAL theorem before the project sprawls into case studies. The shift — from "Kerr-Newman
 produced C=−14/B" to "parity-fixed inverse-channel geometry has a dimension-general local
@@ -196,8 +197,14 @@ transverse fibre shear; m=2 (3D state space) ⟹ 14. **Certified for general m**
 (`verification/pfc_test1_local_normal_forms.py`, byte-stable ×2: first-principles Ricci m=1..4,
 symbolic-m warped reduction, parity kills x⁻³, generic order-3). Note
 `paper/pfc_normal_forms.tex`. KN is the m=2 instance (T=0 generic; Ω=0,Φ_e=0 parity-fixed −14/B;
-corner PFC-4). **Frontier (PFC-4):** the general corner-valuation theorem (KN Schwarzschild
-corner `lead7_test9` is the worked instance). **The legs test:** if the same local laws recur
+corner PFC-4). **PFC-4 opening (DONE, `pfc_test2_corner_valuation.py` ×2):** codim-2 corner valuation —
+order along a corner path = support function of a Newton polytope with vertices `(−p_x,r_y)`,
+`(r_x,−p_y)` from the two single-face orders/residue weights; `m(a)=max(p_x a_x−r_y a_y,
+p_y a_y−r_x a_x)`. KN from certified face data → the `lead7_test9` wedge; synthetic (4,4),(4,3)
+validated by direct curvature; corner order drops below both faces; balanced facet ⟹ front-face
+(mixed) coefficient; raw monomial weights non-generic (face data is the input). PREREG
+`campaigns/PFC_local_calculus/PREREG_PFC4_corner.md`. **Frontier:** general vertex-rule proof +
+cancellation condition + codim ≥3 + front-face classification. **The legs test:** if the same local laws recur
 across black-hole chemistry, cavity ensembles, ordinary thermodynamics, and non-thermodynamic
 implicit surfaces, DBP is a normal-form calculus, not a metric that worked once.
 
