@@ -1,5 +1,11 @@
 # LEAD-7 — carrier-pullback metric probe (Kerr n=2)
 
+> **SUPERSEDED by the pole-order check (`LEAD7_pole_orders.md`, 2026-07-07).** The
+> metric-divergence shown below is NECESSARY but NOT SUFFICIENT: the *curvature* R[g] of
+> this pullback metric diverges order ~8 on extremal (not 3) and does NOT diverge on
+> Schwarzschild — it FAILS the DBP complementarity/pole-order law. Candidate B is out.
+> Kept as the record of the weaker check that misled the first recommendation.
+
 **Date:** 2026-07-07. Probe (numerical, EMPIRICAL tier) substantiating the
 carrier-pullback metric as a better DBP metric candidate than the paper's diagonal
 `g^DBP=−h⁻¹` (Will's flag). Not a certificate — a design-decision probe. Origin:

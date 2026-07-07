@@ -8,11 +8,23 @@ Source: `Reference_Material/gtd_vs_dbp.pdf` (re-verification rule: origin is cla
 evidence). Prerequisite RC-5 structure tier: `verification/recert_gtd_dbp_n2.py`
 (`d047d21b`, 11/11, byte-stable ×2).
 
-## The metric design decision (Will's flag, 2026-07-07)
+## The metric design decision (Will's flag, 2026-07-07) — UPDATED after the pole check
+
+**POLE-ORDER VERDICT (`reports/LEAD7_pole_orders.md`):** the head-to-head is decided at
+n=2. Candidate A (paper diagonal) gives R[g] pole orders **exactly 3 (extremal) / 4
+(Schwarzschild)**, matching the paper's Result 6 — method validated. **Candidate B (the
+carrier-pullback) FAILS:** R diverges order ~8 on extremal and does NOT diverge on
+Schwarzschild — not even complementary. My earlier promotion of B was on the weaker
+"metric-diverges-on-boundary" check; the *curvature* pole order (the real diagnostic)
+refutes it. **Candidate C (three-channel)** is complementary but with wrong orders
+(~8/4). So the paper's "cheap" A carries the canonical n=2 law; the pullback shortcut
+does not. Primary is now: **generalize the diagonal construction to n=3** (or find a
+different curvature-matching metric — the pullback is out). The candidate list below is
+kept for the record; the verdict supersedes its "Candidate B primary" recommendation.
 
 Will: the paper's `g^DBP = −h⁻¹` (channel-inverse, **diagonal**) was the "cheap and
-easy" first-pass choice. The brief adopts a **better candidate as primary** and tests
-it head-to-head:
+easy" first-pass choice. The brief originally adopted a candidate as primary and tested
+it head-to-head (now decided against it):
 
 - **CANDIDATE A — the diagonal channel-inverse (paper's "cheap" one):**
   `h = diag(κ_{c,i})`, `g^DBP = −h⁻¹`. Diagonal ⟹ discards off-diagonal/interaction
