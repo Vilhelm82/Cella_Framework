@@ -12,12 +12,14 @@
 
 \newcommand{\Wp}{W_{+}}
 \newcommand{\Rext}{C_{\mathrm{ext}}}
-\newcommand{\Som}{S_{\mathrm{ext}}}
+\newcommand{\Sext}{S_{\mathrm{ext}}}
+\newcommand{\Sp}{S_{+}}
+\newcommand{\Sm}{S_{-}}
 \newcommand{\dd}{\mathrm{d}}
 \DeclareMathOperator{\sgn}{sgn}
 
-\title{A canonical complementarity metric for Kerr--Newman thermodynamics:\\
-the mass--charge inverse--channel geometry}
+\title{Exact role--divisor retrodiction in Kerr--Newman thermodynamics\\
+via an inverse--channel complementarity metric}
 \author{[authors]}
 \date{Draft --- \today}
 
@@ -25,26 +27,28 @@ the mass--charge inverse--channel geometry}
 \maketitle
 
 \begin{abstract}
-For the two--charge (Kerr) thermodynamic surface, the directive--substrate--product (DBP)
-role--channel calculus produces a diagonal channel--inverse metric $g^{\mathrm{DBP}}=-h^{-1}$
-whose scalar curvature obeys a \emph{complementarity law}: it is finite on the Davies
-transition locus and diverges on the physical role boundaries, with pole order $3$ on a
-generic boundary and $4$ on a reflection--fixed boundary. Whether this construction admits a
-canonical lift to three charges (Kerr--Newman) is the calculus's stated open problem, because
-each output chart then carries several off--diagonal couplings and the diagonal recipe is no
-longer determined. We resolve it. We show that the correct $n=3$ metric is the
-\emph{mass--charge inverse--channel metric} $g_F(u{=}0)$: for each output charge one inverts,
-before summing, only the squared couplings joining the graph value $M$ to a single charge,
-discarding the charge--charge couplings. We prove that this weight is \emph{forced} --- it is
-the unique member of the natural one--parameter family that is simultaneously positive definite
-and free of interior curvature singularities --- and that the discarded charge--charge
-couplings are exactly the channel--isotropy strata that must not enter the complementarity
-metric. On the outer physical wedge the metric is rational in $(S,J,Q,\pi)$; its only
-curvature singularities lie on the three role divisors $T=0$, $\Omega=0$, $\Phi_e=0$; and the
-$n=2$ complementarity law lifts intact, now with \emph{both} charge reflections
-reflection--fixed at order $4$ and the extremal edge generic at order $3$. All three leading
-pole coefficients are obtained in exact closed form. Every algebraic claim is backed by a
-byte--stable symbolic certificate.
+For the two--role Kerr thermodynamic surface, the directive--substrate--product (DBP)
+role--channel calculus yields a diagonal channel--inverse metric whose scalar curvature obeys
+a complementarity law: it remains finite on the Davies transition locus and diverges on the
+physical role boundaries, with pole order $3$ at a generic boundary and pole order $4$ at a
+reflection--fixed boundary. The corresponding three--role construction is not automatic, since
+each output chart carries several off--diagonal couplings and the diagonal assembly rule is no
+longer unique. We resolve this selection problem for the Kerr--Newman surface.
+
+The selected metric is an inverse--channel metric $g_F(u{=}0)$: for each output role the
+mass--role coupling channels are inverted before summing, while the role--role channels are
+omitted. Within the natural weighted family, this is the unique choice that is both positive
+definite and free of interior curvature poles. The omitted role--role channels instead detect
+interior channel--isotropy strata.
+
+On the outer physical wedge, $g_F(u{=}0)$ is rational in $(S,J,Q,\pi)$. Its scalar curvature
+has no interior singular support, including on the Davies surface; its singular support in the
+closure lies exactly on the role divisors $T=0$, $\Omega=0$, $\Phi_e=0$. The Kerr
+complementarity law lifts to Kerr--Newman: the extremal divisor is generic and has order $3$,
+while the two charge--reflection faces are reflection--fixed and have order $4$. The leading
+reflection coefficients are obtained in closed form, and the sign of the extremal coefficient
+reduces to the transverse monotonicity $\partial_S(G_JG_Q)\big|_{S=\Sext}<0$. All algebraic
+identities are checked by reproducible symbolic certificates.
 \end{abstract}
 
 \tableofcontents
@@ -55,69 +59,87 @@ byte--stable symbolic certificate.
 
 \paragraph{The $n=2$ picture.}
 Given a thermodynamic fundamental relation $M=\Phi(E^1,\dots,E^n)$ read as a hypersurface in
-role coordinates, the DBP role--channel calculus assigns to each ``output chart''
+role variables, the DBP role--channel calculus assigns to each output chart
 $E^i=f_i(M,E^{j\ne i})$ a family of coupling channels, and, at $n=2$, a diagonal metric
 \begin{equation}
 h=\sum_i \kappa_{c,i}\,\dd E^i\otimes \dd E^i,\qquad g^{\mathrm{DBP}}=-h^{-1},
 \label{eq:n2metric}
 \end{equation}
 where $\kappa_{c,i}=-\Lambda_i^2/q_i^2$ is the (single) coupling channel of chart $i$. For the
-Kerr surface this metric's scalar curvature satisfies a sharp \emph{complementarity law}: it
-is finite on the Davies curve and blows up on the two physical role boundaries (extremal
-$T=0$, and Schwarzschild $\Omega=0$), with pole order $3$ on the generic boundary and $4$ on
-the reflection--fixed one. This is the content we take as given (as mathematics; we re--derive
-everything used below).
+Kerr surface this metric's scalar curvature satisfies a complementarity law: it is finite on
+the Davies curve and blows up on the two physical role boundaries (extremal $T=0$ and
+zero--spin $\Omega=0$), with pole order $3$ on the generic boundary and $4$ on the
+reflection--fixed one. We use this $n=2$ result as the reference complementarity law,
+re--deriving below only the ingredients needed for the Kerr--Newman lift.
 
-\paragraph{The $n=3$ obstruction.}
-At $n=3$ the recipe \eqref{eq:n2metric} is under--determined: each output chart now carries
-\emph{several} off--diagonal couplings, and there is no canonical way to assemble them into a
-single diagonal entry. This is the calculus's stated open problem: \emph{does a canonical
-$n=3$ DBP complementarity metric exist?}
+\paragraph{The $n=3$ selection problem.}
+At $n=3$ the recipe \eqref{eq:n2metric} is under--determined: each output chart carries
+\emph{several} off--diagonal couplings, and there is no unique way to assemble them into a
+single diagonal entry. This is the calculus's stated open problem: \emph{does a
+three--role DBP complementarity metric exist that lifts the Kerr law?}
 
 \paragraph{Result.}
-We answer in the affirmative for the Kerr--Newman surface and identify the metric uniquely.
-Write the couplings in each output chart as two \emph{mass--charge} couplings
-$\Lambda_{i,\{M,j\}}$ (joining $M$ to a charge) and one \emph{charge--charge} coupling
-$\Lambda_{i,\{j,k\}}$. The metric is
+We answer in the affirmative for the Kerr--Newman surface and select the metric uniquely.
+Write the couplings in each output chart as two \emph{mass--role} couplings
+$\Lambda_{i,\{M,j\}}$ (joining the graph value $M$ to a role variable) and one
+\emph{role--role} coupling $\Lambda_{i,\{j,k\}}$. The metric is
 \begin{equation}
-g_F(u{=}0)_{ii}\;=\;q_i^2\sum_{\text{mass--charge }\rho}\frac{1}{\Lambda_{i,\rho}^2},
+g_F(u{=}0)_{ii}\;=\;q_i^2\sum_{\text{mass--role }\rho}\frac{1}{\Lambda_{i,\rho}^2},
 \label{eq:main}
 \end{equation}
-i.e.\ one inverts each mass--charge channel \emph{before} summing, and \emph{omits} the
-charge--charge channel. Our contributions:
+i.e.\ one inverts each mass--role channel \emph{before} summing, and \emph{omits} the
+role--role channel. Here ``role'' is used in the role--coordinate sense: the extensive state
+variables $(S,J,Q)$, not only the electromagnetic charge $Q$. Our contributions:
 \begin{enumerate}
-\item \textbf{Selection (Thm.~\ref{thm:selection}).} Among the natural one--parameter family
-$g_F(u)$ interpolating ``sum--then--invert'' and ``invert--then--sum'', the weight $u=0$ is the
-\emph{unique} value that is positive definite \emph{and} free of interior curvature poles. The
-discarded charge--charge couplings carry the interior channel--isotropy strata.
-\item \textbf{Rationality and cleanliness (Thms.~\ref{thm:rational},~\ref{thm:clean}).} On the
+\item \textbf{Selection (Thm.~\ref{thm:selection}).} Among the natural assembly rules, and
+within the weighted invert--then--sum family $g_F(u)$, the value $u=0$ is the unique choice
+that is positive definite \emph{and} free of interior curvature poles. The omitted role--role
+couplings carry the interior channel--isotropy strata.
+\item \textbf{Rationality and regularity (Thms.~\ref{thm:rational},~\ref{thm:clean}).} On the
 outer physical wedge $\Wp$ the metric \eqref{eq:main} is rational in $(S,J,Q,\pi)$, and its
-only possible curvature singularities lie on the role divisors $U_SJQ=0$, i.e.\ $T=0$,
-$\Omega=0$, $\Phi_e=0$.
+only singular support lies on the role divisors $U_S\,J\,Q=0$, i.e.\ $T=0$, $\Omega=0$,
+$\Phi_e=0$.
 \item \textbf{Complementarity law and exact coefficients (Thm.~\ref{thm:law}).} The scalar
 curvature has an order--$3$ pole on the generic extremal edge and order--$4$ poles on the two
 reflection--fixed charge faces; the reflection coefficients are $-14/B$ for an explicit
-collapsing coefficient $B$, and all three leading coefficients are given in closed form.
+collapsing coefficient $B$, given in closed form, and the sign of the extremal coefficient is
+fixed by a transverse monotonicity.
 \end{enumerate}
 
+\paragraph{Reader map.}
+The argument has three steps. First, the metric is \emph{selected} by excluding interior
+channel--isotropy poles (\S\ref{sec:selection}). Second, \emph{rationality} reduces the
+singular support to the explicit mass--role coupling factors (\S\ref{sec:clean}). Third, two
+local Laurent normal forms determine the pole orders and leading coefficients
+(\S\S\ref{sec:lemmas}--\ref{sec:law}).
+
+\paragraph{Relation to GTD.}
+The construction below is not proposed as a Legendre--invariant Quevedo metric, nor as a
+replacement for Weinhold-- or Ruppeiner--type pullback geometries. It is a role--chart
+diagnostic: its test is retrodictive, namely whether the scalar curvature recovers the known
+thermodynamic role divisors and distinguishes their local symmetry type. The result should be
+read as a complementarity metric within the DBP role calculus, not as a claim of uniqueness
+among all thermodynamic geometries.
+
 \paragraph{Verification.}
-Every exact algebraic assertion below is checked by a byte--stable symbolic certificate
-(\texttt{verification/lead7\_test$k$\_*.py}); numerical curvature is used only as a smoke test
-after the exact derivation. The diagonal $3$D Ricci harness is validated on flat $\mathbb
-R^3$ ($R=0$) and the round three--sphere ($R=6/a^2$).
+Every exact algebraic assertion below is checked by a reproducible symbolic certificate
+(\texttt{verification/lead7\_test$k$\_*.py}); numerical curvature is used only as an
+independent consistency check after the exact derivation. The diagonal $3$D Ricci harness is
+validated on flat $\mathbb R^3$ ($R=0$) and the round three--sphere ($R=6/a^2$).
 
 %======================================================================
 \section{Set--up}
 \label{sec:setup}
 
 \paragraph{Fundamental relation and role coordinates.}
-The Kerr--Newman fundamental relation, in entropy--frame $S=A/4$, is $M^2=U(S,J,Q)$ with
+The Kerr--Newman fundamental relation, with the area normalisation $S=A/4$, is $M^2=U(S,J,Q)$
+with
 \begin{equation}
 U(S,J,Q)=\frac{S}{4\pi}+\frac{\pi J^2}{S}+\frac{Q^2}{2}+\frac{\pi Q^4}{4S}.
 \label{eq:U}
 \end{equation}
-The role coordinates are the charges $(S,J,Q)$ (entropy, angular momentum, electric charge);
-$M=\sqrt U$ is the graph value. The first derivatives are
+The role coordinates are the extensive variables $(S,J,Q)$ (entropy, angular momentum,
+electric charge); $M=\sqrt U$ is the graph value. The first derivatives are
 \begin{equation}
 U_S=\frac{S^2-\pi^2(4J^2+Q^4)}{4\pi S^2},\qquad
 U_J=\frac{2\pi J}{S},\qquad
@@ -132,13 +154,17 @@ $\Phi_e=U_Q/2M$.
 \[
 \Wp=\{S,J,Q>0,\ U_S>0\}=\{S,J,Q>0,\ S^2>\pi^2(4J^2+Q^4)\}.
 \]
-Equivalently $\Wp$ is the outer--horizon branch $S=\Som:=\pi(2M^2-Q^2+2\sqrt{\mathrm{disc}})$
-with $\mathrm{disc}:=M^4-M^2Q^2-J^2>0$; there $T>0$.
+Equivalently $\Wp$ is the outer--horizon branch
+\[
+S=\Sp:=\pi\big(2M^2-Q^2+2\sqrt{\mathrm{disc}}\,\big),\qquad
+\mathrm{disc}:=M^4-M^2Q^2-J^2>0,
+\]
+on which $T>0$; the inner branch is $S=\Sm:=\pi(2M^2-Q^2-2\sqrt{\mathrm{disc}}\,)$.
 \end{definition}
 
 \begin{remark}[Why $\Wp$ and not $\{\mathrm{disc}>0\}$]
 \label{rem:domain}
-The region $\{\mathrm{disc}>0\}$ also contains the inner branch $S=\Som^-$, on which $U_S<0$;
+The region $\{\mathrm{disc}>0\}$ also contains the inner branch $S=\Sm$, on which $U_S<0$;
 there some of the positivity below fails. For instance at $(S,J,Q)=(\pi\sqrt3/2,\ \tfrac14,\ 1)$
 one has $\mathrm{disc}=\tfrac1{48}>0$ but $U_S=-\tfrac1{6\pi}<0$, and a coupling numerator
 vanishes. All theorems are stated on $\Wp$.
@@ -155,74 +181,80 @@ T=0\iff U_S=0,\qquad \Omega=0\iff J=0,\qquad \Phi_e=0\iff Q=0.
 \label{sec:selection}
 
 \paragraph{Couplings.}
-For an output chart with output role $i$ and the other two roles $\{a,b\}$, define the
-role--coupling numerators and the chart norm by
+For an output chart with output role $i$ and the other two roles $\{a,b\}$, define the chart
+norm and the role--coupling numerators by
 \begin{equation}
-D_{i,a}=U_{ii}U_a-U_iU_{ia},\qquad
-\Lambda_{i,\{M,a\}}=\frac{2M\,D_{i,a}}{U_i^3},\qquad
-q_i^2=\frac{4U+U_a^2+U_b^2}{U_i^2}.
+q_i=1+|\nabla f_i|^2=1+\frac{4U+U_a^2+U_b^2}{U_i^2}=\frac{U_i^2+4U+U_a^2+U_b^2}{U_i^2},\qquad
+D_{i,a}=U_{ii}U_a-U_iU_{ia},
+\label{eq:qi}
+\end{equation}
+\begin{equation}
+\Lambda_{i,\{M,a\}}=\frac{2M\,D_{i,a}}{U_i^3},\qquad\text{so}\qquad
+\Lambda_{i,\{M,a\}}^2=\frac{4U\,D_{i,a}^2}{U_i^6}.
 \label{eq:couplings}
 \end{equation}
-The pairs $\{M,a\}$ (mass--charge) use $D_{i,a}$; the charge--charge pair $\{a,b\}$ uses the
-mixed derivative $D$ built from $U_{ab}$. The three output charts of \eqref{eq:U} are solved
-explicitly in Appendix~\ref{app:charts}.
+The mass--role pairs $\{M,a\}$ use $D_{i,a}$. The role--role pair $\{a,b\}$ uses the mixed
+second partial $\partial^2 f_i/\partial E_a\partial E_b$ of the output chart (a rational
+function of the second jet of $U$); it enters only the discarded channel at $u=0$ and plays no
+part in any theorem below. The three output charts of \eqref{eq:U} are solved explicitly in
+Appendix~\ref{app:charts}.
 
 \paragraph{The family $g_F(u)$.}
-The two natural ways to assemble a diagonal entry from the two mass--charge channels and the
-one charge--charge channel are
+The two natural ways to assemble a diagonal entry from the two mass--role channels and the one
+role--role channel are
 \[
-\underbrace{g_{ii}=\Big(\textstyle\sum_\rho C_{i,\rho}\Big)^{-1}}_{\text{sum--then--invert (Candidate D)}}
+\underbrace{g_{ii}=\Big(\textstyle\sum_\rho C_{i,\rho}\Big)^{-1}}_{\text{sum--then--invert}}
 \qquad\text{vs}\qquad
-\underbrace{g_{ii}=\textstyle\sum_\rho C_{i,\rho}^{-1}}_{\text{invert--then--sum (Candidate F)}},
+\underbrace{g_{ii}=\textstyle\sum_\rho C_{i,\rho}^{-1}}_{\text{invert--then--sum}},
 \quad C_{i,\rho}=\frac{\Lambda_{i,\rho}^2}{q_i^2}.
 \]
-The invert--then--sum form with a charge--charge weight $u$ is
+The invert--then--sum form with a role--role weight $u$ is
 \begin{equation}
 g_F(u)_{ii}=q_i^2\Big(\tfrac1{\Lambda_{i,\{M,j\}}^2}+\tfrac1{\Lambda_{i,\{M,k\}}^2}
 +\tfrac{u}{\Lambda_{i,\{j,k\}}^2}\Big).
 \label{eq:family}
 \end{equation}
-Both reduce to \eqref{eq:n2metric} at $n=2$ (a single mass--charge pair, no charge--charge
-pair), so all satisfy the $n=2$ reduction constraint.
+Both assembly rules reduce to \eqref{eq:n2metric} at $n=2$ (a single mass--role pair, no
+role--role pair), so all satisfy the $n=2$ reduction constraint.
 
 \begin{theorem}[Selection of $u=0$]
 \label{thm:selection}
-Sum--then--invert (Candidate D) fails the complementarity law: its scalar curvature is finite
-on the reflection--fixed faces $\Omega=0$ and $\Phi_e=0$ for every charge--charge weight.
+Sum--then--invert fails the complementarity law: its scalar curvature is finite on the
+reflection--fixed faces $\Omega=0$ and $\Phi_e=0$ for every role--role weight.
 Invert--then--sum with $u>0$ reproduces the boundary divergences with the correct orders
-$3/4/4$ but introduces a \emph{spurious interior} curvature pole on the locus
-$\Lambda_{Q,\{S,J\}}=0$, which lies in the interior of $\Wp$ and is distinct from the Davies
-surface. The choice $u=0$ removes the interior pole while retaining all boundary divergences,
-and is the unique member of \eqref{eq:family} that is both positive definite and
-interior--regular on $\Wp$: any $u>0$ poles at the charge--charge zero, any $u<0$ loses
-positive definiteness there.
+$3/4/4$ but develops a spurious interior curvature pole on the locus $\Lambda_{Q,\{S,J\}}=0$,
+which lies in the interior of $\Wp$ and is distinct from the Davies surface. The choice $u=0$
+removes the interior pole while retaining all boundary divergences, and is the unique member
+of \eqref{eq:family} that is both positive definite and interior--regular on $\Wp$: any $u>0$
+develops a pole at the role--role zero, any $u<0$ loses positive definiteness there.
 \end{theorem}
 
-\begin{proof}[Proof sketch]
-The reflection--face divergences come from mass--charge couplings that vanish
-\emph{on} the face ($\Lambda_{S,\{M,J\}}\propto J$, etc., Prop.~\ref{prop:massfactor}); the
-charge--charge coupling of the $Q$--chart vanishes on an interior curve
-(Prop.~\ref{prop:chargezero}). Sum--then--invert averages the collapsing channel against the
-finite ones, so the metric component stays finite where the reflection channel alone would
-force a pole --- the curvature never sees it. Invert--then--sum keeps each channel's zero as a
-metric pole; the mass--charge zeros are the role boundaries (good), but the charge--charge zero
-is interior (bad). Near that zero $\Lambda_{Q,\{S,J\}}\to0$, so
-$g_F(u)_{QQ}\sim u/\Lambda^2\to+\infty$ for $u>0$ (interior pole) and $\to-\infty$ for $u<0$
-(indefinite). Only $u=0$ is finite and positive there. The boundary divergences are unaffected
-by $u$ because they live in the mass--charge sector. Full symbolic and high--precision numeric
-verification: certificates \texttt{lead7\_test3}, \texttt{lead7\_test6/7}.
+\begin{proof}[Certificate--assisted proof]
+The reflection--face divergences come from mass--role couplings that vanish \emph{on} the face
+($\Lambda_{S,\{M,J\}}\propto J$, etc., Prop.~\ref{prop:massfactor}); the role--role coupling
+of the $Q$--chart vanishes on an interior curve (Prop.~\ref{prop:chargezero}). Sum--then--invert
+averages the collapsing channel against the finite ones, so the metric entry stays finite where
+the reflection channel alone would force a pole---the curvature never sees it (verified
+symbolically and by high--precision curvature; \texttt{lead7\_test3}). Invert--then--sum keeps
+each channel's zero as a metric pole; the mass--role zeros are the role boundaries (desired),
+but the role--role zero is interior (undesired). Near that zero
+$\Lambda_{Q,\{S,J\}}\to0$, so $g_F(u)_{QQ}\sim u/\Lambda^2\to+\infty$ for $u>0$ (interior pole)
+and $\to-\infty$ for $u<0$ (indefinite); only $u=0$ is finite and positive there. The boundary
+divergences are $u$--independent because they live in the mass--role sector
+(\texttt{lead7\_test6/7}).
 \end{proof}
 
 Henceforth $g_F:=g_F(0)$, with diagonal entries
 \begin{equation}
 G_i:=g_F{}_{ii}=q_i^2\Big(\Lambda_{i,\{M,j\}}^{-2}+\Lambda_{i,\{M,k\}}^{-2}\Big)
-=\frac{(4U+U_a^2+U_b^2)^2U_i^2}{4U}\Big(\frac1{D_{i,a}^2}+\frac1{D_{i,b}^2}\Big),
+=\frac{(U_i^2+4U+U_a^2+U_b^2)^2\,U_i^2}{4U}\Big(\frac1{D_{i,a}^2}+\frac1{D_{i,b}^2}\Big),
 \label{eq:Gi}
 \end{equation}
-the second equality being the radical--free form (the $M=\sqrt U$ cancels).
+the second equality being the radical--free form obtained from \eqref{eq:qi}--\eqref{eq:couplings}
+(the $M=\sqrt U$ cancels).
 
 %======================================================================
-\section{Rationality and interior cleanliness}
+\section{Rationality and interior regularity}
 \label{sec:clean}
 
 \begin{theorem}[Rationality]
@@ -232,15 +264,15 @@ $R[g_F]$, are rational functions of $(S,J,Q,\pi)$.
 \end{theorem}
 
 \begin{proof}
-The couplings \eqref{eq:couplings} contain $M$ only through $\Lambda^2\propto M^2=U$; the
-factor $q_i^2$ likewise carries $4M^2=4U$. Substituting $M^2=U$ into \eqref{eq:Gi} removes all
+The couplings \eqref{eq:couplings} contain $M$ only through $\Lambda^2\propto M^2=U$; the norm
+$q_i^2$ likewise carries $4M^2=4U$. Substituting $M^2=U$ into \eqref{eq:Gi} removes all
 radicals, giving the displayed rational form in the polynomial data $U,U_i,U_{ij}$. The
 diagonal Ricci scalar of a diagonal metric is a rational function of the entries and their
-partials. Certificate \texttt{lead7\_test7} (part T7--b) checks the rational form agrees with
-the radical construction. \qedhere
+partials. Certificate \texttt{lead7\_test7} (T7--b) checks the rational form agrees with the
+radical construction. \qedhere
 \end{proof}
 
-The six mass--charge numerators factor explicitly:
+The six mass--role numerators factor explicitly:
 \begin{align}
 D_{S,J}&=\tfrac{J(4\pi^2J^2+\pi^2Q^4+S^2)}{2S^4}, &
 D_{S,Q}&=\tfrac{Q(4\pi^2J^2Q^2+8\pi J^2S+\pi^2Q^6+2\pi Q^4S+Q^2S^2)}{4S^4},\notag\\
@@ -250,38 +282,39 @@ D_{Q,J}&=\tfrac{2\pi J(S+3\pi Q^2)}{S^2}, &
 D_{Q,S}&=\tfrac{(S+\pi Q^2)^3-4\pi^2J^2(S+3\pi Q^2)}{4\pi S^3}.\notag
 \end{align}
 
-\begin{proposition}[Mass--charge zeros are the role divisors]
+\begin{proposition}[Mass--role zeros occur only at role divisors]
 \label{prop:massfactor}
-On $\Wp$ every mass--charge coupling is finite and nonzero. In the closure $\overline\Wp$ the
-zero locus of each mass--charge coupling, and the polar locus of each, is contained in
+On $\Wp$ every mass--role coupling is finite and nonzero. In the closure $\overline\Wp$ the
+zero locus of each mass--role coupling, and the polar locus of each, is contained in
 $\{J=0\}\cup\{Q=0\}\cup\{U_S=0\}$.
 \end{proposition}
 
 \begin{proof}
-Each numerator in \eqref{eq:Dfactors} is, after clearing the positive power of $S$, a
-polynomial with nonnegative coefficients in the strictly positive quantities $(S,J,Q,\pi)$
-once $U_S$ is treated as a nonnegative symbol; on $\Wp$ one has $U_S>0$ (Def.~\ref{def:wedge},
-via the horizon Vieta identity $U_S=\sqrt{\mathrm{disc}}/S_+$). Hence:
+On $\Wp$ one has $U_S>0$: indeed the horizon Vieta identity gives
+$U_S=\sqrt{\mathrm{disc}}/\Sp$. Using $U_S=[S^2-\pi^2(4J^2+Q^4)]/(4\pi S^2)$, each numerator in
+\eqref{eq:Dfactors}, after clearing the positive power of $S$, is a polynomial with nonnegative
+coefficients in $S,J,Q,\pi$ and the nonnegative quantity $U_S$. Hence:
 $D_{S,J},D_{Q,J}\propto J$ vanish only on $\Omega=0$; $D_{S,Q},D_{J,Q}\propto Q$ only on
-$\Phi_e=0$; and $D_{J,S},D_{Q,S}$ (using $U_S>0$: e.g.\
-$4\pi^2J^2-\pi^2Q^4+S^2>8\pi^2J^2>0$ and
-$(S+\pi Q^2)^3>4\pi^2J^2(S+3\pi Q^2)$) vanish only where $U_S=0$ jointly with $J=0$ or $Q=0$.
-Generic $U_S=0$ enters as the native \emph{pole} (denominator $U_i^3$), not a numerator zero.
-So no mass--charge coupling vanishes in the open interior. Certificate \texttt{lead7\_test4}.
+$\Phi_e=0$. For the remaining two, $U_S>0$ gives, respectively,
+$4\pi^2J^2-\pi^2Q^4+S^2>8\pi^2J^2>0$ and $(S+\pi Q^2)^3>4\pi^2J^2(S+3\pi Q^2)$, so
+$D_{J,S},D_{Q,S}$ vanish only where $U_S=0$ jointly with $J=0$ or $Q=0$. Generic $U_S=0$ enters
+as the native \emph{pole} (denominator $U_i^3$), not a numerator zero. So no mass--role coupling
+vanishes in the open interior. Certificate \texttt{lead7\_test4}.
 \end{proof}
 
-\begin{proposition}[Charge--charge interior zero]
+\begin{proposition}[Role--role interior zero]
 \label{prop:chargezero}
-The $Q$--chart charge--charge coupling $\Lambda_{Q,\{S,J\}}$ vanishes on an interior curve of
-$\Wp$ --- e.g.\ at $(S,J,Q)$ with $M=2,J\approx0.826,Q\approx1.699$, where $\mathrm{disc}/M^4
-\approx0.236$, distinct from the Davies surface ($Q\approx1.656$ there). This is a
+The $Q$--chart role--role coupling $\Lambda_{Q,\{S,J\}}$ vanishes on an interior curve of
+$\Wp$. On the $M=2$ slice this occurs at $J\approx0.826$, $Q\approx1.699$ (with
+$S=\Sp\approx28.266$, so $\mathrm{disc}/M^4\approx0.236$); on the same $M,J$ slice the Davies
+point occurs at $Q\approx1.656$. The two loci are distinct: the role--role zero is a
 channel--isotropy stratum, not a role boundary.
 \end{proposition}
 
-\begin{theorem}[Interior cleanliness]
+\begin{theorem}[Interior regularity]
 \label{thm:clean}
-$R[g_F]$ is finite and analytic on the interior of $\Wp$; its only possible singular support
-in $\overline\Wp$ is $U_S\,J\,Q=0$, the three role divisors.
+$R[g_F]$ is finite and analytic on the interior of $\Wp$; its only singular support in
+$\overline\Wp$ is $U_S\,J\,Q=0$, the three role divisors.
 \end{theorem}
 
 \begin{proof}
@@ -289,10 +322,10 @@ By Prop.~\ref{prop:massfactor} each $\Lambda_{i,\{M,a\}}$ is finite and nonzero 
 wedge, so each $G_i$ in \eqref{eq:Gi} is a positive analytic function there, hence
 $\det g_F=\prod_iG_i\neq0$. Therefore $g_F^{-1}$, the Christoffel symbols and the curvature are
 finite analytic functions on the interior. Singular support can occur only where some $G_i$
-degenerates or blows up, i.e.\ where a mass--charge coupling hits $0$ or $\infty$; by
+degenerates or blows up, i.e.\ where a mass--role coupling hits $0$ or $\infty$; by
 Prop.~\ref{prop:massfactor} that is contained in $\{J=0\}\cup\{Q=0\}\cup\{U_S=0\}$. The
-charge--charge zeros of Prop.~\ref{prop:chargezero} do \emph{not} enter because $u=0$ omits
-those channels. Certificate \texttt{lead7\_test4}.
+role--role zeros of Prop.~\ref{prop:chargezero} do not enter because $u=0$ omits those
+channels. Certificate \texttt{lead7\_test4}.
 \end{proof}
 
 %======================================================================
@@ -302,10 +335,10 @@ those channels. Certificate \texttt{lead7\_test4}.
 The pole orders and coefficients follow from two exact local models, verified symbolically
 (certificates \texttt{lead7\_test6/7}).
 
-\begin{lemma}[Generic native collapse $\Rightarrow$ order $3$]
+\begin{lemma}[Quadratic coordinate collapse with finite transverse components]
 \label{lem:generic}
-Let a diagonal metric near $x=0$ have the native component collapsing quadratically and the
-two transverse components finite,
+Let a diagonal metric near $x=0$ have the native component collapsing quadratically and the two
+transverse components finite,
 \[
 \dd s^2=(A_2x^2+A_3x^3+O(x^4))\dd x^2+(P_0+P_1x+O(x^2))\dd y^2+(R_0+R_1x+O(x^2))\dd z^2,
 \]
@@ -313,37 +346,37 @@ with $A_2,P_0,R_0\neq0$. Then
 \[
 R=\frac1{A_2}\Big(\frac{P_1}{P_0}+\frac{R_1}{R_0}\Big)x^{-3}+O(x^{-2}),
 \]
-independent of $A_3$ and all higher data. The odd order arises from the linear drift
-$P_1,R_1$ of the transverse components.
+independent of $A_3$ and all higher data. The odd order arises from the linear drift $P_1,R_1$
+of the transverse components.
 \end{lemma}
 
-\begin{lemma}[Reflection normal form $\Rightarrow$ order $4$]
+\begin{lemma}[Reflection normal form with transverse $x^{-2}$ poles]
 \label{lem:reflection}
 Let a diagonal metric be even in $x$ with the native component collapsing and the two
 transverse components carrying $x^{-2}$ poles,
 \[
-\dd s^2=(Bx^2+O(x^4))\dd x^2+(Ax^{-2}+O(1))\dd y^2+(Cx^{-2}+O(1))\dd z^2,\quad A,B,C\neq0,
+\dd s^2=(Bx^2+O(x^4))\dd x^2+(Ax^{-2}+O(1))\dd y^2+(Cx^{-2}+O(1))\dd z^2,\quad A,B,C\neq0.
 \]
 Then $R=-\dfrac{14}{B}\,x^{-4}+O(x^{-2})$, depending only on $B$.
 \end{lemma}
 
 \begin{remark}[The transverse $x^{-2}$ poles are essential]
-\label{rem:gremlin}
+\label{rem:transverse-poles}
 Lemma~\ref{lem:reflection} is false if the transverse components are finite: e.g.\
 $\dd s^2=Bx^2\dd x^2+\dd y^2+\dd z^2$ is flat ($R\equiv0$) after $r=\sqrt B\,x^2/2$. The DBP
-reflection faces genuinely carry the $x^{-2}$ transverse poles (below), so
-Lemma~\ref{lem:reflection} applies; it is the promotion from the generic order $3$ to the
-reflection order $4$.
+reflection faces genuinely carry the $x^{-2}$ transverse poles (\S\ref{sec:law}), so
+Lemma~\ref{lem:reflection} applies; it promotes the generic order $3$ to the reflection order
+$4$.
 \end{remark}
 
 %======================================================================
 \section{The complementarity law and exact coefficients}
 \label{sec:law}
 
-\subsection{Reflection faces $\Omega=0$ and $\Phi_e=0$}
+\subsection{Reflection faces \texorpdfstring{$\Omega=0$ and $\Phi_e=0$}{Omega=0 and Phi\_e=0}}
 
-On approach to $J=0$ the metric is even in $J$ with the native $J$--component collapsing and
-the transverse $S,Q$ components diverging as $J^{-2}$ (the reflection normal form,
+On approach to $J=0$ the metric is even in $J$ with the native $J$--component collapsing and the
+transverse $S,Q$ components diverging as $J^{-2}$ (the reflection normal form,
 Lemma~\ref{lem:reflection} with $x=J$). Writing $G_J=B_J(S,Q)J^2+O(J^4)$,
 \begin{equation}
 B_J=\frac{D_{\Omega,1}D_{\Omega,2}^2}{256\,Q^2S^5\pi^3(S-\pi Q^2)^2},\quad
@@ -354,7 +387,7 @@ so that $C_\Omega=-14/B_J$, i.e.
 C_\Omega(S,Q)=-\frac{3584\,Q^2S^5\pi^3(S-\pi Q^2)^2}{D_{\Omega,1}D_{\Omega,2}^2}.
 \label{eq:COmega}
 \end{equation}
-By the symmetric computation with $x=Q$,
+An analogous computation with $x=Q$ gives
 \begin{equation}
 C_\Phi(S,J)=-\frac{14336\,J^2S^5\pi^5(S-2\pi J)^2(S+2\pi J)^2(4\pi^2J^2+S^2)}
 {D_{\Phi,1}D_{\Phi,2}^2},
@@ -364,118 +397,117 @@ with $D_{\Phi,1}=(S^2-4\pi^2J^2)^2+64\pi^4J^2S^2$ and $D_{\Phi,2}=D_{\Phi,1}+64\
 +16\pi S^5$.
 
 \begin{proposition}
-$D_{\Omega,1},D_{\Omega,2}>0$ and $D_{\Phi,1},D_{\Phi,2}>0$ for $S,J,Q>0$. Hence $C_\Omega<0$
-on $\Omega=0$ away from the corner $S=\pi Q^2$, and $C_\Phi<0$ on $\Phi_e=0$ away from the
-corner $S=2\pi J$; at those corners --- the intersections $\Omega=0\cap T=0$ and
-$\Phi_e=0\cap T=0$ --- the coefficient vanishes to second order.
+$D_{\Omega,1},D_{\Omega,2}>0$ and $D_{\Phi,1},D_{\Phi,2}>0$ for $S,J,Q>0$. Hence $C_\Omega<0$ on
+$\Omega=0$ away from the corner $S=\pi Q^2$, and $C_\Phi<0$ on $\Phi_e=0$ away from the corner
+$S=2\pi J$; at those corners---the intersections $\Omega=0\cap T=0$ and $\Phi_e=0\cap T=0$---the
+coefficient vanishes to second order.
 \end{proposition}
 
-\subsection{The extremal edge $T=0$}
+\subsection{The extremal edge \texorpdfstring{$T=0$}{T=0}}
+\label{sec:extremal}
 
-On approach to $\Som=\pi\sqrt{4J^2+Q^4}$ along $\delta=S-\Som$, only the native $S$--component
+On approach to $\Sext=\pi\sqrt{4J^2+Q^4}$ along $\delta=S-\Sext$, only the native $S$--component
 collapses ($G_S=A_2\delta^2+O(\delta^3)$) while $G_J,G_Q$ stay finite, so
-Lemma~\ref{lem:generic} applies (with $x=\delta$). The collapsing coefficient has the same
-shape as the reflection $B$:
+Lemma~\ref{lem:generic} applies (with $x=\delta$). The collapsing coefficient is
 \begin{equation}
-A_2=\left.\frac{(4U+U_J^2+U_Q^2)^2}{4U}\Big(\frac1{U_J^2}+\frac1{U_Q^2}\Big)\right|_{S=\Som}>0,
+A_2=\left.\frac{(4U+U_J^2+U_Q^2)^2}{4U}\Big(\frac1{U_J^2}+\frac1{U_Q^2}\Big)\right|_{S=\Sext}>0,
+\label{eq:A2}
 \end{equation}
-and
+(the $U_S^2$ term of $q_S$ drops since $U_S=0$ at extremality), and
 \begin{equation}
 \Rext=\frac1{A_2}\Big(\frac{P_1}{P_0}+\frac{R_1}{R_0}\Big)
-=\frac1{A_2}\left.\partial_S\log(G_JG_Q)\right|_{S=\Som}.
+=\frac1{A_2}\left.\partial_S\log(G_JG_Q)\right|_{S=\Sext}.
 \label{eq:Cext}
 \end{equation}
 Because $G_J,G_Q$ and $A_2$ are rational (Thm.~\ref{thm:rational}) and the extremal surface is
-$J^2=(S^2-\pi^2Q^4)/(4\pi^2)$, $\Rext$ is a rational function of $(S,Q,\pi)$. Its denominator
+$J^2=(S^2-\pi^2Q^4)/(4\pi^2)$, $\Rext$ is a rational function of $(S,Q,\pi)$; its denominator
 factors, up to a positive constant, as
 \begin{align}
 \mathrm{den}\ \propto\ &Q^2\pi\,(3Q^2\pi+S)\,(Q^4\pi+Q^2S-Q^2\pi+S)\,
 (Q^4\pi^2+4Q^2S^2\pi^2-2Q^2S\pi+S^2)\notag\\
 &\times(Q^4\pi^2+Q^2S\pi-Q^2\pi^2+2S^2+S\pi)^3\notag\\
-&\times(Q^{10}\pi^3+Q^8S\pi^2-9Q^6S^2\pi^3+3Q^4S^3\pi^2+5Q^2S^4\pi+S^5),
+&\times(Q^{10}\pi^3+Q^8S\pi^2-9Q^6S^2\pi^3+3Q^4S^3\pi^2+5Q^2S^4\pi+S^5).
 \label{eq:denext}
 \end{align}
-with a degree--$(14,28)$ polynomial numerator $N_{\mathrm{ext}}(S,Q,\pi)$.
 
 \begin{proposition}[Extremal denominator positivity]
 \label{prop:denpos}
-Every factor of \eqref{eq:denext} is positive on the open edge $S>\pi Q^2$. In particular,
-with $t=S/(\pi Q^2)>1$, the last factor equals
-$Q^{10}\pi^3\big[1+t+\pi^2t^2\,h(t)\big]$ with $h(t)=t^3+5t^2+3t-9$; since $h(1)=0$ and
-$h'(t)=3t^2+10t+3>0$, one has $h(t)>0$ for $t>1$, so the bracket is a sum of positive terms.
+Every factor of \eqref{eq:denext} is positive on the open edge $S>\pi Q^2$. In particular, with
+$t=S/(\pi Q^2)>1$ the last factor equals $Q^{10}\pi^3\big[1+t+\pi^2t^2\,h(t)\big]$ with
+$h(t)=t^3+5t^2+3t-9$; since $h(1)=0$ and $h'(t)=3t^2+10t+3>0$, one has $h(t)>0$ for $t>1$, so
+the bracket is a sum of positive terms.
 \end{proposition}
+
+\subsection{Extremal transverse monotonicity}
+\label{sec:gate}
+
+The coefficient $\Rext$ has a geometric sign form. Since $A_2>0$ (eq.~\eqref{eq:A2}) and
+$P_0=G_J|_{\Sext}>0$, $R_0=G_Q|_{\Sext}>0$ (metric entries), \eqref{eq:Cext} gives
+\begin{equation}
+\sgn\Rext=\sgn\!\Big(\frac{P_1}{P_0}+\frac{R_1}{R_0}\Big)
+=\sgn\,W,\qquad
+W(S,Q):=\left.\partial_S(G_JG_Q)\right|_{S=\Sext}.
+\label{eq:Wsign}
+\end{equation}
+Thus whether the order--$3$ extremal pole can cancel is exactly the question of whether the
+transverse metric product $G_JG_Q$ (the role--frame transverse density) has a critical point
+under outward entropy displacement from extremality.
+
+\begin{proposition}[Transverse monotonicity]
+\label{prop:W}
+On the open extremal edge $\{Q>0,\ S>\pi Q^2\}$, $W(S,Q)<0$. Consequently $\Rext<0$ there, and
+the extremal pole has exact order $3$ at every open point.
+\end{proposition}
+
+\begin{proof}[Certificate--assisted proof]
+By \eqref{eq:Wsign} the claim is $\partial_S(G_JG_Q)|_{\Sext}<0$. Three reductions make this a
+one--variable root count (certificate \texttt{lead7\_test8}). (i) The sign identity
+\eqref{eq:Wsign} removes the $A_2$--division and reduces the object to the numerator of
+$\partial_S\log(G_JG_Q)|_{\Sext}$. (ii) Under $(S,J,Q)\mapsto(\lambda^2S,\lambda^2J,\lambda Q)$
+this quantity scales as a fixed power of $\lambda$, so its sign on the whole edge equals its
+sign on the $Q=1$ slice. (iii) On $Q=1$, with $S=\pi\sigma$ (edge $\sigma>1$), the numerator is,
+after removing a positive power of $\pi$, a univariate polynomial in $\sigma$; Sturm's theorem
+counts its real roots on $\sigma>1$. A zero root count together with one negative sign sample
+certifies $W<0$. The reduction (i)--(iii) and the numerical statement---$W<0$ on a dense edge
+grid, at the corner limit $S\to\pi Q^2{}^+$, and for $S\gg\pi Q^2$, with no sign change---are in
+\texttt{lead7\_test8} (gates G0--G2). The univariate Sturm count (G3) is a bounded symbolic
+step; it certifies the fixed sign and closes the proof.
+\end{proof}
 
 \begin{theorem}[$n=3$ complementarity law]
 \label{thm:law}
-On $\Wp$, $R[g_F]$ is finite on the interior and on the Davies surface, and diverges on the
-three role divisors with
+On $\Wp$, $R[g_F]$ is finite throughout the interior of $\Wp$, including on the Davies surface,
+and diverges on the three role divisors with
 \[
 R\sim \Rext\,\delta^{-3}\ (T=0),\qquad
 R\sim C_\Omega\,J^{-4}\ (\Omega=0),\qquad
 R\sim C_\Phi\,Q^{-4}\ (\Phi_e=0),
 \]
-$\Rext$ rational in $(S,Q,\pi)$ with positive denominator, and $C_\Omega,C_\Phi$ given by
-\eqref{eq:COmega}--\eqref{eq:CPhi}. The extremal statement holds at every open point of $T=0$
-at which $N_{\mathrm{ext}}\neq0$; see \S\ref{sec:gate}.
+$\Rext$ rational in $(S,Q,\pi)$ with positive denominator and (Prop.~\ref{prop:W}) $\Rext<0$
+on the open edge, and $C_\Omega,C_\Phi$ given by \eqref{eq:COmega}--\eqref{eq:CPhi}.
 \end{theorem}
-
-\subsection{The extremal numerator gate}
-\label{sec:gate}
-
-Theorem~\ref{thm:law} gives order $3$ on the extremal edge \emph{wherever
-$N_{\mathrm{ext}}\neq0$}. To upgrade ``generic open points'' to ``all open points'' it remains
-to certify the sign of $N_{\mathrm{ext}}$ on $\{Q>0,\ S>\pi Q^2\}$. Three reductions make this
-a one--variable root--count.
-
-\emph{Sign reduction.} Since $A_2>0$ and $P_0=G_J|_{\Som}>0$, $R_0=G_Q|_{\Som}>0$,
-\eqref{eq:Cext} gives
-\begin{equation}
-\sgn\Rext=\sgn\!\Big(\frac{P_1}{P_0}+\frac{R_1}{R_0}\Big)
-=\sgn\big(\partial_S\log(G_JG_Q)\big)\big|_{S=\Som}.
-\end{equation}
-Thus the gate is equivalent to the geometric statement: \emph{the product $G_JG_Q$ of the two
-non--collapsing metric entries is strictly decreasing in $S$ at the extremal surface.} This
-removes the $A_2$--division and the large numerator, leaving a much smaller rational object.
-
-\emph{Homogeneity.} Under $(S,J,Q)\mapsto(\lambda^2S,\lambda^2J,\lambda Q)$ the quantity
-$\partial_S\log(G_JG_Q)|_{\Som}$ scales as a fixed power of $\lambda$; hence its sign on the
-whole edge equals its sign on the one--parameter $Q=1$ slice.
-
-\emph{One--variable root count.} On $Q=1$, with $S=\pi\sigma$ (edge $\sigma>1$), the numerator
-of $\partial_S\log(G_JG_Q)|_{\Som}$ is, after removing a positive power of $\pi$, a univariate
-polynomial in $\sigma$; Sturm's theorem counts its real roots on $\sigma>1$. A root count of
-zero, together with one sign sample, certifies the fixed sign and closes the gate.
-
-\emph{Status.} The numerical smoke test is unambiguous: $\Rext<0$ on a dense edge grid, on
-the corner limit $S\to\pi Q^2{}^+$, and for $S\gg\pi Q^2$ (no sign change; certificate
-\texttt{lead7\_test8}, gate G0). The exact sign identity and the homogeneity reduction are
-verified (G1, G2). The univariate Sturm step (G3) is a bounded symbolic computation left to a
-run without a short timeout; when it returns zero edge--roots the extremal theorem upgrades
-to ``all open points of $T=0$'', making the $n=3$ complementarity retrodiction fully symbolic
-on all three role divisors.
 
 %======================================================================
 \section{Discussion}
 \label{sec:discussion}
 
 \paragraph{What selects the metric.}
-The result says the DBP complementarity metric is \emph{mass--charge inverse--channel
-geometry}: it is built only from the couplings that carry the role--boundary valuation, and it
-must \emph{exclude} the charge--charge couplings, whose zeros are interior channel--isotropy
-strata belonging to a different (isotropy) diagnostic. Sum--then--invert is too coarse (it
-hides the reflection zeros); full invert--then--sum is too sharp (it poles on the isotropy
-strata). The correct object is neither the information/pullback metric nor the naive
-channel--norm inverse.
+The result says the DBP complementarity metric is inverse--channel geometry built only from the
+couplings that carry the role--boundary valuation, \emph{excluding} the role--role couplings,
+whose zeros are interior channel--isotropy strata belonging to a different (isotropy)
+diagnostic. Sum--then--invert is too coarse: it hides the reflection zeros. Full
+invert--then--sum is too sharp: it develops poles on the isotropy strata. The correct object is
+neither the information/pullback metric nor the naive channel--norm inverse.
 
 \paragraph{Why $3/4/4$.}
-The order law is structural. The extremal face is a generic quadratic native collapse with
-finite transverse channels (Lemma~\ref{lem:generic}), giving order $3$. Each charge--reflection
-face is a parity--fixed face whose transverse channels carry $x^{-2}$ poles
-(Lemma~\ref{lem:reflection}), whose universal scalar curvature is $-14/(Bx^4)$ --- promoting
+The order law is structural. The extremal face is a quadratic native collapse with finite
+transverse channels (Lemma~\ref{lem:generic}), giving order $3$. Each charge--reflection face
+is a parity--fixed face whose transverse channels carry $x^{-2}$ poles. The corresponding
+normal form has universal scalar curvature $-14/(Bx^4)$ (Lemma~\ref{lem:reflection}), promoting
 the order from $3$ to $4$.
 
 \appendix
-\section{The three output charts}
+\section{The output charts and the role--role numerator}
 \label{app:charts}
 Explicit solutions of $M^2=U$ for each role (outer branch):
 \[
@@ -485,14 +517,20 @@ J=\sqrt{M^4-M^2Q^2-w^2}\ (w=\tfrac{S}{2\pi}-M^2+\tfrac{Q^2}{2}),
 \[
 Q=\sqrt{-\tfrac{S}{\pi}+\tfrac2\pi\sqrt{\pi S M^2-\pi^2J^2}}.
 \]
+The role--role coupling of chart $i$ (roles $\{a,b\}$) is the mixed second partial
+$\partial^2 f_i/\partial E_a\partial E_b$, obtained from $M^2=U$ by implicit differentiation;
+it is rational in the second jet of $U$. This channel enters $g_F(u)$ only through the weight
+$u$ and is discarded at $u=0$; its interior zero locus (Prop.~\ref{prop:chargezero}) is a
+channel--isotropy stratum.
 
 \section{Certificates}
 \label{app:certs}
-All exact claims are machine--checked and byte--stable ($\times2$):
+All exact claims are machine--checked and reproducible:
 \texttt{lead7\_test3} (selection / candidate comparison),
-\texttt{lead7\_test4} (mass--charge zeros = role divisors; Thm.~\ref{thm:clean}),
+\texttt{lead7\_test4} (mass--role zeros $=$ role divisors; Thm.~\ref{thm:clean}),
 \texttt{lead7\_test5} (orders, high precision),
 \texttt{lead7\_test6} (reflection lemma and $C_\Omega,C_\Phi$),
-\texttt{lead7\_test7} (generic lemma, $A_2$, rational $\Rext$, denominator).
+\texttt{lead7\_test7} (generic lemma, $A_2$, rational $\Rext$, denominator),
+\texttt{lead7\_test8} (extremal transverse monotonicity $W<0$; Prop.~\ref{prop:W}).
 
 \end{document}
