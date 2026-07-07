@@ -65,6 +65,21 @@ understood; a list of banned sources would not protect against the next stale on
 
 ## Current state (update this block in-session, every session)
 
+- **LEAD-7 RESOLVED — central question (2026-07-07).** The canonical n=3 DBP metric is
+  `g_F(u=0)` = the mass-charge **inverse-channel** metric (invert-then-sum the mass-role
+  couplings; role-role couplings excluded, `u=0` uniquely selected). The carrier-pullback
+  (Candidate B) and sum-then-invert (Candidate D) were both REFUTED on pole orders. On the
+  outer physical wedge `W₊={S,J,Q>0,U_S>0}` it is analytic positive-definite with finite
+  interior curvature (Test 4 theorem: mass-charge coupling zeros = role divisors exactly), and
+  its scalar curvature obeys the full complementarity law: extremal `T=0` order 3 (generic),
+  `Ω=0` & `Φ_e=0` order 4 (reflection-fixed). All three leading coefficients in exact closed
+  form; the extremal `N_ext` gate is **CLOSED** — `C_ext<0` at every open point of `T=0`
+  (`verification/lead7_test8_extremal_gate_replacement.py`, full-edge coefficient-positivity
+  certificate, byte-stable ×2). Certificates: `lead7_test3..8`. Formal proof paper
+  `paper/lead7_kn_n3_dbp_metric.tex`; report `reports/LEAD7_retrodiction_n3.md`; brief
+  `campaigns/LEAD7_dbp_metric/BRIEF.md`; lead entry `LEADS.md`. Optional remaining (LEVER
+  payoff, sets no queue priority): replace the Test 5 numeric order fits with the exact Laurent
+  lemmas; physics-novelty writeup.
 - Campaign record: **G0.2 two-species account** — Stage 0 GATE CLEAN (RC-1 `d370daae`
   — re-pinned `4ad5a6eb` 2026-07-06, T1/T6 stdout slot-labels hardened in ink, values
   unchanged; RC-2 `b21992f3`, RC-3 `e4765c7c`; finding: zero holonomy ≠ flat). **STAGE A CLOSED

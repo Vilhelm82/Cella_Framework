@@ -122,7 +122,22 @@ locate the wall (transcendental boundary) honestly.
 
 ## LEAD-7 — The n=3 DBP metric and complementarity lift (h_3)
 
-**Status:** OPEN — campaign opened 2026-07-07 (`campaigns/LEAD7_dbp_metric/BRIEF.md`).
+**Status: RESOLVED (central question) — 2026-07-07.** The canonical n=3 DBP metric is
+`g_F(u=0)` = the mass-charge **inverse-channel** metric (invert-then-sum over the mass-role
+couplings, role-role couplings excluded); the carrier-pullback primary below was REFUTED
+(Candidate B: wrong pole orders), as was sum-then-invert (Candidate D: misses the reflection
+faces). u=0 is uniquely selected. On the outer physical wedge `W₊={S,J,Q>0,U_S>0}` the metric
+is analytic positive-definite with finite curvature interior (Test 4 theorem), and its scalar
+curvature obeys the full complementarity law: order-3 pole on extremal `T=0` (generic),
+order-4 on `Ω=0` and `Φ_e=0` (reflection-fixed). All three leading coefficients are in exact
+closed form (`C_Ω`, `C_Φ` via the universal −14/B identity; `C_ext` rational in `(S,Q,π)`), and
+the extremal `N_ext` gate is **CLOSED** — `C_ext<0` at every open point of `T=0`
+(`verification/lead7_test8_extremal_gate_replacement.py`, full-edge coefficient-positivity
+certificate, byte-stable ×2). Formal proof paper: `paper/lead7_kn_n3_dbp_metric.tex`. Report:
+`reports/LEAD7_retrodiction_n3.md`. Remaining (optional, LEVER payoff): replace the Test 5
+numeric order fits with the exact Laurent lemmas, and the physics-novelty writeup.
+
+**[Historical] Status:** OPEN — campaign opened 2026-07-07 (`campaigns/LEAD7_dbp_metric/BRIEF.md`).
 GTD/DBP paper's own named open problem; the physics-novelty channel (LEVER Tier-2 GTD
 row). **RC-5 structure tier DONE** (`verification/recert_gtd_dbp_n2.py` `d047d21b`,
 11/11 ×2: Christodoulou, Davies, jet+channels at fixture (8,6), radical cancellation,
