@@ -12,6 +12,7 @@
 
 \newcommand{\Wp}{W_{+}}
 \newcommand{\Rext}{C_{\mathrm{ext}}}
+\newcommand{\Rc}{\mathcal R_0}
 \newcommand{\Sext}{S_{\mathrm{ext}}}
 \newcommand{\Sp}{S_{+}}
 \newcommand{\Sm}{S_{-}}
@@ -109,9 +110,14 @@ only singular support lies on the role divisors $U_S\,J\,Q=0$, i.e.\ $T=0$, $\Om
 $\Phi_e=0$.
 \item \textbf{Complementarity law and exact coefficients (Thm.~\ref{thm:law}).} The scalar
 curvature has an order--$3$ pole on the generic extremal edge and order--$4$ poles on the two
-reflection--fixed charge faces; the reflection coefficients are $-14/B$ for an explicit
+reflection--fixed role faces; the reflection coefficients are $-14/B$ for an explicit
 collapsing coefficient $B$, given in closed form, and the sign of the extremal coefficient is
 fixed by a transverse monotonicity.
+\item \textbf{A general normal form and the corner (Props.~\ref{prop:mm5},~\ref{prop:corner}).}
+The $-14/B$ is the $m=2$ case of a parity--fixed inverse--channel normal form with scalar
+curvature $-m(m+5)x^{-4}/B$ ($m$ = transverse fibre dimension). Where the two order--$4$ faces
+meet---the Schwarzschild corner---the balanced approach cancels them back to order $2$, the
+mildest point of the boundary, along a Newton wedge $m(a)=\max(4a-2,4-2a)$.
 \end{enumerate}
 
 \paragraph{Reader map.}
@@ -391,23 +397,57 @@ independent of $A_3$ and all higher data. The odd order arises from the linear d
 of the transverse components.
 \end{lemma}
 
-\begin{lemma}[Reflection normal form with transverse $x^{-2}$ poles]
-\label{lem:reflection}
-Let a diagonal metric be even in $x$ with the native component collapsing and the two
-transverse components carrying $x^{-2}$ poles,
+The reflection order and its universal coefficient are a special case of a general normal
+form for a parity--fixed inverse--channel geometry: one collapsing coordinate against a flat
+transverse fibre.
+
+\begin{proposition}[Parity--fixed inverse--channel normal form]
+\label{prop:mm5}
+Let $m\ge1$, $B>0$, $A_\alpha>0$. For the pure diagonal normal form on an
+$(m{+}1)$--dimensional state space,
 \[
-\dd s^2=(Bx^2+O(x^4))\dd x^2+(Ax^{-2}+O(1))\dd y^2+(Cx^{-2}+O(1))\dd z^2,\quad A,B,C\neq0.
+\dd s^2=Bx^2\,\dd x^2+x^{-2}\sum_{\alpha=1}^{m}A_\alpha\,\dd y_\alpha^2,
 \]
-Then $R=-\dfrac{14}{B}\,x^{-4}+O(x^{-2})$, depending only on $B$.
-\end{lemma}
+the scalar curvature is exactly
+\[
+R=-\frac{m(m+5)}{B}\,x^{-4},
+\]
+independent of all transverse amplitudes $A_\alpha$. In particular $m=2$ (a three--dimensional
+state space) gives $R=-14\,x^{-4}/B$.
+\end{proposition}
+
+\begin{proof}
+Set $r=\tfrac12\sqrt B\,x^2$, so $\dd r=\sqrt B\,x\,\dd x$ and $x^{-2}=\sqrt B/(2r)$. The metric
+becomes the warped product $\dd s^2=\dd r^2+w(r)^2h_{\mathrm{flat}}$ with flat fibre
+$h_{\mathrm{flat}}=\sum_\alpha A_\alpha\,\dd y_\alpha^2$ and $w(r)^2=\sqrt B/(2r)$, i.e.\
+$w\propto r^{-1/2}$. For a warped product over a flat $m$--dimensional fibre,
+$R=-2m\,w''/w-m(m-1)(w'/w)^2$; with $w'/w=-1/(2r)$ and $w''/w=3/(4r^2)$,
+\[
+R=-\frac{6m}{4r^2}-\frac{m(m-1)}{4r^2}=-\frac{m(m+5)}{4r^2},
+\]
+and $4r^2=Bx^4$ gives the claim. The two contributions are radial focusing ($6m$) and
+transverse fibre shear ($m(m-1)$). (Verified independently from a first--principles Ricci
+computation for $m=1,2,3$: $R=-6,-14,-24$ times $x^{-4}/B$; certificate
+\texttt{lead7\_test10}.)
+\end{proof}
+
+\begin{corollary}[Asymptotic parity--fixed face]
+\label{lem:reflection}
+Suppose near $x=0$, with all components even in $x$,
+\[
+g_{xx}=B(y)x^2+O(x^4),\qquad g_{\alpha\alpha}=A_\alpha(y)x^{-2}+O(1),\qquad B(y)>0,\ A_\alpha(y)>0.
+\]
+Then $R=-\dfrac{m(m+5)}{B(y)}\,x^{-4}+O(x^{-2})$; for $m=2$, $R=-14\,x^{-4}/B(y)+O(x^{-2})$.
+\end{corollary}
 
 \begin{remark}[The transverse $x^{-2}$ poles are essential]
 \label{rem:transverse-poles}
-Lemma~\ref{lem:reflection} is false if the transverse components are finite: e.g.\
-$\dd s^2=Bx^2\dd x^2+\dd y^2+\dd z^2$ is flat ($R\equiv0$) after $r=\sqrt B\,x^2/2$. The DBP
-reflection faces genuinely carry the $x^{-2}$ transverse poles (\S\ref{sec:law}), so
-Lemma~\ref{lem:reflection} applies; it promotes the generic order $3$ to the reflection order
-$4$.
+The collapsing--only form $\dd s^2=Bx^2\dd x^2+\dd y^2+\dd z^2$ is flat ($R\equiv0$, after
+$r=\sqrt B\,x^2/2$): the $m=0$ member has no fibre. The order--$4$ pole needs a genuinely
+collapsing fibre, i.e.\ the transverse $x^{-2}$ poles. The DBP reflection faces carry them
+(\S\ref{sec:law}), so Cor.~\ref{lem:reflection} applies with $m=2$; it promotes the generic
+order $3$ to the reflection order $4$, and makes the coefficient $-14/B$ inevitable rather than
+a symbolic coincidence.
 \end{remark}
 
 %======================================================================
@@ -417,8 +457,8 @@ $4$.
 \subsection{Reflection faces \texorpdfstring{$\Omega=0$ and $\Phi_e=0$}{Omega=0 and Phi\_e=0}}
 
 On approach to $J=0$ the metric is even in $J$ with the native $J$--component collapsing and the
-transverse $S,Q$ components diverging as $J^{-2}$ (the reflection normal form,
-Lemma~\ref{lem:reflection} with $x=J$). Writing $G_J=B_J(S,Q)J^2+O(J^4)$,
+transverse $S,Q$ components diverging as $J^{-2}$ (the parity--fixed normal form,
+Cor.~\ref{lem:reflection} with $x=J$, $m=2$). Writing $G_J=B_J(S,Q)J^2+O(J^4)$,
 \begin{equation}
 B_J=\frac{D_{\Omega,1}D_{\Omega,2}^2}{256\,Q^2S^5\pi^3(S-\pi Q^2)^2},\quad
 D_{\Omega,1}=(S-\pi Q^2)^2+16\pi^2Q^2S^2,\ \ D_{\Omega,2}=D_{\Omega,1}+16\pi S^3,
@@ -527,6 +567,56 @@ open edge. Certificate \texttt{lead7\_test8\_extremal\_gate\_graphnorm} verifies
 Sturm subcertificates reproducibly.
 \end{proof}
 
+\subsection{The double--reflection corner}
+\label{sec:corner}
+
+The two charge faces $\Omega=0$ and $\Phi_e=0$ meet on the Schwarzschild ray $J=Q=0$
+($S=s$ free). Approach it along the wedge $Q=\epsilon$, $J=\rho\,\epsilon^{a}$
+($\rho>0$, $a\ge0$, $\epsilon\to0^+$). Write $N_0(s)=4U_0+U_{S,0}^2=s/\pi+1/(16\pi^2)$ for the
+corner value of the chart norm ($U_0=s/4\pi$, $U_{S,0}=1/4\pi$). On the balanced diagonal
+$a=1$ the metric entries have the closed--form limits
+\begin{equation}
+\epsilon^6 G_S\to \frac{N_0^2\,s^5}{\pi\,(s+8\pi\rho^2)^2}
+=\frac{(16\pi s+1)^2 s^5}{256\pi^5(s+8\pi\rho^2)^2},\quad
+G_J\to \frac{N_0^2\pi\rho^2}{s},\quad
+G_Q\to \frac{N_0^2 s}{4\pi\rho^2},
+\label{eq:cornermetric}
+\end{equation}
+so $G_S$ collapses as $\epsilon^{6}$ while $G_J,G_Q$ are $\epsilon$--independent and scale as
+$\rho^{\pm2}$ (their product $G_JG_Q\to N_0^4/4$ is $\rho$--independent). The
+$1/(16\pi^2)=U_{S,0}^2$ inside $N_0$ is the graph--norm term; dropping it gives the schematic
+$s^7/[\pi^3(s+8\pi\rho^2)^2]$, low by the factor $(1+1/(16\pi s))^2$
+($\approx1.04$ at $s=1$).
+
+\begin{proposition}[Corner order and Newton wedge]
+\label{prop:corner}
+Along $Q=\epsilon$, $J=\rho\epsilon^{a}$ the scalar curvature diverges as
+$R\sim\epsilon^{-m(a)}$ with
+\[
+m(a)=\max\bigl(4a-2,\ 4-2a\bigr),
+\]
+a Newton polygon with vertex $(a,m)=(1,2)$ and edges $m=4-2a$ ($0\le a\le1$, the $\Phi_e$
+side, $m(0)=4$) and $m=4a-2$ ($a\ge1$, the $\Omega$ side). The minimum over all directions is
+$m=2$, attained only on the balanced diagonal: $\epsilon^2R\to\Rc(s,\rho)<0$, finite. The
+double--reflection corner is thus the mildest point of the boundary---the two order--$4$
+collapses partially cancel to order $2$.
+\end{proposition}
+
+The corner value $\Rc(s,\rho)$ is controlled at its own extremes by the reflection
+coefficients: their corner residues are
+\[
+\kappa_\Omega(s)=\lim_{Q\to0}\frac{C_\Omega}{Q^2}=-\frac{3584\,\pi^3 s}{(16\pi s+1)^2},\qquad
+\kappa_\Phi(s)=\lim_{J\to0}\frac{C_\Phi}{J^2}=-\frac{14336\,\pi^5}{s(16\pi s+1)^2},
+\]
+with $\rho^4\Rc\to\kappa_\Omega(s)$ as $\rho\to0$ and $\Rc/\rho^2\to\kappa_\Phi(s)$ as
+$\rho\to\infty$. But $\Rc$ is \emph{not} the two--face superposition:
+$\Rc(s,\rho)-\kappa_\Omega(s)\rho^{-4}-\kappa_\Phi(s)\rho^2$ is a nonzero mixed--channel term
+(numerically $\Rc(1,1)=-1801.25$ against the superposition $-1711.56$, an excess $-89.70$),
+the curvature signature of the cross term in $G_S$'s denominator that neither single face
+resolves. All of \eqref{eq:cornermetric}, Prop.~\ref{prop:corner}, the residues, and the mixed
+excess are in certificate \texttt{lead7\_test9} (exact--partial curvature; the $\kappa$'s are
+exact residues of the closed forms $C_\Omega,C_\Phi$).
+
 \begin{theorem}[$n=3$ complementarity law]
 \label{thm:law}
 On the open wedge $\Wp$, $R[g_F]$ is finite and analytic, including on the Davies surface. As
@@ -556,9 +646,14 @@ therefore neither an information/pullback metric nor the naive channel--norm inv
 \paragraph{Why $3/4/4$.}
 The order law is structural. The extremal face is a quadratic native collapse with finite
 transverse channels (Lemma~\ref{lem:generic}), giving order $3$. Each reflection--fixed role face
-is a parity--fixed face whose transverse channels carry $x^{-2}$ poles. The corresponding
-normal form has universal scalar curvature $-14/(Bx^4)$ (Lemma~\ref{lem:reflection}), promoting
-the order from $3$ to $4$.
+is a parity--fixed face whose transverse channels carry $x^{-2}$ poles---one collapsing
+coordinate against a flat $2$--dimensional fibre. By the parity--fixed normal form
+(Prop.~\ref{prop:mm5}, Cor.~\ref{lem:reflection}) the scalar curvature is
+$-m(m+5)x^{-4}/B$ with $m=2$ here, i.e.\ $-14/(Bx^4)$, promoting the order from $3$ to $4$. The
+coefficient $14=6\cdot2+2\cdot1$ splits into radial focusing and transverse fibre shear; the
+amplitudes drop out because they only rescale a flat fibre. The two order--$4$ faces then meet
+at the Schwarzschild corner, where the balanced approach cancels back to order $2$
+(Prop.~\ref{prop:corner})---the mildest, not the wildest, point of the boundary.
 
 \appendix
 \section{The output charts and the role--role channel}
@@ -593,13 +688,16 @@ All exact claims are machine--checked and reproducible:
 \texttt{lead7\_test3} (selection / candidate comparison),
 \texttt{lead7\_test4} (mass--role zeros $=$ role divisors; Thm.~\ref{thm:clean}),
 \texttt{lead7\_test5} (orders, high precision),
-\texttt{lead7\_test6} (reflection lemma and $C_\Omega,C_\Phi$),
+\texttt{lead7\_test6} (reflection coefficients $C_\Omega,C_\Phi$),
 \texttt{lead7\_test7} (generic lemma, $A_2$, rational $\Rext$, denominator),
 \texttt{lead7\_test8\_extremal\_gate\_graphnorm} (full--edge extremal transverse monotonicity
 $W<0$ for the graph--normalized metric: $L_{\mathrm{ext}}=-P/D$ with $D$ a product of nine
 coefficient--positive factors, $P=Aq^2+Bq+C$ with $B,C$ coefficient--positive and $A>0$ by two
-Sturm certificates ($\widetilde H$ of degree $5$ and $9F+G$); Prop.~\ref{prop:W}). The
-certificate was run twice with identical symbolic output.
+Sturm certificates ($\widetilde H$ of degree $5$ and $9F+G$); Prop.~\ref{prop:W}),
+\texttt{lead7\_test9} (double--reflection corner: closed--form metric limits, Newton wedge
+$m(a)=\max(4a-2,4-2a)$, corner residues, mixed excess; Prop.~\ref{prop:corner}),
+\texttt{lead7\_test10} (parity--fixed normal form $R=-m(m+5)/B\,x^{-4}$ from first--principles
+Ricci for $m=1,2,3$; Prop.~\ref{prop:mm5}). All were run twice with identical output.
 
 \begin{thebibliography}{9}
 \bibitem{Weinhold1975} F.~Weinhold, \emph{Metric geometry of equilibrium thermodynamics},

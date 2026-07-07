@@ -83,6 +83,22 @@ into 9 coefficient-positive factors and P=Aq²+Bq+C has B,C coefficient-positive
 A=C₀·π²t²·(π²F+G), F=(t−1)·t³(t+3)³·H̃, H̃=2t⁵+5t⁴−15t³−7t²+15t+8 degree-5 positive on [1,∞)
 (Sturm), 9F+G>0 on [1,∞) (Sturm); since π²>9, π²F+G=(π²−9)F+(9F+G)>0 ⟹ A>0 ⟹ P>0, D>0 ⟹ L_ext<0.
 
+**GENERAL PARITY-FIXED NORMAL FORM (Test 10, first-principles Ricci m=1,2,3, clean ×2):** the
+−14/B reflection identity is the m=2 case of `ds²=Bx²dx²+x⁻²Σ_{α=1..m}A_α dy_α²` ⟹
+`R=−m(m+5)/B·x⁻⁴` EXACTLY, amplitude-independent (m=1→−6, m=2→−14, m=3→−24). Split
+m(m+5)=6m+m(m−1) (radial focusing + transverse fibre shear). Corollary: y-dependent B(y),A(y) +
+even subleading ⟹ leading coeff −m(m+5)/B(y). So C_Ω=−14/B_J, C_Φ=−14/B_Q are inevitable (3D
+state space, m=2), not symbolic coincidences.
+
+**DOUBLE-REFLECTION (SCHWARZSCHILD) CORNER (Test 9, exact-partial curvature, clean ×2):** where
+Ω=0 ∩ Φ_e=0 meet (J=Q=0, S=s), the curvature is MILDEST not wildest. Along Q=ε, J=ρε^a:
+balanced (a=1) radial order EXACTLY 2 (R₀(1,1)=−1801.25<0 finite); Newton wedge
+m(a)=max(4a−2,4−2a), vertex (1,2), min m=2 on the diagonal (two order-4 collapses partially
+cancel). Metric limits closed-form: ε⁶G_S→N₀²s⁵/[π(s+8πρ²)²] (N₀=s/π+1/(16π²); the "1.04×
+schematic" = (1+1/(16πs))² graph-norm correction), G_J→N₀²πρ²/s, G_Q→N₀²s/(4πρ²). Boundary
+links κ_Ω=−3584π³s/(16πs+1)², κ_Φ=−14336π⁵/[s(16πs+1)²] (exact residues of C_Ω,C_Φ). R₀ is NOT
+the two-face sum: mixed excess M(1,1)=−89.70 (G_S mixed-denominator fingerprint).
+
 **n=3 COMPLEMENTARITY RETRODICTION COMPLETE (fully symbolic):** orders 3/4/4, all three
 leading coefficients (C_Ω, C_Φ, C_ext) in exact closed form, AND the extremal order-3 pole
 established at every open point (gate closed, Test 8). Combined with the metric identification
