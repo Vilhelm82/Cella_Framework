@@ -3,9 +3,10 @@
 **Date:** 2026-07-07. Certificates: `verification/lead7_test5_pole_orders_n3.py` (orders,
 12/12 ×2), `verification/lead7_test6_pole_coeffs_n3.py` (reflection coefficients, 5/5),
 `verification/lead7_test7_extremal_coeff_n3.py` (extremal coefficient exact rational form,
-4/4 ×2), and `verification/lead7_test8_extremal_gate_replacement.py` (extremal `N_ext` gate
-CLOSED — full-edge coefficient-positivity certificate, byte-stable ×2; the earlier
-`lead7_test8_extremal_gate.py` is the superseded Sturm-reduction path). Curvature harness = the exact-partial 3D Ricci
+4/4 ×2), and `verification/lead7_test8_extremal_gate_graphnorm.py` (extremal `N_ext` gate
+CLOSED for the graph-norm metric — full-edge coefficient-positivity certificate, byte-stable
+×2; the `_replacement.py` variant is refuted (wrong metric) and `_extremal_gate.py` is the
+superseded Sturm-reduction path). Curvature harness = the exact-partial 3D Ricci
 validated in Test 2 (flat ℝ³→0, 3-sphere →6/a²). Domain: the outer physical wedge
 `W₊={S,J,Q>0, U_S>0}` (Test 4). This is the KN analogue of the paper's n=2 RC-5 retrodiction
 tier (`C_ext`, `C_sch`).
@@ -108,32 +109,42 @@ with a long (degree 14 in `S`, 28 in `Q`) polynomial numerator `N_ext`. Verified
 direct high-precision curvature. Sample values (on the extremal surface, in `(S,Q)`):
 `C_ext(20,1) = −0.0660176096`, `C_ext(30,1) = −0.0727822594`, `C_ext(20,2) = −0.000549074077`.
 
-**The `N_ext` gate — CLOSED by a full-edge coefficient-positivity certificate
-(`verification/lead7_test8_extremal_gate_replacement.py`).** The pole is order 3 wherever `N_ext≠0`, i.e. wherever
-`C_ext≠0`. The gate is now closed unconditionally on the entire open edge:
+**Metric normalization — the certified metric carries the graph "1+".** The DBP chart norm is
+`q_i = 1+|∇f_i|² = 1+(4U+U_a²+U_b²)/U_i²` (the n=2 norm `q0=1+a²+b²`, `recert_gtd_dbp_n2.py`),
+so `G_i = q_i²·U_i⁶/(4U)·Σ(1/D²) = (U_i²+4U+U_a²+U_b²)²·U_i²/(4U)·Σ(1/D²)`. The `+U_i²` (the
+"1+") is **essential**: the graph-norm metric reproduces the banked direct-curvature `C_ext`
+values EXACTLY (−0.0660176096, −0.0727822594, −0.000549074077 above), whereas dropping it to
+`|∇f|²` gives −0.0656…, −0.0727…, −0.0002345… . It matters only in the finite *transverse*
+channels: on a collapsing channel `U_i→0` makes `q_i→∞`, so the "1+" washes out and `A₂`,
+`C_Ω`, `C_Φ` are normalization-independent (`B_J` identical to 10+ digits either way). An
+earlier gate script (`lead7_test8_extremal_gate_replacement.py`) dropped the "1+" and is
+therefore **refuted as the LEAD-7 certificate** (kept only as the record of the mis-step).
+
+**The `N_ext` gate — CLOSED for the graph-norm metric by a full-edge coefficient-positivity
+certificate (`verification/lead7_test8_extremal_gate_graphnorm.py`, byte-stable ×2).** The pole
+is order 3 wherever `N_ext≠0`, i.e. wherever `C_ext≠0`. Closed unconditionally on the whole
+open edge:
 1. *Sign reduction:* since `A₂>0`, `g_JJ|ext>0`, `g_QQ|ext>0`,
    `sign(C_ext) = sign(∂_S log(g_JJ g_QQ))|_ext =: sign(L_ext)` — the gate is exactly
    *"`g_JJ·g_QQ` is strictly decreasing in `S` at the extremal surface"* (drops the `A₂`
    division and the huge numerator).
 2. *Edge parametrisation:* write `q=Q²>0`, `t=S/(πQ²)>1`; then `L_ext = −P/D` for polynomials
    `P,D` in `(q,t,π)`.
-3. *Coefficient positivity:* under `t=1+r` (`r>0`) and `π²=9+b` (`b>0`, the rational bound
-   `π>3`), a polynomial in the positive variables `q,r,b` with nonnegative coefficients is
-   positive on the edge. `D` factors into ten such coefficient-positive factors. `P` is
-   quadratic in `q`, `P=A q²+B q+C`; `B,C` are coefficient-positive, and
-   `A=8π²t⁴(π²F+G)` with `F(t)=t²(t−1)(t+3)³H(t)`, `H` of degree 6 with no root in `(1,∞)`
-   and `H(1)=8` (Sturm), so `F>0` for `t>1`; since `9F+G>0` and `π²>9`, `π²F+G>0`, hence
-   `A>0`. Therefore `P>0`, `D>0`, so `L_ext=−P/D<0`.
+3. *Coefficient positivity:* after extracting positive monomials in `π,q,t` and substituting
+   `t=1+r` (`r>0`), `π²=9+b` (`b>0`, from `π>3`), each residual factor is a nonzero polynomial
+   in the positive variables `q,r,b` with nonnegative coefficients, hence positive. `D` factors
+   into **nine** such factors. `P` is quadratic in `q`, `P=A q²+B q+C`; `B,C` are
+   coefficient-positive, and (after removing a positive monomial) `A=C₀·π²t²·(π²F+G)` with
+   `F(t)=(t−1)·t³(t+3)³·H̃(t)`, `H̃=2t⁵+5t⁴−15t³−7t²+15t+8` of degree 5 and positive on `[1,∞)`
+   (Sturm), so `F>0` for `t>1`; a second Sturm count gives `9F+G>0` on `[1,∞)`. Since `π²>9`
+   and `F>0`, `π²F+G=(π²−9)F+(9F+G)>0`, so `A>0`. Therefore `P>0`, `D>0`, `L_ext=−P/D<0`.
 
 **Status — CLOSED.** `C_ext<0` at *every* open point of the extremal edge (not merely on a
-dense grid). The full-edge symbolic certificate `lead7_test8_extremal_gate_replacement` proves `L_ext<0` for all `q>0`,
-`t>1`, matching the numerical sign check (`C_ext<0` on a dense edge grid, at the corner limit
-`S→πQ²⁺`, and for `S≫πQ²`, no sign change). This upgrades the extremal theorem from "generic
-open points" to **all open points of `T=0`**: the extremal pole has exact order 3 throughout,
-completing the fully symbolic retrodiction. (The earlier reduction to a one-variable Sturm
-count on the `Q=1` slice — which the degree-14/28 `expand`/`cancel` made too slow for a
-short-timeout run — is subsumed: the coefficient-positivity route needs only the single
-degree-6 Sturm count on `H`, which is bounded and fast.)
+dense grid). This upgrades the extremal theorem from "generic open points" to **all open points
+of `T=0`**: the extremal pole has exact order 3 throughout, completing the fully symbolic
+retrodiction. (The earlier one-variable Sturm reduction on the `Q=1` slice — too slow for a
+short-timeout run — is subsumed: the coefficient-positivity route needs only two bounded
+low-degree Sturm counts.)
 
 ## Status of the n=3 complementarity
 

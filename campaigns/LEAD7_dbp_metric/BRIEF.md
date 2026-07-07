@@ -64,14 +64,24 @@ Key: the implicit-formula couplings are RADICAL-FREE (rational in S,J,Q,π), so 
 A₂ are rational and on the extremal surface J²=(S²−π²Q⁴)/(4π²) the whole coefficient is
 rational; verified vs direct curvature.
 
-**Extremal N_ext gate CLOSED (`lead7_test8_extremal_gate_replacement.py`, byte-stable ×2):** C_ext<0 at EVERY open point
-of the extremal edge (not merely on a dense grid), so the extremal pole has exact order 3
-throughout T=0 (upgrades "generic open points" → "all open points"). Full-edge
-coefficient-positivity certificate: sign(C_ext)=sign(L_ext), L_ext=∂_S log(g_JJ g_QQ)|ext;
-parametrise the edge by q=Q²>0, t=S/(πQ²)>1 so L_ext=−P/D; under t=1+r (r>0), π²=9+b (b>0,
-from π>3), D factors into 10 coefficient-positive factors and P=Aq²+Bq+C has B,C
-coefficient-positive with A=8π²t⁴(π²F+G), F=t²(t−1)(t+3)³H(t), H degree-6 with no root in
-(1,∞) and H(1)=8 (single bounded Sturm count), 9F+G>0 ⟹ A>0 ⟹ P>0, D>0 ⟹ L_ext<0.
+**METRIC NORMALIZATION (correction, byte-verified):** the certified metric carries the graph
+"1+": q_i=1+|∇f_i|²=1+(4U+U_a²+U_b²)/U_i² (n=2 norm q0=1+a²+b², recert_gtd_dbp_n2.py), so
+G_i=(U_i²+4U+U_a²+U_b²)²·U_i²/(4U)·Σ(1/D²). The +U_i² is essential — the graph-norm metric
+reproduces the banked direct-curvature C_ext EXACTLY (−0.0660176096 to 10 digits), the no-"1+"
+form gives −0.0656…; it matters only in the finite transverse channels (on a collapsing channel
+q→∞, so A₂/C_Ω/C_Φ are normalization-independent, B_J identical either way). The no-"1+" gate
+script `lead7_test8_extremal_gate_replacement.py` is REFUTED (wrong metric), kept as the
+mis-step record.
+
+**Extremal N_ext gate CLOSED for the graph-norm metric (`lead7_test8_extremal_gate_graphnorm.py`,
+byte-stable ×2):** C_ext<0 at EVERY open point of the extremal edge (not merely on a dense grid),
+so the extremal pole has exact order 3 throughout T=0 (upgrades "generic open points" → "all
+open points"). Full-edge coefficient-positivity certificate: sign(C_ext)=sign(L_ext),
+L_ext=∂_S log(g_JJ g_QQ)|ext; parametrise the edge by q=Q²>0, t=S/(πQ²)>1 so L_ext=−P/D; after
+extracting positive monomials and substituting t=1+r (r>0), π²=9+b (b>0, from π>3), D factors
+into 9 coefficient-positive factors and P=Aq²+Bq+C has B,C coefficient-positive with
+A=C₀·π²t²·(π²F+G), F=(t−1)·t³(t+3)³·H̃, H̃=2t⁵+5t⁴−15t³−7t²+15t+8 degree-5 positive on [1,∞)
+(Sturm), 9F+G>0 on [1,∞) (Sturm); since π²>9, π²F+G=(π²−9)F+(9F+G)>0 ⟹ A>0 ⟹ P>0, D>0 ⟹ L_ext<0.
 
 **n=3 COMPLEMENTARITY RETRODICTION COMPLETE (fully symbolic):** orders 3/4/4, all three
 leading coefficients (C_Ω, C_Φ, C_ext) in exact closed form, AND the extremal order-3 pole

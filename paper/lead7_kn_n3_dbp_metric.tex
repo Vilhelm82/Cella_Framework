@@ -1,7 +1,7 @@
 \documentclass[11pt]{article}
 \usepackage{amsmath,amssymb,amsthm,mathtools}
 \usepackage[margin=1in]{geometry}
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}[theorem]{Lemma}
@@ -45,12 +45,13 @@ On the outer physical wedge, $g_F(u{=}0)$ is rational in $(S,J,Q,\pi)$. Its scal
 has no interior singular support, including on the Davies surface; its singular support in the
 closure lies exactly on the role divisors $T=0$, $\Omega=0$, $\Phi_e=0$. The Kerr
 complementarity law lifts to Kerr--Newman: the extremal divisor is generic and has order $3$,
-while the two charge--reflection faces are reflection--fixed and have order $4$. The leading
-reflection coefficients are obtained in closed form, and the extremal coefficient is shown to
-be strictly negative at every open point of the extremal edge---so the extremal pole has exact
-order $3$ throughout---by a full--edge coefficient--positivity certificate for the transverse
-monotonicity $\partial_S(G_JG_Q)\big|_{S=\Sext}<0$. All algebraic identities are checked by
-reproducible symbolic certificates.
+while the two reflection--fixed role faces (spin $\Omega=0$ and electric charge $\Phi_e=0$)
+have order $4$. The leading reflection coefficients are obtained in closed form, and the
+extremal coefficient is shown to be strictly negative at every open point of the extremal
+edge---so the extremal pole has exact order $3$ throughout---by proving strict transverse
+monotonicity, $\partial_S(G_JG_Q)\big|_{S=\Sext}<0$, via a full--edge coefficient--positivity
+and Sturm certificate. All algebraic identities are checked by reproducible symbolic
+certificates.
 \end{abstract}
 
 \tableofcontents
@@ -60,8 +61,13 @@ reproducible symbolic certificates.
 \label{sec:intro}
 
 \paragraph{The $n=2$ picture.}
-Given a thermodynamic fundamental relation $M=\Phi(E^1,\dots,E^n)$ read as a hypersurface in
-role variables, the DBP role--channel calculus assigns to each output chart
+Thermodynamic geometry equips a fundamental relation with a Riemannian metric whose curvature
+diagnoses phase structure---the Weinhold~\cite{Weinhold1975} and Ruppeiner~\cite{Ruppeiner1995}
+information metrics, the Legendre--invariant program of geometrothermodynamics
+(GTD)~\cite{Quevedo2007}, and, as a complementary reading, the heat--capacity
+(Davies~\cite{Davies1977}) transition loci. The directive--substrate--product (DBP)
+role--channel calculus~\cite{Lloyd2026} is one such reading. Given a fundamental relation
+$M=\Phi(E^1,\dots,E^n)$ read as a hypersurface in role variables, it assigns to each output chart
 $E^i=f_i(M,E^{j\ne i})$ a family of coupling channels, and, at $n=2$, a diagonal metric
 \begin{equation}
 h=\sum_i \kappa_{c,i}\,\dd E^i\otimes \dd E^i,\qquad g^{\mathrm{DBP}}=-h^{-1},
@@ -178,6 +184,17 @@ T=0\iff U_S=0,\qquad \Omega=0\iff J=0,\qquad \Phi_e=0\iff Q=0.
 \label{eq:divisors}
 \end{equation}
 
+\begin{definition}[Davies surface]
+\label{def:davies}
+The Davies surface referred to below is the fixed--$(J,Q)$ heat--capacity divergence locus,
+\[
+\partial_S T\big|_{J,Q}=0\quad\Longleftrightarrow\quad 2U\,U_{SS}-U_S^2=0 ,
+\]
+which lies in the interior of $\Wp$ for the relevant parameter range. It serves here as an
+interior comparison locus---the transition where the $n=2$ information/GTD curvatures diverge---%
+\emph{not} as a role divisor.
+\end{definition}
+
 %======================================================================
 \section{The metric and the selection theorem}
 \label{sec:selection}
@@ -248,10 +265,11 @@ the reflection channel alone would force a pole---the curvature never sees it (v
 symbolically and by high--precision curvature; \texttt{lead7\_test3}). Invert--then--sum keeps
 each channel's zero as a metric pole; the mass--role zeros are the role boundaries (desired),
 but the role--role zero is interior (undesired). Near that zero
-$\Lambda_{Q,\{S,J\}}\to0$, so $g_F(u)_{QQ}\sim u/\Lambda^2\to+\infty$ for $u>0$ (interior pole)
-and $\to-\infty$ for $u<0$ (indefinite); only $u=0$ is finite and positive there. The boundary
-divergences are $u$--independent because they live in the mass--role sector
-(\texttt{lead7\_test6/7}).
+$\Lambda_{Q,\{S,J\}}\to0$, so $g_F(u)_{QQ}\sim u/\Lambda^2$ for $u>0$; the curvature certificate
+(\texttt{lead7\_test3}) verifies that this metric pole produces a scalar--curvature pole. For
+$u<0$ the same term drives the diagonal entry negative near the zero, so positive definiteness
+is lost; only $u=0$ is finite and positive there. The boundary divergences are $u$--independent
+because they live in the mass--role sector (\texttt{lead7\_test6/7}).
 \end{proof}
 
 Henceforth $g_F:=g_F(0)$, with diagonal entries
@@ -261,7 +279,14 @@ G_i:=g_F{}_{ii}=q_i^2\Big(\Lambda_{i,\{M,j\}}^{-2}+\Lambda_{i,\{M,k\}}^{-2}\Big)
 \label{eq:Gi}
 \end{equation}
 the second equality being the radical--free form obtained from \eqref{eq:qi}--\eqref{eq:couplings}
-(the $M=\sqrt U$ cancels).
+(the $M=\sqrt U$ cancels). The numerator carries $q_i^2$, hence the term
+$(U_i^2+4U+U_a^2+U_b^2)^2$ with the leading $U_i^2$: this is the graph normalization $q_i=1+|\nabla
+f_i|^2$ of \eqref{eq:qi}, \emph{not} $|\nabla f_i|^2$. The $+U_i^2$ is essential---it is what makes
+$G_i$ reduce to the $n=2$ channel metric $g_{ii}=q_i^2/\Lambda_i^2$ and it fixes the transverse
+values $G_J,G_Q$ that enter the extremal coefficient (Prop.~\ref{prop:W}); dropping it changes
+$\Rext$. (On a collapsing channel $U_i\to0$ makes $q_i\to\infty$, so $q_i\sim|\nabla f_i|^2$ and the
+$+U_i^2$ is invisible in the reflection coefficient $A_2$ and $C_\Omega,C_\Phi$; it survives only in
+the finite transverse channels.)
 
 %======================================================================
 \section{Rationality and interior regularity}
@@ -459,10 +484,11 @@ the bracket is a sum of positive terms.
 
 The coefficient $\Rext$ has a geometric sign form. Since $A_2>0$ (eq.~\eqref{eq:A2}) and
 $P_0=G_J|_{\Sext}>0$, $R_0=G_Q|_{\Sext}>0$ (metric entries), \eqref{eq:Cext} gives
+$\sgn\Rext=\sgn(P_1/P_0+R_1/R_0)=\sgn W$, where---differentiating in the ambient entropy
+$\tilde S$ at fixed $(J,Q)$ and then eliminating $J$ on the extremal edge---
 \begin{equation}
-\sgn\Rext=\sgn\!\Big(\frac{P_1}{P_0}+\frac{R_1}{R_0}\Big)
-=\sgn\,W,\qquad
-W(S,Q):=\left.\partial_S(G_JG_Q)\right|_{S=\Sext}.
+W(S,Q):=\Big[\partial_{\tilde S}\big(G_JG_Q\big)(\tilde S,J,Q)\Big]_{\tilde S=S,\;
+J^2=(S^2-\pi^2Q^4)/(4\pi^2)},\qquad S>\pi Q^2 .
 \label{eq:Wsign}
 \end{equation}
 Thus whether the order--$3$ extremal pole can cancel is exactly the question of whether the
@@ -471,33 +497,41 @@ under outward entropy displacement from extremality.
 
 \begin{proposition}[Transverse monotonicity]
 \label{prop:W}
-On the open extremal edge $\{Q>0,\ S>\pi Q^2\}$, $W(S,Q)<0$. Consequently $\Rext<0$ there, and
-the extremal pole has exact order $3$ at every open point.
+On the open extremal edge, written as $Q>0$, $S>\pi Q^2$ after eliminating $J$, one has
+$W(S,Q)<0$. Consequently $\Rext<0$ there, and the extremal pole has exact order $3$ at every
+open point.
 \end{proposition}
 
 \begin{proof}[Certificate--assisted proof]
 By \eqref{eq:Wsign} it suffices to show
-$L:=\partial_S\log(G_JG_Q)\big|_{\Sext}<0$ on the open edge. Parametrise the edge by
+$L:=\partial_{\tilde S}\log(G_JG_Q)\big|_{\Sext}<0$ on the open edge. Parametrise the edge by
 $q=Q^2>0$ and $t=S/(\pi Q^2)>1$; there $L=-P/D$ for polynomials $P,D$ in $(q,t,\pi)$. Both
-$P>0$ and $D>0$ are certified by coefficient positivity under the substitutions $t=1+r$
-($r>0$) and $\pi^2=9+b$ ($b>0$, the rational bound $\pi>3$): a polynomial in the positive
-variables $q,r,b$ with nonnegative coefficients is positive on the edge. The denominator $D$
-factors into ten such coefficient--positive factors. The numerator is quadratic in $q$,
-$P=A\,q^2+B\,q+C$; the coefficients $B,C$ are coefficient--positive, and
+$P>0$ and $D>0$ are certified by coefficient positivity: after extracting positive monomial
+factors in $\pi,q,t$ and applying the substitutions $t=1+r$ ($r>0$) and $\pi^2=9+b$ ($b>0$,
+the rational bound $\pi>3$), each remaining factor is a \emph{nonzero} polynomial in the
+positive variables $q,r,b$ with nonnegative coefficients, hence strictly positive on the open
+edge. The denominator $D$ factors into nine such coefficient--positive factors. The numerator
+is quadratic in $q$, $P=A\,q^2+B\,q+C$; the coefficients $B,C$ are coefficient--positive, and
+after removing a positive monomial $A=C_0\,\pi^2t^2\,(\pi^2F+G)$ with $C_0>0$ and
 \[
-A=8\pi^2t^4(\pi^2F+G),\qquad F(t)=t^2(t-1)(t+3)^3H(t),
+F(t)=(t-1)\,t^3(t+3)^3\,\widetilde H(t),\qquad
+\widetilde H(t)=2t^5+5t^4-15t^3-7t^2+15t+8 .
 \]
-with $H$ of degree $6$ having no root in $(1,\infty)$ and $H(1)=8$ (Sturm), so $F>0$ for
-$t>1$; since $9F+G>0$ and $\pi^2>9$, also $\pi^2F+G>0$, hence $A>0$. Therefore $P>0$, and with
-$D>0$ we get $L=-P/D<0$; thus $\Rext<0$ on the whole open edge. Certificate
-\texttt{lead7\_test8\_extremal\_gate\_replacement} (all factor and Sturm sub--certificates
-byte--stable $\times 2$).
+A Sturm count gives $\widetilde H>0$ on $[1,\infty)$, so $F>0$ for $t>1$; a second Sturm count
+gives $9F+G>0$ on $[1,\infty)$. Since $\pi^2>9$ and $F>0$,
+\[
+\pi^2F+G=(\pi^2-9)F+(9F+G)>0,
+\]
+hence $A>0$. Therefore $P>0$, and with $D>0$ we get $L=-P/D<0$; thus $\Rext<0$ on the whole
+open edge. Certificate \texttt{lead7\_test8\_extremal\_gate\_graphnorm} verifies all factor and
+Sturm subcertificates reproducibly.
 \end{proof}
 
 \begin{theorem}[$n=3$ complementarity law]
 \label{thm:law}
-On $\Wp$, $R[g_F]$ is finite throughout the interior of $\Wp$, including on the Davies surface,
-and diverges on the three role divisors with
+On the open wedge $\Wp$, $R[g_F]$ is finite and analytic, including on the Davies surface. As
+one approaches the boundary role divisors in $\overline{\Wp}$, the scalar curvature has the
+leading behaviours
 \[
 R\sim \Rext\,\delta^{-3}\ (T=0),\qquad
 R\sim C_\Omega\,J^{-4}\ (\Omega=0),\qquad
@@ -516,12 +550,12 @@ The result says the DBP complementarity metric is inverse--channel geometry buil
 couplings that carry the role--boundary valuation, \emph{excluding} the role--role couplings,
 whose zeros are interior channel--isotropy strata belonging to a different (isotropy)
 diagnostic. Sum--then--invert is too coarse: it hides the reflection zeros. Full
-invert--then--sum is too sharp: it develops poles on the isotropy strata. The correct object is
-neither the information/pullback metric nor the naive channel--norm inverse.
+invert--then--sum is too sharp: it develops poles on the isotropy strata. The selected object is
+therefore neither an information/pullback metric nor the naive channel--norm inverse.
 
 \paragraph{Why $3/4/4$.}
 The order law is structural. The extremal face is a quadratic native collapse with finite
-transverse channels (Lemma~\ref{lem:generic}), giving order $3$. Each charge--reflection face
+transverse channels (Lemma~\ref{lem:generic}), giving order $3$. Each reflection--fixed role face
 is a parity--fixed face whose transverse channels carry $x^{-2}$ poles. The corresponding
 normal form has universal scalar curvature $-14/(Bx^4)$ (Lemma~\ref{lem:reflection}), promoting
 the order from $3$ to $4$.
@@ -561,9 +595,23 @@ All exact claims are machine--checked and reproducible:
 \texttt{lead7\_test5} (orders, high precision),
 \texttt{lead7\_test6} (reflection lemma and $C_\Omega,C_\Phi$),
 \texttt{lead7\_test7} (generic lemma, $A_2$, rational $\Rext$, denominator),
-\texttt{lead7\_test8\_extremal\_gate\_replacement} (full--edge extremal transverse monotonicity
-$W<0$: $L_{\mathrm{ext}}=-P/D$ with $D$ a product of ten coefficient--positive factors,
-$P=Aq^2+Bq+C$ with $B,C$ coefficient--positive and $A>0$ by the degree--$6$ Sturm certificate
-for $H$; Prop.~\ref{prop:W}).
+\texttt{lead7\_test8\_extremal\_gate\_graphnorm} (full--edge extremal transverse monotonicity
+$W<0$ for the graph--normalized metric: $L_{\mathrm{ext}}=-P/D$ with $D$ a product of nine
+coefficient--positive factors, $P=Aq^2+Bq+C$ with $B,C$ coefficient--positive and $A>0$ by two
+Sturm certificates ($\widetilde H$ of degree $5$ and $9F+G$); Prop.~\ref{prop:W}). The
+certificate was run twice with identical symbolic output.
+
+\begin{thebibliography}{9}
+\bibitem{Weinhold1975} F.~Weinhold, \emph{Metric geometry of equilibrium thermodynamics},
+J.~Chem.~Phys.\ \textbf{63} (1975) 2479.
+\bibitem{Ruppeiner1995} G.~Ruppeiner, \emph{Riemannian geometry in thermodynamic fluctuation
+theory}, Rev.~Mod.~Phys.\ \textbf{67} (1995) 605; erratum \textbf{68} (1996) 313.
+\bibitem{Davies1977} P.~C.~W.~Davies, \emph{The thermodynamic theory of black holes},
+Proc.~R.~Soc.~Lond.~A \textbf{353} (1977) 499.
+\bibitem{Quevedo2007} H.~Quevedo, \emph{Geometrothermodynamics}, J.~Math.~Phys.\ \textbf{48}
+(2007) 013506.
+\bibitem{Lloyd2026} W.~Lloyd, \emph{Two geometric readings of a thermodynamic surface: the
+directive--substrate--product role--channel calculus}, note (2026).
+\end{thebibliography}
 
 \end{document}

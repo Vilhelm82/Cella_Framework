@@ -74,12 +74,21 @@ understood; a list of banned sources would not protect against the next stale on
   its scalar curvature obeys the full complementarity law: extremal `T=0` order 3 (generic),
   `Ω=0` & `Φ_e=0` order 4 (reflection-fixed). All three leading coefficients in exact closed
   form; the extremal `N_ext` gate is **CLOSED** — `C_ext<0` at every open point of `T=0`
-  (`verification/lead7_test8_extremal_gate_replacement.py`, full-edge coefficient-positivity
+  (`verification/lead7_test8_extremal_gate_graphnorm.py`, full-edge coefficient-positivity
   certificate, byte-stable ×2). Certificates: `lead7_test3..8`. Formal proof paper
   `paper/lead7_kn_n3_dbp_metric.tex`; report `reports/LEAD7_retrodiction_n3.md`; brief
   `campaigns/LEAD7_dbp_metric/BRIEF.md`; lead entry `LEADS.md`. Optional remaining (LEVER
   payoff, sets no queue priority): replace the Test 5 numeric order fits with the exact Laurent
   lemmas; physics-novelty writeup.
+  **CASE LAW (metric-normalization, 2026-07-07):** the DBP chart norm is `q_i=1+|∇f_i|²` — the
+  graph "1+" is canonical (n=2 `q0=1+a²+b²`, recert_gtd_dbp_n2.py), NOT an accidental factor. A
+  handed-off gate script dropped it to `|∇f|²` and certified the wrong metric; caught only by
+  matching the extremal coefficient to DIRECT curvature (graph-norm reproduces C_ext(20,1)=
+  −0.0660176096 to 10 digits; no-"1+" gives −0.0656…). Tell: **verify a metric's identity
+  against independent curvature, not against the script that assembled it** — a byte-stable
+  certificate of the wrong object is still wrong. (The "1+" is invisible on collapsing channels,
+  where `q→∞`, so A₂/C_Ω/C_Φ were unaffected; it only moved the finite transverse channels /
+  C_ext. Refuted script kept as `lead7_test8_extremal_gate_replacement.py` w/ REFUTED banner.)
 - Campaign record: **G0.2 two-species account** — Stage 0 GATE CLEAN (RC-1 `d370daae`
   — re-pinned `4ad5a6eb` 2026-07-06, T1/T6 stdout slot-labels hardened in ink, values
   unchanged; RC-2 `b21992f3`, RC-3 `e4765c7c`; finding: zero holonomy ≠ flat). **STAGE A CLOSED

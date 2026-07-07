@@ -132,7 +132,7 @@ curvature obeys the full complementarity law: order-3 pole on extremal `T=0` (ge
 order-4 on `Ω=0` and `Φ_e=0` (reflection-fixed). All three leading coefficients are in exact
 closed form (`C_Ω`, `C_Φ` via the universal −14/B identity; `C_ext` rational in `(S,Q,π)`), and
 the extremal `N_ext` gate is **CLOSED** — `C_ext<0` at every open point of `T=0`
-(`verification/lead7_test8_extremal_gate_replacement.py`, full-edge coefficient-positivity
+(`verification/lead7_test8_extremal_gate_graphnorm.py`, full-edge coefficient-positivity
 certificate, byte-stable ×2). Formal proof paper: `paper/lead7_kn_n3_dbp_metric.tex`. Report:
 `reports/LEAD7_retrodiction_n3.md`. Remaining (optional, LEVER payoff): replace the Test 5
 numeric order fits with the exact Laurent lemmas, and the physics-novelty writeup.

@@ -1,18 +1,5 @@
 """
-!!! REFUTED — WRONG METRIC. Superseded by lead7_test8_extremal_gate_graphnorm.py. !!!
-
-This script certifies the NO-"1+" metric  G_i = (4U+U_a^2+U_b^2)^2 U_i^2/(4U) sum(1/D^2),
-i.e. it drops the graph normalization q_i = 1+|grad f_i|^2 down to |grad f_i|^2. That "1+"
-is NOT accidental: it is the canonical n=2 DBP norm (recert_gtd_dbp_n2.py line 24,
-q0 = 1 + a^2 + b^2), and the graph-norm metric reproduces the banked DIRECT-CURVATURE
-extremal coefficient EXACTLY (C_ext(20,1) = -0.0660176096 to 10 digits; Tests 6,7), while
-THIS metric gives -0.0656... So the metric certified here is not the LEAD-7 metric. The gate
-still closes for BOTH metrics (sign of C_ext is negative either way), but the object proved
-here is the wrong one. Kept only as the record of the mis-step; do not cite as the LEAD-7
-certificate. Use lead7_test8_extremal_gate_graphnorm.py.
-
---------------------------------------------------------------------------------------------
-LEAD-7 TEST 8 — extremal gate replacement
+LEAD-7 TEST 8 — extremal gate, GRAPH-NORMALIZED (canonical) metric
 
 Purpose
 -------
@@ -25,19 +12,25 @@ on the whole open extremal edge
     Q > 0,    S = pi*Q^2*t,    t > 1,
     J^2 = Q^4*(t^2 - 1)/4.
 
-This replacement fixes three issues in the earlier harness:
+METRIC (canonical DBP graph normalization; supersedes
+lead7_test8_extremal_gate_replacement.py). The chart norm is q_i = 1+|grad f_i|^2
+= 1 + (4U + U_a^2 + U_b^2)/U_i^2 (the n=2 DBP norm, recert_gtd_dbp_n2.py line 24:
+q0 = 1 + a^2 + b^2), so
 
-1. Correct metric component:
-       G_i = (4U + U_a^2 + U_b^2)^2 * U_i^2/(4U) * sum(1/D_{i,a}^2)
-   not the accidental `(1 + (...)/U_i^2)^2` version.
+    G_i = q_i^2 * U_i^6/(4U) * sum(1/D_{i,a}^2)
+        = (U_i^2 + 4U + U_a^2 + U_b^2)^2 * U_i^2/(4U) * sum(1/D_{i,a}^2).
 
-2. Edge samples are parameterised by S = pi*Q^2*t, t>1, so no off-edge
-   negative-J^2 points enter positivity tests.
+The "+U_i^2" (i.e. the "1+" in q_i) is the graph/ambient normalization, NOT an
+accidental factor: the graph-norm metric reproduces the banked direct-curvature
+coefficients EXACTLY (C_ext(20,1) = -0.0660176096 to 10 digits; Tests 6,7),
+whereas the no-"1+" form gives -0.0656... The earlier _replacement.py certified
+the no-"1+" metric and is therefore refuted as the LEAD-7 metric; this file is the
+certificate for the correct one.
 
-3. No Q=1 homogeneity reduction is assumed. The symbolic proof is done on the
-   full dimensionless edge with
-       q = Q^2 > 0,    S = p*q*t,    J^2 = q^2*(t^2-1)/4,
-   where p represents pi.
+Edge samples are parameterised by S = pi*Q^2*t, t>1 (no off-edge negative-J^2
+points), and the symbolic proof is done on the full dimensionless edge with
+q=Q^2>0, S=p*q*t, J^2=q^2*(t^2-1)/4 (p represents pi). No Q=1 homogeneity
+reduction is assumed.
 
 The exact edge expression reduces to
 
@@ -48,9 +41,11 @@ where D>0 on p=pi, q>0, t>1 and P is quadratic in q:
     P = A(p,t) q^2 + B(p,t) q + C(p,t).
 
 The script proves:
-  - D>0 by explicit factor certificates;
+  - D>0 by explicit factor certificates (nine coefficient-positive factors);
   - B>0 and C>0 by coefficient positivity after p^2=9+b and t=1+r;
-  - A>0 by the two Sturm certificates for H(t) and L(t)=9F(t)+G(t).
+  - A>0 via A = C0*p^a*t^b*(p^2 F(t)+G(t)) with F=(t-1)*t^3*(t+3)^3*Htilde(t),
+    Htilde degree 5 > 0 on [1,oo) (Sturm), and 9F+G > 0 on [1,oo) (Sturm), so
+    for pi^2>9:  p^2 F+G = (p^2-9)F + (9F+G) > 0.
 
 Exit codes
 ----------
@@ -271,8 +266,8 @@ sumQ = tc(1 / N_QS**2 + 1 / N_QJ2)
 
 # Correct LEAD-7 components:
 # G_i = (4U + U_a^2 + U_b^2)^2 * U_i^2/(4U) * sum(1/D^2)
-GJ = tc(qnum_J**2 * UJ2 / (4 * U) * sumJ)
-GQ = tc(qnum_Q**2 * UQ2 / (4 * U) * sumQ)
+GJ = tc((UJ2 + qnum_J)**2 * UJ2 / (4 * U) * sumJ)
+GQ = tc((UQ2 + qnum_Q)**2 * UQ2 / (4 * U) * sumQ)
 A2 = tc((4 * U + UJ2 + UQ2) ** 2 / (4 * U) * (1 / UJ2 + 1 / UQ2))
 
 # Full open extremal edge substitution.
@@ -289,11 +284,11 @@ def edge_dlog(expr: sp.Expr, label: str) -> sp.Expr:
 
 say("Building L_ext directly on the edge...")
 L_terms = [
-    2 * edge_dlog(qnum_J, "qnum_J"),
+    2 * edge_dlog(UJ2 + qnum_J, "qnum_J(graph)"),
     edge_dlog(UJ2, "UJ2"),
     -edge_dlog(U, "U[J-part]"),
     edge_dlog(sumJ, "sumJ"),
-    2 * edge_dlog(qnum_Q, "qnum_Q"),
+    2 * edge_dlog(UQ2 + qnum_Q, "qnum_Q(graph)"),
     edge_dlog(UQ2, "UQ2"),
     -edge_dlog(U, "U[Q-part]"),
     edge_dlog(sumQ, "sumQ"),
@@ -462,33 +457,45 @@ def numerator_certificate(Ppos: sp.Expr, dump_dir: Path) -> bool:
     okB = cert_positive_by_coeff_shift(Bcoef, "G3b.Bcoef_positive", dump_dir=dump_dir)
     okC = cert_positive_by_coeff_shift(Ccoef, "G3b.Ccoef_positive", dump_dir=dump_dir)
 
-    # A needs the Sturm sub-proof from the hand analysis.
+    # A needs the Sturm sub-proof from the hand analysis. GENERIC handling (no metric-
+    # specific hardcoded factorisation): after stripping positive monomials in (p,t), the
+    # core is even in p with p-powers {0,2}, i.e. Acore = C0*(p^2 F(t) + G(t)) with C0>0.
+    # Positivity route: prove F>0 and 9F+G>0 on t>1, then for pi^2>9
+    #   p^2 F + G = (p^2-9) F + (9F+G) > 0.
     print("[G3c] A coefficient Sturm certificate ...", flush=True)
-    # Acoef = 8*p^2*t^4*A0, where A0 = p^2*F(t)+G(t).
-    A0 = sp.factor(Acoef / (8 * p**2 * t**4))
-    A0_a = convert_even_powers_to_a(A0)
-    if A0_a is None:
-        check("G3c.A0_even_powers", False, "A0 not even in p", fatal=False)
+    Acore, Amon = strip_common_monomial(sp.factor(Acoef), [p, t])
+    if Amon:
+        say(f"G3c stripped positive monomial {Amon} from A")
+    Acore = sp.expand(Acore)
+    Ap_poly = sp.Poly(Acore, p)
+    ppows = sorted({m[0] for m in Ap_poly.monoms()})
+    ok_even = check("G3c.A_even_p2", ppows == [0, 2] or ppows == [2] or ppows == [0],
+                    f"A core p-powers = {ppows} (expect subset of {{0,2}})")
+    if not ok_even:
         okA = False
     else:
-        A0_poly = sp.Poly(sp.expand(A0_a), a)
-        F = sp.factor(A0_poly.coeff_monomial(a))
-        G = sp.factor(A0_poly.coeff_monomial(1))
-        H_num = sp.factor(F / (t**2 * (t - 1) * (t + 3) ** 3))
-        H_expected = 2*t**6 + 5*t**5 - 15*t**4 - 7*t**3 + 11*t**2 + 8*t + 4
-        ok_factor = check(
-            "G3c.F_factorisation",
-            sp.simplify(H_num - H_expected) == 0,
-            "F=t^2(t-1)(t+3)^3 H(t)",
-        )
-        okH = sturm_positive_on_1_inf(H_expected, "G3c.H_positive_1_inf")
+        F = sp.expand(Ap_poly.coeff_monomial(p**2))     # coeff of p^2 (carries C0>0)
+        G = sp.expand(Ap_poly.coeff_monomial(1))         # coeff of p^0
+        # F>0 on (1,oo): factor out (t-1)^m; cofactor Fc>0 on [1,oo) => F>0 on (1,oo).
+        m = 0
+        Fc = sp.Poly(F, t)
+        while Fc.degree() > 0 and sp.rem(Fc.as_expr(), t - 1, t) == 0:
+            Fc = sp.Poly(sp.quo(Fc.as_expr(), t - 1, t), t)
+            m += 1
+        Fc = Fc.as_expr()
+        say(f"G3c: (t-1) multiplicity in F = {m}; F = (t-1)^{m} * Fc, "
+            f"Fc factored = {sp.factor(Fc)}")
+        okFc = sturm_positive_on_1_inf(Fc, "G3c.Fcofactor_positive_1_inf")
+        okF = check("G3c.F_positive_1_inf", okFc and (m % 2 == 1 or m == 0),
+                    f"F=(t-1)^{m}*Fc>0 on (1,oo) since Fc>0 and (t-1)^{m}>0 for t>1")
         Llower = sp.expand(9 * F + G)
-        okL = sturm_positive_on_1_inf(Llower, "G3c.Llower_positive_1_inf")
-        okA = ok_factor and okH and okL
+        okL = sturm_positive_on_1_inf(Llower, "G3c.Llower_9F_plus_G_positive")
+        okA = ok_even and okF and okL
         check(
             "G3c.Acoef_positive",
             okA,
-            "A=8*p^2*t^4*(p^2 F+G), F>0, pi^2>9, 9F+G>0",
+            "A = C0*p^a*t^b*(p^2 F+G); F>0, 9F+G>0 on t>1, pi^2>9 "
+            "=> p^2 F+G=(p^2-9)F+(9F+G)>0",
         )
 
     # Since q>0, P=A q^2+B q+C > 0 if all three coefficients are positive.
