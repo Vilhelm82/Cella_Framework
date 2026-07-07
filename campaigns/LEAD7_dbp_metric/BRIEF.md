@@ -46,8 +46,19 @@ coupling is strictly nonzero — its zeros/native-poles are supported EXACTLY on
 zero). So `g_F(u=0)` is analytic positive-definite on `W₊` ⟹ finite analytic curvature ⟹
 **no interior curvature singularity** — Test 3's interior-cleanliness is now a theorem, and
 the u=0 selection is structural (the charge-charge couplings, excluded at u=0, are the ones
-with interior zeros = LEAD-2 isotropy strata). REMAINING: exact pole coefficients (KN
-retrodiction tier), the only piece of the n=3 complementarity still at numeric tier.
+with interior zeros = LEAD-2 isotropy strata).
+
+**UPDATE — KN retrodiction tier** (`lead7_test5_pole_orders_n3.py` 12/12 ×2 orders;
+`lead7_test6_pole_coeffs_n3.py` reflection coefficients; report
+`reports/LEAD7_retrodiction_n3.md`). Pole ORDERS of R[g_F(u=0)] pinned to exact integers:
+extremal T=0 order 3 (generic), Ω=0 and Φ_e=0 order 4 (reflection-fixed) — the n=3 Result-6
+law. Reflection-fixed COEFFICIENTS in EXACT closed form via a universal identity (R's
+reflection-face leading coefficient = −14/B, B = leading coeff of the collapsing metric
+component, symbolic): C_Ω(S,Q) = −3584 Q²S⁵π³(πQ²−S)²/[...], C_Φ(S,J) = −14336
+J²S⁵π⁵(2πJ−S)²(2πJ+S)²(4π²J²+S²)/[...], matched to direct curvature to ~20 digits; corner
+factors (πQ²−S)², (2πJ−S)² vanish on the divisor corners (Ω=0∩extremal, Φ_e=0∩extremal).
+REMAINING: only the extremal (order-3, branch-point) coefficient C_ext(J,Q) closed form
+(high-precision numeric in hand); everything else of the n=3 complementarity is certified.
 
 ## Candidate D (output-channel norm inverse) — TEST 1/2 VERDICT (2026-07-07)
 
