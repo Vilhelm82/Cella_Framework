@@ -337,9 +337,24 @@ understood; a list of banned sources would not protect against the next stale on
   π²·algebraic-irrational, not an elliptic period). General-n (r=n−1) formulas
   `−(n−2)/(2(n+1))`/`−1/(n+1)` VOID (aux-normalized) — redo owed (expect `√(n+1)`).
   **ARITH-I: Stage A COMPLETE + Stage B CLOSED (r=3 constant PROVEN −2π²/√5) —
-  campaign's central r=2/r=3 questions both resolved. NEXT OPEN TASK: engine queue is
-  Will's call (ARITH-I follow-ups are paper-track; the −1/(n+1) conjecture + symbolic
-  −2π²/5 are the natural continuation if reprioritized).**
+  campaign's central r=2/r=3 questions both resolved.**
+- **ARITH-I CAMPAIGN CLOSED (2026-07-07).** `campaigns/ARITH_I_higher_cohn_vossen/CLOSE.md`.
+  Both central questions resolved; case law banked (fabricated stop condition VOID;
+  channel normalization bordered-vs-compression). Open follow-ups are ALL paper-track
+  (general-n r=n−1 redo w/ standard norm — aux formulas void; r=3-fixed-n>4; §I.3b
+  re-derivation; prior-art) — they set NO engine priority. Cross-checked Will's
+  `DBP_Curvature_Constants_Corrected_Formulation.md`: fully consistent (it's the n=3
+  elliptic story; Stage-B −2π²/√5 is the n≥4 compact story; K-2 generalizes its
+  keystone isogeny). **NEXT OPEN TASK — Will's call on the axis:** (build) Layer 2 G2.0
+  "the fit as observation map" is the ROADMAP's next gate; (discovery, post-Layer-1,
+  novelty-axis only) LEAD-1 (κ grid) or **LEAD-7** (n=3 DBP metric/complementarity lift).
+  **LEAD-7 IS reachable** (Layer 1 complete; RC-5 scoped+priced `reports/RC5_SCOPING.md`,
+  1–2 sessions) — but its BINDING prerequisite is **RC-5 re-verified in-repo** (n=2 GTD
+  spine: channel-inverse metric, pole-order law 2/3/4, Kerr/RN/vdW complementarity; no
+  in-repo certificate yet — origin is the GTD paper only). So LEAD-7's concrete first
+  step = the RC-5 recert, NOT to cite paper eq.(28) [pending] or the Mahanta m_sg=0
+  reading [unconfirmed]. Then LEAD-7 Stage A (enumerate S₃-equivariant bilinear forms
+  on O → screen constraints (1)–(5) → Kerr-Newman battery + D3 complementarity).
   Note for the session: `verification/` scripts carry the certified formulas
   (transport, normal form, F1/F3, role channels) — cite and re-use those, import
   nothing else.
