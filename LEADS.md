@@ -122,9 +122,19 @@ locate the wall (transcendental boundary) honestly.
 
 ## LEAD-7 — The n=3 DBP metric and complementarity lift (h_3)
 
-**Status:** OPEN — added 2026-07-06 from the updated R&D brief (`Reference_Material/`);
-the GTD/DBP paper's own named open problem, and the continuation of the LEVER Tier-2
-GTD row (the physics-novelty channel).
+**Status:** OPEN — campaign opened 2026-07-07 (`campaigns/LEAD7_dbp_metric/BRIEF.md`).
+GTD/DBP paper's own named open problem; the physics-novelty channel (LEVER Tier-2 GTD
+row). **RC-5 structure tier DONE** (`verification/recert_gtd_dbp_n2.py` `d047d21b`,
+11/11 ×2: Christodoulou, Davies, jet+channels at fixture (8,6), radical cancellation,
+`g^DBP` pos-def, boundary=chart-singularity). **METRIC DESIGN (Will's flag):** the
+paper's diagonal `g^DBP=−h⁻¹` was the cheap first pass; the campaign adopts the
+**carrier-pullback metric `g_ab=(dO)ᵀ(dO)`** as primary — canonical (pullback of the
+faithful carrier), S₃-equivariant + factors through O by construction, degenerates on
+isotropy loci, and **generalizes to n=3 with NO coupling-arrangement ambiguity** (it
+dissolves the paper's open problem). Complementarity CONFIRMED numerically on Kerr
+(diverges on extremal & Schwarzschild, finite on Davies; `reports/LEAD7_pullback_probe.md`).
+**Next:** RC-5 retrodiction tier (pole-order coeffs) + which candidate reproduces the
+order-3/4 law, then Stage A (n=3 lift: `(dO)ᵀ(dO)` on Kerr-Newman → D3 complementarity test).
 **The question:** at n=2 the DBP metric `g_DBP = -h^(-1)`, `h = Σ_i κ_{c,i} dE_i ⊗ dE_i`
 is established with the complementarity law (GTD-II: order-2 poles on transition loci;
 DBP: order-3 poles on generic role boundaries, order-4 where reflection-fixed). At n=3

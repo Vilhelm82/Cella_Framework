@@ -355,6 +355,17 @@ understood; a list of banned sources would not protect against the next stale on
   step = the RC-5 recert, NOT to cite paper eq.(28) [pending] or the Mahanta m_sg=0
   reading [unconfirmed]. Then LEAD-7 Stage A (enumerate S₃-equivariant bilinear forms
   on O → screen constraints (1)–(5) → Kerr-Newman battery + D3 complementarity).
+- **LEAD-7 OPENED (2026-07-07).** `campaigns/LEAD7_dbp_metric/BRIEF.md`. RC-5 structure
+  tier DONE (`verification/recert_gtd_dbp_n2.py` `d047d21b`, 11/11 ×2 — n=2 Kerr spine
+  re-verified: Christodoulou, Davies, jet+channels at fixture (8,6), radical cancellation,
+  `g^DBP` pos-def, boundary=chart-singularity). **Metric decision (Will's flag): the
+  paper's diagonal `g^DBP=−h⁻¹` was the cheap first pass; primary candidate is now the
+  CARRIER-PULLBACK metric `g_ab=(dO)ᵀ(dO)`** — canonical, S₃-equivariant + factors through
+  O by construction, degenerates on isotropy loci, and generalizes to n=3 with NO
+  coupling-arrangement ambiguity (dissolves the paper's open problem). Kerr complementarity
+  CONFIRMED numerically (diverges on extremal & Schwarzschild boundaries, finite on Davies;
+  `reports/LEAD7_pullback_probe.md`). **NEXT: RC-5 retrodiction tier (pole-order coeffs) +
+  which candidate gives the paper's order-3/4 law; then Stage A (n=3 lift + D3 test).**
   Note for the session: `verification/` scripts carry the certified formulas
   (transport, normal form, F1/F3, role channels) — cite and re-use those, import
   nothing else.
