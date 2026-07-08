@@ -1,0 +1,1227 @@
+{
+  "campaign": "cella_pathfinder_hostile_mvp",
+  "cases": [
+    {
+      "engines": {
+        "cella_direct": {
+          "elapsed_ms": 0.17,
+          "note": "Direct profile has telemetry but no higher Pathfinder route contract.",
+          "operation_shape": "catastrophic_cancellation",
+          "status": "pass"
+        },
+        "cella_pathfinder": {
+          "elapsed_ms": 0.729,
+          "route": {
+            "blocking_inputs": {
+              "missing_constants": []
+            },
+            "decision": "rewrite_candidate_needed",
+            "dominant_pattern": "sterbenz_safe_catastrophic",
+            "exact_account_available": true,
+            "expression": "(1 + eps) - 1",
+            "next_tools": [
+              "cella_rewrite_candidates",
+              "cella_pathfinder_compare"
+            ],
+            "operation_shape": "catastrophic_cancellation",
+            "profile_summary": {
+              "catastrophic_site_count": 1,
+              "danger_sites": [
+                {
+                  "account_probe_status": "exact_q_account",
+                  "path": "root",
+                  "pattern": "sterbenz_safe_catastrophic",
+                  "severity": "catastrophic",
+                  "signal_exponent": "1",
+                  "unknown_parameters": []
+                }
+              ],
+              "exact_account_coverage": "all",
+              "predicted_burden_vector": {
+                "benign_sites": 0,
+                "catastrophic_sites": 1,
+                "dominant_pattern": "sterbenz_safe_catastrophic",
+                "largest_leading_constant": 1.0,
+                "micro_probe_sites": 1,
+                "min_predicted_crossing_epsilon": 2.2204460479538675e-16,
+                "ordinary_sites": 0,
+                "self_cancellation_sites": 0,
+                "subtraction_sites": 1,
+                "unrecognised_sites": 0
+              },
+              "rewriteable_catastrophic_site_count": 1,
+              "site_count": 1,
+              "unresolved_catastrophic_site_count": 0
+            },
+            "route_confidence": "high",
+            "why": "Every catastrophic same-leading-constant cancellation site has a conservative rewrite family."
+          },
+          "status": "pass"
+        },
+        "flint_arb": {
+          "backend": "python-flint arb",
+          "bits": 227,
+          "contains_zero": false,
+          "elapsed_ms": 0.306,
+          "lower": "[9.9999999999999999999999999999999999999999999999999999999999999999999751413880386e-13 +/- 2.40e-93]",
+          "note": "Arb ball evaluation baseline; no Pathfinder route or rewrite decision.",
+          "operation": "constant_offset_collapse",
+          "precision_dps": 80,
+          "radius": "[2.1084395925733794171078960527306213655310127908538739200151122571108681519436361e-81 +/- 2.23e-161]",
+          "rel_accuracy_bits": 227,
+          "sample_eps": "1e-12",
+          "status": "pass",
+          "upper": "[1.0000000000000000000000000000000000000000000000000000000000000000000017310179890e-12 +/- 9.16e-93]",
+          "value": "[1.0000000000000000000000000000000000000000000000000000000000000000000e-12 +/- 2.49e-81]"
+        },
+        "mpmath_naive": {
+          "elapsed_ms": 0.073,
+          "note": "Direct mpmath numeric sample; no route or rewrite decision.",
+          "sample_eps": "1e-12",
+          "status": "pass",
+          "value": "1.00008890058234e-12"
+        },
+        "sympy_naive": {
+          "elapsed_ms": 152.309,
+          "node_count": 0,
+          "note": "Naive SymPy parse/simplify baseline; no Pathfinder route telemetry.",
+          "simplified": "eps",
+          "simplified_node_count": 0,
+          "status": "pass"
+        }
+      },
+      "family": "arithmetic_cancellation",
+      "id": "arith_constant_offset",
+      "kind": "route_expression",
+      "source": "Pathfinder cancellation design"
+    },
+    {
+      "engines": {
+        "cella_direct": {
+          "elapsed_ms": 0.094,
+          "note": "Direct profile has telemetry but no higher Pathfinder route contract.",
+          "operation_shape": "catastrophic_cancellation",
+          "status": "pass"
+        },
+        "cella_pathfinder": {
+          "elapsed_ms": 0.212,
+          "route": {
+            "blocking_inputs": {
+              "missing_constants": []
+            },
+            "decision": "rewrite_candidate_needed",
+            "dominant_pattern": "sterbenz_safe_catastrophic",
+            "exact_account_available": false,
+            "expression": "sqrt(1 + eps) - 1",
+            "next_tools": [
+              "cella_rewrite_candidates",
+              "cella_pathfinder_compare"
+            ],
+            "operation_shape": "catastrophic_cancellation",
+            "profile_summary": {
+              "catastrophic_site_count": 1,
+              "danger_sites": [
+                {
+                  "account_probe_status": "float_telemetry_only",
+                  "path": "root",
+                  "pattern": "sterbenz_safe_catastrophic",
+                  "severity": "catastrophic",
+                  "signal_exponent": "1",
+                  "unknown_parameters": []
+                }
+              ],
+              "exact_account_coverage": "none",
+              "predicted_burden_vector": {
+                "benign_sites": 0,
+                "catastrophic_sites": 1,
+                "dominant_pattern": "sterbenz_safe_catastrophic",
+                "largest_leading_constant": 1.0,
+                "micro_probe_sites": 1,
+                "min_predicted_crossing_epsilon": 4.440892125490019e-16,
+                "ordinary_sites": 0,
+                "self_cancellation_sites": 0,
+                "subtraction_sites": 1,
+                "unrecognised_sites": 0
+              },
+              "rewriteable_catastrophic_site_count": 1,
+              "site_count": 1,
+              "unresolved_catastrophic_site_count": 0
+            },
+            "route_confidence": "medium",
+            "why": "Every catastrophic same-leading-constant cancellation site has a conservative rewrite family."
+          },
+          "status": "pass"
+        },
+        "flint_arb": {
+          "backend": "python-flint arb",
+          "bits": 228,
+          "contains_zero": false,
+          "elapsed_ms": 0.072,
+          "lower": "[4.9999999999987500000000006249999999996093750000002734374999997949218256542815688e-13 +/- 1.81e-93]",
+          "note": "Arb ball evaluation baseline; no Pathfinder route or rewrite decision.",
+          "operation": "sqrt_minus_one",
+          "precision_dps": 80,
+          "radius": "[3.1626754808684483716094851270364004933080768590372608532183428213243083672464792e-81 +/- 3.89e-161]",
+          "rel_accuracy_bits": 226,
+          "sample_eps": "1e-12",
+          "status": "pass",
+          "upper": "[4.9999999999987500000000006249999999996093750000002734374999997949218889077911862e-13 +/- 1.31e-93]",
+          "value": "[4.9999999999987500000000006249999999996093750000002734374999997949219e-13 +/- 7.44e-81]"
+        },
+        "mpmath_naive": {
+          "elapsed_ms": 0.069,
+          "note": "Direct mpmath numeric sample; no route or rewrite decision.",
+          "sample_eps": "1e-12",
+          "status": "pass",
+          "value": "5.00044450291171e-13"
+        },
+        "sympy_naive": {
+          "elapsed_ms": 52.844,
+          "node_count": 4,
+          "note": "Naive SymPy parse/simplify baseline; no Pathfinder route telemetry.",
+          "simplified": "sqrt(eps + 1) - 1",
+          "simplified_node_count": 4,
+          "status": "pass"
+        }
+      },
+      "family": "arithmetic_cancellation",
+      "id": "arith_sqrt_conjugate",
+      "kind": "route_expression",
+      "source": "Pathfinder cancellation design"
+    },
+    {
+      "engines": {
+        "cella_direct": {
+          "elapsed_ms": 0.071,
+          "note": "Direct profile has telemetry but no higher Pathfinder route contract.",
+          "operation_shape": "catastrophic_cancellation",
+          "status": "pass"
+        },
+        "cella_pathfinder": {
+          "elapsed_ms": 0.118,
+          "route": {
+            "blocking_inputs": {
+              "missing_constants": []
+            },
+            "decision": "precision_budget_needed",
+            "dominant_pattern": "sterbenz_safe_catastrophic",
+            "exact_account_available": false,
+            "expression": "cos(eps) - 1",
+            "next_tools": [
+              "cella_arith_precision_budget",
+              "cella_operand_residue_trace"
+            ],
+            "operation_shape": "catastrophic_cancellation",
+            "profile_summary": {
+              "catastrophic_site_count": 1,
+              "danger_sites": [
+                {
+                  "account_probe_status": "float_telemetry_only",
+                  "path": "root",
+                  "pattern": "sterbenz_safe_catastrophic",
+                  "severity": "catastrophic",
+                  "signal_exponent": "2",
+                  "unknown_parameters": []
+                }
+              ],
+              "exact_account_coverage": "none",
+              "predicted_burden_vector": {
+                "benign_sites": 0,
+                "catastrophic_sites": 1,
+                "dominant_pattern": "sterbenz_safe_catastrophic",
+                "largest_leading_constant": 1.0,
+                "micro_probe_sites": 1,
+                "min_predicted_crossing_epsilon": 2.1073423851559573e-08,
+                "ordinary_sites": 0,
+                "self_cancellation_sites": 0,
+                "subtraction_sites": 1,
+                "unrecognised_sites": 0
+              },
+              "rewriteable_catastrophic_site_count": 0,
+              "site_count": 1,
+              "unresolved_catastrophic_site_count": 1
+            },
+            "route_confidence": "medium",
+            "why": "Catastrophic cancellation was detected but no conservative rewrite family was found."
+          },
+          "status": "pass"
+        },
+        "flint_arb": {
+          "backend": "python-flint arb",
+          "bits": 189,
+          "contains_zero": false,
+          "elapsed_ms": 0.063,
+          "lower": "[-4.9999999999999999999999995833333333333333333333333472222418843625305681663384045e-25 +/- 1.97e-105]",
+          "note": "Arb ball evaluation baseline; no Pathfinder route or rewrite decision.",
+          "operation": "cos_minus_one",
+          "precision_dps": 80,
+          "radius": "[1.0583378423582641316884591881040880339403930990919246582693052547371169448354781e-81 +/- 2.35e-161]",
+          "rel_accuracy_bits": 187,
+          "sample_eps": "1e-12",
+          "status": "pass",
+          "upper": "[-4.9999999999999999999999995833333333333333333333333472222207176056834028837046353e-25 +/- 3.59e-105]",
+          "value": "[-4.9999999999999999999999995833333333333333333333333472222e-25 +/- 4.19e-81]"
+        },
+        "mpmath_naive": {
+          "elapsed_ms": 0.059,
+          "note": "Direct mpmath numeric sample; no route or rewrite decision.",
+          "sample_eps": "1e-12",
+          "status": "pass",
+          "value": "0.0"
+        },
+        "sympy_naive": {
+          "elapsed_ms": 7.789,
+          "node_count": 2,
+          "note": "Naive SymPy parse/simplify baseline; no Pathfinder route telemetry.",
+          "simplified": "cos(eps) - 1",
+          "simplified_node_count": 2,
+          "status": "pass"
+        }
+      },
+      "family": "arithmetic_cancellation",
+      "id": "arith_unresolved_cos",
+      "kind": "route_expression",
+      "source": "Pathfinder precision-budget gap case"
+    },
+    {
+      "engines": {
+        "cella_direct": {
+          "elapsed_ms": 0.965,
+          "status": "pass",
+          "symbolic": {
+            "expression": {
+              "denominator": [
+                [
+                  "1",
+                  [
+                    "0",
+                    "2"
+                  ]
+                ],
+                [
+                  "2",
+                  [
+                    "1",
+                    "1"
+                  ]
+                ]
+              ],
+              "denominator_terms": "2",
+              "is_zero": false,
+              "numerator": [
+                [
+                  "1",
+                  [
+                    "0",
+                    "2"
+                  ]
+                ],
+                [
+                  "2",
+                  [
+                    "1",
+                    "1"
+                  ]
+                ]
+              ],
+              "numerator_terms": "2",
+              "text": "(Q^2 + 2*S*Q)/(Q^2 + 2*S*Q)",
+              "variables": [
+                "S",
+                "Q"
+              ]
+            },
+            "method": "sympy_parse_to_cella_sparse_Q_polynomial_field",
+            "variables": [
+              "S",
+              "Q"
+            ],
+            "verdict_path": "Cella sparse terms; no floats; no transcendental simplification"
+          }
+        },
+        "cella_pathfinder": {
+          "elapsed_ms": 1.965,
+          "route": {
+            "decision": "symbolic_normal_form",
+            "why": "Use Cella sparse rational-function records instead of expanded global algebra."
+          },
+          "status": "pass",
+          "symbolic": {
+            "expression": {
+              "denominator": [
+                [
+                  "1",
+                  [
+                    "0",
+                    "2"
+                  ]
+                ],
+                [
+                  "2",
+                  [
+                    "1",
+                    "1"
+                  ]
+                ]
+              ],
+              "denominator_terms": "2",
+              "is_zero": false,
+              "numerator": [
+                [
+                  "1",
+                  [
+                    "0",
+                    "2"
+                  ]
+                ],
+                [
+                  "2",
+                  [
+                    "1",
+                    "1"
+                  ]
+                ]
+              ],
+              "numerator_terms": "2",
+              "text": "(Q^2 + 2*S*Q)/(Q^2 + 2*S*Q)",
+              "variables": [
+                "S",
+                "Q"
+              ]
+            },
+            "method": "sympy_parse_to_cella_sparse_Q_polynomial_field",
+            "variables": [
+              "S",
+              "Q"
+            ],
+            "verdict_path": "Cella sparse terms; no floats; no transcendental simplification"
+          }
+        },
+        "flint_arb": {
+          "elapsed_ms": 0.001,
+          "reason": "Arb baseline is not applicable to symbolic_rational in this MVP",
+          "status": "limit"
+        },
+        "mpmath_naive": {
+          "elapsed_ms": 0.002,
+          "reason": "mpmath naive baseline is not applicable to symbolic_rational",
+          "status": "limit"
+        },
+        "sympy_naive": {
+          "elapsed_ms": 7.12,
+          "node_count": 8,
+          "note": "Naive SymPy parse/simplify baseline; no Pathfinder route telemetry.",
+          "simplified": "1",
+          "simplified_node_count": 0,
+          "status": "pass"
+        }
+      },
+      "family": "symbolic_swell",
+      "id": "symbolic_rational_normal_form",
+      "kind": "symbolic_rational",
+      "source": "DBP-style rational function normal-form route"
+    },
+    {
+      "engines": {
+        "cella_direct": {
+          "elapsed_ms": 0.017,
+          "local_germ": {
+            "coefficient": null,
+            "coefficient_text": "-14/(B)",
+            "coordinate": "x",
+            "kind": "parity_fixed",
+            "law": "R = -m(m+5)/B * x^-4 + O(x^-2)",
+            "m": "2",
+            "order": "4",
+            "proof_obligations": [
+              "native component has even quadratic collapse",
+              "all transverse channels have x^-2 leading poles",
+              "all components are even in the boundary coordinate",
+              "B and transverse leading units are nonzero on the stratum"
+            ],
+            "sympy_killer": "read coefficient from local germ; do not expand global curvature"
+          },
+          "status": "pass"
+        },
+        "cella_pathfinder": {
+          "elapsed_ms": 0.04,
+          "local_germ": {
+            "coefficient": null,
+            "coefficient_text": "-14/(B)",
+            "coordinate": "x",
+            "kind": "parity_fixed",
+            "law": "R = -m(m+5)/B * x^-4 + O(x^-2)",
+            "m": "2",
+            "order": "4",
+            "proof_obligations": [
+              "native component has even quadratic collapse",
+              "all transverse channels have x^-2 leading poles",
+              "all components are even in the boundary coordinate",
+              "B and transverse leading units are nonzero on the stratum"
+            ],
+            "sympy_killer": "read coefficient from local germ; do not expand global curvature"
+          },
+          "status": "pass"
+        },
+        "flint_arb": {
+          "elapsed_ms": 0.001,
+          "reason": "Arb baseline is not applicable to local_germ in this MVP",
+          "status": "limit"
+        },
+        "mpmath_naive": {
+          "elapsed_ms": 0.001,
+          "reason": "mpmath naive baseline is not applicable to local_germ",
+          "status": "limit"
+        },
+        "sympy_naive": {
+          "elapsed_ms": 0.001,
+          "reason": "SymPy naive baseline is not applicable to local_germ",
+          "status": "limit"
+        }
+      },
+      "family": "local_geometry",
+      "id": "pfc_parity_fixed",
+      "kind": "local_germ",
+      "source": "pfc_normal_forms.tex parity-fixed inverse-channel law"
+    },
+    {
+      "engines": {
+        "cella_direct": {
+          "elapsed_ms": 0.015,
+          "local_germ": {
+            "coefficient": null,
+            "coefficient_text": "(P1/P0 + R1/R0)/(A2)",
+            "coordinate": "delta",
+            "kind": "generic_quadratic",
+            "law": "R = (1/A) * sum(P_a1/P_a0) * x^-3 + O(x^-2)",
+            "m": "2",
+            "order": "3",
+            "proof_obligations": [
+              "native component has quadratic collapse",
+              "transverse channels have finite nonzero leading values",
+              "at least one transverse first drift is nonzero for exact order 3"
+            ],
+            "sympy_killer": "read odd pole from transverse first drift"
+          },
+          "status": "pass"
+        },
+        "cella_pathfinder": {
+          "elapsed_ms": 0.021,
+          "local_germ": {
+            "coefficient": null,
+            "coefficient_text": "(P1/P0 + R1/R0)/(A2)",
+            "coordinate": "delta",
+            "kind": "generic_quadratic",
+            "law": "R = (1/A) * sum(P_a1/P_a0) * x^-3 + O(x^-2)",
+            "m": "2",
+            "order": "3",
+            "proof_obligations": [
+              "native component has quadratic collapse",
+              "transverse channels have finite nonzero leading values",
+              "at least one transverse first drift is nonzero for exact order 3"
+            ],
+            "sympy_killer": "read odd pole from transverse first drift"
+          },
+          "status": "pass"
+        },
+        "flint_arb": {
+          "elapsed_ms": 0.001,
+          "reason": "Arb baseline is not applicable to local_germ in this MVP",
+          "status": "limit"
+        },
+        "mpmath_naive": {
+          "elapsed_ms": 0.001,
+          "reason": "mpmath naive baseline is not applicable to local_germ",
+          "status": "limit"
+        },
+        "sympy_naive": {
+          "elapsed_ms": 0.001,
+          "reason": "SymPy naive baseline is not applicable to local_germ",
+          "status": "limit"
+        }
+      },
+      "family": "local_geometry",
+      "id": "pfc_generic_quadratic",
+      "kind": "local_germ",
+      "source": "pfc_normal_forms.tex generic quadratic collapse"
+    },
+    {
+      "engines": {
+        "cella_direct": {
+          "corner": {
+            "active_frontface": [
+              "Vx",
+              "Vy"
+            ],
+            "active_vertices": [
+              "Vx",
+              "Vy"
+            ],
+            "balanced_direction": {
+              "ax_over_ay": "1"
+            },
+            "cancellation": {},
+            "face_data": {
+              "p_x": "4",
+              "p_y": "4",
+              "r_x": "2",
+              "r_y": "2"
+            },
+            "input_kind": "face_data",
+            "method": "corner_support_function_frontface_certificate",
+            "path": {
+              "ax": "1",
+              "ay": "1"
+            },
+            "support_order": "2",
+            "support_terms": {
+              "Vx": "2",
+              "Vy": "2"
+            },
+            "vertices": {
+              "Vx": {
+                "active": true,
+                "coefficient": null,
+                "exponent": [
+                  "-4",
+                  "2"
+                ],
+                "polar": true
+              },
+              "Vy": {
+                "active": true,
+                "coefficient": null,
+                "exponent": [
+                  "2",
+                  "-4"
+                ],
+                "polar": true
+              }
+            }
+          },
+          "elapsed_ms": 0.024,
+          "status": "pass"
+        },
+        "cella_pathfinder": {
+          "corner": {
+            "active_frontface": [
+              "Vx",
+              "Vy"
+            ],
+            "active_vertices": [
+              "Vx",
+              "Vy"
+            ],
+            "balanced_direction": {
+              "ax_over_ay": "1"
+            },
+            "cancellation": {},
+            "face_data": {
+              "p_x": "4",
+              "p_y": "4",
+              "r_x": "2",
+              "r_y": "2"
+            },
+            "input_kind": "face_data",
+            "method": "corner_support_function_frontface_certificate",
+            "path": {
+              "ax": "1",
+              "ay": "1"
+            },
+            "support_order": "2",
+            "support_terms": {
+              "Vx": "2",
+              "Vy": "2"
+            },
+            "vertices": {
+              "Vx": {
+                "active": true,
+                "coefficient": null,
+                "exponent": [
+                  "-4",
+                  "2"
+                ],
+                "polar": true
+              },
+              "Vy": {
+                "active": true,
+                "coefficient": null,
+                "exponent": [
+                  "2",
+                  "-4"
+                ],
+                "polar": true
+              }
+            }
+          },
+          "elapsed_ms": 0.041,
+          "status": "pass"
+        },
+        "flint_arb": {
+          "elapsed_ms": 0.001,
+          "reason": "Arb baseline is not applicable to corner_frontface in this MVP",
+          "status": "limit"
+        },
+        "mpmath_naive": {
+          "elapsed_ms": 0.001,
+          "reason": "mpmath naive baseline is not applicable to corner_frontface",
+          "status": "limit"
+        },
+        "sympy_naive": {
+          "elapsed_ms": 0.001,
+          "reason": "SymPy naive baseline is not applicable to corner_frontface",
+          "status": "limit"
+        }
+      },
+      "family": "local_geometry",
+      "id": "pfc_corner_wedge",
+      "kind": "corner_frontface",
+      "source": "pfc_normal_forms.tex codimension-2 corner valuation"
+    },
+    {
+      "engines": {
+        "cella_direct": {
+          "elapsed_ms": 0.001,
+          "reason": "Direct Cella primitive path has no internal Pathfinder overlay for this case.",
+          "status": "limit"
+        },
+        "cella_pathfinder": {
+          "elapsed_ms": 0.049,
+          "overlay": {
+            "authority": "c001_eval",
+            "channel_predicate": "delta_kappa_c",
+            "domain": "dbp",
+            "local_germ_kind": "unknown",
+            "next_tools": [
+              "cella_gauge_channel_transport",
+              "cella_three_channel_referee"
+            ],
+            "notes": [
+              "Stage C pin/move predicates are keyed to the coupling channel, not the whole channel tuple."
+            ],
+            "quantity_definitions": {
+              "channel_norm_sq": "kappa_c^2 + kappa_s^2 + kappa_int^2",
+              "squared_total_KG": "K_G^2"
+            },
+            "regularity_status": "unknown",
+            "route_status": "eval_tier",
+            "shape_resolution": "not_applicable",
+            "warnings": [
+              "whole_vector_predicate_superseded"
+            ]
+          },
+          "route": {
+            "blocking_inputs": {
+              "missing_constants": []
+            },
+            "decision": "direct_ok",
+            "dominant_pattern": "none",
+            "exact_account_available": false,
+            "expression": "eps",
+            "geometry_overlay": {
+              "authority": "c001_eval",
+              "channel_predicate": "delta_kappa_c",
+              "domain": "dbp",
+              "local_germ_kind": "unknown",
+              "next_tools": [
+                "cella_gauge_channel_transport",
+                "cella_three_channel_referee"
+              ],
+              "notes": [
+                "Stage C pin/move predicates are keyed to the coupling channel, not the whole channel tuple."
+              ],
+              "quantity_definitions": {
+                "channel_norm_sq": "kappa_c^2 + kappa_s^2 + kappa_int^2",
+                "squared_total_KG": "K_G^2"
+              },
+              "regularity_status": "unknown",
+              "route_status": "eval_tier",
+              "shape_resolution": "not_applicable",
+              "warnings": [
+                "whole_vector_predicate_superseded"
+              ]
+            },
+            "next_tools": [
+              "cella_symbolic_rational",
+              "cella_arith_precision_budget",
+              "cella_gauge_channel_transport",
+              "cella_three_channel_referee"
+            ],
+            "operation_shape": "no_subtraction",
+            "profile_summary": {
+              "catastrophic_site_count": 0,
+              "danger_sites": [],
+              "exact_account_coverage": "none",
+              "predicted_burden_vector": {
+                "benign_sites": 0,
+                "catastrophic_sites": 0,
+                "dominant_pattern": "none",
+                "largest_leading_constant": null,
+                "micro_probe_sites": 0,
+                "min_predicted_crossing_epsilon": null,
+                "ordinary_sites": 0,
+                "self_cancellation_sites": 0,
+                "subtraction_sites": 0,
+                "unrecognised_sites": 0
+              },
+              "rewriteable_catastrophic_site_count": 0,
+              "site_count": 0,
+              "unresolved_catastrophic_site_count": 0
+            },
+            "route_confidence": "high",
+            "why": "No subtraction site was detected."
+          },
+          "status": "pass"
+        },
+        "flint_arb": {
+          "elapsed_ms": 0.001,
+          "reason": "Arb baseline is not applicable to dbp_overlay in this MVP",
+          "status": "limit"
+        },
+        "mpmath_naive": {
+          "elapsed_ms": 0.001,
+          "reason": "mpmath naive baseline is not applicable to dbp_overlay",
+          "status": "limit"
+        },
+        "sympy_naive": {
+          "elapsed_ms": 0.001,
+          "reason": "SymPy naive baseline is not applicable to dbp_overlay",
+          "status": "limit"
+        }
+      },
+      "family": "dbp_channel",
+      "id": "dbp_stage_c_channel_predicate",
+      "kind": "dbp_overlay",
+      "source": "c001 three-channel KG campaign Stage C correction"
+    },
+    {
+      "engines": {
+        "cella_direct": {
+          "elapsed_ms": 0.001,
+          "reason": "Direct Cella primitive path has no internal Pathfinder overlay for this case.",
+          "status": "limit"
+        },
+        "cella_pathfinder": {
+          "elapsed_ms": 0.049,
+          "overlay": {
+            "authority": "dbp_standing_results",
+            "channel_predicate": null,
+            "domain": "dbp",
+            "local_germ_kind": "unknown",
+            "next_tools": [],
+            "notes": [
+              "single_g_i_zero_is_not_singular_when_q_nonzero"
+            ],
+            "quantity_definitions": {
+              "channel_norm_sq": "kappa_c^2 + kappa_s^2 + kappa_int^2",
+              "squared_total_KG": "K_G^2"
+            },
+            "regularity": {
+              "g": [
+                "0",
+                "1",
+                "2"
+              ],
+              "q": "5",
+              "rule": "refuse only when q=g^Tg is zero"
+            },
+            "regularity_status": "regular",
+            "route_status": "standing_canonical",
+            "shape_resolution": "not_applicable",
+            "warnings": []
+          },
+          "route": {
+            "blocking_inputs": {
+              "missing_constants": []
+            },
+            "decision": "direct_ok",
+            "dominant_pattern": "none",
+            "exact_account_available": false,
+            "expression": "eps",
+            "geometry_overlay": {
+              "authority": "dbp_standing_results",
+              "channel_predicate": null,
+              "domain": "dbp",
+              "local_germ_kind": "unknown",
+              "next_tools": [],
+              "notes": [
+                "single_g_i_zero_is_not_singular_when_q_nonzero"
+              ],
+              "quantity_definitions": {
+                "channel_norm_sq": "kappa_c^2 + kappa_s^2 + kappa_int^2",
+                "squared_total_KG": "K_G^2"
+              },
+              "regularity": {
+                "g": [
+                  "0",
+                  "1",
+                  "2"
+                ],
+                "q": "5",
+                "rule": "refuse only when q=g^Tg is zero"
+              },
+              "regularity_status": "regular",
+              "route_status": "standing_canonical",
+              "shape_resolution": "not_applicable",
+              "warnings": []
+            },
+            "next_tools": [
+              "cella_symbolic_rational",
+              "cella_arith_precision_budget"
+            ],
+            "operation_shape": "no_subtraction",
+            "profile_summary": {
+              "catastrophic_site_count": 0,
+              "danger_sites": [],
+              "exact_account_coverage": "none",
+              "predicted_burden_vector": {
+                "benign_sites": 0,
+                "catastrophic_sites": 0,
+                "dominant_pattern": "none",
+                "largest_leading_constant": null,
+                "micro_probe_sites": 0,
+                "min_predicted_crossing_epsilon": null,
+                "ordinary_sites": 0,
+                "self_cancellation_sites": 0,
+                "subtraction_sites": 0,
+                "unrecognised_sites": 0
+              },
+              "rewriteable_catastrophic_site_count": 0,
+              "site_count": 0,
+              "unresolved_catastrophic_site_count": 0
+            },
+            "route_confidence": "high",
+            "why": "No subtraction site was detected."
+          },
+          "status": "pass"
+        },
+        "flint_arb": {
+          "elapsed_ms": 0.0,
+          "reason": "Arb baseline is not applicable to dbp_overlay in this MVP",
+          "status": "limit"
+        },
+        "mpmath_naive": {
+          "elapsed_ms": 0.001,
+          "reason": "mpmath naive baseline is not applicable to dbp_overlay",
+          "status": "limit"
+        },
+        "sympy_naive": {
+          "elapsed_ms": 0.001,
+          "reason": "SymPy naive baseline is not applicable to dbp_overlay",
+          "status": "limit"
+        }
+      },
+      "family": "dbp_channel",
+      "id": "dbp_regular_gi_zero",
+      "kind": "dbp_overlay",
+      "source": "c001 K11 frozen-spec tension"
+    },
+    {
+      "engines": {
+        "cella_direct": {
+          "elapsed_ms": 0.001,
+          "reason": "Direct Cella primitive path has no internal Pathfinder overlay for this case.",
+          "status": "limit"
+        },
+        "cella_pathfinder": {
+          "elapsed_ms": 0.026,
+          "overlay": {
+            "authority": "dbp_standing_results",
+            "carrier": "M^(n-2,2) = C[C(n,2)]",
+            "channel_predicate": null,
+            "domain": "dbp",
+            "local_germ_kind": "unknown",
+            "loss_shape": "S^(n-2,2)",
+            "n": "5",
+            "next_tools": [
+              "cella_role_pair_loss_diagnostic",
+              "cella_rolechspec_n3"
+            ],
+            "notes": [],
+            "quantity_definitions": {
+              "channel_norm_sq": "kappa_c^2 + kappa_s^2 + kappa_int^2",
+              "squared_total_KG": "K_G^2"
+            },
+            "regularity_status": "unknown",
+            "route_status": "standing_canonical",
+            "shape_resolution": "carrier_required",
+            "warnings": []
+          },
+          "route": {
+            "blocking_inputs": {
+              "missing_constants": []
+            },
+            "decision": "direct_ok",
+            "dominant_pattern": "none",
+            "exact_account_available": false,
+            "expression": "eps",
+            "geometry_overlay": {
+              "authority": "dbp_standing_results",
+              "carrier": "M^(n-2,2) = C[C(n,2)]",
+              "channel_predicate": null,
+              "domain": "dbp",
+              "local_germ_kind": "unknown",
+              "loss_shape": "S^(n-2,2)",
+              "n": "5",
+              "next_tools": [
+                "cella_role_pair_loss_diagnostic",
+                "cella_rolechspec_n3"
+              ],
+              "notes": [],
+              "quantity_definitions": {
+                "channel_norm_sq": "kappa_c^2 + kappa_s^2 + kappa_int^2",
+                "squared_total_KG": "K_G^2"
+              },
+              "regularity_status": "unknown",
+              "route_status": "standing_canonical",
+              "shape_resolution": "carrier_required",
+              "warnings": []
+            },
+            "next_tools": [
+              "cella_symbolic_rational",
+              "cella_arith_precision_budget",
+              "cella_role_pair_loss_diagnostic",
+              "cella_rolechspec_n3"
+            ],
+            "operation_shape": "no_subtraction",
+            "profile_summary": {
+              "catastrophic_site_count": 0,
+              "danger_sites": [],
+              "exact_account_coverage": "none",
+              "predicted_burden_vector": {
+                "benign_sites": 0,
+                "catastrophic_sites": 0,
+                "dominant_pattern": "none",
+                "largest_leading_constant": null,
+                "micro_probe_sites": 0,
+                "min_predicted_crossing_epsilon": null,
+                "ordinary_sites": 0,
+                "self_cancellation_sites": 0,
+                "subtraction_sites": 0,
+                "unrecognised_sites": 0
+              },
+              "rewriteable_catastrophic_site_count": 0,
+              "site_count": 0,
+              "unresolved_catastrophic_site_count": 0
+            },
+            "route_confidence": "high",
+            "why": "No subtraction site was detected."
+          },
+          "status": "pass"
+        },
+        "flint_arb": {
+          "elapsed_ms": 0.0,
+          "reason": "Arb baseline is not applicable to dbp_overlay in this MVP",
+          "status": "limit"
+        },
+        "mpmath_naive": {
+          "elapsed_ms": 0.001,
+          "reason": "mpmath naive baseline is not applicable to dbp_overlay",
+          "status": "limit"
+        },
+        "sympy_naive": {
+          "elapsed_ms": 0.001,
+          "reason": "SymPy naive baseline is not applicable to dbp_overlay",
+          "status": "limit"
+        }
+      },
+      "family": "dbp_channel",
+      "id": "dbp_n5_carrier_required",
+      "kind": "dbp_overlay",
+      "source": "DBP standing results scalar threshold"
+    },
+    {
+      "engines": {
+        "cella_direct": {
+          "elapsed_ms": 0.003,
+          "reason": "Direct Cella primitive path has no internal Pathfinder overlay for this case.",
+          "status": "limit"
+        },
+        "cella_pathfinder": {
+          "command": [
+            "/usr/bin/python",
+            "/home/wlloyd/Cella Framework/verification/lead7_test6_pole_coeffs_n3.py"
+          ],
+          "elapsed_ms": 38487.386,
+          "expected_returncode": 0,
+          "returncode": 0,
+          "script_elapsed_ms": 38487.333,
+          "status": "pass",
+          "stderr_tail": "",
+          "stdout_contains": "VERDICT: LEAD-7 TEST 6 CLEAN",
+          "stdout_tail": "PASS  T6-a.universal_-14/B  R's x^-4 coefficient = -14/B(y,z), independent of A,C and all subleading terms\nPASS  T6-c.factored_Omega  C_Omega closed form = factored form (corner factor (pi Q^2 - S)^2 = Omega=0 \u2229 extremal)\nPASS  T6-c.factored_Phi  C_Phi closed form = factored form (corner factor (2pi J - S)^2 = Phi_e=0 \u2229 extremal)\n  [T6-b] lambdifying (~1 min)...\nPASS  T6-b.C_Omega_numeric  C_Omega closed form = direct curvature (Richardson, ~20 digits)\nPASS  T6-b.C_Phi_numeric  C_Phi closed form = direct curvature (Richardson, ~20 digits)\nVERDICT: LEAD-7 TEST 6 CLEAN -- 5/5. EXACT leading pole coefficients at the two reflection-fixed KN role divisors of g_F(u=0), from the universal identity R ~ -14/B x^-4 (symbolic): C_Omega(S,Q) on Omega=0 and C_Phi(S,J) on Phi_e=0, both closed rational forms in (S,J/Q,pi), matched to direct curvature to ~20 digits. Corner factors (pi Q^2-S)^2 / (2pi J-S)^2 vanish exactly on the divisor corners. With Test 5 (orders 3/4/4) this certifies the n=3 complementarity order law AND the reflection-fixed coefficients. Open: the extremal (order-3) coefficient closed form.",
+          "verdict": "VERDICT: LEAD-7 TEST 6 CLEAN -- 5/5. EXACT leading pole coefficients at the two reflection-fixed KN role divisors of g_F(u=0), from the universal identity R ~ -14/B x^-4 (symbolic): C_Omega(S,Q) on Omega=0 and C_Phi(S,J) on Phi_e=0, both closed rational forms in (S,J/Q,pi), matched to direct curvature to ~20 digits. Corner factors (pi Q^2-S)^2 / (2pi J-S)^2 vanish exactly on the divisor corners. With Test 5 (orders 3/4/4) this certifies the n=3 complementarity order law AND the reflection-fixed coefficients. Open: the extremal (order-3) coefficient closed form."
+        },
+        "flint_arb": {
+          "elapsed_ms": 0.003,
+          "reason": "Arb baseline is not applicable to verification_script in this MVP",
+          "status": "limit"
+        },
+        "mpmath_naive": {
+          "elapsed_ms": 0.002,
+          "reason": "mpmath naive baseline is not applicable to verification_script",
+          "status": "limit"
+        },
+        "sympy_naive": {
+          "elapsed_ms": 0.003,
+          "reason": "SymPy naive baseline is not applicable to verification_script",
+          "status": "limit"
+        }
+      },
+      "family": "computational_hog",
+      "id": "hog_lead7_reflection_coefficients",
+      "kind": "verification_script",
+      "source": "verification/lead7_test6_pole_coeffs_n3.py"
+    },
+    {
+      "engines": {
+        "cella_direct": {
+          "elapsed_ms": 0.004,
+          "reason": "Direct Cella primitive path has no internal Pathfinder overlay for this case.",
+          "status": "limit"
+        },
+        "cella_pathfinder": {
+          "command": [
+            "/usr/bin/python",
+            "/home/wlloyd/Cella Framework/verification/lead7_test9_corner.py"
+          ],
+          "elapsed_ms": 54492.233,
+          "expected_returncode": 0,
+          "returncode": 0,
+          "script_elapsed_ms": 54492.166,
+          "status": "pass",
+          "stderr_tail": "",
+          "stdout_contains": "VERDICT: LEAD-7 TEST 9 CLEAN",
+          "stdout_tail": "   a=  0.0: order(numeric)=         4.0  m(a)=max(4a-2,4-2a)=4.0\n   a=  0.5: order(numeric)=   3.0000255  m(a)=max(4a-2,4-2a)=3.0\n   a=  1.0: order(numeric)=         2.0  m(a)=max(4a-2,4-2a)=2.0\n   a=  1.5: order(numeric)=   3.9999999  m(a)=max(4a-2,4-2a)=4.0\n   a=  2.0: order(numeric)=         6.0  m(a)=max(4a-2,4-2a)=6.0\nPASS  T9-C.newton_polygon  m(a)=max(4a-2,4-2a); vertex (1,2); edges 4-2a and 4a-2\n\n== (B) balanced diagonal a=1: eps^2 R -> R0(s,rho), order exactly 2 ==\n   s=1.0 rho=1.0: order=2.0  R0=-1801.253546  (finite, <0)\n   s=2.0 rho=1.0: order=2.0  R0=-263.6427166  (finite, <0)\nPASS  T9-B.balanced_order2_negative  eps^2 R -> R0<0 finite; order exactly 2\n\n== (D) R0 boundary links = EXACT corner residues of the Test 6 C_Omega, C_Phi ==\nPASS  T9-D.kappa_Omega_exact  lim_{Q->0} C_Omega/Q^2 = -3584 pi^3 S/(16 pi S+1)^2\nPASS  T9-D.kappa_Phi_exact  lim_{J->0} C_Phi/J^2 = -14336 pi^5/[S(16 pi S+1)^2]\n   rho=0.25: rho^4 R0 = -44.158003   kappa_Omega(1) = -42.283168  (directional, under-resolved)\n   rho=5.0: R0/rho^2 = -1671.5556   kappa_Phi(1)   = -1669.2726\nPASS  T9-D.rho_trend_consistent  rho^4 R0 -> kappa_Omega, R0/rho^2 -> kappa_Phi (numeric, conditioning-limited at extremes)\n\n== (E) mixed-channel excess: R0 != two-face sum ==\n   R0(1,1)=-1801.253546   two-face sum=-1711.555742   mixed M=-89.697804\nPASS  T9-E.mixed_term_nonzero  M(1,1)=-89.6978 is a genuine interior term (not captured by C_Omega,C_Phi alone)\n\nVERDICT: LEAD-7 TEST 9 CLEAN. The Schwarzschild double-reflection corner is the CALMEST boundary point: exact-partial curvature gives balanced radial order EXACTLY 2 (R0<0 finite), the Newton exponent m(a)=max(4a-2,4-2a) with minimum 2 at the balanced diagonal, metric corner limits in closed form (eps^6 G_S -> N0^2 s^5/[pi(s+8pi rho^2)^2], the '1.04x' = (1+1/(16 pi s))^2 graph-norm correction), rho->0/rho->inf limits set by the C_Omega,C_Phi corner residues, and a nonzero mixed-channel excess M so R0 is NOT the two-face sum.",
+          "verdict": "VERDICT: LEAD-7 TEST 9 CLEAN. The Schwarzschild double-reflection corner is the CALMEST boundary point: exact-partial curvature gives balanced radial order EXACTLY 2 (R0<0 finite), the Newton exponent m(a)=max(4a-2,4-2a) with minimum 2 at the balanced diagonal, metric corner limits in closed form (eps^6 G_S -> N0^2 s^5/[pi(s+8pi rho^2)^2], the '1.04x' = (1+1/(16 pi s))^2 graph-norm correction), rho->0/rho->inf limits set by the C_Omega,C_Phi corner residues, and a nonzero mixed-channel excess M so R0 is NOT the two-face sum."
+        },
+        "flint_arb": {
+          "elapsed_ms": 0.002,
+          "reason": "Arb baseline is not applicable to verification_script in this MVP",
+          "status": "limit"
+        },
+        "mpmath_naive": {
+          "elapsed_ms": 0.002,
+          "reason": "mpmath naive baseline is not applicable to verification_script",
+          "status": "limit"
+        },
+        "sympy_naive": {
+          "elapsed_ms": 0.004,
+          "reason": "SymPy naive baseline is not applicable to verification_script",
+          "status": "limit"
+        }
+      },
+      "family": "computational_hog",
+      "id": "hog_lead7_schwarzschild_corner",
+      "kind": "verification_script",
+      "source": "verification/lead7_test9_corner.py"
+    },
+    {
+      "engines": {
+        "cella_direct": {
+          "elapsed_ms": 0.003,
+          "reason": "Direct Cella primitive path has no internal Pathfinder overlay for this case.",
+          "status": "limit"
+        },
+        "cella_pathfinder": {
+          "command": [
+            "/usr/bin/python",
+            "/home/wlloyd/Cella Framework/verification/pfc_test3_vertex_rule.py"
+          ],
+          "elapsed_ms": 1236.818,
+          "expected_returncode": 0,
+          "returncode": 0,
+          "script_elapsed_ms": 1236.733,
+          "status": "pass",
+          "stderr_tail": "",
+          "stdout_contains": "VERDICT: PFC-4 vertex rule PROVEN",
+          "stdout_tail": "== (1) single-weight germ: R has exactly the 3 vertices V_1,V_2,V_0 (symbolic weights) ==\nPASS  PFC4vr.three_vertices  polar support = {V_1,V_2,V_0} = {(-p1 - 2, -q1),(-p2, -q2 - 2),(-p0, -q0)}\nPASS  PFC4vr.coeff_A  V_1 coefficient = A(p0,p1,p2)/(2 h_1), A explicit\nPASS  PFC4vr.coeff_B  V_2 coefficient = B(q0,q1,q2)/(2 h_2), B explicit\nPASS  PFC4vr.spectator_is_s_jet  V_0 coefficient depends only on the spectator s-jet (h_i, h_i', h_i''), vanishes if h_i const\n\n== (2) generic-germ invariance: unit factors leave the ORDER (support function) fixed ==\nPASS  PFC4vr.unit_invariance_order  order(plain) = order(with units) = support fn of {V_1,V_2}=[(-4, 1), (1, -4)] over a direction grid (units are corner-nonvanishing => vertices, hence order, unchanged)\n\n== (3) face-data reading: p_x=p_1+2, p_y=q_2+2, r_x=-p_2, r_y=-q_1 ==\nPASS  PFC4vr.face_order_identity  V_1 x-depth = p_1+2 = single x-face order; parity-fixed sample A(-2,2,-2)=-28 (!=0)\nPASS  PFC4vr.residue_weight_identity  V_1=(-p_x, r_y) with p_x=p_1+2, r_y=-q_1 ; V_2=(r_x,-p_y) with p_y=q_2+2, r_x=-p_2\n\n== (4) Kerr-Newman: g_Q=g_x~x^2 y^-2, g_J=g_y~x^-2 y^2, g_S~x^-6 (V_0 non-polar) ==\nPASS  PFC4vr.KN  V_1=(-4, 2), V_2=(2, -4), V_0=(6, 0) (non-polar); A=-84, B=-12; wedge Max(4 - 2*a, 4*a - 2) = lead7_test9\n\nVERDICT: PFC-4 vertex rule PROVEN. The corner curvature polytope is {V_1,V_2,V_0} with V_1=(-(p_1+2),-q_1)=(-p_x,r_y), V_2=(-p_2,-(q_2+2))=(r_x,-p_y), V_0=(-p_0,-q_0), and EXPLICIT coefficients A(p0,p1,p2)/h_1, B(q0,q1,q2)/h_2, and an s-jet C_spec. The order is the support function of the polar nonzero-coefficient vertices; cancellation is exactly A=0 / B=0 (spectator: vanishing s-jet). Unit factors leave the vertices fixed, so the rule holds for generic germs, not just monomials. Kerr-Newman recovers V_1=(-4,2), V_2=(2,-4), wedge max(4a-2,4-2a).",
+          "verdict": "VERDICT: PFC-4 vertex rule PROVEN. The corner curvature polytope is {V_1,V_2,V_0} with V_1=(-(p_1+2),-q_1)=(-p_x,r_y), V_2=(-p_2,-(q_2+2))=(r_x,-p_y), V_0=(-p_0,-q_0), and EXPLICIT coefficients A(p0,p1,p2)/h_1, B(q0,q1,q2)/h_2, and an s-jet C_spec. The order is the support function of the polar nonzero-coefficient vertices; cancellation is exactly A=0 / B=0 (spectator: vanishing s-jet). Unit factors leave the vertices fixed, so the rule holds for generic germs, not just monomials. Kerr-Newman recovers V_1=(-4,2), V_2=(2,-4), wedge max(4a-2,4-2a)."
+        },
+        "flint_arb": {
+          "elapsed_ms": 0.003,
+          "reason": "Arb baseline is not applicable to verification_script in this MVP",
+          "status": "limit"
+        },
+        "mpmath_naive": {
+          "elapsed_ms": 0.002,
+          "reason": "mpmath naive baseline is not applicable to verification_script",
+          "status": "limit"
+        },
+        "sympy_naive": {
+          "elapsed_ms": 0.003,
+          "reason": "SymPy naive baseline is not applicable to verification_script",
+          "status": "limit"
+        }
+      },
+      "family": "computational_hog",
+      "id": "hog_pfc_vertex_rule",
+      "kind": "verification_script",
+      "source": "verification/pfc_test3_vertex_rule.py"
+    },
+    {
+      "engines": {
+        "cella_direct": {
+          "elapsed_ms": 0.001,
+          "reason": "Direct Cella primitive path has no internal Pathfinder overlay for this case.",
+          "status": "limit"
+        },
+        "cella_pathfinder": {
+          "elapsed_ms": 0.002,
+          "reason": "period/residue hostile fixtures need a deterministic small elliptic third-kind contour case",
+          "status": "limit"
+        },
+        "flint_arb": {
+          "elapsed_ms": 0.0,
+          "reason": "Arb baseline is not applicable to reserved_limit in this MVP",
+          "status": "limit"
+        },
+        "mpmath_naive": {
+          "elapsed_ms": 0.001,
+          "reason": "mpmath naive baseline is not applicable to reserved_limit",
+          "status": "limit"
+        },
+        "sympy_naive": {
+          "elapsed_ms": 0.001,
+          "reason": "SymPy naive baseline is not applicable to reserved_limit",
+          "status": "limit"
+        }
+      },
+      "family": "period_residue",
+      "id": "period_residue_lane_reserved",
+      "kind": "reserved_limit",
+      "source": "Cella arithmetic arm design"
+    }
+  ],
+  "manifest_path": "benchmarks/pathfinder_hostile/manifest.json",
+  "summary": {
+    "case_count": 14,
+    "engine_status_counts": {
+      "cella_direct": {
+        "limit": 7,
+        "pass": 7
+      },
+      "cella_pathfinder": {
+        "limit": 1,
+        "pass": 13
+      },
+      "flint_arb": {
+        "limit": 11,
+        "pass": 3
+      },
+      "mpmath_naive": {
+        "limit": 11,
+        "pass": 3
+      },
+      "sympy_naive": {
+        "limit": 10,
+        "pass": 4
+      }
+    },
+    "total_status_counts": {
+      "limit": 40,
+      "pass": 30
+    }
+  },
+  "version": "2026-07-08"
+}

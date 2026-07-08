@@ -1,0 +1,20 @@
+{
+  "stage": "flagship stage B (succession), PREREG_v2",
+  "prereg_sha256_16": "0e0b3610cc0d504f",
+  "records_sha256": "ca2741a0874ad42192dae15f10e5c18f88a37be11495e0780026d23c1e606edd",
+  "byte_stable_x2": true,
+  "runs": ["records/stageB_records_run1.jsonl", "records/stageB_records_run2.jsonl"],
+  "verdicts": {
+    "PB.0": {"pass": true, "note": "symbolic n=3 identity, keystone anchors (Delta_c=4, Q_nu=2I-J, coeffs (-1,2)), projector gates n=4,5,6 all green"},
+    "PB.1": {"pass": false, "cells": {"W-prod": false, "W-sum": false}, "note": "zero-residual span membership FAILS at every n>=4 fixture, both weights; probe (residual) and referee (generator commutation) agree at all 12 cells"},
+    "PB.2": {"pass": false, "note": "not graded on merits - both cells failed PB.1 (per frozen flow)"}
+  },
+  "kill_fired": "K-B1: both weight cells fail PB.1 => bridge-as-stated DEAD at the quadratic layer; HALT stage, route to Will",
+  "status_moves_proposed": {
+    "CL-F5": "quadratic-layer fixed-g span-membership form REFUTED at n>=4 [CERTIFIED x2]; claim survives narrower - see report OBSERVED direction law",
+    "CL-ENG2": "untouched (B.3 never opened)"
+  },
+  "observed_unfrozen": "W-prod isotypic shadow direction is g-independent per n and fits (c_triv,c_std,c_shape) ~ (-(n-2), 2, n), specializing at n=3 to I.3a's (-1,2); scalar factor carries all g-dependence",
+  "defect_chains": 0,
+  "session": "S-2026-07-05b"
+}

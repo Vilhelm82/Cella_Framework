@@ -1,0 +1,17 @@
+{
+  "note": "B-prime fixtures: g-vectors only (the object Q_nu(g) is H-free). Fresh literals, no reuse of Stage-B g's. Distinct positive entries.",
+  "fresh_g": [
+    {"id": "p4a", "n": 4, "g": [1, 2, 3, 7]},
+    {"id": "p4b", "n": 4, "g": [2, 3, 5, 11]},
+    {"id": "p4c", "n": 4, "g": [1, 4, 6, 9]},
+    {"id": "p5a", "n": 5, "g": [1, 2, 3, 7, 11]},
+    {"id": "p5b", "n": 5, "g": [2, 5, 6, 9, 13]},
+    {"id": "p5c", "n": 5, "g": [1, 3, 8, 10, 12]},
+    {"id": "p6a", "n": 6, "g": [1, 2, 3, 7, 11, 13]},
+    {"id": "p6b", "n": 6, "g": [2, 4, 5, 9, 10, 17]},
+    {"id": "p6c", "n": 6, "g": [1, 3, 6, 8, 14, 15]}
+  ],
+  "regression_source": "records/stageB_records_run1.jsonl (sha256 pinned in freeze_pins_bprime.sha256)",
+  "frozen": true,
+  "session": "S-2026-07-05b"
+}
