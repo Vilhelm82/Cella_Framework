@@ -1,0 +1,162 @@
+"""Cella pathfinder route planning and conservative rewrite support."""
+
+from __future__ import annotations
+
+import ast
+
+from .residual_profile import residual_profile
+
+
+def route_plan(
+    expression: str,
+    sweep: dict,
+    constants: dict | None = None,
+    include_profile: bool = False,
+    include_samples: bool = False,
+) -> dict:
+    try:
+        profile = residual_profile(
+            str(expression),
+            sweep,
+            constants=constants or {},
+            include_samples=include_samples,
+        )
+    except Exception as exc:
+        return {
+            "expression": str(expression),
+            "decision": "unsupported_shape",
+            "why": f"Residual profile could not parse or probe the expression: {exc}",
+            "operation_shape": None,
+            "dominant_pattern": None,
+            "exact_account_available": False,
+            "blocking_inputs": {"unsupported": str(exc), "missing_constants": []},
+            "next_tools": ["cella_help"],
+            "route_confidence": "low",
+            "profile_summary": {},
+        }
+
+    sites = list(profile.get("danger_sites", []))
+    burden = dict(profile.get("predicted_burden_vector", {}))
+    operation_shape = str(profile.get("operation_shape"))
+    dominant = burden.get("dominant_pattern")
+    missing = _missing_constants(sites)
+    exact_account = _has_exact_account(sites)
+    known_rewrite = _has_known_rewrite(str(expression), operation_shape)
+
+    if missing:
+        decision = "needs_declared_constants"
+        why = "At least one subtraction site contains an unknown symbolic parameter."
+        next_tools = ["cella_route_plan"]
+        confidence = "high"
+    elif operation_shape == "no_subtraction":
+        decision = "direct_ok"
+        why = "No subtraction site was detected."
+        next_tools = ["cella_symbolic_rational", "cella_arith_precision_budget"]
+        confidence = "high"
+    elif operation_shape == "self_cancellation":
+        decision = "collapse_symbolically"
+        why = "A structural x-x site can be collapsed before arithmetic."
+        next_tools = ["cella_symbolic_rational", "cella_symbolic_equal"]
+        confidence = "high"
+    elif operation_shape == "catastrophic_cancellation" and known_rewrite:
+        decision = "rewrite_candidate_needed"
+        why = "Catastrophic same-leading-constant cancellation has at least one conservative rewrite family."
+        next_tools = ["cella_rewrite_candidates", "cella_pathfinder_compare"]
+        confidence = "high" if exact_account else "medium"
+    elif operation_shape == "catastrophic_cancellation":
+        decision = "precision_budget_needed"
+        why = "Catastrophic cancellation was detected but no conservative rewrite family was found."
+        next_tools = ["cella_arith_precision_budget", "cella_operand_residue_trace"]
+        confidence = "medium"
+    elif operation_shape == "benign_cancellation":
+        decision = "direct_ok"
+        why = "Cancellation opens with a benign fractional signal; monitor BACL/account burden."
+        next_tools = ["cella_bacl_pair", "cella_operand_residue_trace"]
+        confidence = "medium"
+    elif operation_shape == "partly_unrecognised":
+        decision = "unsupported_shape"
+        why = "At least one subtraction site could not be classified."
+        next_tools = ["cella_operand_residue_trace", "cella_help"]
+        confidence = "low"
+    else:
+        decision = "direct_ok"
+        why = "No high-risk cancellation route was detected."
+        next_tools = ["cella_arith_precision_budget"]
+        confidence = "medium"
+
+    out = {
+        "expression": str(expression),
+        "decision": decision,
+        "why": why,
+        "operation_shape": operation_shape,
+        "dominant_pattern": dominant,
+        "exact_account_available": exact_account,
+        "blocking_inputs": {"missing_constants": missing},
+        "next_tools": next_tools,
+        "route_confidence": confidence,
+        "profile_summary": {
+            "site_count": len(sites),
+            "danger_sites": [
+                {
+                    "path": site.get("path"),
+                    "pattern": site.get("pattern"),
+                    "severity": site.get("severity"),
+                    "signal_exponent": site.get("signal_exponent"),
+                    "account_probe_status": site.get("account_probe_status"),
+                }
+                for site in sites
+            ],
+            "predicted_burden_vector": burden,
+        },
+    }
+    if include_profile:
+        out["profile"] = profile
+    return out
+
+
+def _has_exact_account(sites: list[dict]) -> bool:
+    for site in sites:
+        if site.get("account_probe_status") == "exact_q_account":
+            return True
+        for sample in site.get("probe_samples", []):
+            if sample.get("exact_account", {}).get("status") == "exact_q_account":
+                return True
+    return False
+
+
+def _missing_constants(sites: list[dict]) -> list[str]:
+    missing = set()
+    marker = "unknown parameter "
+    for site in sites:
+        text = str(site.get("probe_error", ""))
+        if marker in text:
+            name = text.split(marker, 1)[1].split(";", 1)[0].strip().strip("'\"")
+            if name:
+                missing.add(name)
+    return sorted(missing)
+
+
+def _has_known_rewrite(expression: str, operation_shape: str) -> bool:
+    if operation_shape == "self_cancellation":
+        return True
+    if operation_shape != "catastrophic_cancellation":
+        return False
+    try:
+        node = ast.parse(str(expression), mode="eval").body
+    except SyntaxError:
+        return False
+    return _is_subtraction(node) or _has_sqrt_conjugate_shape(node)
+
+
+def _is_subtraction(node: ast.AST) -> bool:
+    return isinstance(node, ast.BinOp) and isinstance(node.op, ast.Sub)
+
+
+def _has_sqrt_conjugate_shape(node: ast.AST) -> bool:
+    if not _is_subtraction(node):
+        return False
+    if not isinstance(node.left, ast.Call):
+        return False
+    if not isinstance(node.left.func, ast.Name) or node.left.func.id != "sqrt":
+        return False
+    return isinstance(node.right, ast.Constant) and node.right.value == 1
