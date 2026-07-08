@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import ast
-from collections.abc import Iterator
 
 from .residual_profile import residual_profile
 
@@ -42,7 +41,7 @@ def route_plan(
     dominant = burden.get("dominant_pattern")
     missing = _missing_constants(sites)
     exact_account = _has_exact_account(sites)
-    known_rewrite = _has_known_rewrite(str(expression), operation_shape)
+    known_rewrite = _has_known_rewrite(str(expression), operation_shape, sites)
 
     if missing:
         decision = "needs_declared_constants"
@@ -137,20 +136,36 @@ def _missing_constants(sites: list[dict]) -> list[str]:
     return sorted(missing)
 
 
-def _has_known_rewrite(expression: str, operation_shape: str) -> bool:
+def _has_known_rewrite(
+    expression: str, operation_shape: str, sites: list[dict]
+) -> bool:
     if operation_shape == "self_cancellation":
         return True
     if operation_shape != "catastrophic_cancellation":
         return False
     try:
-        node = ast.parse(str(expression), mode="eval").body
+        root = ast.parse(str(expression), mode="eval").body
     except SyntaxError:
         return False
-    return any(
-        _has_sqrt_conjugate_shape(subtraction)
-        or _has_difference_of_squares_shape(subtraction)
-        or _has_simple_constant_perturbation(subtraction)
-        for subtraction in _subtraction_nodes(node)
+    for site in sites:
+        if not _is_catastrophic_site(site):
+            continue
+        node = _node_at_profile_path(root, site.get("path"))
+        if node is None or not _is_subtraction(node):
+            continue
+        if (
+            _has_sqrt_conjugate_shape(node)
+            or _has_difference_of_squares_shape(node)
+            or _has_simple_constant_perturbation(node)
+        ):
+            return True
+    return False
+
+
+def _is_catastrophic_site(site: dict) -> bool:
+    return (
+        site.get("severity") == "catastrophic"
+        or site.get("pattern") == "sterbenz_safe_catastrophic"
     )
 
 
@@ -158,11 +173,25 @@ def _is_subtraction(node: ast.AST) -> bool:
     return isinstance(node, ast.BinOp) and isinstance(node.op, ast.Sub)
 
 
-def _subtraction_nodes(node: ast.AST) -> Iterator[ast.BinOp]:
-    if _is_subtraction(node):
-        yield node
-    for child in ast.iter_child_nodes(node):
-        yield from _subtraction_nodes(child)
+def _node_at_profile_path(root: ast.AST, path: object) -> ast.AST | None:
+    if not isinstance(path, str) or not path.startswith("root"):
+        return None
+    node = root
+    for part in path.split(".")[1:]:
+        if part == "left" and isinstance(node, ast.BinOp):
+            node = node.left
+        elif part == "right" and isinstance(node, ast.BinOp):
+            node = node.right
+        elif part == "arg":
+            if isinstance(node, ast.UnaryOp):
+                node = node.operand
+            elif isinstance(node, ast.Call) and node.args:
+                node = node.args[0]
+            else:
+                return None
+        else:
+            return None
+    return node
 
 
 def _has_simple_constant_perturbation(node: ast.AST) -> bool:
