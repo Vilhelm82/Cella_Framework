@@ -32,7 +32,12 @@ def route_plan(
             "blocking_inputs": {"unsupported": str(exc), "missing_constants": []},
             "next_tools": ["cella_help"],
             "route_confidence": "low",
-            "profile_summary": {},
+            "profile_summary": {
+                "catastrophic_site_count": 0,
+                "rewriteable_catastrophic_site_count": 0,
+                "unresolved_catastrophic_site_count": 0,
+                "exact_account_coverage": "none",
+            },
         }
 
     sites = list(profile.get("danger_sites", []))
@@ -40,8 +45,13 @@ def route_plan(
     operation_shape = str(profile.get("operation_shape"))
     dominant = burden.get("dominant_pattern")
     missing = _missing_constants(sites)
-    exact_account = _has_exact_account(sites)
-    known_rewrite = _has_known_rewrite(str(expression), operation_shape, sites)
+    exact_account_coverage = _exact_account_coverage(sites, operation_shape)
+    exact_account = exact_account_coverage in ("some", "all", "structural")
+    rewrite_coverage = _catastrophic_rewrite_coverage(str(expression), sites)
+    catastrophic_count = rewrite_coverage["catastrophic_site_count"]
+    rewriteable_count = rewrite_coverage["rewriteable_catastrophic_site_count"]
+    unresolved_count = rewrite_coverage["unresolved_catastrophic_site_count"]
+    known_rewrite = catastrophic_count > 0 and unresolved_count == 0
 
     if missing:
         decision = "needs_declared_constants"
@@ -60,13 +70,21 @@ def route_plan(
         confidence = "high"
     elif operation_shape == "catastrophic_cancellation" and known_rewrite:
         decision = "rewrite_candidate_needed"
-        why = "Catastrophic same-leading-constant cancellation has at least one conservative rewrite family."
+        why = "Every catastrophic same-leading-constant cancellation site has a conservative rewrite family."
         next_tools = ["cella_rewrite_candidates", "cella_pathfinder_compare"]
-        confidence = "high" if exact_account else "medium"
+        confidence = "high" if exact_account_coverage in ("all", "structural") else "medium"
     elif operation_shape == "catastrophic_cancellation":
         decision = "precision_budget_needed"
-        why = "Catastrophic cancellation was detected but no conservative rewrite family was found."
-        next_tools = ["cella_arith_precision_budget", "cella_operand_residue_trace"]
+        if rewriteable_count:
+            why = "Some catastrophic sites have conservative rewrite families, but at least one catastrophic site remains unresolved."
+            next_tools = [
+                "cella_rewrite_candidates",
+                "cella_arith_precision_budget",
+                "cella_operand_residue_trace",
+            ]
+        else:
+            why = "Catastrophic cancellation was detected but no conservative rewrite family was found."
+            next_tools = ["cella_arith_precision_budget", "cella_operand_residue_trace"]
         confidence = "medium"
     elif operation_shape == "benign_cancellation":
         decision = "direct_ok"
@@ -107,6 +125,10 @@ def route_plan(
                 for site in sites
             ],
             "predicted_burden_vector": burden,
+            "catastrophic_site_count": catastrophic_count,
+            "rewriteable_catastrophic_site_count": rewriteable_count,
+            "unresolved_catastrophic_site_count": unresolved_count,
+            "exact_account_coverage": exact_account_coverage,
         },
     }
     if include_profile:
@@ -114,14 +136,20 @@ def route_plan(
     return out
 
 
-def _has_exact_account(sites: list[dict]) -> bool:
-    for site in sites:
-        if site.get("account_probe_status") in ("exact_q_account", "structural_exact"):
-            return True
-        for sample in site.get("probe_samples", []):
-            if sample.get("exact_account", {}).get("status") == "exact_q_account":
-                return True
-    return False
+def _exact_account_coverage(sites: list[dict], operation_shape: str) -> str:
+    if operation_shape == "self_cancellation":
+        return "structural"
+    if not sites:
+        return "none"
+
+    statuses = [site.get("account_probe_status") for site in sites]
+    if all(status == "structural_exact" for status in statuses):
+        return "structural"
+    if all(status in ("exact_q_account", "structural_exact") for status in statuses):
+        return "all"
+    if any(status in ("exact_q_account", "structural_exact") for status in statuses):
+        return "some"
+    return "none"
 
 
 def _missing_constants(sites: list[dict]) -> list[str]:
@@ -136,30 +164,52 @@ def _missing_constants(sites: list[dict]) -> list[str]:
     return sorted(missing)
 
 
-def _has_known_rewrite(
-    expression: str, operation_shape: str, sites: list[dict]
-) -> bool:
+def _has_known_rewrite(expression: str, operation_shape: str, sites: list[dict]) -> bool:
     if operation_shape == "self_cancellation":
         return True
     if operation_shape != "catastrophic_cancellation":
         return False
+    coverage = _catastrophic_rewrite_coverage(expression, sites)
+    return (
+        coverage["catastrophic_site_count"] > 0
+        and coverage["unresolved_catastrophic_site_count"] == 0
+    )
+
+
+def _catastrophic_rewrite_coverage(expression: str, sites: list[dict]) -> dict:
+    catastrophic_sites = [site for site in sites if _is_catastrophic_site(site)]
+    catastrophic_count = len(catastrophic_sites)
+    rewriteable_count = 0
+
     try:
         root = ast.parse(str(expression), mode="eval").body
     except SyntaxError:
-        return False
-    for site in sites:
-        if not _is_catastrophic_site(site):
-            continue
+        return {
+            "catastrophic_site_count": catastrophic_count,
+            "rewriteable_catastrophic_site_count": 0,
+            "unresolved_catastrophic_site_count": catastrophic_count,
+        }
+
+    for site in catastrophic_sites:
         node = _node_at_profile_path(root, site.get("path"))
-        if node is None or not _is_subtraction(node):
-            continue
-        if (
-            _has_sqrt_conjugate_shape(node)
-            or _has_difference_of_squares_shape(node)
-            or _has_simple_constant_perturbation(node)
-        ):
-            return True
-    return False
+        if node is not None and _has_known_rewrite_family(node):
+            rewriteable_count += 1
+
+    return {
+        "catastrophic_site_count": catastrophic_count,
+        "rewriteable_catastrophic_site_count": rewriteable_count,
+        "unresolved_catastrophic_site_count": catastrophic_count - rewriteable_count,
+    }
+
+
+def _has_known_rewrite_family(node: ast.AST) -> bool:
+    if not _is_subtraction(node):
+        return False
+    return (
+        _has_sqrt_conjugate_shape(node)
+        or _has_difference_of_squares_shape(node)
+        or _has_simple_constant_perturbation(node)
+    )
 
 
 def _is_catastrophic_site(site: dict) -> bool:
