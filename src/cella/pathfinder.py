@@ -116,7 +116,7 @@ def route_plan(
 
 def _has_exact_account(sites: list[dict]) -> bool:
     for site in sites:
-        if site.get("account_probe_status") == "exact_q_account":
+        if site.get("account_probe_status") in ("exact_q_account", "structural_exact"):
             return True
         for sample in site.get("probe_samples", []):
             if sample.get("exact_account", {}).get("status") == "exact_q_account":
@@ -145,11 +145,40 @@ def _has_known_rewrite(expression: str, operation_shape: str) -> bool:
         node = ast.parse(str(expression), mode="eval").body
     except SyntaxError:
         return False
-    return _is_subtraction(node) or _has_sqrt_conjugate_shape(node)
+    return (
+        _has_sqrt_conjugate_shape(node)
+        or _has_difference_of_squares_shape(node)
+        or _has_simple_constant_perturbation(node)
+    )
 
 
 def _is_subtraction(node: ast.AST) -> bool:
     return isinstance(node, ast.BinOp) and isinstance(node.op, ast.Sub)
+
+
+def _has_simple_constant_perturbation(node: ast.AST) -> bool:
+    if not _is_subtraction(node):
+        return False
+    if not _is_numeric_constant(node.right):
+        return False
+    if not isinstance(node.left, ast.BinOp) or not isinstance(node.left.op, ast.Add):
+        return False
+    return _same_constant(node.left.left, node.right) or _same_constant(
+        node.left.right, node.right
+    )
+
+
+def _has_difference_of_squares_shape(node: ast.AST) -> bool:
+    if not _is_subtraction(node):
+        return False
+    if not _is_nonnegative_numeric_constant(node.right):
+        return False
+    left = node.left
+    if isinstance(left, ast.BinOp) and isinstance(left.op, ast.Mult):
+        return ast.dump(left.left) == ast.dump(left.right)
+    if isinstance(left, ast.BinOp) and isinstance(left.op, ast.Pow):
+        return _constant_value(left.right) == 2
+    return False
 
 
 def _has_sqrt_conjugate_shape(node: ast.AST) -> bool:
@@ -160,3 +189,26 @@ def _has_sqrt_conjugate_shape(node: ast.AST) -> bool:
     if not isinstance(node.left.func, ast.Name) or node.left.func.id != "sqrt":
         return False
     return isinstance(node.right, ast.Constant) and node.right.value == 1
+
+
+def _same_constant(left: ast.AST, right: ast.AST) -> bool:
+    return _is_numeric_constant(left) and _constant_value(left) == _constant_value(right)
+
+
+def _is_numeric_constant(node: ast.AST) -> bool:
+    return _constant_value(node) is not None
+
+
+def _is_nonnegative_numeric_constant(node: ast.AST) -> bool:
+    value = _constant_value(node)
+    return value is not None and value >= 0
+
+
+def _constant_value(node: ast.AST) -> int | float | None:
+    if (
+        isinstance(node, ast.Constant)
+        and isinstance(node.value, (int, float))
+        and not isinstance(node.value, bool)
+    ):
+        return node.value
+    return None
