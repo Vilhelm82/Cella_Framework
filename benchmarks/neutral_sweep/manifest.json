@@ -1,0 +1,114 @@
+{
+  "suite": "cella_engine_neutral_sweep",
+  "version": "2026-07-08",
+  "description": "Declarative engine-neutral benchmark corpus. Each engine receives the same mathematical task through its native adapter.",
+  "cases": [
+    {
+      "id": "cancel_constant_offset",
+      "family": "arithmetic_cancellation",
+      "kind": "arithmetic_rewrite",
+      "input": {
+        "expression": "(1 + eps) - 1",
+        "stable_expression": "eps",
+        "sweep": {"variable": "eps", "low": "1e-20", "high": "1e-4"},
+        "sample": {"eps": "1e-20"},
+        "dps": 80
+      },
+      "expect": {"decision": "rewrite_candidate_needed", "equivalent": true}
+    },
+    {
+      "id": "cancel_sqrt_conjugate",
+      "family": "arithmetic_cancellation",
+      "kind": "arithmetic_rewrite",
+      "input": {
+        "expression": "sqrt(1 + eps) - 1",
+        "stable_expression": "eps/(sqrt(1 + eps) + 1)",
+        "sweep": {"variable": "eps", "low": "1e-20", "high": "1e-4"},
+        "sample": {"eps": "1e-20"},
+        "dps": 80
+      },
+      "expect": {"decision": "rewrite_candidate_needed", "equivalent": true}
+    },
+    {
+      "id": "rational_binomial_collapse",
+      "family": "symbolic_rational",
+      "kind": "symbolic_equal",
+      "input": {
+        "left": "((S + Q)^2 - S^2)/(Q*(2*S + Q))",
+        "right": "1",
+        "variables": ["S", "Q"],
+        "sample": {"S": "3", "Q": "2"},
+        "dps": 80
+      },
+      "expect": {"equal": true}
+    },
+    {
+      "id": "poly_sophie_germain",
+      "family": "polynomial_identity",
+      "kind": "symbolic_equal",
+      "input": {
+        "left": "x^4 + 4*y^4",
+        "right": "(x^2 - 2*x*y + 2*y^2)*(x^2 + 2*x*y + 2*y^2)",
+        "variables": ["x", "y"],
+        "sample": {"x": "5", "y": "7"},
+        "dps": 80
+      },
+      "expect": {"equal": true}
+    },
+    {
+      "id": "local_parity_fixed_pole",
+      "family": "local_geometry",
+      "kind": "local_germ",
+      "input": {
+        "coordinate": "x",
+        "native": {"leading": "B", "power": "2", "parity": "even"},
+        "transverse": [
+          {"leading": "A1", "power": "-2", "parity": "even"},
+          {"leading": "A2", "power": "-2", "parity": "even"}
+        ]
+      },
+      "expect": {"kind": "parity_fixed", "coefficient_text": "-14/(B)"}
+    },
+    {
+      "id": "corner_balanced_wedge",
+      "family": "local_geometry",
+      "kind": "corner_frontface",
+      "input": {
+        "face_data": {"p_x": "4", "p_y": "4", "r_x": "2", "r_y": "2"},
+        "path": {"ax": "1", "ay": "1"}
+      },
+      "expect": {"support_order": "2"}
+    },
+    {
+      "id": "hilbert_det_n7",
+      "family": "linear_algebra",
+      "kind": "matrix_determinant",
+      "input": {
+        "matrix": "hilbert",
+        "n": 7,
+        "dps": 120
+      },
+      "expect": {"determinant": "1/2067909047925770649600000"}
+    },
+    {
+      "id": "branch_log_exp_ipi",
+      "family": "complex_branch",
+      "kind": "complex_eval",
+      "input": {
+        "expression": "log(exp(i*pi))",
+        "dps": 80
+      },
+      "expect": {"principal_imag": "pi", "real_zero": true}
+    },
+    {
+      "id": "timeout_progress_probe",
+      "family": "harness_safety",
+      "kind": "timeout_probe",
+      "input": {
+        "delay_engine": "sympy",
+        "delay_seconds": 60
+      },
+      "expect": {"non_delayed_status": "pass", "delayed_status": "timeout"}
+    }
+  ]
+}

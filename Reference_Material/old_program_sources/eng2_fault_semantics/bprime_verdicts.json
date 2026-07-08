@@ -1,0 +1,18 @@
+{
+  "stage": "B-prime direction-law probe, PREREG_BPRIME",
+  "records_sha256": "68698bf2735b23329281d20361a09b6564768ad5faf3ed867065d4f411c5dc4f",
+  "byte_stable_x2": true,
+  "verdicts": {"PBp.0": true, "PBp.1": true, "PBp.1b": true, "PBp.2": true, "PBp.3a": true, "referee_agree": true},
+  "kill_fired": null,
+  "status_moves_proposed": {
+    "direction_law": "CERTIFIED (symbolic n=4,5; multi-g exact numeric n=6): shadow(Q_nu) = s(g)*((n-2)I - A_1_Johnson)",
+    "scalar_closed_form": "CERTIFIED n=4,5: s(g) = e_3(g^2)/(C(n,3)*e_n(g^2)); general-n FORMULATED, proof owed",
+    "n3_miracle": "EXPLAINED [STRUCTURAL]: s == 1 at n=3; I.3a = n=3 member (A_1 = J-I => 2I-J)",
+    "CL-F5": "succeeded by the Johnson-operator shadow law [CERTIFIED at fixtures]; full bridge = shadow law + covariant completion (R full-rank, measured, OPEN)",
+    "CL-ENG2": "still gated"
+  },
+  "defect_chains": 0,
+  "instrument_defects": 1,
+  "instrument_defect_note": "pinfile relative-path depth error caught by the pin gate pre-run (REFUSE_MISMATCH); regenerated before any battery run",
+  "session": "S-2026-07-05b"
+}

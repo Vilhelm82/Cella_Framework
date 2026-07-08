@@ -1,0 +1,73 @@
+{
+  "fail_count": 0,
+  "limit_count": 10,
+  "mode": "baseline_limits_allowed",
+  "pass_count": 3,
+  "results": [
+    {
+      "detail": "",
+      "name": "BAT1 existing arithmetic route planner still detects rewrite-needed cancellation",
+      "status": "pass"
+    },
+    {
+      "detail": "",
+      "name": "BAT2 existing rewrite generator still exposes constant-offset collapse",
+      "status": "pass"
+    },
+    {
+      "detail": "",
+      "name": "BAT3 existing campaign primitive classifies the parity-fixed local law",
+      "status": "pass"
+    },
+    {
+      "detail": "call_route_plan() got an unexpected keyword argument 'domain'",
+      "name": "BAT4 Pathfinder accepts a declared DBP domain and returns a geometry overlay",
+      "status": "limit"
+    },
+    {
+      "detail": "{}",
+      "name": "BAT5 Stage C pin/move routes through delta_kappa_c, not whole-vector predicates",
+      "status": "limit"
+    },
+    {
+      "detail": "{}",
+      "name": "BAT6 single g_i=0 with q!=0 is regular rather than refused",
+      "status": "limit"
+    },
+    {
+      "detail": "{}",
+      "name": "BAT7 q=g^Tg=0 is the true DBP singular refusal locus",
+      "status": "limit"
+    },
+    {
+      "detail": "{}",
+      "name": "BAT8 Pathfinder distinguishes K_G^2 from channel-norm square",
+      "status": "limit"
+    },
+    {
+      "detail": "{}",
+      "name": "BAT9 n=5 scalar-spectrum shape routing requires carrier/witness machinery",
+      "status": "limit"
+    },
+    {
+      "detail": "{}",
+      "name": "BAT10 reflection faces route to parity_fixed order-4 local law",
+      "status": "limit"
+    },
+    {
+      "detail": "{}",
+      "name": "BAT11 extremal face routes to generic_quadratic order-3 local law",
+      "status": "limit"
+    },
+    {
+      "detail": "{}",
+      "name": "BAT12 double reflection corner routes to Newton-wedge analysis",
+      "status": "limit"
+    },
+    {
+      "detail": "{}",
+      "name": "BAT13 KN metric route selects mass-role inverse-sum u=0 and preserves graph normalization",
+      "status": "limit"
+    }
+  ]
+}

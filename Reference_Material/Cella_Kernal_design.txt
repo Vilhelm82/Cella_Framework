@@ -1,0 +1,225 @@
+
+• Perfect. I’m locking the scope around that sequence: route one expression first, then
+  let candidate ranking consume that result. I’ll lay out the design now; once you
+  approve it, I’ll write the spec and then move into implementation.
+
+• Updated Plan
+  └ User selected single-expression route planning first, followed immediately by
+    candidate ranking.
+    ✔ Explore current Cella pathfinder, cleanliness, and MCP boundaries
+    ✔ Ask one scope question
+    □ Propose 2-3 build approaches
+    □ Present a short design for approval
+    □ Write approved spec before implementation
+
+• Good. Three possible approaches:
+
+  1. Route Planner First, Ranking Second
+     Build cella_route_plan around the existing profiler. It decides what Claude should
+     do next for one expression. Then build cella_pathfinder_compare to rank candidate
+     rewrites.
+     Recommended. Fastest ROI, minimal disruption, uses what we just built.
+
+  2. Exact Account Primitive Refactor First
+     Push the value + account == TRUE in Q object deeper into every pathfinder operation
+     before adding new tools.
+     Cleaner long term, slower now. Too much foundation work before Claude gets useful
+     behavior.
+
+  3. Rewrite Generator First
+     Generate candidates immediately, then profile/rank them later.
+     Tempting, but it risks producing a pile of plausible algebra without knowing which
+     problem it is solving.
+
+  Design
+  Phase 1: cella_route_plan
+  Input: expression, sweep, optional constants, optional include_samples.
+  It calls cella_residual_profile, reads operation_shape, exact-account availability,
+  dangerous sites, burden vector, and declared gaps. It returns a compact decision:
+
+  - direct_ok
+  - collapse_symbolically
+  - rewrite_candidate_needed
+  - rank_declared_forms
+  - precision_budget_needed
+  - needs_declared_constants
+  - unsupported_shape
+
+  It also returns next_tools, why, blocking_inputs, and route_confidence.
+
+  Phase 2: cella_rewrite_candidates
+  Input: one expression plus optional profiler/route-plan output.
+  Generates conservative candidates only:
+
+  - x - x -> 0
+  - (a*a - b*b) -> (a-b)*(a+b)
+  - (u*c - v*c) -> c*(u-v) where parser can see it
+  - pair-first regrouping for 3-term additive chains
+  - constant-baseline subtraction hints like sqrt(1+eps)-1 -> eps/(sqrt(1+eps)+1) for
+    known conjugate templates
+
+  No aggressive symbolic expansion.
+
+  Phase 3: cella_pathfinder_compare
+  Input: original expression, candidate forms, variables/grid.
+  Runs candidates through existing exact-account/BACL cleanliness machinery where
+  possible, checks exact equivalence over declared grid, and ranks by:
+
+  1. same exact result class
+  2. lower BACL lattice burden
+  3. lower rounding residue ulps
+  4. lower operation depth
+  5. route-plan severity
+
+  MCP Surface
+  Add tools to pathfinder profile:
+
+  - cella_route_plan
+  - cella_rewrite_candidates
+  - cella_pathfinder_compare
+
+  Update cella_help and gates.
+
+  Tests
+  Gates should prove:
+
+  - catastrophic expression routes to rewrite before evaluation
+  - self-cancellation routes to symbolic collapse
+  - unknown symbol routes to declared constants
+  - benign sqrt gap routes direct-with-monitor
+  - generated difference-of-squares candidate ranks cleaner than naive form
+  - pair-first absorption prefers the existing BACL-clean ordering
+  - router can call all of this from pathfinder
+
+
+
+The hostile benchmark should test the Pathfinder thesis, not the wrapper
+  plumbing:
+
+  > Can Cella identify the cleaner computational route before SymPy/mpmath/Arb walk into
+  > expression swell, cancellation, precision escalation, or global-form stupidity?
+
+  Recommended Campaign
+  Build a staged hostile benchmark with four engine lanes:
+
+  1. Cella + Pathfinder
+     Internal Pathfinder enabled, tools receive ordinary problem inputs.
+
+  2. Cella without Pathfinder
+     Same Cella primitives, but no routing advantage. This proves Pathfinder is actually
+     doing work.
+
+  3. Conventional symbolic/numeric
+     SymPy, mpmath, and Arb/FLINT where available.
+
+  4. Expert conventional
+     Same engines, but with reasonable expert moves: cancel, factor, series, cse, dps
+     escalation, ball arithmetic, etc. No strawmen.
+
+  Benchmark Families
+
+  1. Arithmetic Cancellation
+      - (1 + eps) - 1
+      - sqrt(1 + eps) - 1
+      - 1 - sqrt(1 - eps)
+      - (a*a) - (b*b)
+      - ((12+eps)*(12+eps))-144
+      - cos(eps)-1
+      - mixed chains where only some sites are rewriteable
+
+  Measures: residual burden, exact-account coverage, chosen route, precision escalation
+  avoided.
+
+  2. Symbolic Swell
+      - rational functions in (S,J,Q,pi)
+      - -14/B symbolic coefficient cases
+      - KN metric coefficient forms
+      - symbolic channel sums
+      - equality/cross-multiplication cases where SymPy expands too much
+
+  Measures: expression node count, peak memory, time, whether Cella keeps normal-form
+  records instead of expanding.
+
+  3. Local Geometry
+      - PFC parity-fixed normal form
+      - generic quadratic collapse
+      - master quadric exponent vectors
+      - double reflection corner Newton wedge
+      - KN 3/4/4 role-divisor table
+      - graph-normalization mutation: dropping +U_i^2 must be caught
+
+  Measures: local law identified, global curvature avoided, correct order/coefficient/
+  wedge.
+
+  4. DBP Channel / Carrier
+      - c001 Stage C pin/move: delta_kappa_c, not whole vector
+      - keystone K_G and channel partition
+      - g_i=0, q!=0 regularity case
+      - q=0 true singular refusal
+      - K_G^2 vs channel-norm square
+      - n=5 scalar spectrum must route to carrier/witness
+
+  Measures: no false singularity, no ambiguous scalar claim, no channel-slot collapse.
+
+  5. High-Precision Period / Residue
+      - elliptic third-kind CPV examples
+      - Carlson referee cases
+      - branch/residue gate cases
+      - contour comparison stress tests from verification scripts
+
+  Measures: dps required, stability, branch correctness, whether Pathfinder avoids blind
+  precision escalation.
+
+  Pass/Fail Rules
+  A Cella win requires:
+
+  - correct result or correct typed refusal
+  - route chosen before expensive computation
+  - lower expression swell or lower precision burden than conventional baseline
+  - richer telemetry: why this path, what was avoided, what remains open
+
+  A failure is:
+
+  - wrong mathematical result
+  - silent overclaim
+  - choosing global expansion when local normal form exists
+  - needing hand-declared metadata that should be derivable
+  - Pathfinder not actually influencing the tool path
+
+  Artifacts
+  Each run should emit:
+
+  - manifest.lock.json: frozen benchmark cases
+  - engine_runs/*.json: raw per-engine results
+  - route_traces/*.json: Pathfinder decisions
+  - limits.md: functionality gaps
+  - wins_losses.csv: Cella vs SymPy/mpmath/Arb
+  - summary.md: human-readable verdict
+
+  Campaign Phases
+
+  1. MVP Hostile Set
+     25-40 curated cases from your papers, verification scripts, c001, DBP standing
+     results, and arithmetic hogs.
+
+  2. Ablation Run
+     Cella with Pathfinder vs Cella without Pathfinder. This is the crucial proof.
+
+  3. Conventional Baselines
+     SymPy/mpmath/Arb naive and expert modes.
+
+  4. Gap Classification
+     Every miss becomes one of:
+      - extractor gap
+      - route gap
+      - primitive gap
+      - integration gap
+      - genuine research gap
+
+  5. Second Pass
+     Improve only the gaps with highest observed ROI.
+
+  Key Design Rule
+  Pathfinder must be treated as an internal engine, not a callable MCP product. The
+  benchmark may expose trace logs, but normal MCP tools should use Pathfinder silently.
+

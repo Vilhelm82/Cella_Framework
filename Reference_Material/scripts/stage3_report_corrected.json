@@ -1,0 +1,137 @@
+{
+    "stage_3a_exact": {
+        "G1_bare_residue_squared": {
+            "passed": true,
+            "actual_simplified": "24 + 17*sqrt(2)",
+            "expected": "24 + 17*sqrt(2)",
+            "difference_simplified": "0"
+        },
+        "G2_weighted_residue_squared": {
+            "passed": true,
+            "actual_simplified": "16",
+            "expected": "16",
+            "difference_simplified": "0"
+        },
+        "G2_sign_gate_weighted_residue_positive": {
+            "passed": true,
+            "P_numeric": "-0.57710006302280598263350595031477141813663440857087482560669523394336371363148960",
+            "res_bare_expected_numeric": "-6.9312070060230213722770018166142873260390533268185902823099110180580990244963604",
+            "conclusion": "P < 0 and Res_bare < 0, so P*Res_bare = +4, not -4"
+        },
+        "G3_one_sided_branch_offset": {
+            "passed": true,
+            "actual_simplified": "4*I*pi",
+            "expected": "4*I*pi",
+            "difference_simplified": "0"
+        },
+        "G3_two_sided_branch_jump": {
+            "passed": true,
+            "actual_simplified": "8*I*pi",
+            "expected": "8*I*pi",
+            "difference_simplified": "0"
+        },
+        "G6_lambda_product": {
+            "passed": true,
+            "actual_simplified": "1/8",
+            "expected": "1/8",
+            "difference_simplified": "0"
+        },
+        "G6_lambda_dual_is_one_minus_lambda": {
+            "passed": true,
+            "actual_simplified": "sqrt(2)/4 + 1/2",
+            "expected": "sqrt(2)/4 + 1/2",
+            "difference_simplified": "0"
+        },
+        "G7_legendre_j": {
+            "passed": true,
+            "actual_simplified": "10976",
+            "expected": "10976",
+            "difference_simplified": "0"
+        },
+        "G8_phi2_isogeny": {
+            "passed": true,
+            "actual_simplified": "0",
+            "expected": "0",
+            "difference_simplified": "0"
+        },
+        "G10_interchange_parameter_m_over_n": {
+            "passed": true,
+            "actual_simplified": "-2 + 2*sqrt(2)",
+            "expected": "-2 + 2*sqrt(2)",
+            "difference_simplified": "0"
+        },
+        "H1_x0_squared": {
+            "passed": true,
+            "actual_simplified": "-16 + 12*sqrt(2)",
+            "expected": "-16 + 12*sqrt(2)",
+            "difference_simplified": "0"
+        },
+        "H2_one_minus_x0_squared": {
+            "passed": true,
+            "actual_simplified": "17 - 12*sqrt(2)",
+            "expected": "17 - 12*sqrt(2)",
+            "difference_simplified": "0"
+        },
+        "H3_one_minus_m_x0_squared": {
+            "passed": true,
+            "actual_simplified": "3 - 2*sqrt(2)",
+            "expected": "3 - 2*sqrt(2)",
+            "difference_simplified": "0"
+        },
+        "H4_n_times_unit": {
+            "passed": true,
+            "actual_simplified": "sqrt(2)/8",
+            "expected": "sqrt(2)/8",
+            "difference_simplified": "0"
+        }
+    },
+    "stage_3b_numerical": {
+        "G4_two_route_CPV_Pi": {
+            "passed": true,
+            "actual_diff": "3.2284884851155236168111269177050213420324729811822078423728067057410677066090377e-136",
+            "tolerance": "1.0e-130",
+            "cpv_pi_interchange": "-4.67826592165063908614377494851287184072661176718846253807540433202811985387384406292348956801923083807896856531359888773092966291555632868717651682268688893495228350243065279478505",
+            "cpv_pi_contour_real": "-4.67826592165063908614377494851287184072661176718846253807540433202811985387384406292348956801923083807896856531359888773092966291555632836432766831113452725383959173192851859153775",
+            "contour_bare_imag_over_pi": "-6.9312070060230213722770018166142873260390533268185902823099110180580990244963604",
+            "note": "contour route is independent; real part is CPV, imaginary part records branch offset"
+        },
+        "G3_weighted_branch_offset_numeric": {
+            "passed": true,
+            "actual_diff": "5.5798638014277572227822745048711723424737838715270052967693985774011908634471208e-137",
+            "tolerance": "1.0e-120",
+            "weighted_imag_over_pi": "4.0",
+            "interpretation": "weighted contour differs from CPV by sign*4*pi*i"
+        },
+        "G5_certified_dual_CPV_pin": {
+            "passed": true,
+            "actual_diff": "1.7896502549478552343587720421489497511818799194528949824791569778562127634386797e-220",
+            "tolerance": "1.0e-170",
+            "dual_cpv": "-3.988001085974558097719762257539087379694121855552360291347972820374382044301620084374998184536780571825905599613640469999524934769838194516297015969913667980232572633733216813738631005097537291913139724257892149600355947",
+            "certified_dual_cpv": "-3.988001085974558097719762257539087379694121855552360291347972820374382044301620084374998184536780571825905599613640469999524934769838194516297015969913667980232572633733216813738631005097537291913139724257892149600355947",
+            "pin_tail": "9694121855552360291"
+        },
+        "G9_period_controls": {
+            "passed": true,
+            "omega_1_equals": "2^(7/4) * K(k_primary^2)",
+            "Im_omega_2_equals": "-2^(3/4) * K(k_dual^2)",
+            "omega_1_numeric": "5.494707479796435718144449526692740968348570946528668042471207053953988354118952402186341624887028931",
+            "Im_omega_2_numeric": "-4.036461653911667430313646650901063587201822505260896726618743718724215157413323939265677463803550194"
+        }
+    },
+    "parameters": {
+        "n_dual": "1/2 + 3*sqrt(2)/8",
+        "m_dual_k_squared": "sqrt(2)/4 + 1/2",
+        "P_prefactor_on_Pi": "2**(1/4)*(8 - 6*sqrt(2))",
+        "x0_squared": "-16 + 12*sqrt(2)",
+        "res_bare_expected": "2**(1/4)*(-3 - 2*sqrt(2))",
+        "weighted_residue": "4 (by squared gate + sign gate)",
+        "lambda_primary": "1/2 - sqrt(2)/4",
+        "lambda_dual": "sqrt(2)/4 + 1/2"
+    },
+    "overall": {
+        "passed": true,
+        "exact_gates_passed": true,
+        "numerical_gates_passed": true,
+        "note": "No naive ellippi(n>1,m) path is used for certification."
+    }
+}

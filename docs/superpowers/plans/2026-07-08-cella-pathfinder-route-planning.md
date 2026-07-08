@@ -107,6 +107,21 @@ check("PTH4 benign cancellation remains direct but asks for BACL monitoring",
       and benign["value"]["dominant_pattern"] == "sterbenz_safe_benign"
       and "cella_bacl_pair" in benign["value"]["next_tools"])
 
+precision = route("cos(eps) - 1")
+check("PTH5 catastrophic site without known rewrite routes to precision budgeting",
+      precision["ok"]
+      and precision["value"]["decision"] == "precision_budget_needed"
+      and precision["value"]["profile_summary"]["unresolved_catastrophic_site_count"] == 1
+      and "cella_arith_precision_budget" in precision["value"]["next_tools"])
+
+mixed = route("(cos(eps) - 1) + ((1 + eps) - 1)")
+check("PTH6 mixed catastrophic sites keep unresolved precision-budget route",
+      mixed["ok"]
+      and mixed["value"]["decision"] == "precision_budget_needed"
+      and mixed["value"]["profile_summary"]["catastrophic_site_count"] == 2
+      and mixed["value"]["profile_summary"]["rewriteable_catastrophic_site_count"] == 1
+      and mixed["value"]["profile_summary"]["unresolved_catastrophic_site_count"] == 1)
+
 print()
 if FAILS:
     print(f"GATE MCP PATHFINDER: OPEN ({len(FAILS)} failing)")
@@ -180,7 +195,8 @@ def route_plan(
     operation_shape = str(profile.get("operation_shape"))
     dominant = burden.get("dominant_pattern")
     missing = _missing_constants(sites)
-    exact_account = _has_exact_account(sites)
+    exact_account_coverage = _exact_account_coverage(sites, operation_shape)
+    exact_account = exact_account_coverage in ("some", "all", "structural")
     known_rewrite = _has_known_rewrite(str(expression), operation_shape)
 
     if missing:
@@ -247,6 +263,7 @@ def route_plan(
                 for site in sites
             ],
             "predicted_burden_vector": burden,
+            "exact_account_coverage": exact_account_coverage,
         },
     }
     if include_profile:
@@ -254,14 +271,20 @@ def route_plan(
     return out
 
 
-def _has_exact_account(sites: list[dict]) -> bool:
-    for site in sites:
-        if site.get("account_probe_status") == "exact_q_account":
-            return True
-        for sample in site.get("probe_samples", []):
-            if sample.get("exact_account", {}).get("status") == "exact_q_account":
-                return True
-    return False
+def _exact_account_coverage(sites: list[dict], operation_shape: str) -> str:
+    if operation_shape == "self_cancellation":
+        return "structural"
+    if not sites:
+        return "none"
+
+    statuses = [site.get("account_probe_status") for site in sites]
+    if all(status == "structural_exact" for status in statuses):
+        return "structural"
+    if all(status in ("exact_q_account", "structural_exact") for status in statuses):
+        return "all"
+    if any(status in ("exact_q_account", "structural_exact") for status in statuses):
+        return "some"
+    return "none"
 
 
 def _missing_constants(sites: list[dict]) -> list[str]:
@@ -293,6 +316,133 @@ PYTHONPATH=src python tests/gate_mcp_pathfinder.py
 ```
 
 Expected: import failure still exists because MCP call wrappers are not wired yet.
+
+### Task 2A: Structured Unknown Parameter Metadata
+
+**Files:**
+- Modify: `src/cella/residual_profile.py`
+- Modify: `src/cella/pathfinder.py`
+
+- [ ] **Step 1: Add unknown-parameter collection to `residual_profile.py`**
+
+Add this helper near the expression helpers:
+
+```python
+def _unknown_parameters(expr: Expr) -> list[str]:
+    out = set()
+
+    def walk(node: Expr):
+        if isinstance(node, UnknownParameter):
+            out.add(node.name)
+        elif isinstance(node, Unary):
+            walk(node.value)
+        elif isinstance(node, Binary):
+            walk(node.left)
+            walk(node.right)
+
+    walk(expr)
+    return sorted(out)
+```
+
+In `_classify_subtraction`, compute:
+
+```python
+unknown_parameters = sorted(set(_unknown_parameters(node.left)) | set(_unknown_parameters(node.right)))
+```
+
+For every returned site record, include:
+
+```python
+"unknown_parameters": unknown_parameters,
+```
+
+For self-cancellation, the list will usually be empty unless the identical
+operands are both undeclared symbols. This field is telemetry; it is not by
+itself proof that constants are blocking.
+
+- [ ] **Step 2: Prefer structured missing constants in `pathfinder.py`**
+
+Change `_missing_constants` to read structured fields first and retain the old
+string fallback:
+
+```python
+def _missing_constants(sites: list[dict]) -> list[str]:
+    missing = set()
+    for site in sites:
+        if _site_needs_declared_constants(site):
+            for name in site.get("unknown_parameters", []) or []:
+                if name:
+                    missing.add(str(name))
+        text = str(site.get("probe_error", ""))
+        marker = "unknown parameter "
+        if marker in text:
+            name = text.split(marker, 1)[1].split(";", 1)[0].strip().strip("'\"")
+            if name:
+                missing.add(name)
+    return sorted(missing)
+
+
+def _site_needs_declared_constants(site: dict) -> bool:
+    return (
+        site.get("account_probe_status") == "unavailable"
+        or site.get("pattern") == "unrecognised"
+        or site.get("severity") == "needs_empirical_refinery"
+    )
+```
+
+Also include `unknown_parameters` in each `profile_summary["danger_sites"]`
+entry:
+
+```python
+"unknown_parameters": site.get("unknown_parameters", []),
+```
+
+- [ ] **Step 3: Run direct verification**
+
+Run:
+
+```bash
+PYTHONPATH=src python - <<'PY'
+from cella.pathfinder import route_plan
+from cella.residual_profile import residual_profile
+s={"variable":"eps","low":"1e-12","high":"1e-4"}
+p=residual_profile("(A + eps) - A", s)
+print(p["danger_sites"][0]["unknown_parameters"])
+r=route_plan("(A + eps) - A", s)
+print(r["blocking_inputs"]["missing_constants"])
+print(r["profile_summary"]["danger_sites"][0]["unknown_parameters"])
+PY
+```
+
+Expected:
+
+```text
+['A']
+['A']
+['A']
+```
+
+- [ ] **Step 4: Confirm the MCP route gate is still red for Task 3**
+
+Run:
+
+```bash
+PYTHONPATH=src python tests/gate_mcp_pathfinder.py
+```
+
+Expected: import failure for missing `call_route_plan`.
+
+- [ ] **Step 5: Commit structured unknown metadata**
+
+Run:
+
+```bash
+git add src/cella/residual_profile.py src/cella/pathfinder.py
+git commit -m "Add structured unknown parameter metadata"
+```
+
+Expected: commit contains only residual-profile and pathfinder structured
+unknown-parameter plumbing.
 
 ### Task 3: Wire `cella_route_plan` into MCP
 
@@ -382,7 +532,7 @@ Run:
 PYTHONPATH=src python tests/gate_mcp_pathfinder.py
 ```
 
-Expected: `PTH1` through `PTH4` pass.
+Expected: `PTH1` through `PTH6` pass.
 
 - [ ] **Step 6: Commit route planning**
 
@@ -416,11 +566,20 @@ from cella.mcp_server import (
 Add these checks before the final print block:
 
 ```python
+offset = call_rewrite_candidates(
+    expression="(1 + eps) - 1",
+    sweep={"variable": "eps", "low": "1e-12", "high": "1e-4"},
+)
+check("PTH7 constant-offset collapse exposes the residual carrier directly",
+      offset["ok"]
+      and any(c["family"] == "constant_offset_collapse" and c["expression"] == "eps"
+              for c in offset["value"]["candidates"]))
+
 conjugate = call_rewrite_candidates(
     expression="sqrt(1 + eps) - 1",
     sweep={"variable": "eps", "low": "1e-12", "high": "1e-4"},
 )
-check("PTH5 conjugate template is generated for sqrt(1+eps)-1",
+check("PTH8 conjugate template is generated for sqrt(1+eps)-1",
       conjugate["ok"]
       and any(c["family"] == "sqrt_conjugate" for c in conjugate["value"]["candidates"])
       and any("sqrt" in c["expression"] and "/" in c["expression"] for c in conjugate["value"]["candidates"]))
@@ -429,16 +588,27 @@ square = call_rewrite_candidates(
     expression="((12 + eps) * (12 + eps)) - 144",
     sweep={"variable": "eps", "low": "1e-12", "high": "1e-4"},
 )
-check("PTH6 square-minus-constant emits a difference-of-squares candidate",
+check("PTH9 square-minus-constant emits a difference-of-squares candidate",
       square["ok"]
       and any(c["family"] == "difference_of_squares" for c in square["value"]["candidates"])
       and square["value"]["requires_ranking"] is True)
+
+symbolic_square = call_rewrite_candidates(
+    expression="(a * a) - (b * b)",
+    sweep={"variable": "eps", "low": "1e-12", "high": "1e-4"},
+)
+check("PTH10 symbolic a^2-b^2 emits a general difference-of-squares candidate",
+      symbolic_square["ok"]
+      and any(c["family"] == "difference_of_squares"
+              and "(a)" in c["expression"]
+              and "(b)" in c["expression"]
+              for c in symbolic_square["value"]["candidates"]))
 
 self_candidates = call_rewrite_candidates(
     expression="eps - eps",
     sweep={"variable": "eps", "low": "1e-12", "high": "1e-4"},
 )
-check("PTH7 self-cancellation emits zero candidate",
+check("PTH11 self-cancellation emits zero candidate",
       self_candidates["ok"]
       and self_candidates["value"]["candidates"][0]["expression"] == "0"
       and self_candidates["value"]["candidates"][0]["family"] == "self_collapse")
@@ -488,12 +658,14 @@ def rewrite_candidates(
         }
 
     _add_unique(candidates, _self_collapse_candidate(tree))
+    _add_unique(candidates, _constant_offset_collapse_candidate(tree))
     _add_unique(candidates, _difference_of_squares_candidate(tree))
     _add_unique(candidates, _sqrt_conjugate_candidate(tree))
+    _add_unique(candidates, _common_factor_candidate(tree))
     for candidate in _three_term_regroup_candidates(tree):
         _add_unique(candidates, candidate)
 
-    for family in ("self_collapse", "difference_of_squares", "sqrt_conjugate", "three_term_regroup"):
+    for family in ("self_collapse", "constant_offset_collapse", "difference_of_squares", "sqrt_conjugate", "common_factor_extraction", "three_term_regroup"):
         if not any(c["family"] == family for c in candidates):
             not_generated.append({"family": family, "reason": "pattern_not_visible"})
 
@@ -501,7 +673,7 @@ def rewrite_candidates(
         "original": original,
         "route_decision": None if route_plan_record is None else route_plan_record.get("decision"),
         "candidates": candidates,
-        "requires_ranking": len(candidates) > 1,
+        "requires_ranking": any(c["family"] != "self_collapse" for c in candidates),
         "not_generated": not_generated,
     }
 ```
@@ -535,6 +707,26 @@ def _self_collapse_candidate(node: ast.AST) -> dict | None:
             "risk": "low",
         }
     return None
+
+
+def _constant_offset_collapse_candidate(node: ast.AST) -> dict | None:
+    if not (isinstance(node, ast.BinOp) and isinstance(node.op, ast.Sub)):
+        return None
+    if not isinstance(node.left, ast.BinOp) or not isinstance(node.left.op, ast.Add):
+        return None
+    if _same_ast(node.left.left, node.right):
+        residual = _source(node.left.right)
+    elif _same_ast(node.left.right, node.right):
+        residual = _source(node.left.left)
+    else:
+        return None
+    return {
+        "name": "constant_offset_collapse",
+        "expression": residual,
+        "family": "constant_offset_collapse",
+        "reason": "The expression has visible (c+x)-c structure; expose the residual carrier directly.",
+        "risk": "low",
+    }
 ```
 
 Add `difference_of_squares`, `sqrt_conjugate`, and three-term helpers:
@@ -563,11 +755,18 @@ def _difference_of_squares_candidate(node: ast.AST) -> dict | None:
     if not (isinstance(node, ast.BinOp) and isinstance(node.op, ast.Sub)):
         return None
     left_base = _is_square_product(node.left)
+    right_base = _is_square_product(node.right)
     right_root = _sqrt_int_constant(node.right)
-    if left_base is None or right_root is None:
+    if left_base is None:
         return None
     base = _source(left_base)
-    expr = f"(({base}) - {right_root}) * (({base}) + {right_root})"
+    if right_base is not None:
+        other = _source(right_base)
+    elif right_root is not None:
+        other = str(right_root)
+    else:
+        return None
+    expr = f"(({base}) - ({other})) * (({base}) + ({other}))"
     return {
         "name": "difference_of_squares",
         "expression": expr,
@@ -598,16 +797,25 @@ def _sqrt_conjugate_candidate(node: ast.AST) -> dict | None:
     left_arg = _sqrt_call_arg(node.left)
     if left_arg is not None and isinstance(node.right, ast.Constant) and node.right.value == 1:
         x_node = _split_one_plus_x(left_arg)
-        if x_node is not None:
-            x = _source(x_node)
-            inner = _source(left_arg)
-            return {
-                "name": "sqrt_conjugate",
-                "expression": f"({x}) / (sqrt({inner}) + 1)",
-                "family": "sqrt_conjugate",
-                "reason": "Conjugate removes same-leading-constant subtraction.",
-                "risk": "medium",
-            }
+        x = _source(x_node) if x_node is not None else f"({_source(left_arg)}) - 1"
+        inner = _source(left_arg)
+        return {
+            "name": "sqrt_conjugate",
+            "expression": f"({x}) / (sqrt({inner}) + 1)",
+            "family": "sqrt_conjugate",
+            "reason": "Conjugate removes same-leading-constant subtraction.",
+            "risk": "medium",
+        }
+    right_arg = _sqrt_call_arg(node.right)
+    if right_arg is not None and isinstance(node.left, ast.Constant) and node.left.value == 1:
+        inner = _source(right_arg)
+        return {
+            "name": "sqrt_conjugate",
+            "expression": f"(1 - ({inner})) / (1 + sqrt({inner}))",
+            "family": "sqrt_conjugate",
+            "reason": "Conjugate removes same-leading-constant subtraction.",
+            "risk": "medium",
+        }
     return None
 
 
@@ -741,7 +949,7 @@ comparison = call_pathfinder_compare(
         "neg_big": ["-0x1p+1"],
     },
 )
-check("PTH8 pathfinder compare ranks declared equivalent forms by BACL/refinery burden",
+check("PTH12 pathfinder compare ranks declared equivalent forms by BACL/refinery burden",
       comparison["ok"]
       and comparison["value"]["winner"] in ["clean_absorb_first", "clean_absorb_commuted"]
       and comparison["value"]["equivalence_status"] == "verified_exact_real_equivalence_on_declared_grid"
@@ -752,7 +960,7 @@ router_route = router.call(
     "route_plan",
     {"expression": "(1 + eps) - 1", "sweep": {"variable": "eps", "low": "1e-12", "high": "1e-4"}},
 )
-check("PTH9 router dispatches route planning from the pathfinder profile",
+check("PTH13 router dispatches route planning from the pathfinder profile",
       router_route["ok"]
       and router_route["tool"] == "cella_route_plan"
       and router_route["result"]["value"]["decision"] == "rewrite_candidate_needed")
@@ -829,18 +1037,27 @@ def call_pathfinder_compare(
     dimensions: list | None = None,
 ) -> dict:
     """Rank declared forms by exact-account/BACL pathfinder burden."""
-    return _wrap_proof(
-        "cella_pathfinder_compare",
-        "Pathfinder ranking for declared algebraic forms over a binary64 grid.",
-        lambda: pathfinder_compare(
-            [str(v) for v in variables],
-            forms,
-            grid,
-            dimensions=None if dimensions is None else [str(d) for d in dimensions],
-        ),
-        depends=("The comparison scope is the declared grid; it is not a global identity proof.",),
-    )
+    try:
+        return _wrap_proof(
+            "cella_pathfinder_compare",
+            "Pathfinder ranking for declared algebraic forms over a binary64 grid.",
+            lambda: pathfinder_compare(
+                [str(v) for v in variables],
+                forms,
+                grid,
+                dimensions=None if dimensions is None else [str(d) for d in dimensions],
+            ),
+            depends=("The comparison scope is the declared grid; it is not a global identity proof.",),
+        )
+    except ValueError as exc:
+        # Return refusal-shaped MCP output with token INDETERMINATE and
+        # stratum non_equivalent_declared_grid.
+        ...
 ```
+
+Non-equivalent forms must not leak a Python exception out of the MCP callable.
+The returned refusal should preserve the first failing sample in the refusal
+plain/detail text.
 
 Add `"cella_pathfinder_compare"` to `TOOL_NAMES`, `TOOL_GROUPS["pathfinder"]`, help text, and `tool_callable_map()`.
 
@@ -886,7 +1103,7 @@ Add to `tests/gate_mcp_pathfinder.py`:
 from cella.mcp_server import call_cella_help
 
 help_record = call_cella_help("cella_route_plan")
-check("PTH10 help documents route-plan result reading",
+check("PTH14 help documents route-plan result reading",
       help_record["ok"]
       and "decision" in help_record["value"]["tool"]["read_result"]
       and "next_tools" in help_record["value"]["tool"]["read_result"])
