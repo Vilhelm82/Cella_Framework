@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import ast
+from collections.abc import Iterator
 
 from .residual_profile import residual_profile
 
@@ -145,15 +146,23 @@ def _has_known_rewrite(expression: str, operation_shape: str) -> bool:
         node = ast.parse(str(expression), mode="eval").body
     except SyntaxError:
         return False
-    return (
-        _has_sqrt_conjugate_shape(node)
-        or _has_difference_of_squares_shape(node)
-        or _has_simple_constant_perturbation(node)
+    return any(
+        _has_sqrt_conjugate_shape(subtraction)
+        or _has_difference_of_squares_shape(subtraction)
+        or _has_simple_constant_perturbation(subtraction)
+        for subtraction in _subtraction_nodes(node)
     )
 
 
 def _is_subtraction(node: ast.AST) -> bool:
     return isinstance(node, ast.BinOp) and isinstance(node.op, ast.Sub)
+
+
+def _subtraction_nodes(node: ast.AST) -> Iterator[ast.BinOp]:
+    if _is_subtraction(node):
+        yield node
+    for child in ast.iter_child_nodes(node):
+        yield from _subtraction_nodes(child)
 
 
 def _has_simple_constant_perturbation(node: ast.AST) -> bool:
