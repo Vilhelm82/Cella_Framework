@@ -465,9 +465,11 @@ def _site_fingerprint(site: dict, root: ast.AST | None = None) -> dict:
         "operand_perturbation": site.get("operand_perturbation"),
         "route_assembly_class": _route_assembly_class(site, root),
         "scale_evidence": {
-            "left_leading_constant": site.get("left_leading_constant"),
-            "right_leading_constant": site.get("right_leading_constant"),
-            "leading_constant_gap": site.get("leading_constant_gap"),
+            "chart_local": True,
+            "anchor": site.get("chart_local_debug", {}).get("anchor", "x=0"),
+            "left_leading_constant": site.get("chart_local_debug", {}).get("left_leading_constant"),
+            "right_leading_constant": site.get("chart_local_debug", {}).get("right_leading_constant"),
+            "leading_constant_gap": site.get("chart_local_debug", {}).get("leading_constant_gap"),
         },
         "account_probe_status": site.get("account_probe_status"),
         "unknown_parameters": site.get("unknown_parameters", []),
@@ -528,7 +530,7 @@ def _route_assembly_class_from_residual(site: dict) -> str | None:
     if left_stationary and right_stationary:
         return "stationary_operands"
 
-    same_constant = site.get("leading_constant_gap") == 0.0
+    same_constant = site.get("chart_local_debug", {}).get("leading_constant_gap") == 0.0
     if not same_constant:
         return None
 

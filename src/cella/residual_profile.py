@@ -373,10 +373,14 @@ def _classify_subtraction(node: Binary, path: str, sweep: Sweep, include_samples
             "pattern": "self_cancellation",
             "severity": "structural_zero",
             "probe_used": False,
-            "left_leading_constant": None,
-            "right_leading_constant": None,
-            "leading_constant_gap": 0.0,
+            "fingerprint_key": "valuation",
             "signal_exponent": "zero",
+            "chart_local_debug": {
+                "anchor": "x=0",
+                "left_leading_constant": None,
+                "right_leading_constant": None,
+                "leading_constant_gap": 0.0,
+            },
             "signal_coefficient": 0.0,
             "predicted_precision_crossing_epsilon": None,
             "sterbenz_window": True,
@@ -405,10 +409,14 @@ def _classify_subtraction(node: Binary, path: str, sweep: Sweep, include_samples
             "severity": "needs_empirical_refinery",
             "probe_used": True,
             "probe_error": probe["error"],
-            "left_leading_constant": None,
-            "right_leading_constant": None,
-            "leading_constant_gap": None,
+            "fingerprint_key": "valuation",
             "signal_exponent": None,
+            "chart_local_debug": {
+                "anchor": "x=0",
+                "left_leading_constant": None,
+                "right_leading_constant": None,
+                "leading_constant_gap": None,
+            },
             "signal_coefficient": None,
             "predicted_precision_crossing_epsilon": None,
             "sterbenz_window": None,
@@ -481,10 +489,18 @@ def _classify_subtraction(node: Binary, path: str, sweep: Sweep, include_samples
         "pattern": pattern,
         "severity": severity,
         "probe_used": True,
-        "left_leading_constant": left_constant,
-        "right_leading_constant": right_constant,
-        "leading_constant_gap": gap,
+        "fingerprint_key": "valuation",
         "signal_exponent": signal_exponent,
+        "chart_local_debug": {
+            "anchor": "x=0",
+            "note": "leading constants are read at the x=0 chart; chart-local debug, "
+                    "NOT the fingerprint key. For cancellation away from x=0 (e.g. "
+                    "x->inf) these do not describe the cancellation locus -- the "
+                    "valuation (signal_exponent) and condition number do.",
+            "left_leading_constant": left_constant,
+            "right_leading_constant": right_constant,
+            "leading_constant_gap": gap,
+        },
         "signal_coefficient": coefficient,
         "signal_signed_coefficient": probe["signed_coefficient"],
         "residual_order_evidence": probe["residual_order_evidence"],
@@ -858,9 +874,10 @@ def _burden_vector(sites: list[dict]) -> dict:
             counts["ordinary_sites"] += 1
         if site.get("predicted_precision_crossing_epsilon"):
             crossings.append(float(site["predicted_precision_crossing_epsilon"]))
+        cld = site.get("chart_local_debug", {})
         for key in ("left_leading_constant", "right_leading_constant"):
-            if site.get(key) is not None:
-                constants.append(abs(float(site[key])))
+            if cld.get(key) is not None:
+                constants.append(abs(float(cld[key])))
     dominant = "none"
     if counts["catastrophic_sites"]:
         dominant = "sterbenz_safe_catastrophic"

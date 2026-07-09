@@ -78,8 +78,8 @@ check("R5 buried constants are exposed by the cheap expression-graph micro-probe
       and buried_constant["value"]["operation_shape"] == "catastrophic_cancellation"
       and buried_constant["value"]["danger_sites"][0]["pattern"] == "sterbenz_safe_catastrophic"
       and buried_constant["value"]["danger_sites"][0]["probe_used"] is True
-      and buried_constant["value"]["danger_sites"][0]["left_leading_constant"] == 144.0
-      and buried_constant["value"]["danger_sites"][0]["right_leading_constant"] == 144.0)
+      and buried_constant["value"]["danger_sites"][0]["chart_local_debug"]["left_leading_constant"] == 144.0
+      and buried_constant["value"]["danger_sites"][0]["chart_local_debug"]["right_leading_constant"] == 144.0)
 
 linear_perturb = linear["value"]["danger_sites"][0].get("operand_perturbation", {})
 buried_perturb = buried_constant["value"]["danger_sites"][0].get("operand_perturbation", {})
