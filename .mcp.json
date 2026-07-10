@@ -13,6 +13,16 @@
       "env": {
         "PYTHONPATH": "src"
       }
+    },
+    "wreath-engine": {
+      "type": "stdio",
+      "command": "uv",
+      "args": [
+        "--directory",
+        "tools/wreath_engine",
+        "run",
+        "wreath-engine-mcp"
+      ]
     }
   }
 }

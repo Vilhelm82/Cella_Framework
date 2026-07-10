@@ -1,0 +1,27 @@
+[project]
+name = "wreath-engine"
+version = "0.1.0"
+description = "Executable pipeline for the conjugate Kummer wreath-lift theorem: F2 rank/kernel bookkeeping in Python, mathematical claims certified by Macaulay2."
+requires-python = ">=3.12"
+dependencies = ["mcp>=1.0"]
+
+[project.scripts]
+wreath-engine = "wreath_engine.cli:main"
+wreath-engine-mcp = "wreath_engine.server:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["wreath_engine"]
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "m2: tests that require a working Macaulay2 installation",
+    "slow: long-running golden reproductions",
+]

@@ -1,0 +1,31 @@
+{
+  "name": "toy_quadratic",
+  "ring": {
+    "variables": ["a", "x"],
+    "weights": [2, 1],
+    "order": "GRevLex",
+    "coefficients": "QQ"
+  },
+  "base_cover": {
+    "incidence_gens": ["x^2-a"],
+    "sheet_vars": ["x"],
+    "degree": 2,
+    "expected_codim": 1,
+    "ramification_det_identity": "2*x",
+    "group": { "name": "S2", "order": 2, "claimed_by": "quadratic cover" }
+  },
+  "channels": [
+    { "name": "r1", "radicand": "x-1" }
+  ],
+  "divisors": [
+    {
+      "name": "contact1",
+      "gens": ["x-1"],
+      "claimed_parity_row": [1],
+      "type": "contact",
+      "expected_base_image": "a-1"
+    }
+  ],
+  "generic_denominator": "a",
+  "slices": []
+}
