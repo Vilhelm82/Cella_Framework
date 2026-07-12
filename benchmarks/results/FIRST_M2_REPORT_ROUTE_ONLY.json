@@ -1,0 +1,124 @@
+{
+  "baseline_route": "saturate(Ceven + IZ + sliceA, ideal(M)); eliminate sheetVars",
+  "baseline_trials": [
+    {
+      "canonical_generators": [
+        "J^2",
+        "M-11",
+        "N1-4",
+        "N2-8",
+        "N3-12",
+        "N4-20"
+      ],
+      "peak_rss_kb": 358020,
+      "total_wall_ns": 3172625242,
+      "trial": 1
+    }
+  ],
+  "benchmark_id": "m2-even-contact-delta-slice-a-v1",
+  "canonical_generators": [
+    "J^2",
+    "M-11",
+    "N1-4",
+    "N2-8",
+    "N3-12",
+    "N4-20"
+  ],
+  "certificate_status": "route-only-bypassed",
+  "cold_warm_policy": "one excluded warm-up per route; every measured trial is a separate cold M2 process",
+  "delivery_mode": "route-only",
+  "host_version": "1.25.11",
+  "logical_cpu_count": 16,
+  "mathematical_target": "exact even-contact/difference-divisor sliced base-image ideal with doubled J node",
+  "measured_trials_per_route": 1,
+  "pathfinder_route": "contact_restriction",
+  "pathfinder_trials": [
+    {
+      "analysis_ns": 49194,
+      "canonical_generators": [
+        "J^2",
+        "M-11",
+        "N1-4",
+        "N2-8",
+        "N3-12",
+        "N4-20"
+      ],
+      "certificate_cpu_seconds": 0.0,
+      "certificate_status": "SKIPPED",
+      "execution_cpu_seconds": 0.000300113,
+      "host_execution_and_certificate_wall_ns": 3166424800,
+      "lifting_ns": 155527,
+      "lowering_ns": 51638,
+      "peak_rss_kb": 358300,
+      "total_wall_ns": 3166899886,
+      "trial": 1
+    }
+  ],
+  "platform": "Linux-7.0.13-100.fc43.x86_64-x86_64-with-glibc2.42",
+  "python_version": "3.14.6",
+  "release_gate": {
+    "closed": false,
+    "reason": "Route-only mode: certified delivery bypassed, so the release gate is not evaluated. Exact result equivalence with the baseline still held."
+  },
+  "result_equivalence_status": "exact-generator-equivalence",
+  "route_evidence": {
+    "canonical_route_sha256": "550b3a40371b704cbe417a44aef10c2d06225bccfc3d8d80cd8cfb46b675538a",
+    "characteristic": 0,
+    "restricted_generator_identity": "delta|Ceven = -16*J^2",
+    "sign_product": 1
+  },
+  "source_document": "benchmarks/FIRST_M2_FIXTURE.md",
+  "speedup_ratio": 1.0018078740112089,
+  "timing_summary": {
+    "baseline_peak_rss_kb": {
+      "maximum": 358020,
+      "median": 358020,
+      "minimum": 358020
+    },
+    "baseline_total_wall_ns": {
+      "maximum": 3172625242,
+      "median": 3172625242,
+      "minimum": 3172625242
+    },
+    "pathfinder_analysis_ns": {
+      "maximum": 49194,
+      "median": 49194,
+      "minimum": 49194
+    },
+    "pathfinder_certificate_cpu_seconds": {
+      "maximum": 0.0,
+      "median": 0.0,
+      "minimum": 0.0
+    },
+    "pathfinder_execution_cpu_seconds": {
+      "maximum": 0.000300113,
+      "median": 0.000300113,
+      "minimum": 0.000300113
+    },
+    "pathfinder_host_execution_and_certificate_wall_ns": {
+      "maximum": 3166424800,
+      "median": 3166424800,
+      "minimum": 3166424800
+    },
+    "pathfinder_peak_rss_kb": {
+      "maximum": 358300,
+      "median": 358300,
+      "minimum": 358300
+    },
+    "pathfinder_total_wall_ns": {
+      "maximum": 3166899886,
+      "median": 3166899886,
+      "minimum": 3166899886
+    },
+    "pathfinder_wrapper_lifting_ns": {
+      "maximum": 155527,
+      "median": 155527,
+      "minimum": 155527
+    },
+    "pathfinder_wrapper_lowering_ns": {
+      "maximum": 51638,
+      "median": 51638,
+      "minimum": 51638
+    }
+  }
+}

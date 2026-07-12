@@ -33,12 +33,17 @@ class M2Session:
     def run(self, script_text: str, timeout: float = 600.0) -> list[dict]:
         """Feed a script, read until the sentinel, return parsed result blocks.
 
-        Raises M2Error on timeout or a dead session (after killing it).
+        Raises M2Error on timeout, a dead session, or a script that emitted
+        no result blocks (mid-script failure) — the session is killed in
+        every case so the next probe starts clean.
         """
         with self._lock:
             proc = self._ensure()
             assert proc.stdin is not None and proc.stdout is not None
-            proc.stdin.write(script_text + f'\nprint "{SENTINEL}";\n')
+            # clearAll: each probe runs in a clean namespace; the generated
+            # script reloads WreathEngine.m2 itself, so nothing is lost.
+            proc.stdin.write("clearAll;\n" + script_text
+                             + f'\nprint "{SENTINEL}";\n')
             proc.stdin.flush()
             lines: list[str] = []
             deadline = time.monotonic() + timeout
@@ -66,7 +71,22 @@ class M2Session:
                 self.kill()
                 raise m2run.M2Error("exploratory session died",
                                     log_tail="".join(lines[-30:]))
-            return m2run.parse_results("".join(result))
+            parsed = m2run.parse_results("".join(result))
+            if not parsed:
+                # The sentinel arrived but no fenced blocks did: a statement
+                # failed mid-script (interactive M2 prints the error and
+                # continues to the next statement, so the trailing sentinel
+                # still executes). Every explore script emits component_count
+                # before anything else, so zero blocks is always a failure,
+                # never a finding. Kill the polluted session and surface the
+                # raw output; the caller's batch fallback writes the forensic
+                # script + verbatim log under runs/.
+                self.kill()
+                raise m2run.M2Error(
+                    "exploratory session emitted no result blocks "
+                    "(mid-script failure)",
+                    log_tail="".join(result[-40:]))
+            return parsed
 
     def kill(self) -> None:
         if self._proc is not None:

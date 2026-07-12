@@ -125,16 +125,25 @@ def suggest_parity_rows(spec: dict | None = None,
     try:
         script = m2gen.generate_explore_parity(ps, divisor_gens)
         results = m2session.shared_session().run(script, timeout=timeout_seconds)
+        components = [r for r in results if "parity_row" in r]
+        diagnostics = [r for r in results if "parity_row" not in r]
+        counts = [d.get("value") for d in diagnostics
+                  if d.get("gate") == "component_count"]
         return {
             "status": "exploratory",
             "candidate_gens": divisor_gens,
-            "components": [r for r in results if "parity_row" in r],
+            "component_count": counts[0] if counts else None,
+            "components": components,
+            "diagnostics": diagnostics,
             "channel_order": [c.name for c in ps.channels],
             "warnings": ["exploratory only — parity rows here certify nothing"],
         }
-    except m2run.M2Error:
-        return pipeline.suggest_parity_rows(ps, divisor_gens,
-                                            timeout=timeout_seconds)
+    except m2run.M2Error as exc:
+        env = pipeline.suggest_parity_rows(ps, divisor_gens,
+                                           timeout=timeout_seconds)
+        env.setdefault("warnings", []).append(
+            f"session path failed ({exc}); result produced by batch fallback")
+        return env
 
 
 @mcp.tool()
@@ -172,6 +181,25 @@ def start_verification(spec: dict | None = None,
     if isinstance(ps, dict):
         return ps
     return jobs.start_job(ps, "verify", timeout=timeout_seconds)
+
+
+@mcp.tool()
+def start_suggestion(spec: dict | None = None,
+                     spec_path: str | None = None,
+                     divisor_gens: list[str] | None = None,
+                     timeout_seconds: float = 7200.0) -> dict:
+    """Async suggest_parity_rows for probes whose decomposition outlives the
+    MCP transport window (e.g. ramification-adjacent divisors). Runs the
+    batch explorer as a job; the probe's script + verbatim output land under
+    runs/. Returns a job_id; poll with get_job_status, collect with
+    get_job_result. EXPLORATORY — never certifies."""
+    ps = _load(spec, spec_path)
+    if isinstance(ps, dict):
+        return ps
+    if not divisor_gens:
+        return {"status": "error", "error": "divisor_gens required"}
+    return jobs.start_job(ps, "explore", timeout=timeout_seconds,
+                          extra={"divisor_gens": divisor_gens})
 
 
 @mcp.tool()

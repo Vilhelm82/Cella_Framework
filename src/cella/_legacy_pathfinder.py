@@ -1,4 +1,4 @@
-"""Cella pathfinder route planning and conservative rewrite support."""
+"""Legacy Cella Pathfinder behavior retained behind the typed package facade."""
 
 from __future__ import annotations
 

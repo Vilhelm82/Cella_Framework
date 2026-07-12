@@ -1,0 +1,27 @@
+{
+  "schema": "cella.dbp.native_periods.static_schedule.v1",
+  "target_bits_floor": 150,
+  "kernel_form": "factored",
+  "rule": "certified_taylor_interval_jet",
+  "panels": 32,
+  "kernel_schedules": {
+    "g_plus_v1": [
+      {"first_panel": 0, "last_panel": 31, "order": 88, "guard_bits": 90, "radius_multiplier": 6}
+    ],
+    "g_minus_v1": [
+      {"first_panel": 0, "last_panel": 8, "order": 70, "guard_bits": 90, "radius_multiplier": 8},
+      {"first_panel": 9, "last_panel": 11, "order": 80, "guard_bits": 90, "radius_multiplier": 6},
+      {"first_panel": 12, "last_panel": 14, "order": 104, "guard_bits": 90, "radius_multiplier": 4},
+      {"first_panel": 15, "last_panel": 19, "order": 128, "guard_bits": 90, "radius_multiplier": 3},
+      {"first_panel": 20, "last_panel": 22, "order": 104, "guard_bits": 90, "radius_multiplier": 4},
+      {"first_panel": 23, "last_panel": 25, "order": 80, "guard_bits": 90, "radius_multiplier": 6},
+      {"first_panel": 26, "last_panel": 31, "order": 70, "guard_bits": 90, "radius_multiplier": 8}
+    ]
+  },
+  "obligations": [
+    "exact_domain_separation",
+    "panel_differentiability_radius",
+    "fixed_dag_account_closure",
+    "algebraic_recurrence_cauchy_remainder"
+  ]
+}

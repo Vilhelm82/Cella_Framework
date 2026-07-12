@@ -1,0 +1,194 @@
+{
+  "schema_id": "cella.dbp.native_evaluator.release_report",
+  "schema_version": "1.0",
+  "date": "2026-07-12",
+  "verdict": "PASS",
+  "scope": "Completed fixed-route DBP native relative-period evaluator",
+  "code_change_policy": {
+    "requested": "Do not modify code unless a gate fails",
+    "initial_precision_gate_failed": true,
+    "failure": "The frozen M1 schedule refused dual_cpv at 192 bits and both targets at 256 and 384 bits because its certified Cauchy remainder was too wide.",
+    "authorized_minimum_fix": "Retain the frozen panel partition, radii, and algebraic rewrites; deterministically increase only recurrence order from the requested proof budget.",
+    "certificate_verifier_added_after_gate_gap": true
+  },
+  "tests": {
+    "initial_full_suite_clean_processes": {
+      "passed": 37,
+      "failed": 0,
+      "hostile_benchmark": "passed unskipped",
+      "hostile_elapsed_seconds": 95
+    },
+    "current_full_suite_clean_processes": {
+      "passed": 37,
+      "failed": 0,
+      "skipped": 1,
+      "skip": "tests/gate_pathfinder_hostile_benchmark.py --skip-hostile"
+    },
+    "dbp_gate_assertions": 1570,
+    "exact_verifiers": {
+      "verify_dbp_landen_trace_theorem.py": 47,
+      "verify_dbp_landen_trace_theorem_v1_1.py": 75,
+      "verify_dbp_native_relative_period_route.py": 18
+    }
+  },
+  "evaluations": [
+    {
+      "target": "primary",
+      "requested_bits": 192,
+      "lower_numerator": "-580175186565198337643655937351881090836109965678107591285512890460960600493765",
+      "upper_numerator": "-580175186565198337643655937351881090836109965678107591285512890460960514360070",
+      "denominator_exponent": 256,
+      "certified_width_bits": 229,
+      "decimal_rendering_60_places": "-5.010490702660418769050021160526777648056994856721609896559050",
+      "certificate_digest": "525fdf2e47489665d32b42d7c1e4b264fdb03484a628915ae891acae39164a53"
+    },
+    {
+      "target": "dual_cpv",
+      "requested_bits": 192,
+      "lower_numerator": "-461778977625679928055388951143059726456678375383303538322060207148797939478002",
+      "upper_numerator": "-461778977625679928055388951143059726456678375383303538322060207148765110519824",
+      "denominator_exponent": 256,
+      "certified_width_bits": 221,
+      "decimal_rendering_60_places": "-3.988001085974558097719762257539087379694121855552360291347972",
+      "certificate_digest": "abacc446b534fa1f7faad68547c1eb26a02271e7fbb42331e5186015d0402db8"
+    },
+    {
+      "target": "primary",
+      "requested_bits": 256,
+      "lower_numerator": "-10702343184484905904188000918232641530277808112391469252702947140094325597353535493293398288655109",
+      "upper_numerator": "-10702343184484905904188000918232641530277808112391469252702947140094325597353535493293398270283446",
+      "denominator_exponent": 320,
+      "certified_width_bits": 295,
+      "decimal_rendering_60_places": "-5.010490702660418769050021160526777648056994856721609896559050",
+      "certificate_digest": "d1abc1f32245743ee0d8edaf6b1f7bc5617827121941fdaca738b762283cfa82"
+    },
+    {
+      "target": "dual_cpv",
+      "requested_bits": 256,
+      "lower_numerator": "-8518318618880166845259941586258388551891836188461077743947870136405873573877307577321461131615983",
+      "upper_numerator": "-8518318618880166845259941586258388551891836188461077743947870136405873573877307577321421074707401",
+      "denominator_exponent": 320,
+      "certified_width_bits": 284,
+      "decimal_rendering_60_places": "-3.988001085974558097719762257539087379694121855552360291347972",
+      "certificate_digest": "1f9f15eaeb066a7b386fef3291e9cc60df2cc80ab8c5b017e89a1b56465abdf6"
+    },
+    {
+      "target": "primary",
+      "requested_bits": 384,
+      "lower_numerator": "-3641818670416697760141711023079651972971004599583972701666492964847486286829582215705726989030275925081157669648985364229908747874628008",
+      "upper_numerator": "-3641818670416697760141711023079651972971004599583972701666492964847486286829582215705726989030275925081157669648985364229908747872421667",
+      "denominator_exponent": 448,
+      "certified_width_bits": 426,
+      "decimal_rendering_60_places": "-5.010490702660418769050021160526777648056994856721609896559050",
+      "certificate_digest": "bb649bafb2b28726d8e74857dfeb005ea7d4962600c58ce322f9fa3a800baadc"
+    },
+    {
+      "target": "dual_cpv",
+      "requested_bits": 384,
+      "lower_numerator": "-2898633621819242704742764989653366270406639065874213081057645375975366262218938204938199989033773834608357799655682780499464804116267971",
+      "upper_numerator": "-2898633621819242704742764989653366270406639065874213081057645375975366262218938204938199989033773834608357799655682780499464771327722263",
+      "denominator_exponent": 448,
+      "certified_width_bits": 413,
+      "decimal_rendering_60_places": "-3.988001085974558097719762257539087379694121855552360291347972",
+      "certificate_digest": "3b18abf87358e8d1d24e77e6f06455097e6afaa602519d07a27b9dcfa709f36b"
+    }
+  ],
+  "fixtures": {
+    "primary": {
+      "declared_kind": "decimal_prefix",
+      "digits_after_decimal": 50,
+      "literal": "-5.01049070266041876905002116052677764805699485672160",
+      "both_endpoints_share_literal_prefix_at_all_precisions": true,
+      "both_endpoints_round_identically_at_all_precisions": true,
+      "conventional_50_place_rounding": "-5.01049070266041876905002116052677764805699485672161",
+      "rounded_value_equals_literal": false,
+      "note": "The stored fixture is a prefix/truncation oracle, not a correctly rounded 50-place decimal."
+    },
+    "dual_cpv": {
+      "declared_kind": "decimal_prefix",
+      "digits_after_decimal": 54,
+      "literal": "-3.988001085974558097719762257539087379694121855552360291",
+      "both_endpoints_share_literal_prefix_at_all_precisions": true,
+      "both_endpoints_round_identically_at_all_precisions": true,
+      "conventional_54_place_rounding": "-3.988001085974558097719762257539087379694121855552360291",
+      "rounded_value_equals_literal": true
+    }
+  },
+  "certificate_replay": {
+    "clean_processes": 2,
+    "certificates_per_process": 6,
+    "process_a_exit": 0,
+    "process_b_exit": 0,
+    "byte_identical": true,
+    "canonical_bundle_sha256": "47b82d536982fb27ff730da6311f0340e9da81ae04e3a91c3c78348d6c8cc66e"
+  },
+  "refusal_campaign": {
+    "passed": 6,
+    "failed": 0,
+    "cases": {
+      "wrong_sheet": "unsupported_relative_path:path_gate",
+      "wrong_path": "unsupported_relative_path:path_gate",
+      "missing_cpv": "unsupported_relative_path:path_gate",
+      "altered_pole": "route_identity_failed:source_ledger",
+      "account_tampering": "account_not_closed:account_ledger",
+      "valid_certificate": "accepted"
+    }
+  },
+  "production_dependency_audit": {
+    "reachable_modules": 14,
+    "forbidden_import_or_call_hits": 0,
+    "external_import_roots": [
+      "__future__", "dataclasses", "enum", "fractions", "functools",
+      "hashlib", "importlib", "json", "math", "struct", "typing"
+    ],
+    "forbidden": [
+      "mpmath", "SymPy", "SciPy", "FLINT/Arb", "Sage", "AGM",
+      "Carlson", "ellipk", "ellipe", "ellippi", "elliptic-library calls"
+    ]
+  },
+  "benchmarks": {
+    "method": "Each target/precision cold run used a fresh Python process. Marginal medians used seven repeat calls after populating only that request's exact integral cache. Certificate verification medians used 100 structural verification calls.",
+    "native": [
+      {"target": "primary", "bits": 192, "cold_seconds": 10.020778450, "marginal_median_seconds": 0.001370482, "certificate_verify_median_seconds": 0.000132513},
+      {"target": "dual_cpv", "bits": 192, "cold_seconds": 16.389693163, "marginal_median_seconds": 0.001037517, "certificate_verify_median_seconds": 0.000132182},
+      {"target": "primary", "bits": 256, "cold_seconds": 18.637676350, "marginal_median_seconds": 0.001855555, "certificate_verify_median_seconds": 0.000137396},
+      {"target": "dual_cpv", "bits": 256, "cold_seconds": 32.325893462, "marginal_median_seconds": 0.001491802, "certificate_verify_median_seconds": 0.000132988},
+      {"target": "primary", "bits": 384, "cold_seconds": 48.895571369, "marginal_median_seconds": 0.002860250, "certificate_verify_median_seconds": 0.000132728},
+      {"target": "dual_cpv", "bits": 384, "cold_seconds": 94.923090872, "marginal_median_seconds": 0.002252542, "certificate_verify_median_seconds": 0.000135433}
+    ],
+    "pathfinder_compile_time_scout": {
+      "cold_process_trials": 7,
+      "cold_process_median_seconds": 0.057597129,
+      "cold_process_min_seconds": 0.056478918,
+      "cold_process_max_seconds": 0.059161529,
+      "planning_trials": 100,
+      "planning_median_seconds": 0.000047400,
+      "runtime_dependency": false,
+      "certificate_evidence": false
+    }
+  },
+  "arb_referee": {
+    "backend": "python-flint 0.9.0 acb.integral",
+    "context_precision_bits": 512,
+    "requested_tolerance_bits": 430,
+    "certifying_path": false,
+    "primary": {
+      "elapsed_seconds": 0.008867,
+      "ball": "[-5.0104907026604187690500211605267776480569948567216098965590501968372045802270598548322437836294365391803591947103981700130038421793287266365613 +/- 5.72e-143]",
+      "native_384_bracket_contains_ball": true,
+      "integral_imaginary_ball_contains_zero": true
+    },
+    "dual_cpv": {
+      "elapsed_seconds": 0.015020,
+      "ball": "[-3.9880010859745580977197622575390873796941218555523602913479728203743820443016200843749981845367805718259055996136404699995249347698381945162970 +/- 2.98e-143]",
+      "native_384_bracket_contains_ball": true,
+      "integral_imaginary_ball_contains_zero": true
+    }
+  },
+  "remaining_boundaries": [
+    "Only the two theorem-compiled DBP routes and their four public target views are admitted.",
+    "The dual numerical execution remains pole-free and contains no runtime CPV crossing.",
+    "Pathfinder remains a compile-time scout only.",
+    "The separately added Legendre K/E realization does not route or alter DBP evaluation."
+  ]
+}

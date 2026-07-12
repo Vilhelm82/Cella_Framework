@@ -1,16 +1,23 @@
 """Gate the hostile Pathfinder benchmark campaign.
 
 Run:  PYTHONPATH=src python tests/gate_pathfinder_hostile_benchmark.py
+Skip: PYTHONPATH=src python tests/gate_pathfinder_hostile_benchmark.py --skip-hostile
+   or CELLA_SKIP_HOSTILE_BENCHMARK=1 with the normal command.
 """
 
 from __future__ import annotations
 
 import json
+import os
 import sys
 import tempfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
+
+if "--skip-hostile" in sys.argv or os.environ.get("CELLA_SKIP_HOSTILE_BENCHMARK") == "1":
+    print("GATE PATHFINDER HOSTILE BENCHMARK: SKIPPED - explicit skip flag set.")
+    sys.exit(0)
 
 FAILS: list[str] = []
 

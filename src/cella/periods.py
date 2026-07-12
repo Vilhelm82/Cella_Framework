@@ -292,6 +292,28 @@ def period_route_compare(route_a: dict, route_b: dict) -> dict:
     }
 
 
+def e128_relative_path_record(target: str):
+    """Narrow adapter to the certified E128 relative-path owner.
+
+    Formal Legendre normal forms remain owned here; numeric execution remains
+    isolated in ``cella.native_periods``.
+    """
+    from .native_periods.api import TARGETS
+    from .native_periods.dbp_theta_route import canonical_source, compile_dbp_theta
+
+    if target not in TARGETS:
+        raise ValueError("unsupported E128 relative-period target")
+    path = TARGETS[target][0]
+    return compile_dbp_theta(canonical_source(path))
+
+
+def legendre_ke_numerical_realization(atom: str, m, required_bits: int, certificate: bool = True):
+    """Adapter from structural K/E atoms to their separate native realization."""
+    from .native_periods.legendre_ke import legendre_ke_enclose
+
+    return legendre_ke_enclose(atom, m, required_bits, certificate)
+
+
 _GAPS = {
     "certified_numeric_evaluation": {
         "why": "period atoms are structurally certified but not enclosed by a native evaluator",

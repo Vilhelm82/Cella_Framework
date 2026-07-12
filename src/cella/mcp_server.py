@@ -57,6 +57,19 @@ from .periods import (
     period_route_compare,
     third_kind_residue,
 )
+from .native_periods import (
+    PeriodRefusal,
+    evaluate_dbp_relative_period,
+    legendre_ke_enclose,
+    legendre_pinning_register,
+    verify_dbp_certificate,
+)
+from .native_periods.certificate import canon as native_period_canon
+from .native_periods.certificate import digest as native_period_digest
+from .native_periods.evidence import (
+    release_report_receipt,
+    verify_landen_trace_theorem,
+)
 from .pathfinder import pathfinder_compare, rewrite_candidates, route_plan
 from .proofs import (
     corner_newton,
@@ -125,6 +138,12 @@ TOOL_NAMES = (
     "cella_period_quartic",
     "cella_period_route_compare",
     "cella_period_third_kind_residue",
+    "cella_dbp_relative_period",
+    "cella_dbp_certificate_verify",
+    "cella_legendre_ke_enclose",
+    "cella_legendre_pinning",
+    "cella_dbp_landen_trace_verify",
+    "cella_dbp_release_receipt",
     "cella_poly_certificate",
     "cella_positive_factor_certificate",
     "cella_pslq_field_referee",
@@ -232,6 +251,12 @@ TOOL_GROUPS = {
         "cella_period_normal_form",
         "cella_period_route_compare",
         "cella_period_gap_report",
+        "cella_dbp_relative_period",
+        "cella_dbp_certificate_verify",
+        "cella_legendre_ke_enclose",
+        "cella_legendre_pinning",
+        "cella_dbp_landen_trace_verify",
+        "cella_dbp_release_receipt",
         "cella_pslq_field_referee",
         "cella_arith_constant_pin",
     ),
@@ -397,6 +422,45 @@ _HELP_TOOLS = {
         "inputs": "optional scope string.",
         "proper_use": "Use after a spike result to decide the next implementation target.",
         "read_result": "gaps are ordered by ROI: native evaluation, algebraic fields, differential reduction, raw K_G route.",
+    },
+    "cella_dbp_relative_period": {
+        "purpose": "Evaluate one admitted DBP relative period with a native certified dyadic bracket.",
+        "inputs": "target in {trace_primary, primary, trace_dual_real_cpv, dual_cpv}; required_bits; optional certificate boolean.",
+        "proper_use": "Use for fixed-route DBP values. Pathfinder is not run and contributes no certificate evidence.",
+        "read_result": "value contains the dyadic bracket, decimal rendering, ledgers, digest, and optional canonical certificate.",
+        "pitfalls": "This is deliberately not a general elliptic-integral evaluator; unsupported paths return typed refusals.",
+    },
+    "cella_dbp_certificate_verify": {
+        "purpose": "Replay and verify a canonical DBP native relative-period certificate independently.",
+        "inputs": "certificate_record returned by cella_dbp_relative_period.",
+        "proper_use": "Run in a separate MCP process when process independence matters.",
+        "read_result": "accepted is true only after source, route, account, bracket, and canonical digest gates close.",
+    },
+    "cella_legendre_ke_enclose": {
+        "purpose": "Correctly round native Legendre K(m) or E(m) on the certified real stratum 0<=m<1.",
+        "inputs": "atom K or E; m as an exact rational or {type:'QSqrt',a,b,r}; required_bits; optional certificate boolean.",
+        "proper_use": "Use for first- and second-kind atoms with exact coefficient recurrences and complementary pinning.",
+        "read_result": "value contains a dyadic bracket, exact partial-sum ledger, pinning register, and certificate.",
+        "pitfalls": "Pi, Landen descent, m>=1, and generic algebraic-field normalization are outside this tool.",
+    },
+    "cella_legendre_pinning": {
+        "purpose": "Generate the independent complementary Legendre identity enclosure register.",
+        "inputs": "m as an exact rational or {type:'QSqrt',a,b,r}; required_bits.",
+        "proper_use": "Use as an exact certificate gate beside K/E evaluation or complement transport.",
+        "read_result": "contains must be true: the independently enclosed left side contains native pi_eval/2.",
+    },
+    "cella_dbp_landen_trace_verify": {
+        "purpose": "Run every exact DBP Landen--trace v1.1 algebraic gate in a clean child process.",
+        "inputs": "None.",
+        "proper_use": "Use to audit the fixed theorem before relying on the E128 trace transport.",
+        "read_result": "passed, exact_gate_count, output digests, identities, and the explicit surface-bridge scope boundary.",
+    },
+    "cella_dbp_release_receipt": {
+        "purpose": "Read a hash-pinned compact receipt for the stored DBP native evaluator v1.0 release campaign.",
+        "inputs": "None.",
+        "proper_use": "Use to retrieve historical release evidence; rerun the campaign for a fresh validation date.",
+        "read_result": "verdict, report hash, replay/refusal/dependency/Arb gates, and remaining boundaries.",
+        "pitfalls": "This tool does not rerun tests or benchmarks and never promotes stored evidence to a current validation.",
     },
     "cella_pslq_field_referee": {
         "purpose": "Search for bounded linear relations over a declared algebraic basis without overclaiming independence.",
@@ -828,6 +892,70 @@ def _wrap_proof(tool: str, what: str, compute_value, depends=()) -> dict:
         "refusals": [],
         "rerun_digest": machine["rerun_digest"],
         "plain": cert.plain(),
+    }
+
+
+def _native_period_parameter(value):
+    """Parse a rational or one declared quadratic-field element from MCP JSON."""
+    if isinstance(value, dict):
+        if value.get("type") != "QSqrt" or set(value) != {"type", "a", "b", "r"}:
+            raise TypeError("quadratic m must be exactly {type:'QSqrt',a,b,r}")
+        return QSqrt(
+            exact_from_json(value["a"]),
+            exact_from_json(value["b"]),
+            exact_from_json(value["r"]),
+        )
+    parsed = exact_from_json(value)
+    if not isinstance(parsed, Fraction):
+        raise TypeError("Legendre m must be one exact scalar")
+    return parsed
+
+
+def _native_period_payload(value) -> dict:
+    if isinstance(value, PeriodRefusal):
+        return {"value": None, "refusal": native_period_canon(value.to_record())}
+    if value is True:
+        return {"value": {"accepted": True}, "refusal": None}
+    if hasattr(value, "to_record"):
+        value = value.to_record()
+    return {"value": native_period_canon(value), "refusal": None}
+
+
+def _wrap_native_period(tool: str, what: str, compute_value, depends=()) -> dict:
+    """Preserve native certificate/refusal records under MCP double-run replay."""
+    first = _native_period_payload(compute_value())
+    second = _native_period_payload(compute_value())
+    first_digest = native_period_digest(first)
+    if first_digest != native_period_digest(second):
+        raise RuntimeError("native period MCP double-run mismatch")
+    refusal = first["refusal"]
+    return {
+        "schema": SCHEMA,
+        "tool": tool,
+        "ok": refusal is None,
+        "what": what,
+        "value": first["value"],
+        "number_type": "native-certificate-record" if refusal is None else "none",
+        "account": {
+            "m": "native_exact_enclosure_account" if refusal is None else None,
+            "r_epochs": [],
+        },
+        "refusal": refusal,
+        "refusals": [refusal] if refusal is not None else [],
+        "rerun_digest": first_digest,
+        "plain": "\n".join([
+            "WHAT WAS COMPUTED",
+            f"  {what}",
+            "",
+            "WHAT IS EXACT",
+            "  Native dyadic enclosures, algebraic ledgers, and canonical digests remain unchanged.",
+            "",
+            "WHAT WAS REFUSED, AND WHY",
+            "  Nothing was refused." if refusal is None else f"  {refusal['token']}: {refusal['detail']}",
+            "",
+            "WHAT WOULD CHANGE THIS RESULT",
+            *[f"  - {item}" for item in depends],
+        ]),
     }
 
 
@@ -1677,6 +1805,98 @@ def call_period_gap_report(scope: str = "elliptic_quartic_spike") -> dict:
     )
 
 
+def call_dbp_relative_period(target: str, required_bits: int, certificate: bool = True) -> dict:
+    """Evaluate one of the four fixed native DBP relative-period targets."""
+    return _wrap_native_period(
+        "cella_dbp_relative_period",
+        f"Native certified DBP relative period {target!r} at {required_bits} bits.",
+        lambda: evaluate_dbp_relative_period(str(target), required_bits, certificate),
+        depends=(
+            "Only the four theorem-admitted fixed paths are supported.",
+            "The frozen native schedule is re-verified at runtime; Pathfinder evidence is excluded.",
+        ),
+    )
+
+
+def call_dbp_certificate_verify(certificate_record: dict) -> dict:
+    """Replay a canonical native DBP certificate without trusting its producer."""
+    return _wrap_native_period(
+        "cella_dbp_certificate_verify",
+        "Independent native replay of a DBP relative-period certificate.",
+        lambda: verify_dbp_certificate(certificate_record),
+        depends=("The supplied record must retain canonical JSON integer and string types.",),
+    )
+
+
+def call_legendre_ke_enclose(
+    atom: str, m, required_bits: int, certificate: bool = True
+) -> dict:
+    """Enclose native Legendre K or E for a rational or QSqrt parameter."""
+    try:
+        parameter = _native_period_parameter(m)
+    except (TypeError, ValueError, ZeroDivisionError) as exc:
+        refusal = PeriodRefusal(
+            "route_identity_failed", "legendre_parameter", str(exc),
+            "exact Fraction or fixed QSqrt parameter",
+        )
+        return _wrap_native_period(
+            "cella_legendre_ke_enclose", "Rejected native Legendre K/E request.",
+            lambda: refusal,
+        )
+    return _wrap_native_period(
+        "cella_legendre_ke_enclose",
+        f"Native certified Legendre {str(atom).upper()} enclosure at {required_bits} bits.",
+        lambda: legendre_ke_enclose(str(atom), parameter, required_bits, certificate),
+        depends=(
+            "The certified real stratum is 0 <= m < 1.",
+            "Complementary Legendre pinning must close against native pi_eval/2.",
+        ),
+    )
+
+
+def call_legendre_pinning(m, required_bits: int) -> dict:
+    """Build the complementary Legendre pinning register."""
+    try:
+        parameter = _native_period_parameter(m)
+    except (TypeError, ValueError, ZeroDivisionError) as exc:
+        refusal = PeriodRefusal(
+            "route_identity_failed", "legendre_parameter", str(exc),
+            "exact Fraction or fixed QSqrt parameter",
+        )
+        return _wrap_native_period(
+            "cella_legendre_pinning", "Rejected complementary Legendre pinning request.",
+            lambda: refusal,
+        )
+    return _wrap_native_period(
+        "cella_legendre_pinning",
+        f"Complementary Legendre pinning register at {required_bits} bits.",
+        lambda: legendre_pinning_register(parameter, required_bits),
+        depends=("The certified real stratum is 0 <= m < 1.",),
+    )
+
+
+def call_dbp_landen_trace_verify() -> dict:
+    """Run the fixed exact v1.1 theorem verifier in clean child processes."""
+    return _wrap_native_period(
+        "cella_dbp_landen_trace_verify",
+        "Clean-process exact audit of the DBP Landen--trace theorem v1.1.",
+        verify_landen_trace_theorem,
+        depends=(
+            "This verifies the curve/isogeny trace theorem, not the pending surface-to-curve bridge.",
+        ),
+    )
+
+
+def call_dbp_release_receipt() -> dict:
+    """Read the immutable v1.0 release-report receipt without rerunning it."""
+    return _wrap_native_period(
+        "cella_dbp_release_receipt",
+        "Hash-pinned receipt for the stored DBP native evaluator v1.0 release campaign.",
+        release_report_receipt,
+        depends=("A fresh current validation requires rerunning the release campaign.",),
+    )
+
+
 def call_pslq_field_referee(value, basis: list, max_coeff: int = 10) -> dict:
     """Search for bounded exact linear relations over a declared basis."""
     return _wrap_proof(
@@ -1863,6 +2083,12 @@ def tool_callable_map() -> dict:
         "cella_period_normal_form": call_period_normal_form,
         "cella_period_route_compare": call_period_route_compare,
         "cella_period_gap_report": call_period_gap_report,
+        "cella_dbp_relative_period": call_dbp_relative_period,
+        "cella_dbp_certificate_verify": call_dbp_certificate_verify,
+        "cella_legendre_ke_enclose": call_legendre_ke_enclose,
+        "cella_legendre_pinning": call_legendre_pinning,
+        "cella_dbp_landen_trace_verify": call_dbp_landen_trace_verify,
+        "cella_dbp_release_receipt": call_dbp_release_receipt,
         "cella_pslq_field_referee": call_pslq_field_referee,
         "cella_arith_constant_pin": call_arith_constant_pin,
         "cella_carrier": call_carrier,

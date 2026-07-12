@@ -1,0 +1,705 @@
+% =====================================================================
+%  GALOIS THEORY OF THE HORIZON COVER  --  DRAFT v0.2, 2026-07-10
+%  v0.2: temperature parity corrected (Theta = S*T is the odd covariant;
+%        the temperature pair is Galois-conjugate, not odd); references
+%        pinned (incl. author correction on arXiv:1008.0585).
+%  Author: Will Lloyd (Lloyd Geometric Diagnostics)
+%  Status: WORKING DRAFT. Not for distribution or submission.
+%  Prior-art status: preliminary sweep complete (PRIOR_ART_REPORT_2026-07-10);
+%  INSPIRE-HEP full-text sweep and expert consultation OUTSTANDING.
+%  All novelty statements are provisional ("to our knowledge").
+%  Title alternatives (parked):
+%    - The Two Horizons Are a Galois Pair
+%    - What the Area Product Knows
+%    - Vieta's Formulas for Black Holes
+% =====================================================================
+\documentclass[11pt]{article}
+\usepackage[margin=1.05in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\usepackage{booktabs}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{observation}[theorem]{Observation}
+
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\ZZ}{\mathbb{Z}}
+\newcommand{\disc}{\Delta}
+\newcommand{\Gal}{\mathrm{Gal}}
+\newcommand{\Res}{\mathrm{Res}}
+
+\title{\textbf{Galois Theory of the Horizon Cover}\\[4pt]
+\large Black-hole thermodynamics as invariant theory,\\
+and an Abel--Ruffini obstruction at four charges\\[6pt]
+\normalsize\fbox{DRAFT v0.2 --- 10 July 2026 --- not for distribution}}
+\author{Will Lloyd\\
+\small Lloyd Geometric Diagnostics Pty Ltd, Coffs Harbour, NSW, Australia\\
+\small \texttt{[email placeholder]}}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The inner and outer horizon entropies of a Kerr--Newman black hole are the two
+roots of a monic quadratic whose coefficients are \emph{rational} in the
+asymptotic charges: $z^2-e_1 z+e_2=0$ with $e_1=2\pi(2M^2-Q^2)$ and
+$e_2=\pi^2(4J^2+Q^4)$. We develop the thermodynamics of the horizon pair as the
+Galois theory of this cover. The $\ZZ/2$ grading by the deck transformation
+(the horizon swap) reproduces the known left/right thermodynamic dictionary
+--- sector entropies and temperatures, sector first laws and Smarr formulas,
+the universal area product, the hidden-conformal temperatures and central
+charge, and extremal chirality --- from the single principle that
+\emph{invariants descend to the observables and odd data does not}. The
+Galois-odd datum of the pair is the covariant $\Theta=S\,T$; the temperature
+itself is mixed under the horizon swap, $T_+\mapsto T_-$, and the two
+temperatures form their own conjugate pair with rational symmetric functions. For the four-charge
+(Cveti\v{c}--Youm) generalization the invariant persists,
+$e_2=\pi^2\!\left(4J^2+N_1N_2N_3N_4\right)$ with $N_i=4Q_i$, but the cover
+degree over the physical field $\Q(M,Q_1,\dots,Q_4)$ jumps to five. We certify,
+by Dedekind reduction at multiple rational points, that the Galois group of the
+seed-mass fiber is $S_5$; consequently no closed-form radical expression exists
+for the mass fiber, and --- via an exact collapse of the radical tower --- none
+exists for the horizon entropies themselves: $(S_++S_-)^2/\pi^2$ is a primitive
+element of the $S_5$ field, while $S_+S_-$ remains rational. The solvability
+threshold sits exactly at four charges. The Galois norm of the mass fiber
+factors completely into the sixteen BPS-type linear forms
+$M\pm Q_1\pm Q_2\pm Q_3\pm Q_4$, exhibiting the marginal-stability walls as
+the vanishing locus of a norm. To our knowledge the algebraic-obstruction layer
+of these results has not appeared in the literature; a full prior-art search is
+in progress.
+\end{abstract}
+
+% =====================================================================
+\section{Introduction}
+% =====================================================================
+
+Two families of exact results dominate the thermodynamics of multi-horizon
+black holes. The first is the left/right (``inner mechanics'') apparatus: sector
+entropies $S_{L,R}=(S_+\pm S_-)/2$, sector temperatures, first laws and Smarr
+formulas on both horizons, and negative inner-horizon temperatures, developed
+by Cveti\v{c} and Larsen \cite{CL1,CL2} and given a systematic Gibbsian
+formulation by Cveti\v{c}, Gibbons, L\"u and Pope \cite{CGLP2018}. The second
+is the universal area product: $S_+S_-$ is independent of the mass and
+plausibly quantized \cite{AH,CGP2011,CR2012}, a fact used as evidence for a
+conformal-field-theory description of the microstates in the hidden-conformal
+program \cite{CMS,WangLiu,ChenLong4Q}.
+
+Both families are computed, throughout the literature, by \emph{manipulating
+the roots}: one writes $S_+$ and $S_-$ explicitly in an auxiliary
+parametrization (the solution-generating frame: a seed mass $m$ and boosts
+$\delta_i$ \cite{CY,Std4Q}) and forms the combinations of interest. This paper
+starts from an elementary observation about that method:
+
+\begin{quote}
+\emph{The roots exist only in the auxiliary frame. In the physical variables
+--- the asymptotic charges an observer measures --- the objects that survive
+are exactly the Galois invariants of the horizon cover.}
+\end{quote}
+
+For Kerr--Newman the cover is a quadratic and the distinction is soft: both
+$e_1=S_++S_-$ and $e_2=S_+S_-$ are rational in $(M,J,Q)$, and $\sqrt{\disc}$
+(one square root of an invariant) recovers the roots. We show in
+Section~\ref{sec:KN} that the entire classical left/right dictionary is the
+representation theory of the $\ZZ/2$ deck action on this quadratic: the even
+(invariant) sector is the left-moving sector, the odd sector is the
+right-moving sector, and the Galois-odd datum of the pair is the covariant
+$\Theta=S\,T$ --- the orientation the invariant ring discards.
+
+At four charges the distinction becomes a theorem. The seed mass obeys
+\begin{equation}
+4M \;=\; \sum_{i=1}^{4}\sqrt{\,m^2+N_i^2\,},\qquad N_i=4Q_i ,
+\label{eq:massfiber}
+\end{equation}
+a four-radical relation whose norm form is a \emph{quintic} in $u=m^2$ over
+$\Q(M,Q_1,\dots,Q_4)$. We certify (Theorem~\ref{thm:S5}) that its Galois group
+is $S_5$: by the Abel--Ruffini theorem there is no closed-form radical
+expression for the seed mass in the physical variables. The parametric
+(cosh/sinh) presentation of four-charge thermodynamics is therefore not a
+convention but a necessity. We then show (Theorem~\ref{thm:entropy}) that the
+obstruction propagates to the entropy itself: for the static four-charge black
+hole the radical tower above the quintic collapses --- $\prod_i(w_i+m)\cdot
+\prod_i(w_i-m)=\prod_i N_i^2$ is rational --- so that
+$(S_++S_-)^2/\pi^2$ is a \emph{primitive element} of the $S_5$ field, while
+$S_+S_-$ is rational. The horizon entropies of a four-charge black hole cannot
+be written in radicals in the observables; their symmetric functions can, and
+the celebrated ``universal'' formulas of the literature are precisely the
+symmetric functions --- \emph{universality is Galois descent}.
+
+The solvability threshold is sharp (Proposition~\ref{prop:ladder}): one and
+two charges are rational (the two-charge seed is, explicitly, a product of the
+four BPS walls), three charges give a solvable quartic, and four charges give
+the first $S_5$. Finally, the Galois norm of the mass fiber factors completely
+over $\Q$ into the sixteen BPS-type linear forms (Proposition~\ref{prop:walls}),
+identifying the marginal-stability walls of the charge lattice with the
+vanishing locus of a norm.
+
+\paragraph{Relation to prior work.} The thermodynamic dictionary of
+Section~\ref{sec:KN} is \emph{known}: the sector first laws, Smarr formulas,
+negative inner temperatures, half-energy property, entropy product and
+inversion appear in \cite{CGLP2018}; the hidden-conformal temperatures and
+central charge for Kerr--Newman in \cite{WangLiu} (Kerr case \cite{CMS});
+the universal area products in \cite{AH,CGP2011,CR2012}; the left/right
+formalism originates with \cite{CL1,CL2}. Our contribution there is the
+derivation principle: all of it follows from the $\ZZ/2$ Galois grading of one
+rational quadratic, with no geometric or conformal input. The
+number-theoretic study of \emph{extremal} black holes --- attractor arithmetic,
+class numbers, complex multiplication \cite{Moore,BKO} --- concerns the
+abelian Galois theory of attractor values and is complementary to the
+questions here, which concern the non-abelian Galois theory of the
+\emph{non-extremal cover}. To our knowledge, the algebraic-obstruction layer
+--- the $S_5$ certification, the Abel--Ruffini statements for mass and entropy,
+the charge-count threshold, and the wall-factorization of the norm --- has not
+appeared in the literature; a full prior-art search (INSPIRE full-text and
+expert consultation) is in progress, and these claims should be read with that
+caveat. Notably, \cite{CGLP2018} states the entropy--mass \emph{inversion}
+formula for the quadratic case and develops the sector apparatus at length
+without raising the solvability question in the multi-charge case; a full-text
+search of that paper for the relevant algebraic vocabulary returns no
+occurrences.
+
+\paragraph{Conventions.} Units $G=\hbar=c=1$; entropy $S=A/4$. For
+Kerr--Newman we use the fundamental relation in the form
+\begin{equation}
+M^2 \;=\; U(S,J,Q)\;=\;\frac{S}{4\pi}+\frac{\pi J^2}{S}+\frac{Q^2}{2}
++\frac{\pi Q^4}{4S},
+\label{eq:U}
+\end{equation}
+with conjugate potentials $T=U_S/2M$, $\Omega=U_J/2M$, $\Phi=U_Q/2M$.
+All computer-verified statements are exact (symbolic or exact rational
+arithmetic); the scripts, their SHA-256 hashes, and the Dedekind witnesses are
+inventoried in Appendix~\ref{app:certs}.
+
+% =====================================================================
+\section{The Kerr--Newman horizon pair as a Galois cover}
+\label{sec:KN}
+% =====================================================================
+
+\subsection{The quadratic, its invariants, and the horizon swap}
+
+Solving \eqref{eq:U} for $S$ at fixed $(M,J,Q)$ gives the monic quadratic
+\begin{equation}
+S^2 - e_1 S + e_2 = 0,\qquad
+e_1 = 2\pi\,(2M^2-Q^2),\qquad
+e_2 = \pi^2\,(4J^2+Q^4),
+\label{eq:quadratic}
+\end{equation}
+whose roots are the outer and inner horizon entropies
+\begin{equation}
+S_\pm \;=\; \pi\bigl(2M^2-Q^2 \pm 2\sqrt{\disc}\,\bigr),
+\qquad \disc \;=\; M^4 - M^2Q^2 - J^2 ,
+\end{equation}
+with $e_1^2-4e_2 = 16\pi^2\disc$. Both coefficients are \emph{rational} in the
+asymptotic charges; $e_2$ is independent of the mass (the universal area
+product \cite{AH,CGP2011} in entropy normalization). The Galois group of
+\eqref{eq:quadratic} over $\Q(M,J,Q)$ is $\ZZ/2$, realized geometrically as the
+\emph{horizon swap} $S_+\leftrightarrow S_-$, i.e.\ the deck transformation
+$\sqrt{\disc}\mapsto-\sqrt{\disc}$ of the double cover branched along the
+extremal locus $\disc=0$.
+
+Three elementary facts organize everything that follows (all verified
+symbolically; Appendix~\ref{app:certs}):
+\begin{enumerate}
+\item \emph{Monodromy.} Transporting around $\disc=0$ swaps the sheets while
+$e_1,e_2$ are single-valued. The branch point is simple everywhere on the
+smooth extremal edge: $\disc=0$ and $\nabla\disc=0$ have no common solution
+away from $M=J=Q=0$.
+\item \emph{Past the wall.} For $\disc<0$ (the over-extremal region) the pair
+becomes complex-conjugate, $S_-=\overline{S_+}$, with
+$\mathrm{Re}\,S_\pm=e_1/2$ frozen at the extremal value and
+$\mathrm{Im}\,S_\pm=\pm 2\pi\sqrt{|\disc|}$. The individual root
+``goes complex''; the invariants cross the wall rationally. \emph{The entropy
+never crosses; its symmetric functions do.}
+\item \emph{Vieta identities for the potentials.} On the two branches,
+\begin{equation}
+U_S(S_+)=+\frac{\sqrt\disc}{S_+},\qquad
+U_S(S_-)=-\frac{\sqrt\disc}{S_-},
+\end{equation}
+so that $T_\pm = \pm\sqrt{\disc}/(2MS_\pm)$: the inner-horizon temperature is
+negative in the Gibbsian convention, in agreement with \cite{CGLP2018}.
+\end{enumerate}
+
+\subsection{The Galois-odd datum is $\Theta=S\,T$}
+
+\begin{proposition}[Splitting--temperature identity]
+\label{prop:splitting}
+Let $\Theta:=S\,T$ on either branch, so that $\Theta_\pm=\pm\sqrt{\disc}/2M$.
+Then
+\[
+S_+ - S_- \;=\; 4\pi\sqrt{\disc}\;=\;8\pi M\,\Theta_+ .
+\]
+Under the horizon swap $\Theta$ is odd, $\tau(\Theta_\pm)=-\Theta_\pm$, with
+invariant square $\Theta^2=\disc/4M^2$. The temperature itself is mixed ---
+$\tau(T_+)=T_-$, an odd numerator over a branch-dependent denominator --- and
+the two temperatures are Galois-conjugate over the observables, with rational
+symmetric functions (for $e_2\neq0$)
+\[
+T_+ + T_- \;=\; -\frac{2\pi\disc}{M\,e_2},\qquad
+T_+ T_- \;=\; -\frac{\disc}{4M^2 e_2}.
+\]
+At $J=Q=0$ the identity returns the Schwarzschild value $T_+=1/8\pi M$
+exactly.
+\end{proposition}
+
+The separation of the two sheets \emph{is} the odd covariant. Since
+$(S_+-S_-)^2=e_1^2-4e_2$, the invariant ring sees $\Theta$ only through its
+square: the sign of $\Theta$ --- outer versus inner, the arrow that
+distinguishes the horizons --- is precisely the datum the Galois quotient
+forgets. Temperature inherits that arrow through $T=\Theta/S$, which is how
+the negative inner temperature of \cite{CGLP2018} arises, but $T$ itself is
+not of pure parity: it is the odd covariant divided by a root. This is the
+organizing fact of the paper: \emph{the thermodynamic quantities that are
+hard to define in the observables are the odd and mixed ones; the ones that
+``descend'' are the invariants.}
+
+\subsection{The left/right dictionary from the grading}
+\label{sec:dictionary}
+
+Define the even and odd sector entropies
+\begin{equation}
+S_L=\tfrac12(S_++S_-)=\tfrac12 e_1=\pi(2M^2-Q^2),
+\qquad
+S_R=\tfrac12(S_+-S_-)=2\pi\sqrt{\disc},
+\end{equation}
+and sector temperatures by thermodynamic conjugacy at fixed $(J,Q)$:
+$1/T_{L,R}:=\partial_M S_{L,R}$. All of the following are exact identities
+(Appendix~\ref{app:certs}):
+\begin{align}
+T_L &= \frac{1}{4\pi M} \quad\text{(mass only: $J$ and $Q$ drop out)},&
+T_R &= \frac{\sqrt{\disc}}{M\,e_1},\\
+\frac{1}{T_\pm} &= \frac{1}{T_L}\pm\frac{1}{T_R}
+\quad\text{(harmonic composition)},&
+\Bigl(\frac{T_R}{T_L}\Bigr)^{\!2} &= 1-\frac{4e_2}{e_1^2}
+= \frac{S_R^2}{S_L^2}.
+\end{align}
+The left/right asymmetry is the normalized discriminant of the quadratic. The
+sector split, the half-energy property of the left sector, and the harmonic
+composition agree with \cite{CGLP2018,CL1}; the Cardy-consistent
+hidden-conformal temperatures of \cite{WangLiu},
+$T_L^{\rm CFT}=(2M^2-Q^2)/4\pi J$ and
+$T_R^{\rm CFT}=\sqrt{M^4-J^2-M^2Q^2}/2\pi J$ with $c_L=c_R=12J$, are
+$e_1/8\pi^2 J$ and $\sqrt{\disc}/2\pi J$ in the present variables, and the
+Cardy formula returns exactly $S_L$ and $S_R$ (verified symbolically; Kerr
+case \cite{CMS}). Extremal chirality --- $S_R,T_R\to 0$ at $\disc\to0$, the
+purely left-moving limit of \cite{GHSS} --- is, in this language, the death of
+the odd sector at the branch point.
+
+\begin{proposition}[Sector first laws and Smarr formulas; charge parity]
+\label{prop:sectors}
+With sector potentials $\Omega_X=-T_X\,\partial_J S_X$,
+$\Phi_X=-T_X\,\partial_Q S_X$ one finds, exactly,
+\begin{align}
+\Omega_L &\equiv 0, &
+\Phi_L &= \frac{Q}{2M}, &
+M &= 2T_LS_L+\Phi_L Q,\\
+\Omega_R &= \frac{J}{M(2M^2-Q^2)}, &
+\Phi_R &= \frac{MQ}{2M^2-Q^2}, &
+M &= 2T_RS_R+2\Omega_R J+\Phi_R Q .
+\end{align}
+The left sector is a complete, \emph{non-rotating}, charged thermodynamic
+system: the angular momentum couples exclusively to the odd sector. Charge
+behaves differently: $Q$ appears in both $e_1$ and $\disc$, and couples to
+both sectors.
+\end{proposition}
+
+Sector first laws and Smarr formulas for the two-horizon system appear in
+\cite{CGLP2018}; we re-derive them here from the grading and record the
+following organizing observation, which to our knowledge has not been isolated
+as a principle (pending the picture-literature check, cf.\ \cite{Twofold}):
+
+\begin{observation}[Charge-parity principle]
+\label{obs:parity}
+A conserved charge couples to the sectors according to which symmetric
+functions of the quadratic carry it. $J$ appears only in the discriminant
+(equivalently only in $e_2$): it is \emph{parity-pure}, purely right-moving,
+and $\Omega_L\equiv0$. $Q$ leaks into $e_1$: it \emph{straddles}. This is why
+the $J$-picture of the hidden-conformal correspondence is grading-natural
+(the odd sector's circle is intrinsically the rotation angle, $c=12J$ with no
+further choices), while charged pictures require auxiliary structure --- the
+well-known arbitrary scale in their central charges is, in this language, the
+statement that no parity-pure circle exists for $Q$. On the
+Reissner--Nordstr\"om slice no charge is parity-pure at all.
+\end{observation}
+
+\subsection{Attractor as Vieta; duality as the symmetry of $e_2$}
+
+At the branch point the double root gives
+$S_{\rm ext}=e_1/2=\sqrt{e_2}=\pi\sqrt{4J^2+Q^4}$: the extremal entropy is the
+square root of the constant term, mass-independent by inspection --- the
+attractor-mechanism entropy formula \cite{Moore} appearing as Vieta's formula
+at the discriminant-zero locus. For dyonic Kerr--Newman
+($Q^2\to Q_e^2+Q_m^2$) the electromagnetic duality group is exactly the
+symmetry group of $e_2$: $e_1,e_2,\disc$ are $SO(2)$-invariant, the sector
+potentials transform as duality doublets, both sector Smarr formulas hold
+dyonically, and $T_L=1/4\pi M$ is duality-blind (all verified exactly).
+
+% =====================================================================
+\section{Four charges: the invariant persists}
+\label{sec:fourcharge}
+% =====================================================================
+
+The four-charge generalization (the Cveti\v{c}--Youm class \cite{CY,Std4Q})
+is parametrized by a seed mass $m$, rotation $a$, and four boosts $\delta_i$:
+\begin{equation}
+M=\frac{m}{4}\sum_i\cosh2\delta_i,\quad
+Q_i=\frac{m}{4}\sinh2\delta_i,\quad
+J=ma\,(\Pi_c-\Pi_s),\quad
+N_i:=4Q_i ,
+\end{equation}
+\begin{equation}
+S_\pm = 2\pi m\Bigl[\,m(\Pi_c+\Pi_s)\;\pm\;\sqrt{m^2-a^2}\,(\Pi_c-\Pi_s)\Bigr],
+\qquad \Pi_c=\prod_i\cosh\delta_i,\ \Pi_s=\prod_i\sinh\delta_i .
+\label{eq:fourchargeS}
+\end{equation}
+Two exact anchors pin this presentation to Section~\ref{sec:KN}: the
+zero-boost limit reproduces the Kerr quadratic, and the equal-charge diagonal
+reproduces the Kerr--Newman quadratic \eqref{eq:quadratic} with
+$Q=\sum_iQ_i$ (both verified symbolically). The second symmetric function
+generalizes exactly:
+
+\begin{proposition}[The invariant at four charges]
+\label{prop:crown}
+As an unconditional algebraic identity in the parametrization,
+\begin{equation}
+e_2 \;=\; S_+S_- \;=\; \pi^2\bigl(4J^2 + N_1N_2N_3N_4\bigr).
+\end{equation}
+The Kerr--Newman $Q^4$ is the equal-charge diagonal of the four-fold product.
+The mass enters only through $(J,N_i)$; with quantized charges the invariant
+lies on a lattice --- the classical shadow of level matching. The static
+sectors are $S_{L,R}=2\pi m^2(\Pi_c\pm\Pi_s)$: the Galois-even/odd split is the
+cosh/sinh product split of the string-theoretic left/right excitation counting
+\cite{CL1,SV}.
+\end{proposition}
+
+% =====================================================================
+\section{The unsolvability theorems}
+\label{sec:unsolvable}
+% =====================================================================
+
+\subsection{The mass fiber and its norm}
+
+Eliminating the boosts from the parametrization yields the four-radical
+relation \eqref{eq:massfiber} for the seed mass. Its norm form
+\begin{equation}
+\mathcal N(u)\;=\;\prod_{\varepsilon\in\{\pm1\}^4}
+\Bigl(4M-\sum_i \varepsilon_i\sqrt{u+N_i^2}\Bigr),
+\qquad u=m^2,
+\label{eq:norm}
+\end{equation}
+is a polynomial in $u$ of degree exactly $5$, with leading coefficient
+$-2^{24}M^6$ independent of the charges (Appendix~\ref{app:degree}): the two
+aligned sign patterns contribute one $u$, the four $\pm2$-pairs contribute
+four, and the six balanced $(2,2)$ patterns contribute the $M^6$.
+
+\begin{proposition}[The charge ladder]
+\label{prop:ladder}
+For $n$ charges the analogous norm has $u$-degree $1,1,4,5$ at
+$n=1,2,3,4$. In particular: for $n\le2$ the seed is a rational function of the
+observables --- explicitly, at two charges,
+\begin{equation}
+m^2=\frac{4\,(M-Q_1-Q_2)(M+Q_1+Q_2)(M-Q_1+Q_2)(M+Q_1-Q_2)}{M^2},
+\end{equation}
+the product of the four BPS walls; at $n=3$ the seed obeys an irreducible
+quartic (solvable by radicals, though we are not aware of the formula having
+been written); and $n=4$ is the first quintic. The solvability threshold sits
+exactly at four charges.
+\end{proposition}
+
+\subsection{Abel--Ruffini for the mass fiber}
+
+\begin{theorem}[$S_5$ obstruction, seed mass]
+\label{thm:S5}
+Over $\Q(M,Q_1,\dots,Q_4)$ the polynomial $\mathcal N(u)$ is irreducible with
+Galois group $S_5$. Consequently the seed mass-square $u=m^2$ of the
+non-extremal four-charge black hole admits no closed-form expression in
+radicals in the physical variables, and the boost parametrization cannot be
+inverted in radicals.
+\end{theorem}
+
+\begin{proof}[Proof (computer-certified; Appendix~\ref{app:certs})]
+By the specialization principle, the Galois group of any separable rational
+specialization embeds in the generic group; hence a single specialization with
+non-solvable group forces the generic group to be non-solvable, and, being a
+transitive subgroup of $S_5$ witnessing $S_5$ cycle types, to equal $S_5$. At
+three independent rational points --- including the integer charge vector
+$M=15$, $Q=(1,2,3,5)$, chosen \emph{directly} rather than through the
+parametrization, above the BPS bound $M>\sum_iQ_i$ --- the specialized quintic
+is separable and irreducible over $\Q$, the physical (all-plus branch) root
+lies on it, and Dedekind reduction exhibits Frobenius elements of cycle type
+$(2,3)$ at $p=53$, $23$, $31$ respectively. A $(2,3)$ element has order six and
+exists in no transitive quintic group except $S_5$. All five roots are real at
+each point (the quintics are totally real): the physical seed has four real
+Galois-conjugate siblings over the same observables.
+\end{proof}
+
+\subsection{Abel--Ruffini for the entropy}
+
+The entropy involves the boosts as well as the seed; a priori the obstruction
+of Theorem~\ref{thm:S5} might be bypassed. It is not: the tower collapses.
+
+\begin{lemma}[Collapse of the radical tower; static case]
+\label{lem:collapse}
+Let $w_i=\sqrt{m^2+N_i^2}$ and $u=m^2$. Then, exactly:
+\emph{(i)} the branch-compatible signed radicals lie in the quintic field ---
+there exist $g_i\in\Q[u]/(\mathcal N)$ with $g_i^2\equiv u+N_i^2$ and
+$\sum_i g_i\equiv 4M$ (certified as polynomial identities modulo
+$\mathcal N$); \emph{(ii)} with $A=\prod_i(w_i+m)$, $B=\prod_i(w_i-m)$ one has
+$AB=\prod_iN_i^2\in\Q$, so that $y:=(S_++S_-)/\pi=\sqrt A+\sqrt B$ satisfies
+\begin{equation}
+y^2 \;=\; \gamma(u)\;:=\;2\Bigl[e_4(w)+u\,e_2(w)+u^2+\textstyle\prod_iN_i\Bigr]
+\;\in\;\Q[u]/(\mathcal N).
+\end{equation}
+\end{lemma}
+
+\begin{theorem}[Entropy non-radical; static four-charge]
+\label{thm:entropy}
+$\gamma$ is a primitive element of the quintic field: its resolvent
+$\Res_u(\mathcal N,\,X-\gamma)$ is an irreducible quintic whose Galois group
+is again $S_5$ (Dedekind witnesses of type $(2,3)$ at $p=17,19,23$). Since
+$y^2=\gamma$, the field $\Q(M,\vec Q)(S_++S_-)$ contains the quintic field and
+its Galois closure surjects onto $S_5$: it is non-solvable. Hence, in the
+physical variables:
+\begin{enumerate}
+\item $S_++S_-$ admits no radical expression; its exact degree is $10$
+(the polynomial $\Res_u(\mathcal N,\,Y^2-\gamma)$ is irreducible);
+\item $S_+S_-=\pi^2\prod_iN_i$ is rational, so $S_+$ and $S_-$ individually
+admit no radical expression, and neither do $S_L$ and $S_R$;
+\item $S_L^2=(\pi^2/4)\,\gamma$: the left-sector level count is itself a
+primitive element of the unsolvable field, while the level-matched
+combination $S_L^2-S_R^2=e_2$ is rational.
+\end{enumerate}
+\end{theorem}
+
+\begin{remark}[Scope]
+The rotating case adds $J$ to the same tower over the same quintic and is a
+bookkeeping extension, deferred. The non-radicality of the sector temperatures
+$T_{L,R}$ is plausible by inheritance but not certified here. The five sheets
+of the quintic are realized, at the certified points, by the all-plus sign
+pattern and the four single-flip patterns: the Galois orbit of a four-charge
+black hole over its own observables consists of the hole and its four
+one-charge-conjugate shadows. Single charge conjugations act on the base
+$(e_1,e_2)$ data --- they move between quintic sheets --- while the deck
+transformation of each entropy pair remains
+$\sqrt{\disc}\mapsto-\sqrt{\disc}$.
+\end{remark}
+
+\begin{remark}[Methodological corollary]
+The left/right apparatus of \cite{CL1,CL2,CGLP2018} is constructed by explicit
+manipulation of $S_\pm$ in the boost frame. Theorems~\ref{thm:S5} and
+\ref{thm:entropy} show that at four charges this construction cannot be
+transported to the observables even in principle: the roots, the sector
+entropies, and the individual level counts are not radical functions of
+$(M,\vec Q)$. The quantities of the apparatus that are expressible in the
+observables are precisely the Galois invariants --- the area product, the
+level-matched difference, the wall data of Section~\ref{sec:walls}.
+\emph{Universality is descent: universal formulas are universal because they
+are norms.}
+\end{remark}
+
+% =====================================================================
+\section{The norm and the walls}
+\label{sec:walls}
+% =====================================================================
+
+\begin{proposition}[Wall factorization of the norm]
+\label{prop:walls}
+The product of the five branches of the mass fiber is, exactly,
+\begin{equation}
+\prod_{k=1}^{5}u_k \;=\;
+\frac{256}{M^{6}}\;
+\prod_{\varepsilon\in\{\pm1\}^4}\bigl(M+\varepsilon_1Q_1+\varepsilon_2Q_2
++\varepsilon_3Q_3+\varepsilon_4Q_4\bigr),
+\end{equation}
+with leading coefficient $\mathrm{lc}(\mathcal N)=-2^{24}M^6$ independent of
+the charges. Equivalently $\mathcal N(0)=4^{16}\prod_{16}(M\pm Q_1\pm Q_2\pm
+Q_3\pm Q_4)$: the constant term of the quintic is the black hole evaluated at
+its own BPS limit ($m\to0$), and the Galois norm vanishes exactly on the union
+of the sixteen marginal-stability walls. The norm is positive throughout the
+physical chamber $M>\sum_i|Q_i|$ (consistently with the totally real quintics
+of Theorem~\ref{thm:S5}) and changes sign across walls: the chamber structure
+of the charge lattice is read off one coefficient.
+\end{proposition}
+
+Thus the invariant tower is, floor by floor, \emph{more} rational than
+solvability requires: the roots need $S_5$; the quadratic invariant
+$e_2=\pi^2(4J^2+\prod N_i)$ is rational and quantized; and the quintic's top
+invariant does not merely remain rational --- it splits completely over $\Q$
+into the BPS walls. What the Galois quotient keeps is not just rational; it is
+rational \emph{and physical}. At two charges the wall product \emph{is} the
+seed (Proposition~\ref{prop:ladder}); at four charges it survives only as the
+norm of five entangled sheets.
+
+% =====================================================================
+\section{Discussion and open problems}
+\label{sec:discussion}
+% =====================================================================
+
+The picture that emerges is a division of black-hole thermodynamics into an
+invariant layer and an odd/root layer, separated --- at four charges --- by a
+non-solvable wall. The invariant layer (area products, level matching, wall
+data, the left sector's half-energy) descends to the observables and is where
+the literature's ``universal'' results live; the root layer (individual
+entropies, individual level counts, the sign of the temperature) exists only
+in the duality frame, and the solution-generating map is, in a precise sense,
+radical-one-way. The classical dictionary of the hidden-conformal program is
+reproduced by the grading alone, with no conformal input; the classical
+checks therefore carry no discriminating power about the existence of a dual
+CFT, and the burden of evidence rests on the genuinely quantum observables.
+
+Open problems, in rough order of proximity: \emph{(i)} the Galois/monodromy
+group of the full four-charge entropy cover (the degree-$10$ extension and its
+interplay with the $(\ZZ/2)^4$ charge conjugations), for which imprimitive
+wreath-type methods are the natural tool; \emph{(ii)} the rotating extension
+of Theorem~\ref{thm:entropy} and certification for $T_{L,R}$; \emph{(iii)}
+wall structure, if any, of the lower symmetric functions $e_1,\dots,e_4$ of
+the quintic; \emph{(iv)} the lattice interpretation of $e_2$ in string units;
+\emph{(v)} the charged-picture central charges in the light of
+Observation~\ref{obs:parity}; \emph{(vi)} five-dimensional and
+cosmological-constant generalizations, where the horizon polynomials have
+different degrees and the ladder of Proposition~\ref{prop:ladder} predicts a
+different solvability frontier.
+
+\paragraph{Acknowledgments.}
+[Placeholder.]
+% The author thanks a very patient artificial colleague for verification,
+% adversarial review, and for refusing to let Hawking radiation be claimed
+% before breakfast.
+
+% =====================================================================
+\appendix
+\section{Computational certificates}
+\label{app:certs}
+% =====================================================================
+
+All results marked as verified are exact: symbolic identities in
+\texttt{sympy}, or exact rational arithmetic with numerics used only as
+scaffolding (every numerically-guided step is discharged by an exact
+polynomial identity, e.g.\ modulo $\mathcal N$). Scripts (SHA-256 prefixes):
+
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Script & Contents & SHA-256 (prefix)\\
+\midrule
+\texttt{four\_charge\_crown.py} &
+Prop.~\ref{prop:crown}; anchors; extremal chirality &
+\texttt{8ff83aef7bc0}\\
+\texttt{abel\_ruffini\_black\_holes.py} &
+Thm.~\ref{thm:S5}; ladder points; witnesses &
+\texttt{675b3ced84f0}\\
+\texttt{entropy\_sum\_resolvent.py} &
+Lem.~\ref{lem:collapse}; Thm.~\ref{thm:entropy}; degree 10 &
+\texttt{7f778cb81dce}\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent Kerr--Newman identities of Section~\ref{sec:KN} (Vieta identities,
+splitting--temperature, sector laws, harmonic and ratio laws, Cardy match,
+attractor, duality) were verified in-session as standalone symbolic runs; the
+wall factorization of Proposition~\ref{prop:walls} was verified exactly at
+four rational points together with the charge-independence of the leading
+coefficient.
+
+\paragraph{Dedekind witnesses (Theorem~\ref{thm:S5}).}
+Point A: $M=3$, $Q=(\frac13,\frac12,\frac25,\frac37)$; irreducible; witness
+$p=53$, type $(2,3)$; $5$-cycles at $p=41,43$. Point B: $M=15$, $Q=(1,2,3,5)$;
+irreducible; witness $p=23$; $5$-cycles at $p=29,43,47$. Point C: $M=2$,
+$Q=(\frac27,\frac59,\frac14,\frac4{11})$; irreducible; witness $p=31$.
+All quintics separable and totally real; the physical root verified on each to
+residuals $\le10^{-15}$ (exact irreducibility making the identification
+rigorous).
+
+\paragraph{Witnesses (Theorem~\ref{thm:entropy}, point B).}
+Exact certificates modulo $\mathcal N$: $g_i^2\equiv u+N_i^2$,
+$\sum g_i\equiv 4M$, $\alpha^2-u\beta^2\equiv(\prod N_i)^2$. Resolvent
+irreducible; witnesses $p=17,19,23$, all type $(2,3)$; $E(Y)$ of degree $10$
+irreducible over $\Q$; physical cross-check exact to $80$ digits. Branch
+patterns of the five sheets: $(++++)$ and the four single-flips.
+
+\section{Degree count and the two-charge closed form}
+\label{app:degree}
+
+For large $u$ each factor of \eqref{eq:norm} behaves as
+$4M-(\sum_i\varepsilon_i)\sqrt u+O(u^{-1/2})$. Pairing $\varepsilon$ with
+$-\varepsilon$: the aligned pair contributes $16M^2-16u+\dots$, each of the
+four $|\sum\varepsilon|=2$ pairs contributes $16M^2-4u+\dots$, and each of the
+three balanced pairs contributes $16M^2+O(1)$; half-integer powers cancel
+because $\mathcal N$ is a polynomial. Hence $\deg_u\mathcal N=1+4+0=5$ and
+$\mathrm{lc}=(-16)(-4)^4(4M)^6=-2^{24}M^6$. The same count gives degrees
+$1,1,4$ at $n=1,2,3$ charges; at $n=2$ the norm is linear in $u$ and solving it
+yields the wall-product closed form of Proposition~\ref{prop:ladder}.
+
+% =====================================================================
+\begin{thebibliography}{99}
+% =====================================================================
+\bibitem{CL1} M.~Cveti\v{c} and F.~Larsen,
+``General rotating black holes in string theory: Greybody factors and event
+horizons,'' Phys.\ Rev.\ D {\bf 56} (1997) 4994, [hep-th/9705192].
+\bibitem{CL2} M.~Cveti\v{c} and F.~Larsen,
+``Greybody factors for rotating black holes in four dimensions,''
+Nucl.\ Phys.\ B {\bf 506} (1997) 107, [hep-th/9706071].
+\bibitem{CGLP2018} M.~Cveti\v{c}, G.\,W.~Gibbons, H.~L\"u and C.\,N.~Pope,
+``Killing Horizons: Negative Temperatures and Entropy Super-Additivity,''
+Phys.\ Rev.\ D {\bf 98} (2018) 106015, [arXiv:1806.11134].
+\bibitem{AH} M.~Ansorg and J.~Hennig,
+``The inner Cauchy horizon of axisymmetric and stationary black holes with
+surrounding matter,'' Class.\ Quant.\ Grav.\ {\bf 25} (2008) 222001,
+[arXiv:0810.3998]; ``Inner Cauchy horizon of axisymmetric and stationary
+black holes with surrounding matter in Einstein--Maxwell theory,''
+Phys.\ Rev.\ Lett.\ {\bf 102} (2009) 221102, [arXiv:0903.5405].
+\bibitem{CGP2011} M.~Cveti\v{c}, G.\,W.~Gibbons and C.\,N.~Pope,
+``Universal Area Product Formulae for Rotating and Charged Black Holes in
+Four and Higher Dimensions,'' Phys.\ Rev.\ Lett.\ {\bf 106} (2011) 121301,
+[arXiv:1011.0008].
+\bibitem{CR2012} A.~Castro and M.\,J.~Rodriguez,
+``Universal properties and the first law of black hole inner mechanics,''
+Phys.\ Rev.\ D {\bf 86} (2012) 024008, [arXiv:1204.1284].
+\bibitem{CMS} A.~Castro, A.~Maloney and A.~Strominger,
+``Hidden Conformal Symmetry of the Kerr Black Hole,''
+Phys.\ Rev.\ D {\bf 82} (2010) 024008, [arXiv:1004.0996].
+\bibitem{WangLiu} Y.-Q.~Wang and Y.-X.~Liu,
+``Hidden Conformal Symmetry of the Kerr-Newman Black Hole,''
+JHEP {\bf 08} (2010) 087, [arXiv:1004.4661].
+\bibitem{ChenLong4Q} K.-N.~Shao and Z.~Zhang,
+``Hidden Conformal Symmetry of Rotating Black Hole with four Charges,''
+Phys.\ Rev.\ D {\bf 83} (2011) 106008, [arXiv:1008.0585].
+\bibitem{GHSS} M.~Guica, T.~Hartman, W.~Song and A.~Strominger,
+``The Kerr/CFT Correspondence,''
+Phys.\ Rev.\ D {\bf 80} (2009) 124008, [arXiv:0809.4266].
+\bibitem{CY} M.~Cveti\v{c} and D.~Youm,
+``Entropy of non-extreme charged rotating black holes in string theory,''
+Phys.\ Rev.\ D {\bf 54} (1996) 2612, [hep-th/9603147].
+\bibitem{Std4Q} Z.-W.~Chong, M.~Cveti\v{c}, H.~L\"u and C.\,N.~Pope,
+``Charged rotating black holes in four-dimensional gauged and ungauged
+supergravities,'' Nucl.\ Phys.\ B {\bf 717} (2005) 246, [hep-th/0411045];
+the parametrization in the form used here is also displayed in
+M.~Cveti\v{c}, G.\,W.~Gibbons, C.\,N.~Pope and B.\,F.~Whiting,
+``Positive energy functional for massless scalars in rotating black hole
+backgrounds of maximal ungauged supergravity,'' [arXiv:1912.08988].
+\bibitem{SV} A.~Strominger and C.~Vafa,
+``Microscopic origin of the Bekenstein-Hawking entropy,''
+Phys.\ Lett.\ B {\bf 379} (1996) 99, [hep-th/9601029].
+\bibitem{Moore} G.\,W.~Moore, ``Arithmetic and Attractors,''
+[hep-th/9807087].
+\bibitem{BKO} N.~Benjamin, S.~Kachru, K.~Ono and L.~Rolen,
+``Black holes and class groups,'' Res.\ Math.\ Sci.\ (2018),
+[arXiv:1807.00797]; M.~G\"unaydin, S.~Kachru and A.~Tripathy,
+``Black holes and Bhargava's invariant theory,'' [arXiv:1903.02323].
+\bibitem{Twofold} C.-M.~Chen, Y.-M.~Huang, J.-R.~Sun, M.-F.~Wu and S.-J.~Zou,
+``Twofold Hidden Conformal Symmetries of the Kerr-Newman Black Hole,''
+Phys.\ Rev.\ D {\bf 82} (2010) 066004, [arXiv:1006.4097].
+  %% NOTE: unswept for the charge-parity principle; check before claiming
+  %% Observation 2.8 as new.
+\bibitem{Dummit} D.\,S.~Dummit, ``Solving solvable quintics,''
+Math.\ Comp.\ {\bf 57} (1991) 387.
+\end{thebibliography}
+
+\end{document}

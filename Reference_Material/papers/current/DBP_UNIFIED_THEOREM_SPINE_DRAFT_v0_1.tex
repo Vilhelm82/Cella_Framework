@@ -1,0 +1,1074 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs,array,enumitem,xcolor}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\R}{\mathbb R}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\KG}{K_G}
+\newcommand{\kc}{\kappa_c}
+\newcommand{\ks}{\kappa_s}
+\newcommand{\kint}{\kappa_{\mathrm{int}}}
+\newcommand{\Cham}{\mathcal C}
+\newcommand{\Wp}{W_+}
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\Gal}{\operatorname{Gal}}
+\newcommand{\status}[1]{\textup{\textsc{#1}}}
+\newcommand{\established}{\status{Established}}
+\newcommand{\realization}{\status{Realization}}
+\newcommand{\bridge}{\status{Bridge}}
+\newcommand{\conditional}{\status{Conditional}}
+\newcommand{\proofstop}[1]{\par\medskip\noindent{\color{red!75!black}\textbf{STOP--PROOF.}} \textit{#1}\par\medskip}
+
+\title{\textbf{Active Recharting of Constraint Hypersurfaces}\\
+\large Orbit Quotients, Channel Accounts, and Physical Selection\\[4pt]
+\large A local-to-global synthesis with a Galois--spectral realization}
+\author{William Lloyd}
+\date{Draft v0.2 --- 10 July 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We assemble a local and a global branch into one theorem spine. Locally, a
+labelled three-coordinate constraint hypersurface is represented by its active
+output-chart jet orbit: a functional is invariant under active recharting
+exactly when it factors through the active orbit quotient. Curvature channel
+data forms a framed, defining-function-relative account whose canonical sum
+is an elementary shape-operator invariant. In the Kerr--Newman realization,
+positivity and interior regularity select a unique member of a stated
+inverse-channel metric family, and local metric germs classify its open
+boundary strata.
+
+Globally, the four-charge seed-mass relation gives a finite signed-sheet
+cover. The axial k-ellipse pencil identifies the strict mass chamber with a
+definiteness chamber. An involutive parity block decomposition gives an exact
+singular-value factorization of the mass-square polynomial; every root is
+positive, every positive-imbalance sheet crosses once and transversely, and
+the physical root is the unique least root and first spectrahedral exit.
+
+The unification claimed here is a theorem dependency and comparison, not an
+identification of group actions. The active chart group, radical sign group,
+axial deck involution, and global monodromy act on different carriers. Every
+point at which an identification, a generic-to-specialized arithmetic
+promotion, or a certificate-only calculation would be required is marked
+STOP--PROOF. The result is both a synthesis and an explicit proof programme.
+\end{abstract}
+
+\tableofcontents
+
+\section{Introduction}
+
+\subsection{Scope and terminology}
+
+The abstract local datum in this paper is a constraint hypersurface equipped
+with a \emph{labelled coordinate frame}. Its formal structure is the ability
+to use each coordinate as an output chart and compare the resulting finite
+jets under active recharting. In a directed application, the three coordinates
+may be interpreted as Directive, Substrate, and Product; we call that a
+\emph{DBP realization}. Those semantics are not used in the abstract
+definitions or theorem names. This distinction is essential because the global
+Galois--spectral branch has no natural Directive--Substrate--Product
+interpretation.
+
+\subsection{The spine}
+
+The common logical order is
+\[
+\boxed{\begin{gathered}
+\text{carrier}\longrightarrow\text{orbit quotient}
+\longrightarrow\text{account fibre}\\
+\longrightarrow\text{admissible selection}
+\longrightarrow\text{typed strata}
+\longrightarrow\text{local normal form}
+\end{gathered}}
+\]
+The local and global branches instantiate this order differently:
+\[
+\begin{array}{c@{\qquad}c}
+\textbf{framed constraint geometry}&\textbf{global cover geometry}\\[1mm]
+\text{active output-chart atlas}&\text{signed radical carrier}\\
+\downarrow&\downarrow\\
+\text{chart-orbit quotient}&\text{norm eliminant and }U=m^2\\
+\downarrow&\downarrow\\
+\text{curvature-channel account}&\text{physical/shadow root fibre}\\
+\downarrow&\downarrow\\
+\text{admissible metric}&\text{first definite-pencil exit}\\
+\downarrow&\downarrow\\
+\text{chart/isotropy strata}&\text{collision/wall strata}.
+\end{array}
+\]
+The central assertion is not that the columns are equal. Both exhibit a
+rigorous separation between invariant reduction and physical selection.
+
+\subsection{Status discipline}
+
+\begin{center}
+\begin{tabular}{>{\bfseries}p{0.18\textwidth}p{0.70\textwidth}}
+\toprule
+Established & A self-contained proof is included or reduces to a precise
+classical theorem whose hypotheses are checked.\\
+Realization & Proved for a named family, not promoted to a universal statement
+for framed constraint hypersurfaces.\\
+Bridge & An exact comparison or common architecture; no equivalence is
+asserted.\\
+Conditional & Depends on a banked computation, certificate, or companion
+proof that must be re-verified before publication.\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\proofstop{The word unified means an ordered theorem spine. Promoting
+the spine to an autonomous category requires native morphisms, equivalence,
+closure, and an independent third realization; none is supplied here.}
+
+\section{Framed constraint hypersurfaces and non-identification rules}
+
+\subsection{The local chart datum}
+
+Let $F(x_1,x_2,x_3)=0$ be a smooth local constraint relation. On
+\[
+\mathcal U_1=\{F=0:F_{x_1}F_{x_2}F_{x_3}\neq0\},
+\]
+the relation may be solved with each coordinate as output. Fix $r\geq1$,
+write $X_r$ for the regular finite-jet space, and $J_r(x)$ for one graph jet.
+
+\begin{definition}[active chart-jet carrier]
+The group $G_{\mathrm{act}}=S_3$ acts by re-solving the same relation in
+each output coordinate and transporting the jet by the finite inverse-function
+theorem. The carrier is
+\[
+\mathcal O_r(x)=G_{\mathrm{act}}\cdot J_r(x).
+\]
+Retaining coordinate values gives
+\[
+\mathcal O_r^+(x)
+=G_{\mathrm{act}}\cdot(x_1,x_2,x_3,J_r(x)).
+\]
+\end{definition}
+
+\subsection{Global cover data}
+
+For real parameters $(M,N_1,\ldots,N_k)$ define
+\[
+w_i(U)=\sqrt{U+N_i^2},\qquad
+s_\varepsilon(U)=\sum_i\varepsilon_iw_i(U),
+\quad\varepsilon\in\{\pm1\}^k.
+\]
+The signed norm is the polynomial
+\[
+N_k(U)=\prod_{\varepsilon\in\{\pm1\}^k}
+\left(4M-s_\varepsilon(U)\right),
+\]
+and its oriented axial lift is $q_k(m)=N_k(m^2)$. We distinguish
+\[
+H_{\mathrm{sign}}=(C_2)^k,\qquad
+G_{\mathrm{deck}}=\langle\tau\rangle,\quad\tau(m)=-m,
+\]
+from $G_{\mathrm{act}}$ and any global monodromy group; here $C_2$ is the
+cyclic group of order two.
+
+\begin{proposition}[non-identification guardrail]
+The constructions do not provide canonical identifications
+\[
+S_3\not\cong(C_2)^k,\qquad
+X_r/S_3\not\cong\operatorname{Spec}\Q[U]/(N_k),\qquad
+\Sigma_r\not\equiv\operatorname{Norm}.
+\]
+Local chart recharting and global analytic-continuation monodromy also act on
+different sets.
+\end{proposition}
+
+\begin{proof}
+The chart action permutes output charts of one local relation. Radical sign
+changes move signed sheets, and the deck involution changes an axial cover
+coordinate. No map intertwining these actions has been defined.
+\end{proof}
+
+\proofstop{Any stronger claim requires an explicit carrier map, proof of
+equivariance, and comparison of stabilisers, branch loci, and quotients. A
+structural resemblance is not such a proof.}
+
+\section{The Active Recharting Orbit Theorem}
+
+\begin{definition}[active-recharting invariant]
+A function $\phi:X_r\to Y$ is an order-$r$ active-recharting invariant if
+\[
+\phi(\mathcal T_\sigma\xi)=\phi(\xi)
+\]
+for every $\sigma\in S_3$ wherever both sides are defined.
+\end{definition}
+
+\begin{theorem}[Active Recharting Orbit Theorem]\label{thm:orbit}
+Let $\pi_r:X_r\to X_r/S_3$ be the set-orbit map. Then
+$\phi:X_r\to Y$ is an order-$r$ active-recharting invariant if and only if
+there is a unique $\bar\phi:X_r/S_3\to Y$ satisfying
+\[
+\phi=\bar\phi\circ\pi_r.
+\]
+The same holds for the value-plus-jet carrier $X_r^+$.
+\end{theorem}
+
+\begin{proof}
+The active transition maps satisfy the $S_3$ relations on their common
+regular domain. A function is invariant exactly when it is constant on
+orbits, which is equivalent to unique factorization through the orbit set.
+\end{proof}
+
+\begin{proposition}[rational finite-jet action]\label{prop:rationalaction}
+At orders one and two, active output-chart recharting is a rational $S_3$
+action whose
+denominators are powers of the relevant first derivatives. At each fixed
+finite order the same conclusion follows recursively from the finite
+inverse-function theorem.
+\end{proposition}
+
+\proofstop{For an all-$r$ headline, include the germ-level composition
+argument and a Fa\'{a}-di-Bruno denominator induction. Otherwise restrict
+the published theorem to $r\leq2$, where all formulas are explicit.}
+
+\begin{remark}[mixed invariants]
+A derivative-only tuple is not automatically complete for invariants mixing
+values and jets. Such invariants belong on $X_r^+$. The orbit theorem avoids
+claiming that a preferred finite kernel is complete without proving orbit
+separation.
+\end{remark}
+
+\section{Channel accounts and invariant reduction}
+
+Let $F:\R^n\to\R$ define a regular hypersurface point and put
+\[
+g=\nabla F,\qquad H=\nabla^2F,\qquad q=g^{\mathsf T}g\neq0.
+\]
+In the distinguished coordinate frame, split
+\[
+H=H_c+H_s,\qquad H_s=\operatorname{diag}(H),\qquad H_c=H-H_s.
+\]
+For $1\leq r\leq n-1$ define
+\[
+\widehat{\mathcal C}_r(t,v)
+=(-1)^{r+1}\sum_{|I|=r+1}
+\det\begin{pmatrix}
+0&g_I^{\mathsf T}\\
+g_I&(tH_c+vH_s)_I
+\end{pmatrix}
+=\sum_{p+s=r}t^pv^s\widehat\kappa_{r;p,s}.
+\]
+The letter $v$ avoids collision with the mass-square coordinate $U=m^2$.
+Set
+\[
+\kappa_{r;p,s}
+=\frac{\widehat\kappa_{r;p,s}}{q^{(r+2)/2}}.
+\]
+
+\begin{theorem}[bordered-minor channel reduction]\label{thm:reduction}
+Fix the oriented shape operator
+\[
+P=I-\frac{gg^{\mathsf T}}q,\qquad
+S=-\frac{PHP}{\sqrt q}.
+\]
+Then
+\[
+\sigma_r(S)
+=\frac{\widehat{\mathcal C}_r(1,1)}{q^{(r+2)/2}}
+=\sum_{p+s=r}\kappa_{r;p,s}.
+\]
+If $V_r=\R^{r+1}$ is the ambient coefficient space and
+\[
+\Sigma_r:V_r\to\R,\qquad
+(c_0,\ldots,c_r)\longmapsto\sum_jc_j,
+\]
+then
+\[
+0\longrightarrow\ker\Sigma_r
+\longrightarrow V_r
+\mathop{\longrightarrow}^{\Sigma_r}\R
+\longrightarrow0
+\]
+is exact. A geometrically realizable channel vector lies in the affine
+hyperplane over the reduced elementary extrinsic curvature $\sigma_r$.
+\end{theorem}
+
+\begin{proof}[Proof route]
+Rotate $g$ to $\sqrt q\,e_n$. Only bordered minors containing the normal
+coordinate survive; each is $-q$ times the corresponding tangent principal
+minor. The sign and normalization give $\sigma_r(S)$. Replacing $H$ by
+$tH_c+vH_s$ gives a homogeneous polynomial, and evaluation at $(1,1)$ is the
+sum of its coefficients. Exactness is linear algebra.
+\end{proof}
+
+\proofstop{Write the rotated-frame bordered-minor calculation in full,
+including the global sign convention. Exact tests at finitely many
+dimensions confirm but do not replace the arbitrary-$(n,r)$ proof.}
+
+\subsection{Gauge transport}
+
+For $\widetilde F=\mu F$ with $\mu(x)=1$ and
+$a=\nabla\log\mu(x)$,
+\[
+\widetilde g=g,\qquad
+\widetilde H=H+ga^{\mathsf T}+ag^{\mathsf T},\qquad
+P\widetilde HP=PHP.
+\]
+
+\begin{corollary}[gauge-channel transport]\label{cor:gauge}
+The oriented shape operator and every $\sigma_r$ are fixed, while
+\[
+C_r(\widetilde F)-C_r(F)\in\ker\Sigma_r.
+\]
+For $n=3,r=2$ this is
+\[
+\delta\kc+\delta\kint+\delta\ks=0.
+\]
+\end{corollary}
+
+\begin{remark}
+This proves that reachable gauge displacements lie in the zero-sum
+hyperplane. It does not prove that every vector in that hyperplane is
+geometrically reachable. If $\mu(x)<0$, the chosen normal orientation
+reverses and odd $\sigma_r$ change sign.
+\end{remark}
+
+\subsection{The Gaussian three-channel theorem}
+
+For a regular implicit surface in $\R^3$,
+\[
+\KG=\kc+\kint+\ks.
+\]
+For a graph $z=h(x,y)$, with $Q_0=1+h_x^2+h_y^2$,
+\[
+\kc=-\frac{h_{xy}^2}{Q_0^2},\qquad
+\ks=\frac{h_{xx}h_{yy}}{Q_0^2},\qquad
+\kint=0.
+\]
+Thus the three active output-chart graph records lie on the one-dimensional
+slice
+\[
+\kint=0,\qquad \kc+\ks=\KG
+\]
+inside the two-dimensional affine account plane over $\KG$.
+
+\proofstop{The shape-operator spectrum is complete only for spectral
+scalar invariants under orthogonal conjugation. Do not call
+$\{\sigma_1,\ldots,\sigma_{n-1}\}$ the complete set of all
+active-recharting invariants, which are governed by the larger chart-jet
+quotient.}
+
+\proofstop{Channels are invariants of a framed defining-function jet, or
+canonical representatives after graph normalization. Fixing the coordinate
+frame
+does not fix defining-function gauge. Do not call raw channel values
+gauge-invariant.}
+
+\section{The quotient--selection separation theorem}
+
+\begin{theorem}[two-realization quotient--selection separation]
+\label{thm:separation}
+The local chart and global cover realizations share the following exact
+separation.
+\begin{enumerate}[label=(\alph*)]
+\item In the local realization, the reduced invariant $\sigma_r$ does not
+determine a channel representative whenever $\ker\Sigma_r\neq0$.
+Graph normalization, defining-function gauge, or a metric construction
+supplies additional representative data.
+\item In the global realization, the polynomial $N_k(U)$ determines an
+unordered root multiset and does not by itself label one root as physical.
+On the strict chamber, an oriented definite pencil selects the physical root
+as its first positive boundary exit.
+\item Neither selection is part of the bare invariant quotient.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Part (a) follows from the nontrivial affine fibre of
+Theorem~\ref{thm:reduction}. Polynomial coefficients are symmetric in the
+roots, so they do not carry a root label. The first-exit statement is proved
+in Theorem~\ref{thm:cover}. Part (c) is the conjunction.
+\end{proof}
+
+\begin{remark}
+This theorem establishes a shared logical architecture. It does not provide a
+functor from channel fibres to root fibres.
+\end{remark}
+
+\section{Kerr--Newman inverse-channel metric selection}
+
+For the Kerr--Newman relation $M^2=U(S,J,Q)$, each output coordinate $i$
+carries two mass--coordinate couplings and one coordinate--coordinate
+coupling. Denote the coordinate--coordinate
+weight by $\eta$:
+\[
+g_F(\eta)_{ii}
+=q_i^2\left(
+\Lambda_{i,\{M,j\}}^{-2}
++\Lambda_{i,\{M,k\}}^{-2}
++\eta\Lambda_{i,\{j,k\}}^{-2}
+\right).
+\]
+Let
+\[
+\Wp=\{S,J,Q>0:U_S>0\}
+\]
+be the outer physical wedge.
+
+\begin{theorem}[family-relative Kerr--Newman selection]
+\label{thm:metricselection}
+\realization.
+Within the displayed weighted family:
+\begin{enumerate}[label=(\roman*)]
+\item each $\eta>0$ produces an interior metric and curvature pole at a
+coordinate--coordinate coupling zero;
+\item each $\eta<0$ loses positive definiteness near that zero;
+\item $\eta=0$ is positive definite and interior-regular on $\Wp$,
+while retaining the desired mass--coordinate boundary divergences.
+\end{enumerate}
+Thus $g_F(0)$ is the unique admissible member of this family.
+\end{theorem}
+
+\begin{proof}[Proof route]
+The relevant coordinate--coordinate coupling has an interior zero. Its inverse square
+enters the metric with coefficient $\eta$. Positive $\eta$ produces a
+metric pole and negative $\eta$ forces the diagonal entry negative near
+the zero. At $\eta=0$ that coupling is omitted. The remaining mass--coordinate
+couplings are finite and nonzero in $\Wp$ and vanish only on distinguished
+boundary divisors
+in its closure.
+\end{proof}
+
+\proofstop{Before Theorem~\ref{thm:metricselection} bears publication
+load, reproduce the exact six mass--coordinate factorizations, prove existence
+of the interior coordinate--coordinate zero, and archive a symbolic certificate that the
+$\eta>0$ metric pole produces a nonremovable scalar-curvature pole.}
+
+\begin{corollary}[analytic corridor]\label{cor:interior}
+\conditional.
+The scalar curvature of $g_F(0)$ is analytic on $\Wp$, including the
+Davies surface, and its singular support in the closure is contained in
+\[
+\{T=0\}\cup\{\Omega=0\}\cup\{\Phi_e=0\}.
+\]
+\end{corollary}
+
+\proofstop{To replace contained in by equals, prove nonvanishing of the
+leading residue on every open boundary stratum. The extremal edge depends on
+the full transverse-monotonicity and Sturm certificate.}
+
+\section{Selection realization II: algebraic normalization and reflection descent}
+
+This section separates generic function-field assertions from pointwise real
+assertions.
+
+\subsection{Generic algebraic theorem}
+
+Let
+\[
+F_0=\Q(N_1,\ldots,N_k),\quad L=F_0(m),\quad
+w_i^2=m^2+N_i^2,
+\]
+where the $N_i$ are algebraically independent. Put
+\[
+E=L(w_1,\ldots,w_k),\quad s=\sum_iw_i,\quad
+F=F_0(M),\quad U=m^2.
+\]
+
+\begin{theorem}[generic normalization--reflection chain]
+\label{thm:genericcover}
+Assume the square classes of $m^2+N_i^2$ are independent. Then:
+\begin{enumerate}[label=(\roman*)]
+\item $E/L$ is multiquadratic with group $H_{\mathrm{sign}}=(C_2)^k$;
+\item the stabilizer of $s$ in $H_{\mathrm{sign}}$ is trivial, hence
+$L(s)=E$;
+\item the orbit norm
+\[
+\Phi_k(m,M)=
+\prod_{\varepsilon\in\{\pm1\}^k}
+\left(4M-\sum_i\varepsilon_iw_i\right)
+\]
+lies in $F_0[m,M]$, is even in $m$, and equals $N_k(U,M)$;
+\item the observable-field map induces
+\[
+F[m]/(\Phi_k)\cong E;
+\]
+\item $N_k(U)$ is irreducible over $F$ and has degree
+\[
+\delta_k=\frac12\left(
+2^k-\mathbf 1_{2\mid k}\binom{k}{k/2}
+\right);
+\]
+\item the involution
+\[
+\tau(m)=-m,\qquad\tau(w_i)=w_i
+\]
+has fixed field $E^\tau=F(U)$, and every $w_i$ descends to $F(U)$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}[Proof route]
+Square-class independence gives the multiquadratic extension. A nontrivial
+sign change changes $s$, so the primitive-element stabilizer is trivial.
+The orbit product is invariant under all radical signs and even under
+$m\mapsto-m$. Irreducibility and the field identification follow from
+the incidence map and localization over $F_0[M]$. The fixed-field statement
+uses the degree-two reflection quotient.
+\end{proof}
+
+\proofstop{The companion draft says that birational affine curves have
+isomorphic normalizations, which is not sufficient. If affine normalization
+is claimed here, prove that the incidence curve is normal, the map to the
+axial curve is finite and birational, and therefore has the normalization
+universal property. The field isomorphism itself does not require that
+stronger geometric sentence.}
+
+\subsection{The pointwise real theorem}
+
+Let $X_i,Z_i$ be Pauli matrices acting in the $i$th tensor slot and put
+\[
+L_0=4MI+\sum_iN_iX_i,\qquad
+Z=\sum_iZ_i,\qquad
+L(m)=L_0-mZ.
+\]
+This is the sign-conjugate form of the Nie--Parrilo--Sturmfels pencil, with
+\[
+\det L(m)=N_k(m^2).
+\]
+Define
+\[
+\Cham=\left\{(M,N):4M>\sum_i|N_i|\right\}.
+\]
+
+\begin{lemma}[chamber equals definiteness]\label{lem:definite}
+\[
+L_0\succ0\quad\Longleftrightarrow\quad(M,N)\in\Cham.
+\]
+\end{lemma}
+
+\begin{proof}
+The eigenvalues of $L_0$ are $4M+\sum_i\varepsilon_iN_i$; the least is
+$4M-\sum_i|N_i|$.
+\end{proof}
+
+Let $X_{\mathrm{all}}=\sigma_x^{\otimes k}$. It commutes with $L_0$
+and anticommutes with $Z$. In its two eigenspaces,
+\[
+L_0=\begin{pmatrix}A&0\\0&B\end{pmatrix},\qquad
+Z=\begin{pmatrix}0&C\\C^{\mathsf T}&0\end{pmatrix},
+\qquad A,B\succ0.
+\]
+Set $T=A^{-1/2}CB^{-1/2}$.
+
+\begin{theorem}[spectral chamber and physical selection]
+\label{thm:cover}
+\established.
+Let
+\[
+D_k=
+\begin{cases}
+2^k,&k\text{ odd},\\
+2^k-\binom{k}{k/2},&k\text{ even},
+\end{cases}
+\qquad\delta_k=D_k/2.
+\]
+For every real $(M,N)\in\Cham$, including zero or repeated charges:
+\begin{enumerate}[label=(\roman*)]
+\item $\rank C=\delta_k$ and
+\[
+N_k(U)=\det(L_0)
+\prod_{j=1}^{\delta_k}
+\left(1-U\sigma_j(T)^2\right);
+\]
+\item every root of $N_k$ is real and strictly positive;
+\item each sign vector with positive imbalance
+$a_\varepsilon=\sum_i\varepsilon_i>0$ crosses the level $4M$
+exactly once and transversely, while zero- and negative-imbalance sheets do
+not cross;
+\item the all-plus root $U_{\mathrm{phys}}$ is the unique least root;
+\item
+\[
+U_{\mathrm{phys}}
+=\lambda_{\max}\left(
+L_0^{-1/2}ZL_0^{-1/2}
+\right)^{-2}
+=\left[
+\max_{v\neq0}\frac{v^{\mathsf T}Zv}
+{v^{\mathsf T}L_0v}
+\right]^{-2};
+\]
+\item if $N_k(U)=\sum_{r=0}^{\delta_k}c_rU^r$, then
+$(-1)^rc_r>0$ for every $r$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+Parity makes the normalized symmetric pencil direction off-diagonal. Its
+nonzero eigenvalues are the pairs $\pm\sigma_j(T)$, yielding the
+factorization and positive roots.
+
+Every signed sheet begins below $4M$ at $U=0$. A positive-imbalance sheet
+tends to $+\infty$, so crosses at least once. The number of such sheets is
+$\delta_k=\deg N_k$; their crossings already saturate total degree
+counted with multiplicity. Hence each is unique and transverse and there
+are no further crossings.
+
+At a shadow crossing,
+\[
+\sum_iw_i(U)
+=4M+2\sum_{\varepsilon_i=-1}w_i(U)
+>4M=\sum_iw_i(U_{\mathrm{phys}}).
+\]
+Strict monotonicity of the all-plus sum gives $U>U_{\mathrm{phys}}$.
+The generalized-eigenvalue formula follows, and coefficient alternation is
+the expansion of the positive singular-value product.
+\end{proof}
+
+\begin{corollary}[four-channel global simplicity]
+For $k=4$, if $N_i^2\neq N_j^2$ for $i\neq j$, then all five roots are
+simple at every strict-chamber point. The physical root is first, and larger
+$|N_i|$ gives the later associated single-minus shadow root.
+\end{corollary}
+
+\begin{proof}
+The positive-imbalance sheets are the all-plus sheet and four single-minus
+sheets. Each crossing is transverse. Two single-minus sheets collide exactly
+when $w_i=w_j$, equivalently $N_i^2=N_j^2$.
+\end{proof}
+
+\begin{corollary}[physical analytic section]
+The map $(M,N)\mapsto U_{\mathrm{phys}}(M,N)$ is real-analytic on the
+strict chamber and is fixed by continuation around every loop contained in
+that chamber.
+\end{corollary}
+
+\begin{proof}
+The physical factor has nonzero $U$-derivative everywhere in the chamber, so
+the implicit-function theorem gives local analyticity. Global uniqueness
+glues the local sections and prevents nontrivial continuation.
+\end{proof}
+
+\proofstop{State explicitly that this is the sign-conjugate NPS pencil.
+Do not call the sign convention character-for-character identical to the
+source.}
+
+\proofstop{The critical-sheet discriminant mechanism is absent for
+strict-chamber axial crossings, but it remains a genuine mechanism off
+chamber and in the complex/global discriminant. Do not erase it globally.}
+
+\section{Four-charge arithmetic consequences}
+
+Let $F=\Q(M,N_1,N_2,N_3,N_4)$. The generic $N_4(U)$ has degree five.
+
+\begin{theorem}[$S_5$ obstruction]\label{thm:S5}
+\conditional.
+Assuming the exact Dedekind certificates described in the companion
+calculation, $N_4$ is irreducible over $F$ with generic Galois group $S_5$.
+Consequently the generic seed mass-square is not expressible by radicals
+over the observable field.
+\end{theorem}
+
+\begin{proof}[Certificate route]
+At one rational specialization, exact irreducibility makes the specialized
+group transitive, while a good-prime factorization of cycle type $(2,3)$
+forces that transitive quintic group to be $S_5$. The separable specialized
+group embeds into the generic group, which is a subgroup of $S_5$.
+\end{proof}
+
+\proofstop{Include the specialized quintic, irreducibility certificate,
+good-prime verification, and modular factorization in the paper or a
+permanent machine-readable supplement. A prose report that a run occurred
+is not an auditable certificate.}
+
+\begin{corollary}[totally real arithmetic, correctly scoped]
+Every strict-chamber specialization has five positive real roots counted
+with multiplicity. Any rational or algebraic chamber specialization that is
+separately certified irreducible with Galois group $S_5$ defines a totally
+real $S_5$ quintic field.
+\end{corollary}
+
+\begin{remark}[specialization guardrail]
+Generic $S_5$ does not persist at every chamber point. At
+$(M,N_1,N_2,N_3,N_4)=(2,1,1,1,1)$,
+\[
+N_4(U)=2^{30}(3-U)(15-U)^4.
+\]
+The physical root is simple while four shadow sheets collide.
+\end{remark}
+
+\begin{proposition}[ordered horizon reconstruction]
+\conditional.
+Under the generic descent and square-class hypotheses, signed radicals lie
+in $F(U)$, the oriented axis field is obtained by adjoining $m$, and the
+ordered horizon field is generated by either normalized horizon entropy.
+The rational entropy product reconstructs its conjugate.
+\end{proposition}
+
+\proofstop{Keep unconditional field identification separate from the
+proposed degree-$20$ count. The latter still requires an independent
+square-class gate and a good-specialization argument.}
+
+\section{Involution, parity, and local curvature valuations}
+
+The cover theorem uses an involution commuting with the base matrix and
+anticommuting with the pencil direction. The inverse-channel boundary theorem uses a
+coordinate reflection fixing a metric germ. In both cases odd data vanishes,
+but the actions and outputs remain distinct.
+
+\begin{lemma}[fixed-germ parity]
+If a scalar invariant $R(x,y)$ is constructed naturally from a metric germ
+whose components are even in $x$, then $R(-x,y)=R(x,y)$. Its Laurent
+expansion contains no odd powers of $x$.
+\end{lemma}
+
+\begin{proof}
+The reflection is an isometry of the germ. Naturality of scalar curvature
+gives the result.
+\end{proof}
+
+\begin{proposition}[generic quadratic collapse]\label{prop:generic}
+Let a diagonal metric satisfy
+\[
+g_{xx}=Ax^2+O(x^3),\qquad
+g_{\alpha\alpha}
+=P_{\alpha0}+P_{\alpha1}x+O(x^2),
+\quad AP_{\alpha0}\neq0.
+\]
+Then
+\[
+R=
+\frac1A\sum_{\alpha=1}^{m}
+\frac{P_{\alpha1}}{P_{\alpha0}}x^{-3}
++O(x^{-2}).
+\]
+The pole has exact order three only if the displayed coefficient is nonzero.
+\end{proposition}
+
+\begin{theorem}[pure parity-fixed inverse-channel normal form]
+\label{thm:paritynormal}
+For $m\geq1$, $B>0$, and $A_\alpha>0$,
+\[
+ds^2=Bx^2dx^2+x^{-2}\sum_{\alpha=1}^{m}
+A_\alpha dy_\alpha^2
+\]
+has scalar curvature
+\[
+R=-\frac{m(m+5)}B x^{-4}.
+\]
+The coefficient is independent of all transverse amplitudes.
+\end{theorem}
+
+\begin{proof}
+Set $\rho=\frac12\sqrt B\,x^2$. The metric becomes a warped product
+$d\rho^2+w(\rho)^2h_{\mathrm{flat}}$ with
+$w\propto\rho^{-1/2}$. The flat-fibre warped-product formula gives
+\[
+R=-2m\frac{w''}{w}
+-m(m-1)\left(\frac{w'}w\right)^2
+=-\frac{m(m+5)}{4\rho^2}
+=-\frac{m(m+5)}{Bx^4}.
+\]
+\end{proof}
+
+\begin{corollary}[asymptotic fixed face]
+Assume a diagonal, even, $C^2$ polyhomogeneous germ for which
+\[
+g_{xx}=B(y)x^2+O(x^4),\qquad
+g_{\alpha\alpha}=A_\alpha(y)x^{-2}+O(1),
+\]
+with positive $B,A_\alpha$ and uniform control of the stated remainders
+and transverse derivatives. Then
+\[
+R=-\frac{m(m+5)}{B(y)}x^{-4}+O(x^{-2}).
+\]
+\end{corollary}
+
+\proofstop{Write the full asymptotic curvature expansion proving that
+transverse derivatives do not create another $x^{-4}$ contribution. If the
+needed uniform/product hypotheses are stronger than stated, add them.}
+
+\subsection{Corners}
+
+The current general codimension-two statement is retained only in a
+monomial/polyhomogeneous form.
+
+\begin{proposition}[conditional corner vertex rule]\label{prop:corner}
+\conditional.
+Suppose a diagonal metric has specified monomial weights
+\[
+g_i=h_i(s)x^{p_i}y^{q_i}u_i(x,y,s),
+\]
+where each $u_i$ is a nonvanishing polyhomogeneous unit and the polar
+coefficients below are nonzero. Then the polar part of scalar curvature is
+supported on the candidate vertices
+\[
+V_1=(-(p_1+2),-q_1),\quad
+V_2=(-p_2,-(q_2+2)),\quad
+V_0=(-p_0,-q_0).
+\]
+Along $x=\rho\epsilon^{a_x}$, $y=\epsilon^{a_y}$, the pole order is
+the support function of the surviving vertices.
+\end{proposition}
+
+\proofstop{Single-face pole orders and residue weights alone do not
+determine all mixed corner monomials. Include the closed symbolic identity
+for the coefficients of $V_0,V_1,V_2$, derive it from the diagonal
+scalar-curvature formula, and state every cancellation condition. Do not
+extrapolate to codimension at least three.}
+
+\proofstop{Deck parity $m\mapsto-m$, spin reflection $J\mapsto-J$,
+charge reflection $Q\mapsto-Q$, and defining-function gauge are distinct
+actions. Their common $C_2$ representation pattern is a bridge, not an
+identification.}
+
+\section{Kerr--Newman complementarity as boundary realization}
+
+\begin{theorem}[open-stratum inverse-channel complementarity]
+\label{thm:344}
+\conditional.
+For the selected metric $g_F(0)$:
+\begin{enumerate}[label=(\roman*)]
+\item scalar curvature is analytic in the open outer wedge, including on
+the Davies surface;
+\item on the open generic extremal stratum $T=0$, away from its
+intersections with reflection faces, curvature has exact pole order three;
+\item on the open reflection-fixed strata $\Omega=0$ and $\Phi_e=0$,
+away from further intersections, curvature has exact pole order four and
+leading coefficient $-14/B$;
+\item the verified Schwarzschild intersection
+$\Omega=\Phi_e=0$ has a direction-dependent Newton wedge.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}[Dependency proof]
+Interior regularity is Corollary~\ref{cor:interior}. The extremal germ is
+of the form in Proposition~\ref{prop:generic}; its separately certified
+nonzero coefficient gives exact order three. Each open reflection face is
+the $m=2$ case of Theorem~\ref{thm:paritynormal}. The Schwarzschild
+calculation is the specialized instance of Proposition~\ref{prop:corner}.
+\end{proof}
+
+\proofstop{Re-run and archive the factorization, interior-regularity,
+extremal noncancellation/Sturm, reflection-residue, and corner certificates.
+The intersections $T\cap\Omega$ and $T\cap\Phi_e$ are not
+classified and must be excluded or separately proved.}
+
+\proofstop{For a path $Q=\epsilon$, $J=\rho\epsilon^a$ to approach
+the Schwarzschild corner one needs $a>0$. The endpoint $a=0$ approaches only
+the charge face with nonzero $J$ and must not be described as a corner path.}
+
+\begin{remark}[scope]
+The $3/4/4$ law is portable only conditionally: another diagonal
+inverse-channel surface must first be proved to have the corresponding local
+germs and nonzero coefficients. It is not a theorem about every framed
+constraint hypersurface.
+\end{remark}
+
+\section{Global continuation and arithmetic periods remain companions}
+
+\subsection{Self-glue monodromy}
+
+For a self-glued algebraic relation, solving different output coordinates produces
+different branched covers. There is generally no single Galois or monodromy
+group attached to the unlabelled surface independently of the extraction
+coordinate.
+
+\begin{proposition}[local and global symmetry are independent]
+\bridge.
+After lifting local chart-labelled data to every analytically continued
+solution sheet, global monodromy acts on the sheet index while local chart
+permutation acts on the coordinate index. When analytic continuation preserves
+the coordinate labels, the two actions commute; they are not canonically
+identified.
+\end{proposition}
+
+\proofstop{The companion self-glue draft needs substantial repair before
+its general wreath laws are imported. In particular, $C_m\wr C_m$ is
+usually nonabelian and is not cyclic; the general gcd-layer kernel needs a
+Kummer or branch-cycle proof; a full directed-wreath realization requires independent
+within-block discriminant loci, not merely distinct block labels; and all
+quantifiers must respect the stated exceptional divisors.}
+
+\subsection{Corrected curvature constants}
+
+The elliptic curvature constants concern global integration cycles,
+third-kind differentials, an isogeny, and principal-value residue jumps.
+They are not used to prove the local orbit, metric-selection, or axial-cover
+theorems.
+
+\proofstop{The Jacobi quartic and Legendre cubic are connected by a
+degree-two morphism, not by the displayed model identification. A
+$j$-invariant modular-polynomial relation proves an isogeny over an
+algebraic closure, not an explicit base-field isogeny. The proposed
+$\sqrt2\mapsto-\sqrt2$ language also requires correct fourth-root
+and branch bookkeeping. Most importantly, the exact map from the original
+curvature integral in the original DBP realization to the stated third-kind
+differential remains open.}
+
+\begin{remark}
+The safe algebraic statement is narrower: for the explicitly defined
+third-kind differential on the specified curve, the weighted residue is
+four and the two oriented indentations differ from the principal value by
+$\pm4\pi i$, hence from one another by $8\pi i$. Its interpretation in the
+original DBP realization requires the missing differential and cycle derivation.
+\end{remark}
+
+\section{What the paper absorbs and what it retires}
+
+The following results are internal to the main spine:
+\begin{enumerate}
+\item passive versus active output-chart correction;
+\item the Active Recharting Orbit Theorem;
+\item bordered-minor channel reduction and gauge transport;
+\item the three-channel Gaussian specialization;
+\item the family-relative Kerr--Newman metric selection;
+\item generic and parity-fixed local curvature normal forms;
+\item the generic normalization--reflection chain;
+\item the axial definite-pencil, sheet-saturation, and least-root
+selection theorem.
+\end{enumerate}
+
+The former curvature-orbit correction memo and canonical reduction note can
+be retired into the present text. The implementation-focused three-channel
+specification becomes a verification appendix. Detailed self-glue
+monodromy, elliptic periods, rotating horizon reconstruction, and full
+arithmetic certificates remain companion work.
+
+\section{The remaining unification theorem}
+
+\begin{conjecture}[intrinsic orbit--quotient--selection principle]
+There is a class of systems equipped with
+\[
+(\text{carrier},\text{ symmetry},\text{ quotient},
+\text{ real chamber},\text{ selected section},\text{ wall data})
+\]
+and morphisms preserving these data, such that:
+\begin{enumerate}[label=(\roman*)]
+\item the local active-recharting systems and global horizon-cover systems are
+objects of the class;
+\item invariant observables factor through the quotient;
+\item physical observables require the selected section;
+\item selected sections avoid the interior branch locus;
+\item boundary degenerations are typed functorially by stabiliser and wall
+data.
+\end{enumerate}
+\end{conjecture}
+
+\proofstop{This is not a theorem until the data are minimized, native
+morphisms and equivalence are defined, closure is proved, and a third
+independent realization is exhibited. It must not be used to prove any
+preceding result.}
+
+\section{Conclusion}
+
+The unified framework is a local-to-global theorem chain. The active
+chart-jet orbit is the local carrier; elementary shape curvature is a reduced
+projection; channel data is a framed account. A physical realization then
+requires selection: in Kerr--Newman geometry, positivity and interior
+regularity select a metric-family member; in the axial cover, definiteness
+and orientation select the first boundary root. Involutions remove odd data
+and organize fixed strata, while local metric germs determine boundary
+valuations.
+
+What has been unified is the logical architecture and dependency of proved
+results. What has not been proved is a categorical equivalence of the
+realizations. Keeping that boundary explicit is what makes the synthesis
+auditable.
+
+\appendix
+
+\section{Source absorption map}
+
+\begin{center}
+\small
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.30\textwidth}
+>{\raggedright\arraybackslash}p{0.42\textwidth}
+>{\raggedright\arraybackslash}p{0.18\textwidth}}
+\toprule
+Source manuscript & Disposition & Status\\
+\midrule
+Active role-jet orbit calculus &
+Foundational local theorem, with faithfulness correction & Absorbed\\
+Canonical Invariant Reduction and Gauge Transport &
+Channel polynomial and gauge section & Absorbed\\
+Theorem 8.1 curvature correction &
+Passive/active distinction and value-plus-jet guardrail & Retired memo\\
+Three-channel $K_G$ specifications &
+Gaussian specialization and verification appendix & Absorbed in part\\
+Kerr--Newman inverse-channel metric &
+Selection and complementarity realization & Conditional\\
+Parity-fixed normal forms &
+Local valuation section & Absorbed; corner proof owed\\
+Galois horizon cover and R5--R7 entries &
+Global cover module & Conditional arithmetic\\
+Self-glue monodromy & Global continuation companion & Not load-bearing\\
+Corrected curvature constants & Arithmetic-period companion & Not load-bearing\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Notation collision ledger}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Concept & Unified notation & Avoid\\
+\midrule
+mass square & $U=m^2$ & metric-family $u$\\
+coordinate--coordinate metric weight & $\eta$ & mass-square $u$\\
+channel polynomial variable & $v$ & mass-square $U$\\
+gradient norm & $q=g^{\mathsf T}g$ & charge $Q$ without context\\
+active chart group & $G_{\mathrm{act}}=S_3$ & global monodromy group\\
+sign group & $H_{\mathrm{sign}}=(C_2)^k$ & axial deck group\\
+axial deck group & $G_{\mathrm{deck}}=\langle\tau\rangle$ & charge reflection\\
+mass chamber & $\Cham$ & outer KN wedge $\Wp$\\
+channel tuple & $(\kc,\kint,\ks)$ & alternating tuple orders\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Bibliographic placeholders}
+
+\begin{thebibliography}{99}
+\bibitem{NPS}
+J. Nie, P. A. Parrilo, and B. Sturmfels,
+\emph{Semidefinite Representation of the $k$-Ellipse},
+IMA Volumes in Mathematics and its Applications 146 (2008), 117--132.
+
+\bibitem{PV}
+D. Plaumann and C. Vinzant,
+\emph{Determinantal Representations of Hyperbolic Plane Curves:
+An Elementary Approach},
+J. Symbolic Computation 57 (2013), 98--107.
+
+\bibitem{Orbit}
+W. Lloyd,
+\emph{The Active Role-Jet Orbit Calculus for Constraint-Surface Roles},
+companion manuscript.
+
+\bibitem{KN}
+W. Lloyd,
+\emph{Exact Role-Divisor Retrodiction in Kerr--Newman Thermodynamics
+via an Inverse-Channel Complementarity Metric},
+companion manuscript.
+
+\bibitem{PFC}
+W. Lloyd,
+\emph{Parity-Fixed Inverse-Channel Normal Forms and Universal Curvature
+Blow-Up},
+companion manuscript.
+
+\bibitem{Galois}
+W. Lloyd,
+\emph{Galois Theory of the Horizon Cover},
+companion manuscript.
+\end{thebibliography}
+
+\end{document}

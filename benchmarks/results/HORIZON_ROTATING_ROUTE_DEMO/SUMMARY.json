@@ -1,0 +1,97 @@
+{
+  "module": "horizon_rotating",
+  "module_source": "tools/wreath_engine/examples/horizon_rotating.json",
+  "module_content_hash": "705b7e556790",
+  "delivery_mode": "certified",
+  "cover_degree": 5,
+  "channels": [
+    "u",
+    "gamma",
+    "delta"
+  ],
+  "base_group": {
+    "name": "S5",
+    "order": 120
+  },
+  "routes": [
+    {
+      "index": 1,
+      "route_family": "signed_contact_orbit_projection",
+      "executor": "macaulay2",
+      "ordered_operations": [
+        "derive_triangular_contact_presentation",
+        "enumerate_complete_sign_orbit",
+        "transport_linear_wall_over_sign_orbit",
+        "emit_contact_walls_in_external_bindings"
+      ],
+      "walls_emitted": 16,
+      "certificate_obligations": [
+        "contact-triangular-presentation",
+        "contact-orbit-completeness",
+        "contact-image-contraction"
+      ],
+      "certificate_status": "closed",
+      "wall_seconds": 3.2556,
+      "script": "route1_contact_orbit.m2",
+      "transcript": "route1_contact_orbit.out.txt"
+    },
+    {
+      "index": 2,
+      "route_family": "kummer_finite_extension_primeness",
+      "executor": "macaulay2",
+      "ordered_operations": [
+        "certify_squarefree_by_derivative_gcd",
+        "certify_pairwise_coprime_by_constant_difference",
+        "emit_private_prime_rows_and_primeness_obligations"
+      ],
+      "generators_returned": [
+        "4*M-w1-w2-w3-w4",
+        "N1*N2*N3*N4+8*J^2-u^2-u*w1*w2-u*w1*w3-u*w2*w3-u*w1*w4-u*w2*w4-u*w3*w4-w1*w2*w3*w4",
+        "N1^2+u-w1^2",
+        "N2^2+u-w2^2",
+        "N3^2+u-w3^2",
+        "N4^2+u-w4^2"
+      ],
+      "avoids_generic_decomposition": true,
+      "certificate_obligations": [
+        "derivative-gcd-witness",
+        "constant-difference-witness",
+        "kummer-quadratic-primeness"
+      ],
+      "certificate_status": "closed",
+      "wall_seconds": 3.1733,
+      "script": "route2_iz_primeness.m2",
+      "transcript": "route2_iz_primeness.out.txt"
+    },
+    {
+      "index": 3,
+      "route_family": "rotating_three_channel_wreath_closure",
+      "executor": "native (no M2); group obligations belong to the wreath engine",
+      "ordered_operations": [
+        "extend_static_rows_by_gauss_valuation",
+        "adjoin_private_prime_rows",
+        "f2_block_reduce",
+        "emit_wreath_closure_obligations"
+      ],
+      "parity_matrix": "15x15 from claimed_parity_rows",
+      "f2_rank_discharged_in_core": 15,
+      "closure_group": "C_2^3 wr S_5",
+      "closure_order": 3932160,
+      "external_obligations": [
+        "banked-base-group",
+        "gauss-valuation-parity",
+        "private-prime-realization",
+        "closure-order-equality"
+      ],
+      "certificate_status": "f2_rank discharged in-core; group obligations external",
+      "wall_seconds": 0.000519,
+      "route": "route3_wreath_closure.route.json"
+    }
+  ],
+  "total_wall_seconds": 6.4305,
+  "m2_certificate_replay": "all_closed",
+  "reference_verify_job": "job_20260711T033436_b19195",
+  "reference_verify_seconds": 961.3,
+  "reference_verify_gates": 53,
+  "coverage_note": "Routes cover the 16 contact walls, the delta_private primeness, and the rotating wreath-closure claim. The verify job's per-channel charpoly and structural gates are NOT covered by these routes."
+}

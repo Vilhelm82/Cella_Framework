@@ -223,11 +223,16 @@ def suggest_parity_rows(ps: ProblemSpec, divisor_gens: list[str],
     except m2run.M2Error as exc:
         return {"status": "error", "error": str(exc), "log_tail": exc.log_tail}
     components = [r for r in m2res.results if "parity_row" in r]
+    diagnostics = [r for r in m2res.results if "parity_row" not in r]
+    counts = [d.get("value") for d in diagnostics
+              if d.get("gate") == "component_count"]
     envelope = {
         "status": "exploratory",
         "run_id": run_dir.name,
         "candidate_gens": divisor_gens,
+        "component_count": counts[0] if counts else None,
         "components": components,
+        "diagnostics": diagnostics,
         "channel_order": [c.name for c in ps.channels],
         "warnings": ["exploratory only — parity rows here certify nothing; "
                      "add the divisor to the spec and run verify_valuation_matrix"],

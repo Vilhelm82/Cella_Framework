@@ -1,0 +1,116 @@
+# Prior-Art Report — Session 2026-07-10
+### Galois / Abel–Ruffini structure of four-charge black-hole thermodynamics
+
+---
+
+## 0. Method and its central limitation
+
+**Tools actually used**
+- General web search (US-only, general-purpose index).
+- Web search restricted to `arxiv.org` / `inspirehep.net`.
+- Direct arXiv fetches: two abstracts + one full-text grep.
+
+**NOT used (this is the load-bearing gap)**
+- **INSPIRE-HEP full-text search** — the correct corpus for hep-th; a one-line remark
+  buried inside a paper lives here and will not surface in a general web search.
+- ADS / Google Scholar citation-graph tracing.
+- Consultation with a domain expert (the fastest real clearance).
+
+**Certainty labels used below**
+- `KNOWN-MATCHED` — found in the literature; our result reproduces it (cite as established).
+- `NOT-FOUND` — searched, no hit. *Weak* evidence of novelty (absence from the reachable corpus, not proof).
+- `NOT-CHECKED` — no search run, or not verifiable with these tools.
+
+---
+
+## A. KNOWN — established prior art; our work reproduces it (cite, do not claim)
+
+| Topic | Our object | Literature | Status |
+|---|---|---|---|
+| KN hidden conformal symmetry / Kerr/CFT dictionary | `T_L=(2M²−Q²)/4πJ`, `T_R=√(M⁴−J²−M²Q²)/2πJ`, `c_L=c_R=12J` | arXiv:1004.4661 = JHEP 08 (2010) 087; Kerr case arXiv:1004.0996 | **KNOWN-MATCHED** (symbolic match verified this session) |
+| L/R temperatures & entropies; **left sector = ½ total energy**; entropy-product law; entropy-**inversion** formula; negative inner-horizon temperatures; STU examples | `e₁/2 = S_L`, `S₊S₋`, the mass inversion | **Gibbons–Pope, arXiv:1806.11134 (2018)** | **KNOWN** — abstract verified; full text grepped (see §B note) |
+| Four-charge (Cvetič–Youm) black hole + boost parametrization `G₄M=¼mΣcosh2δᵢ`, `G₄Qᵢ=¼m sinh2δᵢ` | `4M=Σ√(m²+16Qᵢ²)` | standard; surfaced via arXiv:1912.08988 | **CONFIRMED standard** |
+| Universal horizon **area product** `S₊S₋` mass-independent | `e₂ = π²∏Nᵢ` | Cvetič–Larsen (attributed) | **KNOWN** |
+| Arithmetic of **extremal** black holes: attractors ↔ binary quadratic forms; discriminants govern entropy; class numbers count attractors; CM | our extremal/CM side (not tonight's focus) | Moore, arXiv:hep-th/9807087 & 9807056; Bhargava-BH arXiv:1903.02323; Landau–Siegel arXiv:hep-th/9903267 | **KNOWN — adjacent program** |
+
+**Reading of Column A.** The thermodynamic apparatus tonight rebuilt — the L/R split,
+the half-energy invariant, the product and inversion, the CFT temperatures/central
+charge — is established. The overlap with Gibbons–Pope (2018) is central, not adjacent.
+These are context and citations, not results.
+
+---
+
+## B. NOT FOUND in any search run this session (plausibly novel — UNCERTIFIED)
+
+Empty across general + arXiv-restricted queries. **Empty ≠ novel**; it means the corpus
+these tools reach did not surface it.
+
+- Galois-group-`S₅` certification of the four-charge **seed mass** fiber.
+- **Abel–Ruffini** obstruction stated for a black-hole **mass or entropy**.
+- The **charge-count solvability threshold** (`n≤3` solvable, `n=4` the first `S₅`).
+- The **entropy-non-radical** theorem (`S₊+S₋` generates the `S₅` field).
+- The **sector first laws** (`Ω_L≡0`, sector Smarr formulas, charge-parity principle,
+  ratio law). ⚠️ **These were not even specifically searched** — no targeted query was
+  run. Treat as *unswept*, not as *not-found*.
+
+**Positive absence verified.** Gibbons–Pope arXiv:1806.11134 full text was grepped for
+`Galois`, `radical`, `Abel`, `Ruffini`, `quintic`, `solvable`, `Ferrari`, `quartic` —
+**zero occurrences** (only `inversion` matched). They write the inversion formula; they
+do **not** frame its non-invertibility algebraically. This is the strongest single
+data point toward the obstruction layer being unremarked in the place it would most
+naturally appear.
+
+---
+
+## C. NOT CHECKED / owed before any novelty claim
+
+1. **INSPIRE-HEP full-text sweep** — not run. The correct corpus. Highest structural gap.
+2. **arXiv:2403.11823** (logarithmic correction, `U(1)²` STU) — **RESOLVED: CONFABULATION.**
+   Fetched abstract + grepped full PDF (2026-07-10). The paper is about *logarithmic
+   corrections* to entropy via the heat-kernel / Seeley–DeWitt method. Full-text search for
+   `Galois`, `radical`, `Ruffini`, `quintic`, `quartic`, `solvable`, `Ferrari`,
+   `fifth-order`, `inversion` returned **zero hits** (the only `abel` matches are "label" /
+   "Abelian"). The earlier search-engine summary claiming this paper states the four-charge
+   inversion is a radically-unsolvable quintic was a **synthesis, not a citation** — the
+   claim is **not in this paper.** The one lead suggesting the obstruction is already in
+   print is therefore withdrawn. *(Note: this removes a false positive; it does not
+   establish novelty.)*
+3. **arXiv:1006.4097** ("twofold KN") — the picture-question sweep target for the
+   charge-parity principle. Not checked.
+4. **Wang–Liu** reference for the matched L/R temperatures — not independently pulled
+   (our temperature match was against arXiv:1004.4661).
+5. **Expert consultation** (Moore / Sen / attractor-arithmetic lineage) — the fastest real
+   clearance; not possible in-session.
+
+---
+
+## D. Bottom line and recommended manuscript language
+
+- **Cite, don't claim:** L/R thermodynamics (Gibbons–Pope 2018), CFT dictionary
+  (Kerr/CFT 1004.4661), the black hole + parametrization (Cvetič–Youm), the area product
+  (Cvetič–Larsen), the extremal-attractor arithmetic (Moore, Bhargava).
+- **Plausibly novel but unswept:** the algebraic-obstruction layer (Galois `S₅`,
+  Abel–Ruffini, the charge threshold, the entropy-non-radical theorem). Not surfaced by
+  any search this session and explicitly absent from Gibbons–Pope — but this is a
+  preliminary sweep.
+- **Do not** write "for the first time" / "25 years" / "nobody noticed."
+- **Do** write, if anything: *"To our knowledge this has not appeared in the literature;
+  a full prior-art search is in progress."*
+- **Status of the actions:** (1) arXiv:2403.11823 — **DONE, cleared** (confabulation, §C.2);
+  (2) INSPIRE-HEP full-text sweep — **still owed**; (3) one domain expert to confirm it
+  isn't folklore — **still owed**. Two of three gaps remain; do not claim novelty until both close.
+
+---
+
+## Appendix — exact queries run this session
+
+1. `Kerr-Newman black hole hidden conformal symmetry left right temperature central charge CFT` → 1004.4661, 1004.0996, JHEP 08(2010)087.
+2. `Galois group solvability black hole mass formula radicals quintic Abel-Ruffini four-charge` → generic math only; no BH link.
+3. `multi-charge STU black hole mass formula solvable radicals Ferrari quartic transcendental parametrization` → STU refs; boost parametrization; no Galois framing.
+4. `black hole thermodynamics Galois theory solvability radicals horizon polynomial hep-th` → BH-thermo refs; no Galois link.
+5. `non-extremal four-charge black hole mass no closed form must use boost parametrization inversion` → confirmed `G₄M=¼mΣcosh2δᵢ`.
+6. `solvability in radicals quintic general relativity black hole entropy attractor arithmetic number theory` → Moore attractors/arithmetic; Bhargava-BH; Landau–Siegel.
+7. *(arxiv/inspire-restricted)* `Galois group solvable radicals black hole mass charges quintic` → generic math only.
+8. *(arxiv/inspire-restricted)* `Abel-Ruffini not solvable radicals black hole entropy STU supergravity` → 2403.11823, 1508.06667, 1806.11134 (summary made the unverified Abel–Ruffini claim, item C.2).
+
+**Fetched:** arXiv:1806.11134 (abstract + full-text grep), arXiv:1508.06667 (abstract).
