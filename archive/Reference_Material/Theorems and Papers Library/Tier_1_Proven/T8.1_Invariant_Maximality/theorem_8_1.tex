@@ -1,0 +1,226 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{enumitem}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+\newcommand{\T}{\mathcal{T}}
+\newcommand{\K}{\mathcal{K}}
+
+\title{\textbf{Invariant Preservation under Role Transposition}\\[0.4em]
+\large Theorem 8.1 of the Directive-Based Products Framework}
+\author{William Lloyd\\
+\small Sydney, NSW, Australia}
+\date{March 2026 \quad\textnormal{\small (revised June 2026)}}
+
+\begin{document}
+\maketitle
+
+\section{Setting}
+
+We work within the Directive-Based Products (DBP) framework. The objects of study are \emph{well-posed triples} $\tau = (D, S, P)$ satisfying a coupling relation $D \oplus S = P$, where $\oplus$ is a binary operation satisfying five standing properties (existence of forward map, existence of both inverses, measurability of invariants, and continuity). The specific properties are not needed for this proof; what matters is that $\oplus$ determines $P$ from $(D,S)$ and admits recovery operations $\ominus_D$ and $\ominus_S$ such that $S = P \ominus_D D$ and $D = P \ominus_S S$.
+
+\begin{definition}[Role transposition]\label{def:rt}
+The \emph{transposition operator} $\T$ is the action of the symmetric group $S_3$ on well-posed triples. Each $\sigma \in S_3$ reassigns which value occupies the Directive, Substrate, and Product roles while preserving the coupling relation $\oplus$. The six elements of $S_3$ correspond to the six ways of reading the coupling equation:
+\begin{align*}
+e &: (D, S, P) & \sigma_{12} &: (S, D, P) \\
+\sigma_{13} &: (P \ominus_S S,\; S,\; D \oplus S) & \sigma_{23} &: (D,\; P \ominus_D D,\; D \oplus S) \\
+& \text{etc.}
+\end{align*}
+The precise form of each transposition depends on the coupling; what matters is that $\T_\sigma$ permutes the roles while maintaining the constraint $D \oplus S = P$.
+\end{definition}
+
+\begin{definition}[Coupling kernel]\label{def:kernel}
+The \emph{coupling kernel} $K(\tau)$ of a well-posed triple $\tau = (D, S, P)$ is the tuple
+\[
+K = (K_{\mathrm{spec}},\; K_{\mathrm{hol}},\; \kappa),
+\]
+where:
+\begin{itemize}[nosep]
+\item $K_{\mathrm{spec}}$ is the spectral data of $\oplus$ at the operating point (including the Jacobian $J_\oplus = (\partial P/\partial D,\; \partial P/\partial S)$ and higher-order derivative data),
+\item $K_{\mathrm{hol}}$ is the holonomy residue from the full role cycle $D \to S \to P \to D$,
+\item $\kappa \in [0,1]$ is the intrinsic nonlinearity parameter.
+\end{itemize}
+$K$ captures the local coupling-relational content of the triple: how $D$, $S$, and $P$ are related through $\oplus$ and its derivatives at the operating point.
+\end{definition}
+
+\begin{definition}[DBP invariant]\label{def:dbp-inv}
+A function $\varphi$ on well-posed triples is a \emph{DBP invariant} if
+\[
+\varphi(\tau) = \varphi(\T_\sigma(\tau)) \quad \text{for all } \sigma \in S_3.
+\]
+\end{definition}
+
+\begin{definition}[Factors through $K$]\label{def:factors}
+A function $\varphi$ \emph{factors through $K$} if there exists a function $\psi$ such that $\varphi(\tau) = \psi(K(\tau))$ for all well-posed $\tau$.
+\end{definition}
+
+\begin{definition}[Coupling-structural]\label{def:coupling-structural}
+A function $\varphi$ on well-posed triples is \emph{coupling-structural} if it cannot be expressed as a function of the unordered multiset $\{D, S, P\}$ alone. That is, there is no function $g$ such that
+\[
+\varphi(D, S, P) = g(\{D, S, P\})
+\]
+for all well-posed triples $(D, S, P)$.
+\end{definition}
+
+\begin{remark}[Equivalent external formulation]
+Definition~\ref{def:coupling-structural} is equivalent to: $\varphi$ is coupling-structural if and only if there exist two couplings $\oplus_1$, $\oplus_2$ and values $a$, $b$ with $a \oplus_1 b = a \oplus_2 b$ such that $\varphi(a, b, a \oplus_1 b;\; \oplus_1) \neq \varphi(a, b, a \oplus_2 b;\; \oplus_2)$.
+
+The equivalence is immediate: a function of the multiset $\{D,S,P\}$ does not reference $\oplus$ and therefore assigns the same value regardless of which coupling produced the triple. Conversely, a function that is not expressible from the multiset alone must depend on coupling structure, which different couplings can realise differently at the same values.
+\end{remark}
+
+\begin{definition}[Value-symmetric]\label{def:value-symmetric}
+A function $\varphi$ on triples is \emph{value-symmetric} if $\varphi(D,S,P) = \varphi(\pi(D,S,P))$ for every permutation $\pi$ of the three values, regardless of coupling. Equivalently, $\varphi$ depends only on the unordered multiset $\{D, S, P\}$, or equivalently, $\varphi$ factors through the elementary symmetric polynomials $e_1 = D + S + P$, $e_2 = DS + DP + SP$, $e_3 = DSP$.
+\end{definition}
+
+\begin{remark}
+The coupling-structural and value-symmetric classes are complementary: a function is coupling-structural if and only if it is not value-symmetric.
+\end{remark}
+
+
+\section{Main result}
+
+\begin{theorem}[Invariant Preservation]\label{thm:main}
+Let $\varphi$ be a function on well-posed DBP triples.
+\begin{enumerate}[label=(\roman*)]
+\item $K$ is $\T$-invariant: $K(\T_\sigma(\tau)) = K(\tau)$ for all $\sigma \in S_3$.
+\item If $\varphi$ factors through $K$, then $\varphi$ is a DBP invariant.
+\item If $\varphi$ is coupling-structural and a DBP invariant, then $\varphi$ factors through~$K$.
+\item The DBP invariants that do not factor through $K$ are precisely the value-symmetric functions.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+
+\medskip
+\noindent\textbf{Part (i): $K$ is $\T$-invariant.}
+
+$K$ is computed from the coupling relation $\oplus$ and its derivatives at the operating point. A role transposition $\T_\sigma$ re-expresses $\oplus$ in a different frame --- it relabels which value is called $D$, which $S$, which $P$ --- but does not change the coupling itself. The Jacobian $J_\oplus$, the holonomy $K_{\mathrm{hol}}$ (which measures the residue of the full role cycle), and the nonlinearity $\kappa$ (which measures deviation from bilinearity) are all defined in terms of $\oplus$ and its inverses, not in terms of which value occupies which role. Therefore $K(\T_\sigma(\tau)) = K(\tau)$.
+
+\medskip
+\noindent\textbf{Part (ii): Forward direction.}
+
+Assume $\varphi = \psi \circ K$. Since $K$ is $\T$-invariant by part~(i):
+\[
+\varphi(\T_\sigma(\tau)) = \psi(K(\T_\sigma(\tau))) = \psi(K(\tau)) = \varphi(\tau).
+\]
+Therefore $\varphi$ is a DBP invariant. \qed
+
+\medskip
+\noindent\textbf{Part (iii): Reverse direction (coupling-data / role-label dichotomy).}
+
+We prove the contrapositive: if $\varphi$ is coupling-structural and does \emph{not} factor through $K$, then $\varphi$ is not a DBP invariant.
+
+At any operating point, a function on well-posed triples can depend on exactly two types of information:
+
+\begin{enumerate}[label=(\alph*),nosep]
+\item \textbf{Coupling data}: the local structure of $\oplus$ at the operating point --- the Jacobian, holonomy, nonlinearity, and higher-order derivatives. This is precisely what $K$ captures.
+
+\item \textbf{Role-labelled values}: which specific number sits in the $D$-slot, which in the $S$-slot, which in the $P$-slot. This is the information that $\T$ permutes.
+\end{enumerate}
+
+These two types exhaust the information content of a well-posed triple at a point: the coupling data determines how $D$, $S$, $P$ are \emph{related} through $\oplus$, and the role-labelled values determine which specific values \emph{instantiate} those roles. Together they determine the triple completely.
+
+Now suppose $\varphi$ is coupling-structural and does not factor through $K$. We have a dichotomy:
+
+\smallskip
+\noindent\emph{Subcase (a): $\varphi$ depends only on coupling data.}
+Then $\varphi$ is a function of $K$ alone, contradicting the assumption that $\varphi$ does not factor through $K$.
+
+\smallskip
+\noindent\emph{Subcase (b): $\varphi$ depends (also) on role-labelled values.}
+Then there exist two triples $\tau = (D, S, P)$ and $\tau' = (D', S', P')$ with the same coupling data $K(\tau) = K(\tau')$ and the same unordered values $\{D, S, P\} = \{D', S', P'\}$, but with different role assignments (a different value in the $D$-slot, say), such that $\varphi(\tau) \neq \varphi(\tau')$.
+
+Since $\tau$ and $\tau'$ have the same unordered values and satisfy the same coupling, $\tau' = \T_\sigma(\tau)$ for some $\sigma \in S_3$. (This follows directly from Definition~\ref{def:rt}: $\T_\sigma$ acts by reassigning which value occupies each role while preserving the coupling, which is exactly the operation relating $\tau$ and $\tau'$.)
+
+Therefore $\varphi(\tau) \neq \varphi(\T_\sigma(\tau))$, which means $\varphi$ is not a DBP invariant.
+
+\smallskip
+\noindent\emph{Worked example (subcase (b)).} The quantity $\varphi = D\,(\partial P/\partial D)$ is coupling-structural --- it is assembled from the Jacobian entry $\partial P/\partial D \in K_{\mathrm{spec}}$ --- yet it multiplies by the value occupying the $D$-slot. Under $\sigma_{12}$ (swap $D \leftrightarrow S$) it becomes $S\,(\partial P/\partial S)$, generically different: for the asymmetric coupling $P = D S^2$ at $(D,S) = (3,4)$ one has $D\,\partial_D P = 48$ while $S\,\partial_S P = 96$. Hence $\varphi$ is not $\T$-invariant, and does not factor through $K$ despite being built from $K$'s ingredients --- precisely because it references a role-labelled value.
+
+\smallskip
+In both subcases, the assumption that $\varphi$ is coupling-structural and does not factor through $K$ leads to a contradiction with $\T$-invariance. By contrapositive: if $\varphi$ is coupling-structural and $\T$-invariant, then $\varphi$ factors through $K$. \qed
+
+\medskip
+\noindent\textbf{Part (iv): Residual invariants.}
+
+We show that the $\T$-invariant functions not factoring through $K$ are precisely the value-symmetric functions.
+
+$(\subseteq)$\; Let $\varphi$ be $\T$-invariant but not coupling-structural. By Definition~\ref{def:coupling-structural}, $\varphi$ is expressible as a function of the multiset $\{D, S, P\}$, i.e.\ $\varphi$ is value-symmetric.
+
+$(\supseteq)$\; Let $\varphi$ be value-symmetric. Then $\varphi$ depends only on the multiset $\{D,S,P\}$, which every $\T_\sigma$ leaves unchanged; hence $\varphi$ is $\T$-invariant, and being independent of $\oplus$ it is not coupling-structural. In the degenerate setting --- where $K$ does not separate $S_3$-orbits, notably $\kappa = 0$ --- such $\varphi$ lies outside the functions of $K$ and is a genuine residual invariant. In the nonlinear generic setting $K$ separates orbits and value-symmetric functions become functions of $K$ as well (Corollary~\ref{cor:nonlinear}). \qed
+\end{proof}
+
+\begin{corollary}[Exhaustive decomposition]\label{cor:decomp}
+Every $\T$-invariant function $\varphi$ decomposes uniquely as
+\[
+\varphi = \varphi_K + \varphi_{\mathrm{sym}},
+\]
+where $\varphi_K$ factors through $K$ (coupling-structural component) and $\varphi_{\mathrm{sym}}$ factors through the elementary symmetric polynomials $e_1, e_2, e_3$ (value-symmetric component).
+
+There is no third category.
+\end{corollary}
+
+\begin{proof}
+\emph{Existence.}\; Define $\varphi_{\mathrm{sym}}(D,S,P)$ as the average of $\varphi$ over all $6$ permutations of $(D,S,P)$ as values (ignoring the coupling):
+\[
+\varphi_{\mathrm{sym}}(D,S,P) = \frac{1}{6}\sum_{\pi \in S_3} \varphi(\pi(D), \pi(S), \pi(P)).
+\]
+By construction, $\varphi_{\mathrm{sym}}$ is value-symmetric and hence factors through $e_1, e_2, e_3$.
+
+Define $\varphi_K = \varphi - \varphi_{\mathrm{sym}}$. Since $\varphi$ is $\T$-invariant and $\varphi_{\mathrm{sym}}$ is $\T$-invariant (being value-symmetric), their difference $\varphi_K$ is $\T$-invariant. By construction, $\varphi_K$ has zero value-symmetric component, so it is coupling-structural (it cannot be expressed from the multiset alone, since its symmetrisation vanishes). By part~(iii) of Theorem~\ref{thm:main}, $\varphi_K$ factors through $K$.
+
+\emph{Uniqueness.}\; Suppose $\varphi = \varphi_K + \varphi_{\mathrm{sym}} = \varphi_K' + \varphi_{\mathrm{sym}}'$. Then $r = \varphi_K - \varphi_K' = \varphi_{\mathrm{sym}}' - \varphi_{\mathrm{sym}}$. The left side is coupling-structural (difference of functions factoring through $K$ is coupling-structural or zero). The right side is value-symmetric. A function that is simultaneously coupling-structural and value-symmetric would depend on the multiset alone yet not be expressible from it --- a contradiction. Therefore $r = 0$.
+\end{proof}
+
+
+\begin{remark}[Scope of the decomposition]
+The additive split assumes $\varphi$ is real- or complex-valued, so that the $S_3$-average and the difference live in a vector space; operator- or non-abelian-valued invariants require additional structure. The two components occupy complementary subspaces --- the symmetric (Reynolds) component and the coupling-structural component --- with no overlap and no third category.
+\end{remark}
+
+\begin{corollary}[Nonlinear domains]\label{cor:nonlinear}
+For couplings with $\kappa > 0$ at generic operating points, the Jacobian $J_\oplus$ varies across parameter space. Therefore $K$ separates $S_3$-orbits outside a measure-zero set (by the identity theorem for analytic functions), and the coupling-structural qualification in part~(iii) is unnecessary there: the theorem reduces to the clean biconditional --- $\varphi$ is $\T$-invariant if and only if $\varphi$ factors through $K$.
+\end{corollary}
+
+\begin{proof}
+If $\kappa > 0$ generically, then $J_\oplus$ is non-constant. Two triples with $K(\tau_1) = K(\tau_2)$ must share the same Jacobian and hence (for analytic $\oplus$) the same operating point up to the discrete ambiguity of $S_3$ role permutation. Therefore $\tau_2 = \T_\sigma(\tau_1)$ for some $\sigma$, and $K$ is a complete invariant. Value-symmetric functions become functions of $K$ as well, since $K$ determines the values up to role permutation, which the elementary symmetric polynomials do not distinguish.
+\end{proof}
+
+\begin{corollary}[Linear domains]\label{cor:linear}
+For couplings with $\kappa = 0$ (linear), $K$ is constant across parameter space. There are then no non-trivial coupling-structural invariants, and the $\T$-invariants are exactly the value-symmetric functions: linear couplings carry no coupling-structural diagnostic content. This is the case the abandoned ``$K$ separates orbits'' argument could not cover, and the reason the coupling-structural qualifier in part~(iii) is load-bearing.
+\end{corollary}
+
+
+\section{Scope}
+
+Theorem~\ref{thm:main} is a \emph{local} result. $K$ captures coupling information up to the order of its components: $K_{\mathrm{spec}}$ encodes first-order structure (the Jacobian), $K_{\mathrm{hol}}$ encodes second-order structure (curvature of the coupling surface), and $\kappa$ constrains global character.
+
+The dichotomy argument in part~(iii) does not depend on the specific contents of $K$ --- only on the partition between coupling data and role-labelled values. Therefore the theorem extends to any augmentation of $K$ with higher-order derivative data. At each augmentation level, $K$ captures all coupling-structural invariants of that order.
+
+Global and topological invariants of the coupling surface (properties that cannot be detected from any finite-order jet at a single point) are not addressed. The theorem concerns local coupling structure at individual operating points.
+
+\medskip
+\noindent\textbf{Equivalence-class membership, not privileged projection.} Theorem~\ref{thm:main} characterises \emph{which} scalar functions are $\T$-invariant --- those factoring through $K$, with the value-symmetric functions as the complementary residual. It does \emph{not} single out a privileged representative or projection within a class. Every candidate scalar projection of a typed geometric object --- maximum over the unit sphere, contraction along $\nabla K_{G,\mathrm{tangent}}$, principal-direction contraction, gradient-axis contraction --- factors through $K$ and is equally $\T$-invariant. The theorem is silent on which to designate ``primary''; any reading that it resolves that choice overreaches its scope.
+
+
+\section{Discussion}
+
+The theorem establishes a clean separation. The information content of a $\T$-invariant quantity comes from exactly one of two sources: the coupling structure (captured by $K$) or the value configuration (captured by the elementary symmetric polynomials). There is no mixing.
+
+The coupling-structural invariants are the diagnostically relevant ones --- they tell you \emph{how} $D$, $S$, $P$ are related through $\oplus$. The value-symmetric invariants are diagnostically inert --- they carry no information about the coupling and would be invariant under any relabeling, not just coupling-preserving transpositions.
+
+For nonlinear couplings ($\kappa > 0$), which include all diagnostically interesting domains tested to date, the distinction collapses: $K$ is a complete invariant and captures everything.
+
+
+\end{document}
