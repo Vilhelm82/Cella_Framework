@@ -107,6 +107,79 @@ def interval_of(result):
 m0lo,m0hi=interval_of(m0); m1lo,m1hi=interval_of(results["primary"])
 check("precision escalation overlaps", max(m0lo,m1lo) <= min(m0hi,m1hi))
 
+from cella.native_periods.certificate import (HexIntError, decode_hex_int,
+    encode_hex_int)
+from cella.native_periods.records import (BRACKET_RECORD_FIELDS, DyadicBracket,
+    decode_bracket_record)
+
+cert = results["primary"].certificate_record
+brecord = cert["dyadic_bracket"]
+
+check("G9 schema is 1.1", cert["schema_version"] == "1.1")
+check("G9 bracket declares hex encoding", brecord["encoding"] == "hex_rational")
+check("G9 bracket field set is canonical", set(brecord) == BRACKET_RECORD_FIELDS)
+check("G9 no bare bignum survives in the record",
+      not any(isinstance(v, int) and abs(v) >= 2**53 for v in brecord.values()))
+check("G9 bracket record decodes to the source bracket",
+      decode_bracket_record(brecord) == results["primary"].dyadic_bracket)
+
+# Falsification witness: the schema 1.0 encoding really was destroyed by a
+# conforming float64-only JSON parser, and the schema 1.1 encoding is not.
+raw = results["primary"].dyadic_bracket.lower_numerator
+lossy = json.loads(json.dumps({"legacy": raw}), parse_int=float)
+check("G9 bare integer bracket IS destroyed by a float64 JSON parse",
+      int(lossy["legacy"]) != raw)
+survived = json.loads(json.dumps(cert), parse_int=float)
+check("G9 hex bracket SURVIVES a float64 JSON parse",
+      decode_bracket_record({**survived["dyadic_bracket"],
+                             **{k: int(survived["dyadic_bracket"][k]) for k in
+                                ("denominator_exponent", "width_bits", "rounded_value_bits")}})
+      == results["primary"].dyadic_bracket)
+
+for spelling in ("0a", "A", "0x1f", "-0", "", " 1f", "1f ", "+1f"):
+    try:
+        decode_hex_int(spelling)
+        check(f"G9 non-canonical hex {spelling!r} refused", False)
+    except HexIntError:
+        check(f"G9 non-canonical hex {spelling!r} refused", True)
+check("G9 hex codec round-trips signed values",
+      all(decode_hex_int(encode_hex_int(v)) == v
+          for v in (0, 1, -1, 255, -255, raw, -raw, 2**200 - 1)))
+try:
+    encode_hex_int(True)
+    check("G9 hex codec refuses bool", False)
+except HexIntError:
+    check("G9 hex codec refuses bool", True)
+
+legacy_cert = deepcopy(cert)
+legacy_cert["schema_version"] = "1.0"
+legacy_cert["dyadic_bracket"] = {
+    "lower_numerator": raw,
+    "upper_numerator": results["primary"].dyadic_bracket.upper_numerator,
+    "denominator_exponent": results["primary"].dyadic_bracket.denominator_exponent,
+    "width_bits": results["primary"].dyadic_bracket.width_bits,
+    "rounded_value_bits": results["primary"].dyadic_bracket.rounded_value_bits,
+}
+check("G9 schema 1.0 certificate refused by version gate",
+      verify_dbp_certificate(legacy_cert).token == "unsupported_certificate_schema")
+smuggled = deepcopy(legacy_cert)
+smuggled["schema_version"] = "1.1"
+check("G9 schema 1.0 bracket smuggled into 1.1 is refused",
+      verify_dbp_certificate(smuggled).token == "unsupported_certificate_schema")
+
+tampered_hex = deepcopy(cert)
+b = dict(tampered_hex["dyadic_bracket"])
+b["lower_numerator_hex"] = encode_hex_int(raw + 1)
+tampered_hex["dyadic_bracket"] = b
+check("G9 tampered hex numerator breaks the canonical digest",
+      verify_dbp_certificate(tampered_hex).token == "route_identity_failed")
+noncanon = deepcopy(cert)
+b = dict(noncanon["dyadic_bracket"])
+b["lower_numerator_hex"] = "0" + b["lower_numerator_hex"]
+noncanon["dyadic_bracket"] = b
+check("G9 leading-zero hex numerator is refused at the bracket contract",
+      verify_dbp_certificate(noncanon).token == "route_identity_failed")
+
 production = list((root/"src/cella/native_periods").glob("*.py"))
 forbidden = ("mpmath","sympy","scipy","flint","sage","ellipk","ellipe","ellippi","carlson")
 imports = "\n".join(p.read_text().lower() for p in production)

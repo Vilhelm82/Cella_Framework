@@ -6,15 +6,18 @@ from fractions import Fraction
 
 from cella.typed_elementary import pi_eval
 
-from .certificate import canon, digest
+from .certificate import HexIntError, canon, digest
 from .dbp_theta_route import canonical_source, compile_dbp_theta
 from .exact_scalar import Interval
 from .quadrature import integrate_certified
 from .records import (CertifiedPeriodResult, DUAL_PATH, PRIMARY_PATH,
-                      PeriodRefusal)
+                      PeriodRefusal, decode_bracket_record)
 from .terminal import decimal_render, materialize
 from .account import evaluate_fixed_dag_binary64
 
+
+CERTIFICATE_SCHEMA_ID = "cella.dbp.native_relative_period_evaluator.certificate"
+CERTIFICATE_SCHEMA_VERSION = "1.1"
 
 TARGETS = {
     "trace_primary": (PRIMARY_PATH, Fraction(1), False),
@@ -61,8 +64,8 @@ def evaluate_dbp_relative_period(target, target_bits, certificate=True):
         "pi_enclosure": pi_record,
     }
     record = {
-        "schema_id": "cella.dbp.native_relative_period_evaluator.certificate",
-        "schema_version": "1.0", "target": target, "route_id": compiled.route_id,
+        "schema_id": CERTIFICATE_SCHEMA_ID,
+        "schema_version": CERTIFICATE_SCHEMA_VERSION, "target": target, "route_id": compiled.route_id,
         "theorem_version": compiled.theorem_version, "route_version": compiled.route_version,
         "source_ledger": compiled.source_ledger, "compiled_kernel": {
             "id": compiled.kernel_id, "radicand": compiled.radicand,
@@ -83,6 +86,12 @@ def verify_dbp_certificate(record):
     """Verify a canonical DBP certificate without trusting or re-executing it."""
     if not isinstance(record, dict):
         return PeriodRefusal("route_identity_failed", "certificate", "certificate must be a mapping", "canonical certificate record")
+    if record.get("schema_id") != CERTIFICATE_SCHEMA_ID or record.get("schema_version") != CERTIFICATE_SCHEMA_VERSION:
+        return PeriodRefusal(
+            "unsupported_certificate_schema", "certificate",
+            f"verifier admits only {CERTIFICATE_SCHEMA_ID} v{CERTIFICATE_SCHEMA_VERSION}",
+            "declared certificate schema",
+        )
     target = record.get("target")
     if target not in TARGETS:
         return PeriodRefusal("unsupported_relative_path", "certificate", "certificate target is not admitted", "admitted target")
@@ -105,11 +114,17 @@ def verify_dbp_certificate(record):
             or account.get("operation_defect_digest") != expected_account["operation_defect_digest"]):
         return PeriodRefusal("account_not_closed", "account_ledger", "operation account was altered or does not replay", "fixed DAG account closure")
     bracket = record.get("dyadic_bracket")
-    required_bracket_fields = {"lower_numerator", "upper_numerator", "denominator_exponent", "width_bits", "rounded_value_bits"}
-    if (not isinstance(bracket, dict) or set(bracket) != required_bracket_fields
-            or not all(isinstance(bracket[k], int) and not isinstance(bracket[k], bool) for k in required_bracket_fields)
-            or bracket["lower_numerator"] > bracket["upper_numerator"]
-            or bracket["denominator_exponent"] < 0):
+    if isinstance(bracket, dict) and "lower_numerator" in bracket:
+        return PeriodRefusal(
+            "unsupported_certificate_schema", "terminal",
+            "bracket uses the schema 1.0 bare-integer encoding, which JSON transport may silently round; re-emit the certificate under schema 1.1",
+            "hex_rational bracket encoding",
+        )
+    try:
+        decoded = decode_bracket_record(bracket)
+    except HexIntError as exc:
+        return PeriodRefusal("route_identity_failed", "terminal", f"terminal dyadic bracket is malformed: {exc}", "terminal bracket contract")
+    if decoded.lower_numerator > decoded.upper_numerator or decoded.denominator_exponent < 0:
         return PeriodRefusal("route_identity_failed", "terminal", "terminal dyadic bracket is malformed", "terminal bracket contract")
     claimed = record.get("certificate_digest")
     unsigned = dict(record)

@@ -5,6 +5,8 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 from typing import Any
 
+from .certificate import HexIntError, decode_hex_int, encode_hex_int
+
 
 THEOREM_VERSION = "DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1"
 ROUTE_VERSION = "DBP_NATIVE_RELATIVE_PERIOD_ROUTE_THEOREM_v1.0"
@@ -58,6 +60,16 @@ class CompiledKernel:
     route_version: str = ROUTE_VERSION
 
 
+BRACKET_ENCODING = "hex_rational"
+BRACKET_HEX_FIELDS = ("lower_numerator", "upper_numerator")
+BRACKET_INT_FIELDS = ("denominator_exponent", "width_bits", "rounded_value_bits")
+BRACKET_RECORD_FIELDS = frozenset(
+    ("encoding",)
+    + tuple(f"{name}_hex" for name in BRACKET_HEX_FIELDS)
+    + BRACKET_INT_FIELDS
+)
+
+
 @dataclass(frozen=True, slots=True)
 class DyadicBracket:
     lower_numerator: int
@@ -67,7 +79,33 @@ class DyadicBracket:
     rounded_value_bits: int
 
     def to_record(self):
-        return asdict(self)
+        """Transport-safe record.
+
+        The numerators are unbounded and are carried as canonical hex strings.
+        The remaining fields are bit counts bounded by the precision request,
+        far below 2**53, so they stay exact as bare JSON integers.
+        """
+        record = {"encoding": BRACKET_ENCODING}
+        for name in BRACKET_HEX_FIELDS:
+            record[f"{name}_hex"] = encode_hex_int(getattr(self, name))
+        for name in BRACKET_INT_FIELDS:
+            record[name] = getattr(self, name)
+        return record
+
+
+def decode_bracket_record(record) -> DyadicBracket:
+    """Strict inverse of DyadicBracket.to_record; raises HexIntError on any deviation."""
+    if not isinstance(record, dict) or set(record) != BRACKET_RECORD_FIELDS:
+        raise HexIntError("dyadic bracket record has a non-canonical field set")
+    if record["encoding"] != BRACKET_ENCODING:
+        raise HexIntError(f"unsupported bracket encoding {record['encoding']!r}")
+    values = {name: decode_hex_int(record[f"{name}_hex"]) for name in BRACKET_HEX_FIELDS}
+    for name in BRACKET_INT_FIELDS:
+        value = record[name]
+        if isinstance(value, bool) or not isinstance(value, int):
+            raise HexIntError(f"bracket field {name!r} must be a non-boolean int")
+        values[name] = value
+    return DyadicBracket(**values)
 
 
 @dataclass(frozen=True, slots=True)
