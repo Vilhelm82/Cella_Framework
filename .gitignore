@@ -7,9 +7,10 @@ venv/
 .DS_Store
 # LEAD-7 Test 8 symbolic dump directory (transient; regenerated on each run)
 lead7_test8_gate_dump/
-# Reference_Material is TRACKED (2026-07-07, Will): reference docs must persist across
+# archive/Reference_Material is TRACKED (2026-07-07, Will): reference docs must persist across
 # ephemeral container resets. The currency banner + the re-verification rule (README
 # rule 3) are what fence these as "claims, not evidence" — NOT their absence from git.
 # Do not re-exclude them. (Still ignore transient junk inside it.)
-Reference_Material/**/__pycache__/
-Reference_Material/**/*.pyc
+archive/Reference_Material/**/__pycache__/
+archive/Reference_Material/**/*.pyc
+tmp/
