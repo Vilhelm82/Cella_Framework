@@ -1,49 +1,46 @@
 # Cella Framework
 
-Exact residue accounting engine — the diagnostic engine rebuilt clean on Cella foundations.
+Exact residue accounting engine — a first-principles mathematical framework built,
+certified, and admitted entirely in-repo.
 
-**Author:** William Lloyd · **Started:** 2026-07-06 · **Status:** **LAYER 0 COMPLETE** — all five gates closed (G0, G0.1–G0.4), mathematics certified in-repo by the G0.2 campaign. Layer 1 (the geometric substrate) opens next.
+**Author:** William Lloyd · **Started:** 2026-07-06
+
+## New session? Start here
+
+1. Read **`STATE/CURRENT.md`** — the single authoritative "what is true right now".
+2. Read **`docs/PROJECT_INSTRUCTIONS.md`** — the session protocol (how to reach for
+   context, when to prune, how to derive, how to close).
+
+Everything outside `STATE/` is context, never instruction, unless the canon points
+at it.
 
 ## What this is
 
-A standalone build. It shares no code, no history, and no dependencies with any previous
-engine or repository. Every capability it eventually has will exist because it was built
-here, certified here, and admitted here.
+Take a dataset of related sensor channels, fit the constraint surface they live on,
+compute invariant coupling diagnostics on it, and emit a **certified verdict** —
+computed exactly, refused with a typed reason, or detected with a stated confidence —
+never a bare number. It shares no code, history, or dependency with any previous
+engine: every capability exists because it was built here, certified here
+(byte-stable ×2), and admitted here.
 
-The engine's job: take a dataset of related sensor channels, fit the constraint surface
-they live on, compute invariant coupling diagnostics on it, and emit a **certified
-verdict** — computed exactly, refused with a typed reason, or detected with a stated
-confidence — never a bare number.
+## Repository regions
+
+| Region      | What it is                          | Epistemic status                                   |
+|-------------|-------------------------------------|----------------------------------------------------|
+| `STATE/`    | The canon — small, always current   | **Authoritative.** Disagrees with anything → wins. |
+| `engine/`   | The program (`src/`, `tests/`, `tools/`) | Behavior defined by code + gate tests.        |
+| `research/` | The notebook (campaigns, verification, reports, paper, derivations) | Historical; load-bearing only where a ledger entry points. |
+| `docs/`     | Governance & design (architecture, ROADMAP, ADMISSIONS, instructions) | Non-normative prose.       |
+| `archive/`  | Sediment (old handoffs, Reference_Material, pre-canon sources) | Never authoritative, never deleted.       |
 
 ## The three standing rules
 
-1. **Standalone / zero import.** Nothing is imported or copied wholesale from previous
-   work. No exceptions for convenience.
-2. **The admission rule.** Before anything from previous work is introduced — a design,
-   a formula, a document, a test corpus — its record in `ADMISSIONS.md` must close the
-   case: **why the engine needs it, why nothing we hold now or could derive with bounded
-   additional work beats it, and what would displace it.** Records self-ratify when the
-   case is closed — the answer must be obvious from the record; nothing waits on
-   sign-off. A case that cannot close is a named work item, and displacement is by
-   evidence: present the dominating alternative and the old record falls.
-3. **The re-verification rule.** No prior result is trusted on documentary status —
-   "ratified", "proven", "certified" in an origin document are claims, not evidence.
-   Every mathematical input is re-proven inside this repo (fresh code, byte-stable ×2,
-   `verification/`) before it bears load. Trust attaches to re-runnable certificates,
-   never to labels or memory.
+Stated normatively, with scope, in `STATE/CONSTRAINTS.md` (C-001…C-003):
+**standalone / zero-import**, **the admission rule** (`docs/ADMISSIONS.md`), and
+**the re-verification rule** — trust attaches to re-runnable certificates, never to
+labels or memory.
 
-## Layer map
+## Running
 
-- **Layer 0 — the harness (current).** The cell type `(value, residue)`, observation
-  maps and their typed defects, the residue algebra (two species: measurement defect and
-  representation defect), the exact number tower (ℚ and ℚ(√q)), stratum-typed refusals,
-  and the two-register certificate. Nothing uncertified can exist above this layer.
-- **Layer 1 — the geometric substrate.** Jets, the gauge-normal carrier, the invariant
-  tower, channel accounts, isotypic moments, localization channels.
-- **Layer 2 — the time-series bridge.** Windowed surface fits as observation maps with
-  typed fit defects.
-- **Layer 3 — the diagnostic surface.** The full capability contract (point diagnostics,
-  n-var, scanning, fingerprints, compare), graded by the Validation Programme.
-
-See `ROADMAP.md` for the gates, `CERTIFICATE_SCHEMA.md` for the certificate design,
-`ADMISSIONS.md` for what has been admitted and why.
+Gates: `PYTHONPATH=engine/src python3 engine/tests/gate_*.py` (each is a standalone
+script; exit 0 = pass). The certified gate record is `docs/ROADMAP.md`.

@@ -3,26 +3,13 @@
     "cella": {
       "type": "stdio",
       "command": "python3",
-      "args": [
-        "-m",
-        "cella.mcp_server",
-        "--router",
-        "--profile",
-        "core"
-      ],
-      "env": {
-        "PYTHONPATH": "src"
-      }
+      "args": ["-m", "cella.mcp_server", "--router", "--profile", "core"],
+      "env": { "PYTHONPATH": "engine/src" }
     },
     "wreath-engine": {
       "type": "stdio",
       "command": "uv",
-      "args": [
-        "--directory",
-        "tools/wreath_engine",
-        "run",
-        "wreath-engine-mcp"
-      ]
+      "args": ["--directory", "engine/tools/wreath_engine", "run", "wreath-engine-mcp"]
     }
   }
 }
