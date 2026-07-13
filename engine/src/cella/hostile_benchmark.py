@@ -23,7 +23,7 @@ from .residual_profile import residual_profile
 from .symbolic import symbolic_rational
 
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
+REPO_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_MANIFEST = REPO_ROOT / "benchmarks" / "pathfinder_hostile" / "manifest.json"
 
 

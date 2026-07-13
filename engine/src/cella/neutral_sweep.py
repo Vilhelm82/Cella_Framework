@@ -25,7 +25,7 @@ from .pathfinder import route_plan
 from .symbolic import symbolic_equal
 
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
+REPO_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_MANIFEST = REPO_ROOT / "benchmarks" / "neutral_sweep" / "manifest.json"
 DEFAULT_ENGINES = ("cella", "sympy", "mpmath", "flint_arb")
 TERMINAL_STATUSES = ("pass", "fail", "limit", "timeout", "unavailable")

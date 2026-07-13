@@ -97,7 +97,7 @@ check("invalid precision refuses", isinstance(legendre_k_enclose(Fraction(1, 2),
 check("unsupported atom refuses", legendre_ke_enclose("Pi", Fraction(1, 2), 40).token == "unsupported_differential")
 
 # Static production dependency audit: imports and call sites only.
-source = Path("src/cella/native_periods/legendre_ke.py").read_text()
+source = (Path(__file__).resolve().parent.parent / "src" / "cella" / "native_periods" / "legendre_ke.py").read_text()
 tree = ast.parse(source)
 forbidden = ("mpmath", "sympy", "scipy", "flint", "arb", "sage", "agm", "carlson", "ellip")
 hits = []

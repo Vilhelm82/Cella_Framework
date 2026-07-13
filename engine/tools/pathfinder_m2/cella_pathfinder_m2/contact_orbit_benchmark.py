@@ -333,7 +333,7 @@ def run(root: Path, paired_trials: int, cold_trials: int) -> dict[str, object]:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[3])
+    parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[4])
     parser.add_argument("--paired-trials", type=int, default=30)
     parser.add_argument("--cold-trials", type=int, default=7)
     args = parser.parse_args()

@@ -14,7 +14,7 @@ import sys
 from pathlib import Path
 
 
-_ROOT = Path(__file__).resolve().parents[3]
+_ROOT = Path(__file__).resolve().parents[4]
 _CAMPAIGN = _ROOT / "campaigns" / "DBP_NATIVE_RELATIVE_PERIOD_EVALUATOR"
 
 

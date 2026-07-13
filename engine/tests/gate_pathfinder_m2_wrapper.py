@@ -8,6 +8,7 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+REPO_ROOT = ROOT.parent
 sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT / "tools" / "pathfinder_m2"))
 
@@ -28,7 +29,7 @@ def check(name: str, condition: bool) -> None:
 def task(**changes: object) -> M2ContactProjectionTask:
     values: dict[str, object] = {
         "request_id": "m2-even-contact-delta-slice-a-v1",
-        "model_path": ROOT / "docs" / "files" / "horizon_wreath_inertia_model.m2",
+        "model_path": REPO_ROOT / "docs" / "files" / "horizon_wreath_inertia_model.m2",
         "slice_assignments": (("N1", 4), ("N2", 8), ("N3", 12), ("N4", 20)),
     }
     values.update(changes)
@@ -89,7 +90,7 @@ check("wrapper surfaces refusal without fallback execution", refused)
 
 orbit_task = M2ContactOrbitTask(
     request_id="m2-all-signed-contact-walls-v1",
-    model_path=ROOT / "docs" / "files" / "horizon_wreath_inertia_model.m2",
+    model_path=REPO_ROOT / "docs" / "files" / "horizon_wreath_inertia_model.m2",
 )
 orbit_lifted = plan_and_lift(orbit_task)
 check("complete contact orbit selects the structural orbit route", orbit_lifted.route_family == "signed_contact_orbit_projection")

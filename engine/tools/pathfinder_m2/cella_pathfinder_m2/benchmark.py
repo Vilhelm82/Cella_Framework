@@ -304,7 +304,7 @@ def run_campaign(root: Path, trials: int, *, certified: bool = True) -> dict[str
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[3])
+    parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[4])
     parser.add_argument("--trials", type=int, default=7)
     parser.add_argument(
         "--route-only",

@@ -31,7 +31,7 @@ def check(label, condition):
     passed += 1
 
 
-root = Path(__file__).resolve().parents[1]
+root = Path(__file__).resolve().parents[2]
 contracts = json.loads((root/"campaigns/DBP_NATIVE_RELATIVE_PERIOD_EVALUATOR/DBP_NATIVE_RELATIVE_PERIOD_EVALUATOR_CONTRACTS_v1.0.json").read_text())
 plus = compile_dbp_theta(canonical_source(PRIMARY_PATH))
 minus = compile_dbp_theta(canonical_source(DUAL_PATH))

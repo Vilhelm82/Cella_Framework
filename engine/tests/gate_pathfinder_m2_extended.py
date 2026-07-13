@@ -15,6 +15,7 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+REPO_ROOT = ROOT.parent
 sys.path.insert(0, str(ROOT / "src"))
 sys.path.insert(0, str(ROOT / "tools" / "pathfinder_m2"))
 
@@ -103,7 +104,7 @@ check(
 # --- fixture 2: rotating IZ primeness (Kummer P4 route) ---------------------
 primeness_task = M2DifferenceIdealPrimenessTask(
     request_id="m2-rotating-iz-primeness-v1",
-    model_path=ROOT / "docs" / "files" / "horizon_wreath_inertia_model.m2",
+    model_path=REPO_ROOT / "docs" / "files" / "horizon_wreath_inertia_model.m2",
 )
 primeness_lift = plan_and_lift(primeness_task, certified=False)
 check(

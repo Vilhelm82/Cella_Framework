@@ -237,7 +237,7 @@ def run(root: Path, trials: int) -> dict[str, object]:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[3])
+    parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[4])
     parser.add_argument("--trials", type=int, default=30)
     args = parser.parse_args()
     if args.trials < 20:
