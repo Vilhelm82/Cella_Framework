@@ -67,7 +67,7 @@ SYMBOLIC_COLLAPSE_REWRITE_CONTRACT = RouteContract(
     execution_module="external.symbolic_rewrite_executor",
     certificate_obligations=SYMBOLIC_COLLAPSE_CERTIFICATES,
     source_references=(
-        "campaigns/CODEX_HANDOFF_PATHFINDER_BUILD.md#8.1",
+        "research/campaigns/CODEX_HANDOFF_PATHFINDER_BUILD.md#8.1",
         "src/cella/_legacy_pathfinder.py",
     ),
 )

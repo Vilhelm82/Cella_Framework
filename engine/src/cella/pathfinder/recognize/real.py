@@ -221,7 +221,7 @@ STURM_CONTRACT = RouteContract(
     execution_module="external.sturm_escalation_executor",
     certificate_obligations=STURM_CERTIFICATES,
     source_references=(
-        "paper/lead7_kn_n3_dbp_metric.tex#sec:gate",
+        "research/paper/lead7_kn_n3_dbp_metric.tex#sec:gate",
         "CELLA_ARCHITECTURE_v1.3.md#16",
     ),
 )
@@ -360,7 +360,7 @@ PENCIL_CONTRACT = RouteContract(
     execution_module="external.matrix_pencil_selection_executor",
     certificate_obligations=PENCIL_CERTIFICATES,
     source_references=(
-        "paper/lead7_kn_n3_dbp_metric.tex#sec:gate",
+        "research/paper/lead7_kn_n3_dbp_metric.tex#sec:gate",
         "CELLA_ARCHITECTURE_v1.3.md#16",
     ),
 )

@@ -128,7 +128,7 @@ REGULAR_SEQUENCE_CI_CONTRACT = RouteContract(
         "CELLA_ARCHITECTURE_v1.3.md#11.7",
         "CELLA_ARCHITECTURE_v1.3.md#11.8",
         "CELLA_ARCHITECTURE_v1.3.md#11.9",
-        "campaigns/CODEX_HANDOFF_PATHFINDER_BUILD.md#8.2",
+        "research/campaigns/CODEX_HANDOFF_PATHFINDER_BUILD.md#8.2",
     ),
 )
 
@@ -302,7 +302,7 @@ DEGREE_BALANCE_CLOSURE_CONTRACT = RouteContract(
     source_references=(
         "CELLA_ARCHITECTURE_v1.3.md#12.2",
         "CELLA_ARCHITECTURE_v1.3.md#11.7",
-        "campaigns/CODEX_HANDOFF_PATHFINDER_BUILD.md#8.2",
+        "research/campaigns/CODEX_HANDOFF_PATHFINDER_BUILD.md#8.2",
     ),
 )
 

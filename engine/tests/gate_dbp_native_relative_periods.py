@@ -32,7 +32,7 @@ def check(label, condition):
 
 
 root = Path(__file__).resolve().parents[2]
-contracts = json.loads((root/"campaigns/DBP_NATIVE_RELATIVE_PERIOD_EVALUATOR/DBP_NATIVE_RELATIVE_PERIOD_EVALUATOR_CONTRACTS_v1.0.json").read_text())
+contracts = json.loads((root/"research/campaigns/DBP_NATIVE_RELATIVE_PERIOD_EVALUATOR/DBP_NATIVE_RELATIVE_PERIOD_EVALUATOR_CONTRACTS_v1.0.json").read_text())
 plus = compile_dbp_theta(canonical_source(PRIMARY_PATH))
 minus = compile_dbp_theta(canonical_source(DUAL_PATH))
 check("G1 primary expression exact", plus.expression == contracts["routes"]["dbp_theta_primary_v1"]["compiled_kernel"]["expression"] == PLUS_EXPRESSION)

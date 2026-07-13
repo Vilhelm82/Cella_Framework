@@ -120,7 +120,7 @@ MULTIPLICATION_MATRIX_CONTRACT = RouteContract(
     source_references=(
         "CELLA_ARCHITECTURE_v1.3.md#13.2",
         "CELLA_ARCHITECTURE_v1.3.md#13.3",
-        "campaigns/CODEX_HANDOFF_PATHFINDER_BUILD.md",
+        "research/campaigns/CODEX_HANDOFF_PATHFINDER_BUILD.md",
     ),
 )
 
@@ -253,7 +253,7 @@ FACTORIZATION_CONTRACT = RouteContract(
     source_references=(
         "CELLA_ARCHITECTURE_v1.3.md#13.1",
         "CELLA_ARCHITECTURE_v1.3.md#11.9",
-        "campaigns/CODEX_HANDOFF_PATHFINDER_BUILD.md",
+        "research/campaigns/CODEX_HANDOFF_PATHFINDER_BUILD.md",
     ),
 )
 

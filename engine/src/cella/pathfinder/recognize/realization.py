@@ -81,7 +81,7 @@ REALIZATION_POSET_CONTRACT = RouteContract(
     source_references=(
         "CELLA_ARCHITECTURE_v1.3.md#18",
         "docs/m2_out_2026-07-10/REALIZATION_POSET_RUN_REPORT_2026-07-10.md",
-        "campaigns/CODEX_HANDOFF_PATHFINDER_BUILD.md#8.5",
+        "research/campaigns/CODEX_HANDOFF_PATHFINDER_BUILD.md#8.5",
     ),
 )
 

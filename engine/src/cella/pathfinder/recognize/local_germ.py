@@ -99,8 +99,8 @@ LOCAL_GERM_CONTRACT = RouteContract(
     execution_module="external.local_metric_germ_executor",
     certificate_obligations=LOCAL_GERM_CERTIFICATES,
     source_references=(
-        "paper/lead7_kn_n3_dbp_metric.tex#sec:gate",
-        "paper/pfc_normal_forms.tex#thm:pure",
+        "research/paper/lead7_kn_n3_dbp_metric.tex#sec:gate",
+        "research/paper/pfc_normal_forms.tex#thm:pure",
         "CELLA_ARCHITECTURE_v1.3.md#17.1",
     ),
 )
@@ -271,8 +271,8 @@ PARITY_FACE_CONTRACT = RouteContract(
     execution_module="external.parity_fixed_face_executor",
     certificate_obligations=PARITY_FACE_CERTIFICATES,
     source_references=(
-        "paper/pfc_normal_forms.tex#thm:pure",
-        "paper/lead7_kn_n3_dbp_metric.tex#sec:gate",
+        "research/paper/pfc_normal_forms.tex#thm:pure",
+        "research/paper/lead7_kn_n3_dbp_metric.tex#sec:gate",
         "CELLA_ARCHITECTURE_v1.3.md#17.1",
     ),
 )
@@ -432,7 +432,7 @@ EXTREMAL_FACE_CONTRACT = RouteContract(
     execution_module="external.extremal_face_executor",
     certificate_obligations=EXTREMAL_FACE_CERTIFICATES,
     source_references=(
-        "paper/lead7_kn_n3_dbp_metric.tex#sec:gate",
+        "research/paper/lead7_kn_n3_dbp_metric.tex#sec:gate",
         "CELLA_ARCHITECTURE_v1.3.md#16",
     ),
 )
@@ -617,8 +617,8 @@ NEWTON_CORNER_CONTRACT = RouteContract(
     execution_module="external.newton_wedge_corner_executor",
     certificate_obligations=NEWTON_CORNER_CERTIFICATES,
     source_references=(
-        "paper/pfc_normal_forms.tex#thm:pure",
-        "paper/lead7_kn_n3_dbp_metric.tex#sec:gate",
+        "research/paper/pfc_normal_forms.tex#thm:pure",
+        "research/paper/lead7_kn_n3_dbp_metric.tex#sec:gate",
         "CELLA_ARCHITECTURE_v1.3.md#17.1",
     ),
 )

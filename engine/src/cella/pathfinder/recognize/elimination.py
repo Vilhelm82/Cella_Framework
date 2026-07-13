@@ -82,7 +82,7 @@ GENERIC_ELIMINATION_CONTRACT = RouteContract(
     execution_module="external.generic_elimination_executor",
     certificate_obligations=GENERIC_ELIMINATION_CERTIFICATES,
     source_references=(
-        "campaigns/CODEX_HANDOFF_PATHFINDER_BUILD.md#8.2",
+        "research/campaigns/CODEX_HANDOFF_PATHFINDER_BUILD.md#8.2",
         "CELLA_ARCHITECTURE_v1.3.md#11.2",
         "docs/pathfinder/BUILD_SPEC.md",
     ),
@@ -235,7 +235,7 @@ LOCALIZATION_BOUNDARY_SPLIT_CONTRACT = RouteContract(
     certificate_obligations=LOCALIZATION_BOUNDARY_SPLIT_CERTIFICATES,
     source_references=(
         "CELLA_ARCHITECTURE_v1.3.md#11.8",
-        "campaigns/CODEX_HANDOFF_PATHFINDER_BUILD.md#8.2",
+        "research/campaigns/CODEX_HANDOFF_PATHFINDER_BUILD.md#8.2",
     ),
 )
 
@@ -366,8 +366,8 @@ ORDINARY_HOST_COMPUTATION_CONTRACT = RouteContract(
     execution_module="external.host_default_executor",
     certificate_obligations=ORDINARY_HOST_COMPUTATION_CERTIFICATES,
     source_references=(
-        "campaigns/CODEX_HANDOFF_PATHFINDER_BUILD.md#8.1",
-        "campaigns/CODEX_HANDOFF_PATHFINDER_BUILD.md#9",
+        "research/campaigns/CODEX_HANDOFF_PATHFINDER_BUILD.md#8.1",
+        "research/campaigns/CODEX_HANDOFF_PATHFINDER_BUILD.md#9",
     ),
 )
 

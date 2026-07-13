@@ -15,7 +15,7 @@ from pathlib import Path
 
 
 _ROOT = Path(__file__).resolve().parents[4]
-_CAMPAIGN = _ROOT / "campaigns" / "DBP_NATIVE_RELATIVE_PERIOD_EVALUATOR"
+_CAMPAIGN = _ROOT / "research" / "campaigns" / "DBP_NATIVE_RELATIVE_PERIOD_EVALUATOR"
 
 
 def verify_landen_trace_theorem() -> dict:

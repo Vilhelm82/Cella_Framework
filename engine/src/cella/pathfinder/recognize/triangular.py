@@ -138,7 +138,7 @@ DIRECT_SUBSTITUTION_CONTRACT = RouteContract(
     source_references=(
         "CELLA_ARCHITECTURE_v1.3.md#11.9",
         "CELLA_ARCHITECTURE_v1.3.md#12.1",
-        "campaigns/CODEX_HANDOFF_PATHFINDER_BUILD.md#8.2",
+        "research/campaigns/CODEX_HANDOFF_PATHFINDER_BUILD.md#8.2",
     ),
 )
 
@@ -282,7 +282,7 @@ TRIANGULAR_DOMAIN_TOWER_CONTRACT = RouteContract(
     certificate_obligations=TRIANGULAR_DOMAIN_TOWER_CERTIFICATES,
     source_references=(
         "CELLA_ARCHITECTURE_v1.3.md#11.9",
-        "campaigns/CODEX_HANDOFF_PATHFINDER_BUILD.md#8.2",
+        "research/campaigns/CODEX_HANDOFF_PATHFINDER_BUILD.md#8.2",
     ),
 )
 
@@ -418,7 +418,7 @@ LINEAR_INVERSE_RING_MAP_CONTRACT = RouteContract(
     certificate_obligations=LINEAR_INVERSE_RING_MAP_CERTIFICATES,
     source_references=(
         "CELLA_ARCHITECTURE_v1.3.md#11.9",
-        "campaigns/CODEX_HANDOFF_PATHFINDER_BUILD.md#8.2",
+        "research/campaigns/CODEX_HANDOFF_PATHFINDER_BUILD.md#8.2",
     ),
 )
 

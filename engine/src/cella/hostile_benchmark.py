@@ -480,7 +480,7 @@ def _text(value) -> str | None:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run the Cella Pathfinder hostile benchmark campaign.")
     parser.add_argument("--manifest", default=str(DEFAULT_MANIFEST))
-    parser.add_argument("--output", default="reports/pathfinder_hostile/mvp-report.json")
+    parser.add_argument("--output", default="research/reports/pathfinder_hostile/mvp-report.json")
     args = parser.parse_args(argv)
     report = run_manifest(args.manifest, args.output)
     print(json.dumps(report["summary"], indent=2, sort_keys=True))
