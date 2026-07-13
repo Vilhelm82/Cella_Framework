@@ -35,7 +35,7 @@
 \large Orbit Quotients, Channel Accounts, and Physical Selection\\[4pt]
 \large A local-to-global synthesis with a Galois--spectral realization}
 \author{William Lloyd}
-\date{Draft v0.2 --- 10 July 2026}
+\date{Draft v0.3 --- 13 July 2026}
 
 \begin{document}
 \maketitle
@@ -903,21 +903,70 @@ third-kind differentials, an isogeny, and principal-value residue jumps.
 They are not used to prove the local orbit, metric-selection, or axial-cover
 theorems.
 
-\proofstop{The Jacobi quartic and Legendre cubic are connected by a
-degree-two morphism, not by the displayed model identification. A
-$j$-invariant modular-polynomial relation proves an isogeny over an
-algebraic closure, not an explicit base-field isogeny. The proposed
-$\sqrt2\mapsto-\sqrt2$ language also requires correct fourth-root
-and branch bookkeeping. Most importantly, the exact map from the original
-curvature integral in the original DBP realization to the stated third-kind
-differential remains open.}
+\begin{theorem}[primary surface-to-link close-off]\label{thm:surface-link}
+\established.
+For
+\[
+S_s=\{D^2+sDS+P^2=3\},\qquad s\ne0,
+\]
+let $\Gamma_s^+$ be either component of the spherical link of the
+asymptotic cone. Then
+\[
+\int_{S_s}K_G\,dA=-2L(\Gamma_s^+).
+\]
+At $s=1$, exact Legendre reduction of $L(\Gamma_1^+)$ gives
+\[
+\int_{S_1}K_G\,dA
+=-2^{7/4}\left[
+(3+2\sqrt2)\Pi\!\left(\frac{4-3\sqrt2}{8};
+\frac{2-\sqrt2}{4}\right)
+-(2+2\sqrt2)K\!\left(\frac{2-\sqrt2}{4}\right)
+\right]
+=I_{\rm primary}.
+\]
+\end{theorem}
+
+\begin{proof}
+Orthogonally diagonalize the surface to
+$ax^2-by^2+z^2=3$, where
+$a=(1+\sqrt{1+s^2})/2$ and
+$b=(\sqrt{1+s^2}-1)/2$.  On this cylinder the one-form
+\[
+\eta=-\frac{2ab\,y}{\sqrt q\,(a^2x^2+z^2)}
+(x\,dz-z\,dx),\qquad q=\lVert\nabla F\rVert^2,
+\]
+is globally regular and satisfies $d\eta=K_GdA$.  In the global
+hyperbolic parametrization its coefficient tends at the two oriented
+ends to
+\[
+-\frac{\sqrt{ab}}{p(t)\sqrt{p(t)+b}},
+\qquad p(t)=a\cos^2t+\sin^2t.
+\]
+The reciprocal tangent substitution
+\[
+\tan t=\sqrt{\frac{a+b}{1+b}}\cot\theta
+\]
+identifies the integral of this density with the length of one component
+of the spherical asymptotic link.  Stokes' theorem therefore gives one
+copy from each end and proves the displayed factor $-2$.  The final
+formula is the established link-to-Legendre reduction.
+\end{proof}
+
+\proofstop{Theorem~\ref{thm:surface-link} closes the primary scalar
+surface-to-period map. It does not identify the Galois-conjugate
+principal-value constant with a real region or relative cycle of the
+original DBP surface. A chain-level pushforward of the original curvature
+two-form to the elliptic differential would refine the primary statement,
+but is no longer needed to establish its scalar value; the dual surface
+cycle remains genuinely open.}
 
 \begin{remark}
-The safe algebraic statement is narrower: for the explicitly defined
-third-kind differential on the specified curve, the weighted residue is
-four and the two oriented indentations differ from the principal value by
-$\pm4\pi i$, hence from one another by $8\pi i$. Its interpretation in the
-original DBP realization requires the missing differential and cycle derivation.
+The primary and dual channels now have different geometric status.  The
+primary period is the proved total curvature of $S_1$.  For the explicitly
+defined dual third-kind differential, the weighted residue is four and the
+two oriented indentations differ from the principal value by $\pm4\pi i$,
+hence from one another by $8\pi i$; its interpretation in the original DBP
+realization still requires a new differential-and-cycle theorem.
 \end{remark}
 
 \section{What the paper absorbs and what it retires}
@@ -1009,7 +1058,9 @@ Local valuation section & Absorbed; corner proof owed\\
 Galois horizon cover and R5--R7 entries &
 Global cover module & Conditional arithmetic\\
 Self-glue monodromy & Global continuation companion & Not load-bearing\\
-Corrected curvature constants & Arithmetic-period companion & Not load-bearing\\
+Corrected curvature constants &
+Primary surface-to-link theorem absorbed; dual arithmetic-period companion &
+Primary established; dual geometric cycle open\\
 \bottomrule
 \end{tabular}
 \end{center}

@@ -3,6 +3,9 @@
 ## Corrected and completed trace-and-splitting theorem, v1.1
 
 **Date:** 2026-07-12  
+**Supersedes mathematically:** v1.0 wherever v1.0 described the anti-translation period as an unresolved analytic component  
+**Preservation policy:** v1.0 and every supplied source remain unchanged  
+**Primary surface interface:** \`DBP_SURFACE_TO_LINK_CLOSEOFF_v1.0.md\`  
 **Verification:** verify_dbp_landen_trace_theorem_v1_1.py; 75 exact gates, no floating-point arithmetic
 
 ---
@@ -16,7 +19,9 @@ The DBP Landen–Trace theorem is complete as a theorem about:
 3. their common descended trace differential;
 4. their exact anti-translation differentials;
 5. the exact primary and dual anti-periods;
-6. the pole transport, CPV prescriptions, and monodromy.
+6. the pole transport, CPV prescriptions, and monodromy;
+7. the primary scalar interface from the original DBP curvature integral to
+   the period \(I_{\rm primary}\), using the surface-to-link close-off.
 
 The corrected result is:
 
@@ -832,6 +837,57 @@ Equations (7.4) and (7.6) are the completed DBP Landen–Trace reductions.
 
 ---
 
+## 7A. Primary surface-to-period interface
+
+Let
+
+\[
+S_s=\{D^2+sDS+P^2=3\},\qquad s\ne0,
+\]
+
+and let \(\Gamma_s^+\) be one component of the spherical link of the
+asymptotic cone \(D^2+sDS+P^2=0\). The surface-to-link close-off proves
+
+\[
+\boxed{
+\int_{S_s}K_G\,dA=-2L(\Gamma_s^+).
+}
+\tag{7A.1}
+\]
+
+The proof is algebraic and family-wide. After orthogonal diagonalization to
+\(ax^2-by^2+z^2=3\), it exhibits the global primitive
+
+\[
+\eta=-\frac{2ab\,y}{\sqrt q\,(a^2x^2+z^2)}(x\,dz-z\,dx),
+\qquad d\eta=K_G\,dA,
+\tag{7A.2}
+\]
+
+and evaluates its two oriented end limits exactly. An explicit reciprocal
+tangent substitution identifies each end integral with the length of one
+spherical-link component.
+
+Combining (7A.1) with the exact Legendre reduction of that link gives, at the
+keystone \(s=1\),
+
+\[
+\boxed{
+\int_{S_1}K_G\,dA
+=-2^{7/4}\left[(3+2\sqrt2)\Pi(n_+;m_+)
+-(2+2\sqrt2)K(m_+)\right]
+=I_{\rm primary}.
+}
+\tag{7A.3}
+\]
+
+Thus the primary scalar curvature constant is now an input proved from the
+original surface, rather than a numerically retrodicted period value. This
+does not identify \(I_{\rm dual,CPV}\) with a real region or cycle of the DBP
+surface.
+
+---
+
 ## 8. Pole transport and non-torsion trace sector
 
 Both complementary pole pairs map to
@@ -902,6 +958,8 @@ and \(\alpha_\epsilon=R_\epsilon d\log f_\epsilon\).
 9. Dual CPV anti-period \(0\), with one-sided values \(\pm4\pi i\).
 10. Exact primary and dual trace-path formulas.
 11. Pole transport to \(X=-7\), residue \(4\), and non-torsion of the trace pole.
+12. Primary scalar surface-to-link-to-period interface, including an explicit
+    global primitive and exact evaluation of both cone ends.
 
 ### Not claimed
 
@@ -916,7 +974,12 @@ I_{\rm primary}
 
 Equations (7.4) and (7.6) involve different relative paths of the non-torsion differential \(\Theta\). Comparing those paths is a separate relative-homology problem. Non-torsion alone neither proves nor disproves every possible scalar relation between their special values.
 
-The derivation of \(\omega_\epsilon\) directly from the original DBP surface curvature two-form, and the interface with the local curvature valuation calculus, also remain separate theorems.
+The primary scalar identity
+\(\int_{S_1}K_GdA=I_{\rm primary}\) is now proved by the surface-to-link
+close-off and the exact link-to-Legendre reduction. What remains separate is a
+chain-level pushforward of the original curvature two-form to
+\(\omega_+\), the interface with the local curvature valuation calculus, and
+any surface-cycle interpretation of \(I_{\rm dual,CPV}\).
 
 ---
 
