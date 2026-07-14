@@ -1,0 +1,200 @@
+{
+  "schema_id": "cella.cce6.native_surface_sweep_clearance_certificate",
+  "schema_version": "1.0",
+  "date": "2026-07-14",
+  "verdict": "PROVED",
+  "claim_scope": "two_exact_dbp_corridors_on_native_surface_image",
+  "scope_ceiling": "S_Z^nat=image(L_Z); no whole-surface claim",
+  "certificate_kind": "exact_universal_curve_to_surface_clearance_transfer",
+  "source_bindings": {
+    "cce2_stage_report_json_sha256": "f4db1c6252015bff0fb905ad3831d9d05c210b9e6dbb0ecc471c858394a49ee9",
+    "cce2_route_digests_json_sha256": "88f90af2c65ac6c2a037740c1eaa83ef550a0417f54138d2f076d35cf37d9452",
+    "cce2_clearance_bundle_json_sha256": "160c8efbf8e781ae8ca8336bd754ad170208fdccfe8dc8f0d30cae97f9463a50",
+    "stage2_surface_source_sha256": "dac78c175661e5267326facf36e7f237d6973486d18c3221a57a6f8779dd58ad",
+    "stage3_surface_source_sha256": "bdaabb1a1015f7b6b3055321b422a3b6d84053c808d2e3669ea646ff3de82670",
+    "paper_iii_source_sha256": "1fc835086c30fbae414853f186a9cab9ac8c39e6cff1ed79b7364ebb5db6d5ae",
+    "existing_work_extraction_report_sha256": "551c7a1b89a59f7ffc1ce76df33aca47a4f1d445446fb039cfa2266c1a423b94"
+  },
+  "nested_corridor_certificates": {
+    "upper": {
+      "route_id": "dbp_corridor_upper_qi_v1",
+      "route_manifest_digest": "63e19e63181d9573590d2ff4825787c95f4ecc1b99da8d510df370b7ccfaa62d",
+      "clearance_certificate_digest": "c4c9fae572cd9ca02ffdc493389c738731a961df9e7593b0be72382bf8e2240a",
+      "selected_terminal_class": "delta_-^up modulo Z[A_-]+Z[B_-]"
+    },
+    "lower": {
+      "route_id": "dbp_corridor_lower_qi_v1",
+      "route_manifest_digest": "6216ca406c364cf382baabb7f6ea112ed095ce2393ac9d63f06636d5157565b5",
+      "clearance_certificate_digest": "9cf591af652d6c9e7e5609f8641ef00b78c6c8e7434d8d2be0ae6291fbff0217",
+      "selected_terminal_class": "delta_-^down modulo Z[A_-]+Z[B_-]"
+    }
+  },
+  "exact_ring": {
+    "base": "Q(i)",
+    "variables": [
+      "sigma",
+      "rho",
+      "V",
+      "T",
+      "Xi",
+      "H"
+    ],
+    "quotient_relation": "rho^2-1-sigma^2=0",
+    "definitions": {
+      "A": "rho+1",
+      "B": "rho-1",
+      "a": "A/2",
+      "b": "B/2",
+      "c": "B/A",
+      "Delta1": "A*T-B*V",
+      "Delta2": "A^2*T-B^2*V"
+    }
+  },
+  "parameter_identities": [
+    "A-B=2",
+    "A+B=2*rho",
+    "A*B=sigma^2",
+    "a*b=sigma^2/4",
+    "1-c=2/A",
+    "1+c=2*rho/A"
+  ],
+  "corridor_tube_bounds": {
+    "abs_sigma_lower": "3/8",
+    "abs_rho_lower": "1/2",
+    "abs_A_lower": "1/64",
+    "abs_B_lower": "1/64",
+    "abs_A_upper": "5",
+    "abs_B_upper": "5",
+    "abs_c_lower": "1/320",
+    "abs_inverse_c_lower": "1/320",
+    "abs_m_lower": "1/512",
+    "abs_one_minus_m_lower": "1/512",
+    "abs_x_p_lower": "2/5",
+    "abs_x_p_minus_one_lower": "1/320",
+    "abs_x_p_minus_m_lower": "1/163840",
+    "abs_y_p_squared_lower": "1/131072000",
+    "derived_abs_ab_lower": "9/256",
+    "derived_abs_one_minus_c_lower": "2/5",
+    "derived_abs_one_plus_c_lower": "1/5"
+  },
+  "surface_divisors": {
+    "D1": "T-c*V",
+    "D2": "T-c^2*V",
+    "angular_cleared_C": "Delta1*C^2-2*V",
+    "angular_cleared_S": "Delta1*S^2-A*(T-V)",
+    "norm_primitive": "D2*Xi^2+(1-c)*T*H^2",
+    "norm_cleared": "Delta2*Xi^2+2*A*T*H^2",
+    "polar_pullback": "T*(Xi^2+H^2)",
+    "fibre_polar": "Xi^2+H^2"
+  },
+  "collision_identities": {
+    "norm_discriminant_primitive": "-4*(1-c)*T*D2",
+    "norm_discriminant_cleared": "-8*A*T*Delta2",
+    "resultant_linear_identity": "2*A*T-Delta2=-B*Delta1",
+    "norm_polar_resultant_cleared": "B^2*Delta1^2",
+    "norm_polar_resultant_primitive": "c^2*D1^2",
+    "norm_at_fibre_infinity": "Delta2*Xi^2",
+    "polar_at_fibre_infinity": "Xi^2"
+  },
+  "curve_divisor_reduction": {
+    "x": "2*B*V/Delta2",
+    "m": "B/(2*rho)",
+    "x_p": "-2/B",
+    "supporting_identities": [
+      "2*B*V-Delta2=-A*Delta1",
+      "4*rho*V-Delta2=A^2*(V-T)",
+      "B^2*V+Delta2=A^2*T"
+    ],
+    "divisor_map": {
+      "V=0": "x=0",
+      "V=T": "x=m",
+      "T=0": "x=x_p",
+      "D1=0": "x=1",
+      "D2=0": "x=infinity"
+    }
+  },
+  "boundary_faces": {
+    "V=0": {
+      "Delta1": "A*T",
+      "Delta2": "A^2*T",
+      "norm_cleared": "A*T*(A*Xi^2+2*H^2)",
+      "resultant": "A^2*B^2*T^2",
+      "angular_gluing": "C=0; C-sign pair glues"
+    },
+    "V=T": {
+      "Delta1": "2*T",
+      "Delta2": "4*rho*T",
+      "norm_cleared": "2*T*(2*rho*Xi^2+A*H^2)",
+      "resultant": "4*B^2*T^2",
+      "angular_gluing": "S=0; S-sign pair glues"
+    },
+    "simultaneous_angular_zero": "C=S=0 forces T=0 and is excluded"
+  },
+  "refined_curve_clearance_contract": {
+    "normalization": "|V|^2+|T|^2=1 with standard chordal distance on P^1",
+    "marked_base_points": {
+      "P0": "[0:1]",
+      "Pm": "[1:1]",
+      "Pinfinity": "[1:0]",
+      "P1": "[1:c]",
+      "P2": "[1:c^2]"
+    },
+    "norm_upper_bounds": {
+      "norm_P1": "321",
+      "norm_P2": "102401"
+    },
+    "minimum_pairwise_separation_lower": "1/26296576800",
+    "uniform_exclusion_radius": "1/105186307200",
+    "primary_track_clearance_lower": "1/25",
+    "required_positive_witnesses": {
+      "epsilon_infinity": "abs(T) lower bound",
+      "epsilon_1": "abs(D1) lower bound",
+      "epsilon_2": "abs(D2) lower bound"
+    },
+    "existence_proof": "use certified marked-section separations to remove disjoint rational closed neighborhoods, then transport the primary representative through the resulting proper manifold-with-boundary over the finite CCE-2 disk chain",
+    "class_binding": "forgetting the three extra punctures is the existing CCE-3 Gauss-Manin class",
+    "metric_certificate_policy": "an exact PL representative may instantiate rational witnesses; floating path samples are not used"
+  },
+  "quantitative_transfer": {
+    "released_route_epsilon_infinity": "1/105186307200",
+    "released_route_epsilon_1": "1/105186307200",
+    "released_route_epsilon_2": "1/105186307200",
+    "abs_norm_discriminant_lower": "(8/5)*epsilon_infinity*epsilon_2",
+    "abs_norm_polar_resultant_lower": "epsilon_1^2/102400",
+    "abs_norm_constant_coefficient_lower": "(2/5)*epsilon_infinity",
+    "abs_norm_leading_coefficient_lower": "epsilon_2",
+    "face_V0_abs_D1_lower": "epsilon_infinity",
+    "face_V0_abs_D2_lower": "epsilon_infinity",
+    "face_V0_abs_discriminant_lower": "(8/5)*epsilon_infinity^2",
+    "face_V0_abs_resultant_lower": "epsilon_infinity^2/102400",
+    "face_VT_abs_D1_lower": "(2/5)*epsilon_infinity",
+    "face_VT_abs_D2_lower": "(2/25)*epsilon_infinity",
+    "face_VT_abs_discriminant_lower": "(16/125)*epsilon_infinity^2",
+    "face_VT_abs_resultant_lower": "epsilon_infinity^2/640000"
+  },
+  "proved_obligations": [
+    "surface_divisors_in_one_exact_ring",
+    "angular_divisor_reduction",
+    "norm_discriminant_factorization",
+    "polar_pullback_factorization",
+    "norm_polar_resultant_factorization",
+    "relative_endpoint_noncollision",
+    "four_quadrant_boundary_face_clearance",
+    "curve_marked_divisor_equivalence",
+    "both_corridor_parameter_nonvanishing",
+    "positive_exact_bound_transfer",
+    "refined_Gauss_Manin_representative_existence",
+    "native_surface_transport_isotopy",
+    "upper_lower_lateral_binding"
+  ],
+  "retired_blocker": "SurfaceSweepClearanceUnproved for the two certified corridors on S_Z^nat",
+  "retained_refusals": [
+    "OutsideNativeSurfaceImage",
+    "WholeSurfaceScopeUnproved",
+    "SurfaceRouteAdmissibilityMissing"
+  ],
+  "theorem_artifact": {
+    "path": "DBP_NATIVE_SURFACE_SWEEP_CLEARANCE_THEOREM_v1.0.md",
+    "sha256": "8f59e6641a9d7d588d284c3570695b43ebf7f77abd395beef6af2c1c6e0a3ef7"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "schema_id": "cella.continuation.pathfinder_validity_adequacy_matrix",
+  "schema_version": "1.0",
+  "gate": "engine/tests/gate_continuation_pf0.py",
+  "assertions_passed": 58,
+  "clean_process_replays": 2,
+  "cases": [
+    {"class": "admitted", "count": 6, "expected": "ValidPlan", "observed": "ValidPlan", "deterministic": true},
+    {"class": "wrong adapter or version", "count": 2, "expected": "UnsupportedRequest", "observed": "UnsupportedRequest"},
+    {"class": "wrong target", "count": 1, "expected": "UnsupportedRequest", "observed": "UnsupportedRequest"},
+    {"class": "precision boundary neighbors", "count": 6, "expected": "UnsupportedRequest", "observed": "UnsupportedRequest"},
+    {"class": "manifest path state or ring mutation", "count": 4, "expected": "UnsupportedRequest", "observed": "UnsupportedRequest"},
+    {"class": "valid request with inadequate proof budget", "count": 1, "expected": "ValidPlan plus inadequate", "observed": "ValidPlan plus inadequate"}
+  ],
+  "plan_digests": [
+    {"target": "primary", "bits": 192, "digest": "a6d8e2cca14f78f94367f5c42cace779fa4139780d1160f5ac8ad37999f299a9"},
+    {"target": "dual_cpv", "bits": 192, "digest": "4cb53a0b4820d152186e3df388ed21d4262b1870e3115b39e862de774470fac8"},
+    {"target": "primary", "bits": 256, "digest": "9e4b4fe6b81e94f611ee88c63b0366290d94f1c444d2c118981d7886af20cd84"},
+    {"target": "dual_cpv", "bits": 256, "digest": "ada6e19757b07a2e06b06dc5dcb71cf8cd35bfd6cd52e3f82dfb64bfe1c7669a"},
+    {"target": "primary", "bits": 384, "digest": "5e7ae86cc389c908ae69bd0df70fc987a8c1ac35b1d8e0f0f325afa4fb30f45a"},
+    {"target": "dual_cpv", "bits": 384, "digest": "8b662b4e984102e61c4e971ec456d851f469ca3296b0090a64a2cb5bf0f3da35"}
+  ]
+}

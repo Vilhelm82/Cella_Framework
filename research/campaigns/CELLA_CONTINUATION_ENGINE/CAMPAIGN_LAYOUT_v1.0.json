@@ -1,0 +1,26 @@
+{
+  "schema_id": "cella.continuation.campaign_layout",
+  "schema_version": "1.0",
+  "organized_on": "2026-07-14",
+  "layout_rule": "one task or cross-stage authority class per folder",
+  "folders": [
+    {"id": "authority", "path": "00_campaign_authority", "scope": "campaign-wide reports and reconciliations"},
+    {"id": "cce0", "path": "01_cce0_recertification", "scope": "baseline recertification"},
+    {"id": "cce1", "path": "02_cce1_pathfinder", "scope": "Pathfinder recognition and admission"},
+    {"id": "cce2", "path": "03_cce2_corridors", "scope": "exact DBP corridors and clearance"},
+    {"id": "cce3", "path": "04_cce3_relative_classes", "scope": "typed relative-class continuation"},
+    {"id": "cce4", "path": "05_cce4_evaluator", "scope": "bounded evaluator"},
+    {"id": "cce5", "path": "06_cce5_connection", "scope": "relative connection and absolute calibration"},
+    {"id": "cce6", "path": "07_cce6_surface", "scope": "native surface sweep and topology expansion"},
+    {"id": "cce7", "path": "08_cce7_horizon", "scope": "horizon and static chamber"},
+    {"id": "cce8", "path": "09_cce8_role_cover", "scope": "finite role cover and naturality"},
+    {"id": "post8", "path": "10_post8_universalization", "scope": "universalization, LEAD-7, and independent R3"},
+    {"id": "schemas", "path": "shared_schemas", "scope": "request and result data contract"},
+    {"id": "handoffs", "path": "agent_tasks", "scope": "incoming task specifications"}
+  ],
+  "pathfinder_classification": {
+    "path": "research/campaigns/DBP_NATIVE_RELATIVE_PERIOD_EVALUATOR/pathfinder_m1_scout.py",
+    "status": "valid_campaign_local_scout",
+    "relationship": "not_the_primary_engine_src_pathfinder"
+  }
+}

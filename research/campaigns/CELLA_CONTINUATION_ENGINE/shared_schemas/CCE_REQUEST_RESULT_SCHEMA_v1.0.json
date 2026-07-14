@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "cella.continuation.request_result.v1",
+  "title": "CCE-1 request and outcome schema",
+  "$defs": {
+    "proofBudget": {
+      "type": "object",
+      "required": ["max_steps", "max_recurrence_order", "max_work_bits"],
+      "properties": {
+        "max_steps": {"type": "integer", "minimum": 1},
+        "max_recurrence_order": {"type": "integer", "minimum": 1},
+        "max_work_bits": {"type": "integer", "minimum": 1}
+      }
+    },
+    "request": {
+      "type": "object",
+      "required": [
+        "request_id", "adapter_id", "adapter_version", "target",
+        "requested_bits", "family_manifest_digest", "exact_path_digest",
+        "selected_state_digest", "coefficient_ring", "proof_budget"
+      ],
+      "properties": {
+        "request_id": {"type": "string", "minLength": 1},
+        "adapter_id": {"type": "string", "minLength": 1},
+        "adapter_version": {"type": "string", "minLength": 1},
+        "target": {"type": "string", "minLength": 1},
+        "requested_bits": {"type": "integer", "minimum": 1},
+        "family_manifest_digest": {"type": "string"},
+        "exact_path_digest": {"type": "string"},
+        "selected_state_digest": {"type": "string"},
+        "coefficient_ring": {"enum": ["Z", "Z[1/2]", "Z[i]", "Z[1/2,i]"]},
+        "proof_budget": {"$ref": "#/$defs/proofBudget"}
+      }
+    },
+    "refusal": {
+      "type": "object",
+      "required": [
+        "code", "failed_obligation", "source_location",
+        "larger_budget_may_help", "new_theorem_or_adapter_required", "detail"
+      ]
+    }
+  },
+  "oneOf": [
+    {"type": "object", "required": ["request", "plan", "route_certificate", "evaluation_certificate"], "title": "CertifiedResult"},
+    {"type": "object", "required": ["request", "plan", "checkpoint", "remaining_path_digest"], "title": "CertifiedPrefix"},
+    {"type": "object", "required": ["request", "plan", "refusal"], "title": "InsufficientProofBudget"},
+    {"type": "object", "required": ["request", "refusal"], "title": "UnsupportedRequest"}
+  ]
+}
