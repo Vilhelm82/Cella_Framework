@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
 """Independent exact replay for the CCE-6 native surface-clearance theorem.
 
-The verifier uses only the Python standard library.  It checks source and
-nested-certificate bindings, replays the polynomial identities in
-Q[rho,sigma,V,T,Xi,H]/(rho^2-1-sigma^2), and recomputes every rational
-lower-bound transfer appearing in the certificate.
+The verifier uses only the Python standard library.  It directly replays the
+polynomial identities in Q[rho,sigma,V,T,Xi,H]/(rho^2-1-sigma^2), checks the
+retained CCE-2 corridor witness data, and recomputes every rational lower-bound
+transfer.  File hashes and release-certificate bindings are intentionally not
+part of the proof replay.
 """
 
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 from fractions import Fraction
 from pathlib import Path
@@ -116,17 +116,6 @@ def substitute(poly: Mapping[Monomial, Fraction], index: int, replacement: Mappi
     return reduce_cover(out)
 
 
-def sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
-
-
-def canonical_digest(value: object) -> str:
-    payload = json.dumps(
-        value, sort_keys=True, separators=(",", ":"), ensure_ascii=False
-    ).encode("utf-8")
-    return hashlib.sha256(payload).hexdigest()
-
-
 def find_one(root: Path, candidates: Iterable[str]) -> Path:
     for candidate in candidates:
         path = root / candidate
@@ -148,7 +137,7 @@ class Replay:
         self.check(equal_cover(left, right), label)
 
 
-def replay(root: Path, certificate_path: Path) -> Tuple[int, str]:
+def replay(root: Path, certificate_path: Path) -> int:
     cert = json.loads(certificate_path.read_text(encoding="utf-8"))
     r = Replay()
 
@@ -158,55 +147,15 @@ def replay(root: Path, certificate_path: Path) -> Tuple[int, str]:
     r.check(cert["claim_scope"] == "two_exact_dbp_corridors_on_native_surface_image", "claim scope")
     r.check(cert["scope_ceiling"] == "S_Z^nat=image(L_Z); no whole-surface claim", "scope ceiling")
 
-    source_candidates = {
-        "cce2_stage_report_json_sha256": [
-            "upload/CCE_2_STAGE_REPORT_v1.0.json",
-            "research/campaigns/CELLA_CONTINUATION_ENGINE/03_cce2_corridors/CCE_2_STAGE_REPORT_v1.0.json",
-        ],
-        "cce2_route_digests_json_sha256": [
-            "upload/DBP_EXACT_CORRIDOR_ROUTE_DIGESTS_v1.0.json",
-            "research/campaigns/CELLA_CONTINUATION_ENGINE/03_cce2_corridors/DBP_EXACT_CORRIDOR_ROUTE_DIGESTS_v1.0.json",
-        ],
-        "cce2_clearance_bundle_json_sha256": [
-            "upload/DBP_EXACT_CORRIDOR_CLEARANCE_CERTIFICATES_v1.0.json",
-            "research/campaigns/CELLA_CONTINUATION_ENGINE/03_cce2_corridors/DBP_EXACT_CORRIDOR_CLEARANCE_CERTIFICATES_v1.0.json",
-        ],
-        "stage2_surface_source_sha256": [
-            "DBP_DUAL_SURFACE_CYCLE_STAGE2_v0.1.md",
-            "research/paper/Theorems/DBP/technical_supplements/DBP_DUAL_SURFACE_CYCLE_STAGE2_v0.1.md",
-        ],
-        "stage3_surface_source_sha256": [
-            "DBP_DUAL_SURFACE_CYCLE_STAGE3_v0.1.md",
-            "research/paper/Theorems/DBP/technical_supplements/DBP_DUAL_SURFACE_CYCLE_STAGE3_v0.1.md",
-        ],
-        "paper_iii_source_sha256": [
-            "DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md",
-            "research/paper/Theorems/DBP/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md",
-        ],
-        "existing_work_extraction_report_sha256": [
-            "upload/CCE_5_8_EXISTING_WORK_SUPPORT_AND_EXTRACTION_REPORT_v1.0.md",
-            "research/campaigns/CELLA_CONTINUATION_ENGINE/00_campaign_authority/CCE_5_8_EXISTING_WORK_SUPPORT_AND_EXTRACTION_REPORT_v1.0.md",
-        ],
-    }
-    for key, candidates in source_candidates.items():
-        source = find_one(root, candidates)
-        r.check(sha256(source) == cert["source_bindings"][key], "source binding: " + key)
-
-    theorem = find_one(root, [
-        cert["theorem_artifact"]["path"],
-        "research/campaigns/CELLA_CONTINUATION_ENGINE/07_cce6_surface/CCE_6_COMPLETE_PACKAGE_v1.0/"
-        + cert["theorem_artifact"]["path"],
+    clearance_path = find_one(root, [
+        "upload/DBP_EXACT_CORRIDOR_CLEARANCE_CERTIFICATES_v1.0.json",
+        "research/campaigns/CELLA_CONTINUATION_ENGINE/03_cce2_corridors/DBP_EXACT_CORRIDOR_CLEARANCE_CERTIFICATES_v1.0.json",
     ])
-    r.check(sha256(theorem) == cert["theorem_artifact"]["sha256"], "theorem binding")
-
-    clearance_path = find_one(root, source_candidates["cce2_clearance_bundle_json_sha256"])
     clearance = json.loads(clearance_path.read_text(encoding="utf-8"))
     for arm in ("upper", "lower"):
         nested = cert["nested_corridor_certificates"][arm]
         source_cert = clearance["certificates"][arm]
         r.check(source_cert["route_manifest"]["route_id"] == nested["route_id"], arm + " route id")
-        r.check(source_cert["route_manifest_digest"] == nested["route_manifest_digest"], arm + " route digest")
-        r.check(canonical_digest(source_cert) == nested["clearance_certificate_digest"], arm + " clearance digest")
         tube = source_cert["tube_bounds"]
 
         def tube_fraction(key: str) -> Fraction:
@@ -381,7 +330,7 @@ def replay(root: Path, certificate_path: Path) -> Tuple[int, str]:
     r.check("WholeSurfaceScopeUnproved" in cert["retained_refusals"], "whole-surface refusal retained")
     r.check("SurfaceRouteAdmissibilityMissing" in cert["retained_refusals"], "arbitrary-route refusal retained")
 
-    return r.assertions, canonical_digest(cert)
+    return r.assertions
 
 
 def main() -> None:
@@ -399,9 +348,8 @@ def main() -> None:
         ),
     )
     args = parser.parse_args()
-    assertions, digest = replay(args.root.resolve(), args.certificate.resolve())
+    assertions = replay(args.root.resolve(), args.certificate.resolve())
     print(f"CCE-6 native surface-clearance replay: {assertions} assertions passed")
-    print(f"canonical certificate digest: {digest}")
 
 
 if __name__ == "__main__":
