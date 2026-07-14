@@ -17,6 +17,7 @@ __all__ = [
 
 # Modules holding corpus-derived providers; each exposes a PROVIDERS tuple.
 _CORPUS_PROVIDER_MODULES: tuple[str, ...] = (
+    "dbp_native",
     "rewrite",
     "triangular",
     "complete_intersection",

@@ -350,6 +350,51 @@ witnessed, the refusal names the isotropic channel; vocabulary grown 7 → 8 (`g
 count assertion updated, stdout pin `3775a7fb` invariant per P9; `gate_10` re-pinned
 `372a7f54`); certified `tests/gate_12.py`, byte-stable ×2 (`adf6316f`).**
 
+## A-011 — Weighted Laurent-jet curvature proof for variable-transverse diagonal germs
+
+**Origin:**
+`research/campaigns/CELLA_CONTINUATION_ENGINE/10_post8_universalization/LEAD7_VARIABLE_TRANSVERSE_WEIGHTED_JET_THEOREM_v1.0.md`.
+Reference only; the load-bearing derivation is replayed in this repository.
+**Need:** the local-curvature layer uses order-three generic-collapse and order-four
+reflection-face laws.  The existing constant-amplitude derivations did not by themselves
+show that arbitrary dependence of the metric coefficients on transverse coordinates
+leaves the leading Laurent coefficients unchanged.  A full global Ricci expansion is
+too expensive to be a practical replay and obscures which terms can actually contribute.
+**Criterion:** exact symbolic coefficients; arbitrary transverse coefficient functions;
+an explicit valuation argument excluding irrelevant terms before expansion; no floating
+verdict path; bounded replay cost; and an exact statement of the diagonal-germ scope.
+**Alternatives and why each loses:**
+- *Full global SymPy curvature expansion* — mathematically capable but operationally
+  dominated: it constructs all Christoffel/Ricci terms before discovering that nearly all
+  cannot reach the target valuations, ran for hours without a result, and has no usable
+  checkpoint boundary.
+- *Pathfinder local-germ route alone* — selects the correct reduced law but deliberately
+  does not execute the host curvature calculation; its external proof obligation remains
+  undisclosed unless this derivation is supplied.
+- *Constant transverse coefficients* — proves a strictly smaller statement and cannot
+  exclude hidden transverse-derivative contributions.
+- *A prose valuation argument without replay* — explains the mechanism but does not
+  independently check the truncated Christoffel and Ricci account.
+The finite Laurent-jet construction is the bounded derivable alternative: transverse
+coefficients remain arbitrary functions of `(y,z)`, while only exponents capable of
+feeding `x^-3` or `x^-4` survive.
+**Displacement:** an exact proof with strictly larger scope (in particular an off-diagonal
+tensor jet under active role recharting) at comparable or lower replay cost, or a certified
+counterexample inside the stated diagonal-germ hypotheses.
+**Obligations: DISCHARGED 2026-07-15.**
+`research/verification/lead7_variable_transverse_weighted_jet.py` was run twice from
+fresh Python processes with byte-identical output.  It invokes the retained campaign
+derivation at
+`research/campaigns/CELLA_CONTINUATION_ENGINE/10_post8_universalization/verify_lead7_variable_transverse_weighted_jet.py`.
+Each run passed six
+exact assertions: the generic coefficient
+`(P1/P0 + R1/R0)/A2`, the reflection coefficient `-14/B`, absence of transverse
+derivative atoms in both coefficients, and absence of more singular terms.  The written
+valuation proof is
+`LEAD7_VARIABLE_TRANSVERSE_WEIGHTED_JET_THEOREM_v1.0.md`.
+**Status: ESTABLISHED — exact diagonal local-germ scope.  Full off-diagonal role-rechart
+curvature covariance is explicitly outside this admission and remains open.**
+
 ---
 
 *Ledger discipline: append-only; displaced records stay visible with successors named.

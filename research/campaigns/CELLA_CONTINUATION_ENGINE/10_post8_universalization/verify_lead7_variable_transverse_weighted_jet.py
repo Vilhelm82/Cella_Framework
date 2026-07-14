@@ -27,7 +27,6 @@ Reflection face:
 from __future__ import annotations
 
 from dataclasses import dataclass
-import time
 
 import sympy as sp
 
@@ -151,7 +150,6 @@ def check(label: str, condition: bool) -> None:
 
 
 def main() -> None:
-    started = time.perf_counter()
     y, z = sp.symbols("y z", real=True)
 
     A2 = sp.Function("A2")(y, z)
@@ -195,7 +193,7 @@ def main() -> None:
 
     print("generic coefficient:", generic_lead)
     print("reflection coefficient:", reflection_lead)
-    print(f"LEAD7 weighted-local-jet audit: 6 assertions passed in {time.perf_counter() - started:.3f}s")
+    print("LEAD7 weighted-local-jet audit: 6 assertions passed")
 
 
 if __name__ == "__main__":
