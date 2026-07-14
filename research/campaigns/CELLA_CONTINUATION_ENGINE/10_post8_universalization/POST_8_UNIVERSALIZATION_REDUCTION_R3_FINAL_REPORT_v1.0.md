@@ -168,14 +168,13 @@ contain:
 - a general parity-fixed (m(m+5)) normal form.
 
 This materially supersedes the old handoff's description of LEAD7 as having
-no later proof artifacts.  It does not automatically prove rational role
-rechart covariance: an off-diagonal tensor pullback and curvature replay are
-still required.  A dedicated symbolic-function Laurent audit was launched to
-check that arbitrary transverse derivatives do not change the claimed
-leading coefficients.  Until that full symbolic replay returns cleanly, the
-variable-transverse statement in precisely that generality remains
-`ACTIVE_PROOF`; the constant-amplitude theorem and the existing exact Kerr--
-Newman coefficient certificates remain promoted on their proved domains.
+no later proof artifacts.  The arbitrary-transverse diagonal-germ extension
+is now `PROMOTED`: a weighted local-jet proof computes only terms capable of
+contributing to the leading Laurent orders and proves
+\([x^{-3}]R=(P_1/P_0+R_1/R_0)/A_2\) and
+\([x^{-4}]R=-14/B\), with no transverse derivative atoms.  This still does
+not prove rational role-rechart covariance: an off-diagonal tensor pullback
+and curvature replay are required separately.
 
 ## 5. Closure-operation ledger
 
@@ -248,6 +247,12 @@ Newman coefficient certificates remain promoted on their proved domains.
   Laurent audit was inside `verify_lead7_variable_transverse_laurent.py`.
   Neither unfinished result is used by a promoted claim; both were left
   running rather than killed or converted into a timeout verdict.
+- Subsequent resolution: the old Test-8 sweep was identified as redundant
+  with the retained canonical graph-normalized dump.  The variable-transverse
+  obligation was closed independently by
+  `verify_lead7_variable_transverse_weighted_jet.py`, which uses finite Laurent
+  jets and passed six exact assertions in 1.257 seconds.  The result is stated
+  in `LEAD7_VARIABLE_TRANSVERSE_WEIGHTED_JET_THEOREM_v1.0.md`.
 
 ## 8. Release artifacts
 

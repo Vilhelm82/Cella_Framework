@@ -32,6 +32,7 @@ one task folder; do not search the former flat root for stage artifacts.
 - CCE-6 topology expansion: `07_cce6_surface/verify_cce6_whole_surface_topology.py`
 - Post-8 direct mathematics: `10_post8_universalization/verify_post8_promoted_bundle.py`
 - LEAD-7 symbolic expansion: `10_post8_universalization/verify_lead7_variable_transverse_laurent.py`
+- LEAD-7 weighted local-jet proof: `10_post8_universalization/verify_lead7_variable_transverse_weighted_jet.py`
 
 Run engine-backed replays from the repository root with
 `PYTHONPATH=engine/src`. The supplied CCE-6 package accepts `--root` when a

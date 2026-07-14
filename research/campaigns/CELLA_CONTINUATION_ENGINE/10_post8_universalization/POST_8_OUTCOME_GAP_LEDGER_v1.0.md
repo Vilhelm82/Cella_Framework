@@ -22,6 +22,7 @@
 | P8-18 | `ACTIVE_PROOF` | Three-way coherence; waits specifically on the two DBP functors, not on R3 construction |
 | P8-19 | `REFUTED` | Projected eliminant discriminant is a complete ramification oracle |
 | P8-20 | `REFUTED` | Certified Pathfinder plan automatically proves executor adequacy |
+| P8-21 | `PROMOTED` | LEAD7 arbitrary-transverse diagonal germs: weighted Laurent-jet proof gives the exact order-three and order-four coefficients with no transverse derivative contribution |
 
 There are no `BLOCKED` items.  Every surviving item names the exact next
 mathematical or certificate object rather than a generic future-work label.
