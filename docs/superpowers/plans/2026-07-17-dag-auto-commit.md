@@ -92,6 +92,6 @@ Run the auto-commit gate, DAG service gate and DAG MCP gate in an environment wi
 
 Run `python3 -m compileall -q engine/src/cella` and live DAG file verification.
 
-- [ ] **Step 4: Commit and publish**
+- [x] **Step 4: Commit and publish**
 
 Commit the implementation and plan, push `main`, fetch `origin`, and require `git rev-list --left-right --count HEAD...origin/main` to print `0 0`.
