@@ -1,0 +1,202 @@
+# WARP Stage-0 Recon — command transcript (deterministic, no network)
+# run 2026-06-14T09:22:38Z on branch main @ dab02b0
+
+## CMD1: grep -rn projective_ratio|ProjectiveRatio|PROJECTIVE_RATIO src + LAYER_MANIFEST
+src/lloyd_v4/core/status.py:111:class ProjectiveRatioStatus(StrEnum):
+src/lloyd_v4/core/status.py:281:    | ProjectiveRatioStatus
+src/lloyd_v4/primitives/__init__.py:36:from .projective_ratio import (
+src/lloyd_v4/primitives/__init__.py:37:    PROJECTIVE_RATIO_PROTOCOL,
+src/lloyd_v4/primitives/__init__.py:38:    PROJECTIVE_RATIO_SCALARIZATION_PROTOCOL,
+src/lloyd_v4/primitives/__init__.py:39:    PROJECTIVE_RATIO_SCALARIZATION_TRANSITION_RULE,
+src/lloyd_v4/primitives/__init__.py:40:    ProjectiveRatioResult,
+src/lloyd_v4/primitives/__init__.py:41:    ProjectiveRatioValue,
+src/lloyd_v4/primitives/__init__.py:42:    projective_ratio,
+src/lloyd_v4/primitives/__init__.py:43:    scalarize_projective_ratio,
+src/lloyd_v4/primitives/__init__.py:80:    "PROJECTIVE_RATIO_PROTOCOL",
+src/lloyd_v4/primitives/__init__.py:81:    "PROJECTIVE_RATIO_SCALARIZATION_PROTOCOL",
+src/lloyd_v4/primitives/__init__.py:82:    "PROJECTIVE_RATIO_SCALARIZATION_TRANSITION_RULE",
+src/lloyd_v4/primitives/__init__.py:83:    "ProjectiveRatioResult",
+src/lloyd_v4/primitives/__init__.py:84:    "ProjectiveRatioValue",
+src/lloyd_v4/primitives/__init__.py:113:    "projective_ratio",
+src/lloyd_v4/primitives/__init__.py:114:    "scalarize_projective_ratio",
+src/lloyd_v4/primitives/stratified_quadratic_roots.py:16:from lloyd_v4.primitives.projective_ratio import (
+src/lloyd_v4/primitives/stratified_quadratic_roots.py:17:    ProjectiveRatioValue,
+src/lloyd_v4/primitives/stratified_quadratic_roots.py:18:    projective_ratio,
+src/lloyd_v4/primitives/stratified_quadratic_roots.py:19:    scalarize_projective_ratio,
+src/lloyd_v4/primitives/stratified_quadratic_roots.py:77:    coordinate: ProjectiveRatioValue
+src/lloyd_v4/primitives/stratified_quadratic_roots.py:110:    requires=("projective_ratio", "typed_sqrt"),
+src/lloyd_v4/primitives/stratified_quadratic_roots.py:198:    ratio = projective_ratio(
+src/lloyd_v4/primitives/stratified_quadratic_roots.py:206:    scalar = scalarize_projective_ratio(ratio)
+src/lloyd_v4/primitives/stratified_quadratic_roots.py:265:                coordinate=ProjectiveRatioValue(numerator=-b - root_span, denominator=2 * a),
+src/lloyd_v4/primitives/stratified_quadratic_roots.py:269:                coordinate=ProjectiveRatioValue(numerator=-b + root_span, denominator=2 * a),
+src/lloyd_v4/primitives/stratified_quadratic_roots.py:276:                coordinate=ProjectiveRatioValue(numerator=-b, denominator=2 * a),
+src/lloyd_v4/primitives/stratified_quadratic_roots.py:283:                coordinate=ProjectiveRatioValue(numerator=-c, denominator=b),
+src/lloyd_v4/refinery/__init__.py:6:    PROJECTIVE_RATIO_STATUS_PRESERVATION_TRANSITION_RULE,
+src/lloyd_v4/refinery/__init__.py:28:    "PROJECTIVE_RATIO_STATUS_PRESERVATION_TRANSITION_RULE",
+src/lloyd_v4/primitives/projective_ratio.py:10:from lloyd_v4.core.status import ConditioningStatus, ProjectiveRatioStatus, ProtocolStatus
+src/lloyd_v4/primitives/projective_ratio.py:15:PROJECTIVE_RATIO_SPACE = "ProjectiveRatio"
+src/lloyd_v4/primitives/projective_ratio.py:18:PROJECTIVE_RATIO_PROTOCOL = ProducerProtocol(
+src/lloyd_v4/primitives/projective_ratio.py:19:    name="projective_ratio",
+src/lloyd_v4/primitives/projective_ratio.py:22:            ProjectiveRatioStatus.FINITE_RATIO,
+src/lloyd_v4/primitives/projective_ratio.py:23:            ProjectiveRatioStatus.SIGNED_ZERO,
+src/lloyd_v4/primitives/projective_ratio.py:24:            ProjectiveRatioStatus.INFINITE_DIRECTION,
+src/lloyd_v4/primitives/projective_ratio.py:25:            ProjectiveRatioStatus.INDETERMINATE,
+src/lloyd_v4/primitives/projective_ratio.py:31:PROJECTIVE_RATIO_SCALARIZATION_PROTOCOL = ConsumerProtocol(
+src/lloyd_v4/primitives/projective_ratio.py:32:    name="projective_ratio_scalarization",
+src/lloyd_v4/primitives/projective_ratio.py:35:            ProjectiveRatioStatus.FINITE_RATIO,
+src/lloyd_v4/primitives/projective_ratio.py:36:            ProjectiveRatioStatus.SIGNED_ZERO,
+src/lloyd_v4/primitives/projective_ratio.py:45:class ProjectiveRatioValue:
+src/lloyd_v4/primitives/projective_ratio.py:58:ProjectiveRatioResult = TypedResult[ProjectiveRatioValue, ProjectiveRatioStatus]
+src/lloyd_v4/primitives/projective_ratio.py:60:PROJECTIVE_RATIO_SCALARIZATION_TRANSITION_RULE = StatusTransitionRule(
+src/lloyd_v4/primitives/projective_ratio.py:61:    rule_id="projective_ratio.scalarization",
+src/lloyd_v4/primitives/projective_ratio.py:62:    input_status_family=ProjectiveRatioStatus,
+src/lloyd_v4/primitives/projective_ratio.py:64:    input_protocol_id=PROJECTIVE_RATIO_PROTOCOL.name,
+src/lloyd_v4/primitives/projective_ratio.py:65:    output_protocol_id=PROJECTIVE_RATIO_SCALARIZATION_PROTOCOL.name,
+src/lloyd_v4/primitives/projective_ratio.py:67:        {ProjectiveRatioStatus.FINITE_RATIO, ProjectiveRatioStatus.SIGNED_ZERO}
+src/lloyd_v4/primitives/projective_ratio.py:70:        {ProjectiveRatioStatus.INFINITE_DIRECTION, ProjectiveRatioStatus.INDETERMINATE}
+src/lloyd_v4/primitives/projective_ratio.py:73:    description="ProjectiveRatio scalarization accepts finite and signed-zero strata and refuses non-scalar projective strata.",
+src/lloyd_v4/primitives/projective_ratio.py:74:    emitted_input_statuses=PROJECTIVE_RATIO_PROTOCOL.emitted_statuses,
+src/lloyd_v4/primitives/projective_ratio.py:78:def projective_ratio(
+src/lloyd_v4/primitives/projective_ratio.py:98:        value=ProjectiveRatioValue(raw_numerator, raw_denominator),
+src/lloyd_v4/primitives/projective_ratio.py:99:        space=PROJECTIVE_RATIO_SPACE,
+src/lloyd_v4/primitives/projective_ratio.py:104:            operation_id="projective_ratio",
+src/lloyd_v4/primitives/projective_ratio.py:105:            expression_path="canonical_projective_ratio",
+src/lloyd_v4/primitives/projective_ratio.py:117:def scalarize_projective_ratio(result: TypedResult) -> TypedResult:
+src/lloyd_v4/primitives/projective_ratio.py:118:    check = validate_protocol(result, PROJECTIVE_RATIO_SCALARIZATION_PROTOCOL)
+src/lloyd_v4/primitives/projective_ratio.py:120:        operation_id="projective_ratio.scalarize",
+src/lloyd_v4/primitives/projective_ratio.py:121:        expression_path="projective_ratio_scalarization",
+src/lloyd_v4/primitives/projective_ratio.py:164:def _classify(numerator: Any, denominator: Any) -> ProjectiveRatioStatus:
+src/lloyd_v4/primitives/projective_ratio.py:169:        return ProjectiveRatioStatus.INDETERMINATE
+src/lloyd_v4/primitives/projective_ratio.py:171:        return ProjectiveRatioStatus.INFINITE_DIRECTION
+src/lloyd_v4/primitives/projective_ratio.py:173:        return ProjectiveRatioStatus.SIGNED_ZERO
+src/lloyd_v4/primitives/projective_ratio.py:174:    return ProjectiveRatioStatus.FINITE_RATIO
+src/lloyd_v4/primitives/projective_ratio.py:177:def _validity_for_status(status: ProjectiveRatioStatus) -> Validity:
+src/lloyd_v4/primitives/projective_ratio.py:178:    if status in {ProjectiveRatioStatus.FINITE_RATIO, ProjectiveRatioStatus.SIGNED_ZERO}:
+src/lloyd_v4/primitives/projective_ratio.py:180:    if status is ProjectiveRatioStatus.INFINITE_DIRECTION:
+src/lloyd_v4/primitives/projective_ratio.py:185:def _require_projective_value(result: TypedResult) -> ProjectiveRatioValue:
+src/lloyd_v4/primitives/projective_ratio.py:186:    if not isinstance(result.value, ProjectiveRatioValue):
+src/lloyd_v4/primitives/projective_ratio.py:187:        raise TypeError("expected ProjectiveRatioValue")
+src/lloyd_v4/refinery/observations.py:18:from lloyd_v4.core.status import BranchFingerprintStatus, MetrologyStatus, ProjectiveRatioStatus, ProjectionStatus, QuadraticRootStatus
+src/lloyd_v4/refinery/observations.py:29:from lloyd_v4.primitives.projective_ratio import PROJECTIVE_RATIO_PROTOCOL, ProjectiveRatioValue
+src/lloyd_v4/refinery/observations.py:105:    if isinstance(status, ProjectiveRatioStatus) and isinstance(value, ProjectiveRatioValue):
+src/lloyd_v4/refinery/observations.py:106:        return PROJECTIVE_RATIO_PROTOCOL.name
+src/lloyd_v4/refinery/observations.py:132:    if isinstance(value, ProjectiveRatioValue):
+src/lloyd_v4/refinery/observations.py:214:    if status is ProjectiveRatioStatus.FINITE_RATIO:
+src/lloyd_v4/refinery/observations.py:216:    if status is ProjectiveRatioStatus.SIGNED_ZERO:
+src/lloyd_v4/refinery/observations.py:218:    if status is ProjectiveRatioStatus.INFINITE_DIRECTION:
+src/lloyd_v4/branch/slope_flow.py:16:from lloyd_v4.primitives.projective_ratio import projective_ratio, scalarize_projective_ratio
+src/lloyd_v4/branch/slope_flow.py:247:    ratio = projective_ratio(delta_observable, delta_control)
+src/lloyd_v4/branch/slope_flow.py:248:    scalar = scalarize_projective_ratio(ratio)
+src/lloyd_v4/refinery/decision.py:17:    ProjectiveRatioStatus,
+src/lloyd_v4/refinery/decision.py:74:PROJECTIVE_RATIO_STATUS_PRESERVATION_TRANSITION_RULE = _preservation_rule(
+src/lloyd_v4/refinery/decision.py:75:    "refinery.projective_ratio.status_preservation",
+src/lloyd_v4/refinery/decision.py:76:    ProjectiveRatioStatus,
+src/lloyd_v4/refinery/decision.py:112:    ProjectiveRatioStatus: PROJECTIVE_RATIO_STATUS_PRESERVATION_TRANSITION_RULE,
+src/lloyd_v4/refinery/decision.py:419:    if reference.status_family == "ProjectiveRatioStatus":
+src/lloyd_v4/metrology/proxy_calibration.py:13:from lloyd_v4.core.status import MetrologyStatus, ProjectiveRatioStatus, ProtocolStatus, ConditioningStatus
+src/lloyd_v4/metrology/proxy_calibration.py:16:from lloyd_v4.primitives.projective_ratio import projective_ratio, scalarize_projective_ratio
+src/lloyd_v4/metrology/proxy_calibration.py:122:    kq_projective = projective_ratio(proxy, transfer)
+src/lloyd_v4/metrology/proxy_calibration.py:123:    kq_scalar = scalarize_projective_ratio(kq_projective)
+src/lloyd_v4/metrology/proxy_calibration.py:151:            expression_path="projective_ratio_kq_calibration",
+src/lloyd_v4/metrology/proxy_calibration.py:233:def _calibration_status(status: ProjectiveRatioStatus) -> tuple[MetrologyStatus, str]:
+src/lloyd_v4/metrology/proxy_calibration.py:234:    if status is ProjectiveRatioStatus.FINITE_RATIO:
+src/lloyd_v4/metrology/proxy_calibration.py:236:    if status is ProjectiveRatioStatus.SIGNED_ZERO:
+src/lloyd_v4/metrology/proxy_calibration.py:238:    if status is ProjectiveRatioStatus.INFINITE_DIRECTION:
+Build_Docs/Architecture/LAYER_MANIFEST.md:37:- Status families: `CollectionStatus`, `ValueStatus`, `UlpStatus`, `SqrtStatus`, `ProjectiveRatioStatus`, `QuadraticRootStatus`, `TransferStatus`, `SlopeStatus`.
+Build_Docs/Architecture/LAYER_MANIFEST.md:38:- Value types: `TypedCollectionValue`, `TypedCollectionResult`, `TypedValueValue`, `TypedValueResult`, `TypedUlpValue`, `TypedUlpResult`, `TypedSqrtValue`, `TypedSqrtResult`, `ProjectiveRatioValue`, `ProjectiveRatioResult`, `QuadraticCoefficients`, `QuadraticRootCoordinate`, `StratifiedQuadraticRootValue`, `QuadraticRootStateResult`, `TransferObservation`, `TransferObservationResult`, `LogLogSlopeObservation`, `LogLogSlopeResult`.
+Build_Docs/Architecture/LAYER_MANIFEST.md:39:- Protocol types: `NON_EMPTY_TYPED_COLLECTION_PROTOCOL`, `NON_NULL_TYPED_VALUE_PROTOCOL`, `TYPED_COLLECTION_PROTOCOL`, `TYPED_VALUE_PROTOCOL`, `TYPED_ULP_PROTOCOL`, `FINITE_TYPED_ULP_PROTOCOL`, `TYPED_SQRT_PROTOCOL`, `FINITE_TYPED_SQRT_PROTOCOL`, `PROJECTIVE_RATIO_PROTOCOL`, `PROJECTIVE_RATIO_SCALARIZATION_PROTOCOL`, `STRATIFIED_QUADRATIC_ROOTS_PROTOCOL`, `QUADRATIC_ROOT_SELECTION_PROTOCOL`, `TYPED_FINITE_DIFFERENCE_PROTOCOL`, `TRANSFER_OBSERVATION_CONSUMER_PROTOCOL`, `TYPED_LOG_LOG_SLOPE_PROTOCOL`, `LOG_LOG_SLOPE_CONSUMER_PROTOCOL`.
+Build_Docs/Architecture/LAYER_MANIFEST.md:40:- Transition types: `PROJECTIVE_RATIO_SCALARIZATION_TRANSITION_RULE`, `QUADRATIC_ROOT_SELECTION_TRANSITION_RULE`.
+Build_Docs/Architecture/LAYER_MANIFEST.md:41:- Errors and utilities: `PROJECTIVE_RATIO_SPACE`, `QUADRATIC_ROOT_SPACE`, `SCALAR_SPACE`, `BRANCHES_BY_STATUS`, `TRANSFER_SPACE`, `LOG_LOG_SLOPE_SPACE`.
+Build_Docs/Architecture/LAYER_MANIFEST.md:42:- Operations: `typed_collection`, `typed_value`, `typed_ulp`, `typed_sqrt`, `projective_ratio`, `scalarize_projective_ratio`, `stratified_quadratic_roots`, `select_quadratic_root`, `typed_finite_difference`, `typed_log_log_slope`.
+Build_Docs/Architecture/LAYER_MANIFEST.md:43:- Calibrated primitive operations: `typed_collection`, `typed_value`, `typed_ulp`, `typed_sqrt`, `projective_ratio`, `stratified_quadratic_roots`, `typed_finite_difference`.
+Build_Docs/Architecture/LAYER_MANIFEST.md:44:- Internal operations: `projective_ratio.scalarize`, `stratified_quadratic_roots.select`, `typed_log_log_slope`.
+Build_Docs/Architecture/LAYER_MANIFEST.md:45:- All exports: `FINITE_TYPED_SQRT_PROTOCOL`, `FINITE_TYPED_ULP_PROTOCOL`, `LOG_LOG_SLOPE_CONSUMER_PROTOCOL`, `LOG_LOG_SLOPE_SPACE`, `LogLogSlopeObservation`, `LogLogSlopeResult`, `NON_EMPTY_TYPED_COLLECTION_PROTOCOL`, `NON_NULL_TYPED_VALUE_PROTOCOL`, `PROJECTIVE_RATIO_PROTOCOL`, `PROJECTIVE_RATIO_SCALARIZATION_PROTOCOL`, `PROJECTIVE_RATIO_SCALARIZATION_TRANSITION_RULE`, `ProjectiveRatioResult`, `ProjectiveRatioValue`, `QUADRATIC_ROOT_SELECTION_PROTOCOL`, `QUADRATIC_ROOT_SELECTION_TRANSITION_RULE`, `QuadraticCoefficients`, `QuadraticRootCoordinate`, `QuadraticRootStateResult`, `STRATIFIED_QUADRATIC_ROOTS_PROTOCOL`, `StratifiedQuadraticRootValue`, `TRANSFER_OBSERVATION_CONSUMER_PROTOCOL`, `TRANSFER_SPACE`, `TYPED_COLLECTION_PROTOCOL`, `TYPED_FINITE_DIFFERENCE_PROTOCOL`, `TYPED_LOG_LOG_SLOPE_PROTOCOL`, `TYPED_SQRT_PROTOCOL`, `TYPED_ULP_PROTOCOL`, `TYPED_VALUE_PROTOCOL`, `TransferObservation`, `TransferObservationResult`, `TypedCollectionResult`, `TypedCollectionValue`, `TypedSqrtResult`, `TypedSqrtValue`, `TypedUlpResult`, `TypedUlpValue`, `TypedValueResult`, `TypedValueValue`, `projective_ratio`, `scalarize_projective_ratio`, `select_quadratic_root`, `stratified_quadratic_roots`, `typed_collection`, `typed_finite_difference`, `typed_log_log_slope`, `typed_sqrt`, `typed_ulp`, `typed_value`.
+Build_Docs/Architecture/LAYER_MANIFEST.md:150:- Transition types: `PROJECTIVE_RATIO_STATUS_PRESERVATION_TRANSITION_RULE`, `QUADRATIC_ROOT_STATUS_PRESERVATION_TRANSITION_RULE`, `PROJECTION_STATUS_PRESERVATION_TRANSITION_RULE`, `METROLOGY_STATUS_PRESERVATION_TRANSITION_RULE`, `BRANCH_FINGERPRINT_STATUS_PRESERVATION_TRANSITION_RULE`, `REFINERY_REQUIRE_ACCEPTED_TRANSITION_RULE`.
+Build_Docs/Architecture/LAYER_MANIFEST.md:155:- All exports: `BRANCH_FINGERPRINT_STATUS_PRESERVATION_TRANSITION_RULE`, `DEFAULT_SLAG_DIMENSIONS`, `METROLOGY_STATUS_PRESERVATION_TRANSITION_RULE`, `PROJECTION_STATUS_PRESERVATION_TRANSITION_RULE`, `PROJECTIVE_RATIO_STATUS_PRESERVATION_TRANSITION_RULE`, `QUADRATIC_ROOT_STATUS_PRESERVATION_TRANSITION_RULE`, `REFINERY_ACCEPTED_REWRITE_PROTOCOL`, `REFINERY_DECISION_PROTOCOL`, `REFINERY_OBSERVATION_PROTOCOL`, `REFINERY_REQUIRE_ACCEPTED_TRANSITION_RULE`, `RefineryDecisionResult`, `RefineryDecisionValue`, `RefineryObservation`, `RefineryScenarioComparison`, `SlagComparison`, `SlagVector`, `TypedResultSnapshot`, `_STATUS_PRESERVATION_RULES`, `compare_refinery_scenario`, `compute_slag_vector`, `evaluate_rewrite_candidate`, `require_accepted_rewrite`, `snapshot_typed_result`.
+
+## CMD2: grep -rni mobius|möbius|fractional.linear|PGL|projective.*action|act_on src
+src/lloyd_v4/evals/bigraded_jet.py:9:rounding residue, composed by the error-free-transformation laws mapped in
+src/lloyd_v4/evals/cradle_arm_m/make_prereg_stage_a.py:33:             "INDEPENDENT transformed-tree path (commuted operands + "
+src/lloyd_v4/evals/cradle_arm_m/make_prereg_stage_a.py:74:    "referee": "independent transformed-tree exact-Q path (commuted "
+src/lloyd_v4/evals/cradle_arm_m/make_prereg_stage_a.py:100:def transform(e):
+src/lloyd_v4/evals/cradle_arm_m/make_prereg_stage_a.py:106:        base = transform(e.children[0])
+src/lloyd_v4/evals/cradle_arm_m/make_prereg_stage_a.py:112:        return MExpr(e.head, children=(transform(e.children[1]),
+src/lloyd_v4/evals/cradle_arm_m/make_prereg_stage_a.py:113:                                       transform(e.children[0])))
+src/lloyd_v4/evals/cradle_arm_m/make_prereg_stage_a.py:116:                     children=tuple(transform(k) for k in e.children))
+src/lloyd_v4/evals/cradle_arm_m/make_prereg_stage_a.py:124:    return eval_q(transform(parse_mexpr(sexpr)), full)
+src/lloyd_v4/evals/cradle_arm_m/make_prereg_stage_a.py:191:    # dry-run 3: refusal probes typed; transform really transforms
+src/lloyd_v4/evals/cradle_arm_m/make_prereg_stage_a.py:203:    t = transform(parse_mexpr("(pow x 3)"))
+src/lloyd_v4/evals/cradle_arm_m/lanes_m.py:27:transformed equivalent tree: commuted operands + pow expanded to
+src/lloyd_v4/evals/cradle_arm_m/run_stage_a.py:57:             "INDEPENDENT transformed-tree path (commuted operands + "
+src/lloyd_v4/evals/cradle_arm_m/make_prereg_stage_b.py:45:             "independent transformed-tree referee sample exactly in "
+src/lloyd_v4/evals/cradle_arm_m/make_prereg_stage_b.py:91:    "referee": "independent transformed-tree exact-Q samples; the "
+src/lloyd_v4/evals/cradle_arm_m/run_stage_b.py:50:             "independent transformed-tree referee sample exactly in "
+src/lloyd_v4/evals/coupling_holonomy/finite_precision.py:6:computes the holonomy in float64 carrying an EXACT error-free-transform
+src/lloyd_v4/evals/cradle_arm_m/run_stage_e.py:28:from lloyd_v4.evals.cradle_arm_m.make_prereg_stage_a import transform
+src/lloyd_v4/evals/cradle_arm_m/run_stage_e.py:55:             "independent transformed-tree path (F and J both) with "
+src/lloyd_v4/evals/cradle_arm_m/run_stage_e.py:142:        t_exprs = [transform(e) for e in exprs]
+src/lloyd_v4/evals/cradle_arm_m/make_prereg_stage_e.py:27:             "independent transformed-tree path (F and J both) with "
+src/lloyd_v4/evals/cradle_arm_m/make_prereg_stage_e.py:91:    "referee": "transformed-tree re-walk (F and J) for geometry; "
+src/lloyd_v4/evals/coupling_holonomy/holonomy.py:57:    fn_transformed: Callable[[F, F], F]  # commuted / re-associated, exact-equal
+src/lloyd_v4/evals/coupling_holonomy/holonomy.py:61:         transformed: bool = False) -> F:
+src/lloyd_v4/evals/coupling_holonomy/holonomy.py:64:    return (spec.fn_transformed if transformed else spec.fn)(x, y)
+src/lloyd_v4/evals/coupling_holonomy/holonomy.py:97:        return _obs(spec, X, Y, a, b, transformed=True)
+src/lloyd_v4/evals/coupling_holonomy/make_prereg_stage_a.py:74:    """TRUE recomputed through the transformed (commuted) combine - an
+src/lloyd_v4/evals/coupling_holonomy/make_prereg_stage_a.py:77:    return spec.fn_transformed(X, Y)
+src/lloyd_v4/evals/coupling_holonomy/symbolic.py:199:                              (lambda fn, k: (lambda a, b: fn(a, b) + k))(spec.fn_transformed, c))
+
+## CMD4: grep AtomKind/LeafKind members in src
+src/lloyd_v4/primitives/log_eval.py:3:The per-function evaluator for the CONSTRUCT_TO_TOLERANCE atom ``log``. It is the *easy,
+src/lloyd_v4/primitives/log_eval.py:8:with a *proven* series-remainder bound. That is exactly what CONSTRUCT_TO_TOLERANCE means, and it
+src/lloyd_v4/primitives/exp_eval.py:3:The per-function evaluator for the CONSTRUCT_TO_TOLERANCE atom ``exp``, in the same shape as
+src/lloyd_v4/core/binding.py:19:class LeafKind(StrEnum):
+src/lloyd_v4/core/binding.py:33:class AtomKind(StrEnum):
+src/lloyd_v4/core/binding.py:36:    FINITE_EXACT_ALGEBRAIC -- the operation has an IEEE 754-mandated correctly-rounded definition
+src/lloyd_v4/core/binding.py:40:    CONSTRUCT_TO_TOLERANCE -- a limit, not a finite composition (transcendentals: exp/log, the
+src/lloyd_v4/core/binding.py:43:    NOT_ATOM               -- the binding is a composition, not an atom (default).
+src/lloyd_v4/core/binding.py:45:    FINITE_EXACT_ALGEBRAIC = "finite_exact_algebraic"
+src/lloyd_v4/core/binding.py:46:    CONSTRUCT_TO_TOLERANCE = "construct_to_tolerance"
+src/lloyd_v4/core/binding.py:47:    NOT_ATOM = "not_atom"
+src/lloyd_v4/core/binding.py:59:    atom_kind: AtomKind = AtomKind.NOT_ATOM
+src/lloyd_v4/primitives/typed_sqrt.py:124:    atom_kind=AtomKind.FINITE_EXACT_ALGEBRAIC,
+src/lloyd_v4/harness/required_precision.py:15:  - FINITE_EXACT_ALGEBRAIC atom (sqrt, +,-,*,/): correctly-rounded, supplies up to ``format_bits``
+src/lloyd_v4/harness/required_precision.py:17:  - CONSTRUCT_TO_TOLERANCE atom (log, exp): correctness of any returned value is unconditional, but
+src/lloyd_v4/harness/required_precision.py:114:    if atom.atom_kind == AtomKind.FINITE_EXACT_ALGEBRAIC:
+src/lloyd_v4/harness/required_precision.py:116:    if atom.atom_kind == AtomKind.CONSTRUCT_TO_TOLERANCE:
+src/lloyd_v4/harness/required_precision.py:118:    return False   # NOT_ATOM: a composition; terminality is decided at ITS leaves, not here
+src/lloyd_v4/harness/required_precision.py:122:    if (d.atom.atom_kind == AtomKind.CONSTRUCT_TO_TOLERANCE
+src/lloyd_v4/harness/required_precision.py:158:        elif (d.atom.atom_kind == AtomKind.CONSTRUCT_TO_TOLERANCE
+src/lloyd_v4/observers/typed_log.py:3:``typed_log(x, p) = typed_refine(log_eval, x, p)`` -- a named CONSTRUCT_TO_TOLERANCE constructor that
+src/lloyd_v4/observers/typed_log.py:53:    atom_kind=AtomKind.CONSTRUCT_TO_TOLERANCE,
+src/lloyd_v4/observers/typed_acos.py:3:``acos(x) = pi/2 - asin(x)``, domain ``[-1, 1]``. A CONSTRUCT_TO_TOLERANCE atom (one transcendental
+src/lloyd_v4/observers/typed_acos.py:74:    atom_kind=AtomKind.CONSTRUCT_TO_TOLERANCE,
+src/lloyd_v4/observers/typed_refine.py:5:It is the V4-honest core of the CONSTRUCT_TO_TOLERANCE atom class: the primitive *constructs and
+src/lloyd_v4/harness/refine_certificate.py:1:"""Generic P1-certificate glue for refine-to-bound CONSTRUCT_TO_TOLERANCE atoms (authoring-time).
+src/lloyd_v4/observers/typed_asin.py:3:CONSTRUCT_TO_TOLERANCE atom, domain ``[-1, 1]``. Built from asin's own power series with *rational*
+src/lloyd_v4/observers/typed_asin.py:93:    atom_kind=AtomKind.CONSTRUCT_TO_TOLERANCE,
+src/lloyd_v4/observers/typed_exp.py:3:``typed_exp(x, p) = typed_refine(exp_eval, x, p)`` -- a named CONSTRUCT_TO_TOLERANCE constructor
+src/lloyd_v4/observers/typed_exp.py:43:    atom_kind=AtomKind.CONSTRUCT_TO_TOLERANCE,
+src/lloyd_v4/observers/typed_log2.py:5:zero). A CONSTRUCT_TO_TOLERANCE atom with ``log 2`` as its internal constructed constant (as pi is
+src/lloyd_v4/observers/typed_log2.py:70:    atom_kind=AtomKind.CONSTRUCT_TO_TOLERANCE,
+src/lloyd_v4/observers/typed_tan.py:3:A *composition* (NOT_ATOM): ``tan_eval`` divides the ``sin_eval`` enclosure by the ``cos_eval``
+src/lloyd_v4/observers/typed_tan.py:77:# NOT_ATOM: a composition of the sin and cos atoms; its certificate is decided at those leaves.
+src/lloyd_v4/observers/typed_tan.py:85:    atom_kind=AtomKind.NOT_ATOM,
+src/lloyd_v4/observers/typed_atan.py:3:CONSTRUCT_TO_TOLERANCE atom. For ``|x| <= 1`` the alternating series
+src/lloyd_v4/observers/typed_atan.py:85:    atom_kind=AtomKind.CONSTRUCT_TO_TOLERANCE,
+src/lloyd_v4/observers/typed_cos.py:3:CONSTRUCT_TO_TOLERANCE atom, parallel to ``typed_sin``: rigorous 2*pi range-reduction via the
+src/lloyd_v4/observers/typed_cos.py:82:    atom_kind=AtomKind.CONSTRUCT_TO_TOLERANCE,
+src/lloyd_v4/observers/typed_sin.py:3:``sin`` is a CONSTRUCT_TO_TOLERANCE transcendental atom; pi is its internal constructed constant
+src/lloyd_v4/observers/typed_sin.py:102:    atom_kind=AtomKind.CONSTRUCT_TO_TOLERANCE,
+src/lloyd_v4/observers/typed_pow.py:4:``log_eval`` and ``exp_eval`` (hence Layer 1.5 / observers, and ``AtomKind.NOT_ATOM``). Its
+src/lloyd_v4/observers/typed_pow.py:75:# NOT_ATOM: a composition of the exp and log limit-atoms; its certificate is decided at those leaves.
+src/lloyd_v4/observers/typed_pow.py:83:    atom_kind=AtomKind.NOT_ATOM,
+
+## CMD5: grep required_precision|composition floor in src + GLOSSARY
+src/lloyd_v4/harness/required_precision.py:12:itself supply  ``bits + sum(W(k_i))``  -- the **composition floor**.
+src/lloyd_v4/harness/required_precision.py:14:Whether an atom can MEET its floor is the **decidable terminal predicate**:
+src/lloyd_v4/harness/required_precision.py:24:Decidability: this predicate is decidable for THIS restricted lattice -- a finite computation tree, a
+src/lloyd_v4/harness/required_precision.py:26:the memo's "decidable terminal predicate" keystone: yes, for the precision-certificate lattice.
+src/lloyd_v4/harness/required_precision.py:51:    PROVEN = "proven"            # every atom terminally meets its composition floor
+src/lloyd_v4/harness/required_precision.py:102:def is_terminal(atom: PrimitiveBinding, required_bits: int,
+src/lloyd_v4/harness/required_precision.py:106:    """Decidable terminal predicate for one atom against a required precision (its composition floor).
+src/lloyd_v4/harness/required_precision.py:151:            notes.append(f"{d.atom.name}: composition floor {floor} bits exceeds format "

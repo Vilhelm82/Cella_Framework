@@ -1,0 +1,53 @@
+{
+  "task_id": "grok_f1_f2_common_mode_rejection_sterbenz_dense",
+  "campaign": "paper-hardening",
+  "producer": "grok-cli",
+  "retrodiction_gate": {
+    "description": "Retest C F1-F2 cancellation on canonical 137-pt grids (max residual \u22641.11e-16, closed form, shared operand bits)",
+    "passed": true,
+    "evidence_path": "scratch/f1_f2_common_mode_rejection_sterbenz_dense/retrodiction.json"
+  },
+  "claims": [
+    {
+      "claim_id": "sterbenz_dense_f1f2_residual_floor",
+      "statement": "In an 8001-point dense sampling of the Sterbenz region (small-perturbation window near f_direct \approx 1), the F1-F2 residual after subtracting the R-independent closed form stays \le 1.11e-16 across all four fixtures, with median near zero and very low first-difference variance.",
+      "kind": "measured",
+      "status": "PARTIAL",
+      "confidence": "med",
+      "value": "max_dev_schw=1.39e-17, sr=1.11e-16, pa=5.55e-17, cbrt=5.55e-17",
+      "generating_script": "scratch/f1_f2_common_mode_rejection_sterbenz_dense/dense_sterbenz_sweep.py",
+      "raw_output": "scratch/f1_f2_common_mode_rejection_sterbenz_dense/sterbenz_dense_results.json",
+      "byte_stable": true,
+      "derivation": "scratch/f1_f2_common_mode_rejection_sterbenz_dense/derivation_common_mode.md",
+      "falsifier": "Any point in a well-defined high-sawtooth Sterbenz sub-window where |F1-F2 - closed| exceeds ~2e-16 after constant subtraction, or clear periodic structure appears in the residuals at the expected root-rounding spatial frequency.",
+      "axiom_smuggling_check": "derived from spec+axioms only"
+    },
+    {
+      "claim_id": "negative_control_contrast",
+      "statement": "On the same dense grids, F1-F4 (different root operand) shows larger maximum deviations than F1-F2 in three of four fixtures.",
+      "kind": "measured",
+      "status": "PARTIAL",
+      "confidence": "low",
+      "value": "F1-F4 max dev larger than F1-F2 in schw/sr/cbrt under current window definition",
+      "generating_script": "scratch/f1_f2_common_mode_rejection_sterbenz_dense/dense_sterbenz_sweep.py",
+      "raw_output": "scratch/f1_f2_common_mode_rejection_sterbenz_dense/sterbenz_dense_results.json",
+      "byte_stable": true,
+      "derivation": "scratch/f1_f2_common_mode_rejection_sterbenz_dense/derivation_common_mode.md",
+      "falsifier": "F1-F4 residuals on the identical dense grid are as flat as (or flatter than) F1-F2.",
+      "axiom_smuggling_check": "derived from spec+axioms only"
+    }
+  ],
+  "scope_compliance": {
+    "touched_substrate": false,
+    "touched_normative_docs": false,
+    "wrote_canonical_record": false
+  },
+  "not_established": [
+    "Whether the observed low residual floor constitutes perfect common-mode annihilation of root round-off or is still limited by the current Sterbenz window definition and sampling density.",
+    "Quantitative spectral evidence (periodogram / autocorrelation) of sawtooth absence vs presence in the best high-contrast sub-region.",
+    "Fixture-specific optimal definition of the 'worst-case sawtooth' Sterbenz sub-window.",
+    "Any substrate-level derivation of why the shared R operand produces this level of cancellation in float64.",
+    "Extension to higher densities (>>10k points) or adaptive sampling around the exact peak round-off sensitivity point per fixture."
+  ],
+  "calibration_notes": "Retrodiction gate passed cleanly on 2026-06-01. All measurements use pure stdlib + numpy float64 (no mpmath in measurement path except for oracle reference in prior Retest C). This run is research-grade / eval-layer only."
+}

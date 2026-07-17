@@ -1,0 +1,83 @@
+# Beyond the Cradle — Stage −1 Prior-Wins Audit
+
+**Date:** 2026-06-12 (machine date). **Authority:** the campaign brief's
+own §1 (`CAMPAIGN_BRIEF_BEYOND_THE_CRADLE.md` — MANDATORY prior-wins
+audit, on-repo, before any new derivation). **Standing:** audit report
+to Will's box. **Nothing is frozen; no prereg exists; no code was
+written.** The brief stays DRAFT; the §10 rulings stay reserved; the
+queue position behind the atlas close decisions is unchanged.
+
+Method per the brainstorm-stage protocol: direct reads of
+`V4_GLOSSARY.md`-adjacent sources, `LAYER_MANIFEST.md` Provides blocks,
+`HISTORICAL_RECORD.md` rows, the registers, and the source tree.
+
+---
+
+## Verdict table — the eight candidate hits
+
+| # | Candidate hit (brief §1) | Verdict | Evidence |
+|---|---|---|---|
+| 1 | Exact jet multivariate-shaped; account certification univariate | **CONFIRMED, and BETTER than expected** | `evals/exact_jet.py`: `gradient: Tuple`, `_Ctx(n_inputs)` — n-input AD. **`evals/bigraded_jet.py` is ALSO n-input** (`n_inputs` at lines 132/181/444, `n_inputs=len(vals)`). The univariate binding is (a) the certification batteries (HR131/HR132 Stage A ran univariate fixtures) and (b) the atlas's lane seam — `difference_tower/expr.py` is hard-univariate (single token `"x"`, `RATIONAL_OPS`). The gap really is certification + schema, for BOTH instruments. |
+| 2 | HR133 orbit machinery variable-count-agnostic | **CONFIRMED** | `evals/precision_flow.py`: `Phen`/`rn`/orbit extraction are per-real-number — no variable count anywhere in the law layer. The ord₂ period analyzer (`grade_b_p1` shape: orbit + shift-equality) is the reusable pattern for Arm I's LCG analyzer; the dyadic-death biconditional is the exact formal partner of CL-I2's shift-death. |
+| 3 | Plaquette-commutator fireside thread | **NO REPO ANCHOR** | `grep plaquette\|commutator` over `Build_Docs/` + `results/`: the ONLY hits are the Beyond-the-Cradle brief itself. The thread is chat-side. Implication: the brief is the first written record — Arm M Stage C cites the brief, not a prior thread; no prior win exists to consume. |
+| 4 | R9 register row constrains Arm M's claims | **CONFIRMED — WORDING SHARPER THAN THE BRIEF'S PARAPHRASE** | R9's actual core (TASKS_TO_REVISIT, 2026-06-05 updates): the **G geometric-primitive question** — "a deterministic substrate observable that is a geometric invariant *across* fixtures" — with the additive-residual-coupling shape already ruled out and the revisit line asking for "a genuine joint-coupling multi-D construction NOT laundered through a single sqrt." See tension T2 below. |
+| 5 | Complex-Newton door fenced; one stretch fixture proposed | **CONFIRMED, TENSION SURFACED** | Fence wording on-repo: `FIXTURES.md` "Deferred to manifest v2 (noted, not smuggled)"; atlas brief §8 FX-I "(real, univariate v1)"; atlas ledger anti-restart note: "do not open a separate 'Newton fractal holonomy' campaign." See tension T1. |
+| 6 | V3 as multivariate confirmation oracle | **CONFIRMED, CITATION CORRECTED** | The "14/14 at machine ε" figure is real and on-repo but it is scoreboard row **A5** (`PROBE_READINESS.md`; `Reports/v3_calibration_fixtures/closeout.md`: 21-point sweep, 4 surface families, F_val ≤ BACL grain) — a V3↔V4 cross-pipeline calibration result, NOT a K_G figure. V3's K_G itself is deliberately not reproduced (HR77) and V4's K_G question is closed-by-resolution to G2 (HR129). Cite A5 for "V3 is natively multivariate and the cross-pipeline seam works"; do not attach the number to K_G. |
+| 7 | Facet D/E/F organs as templates | **CONFIRMED (trivially)** | Built and graded this session: `instruments/probe_facet_{d,e,f}.py`, all referee-matched; the Facet-E ℚ-trajectory decomposer and Facet-F record-as-program pattern are direct templates for CL-M7 and any Arm M/I reconstruction claims. Economics datum carried forward: exact ℚ Newton ≈ 3× bits/step measured (univariate); K-M4's ℚ² + determinant-division expectation "≳3×" is plausible but must be PINNED at Stage 0, as the brief already requires. |
+| 8 | Bench annex (Throat/certificate work) emitter/checker pattern | **PATTERN ON-REPO; THE NAME IS NOT** | The emit-(form, guard, certificate) / external-checker pattern lives in `CAMPAIGN_/CERTIFIED_FORM_SYNTHESIS_DESIGN_BRIEF.md` (QUEUED in the ledger; Gappa named as candidate external cross-checker). "Throat" has no repo anchor — chat-side name only. If either arm emits certificates, cite the CFS design brief; do not cite "Throat" in frozen documents. |
+
+---
+
+## Surfaced tensions (beyond the brief's §10 — need Will's eye)
+
+- **T1 — the complex stretch fixture vs two fences.** FX-M-D's single
+  z³−1 stretch and CL-M7's "fractal-boundary fixture attributed" sit
+  inside territory double-fenced on-repo: the atlas manifest's
+  "deferred to v2, noted not smuggled" AND the ledger's "no separate
+  Newton-fractal-holonomy campaign" anti-restart note. The brief's own
+  framing ("the door itself stays fenced") is honest, but whether a
+  *new* campaign's manifest carrying one ℝ²-system fractal fixture
+  honors or breaches those fences is exactly the kind of call the
+  covenant reserves. **Recommend an explicit ruling line in §10**
+  (either bless the single stretch with a no-expansion fence, or cut
+  it to keep Arm M's first freeze friction-free).
+- **T2 — R9 scope hygiene.** Arm M's coupling fixtures (FX-M-B/C) are
+  precisely "genuine joint-coupling multi-D constructions not
+  laundered through a single sqrt" — the apparatus R9's revisit line
+  asks for. But R9's core is the **G-primitive** question, and that
+  territory is the project's documented restart-trap field (HR92–97).
+  **Recommend explicit fence text in the Arm M prereg:** Arm M builds
+  and certifies multivariate accounts; it carries NO G-claims, NO
+  cross-fixture-invariant claims; any G-test consuming Arm M apparatus
+  is its own future brief. (The brief's claim ledger already complies —
+  no CL-M row mentions G — the fence just makes it law.)
+- **T3 — FX-M-F vocabulary.** The circle-curvature bridge fixture must
+  speak G2/HR129 vocabulary (G2 as the V4-native extractor; κ as lossy
+  continuum projection — and HR129's "κ NOT univariately recoverable"
+  is explicitly a *univariate* negative, so the bivariate fixture
+  must be worded to measure, not to "search for the right invariant,"
+  which the no-K_G fence forbids).
+
+## Build-vs-grade split (the audit's §1-promised output)
+
+| Component | Standing after audit |
+|---|---|
+| Bivariate lane evaluation (Arm M Stage A) | **GRADE + SCHEMA, mostly:** `bigraded_jet` DAG lanes already n-input; needs `var_support`/`coupling_class` schema fields + bivariate certification battery. The dt-Expr seam (`eval_lane`) stays univariate and atlas-bound — do NOT lift it; it is not needed. |
+| Jet referee column | **GRADE ONLY:** n-input AD with event accounts exists (HR131). |
+| `mixed_tower` (tensor differences, commutator, 2D inversion) | **NEW BUILD** (HR134 Stage B is the template; the falling-factorial inversion generalizes by tensor product). |
+| `plaquette_probe` | **NEW BUILD** (no prior win exists — hit 3). |
+| ℚ² landing decomposer | **LIFT of `probe_facet_e`** (exact 2×2 solves new; pattern proven). |
+| Arm I ledger ops | **NEW BUILD, small** (native ℤ referee free); orbit analyzer lifts the HR133 `grade_b_p1` pattern. |
+| Arm I CL-I2 unification | **GRADE:** both laws exist on-repo (HR133 dyadic death; val₂ shift predicate is elementary); the campaign content is the *joint certification* + the HR-row note question (ruling #6). |
+
+## What this audit does NOT change
+
+The brief remains DRAFT and unfrozen; the §10 rulings (one-or-two
+campaigns, n=2 cap, names, TRIAL applicability, bitwise scope, CL-I2
+HR-note) remain reserved; the queue position behind the atlas close
+decisions is unchanged; the TRIAL-law and pin-law dependencies on
+close decisions #1/#2 are noted in the brief and confirmed real here.
+
+**Stage −1 is complete. STOP — Will's box: the eight verdicts, three
+surfaced tensions (T1–T3), and the build-vs-grade table above, ahead
+of any §10 ruling or Stage-0 freeze.**

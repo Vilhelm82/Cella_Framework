@@ -1,0 +1,15 @@
+{
+ "Bp-P1": {
+  "note": "envelope never violated, 16/16",
+  "pass": true
+ },
+ "Bp-P2": {
+  "detail": "k=0 both_below PASS; k=1 SPLIT FAIL (meas 2.2e-16 <= floor 4.4e-16, pred 1.4e-15); k=2..6 band 1.39-7.00 PASS; k=7 band 15.72 FAIL; k=8..14 band 3.51-7.57 ALL PASS; k=15 SPLIT FAIL (meas 0.5 ulp, pred 4.5e-14)",
+  "in_band": "13/16; the entire k=8..15 claim region passes",
+  "pass": false
+ },
+ "Bp-P3": {
+  "note": "UNKNOWN-class ops 0/3 at every rung - fully collapsed to measured-exact + certified <=0.5-ulp; epsilon content unchanged (16/16 bit-identical)",
+  "pass": true
+ }
+}

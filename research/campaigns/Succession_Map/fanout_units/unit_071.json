@@ -1,0 +1,45 @@
+{
+  "seq": 71,
+  "uid": "U-1474",
+  "type": "theorem",
+  "claim_status": null,
+  "label": "Expected theorem deliverable (Role-Singularity Valuation Law, n=2 seed)",
+  "path": "/home/wlloyd/Cella Framework/Evidence_Store/objects/sha256/3b/3b5e4ac6ff207c3e207691171263482f873ea8126486de58a65e03dfda565f64",
+  "already_linked_objects": [
+    {
+      "id": "OBJ:constraint-surface",
+      "label": "Constraint Surface"
+    },
+    {
+      "id": "OBJ:poleorder-r-g-dbp-at-role-boundaries",
+      "label": "PoleOrder(R[g_DBP]) at role boundaries"
+    },
+    {
+      "id": "OBJ:role-singularity-valuation-law",
+      "label": "Role-Singularity Valuation Law"
+    }
+  ],
+  "priority_candidate_pairs": [
+    {
+      "a": "OBJ:poleorder-r-g-dbp-at-role-boundaries",
+      "b": "OBJ:role-singularity-valuation-law",
+      "la": "PoleOrder(R[g_DBP]) at role boundaries",
+      "lb": "Role-Singularity Valuation Law",
+      "lift": 36.9
+    },
+    {
+      "a": "OBJ:constraint-surface",
+      "b": "OBJ:role-singularity-valuation-law",
+      "la": "Constraint Surface",
+      "lb": "Role-Singularity Valuation Law",
+      "lift": 7.38
+    },
+    {
+      "a": "OBJ:constraint-surface",
+      "b": "OBJ:poleorder-r-g-dbp-at-role-boundaries",
+      "la": "Constraint Surface",
+      "lb": "PoleOrder(R[g_DBP]) at role boundaries",
+      "lift": 2.31
+    }
+  ]
+}

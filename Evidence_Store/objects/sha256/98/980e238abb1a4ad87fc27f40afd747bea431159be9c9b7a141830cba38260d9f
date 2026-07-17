@@ -1,0 +1,262 @@
+#!/usr/bin/env python3
+"""
+Validation script for Corollary 1: Top-Down Lattice Pre-Alignment
+
+Compares "early cancellation" (classic F2 Sterbenz style) vs "late/reassociated"
+forms across the four main fixtures in the Sterbenz region.
+
+Focus: How cleanly the residual lands on an integer lattice (BACL-governed)
+when the large cancellation is performed early vs when small terms are absorbed first.
+
+All work in scratch/. No promotion to src/.
+"""
+
+import numpy as np
+from dataclasses import dataclass
+from typing import Dict, List, Tuple
+
+# =============================================================================
+# Fixture Definitions (F2 forms only, for this validation)
+# =============================================================================
+
+def schwarzschild_f2_early(r: float) -> float:
+    """Classic: (R**2 - 1) + 2/r"""
+    f = 1.0 - 2.0 / r
+    R = np.sqrt(f)
+    power = R * R
+    return (power - 1.0) + (2.0 / r)
+
+def schwarzschild_f2_late(r: float) -> float:
+    """Reassociated: R**2 + (2/r - 1)"""
+    f = 1.0 - 2.0 / r
+    R = np.sqrt(f)
+    power = R * R
+    return power + ((2.0 / r) - 1.0)
+
+def sr_f2_early(beta: float) -> float:
+    """Classic: (R**2 - 1) + beta**2"""
+    f = 1.0 - beta**2
+    R = np.sqrt(f)
+    power = R * R
+    return (power - 1.0) + (beta**2)
+
+def sr_f2_late(beta: float) -> float:
+    """Reassociated: R**2 + (beta**2 - 1)"""
+    f = 1.0 - beta**2
+    R = np.sqrt(f)
+    power = R * R
+    return power + (beta**2 - 1.0)
+
+def pure_algebraic_f2_early(x: float) -> float:
+    """Classic: (R**2 - 1) + x"""
+    f = 1.0 - x
+    R = np.sqrt(f)
+    power = R * R
+    return (power - 1.0) + x
+
+def pure_algebraic_f2_late(x: float) -> float:
+    """Reassociated: R**2 + (x - 1)"""
+    f = 1.0 - x
+    R = np.sqrt(f)
+    power = R * R
+    return power + (x - 1.0)
+
+def cbrt_f2_early(x: float) -> float:
+    """Classic: (R**3 - 1) + x"""
+    f = 1.0 - x
+    R = np.cbrt(f)
+    power = R * R * R
+    return (power - 1.0) + x
+
+def cbrt_f2_late(x: float) -> float:
+    """Reassociated: R**3 + (x - 1)"""
+    f = 1.0 - x
+    R = np.cbrt(f)
+    power = R * R * R
+    return power + (x - 1.0)
+
+# =============================================================================
+# Sterbenz Region Definitions (from existing V4 code)
+# =============================================================================
+
+def is_sterbenz_schwarzschild(r: float) -> bool:
+    """Sterbenz when r >= 4.0 for F2"""
+    return r >= 4.0
+
+def is_sterbenz_sr(beta: float) -> bool:
+    """Sterbenz when beta <= 1/sqrt(2)"""
+    return beta <= (1.0 / np.sqrt(2.0))
+
+def is_sterbenz_pure_algebraic(x: float) -> bool:
+    """Sterbenz when x <= 0.5"""
+    return x <= 0.5
+
+def is_sterbenz_cbrt(x: float) -> bool:
+    return x <= 0.5
+
+# =============================================================================
+# Analysis Helpers
+# =============================================================================
+
+def ulp_at_one() -> float:
+    """ulp(1.0) in float64"""
+    return np.spacing(1.0)
+
+def analyze_lattice(residuals: np.ndarray, ulp_ref: float, tolerance: float = 1e-10) -> Dict:
+    """
+    Analyze how close residuals are to integer multiples of ulp_ref.
+    Returns statistics on lattice cleanliness.
+    """
+    normalized = residuals / ulp_ref
+    fractional_parts = np.abs(normalized - np.round(normalized))
+    
+    is_on_lattice = fractional_parts < tolerance
+    frac_on_lattice = np.mean(is_on_lattice)
+    
+    max_abs_j = np.max(np.abs(np.round(normalized)))
+    
+    # Distribution of nearest integer multiples (for points reasonably close to lattice)
+    nearest_ints = np.round(normalized)
+    unique, counts = np.unique(nearest_ints, return_counts=True)
+    distribution = dict(zip(unique.astype(int), counts))
+    
+    return {
+        "frac_on_lattice": frac_on_lattice,
+        "max_abs_j": max_abs_j,
+        "distribution": distribution,
+        "mean_frac_error": np.mean(fractional_parts),
+        "median_frac_error": np.median(fractional_parts),
+    }
+
+# =============================================================================
+# Main Validation
+# =============================================================================
+
+def run_validation_for_fixture(
+    name: str,
+    early_func,
+    late_func,
+    sterbenz_check,
+    grid_generator,
+    n_points: int = 2001
+) -> Dict:
+    """
+    Run dense sweep in Sterbenz region and compare early vs late association.
+    """
+    print(f"\n=== {name} ===")
+    
+    # Generate dense grid in Sterbenz region
+    raw_grid = grid_generator()
+    sterbenz_mask = np.array([sterbenz_check(val) for val in raw_grid])
+    sterbenz_vals = raw_grid[sterbenz_mask]
+    
+    if len(sterbenz_vals) == 0:
+        print("  No points in Sterbenz region for this fixture.")
+        return {}
+    
+    # Take a dense subset across the Sterbenz region
+    if len(sterbenz_vals) > n_points:
+        indices = np.linspace(0, len(sterbenz_vals)-1, n_points, dtype=int)
+        sterbenz_vals = sterbenz_vals[indices]
+    
+    early_res = np.array([early_func(v) for v in sterbenz_vals])
+    late_res  = np.array([late_func(v)  for v in sterbenz_vals])
+    
+    ulp = ulp_at_one()
+    
+    early_stats = analyze_lattice(early_res, ulp)
+    late_stats  = analyze_lattice(late_res,  ulp)
+    
+    print(f"  Points in Sterbenz region analyzed: {len(sterbenz_vals)}")
+    print(f"  Early (classic F2):  {early_stats['frac_on_lattice']*100:.2f}% on lattice | max |j| = {early_stats['max_abs_j']:.0f}")
+    print(f"  Late  (reassoc):     {late_stats['frac_on_lattice']*100:.2f}% on lattice | max |j| = {late_stats['max_abs_j']:.0f}")
+    
+    return {
+        "name": name,
+        "n_points": len(sterbenz_vals),
+        "early": early_stats,
+        "late": late_stats,
+        "early_raw": early_res,
+        "late_raw": late_res,
+        "sterbenz_vals": sterbenz_vals,
+    }
+
+def main():
+    print("=== Validation of Top-Down Lattice Pre-Alignment Corollary ===\n")
+    print("Comparing early cancellation (V_n - 1) + x_term vs reassociated V_n + (x_term - 1)")
+    print("Normalized by ulp(1.0). Focus: Sterbenz region only.\n")
+    
+    results = {}
+    
+    # --- Schwarzschild ---
+    def schw_grid():
+        # Large r = far from horizon = Sterbenz region for F2
+        r_large = np.linspace(4.0, 50.0, 5000)
+        return r_large
+    
+    results["schwarzschild"] = run_validation_for_fixture(
+        "Schwarzschild (r >= 4)",
+        schwarzschild_f2_early,
+        schwarzschild_f2_late,
+        is_sterbenz_schwarzschild,
+        schw_grid
+    )
+    
+    # --- Special Relativity ---
+    def sr_grid():
+        # Small beta = Sterbenz region
+        beta_small = np.linspace(0.01, 1/np.sqrt(2), 3000)
+        return beta_small
+    
+    results["sr"] = run_validation_for_fixture(
+        "SR (beta <= 1/sqrt(2))",
+        sr_f2_early,
+        sr_f2_late,
+        is_sterbenz_sr,
+        sr_grid
+    )
+    
+    # --- Pure Algebraic ---
+    def pa_grid():
+        # Small x = Sterbenz region for F2
+        x_small = np.linspace(0.001, 0.5, 4000)
+        return x_small
+    
+    results["pure_algebraic"] = run_validation_for_fixture(
+        "Pure Algebraic (x <= 0.5)",
+        pure_algebraic_f2_early,
+        pure_algebraic_f2_late,
+        is_sterbenz_pure_algebraic,
+        pa_grid
+    )
+    
+    # --- Cube Root ---
+    def cbrt_grid():
+        x_small = np.linspace(0.001, 0.5, 4000)
+        return x_small
+    
+    results["cbrt"] = run_validation_for_fixture(
+        "Cube Root (x <= 0.5)",
+        cbrt_f2_early,
+        cbrt_f2_late,
+        is_sterbenz_cbrt,
+        cbrt_grid
+    )
+    
+    # --- Summary ---
+    print("\n" + "="*70)
+    print("SUMMARY")
+    print("="*70)
+    for name, res in results.items():
+        if res:
+            e = res["early"]
+            l = res["late"]
+            delta = l["frac_on_lattice"] - e["frac_on_lattice"]
+            print(f"{name:20s} | Late better by {delta*100:+6.2f}% points | "
+                  f"max|j| early={e['max_abs_j']:.0f} vs late={l['max_abs_j']:.0f}")
+    
+    print("\nNote: This is a first-pass validation using ulp(1.0) normalization.")
+    print("Stronger validation would also check normalization by local residual ulp.")
+
+if __name__ == "__main__":
+    main()

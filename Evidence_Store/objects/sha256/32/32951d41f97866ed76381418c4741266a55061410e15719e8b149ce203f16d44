@@ -1,0 +1,91 @@
+"""BACL composite-observable probe — fixed parameterisation.
+
+Pre-registration:
+- F1_at_f(f) = sqrt(f)**2 − f, algebraically ≡ 0.
+- Parameterised by f directly (avoids the x-crosses-1 issue in earlier draft).
+- At each f in our standard sweep, compute F1(f), F1(f+δf), and BACL grain.
+- Question: does BACL grain make sense when operands are tiny cancellation
+  residues rather than primary observables?
+"""
+import math
+
+
+def sterbenz_class(a, b):
+    abs_a = abs(a)
+    abs_b = abs(b)
+    if abs_a == 0 or abs_b == 0:
+        return "zero_operand"
+    ratio = max(abs_a, abs_b) / min(abs_a, abs_b)
+    if ratio <= 2.0:
+        if ratio <= 1.001:
+            return "tight"
+        return "marginal"
+    return "outside"
+
+
+def bacl_grain(a, b):
+    diff = a - b
+    if b == 0:
+        return {"diff": diff, "ulp_b": 0.0, "j_exact": float("inf"),
+                "j_integer": 0, "deviation": float("inf")}
+    ulp_b = math.ulp(b)
+    j_exact = diff / ulp_b
+    j_integer = int(round(j_exact))
+    deviation = j_exact - j_integer
+    return {"diff": diff, "ulp_b": ulp_b, "j_exact": j_exact,
+            "j_integer": j_integer, "deviation": deviation}
+
+
+def F1_at_f(f):
+    """pure_algebraic F1 parameterised by f directly.
+
+    F1 = R*R - f where R = sqrt(f).
+    Algebraically ≡ 0; substrate residual is float64 cancellation noise.
+    """
+    R = f ** 0.5
+    return R * R - f
+
+
+def main():
+    f_values = [10.0 ** (-2.0 - (7.0 / 11.0) * i) for i in range(12)]
+    eta = 1e-6
+
+    print("=" * 110)
+    print("PART 2 — composite observable: pure_algebraic F1 = R*R − f")
+    print("=" * 110)
+    print(f"\n  eta = {eta}\n")
+    print(f"{'f':>14}  {'F1(f)':>14}  {'F1(f+δf)':>14}  "
+          f"{'ratio':>14}  {'sterbenz':>10}  {'j_integer':>16}  {'deviation':>14}")
+    print("-" * 120)
+
+    for f in f_values:
+        delta_f = eta * f
+        F1_f = F1_at_f(f)
+        F1_f_plus = F1_at_f(f + delta_f)
+
+        if F1_f == 0 and F1_f_plus == 0:
+            print(f"{f:>14.3e}  {F1_f:>14.3e}  {F1_f_plus:>14.3e}  "
+                  f"{'both_zero':>14s}  {'n/a':>10s}  {'n/a':>16s}  {'n/a':>14s}")
+            continue
+        if F1_f == 0 or F1_f_plus == 0:
+            ratio_str = "one_zero"
+            sclass = "zero_op"
+        else:
+            ratio = max(abs(F1_f), abs(F1_f_plus)) / min(abs(F1_f), abs(F1_f_plus))
+            ratio_str = f"{ratio:.4e}"
+            sclass = sterbenz_class(F1_f_plus, F1_f)
+
+        bacl = bacl_grain(F1_f_plus, F1_f)
+        j_int = bacl["j_integer"]
+        dev = bacl["deviation"]
+        j_str = f"{j_int:>16d}"
+        if math.isfinite(dev):
+            dev_str = f"{dev:>+14.3e}"
+        else:
+            dev_str = f"{dev!s:>14s}"
+        print(f"{f:>14.3e}  {F1_f:>14.3e}  {F1_f_plus:>14.3e}  "
+              f"{ratio_str:>14s}  {sclass:>10s}  {j_str}  {dev_str}")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,199 @@
+"""Form generator v1 — derive the Fx forms instead of picking them.
+
+Proof-of-concept for the derive-don't-select campaign (substrate-invariant-search /
+layer-3-promotion Gate 2). Eval-layer, research-grade. Oracles only (Fraction, mpmath).
+
+Architecture (from the 2026-06-05 design discussion):
+  Encoding A (syntax): each form is an AST -> a unique code. We ENUMERATE codes
+    (bounded depth, atoms {R, 1, x}, ops {+,-,*}), deduped by float64 value-vector.
+  Membership: keep expressions algebraically == 0 on the surface (R^2 = 1 - x),
+    tested by exact high-precision evaluation (identity_zero, coupling-FREE).
+  Coordinate (burden): the float64 residual, scored by EVALUATION (coupling-AWARE),
+    NOT by a static per-op sum. Two scores per form:
+      - greedy_per_op : sum of |local round-off| over the chain (the "least rounding
+        per operand" heuristic Will's work shows is WRONG as a global objective).
+      - global_burden : the final residual's deviation from the integer-ulp lattice
+        (Task-031 lattice burden) -- the honest global objective.
+  Retrodiction gate: do F1/F2/F3/c2 fall out of the enumeration, and does
+    ranking-by-global pick the early-absorbing reassociation (c2) while
+    ranking-by-greedy picks something else?  (Will's finding: allow more rounding
+    early -> cleaner global result.)
+"""
+import math, struct
+from fractions import Fraction as Fr
+import mpmath as mp
+mp.mp.dps = 50
+
+# ---- AST: nested tuples ('R',)('one',)('x',) | ('+'/'-'/'*', a, b) ----
+ATOMS = [('R',), ('one',), ('x',)]
+OPS = ('+', '-', '*')
+GRID = [0.04 + i * (0.96 - 0.04) / 23 for i in range(24)]      # pure_algebraic operand grid
+
+
+def ev64(node, x):
+    R = math.sqrt(1.0 - x)
+    def go(n):
+        k = n[0]
+        if k == 'R': return R
+        if k == 'one': return 1.0
+        if k == 'x': return x
+        a, b = go(n[1]), go(n[2])
+        return a + b if k == '+' else a - b if k == '-' else a * b
+    return go(node)
+
+
+def evx(node, xm):                                            # exact (mpmath) for membership
+    R = mp.sqrt(1 - xm)
+    def go(n):
+        k = n[0]
+        if k == 'R': return R
+        if k == 'one': return mp.mpf(1)
+        if k == 'x': return xm
+        a, b = go(n[1]), go(n[2])
+        return a + b if k == '+' else a - b if k == '-' else a * b
+    return go(node)
+
+
+def valvec(node):
+    return tuple(struct.pack('>d', ev64(node, x)).hex() for x in GRID)
+
+
+def depth(node):
+    return 0 if len(node) == 1 else 1 + max(depth(node[1]), depth(node[2]))
+
+
+def ast_str(node):
+    if len(node) == 1:
+        return {'R': 'R', 'one': '1', 'x': 'x'}[node[0]]
+    return f"({ast_str(node[1])} {node[0]} {ast_str(node[2])})"
+
+
+def is_member(node):                                          # algebraic identity_zero on surface?
+    for xm in (mp.mpf('0.137'), mp.mpf('0.5'), mp.mpf('0.8123'), mp.mpf('0.291')):
+        if abs(evx(node, xm)) > mp.mpf('1e-40'):
+            return False
+    return True
+
+
+# ---- coupling-aware scoring (evaluation, NOT static per-op sum) ----
+def scores(node, x):
+    """Return (greedy_per_op_ulp, residual_float) at operand x."""
+    u = math.ulp(1.0 - x)
+    R = math.sqrt(1.0 - x)
+    greedy = Fr(0)
+    def go(n):
+        nonlocal greedy
+        k = n[0]
+        if k == 'R': return R
+        if k == 'one': return 1.0
+        if k == 'x': return x
+        a, b = go(n[1]), go(n[2])
+        fl = a + b if k == '+' else a - b if k == '-' else a * b
+        exact = (Fr(a) + Fr(b)) if k == '+' else (Fr(a) - Fr(b)) if k == '-' else (Fr(a) * Fr(b))
+        greedy += abs(exact - Fr(fl)) / Fr(u)                 # local round-off in ulp units
+        return fl
+    res = go(node)
+    return float(greedy), res
+
+
+def burden(node):
+    """Global lattice burden over the grid: max integer-residual + lattice class."""
+    greedy_tot = 0.0
+    int_res_max = 0.0
+    on_integer = 0
+    n = 0
+    for x in GRID:
+        u = math.ulp(1.0 - x)
+        g, res = scores(node, x)
+        greedy_tot += g
+        level = res / u
+        ir = abs(level - round(level))                       # deviation from integer lattice
+        int_res_max = max(int_res_max, ir)
+        if ir < 1e-9:
+            on_integer += 1
+        n += 1
+    lattice = "integer" if int_res_max < 1e-9 else ("half" if abs(int_res_max - 0.5) < 1e-9 or int_res_max <= 0.5 + 1e-9 else "non_integer")
+    return dict(greedy_per_op=round(greedy_tot, 4), global_int_residual_max=round(int_res_max, 6),
+                on_integer_frac=round(on_integer / n, 3), lattice=lattice)
+
+
+# ---- reference forms (the gate ground truth) ----
+F1 = ('-', ('*', ('R',), ('R',)), ('-', ('one',), ('x',)))            # R*R - (1 - x)
+F2 = ('+', ('-', ('*', ('R',), ('R',)), ('one',)), ('x',))            # (R*R - 1) + x
+F3 = ('-', ('R',), ('R',))                                            # R - R
+C2 = ('+', ('*', ('R',), ('R',)), ('-', ('x',), ('one',)))           # R*R + (x - 1)  (Task-031 c2)
+REFS = {"F1": F1, "F2": F2, "F3": F3, "c2_reassoc": C2}
+
+
+def main():
+    # ---- enumerate codes (Encoding A), dedup by float64 value-vector ----
+    seen = {}                  # valvec -> node
+    by_depth = {0: []}
+    for a in ATOMS:
+        seen[valvec(a)] = a; by_depth[0].append(a)
+    CAP = 120000
+    for d in range(1, 4):
+        by_depth[d] = []
+        shallow = [n for dd in range(0, d) for n in by_depth[dd]]   # depth < d
+        prev = by_depth[d - 1]
+        for a in prev:                                              # at least one operand from depth d-1
+            for b in shallow:
+                for (x, y) in ((a, b), (b, a)):
+                    for op in OPS:
+                        if len(seen) >= CAP:
+                            break
+                        node = (op, x, y)
+                        vv = valvec(node)
+                        if vv not in seen:
+                            seen[vv] = node; by_depth[d].append(node)
+        if len(seen) >= CAP:
+            break
+    total = len(seen)
+
+    # ---- membership filter: which codes are FORMS (identity_zero on surface) ----
+    members = [n for n in seen.values() if is_member(n)]
+    member_vvs = {valvec(n) for n in members}
+
+    # ---- retrodiction gate: do the known forms fall out of the free enumeration? ----
+    recovered = {name: (valvec(node) in seen) for name, node in REFS.items()}
+
+    print("=" * 80)
+    print(f"ENUMERATION  atoms {{R,1,x}} ops {{+,-,*}} depth<=3  ->  {total} deduped codes")
+    print(f"             depth histogram: " + ", ".join(f"d{d}={len(by_depth.get(d,[]))}" for d in range(4)))
+    print(f"MEMBERSHIP   forms (identity_zero on surface R^2=1-x): {len(members)}")
+    print(f"RETRODICTION known forms recovered by FREE enumeration: " +
+          ", ".join(f"{k}={'YES' if v else 'no'}" for k, v in recovered.items()))
+    print()
+    print("REFERENCE FORMS — coupling-aware burden (greedy per-op vs global lattice):")
+    print(f"  {'form':12} {'AST':36} {'greedy_per_op':>13} {'global_int_res':>14} {'lattice':>11}")
+    ranked = []
+    for name, node in REFS.items():
+        b = burden(node)
+        ranked.append((name, node, b))
+        print(f"  {name:12} {ast_str(node):36} {b['greedy_per_op']:13.4f} {b['global_int_residual_max']:14.6f} {b['lattice']:>11}")
+
+    # ---- the principle: greedy vs global disagree ----
+    nonzero = [r for r in ranked if r[0] != "F3"]             # F3 is trivial zero
+    best_global = min(nonzero, key=lambda r: r[2]['global_int_residual_max'])
+    best_greedy = min(nonzero, key=lambda r: r[2]['greedy_per_op'])
+    print()
+    print(f"  rank by GLOBAL lattice burden  -> winner: {best_global[0]}  "
+          f"(int_residual {best_global[2]['global_int_residual_max']}, {best_global[2]['lattice']} lattice)")
+    print(f"  rank by GREEDY per-op rounding -> winner: {best_greedy[0]}  "
+          f"(greedy {best_greedy[2]['greedy_per_op']})")
+    print(f"  DISAGREE: {best_global[0] != best_greedy[0]}   "
+          f"=> least-rounding-per-operand is NOT the clean-global objective (Task-031 / Will's finding).")
+
+    # ---- list a few NEW forms the enumeration found beyond F1/F2/F3/c2 ----
+    ref_vvs = {valvec(n) for n in REFS.values()}
+    new_forms = [n for n in members if valvec(n) not in ref_vvs]
+    new_forms = sorted(new_forms, key=lambda n: (depth(n), len(ast_str(n))))[:8]
+    print()
+    print(f"SAMPLE of OTHER derived forms (members beyond F1/F2/F3/c2), with burden:")
+    for n in new_forms:
+        b = burden(n)
+        print(f"  {ast_str(n):42} greedy {b['greedy_per_op']:8.3f}  int_res {b['global_int_residual_max']:.4f}  {b['lattice']}")
+
+
+if __name__ == "__main__":
+    main()

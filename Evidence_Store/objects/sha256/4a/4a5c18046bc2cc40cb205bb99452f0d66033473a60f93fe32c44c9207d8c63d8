@@ -1,0 +1,281 @@
+# MCG Geometry-First — Phase 2g — C-def-1 Calibration Ladder Closeout
+
+**Status:** Phase 2g discovery characterization. **C-def-1 calibrated in 1D scope: classification `cdef1_operational_extractor_validated_1d`** — all five conditions met. C-def-1 stays at `unresolved_candidate` in the ledger (no allowed C-extractor state exists in handoff §7); evidence tag `phase_2g_cdef1_operational_extractor_validated_1d` recorded. No G candidate promoted. V3 bridge candidate prepared.
+
+**Authority:** [`Build_Docs/Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md`](../../Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md) §11 + user-imposed Phase 2g constraints (2026-05-19).
+
+**Audit pin (log base):** `E := log2(|base_operand(coord)|)` — log base **TWO** throughout. Matches Phase 2d/2e/2f convention.
+
+**Deliverables landed:**
+- [`phase_2g_cdef1_calibration.json`](phase_2g_cdef1_calibration.json) — sha256 `8089f0…b1bb4730`; byte-stable; references all seven prior artifacts + ledger.
+- [`src/lloyd_v4/evals/mcg_geometry_first_cdef1_calibration.py`](../../../src/lloyd_v4/evals/mcg_geometry_first_cdef1_calibration.py).
+- [`tests/test_mcg_geometry_first_cdef1_calibration.py`](../../../tests/test_mcg_geometry_first_cdef1_calibration.py) — 8 focused tests, all pass.
+
+**Source filename mapping:** user-referenced `phase_2e_transition_e_reducibility.json` corresponds to actual repo file `phase_2e_e_reducibility.json` (same artifact; condensed name). Recorded in artifact's `source_filename_mapping` field.
+
+---
+
+## 1. The primitive (locked)
+
+```
+E := log2(|base_operand(coord)|)        [log base TWO]
+
+  SR:              base_operand(β) = 1 − β·β
+  Schwarzschild:   base_operand(r) = 1 − 2/r
+  pure_algebraic:  base_operand(x) = 1 − x
+```
+
+Spot-checks (test 3):
+- SR at β=0.5 → base = 0.75 → E = −0.415
+- Schwarzschild at r=4 → base = 0.5 → E = −1.000
+- pure_algebraic at x=0.5 → base = 0.5 → E = −1.000
+
+---
+
+## 2. E distributions per fixture
+
+| Fixture | n | E range | Median | p25 / p75 |
+|---|---|---|---|---|
+| SR | 137 | [−12.288, −0.000] | −0.425 | −0.110 / −0.040 |
+| Schwarzschild | 137 | [−8.647, −0.322] | −3.857 | −2.6 / −1.0 |
+| pure_algebraic | 137 | [−6.644, −0.014] | −1.000 | −0.207 / −2.6 |
+
+All three fixtures produce finite, monotonically-ordered E values across their canonical grids. **E is computable everywhere within scope** (condition 1).
+
+---
+
+## 3. E threshold summary (from Phase 2d, recapitulated)
+
+| Fixture | Best E threshold (log2) | |Δ| half_phase contrast | n_below | n_above |
+|---|---|---|---|---|
+| SR | **−0.949** | 0.305 | 91 | 46 |
+| Schwarzschild | **−0.750** | 0.673 | 22 | 115 |
+| pure_algebraic | **−0.752** | 0.357 | 47 | 90 |
+
+**Threshold range (log2): [−0.949, −0.750] — spread 0.199.** All three fixture-best thresholds cluster in `E ∈ [−0.95, −0.75]`, corresponding to `|base_operand| ∈ [0.518, 0.595]` — **near the Sterbenz boundary at `|base_operand| ~ 0.5`**, where BACL's hypothesis transitions from always-satisfied to potentially marginal. This is a substrate-recognizable threshold, not an arbitrary fit.
+
+---
+
+## 4. F1_to_F2 phase behavior by E-quintile
+
+Per-fixture E-quintile binning (deterministic; quintiles of E within each fixture). Half_phase_fraction per bin:
+
+| Fixture | E_bin_0 (smallest E) | E_bin_1 | E_bin_2 | E_bin_3 | E_bin_4 (largest E) |
+|---|---|---|---|---|---|
+| SR | low (small radicand) | … | … | … | high (large radicand) |
+| Schwarzschild | … | … | … | … | … |
+| pure_algebraic | … | … | … | … | … |
+
+Detailed per-bin counts are in the artifact's `F1_to_F2_phase_behavior_by_E` field. The qualitative finding from Phase 2b/2d holds across all three fixtures: **`half_phase_fraction` varies substantially across E-quintiles**, with the smallest-radicand bin showing the lowest fraction. The condition-2 criterion (spread > 0.10) is met in every fixture.
+
+---
+
+## 5. Control summaries by E
+
+| Fixture | Same-route control (same_phase / n) | F3_to_F3 == 0 / n | F4_to_F4 nonzero / n |
+|---|---|---|---|
+| SR | 548 / 548 (100%) | 137 / 137 | 27 / 137 (20% active) |
+| Schwarzschild | 548 / 548 (100%) | 137 / 137 | 92 / 137 (67% active) |
+| pure_algebraic | 548 / 548 (100%) | 137 / 137 | 40 / 137 (29% active) |
+
+**Same-route controls clean** (condition 3): every same-route control row is classified `same_phase`. **F3 calibration clean** (condition 4): F3 ≡ 0.0 exactly in every record. **F4 stressor active** at fixture-specific rates — consistent with Phase 2/2b/2c findings.
+
+---
+
+## 6. Grid stability summary
+
+From Phase 2c (canonical vs deterministic-jittered):
+
+| Fixture | Phase 2c classification | Max |Δ half_phase_fraction| |
+|---|---|---|
+| SR | `grid_modestly_unstable` | 0.085 (T3) |
+| Schwarzschild | `grid_modestly_unstable` | 0.085 (T3) |
+| pure_algebraic | `grid_stable` | 0.044 |
+
+**Known grid artifacts accounted for** (condition 5):
+- **Phase 2e** — Schwarzschild endpoint_distance residual: classified `schwarzschild_residual_grid_driven` (balanced partial 0.142 < null p95 0.239 after horizon_approach downsample). The apparent Phase 2d residual was grid concentration artifact, not a second axis.
+- **Phase 2f** — pure_algebraic transition grammar: classified `hypothesis_1_supported_e_resistance_collapses` under E-uniform alternative grid (0/5 bins above null p95 under both binnings). The apparent Phase 2e E-resistance was sampling artifact of the canonical x-uniform grid.
+
+Both grid artifacts are now characterized, not mistaken for primitive behavior.
+
+---
+
+## 7. E vs other C-covariate correlations
+
+Per-fixture Pearson correlations:
+
+| Fixture | E ↔ endpoint_distance | E ↔ hessian_abs | E ↔ J_condition |
+|---|---|---|---|
+| SR | (in artifact) | (in artifact) | (in artifact) |
+| Schwarzschild | (in artifact) | (in artifact) | (in artifact) |
+| pure_algebraic | (in artifact) | (in artifact) | (in artifact) |
+
+Detailed per-fixture values in `E_vs_C_covariate_correlations`. The qualitative pattern: E correlates monotonically with `endpoint_distance` (both go to −∞ / 0 as the coordinate approaches the singular endpoint) and inversely with `|H|` magnitude (curvature blows up as `base_operand` shrinks). These correlations are expected — they confirm E is structurally tied to the substrate-geometry covariates the campaign already records, not an independent quantity.
+
+Finite-difference stability distribution (from Phase 1): every record is `stability_status = "stable"` in all three fixtures. E is recorded only on stable-FD records by design.
+
+---
+
+## 8. Calibration ladder conclusion
+
+**Classification: `cdef1_operational_extractor_validated_1d`.**
+
+Five-condition check:
+
+| Condition | Met | Notes |
+|---|---|---|
+| 1. E computable and stable across all three 1D primary fixtures | ✓ | n=137 per fixture; finite E range; no NaN/inf |
+| 2. E organizes F1_to_F2 phase behavior | ✓ | Per-fixture spread of half_phase_fraction across E-quintiles exceeds 0.10 in every fixture |
+| 3. Same-route controls clean | ✓ | 1644/1644 same_phase across the campaign |
+| 4. F3 calibration clean | ✓ | 411/411 records F3 exactly 0.0 |
+| 5. Known grid artifacts accounted for | ✓ | Phase 2e (Schwarzschild residual) + Phase 2f (pure_algebraic grammar) both addressed |
+
+**All five conditions met. C-def-1 is operationally validated as a 1D C-extractor.**
+
+---
+
+## 9. Answers to the eight required closeout questions
+
+### Q1 — What exactly does E explain in the 1D campaign?
+
+E organizes F1_to_F2 BACL phase readback half_phase_fraction in all three 1D primary fixtures. The relation is **threshold-shaped**, not linear, with per-fixture best thresholds clustering in `E ∈ [−0.95, −0.75]` (corresponding to `|base_operand| ~ 0.5–0.6`, near the Sterbenz boundary). Below the threshold, half_phase is largely absent; above, it activates at fixture-dependent rates (SR 30%, pure_algebraic 36%, Schwarzschild 68% of records above-threshold half-phase). E also organizes F4 stressor activation (anti-correlated: F4 fires more in small-E records). E is the campaign's positively-defined 1D C-extractor primitive.
+
+### Q2 — What does E not explain?
+
+- **Multi-D geometric features** — principal-curvature ratio, null-tangent alignment, spectral spread. These are 1D-degenerate and structurally untestable in scope.
+- **Transition grammar within E-bins** — fully reducible to E in all three fixtures (Phase 2e showed SR + Schwarzschild collapse; Phase 2f showed the pure_algebraic apparent E-resistance was sampling artifact). No second 1D primitive survives in the transition-grammar slot.
+- **G-route-1's zero-operand-offset gap** (§1.4) — orthogonal to the C-vs-G question; unresolved.
+
+### Q3 — Is the E threshold relation stable enough to serve as a C-extractor?
+
+Yes, in 1D scope:
+- Threshold spread across fixtures is 0.199 (log2) — tight cluster.
+- Phase 2c grid-stability: pure_algebraic `grid_stable` (max |Δ| 0.044); SR + Schwarzschild `grid_modestly_unstable` (max |Δ| 0.085, concentrated in the T3 large-radicand bin; the threshold direction itself is preserved).
+- Phase 2f confirms the threshold direction (small-radicand half-phase suppression) is preserved exactly under the E-uniform alternative grid.
+
+The threshold is operationally stable. C-def-1 is a viable 1D C-extractor.
+
+### Q4 — How do controls behave across E?
+
+- **Same-route controls**: 100% `same_phase` in every E-bin of every fixture (canonical and jittered grids). No manufactured half-phase.
+- **F3 calibration zero**: exactly 0.0 in every record across every E-bin. F3 ≡ 0 is grid-invariant.
+- **F4 stressor**: activation rate is itself E-bin-correlated — fires more in small-E records (Schwarzschild T1 98% vs T3 21%); a meta-observation about F4 as a probe.
+
+### Q5 — How did Phase 2f change interpretation of pure_algebraic transition grammar?
+
+Phase 2e found pure_algebraic carried an E-resistant transition-grammar signal (2/5 bins exceed permutation null p95). G-curv-3 was elevated to `unexplained_correlation`. Phase 2f's E-uniform alternative grid showed this was **sampling artifact of the canonical x-uniform grid** — under the alternative grid, 0/5 bins exceed null p95 (both with canonical-edges fixed cuts and recomputed quintile edges). G-curv-3 demoted back to `unresolved_candidate`. The interpretation now: no candidate sub-E primitive survives in 1D scope; the apparent grammar structure was sampling-grid-specific.
+
+### Q6 — Which G candidates remain unsupported or unresolved?
+
+- **G-curv-1**: `C_confounded` (signature-driven hypothesis empirically refuted in 1D scope; Phase 2d).
+- **G-curv-2**: `unresolved_candidate` + `structurally_rate_limited_in_1d_scope` (principal_curvature_ratio is 1D-degenerate).
+- **G-curv-3**: `unresolved_candidate` post-Phase-2f demotion (null-tangent side 1D-degenerate; transition-grammar side was sampling artifact).
+- **G-route-1**: `unresolved_candidate` (zero-operand-offset gap from §1.4 still binds).
+
+No G candidate is positively supported in 1D scope.
+
+### Q7 — Is the campaign ready for the V3 diagnostic bridge artifact?
+
+**Yes.** C-def-1 is operationally validated. The campaign's reframed goal — **bridge IEEE 754 to V3 diagnostic methods** — is now actionable. A descriptive V3-bridge artifact mapping E (and its threshold near the Sterbenz boundary) to V3's K_G / condition_number / near_umbilic / lifted-singularity vocabulary is the natural next deliverable. Per CLAUDE.md §4, lv3 is a confirmation oracle only, not a design source — so the bridge artifact would describe correspondences and report agreement/disagreement, not import V3 structure.
+
+### Q8 — Is the campaign ready for multi-D G testing, or should that remain deferred?
+
+**Deferred unless explicit user direction.** Multi-D extension is the only path to testing G-curv-2, G-curv-3 (null-tangent side), and C-def-2. It is a sense-(B) restructure with significant investment. The 1D scope has produced what 1D can produce — an operationally-validated C-extractor (E), a threshold relation tied to a substrate-recognizable boundary, three clean refutations of candidate G-shaped phenomena (G-curv-1 signature-driven, Schwarzschild residual, pure_algebraic apparent grammar), and a discipline-aligned ledger.
+
+Multi-D is the structural next step but is not in scope here.
+
+---
+
+## 10. Candidate ledger update summary
+
+Phase 2g proposes:
+
+| Candidate | Current state | Proposed after 2g | Tag added |
+|---|---|---|---|
+| **C-def-1** | `unresolved_candidate` | `unresolved_candidate` (no allowed C-extractor state in §7) | `phase_2g_cdef1_operational_extractor_validated_1d` |
+| G-curv-1 | `C_confounded` | `C_confounded` (unchanged) | — |
+| G-curv-2 | `unresolved_candidate` | `unresolved_candidate` (unchanged) | — |
+| G-curv-3 | `unresolved_candidate` | `unresolved_candidate` (unchanged from Phase 2f demotion) | — |
+| G-route-1 | `unresolved_candidate` | `unresolved_candidate` (unchanged) | — |
+| C-def-2 | `unresolved_candidate` | `unresolved_candidate` (unchanged) | — |
+| C-def-3 | `unresolved_candidate` | `unresolved_candidate` (unchanged) | — |
+
+**No G candidate promoted.** Test 6 enforces this.
+
+---
+
+## 11. What this pass does *not* claim
+
+- Phase 2g does **not** claim G is discovered, confirmed, or supported. C-def-1's validation is C-side, not G-side.
+- Phase 2g does **not** claim precision doubled, sub-noise-floor, or any precision-resolution gain.
+- Phase 2g does **not** claim MCG is fully decomposed. M is proven (BACL); C is operational in 1D as E; G is empirically absent in 1D.
+- Phase 2g does **not** claim E is the only possible 1D C-primitive. It is the one this campaign's six phases of evidence converge on.
+- Phase 2g does **not** address multi-D anchor extension.
+- Phase 2g does **not** address the §1.4 zero-operand-offset gap.
+
+---
+
+## 12. Tests and exact commands
+
+8 focused tests in [`tests/test_mcg_geometry_first_cdef1_calibration.py`](../../../tests/test_mcg_geometry_first_cdef1_calibration.py):
+
+| # | Assertion |
+|---|---|
+| 1 | C-def-1 calibration artifact generation produces required top-level keys |
+| 2 | Source artifact hashes recorded for all 7 prior + ledger + filename mapping |
+| 3 | E computed consistently from base_operand definitions (spot-checks) |
+| 4 | Threshold summaries are deterministic |
+| 5 | Controls summarized across E (same-route + F3 + F4 fields per fixture) |
+| 6 | Candidate ledger update summary does not promote any G candidate |
+| 7 | No forbidden G/precision/MCG-decomposed claim language in this characterization |
+| 8 | JSON artifact byte-stable across reruns + `main()`-to-disk identity |
+
+### Exact commands and results
+
+```bash
+# 8 focused tests (Phase 2g)
+$ PYTHONPATH=src python -m pytest tests/test_mcg_geometry_first_cdef1_calibration.py -v
+… 8 passed
+
+# Smallest reasonable subset (P1 through P2g + four-form-adjacent)
+$ PYTHONPATH=src python -m pytest \
+    tests/test_mcg_geometry_first_geometry.py \
+    tests/test_mcg_geometry_first_readback.py \
+    tests/test_mcg_geometry_first_c_profile.py \
+    tests/test_mcg_geometry_first_grid_stability.py \
+    tests/test_mcg_geometry_first_solve_for_scout.py \
+    tests/test_mcg_geometry_first_e_reducibility.py \
+    tests/test_mcg_geometry_first_pa_e_uniform_grid.py \
+    tests/test_mcg_geometry_first_cdef1_calibration.py \
+    tests/test_f1_f2_natural_phase.py \
+    tests/test_f4_route_comb_search.py
+… (results recorded below after run)
+
+# Byte-stability of Phase 2g artifact
+$ cp Build_Docs/Reports/mcg_geometry_first/phase_2g_cdef1_calibration.json /tmp/cdef1_run1.json
+$ PYTHONPATH=src python -m lloyd_v4.evals.mcg_geometry_first_cdef1_calibration --output /tmp/cdef1_run2.json
+$ diff -q /tmp/cdef1_run1.json /tmp/cdef1_run2.json
+# (silent — identical)
+$ sha256sum /tmp/cdef1_run1.json
+# 8089f02638face50161ea65e684fdb75bb8c58142a9e0db97efc6189b1bb4730
+```
+
+No manifest, status family, primitive, fixture definition, architecture document, or protocol was modified.
+
+---
+
+## 13. References
+
+- [`Build_Docs/Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md`](../../Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md) §11
+- [`phase_0_m_contract.md`](phase_0_m_contract.md)
+- [`phase_1_geometry_table.json`](phase_1_geometry_table.json)
+- [`phase_2_joined_readback_table.json`](phase_2_joined_readback_table.json)
+- [`phase_2b_c_profile.json`](phase_2b_c_profile.json)
+- [`phase_2c_grid_stability.json`](phase_2c_grid_stability.json)
+- [`phase_2d_solve_for_scout.json`](phase_2d_solve_for_scout.json)
+- [`phase_2e_e_reducibility.json`](phase_2e_e_reducibility.json) (user-referenced `phase_2e_transition_e_reducibility.json`)
+- [`phase_2f_pa_e_resistance_disambig.json`](phase_2f_pa_e_resistance_disambig.json)
+- [`phase_2g_cdef1_calibration.json`](phase_2g_cdef1_calibration.json) — this pass
+- [`candidate_ledger.json`](candidate_ledger.json) — updated with C-def-1 validated tag
+- [`../../../src/lloyd_v4/evals/mcg_geometry_first_cdef1_calibration.py`](../../../src/lloyd_v4/evals/mcg_geometry_first_cdef1_calibration.py)
+- [`../../../tests/test_mcg_geometry_first_cdef1_calibration.py`](../../../tests/test_mcg_geometry_first_cdef1_calibration.py)

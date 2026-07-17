@@ -1,0 +1,41 @@
+{
+  "rank": 68,
+  "lift": 9.46,
+  "count": 2,
+  "families": 1,
+  "a": {
+    "id": "OBJ:channel-density-polynomial",
+    "label": "channel-density polynomial",
+    "standard_term": "bordered-minor expansion of elementary symmetric curvature invariants of the shape operator",
+    "nomenclature": "special-case-of",
+    "symbols": []
+  },
+  "b": {
+    "id": "OBJ:self-coupling-hessian-split-h-h-c-h-s",
+    "label": "Self/coupling Hessian split H = H_c + H_s",
+    "standard_term": "diagonal-plus-hollow (diagonal / zero-diagonal) matrix decomposition of the Hessian",
+    "nomenclature": "variant-of",
+    "symbols": [
+      "h_c",
+      "h_s"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-0062",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Channel-density polynomial Ĉ_r(t,u)",
+      "summary": "Ĉ_r(t,u) = (−1)^{r+1} Σ_{|I|=r+1}  det [ 0    g_Iᵀ ]\n                                       [ g_I  (t·H_c + u·H_s)_I ]\n`Ĉ_r` is homogeneous of degree `r` in `(t,u)`. Expand\nĈ_r(t,u) = Σ_{p+q=r} t^p u^q · κ̂_{r;p,q}.",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/DBP_Curvature_Role_Reduction.md"
+    },
+    {
+      "uid": "U-0134",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Curvature-channel projection (channel-density polynomial, no",
+      "summary": "For a hypersurface relation $F=0$ at a regular point set $g=\\nabla F$, $H=\\nabla^2F$, $q=g^{\\mathsf T}g\\ne0$. In the distinguished coordinate basis split\n\\[\nH=H_c+H_s,\\qquad H_s=\\operatorname{diag}(H),\\qquad H_c=H-H_s .\n",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex"
+    }
+  ]
+}

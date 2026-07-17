@@ -1,0 +1,1 @@
+../../../../../Papers_Library/07_certificates_data_and_reproducibility/dbp_periods_landen_and_elliptic_structure/periods.py

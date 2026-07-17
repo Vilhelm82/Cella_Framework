@@ -1,0 +1,5659 @@
+{
+  "schema_version": 1,
+  "submission_id": "submit-paper-iv-status-cleanup-2026-07-17",
+  "base_revision": "sha256:becb3d9136f4dea9314b48b768ed114c861aeccfce28d847d4354f261494a272",
+  "idempotency_key": "paper-iv-status-cleanup:6b325088:2661294d",
+  "submitted_by": "codex.claire",
+  "summary": "Reconcile the live all-k and Galois-k-ellipse documents with the weighted successor and proved four-charge closures; preserve dated records with succession notices; resolve status gaps IV1, IV4 and IV5.",
+  "artifacts": [
+    {
+      "schema_version": 1,
+      "artifact_id": "PAP-0075",
+      "artifact_type": "theorem",
+      "title": "All-k Monodromy of Axial k-Ellipse Norms — Theorem Note",
+      "summary": "Retained all-k development note and low-k certificate record, now spliced to mark the generic Morse lemma and S_delta_k theorem proved and to identify the weighted successor.",
+      "subject_families": [
+        "galois_horizon_and_kummer_covers"
+      ],
+      "claim_status": "proved",
+      "lifecycle_status": "superseded",
+      "provenance": {
+        "authors": [
+          "Will Lloyd"
+        ],
+        "created_utc": null,
+        "origin_repository": "Cella Framework",
+        "source_pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md"
+      },
+      "files": [
+        {
+          "role": "theorem_source",
+          "path": "Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+          "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe",
+          "media_type": "text/markdown"
+        }
+      ],
+      "claims": [
+        {
+          "claim_id": "STATUS-CLEANUP-01",
+          "statement": "For every k>=3, the generic equal-weight axial mass-norm group is S_delta_k; the k=3,4,5,6 certificates remain independent checks.",
+          "hypotheses": [
+            "Use the source document's stated hypotheses and scope fences."
+          ],
+          "scope": "Paper IV and Galois-k-ellipse succession status.",
+          "claim_status": "proved",
+          "proof_ids": [],
+          "evidence_ids": []
+        }
+      ],
+      "relations": [],
+      "external_ids": {
+        "paper_artifacts": [
+          "PAP-0075"
+        ]
+      },
+      "declared_impacts": [
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:IV1",
+          "note": "Update current status and source digest after the 2026-07-17 succession cleanup."
+        }
+      ],
+      "llm": {
+        "one_sentence_purpose": "Preserve the all-k development proof and exact low-k certificates while routing current proof authority to the weighted successor.",
+        "key_terms": [
+          "Paper IV",
+          "succession",
+          "current status",
+          "all-k monodromy",
+          "weighted successor"
+        ],
+        "retrieval_questions": [
+          "What is the current status of the result recorded by this document?"
+        ],
+        "context_priority": "high",
+        "context_role": "historical"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "status_cleanup_date": "2026-07-17",
+        "source_sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+      }
+    },
+    {
+      "schema_version": 1,
+      "artifact_id": "PAP-0067",
+      "artifact_type": "report",
+      "title": "Galois–k-Ellipse Horizon Program — Research Map v1.6",
+      "summary": "Current program dashboard updated for all-k weighted symmetric base monodromy, resolved four-charge static and rotating closures, and the remaining case-specific Kummer-rank and braid fronts.",
+      "subject_families": [
+        "galois_horizon_and_kummer_covers"
+      ],
+      "claim_status": "demonstrated",
+      "lifecycle_status": "active",
+      "provenance": {
+        "authors": [
+          "Will Lloyd"
+        ],
+        "created_utc": null,
+        "origin_repository": "Cella Framework",
+        "source_pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/GALOIS_K_ELLIPSE_RESEARCH_MAP_v1_6.md"
+      },
+      "files": [
+        {
+          "role": "research_map",
+          "path": "Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/GALOIS_K_ELLIPSE_RESEARCH_MAP_v1_6.md",
+          "sha256": "2661294d209e5cc7c51e7bd57dfb4e26d057e2e28e2ad1d3ff6875dc32a09471",
+          "media_type": "text/markdown"
+        }
+      ],
+      "claims": [
+        {
+          "claim_id": "STATUS-CLEANUP-02",
+          "statement": "R8 is established, R9 is resolved for four charges, R10 is S16, and R11 is S_delta_k for every k>=3; arbitrary-k decorated closure still requires R=0.",
+          "hypotheses": [
+            "Use the source document's stated hypotheses and scope fences."
+          ],
+          "scope": "Paper IV and Galois-k-ellipse succession status.",
+          "claim_status": "demonstrated",
+          "proof_ids": [],
+          "evidence_ids": []
+        }
+      ],
+      "relations": [],
+      "external_ids": {
+        "paper_artifacts": [
+          "PAP-0067"
+        ]
+      },
+      "declared_impacts": [
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:IV4",
+          "note": "Update current status and source digest after the 2026-07-17 succession cleanup."
+        },
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:IV5",
+          "note": "Update current status and source digest after the 2026-07-17 succession cleanup."
+        }
+      ],
+      "llm": {
+        "one_sentence_purpose": "State the current Galois–k-ellipse results, guardrails and live fronts without stale R8-R11 status tags.",
+        "key_terms": [
+          "Paper IV",
+          "succession",
+          "current status",
+          "research map",
+          "Kummer rank"
+        ],
+        "retrieval_questions": [
+          "What is the current status of the result recorded by this document?"
+        ],
+        "context_priority": "high",
+        "context_role": "core"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "status_cleanup_date": "2026-07-17",
+        "source_sha256": "2661294d209e5cc7c51e7bd57dfb4e26d057e2e28e2ad1d3ff6875dc32a09471"
+      }
+    },
+    {
+      "schema_version": 1,
+      "artifact_id": "PAP-0063",
+      "artifact_type": "report",
+      "title": "Audit Report — R6 + R7 Generic Birationality and Reflection Descent",
+      "summary": "Historical R6/R7 audit, now carrying a succession notice that its pre-R9 conditional closure statuses were superseded by the crown and closure proofs.",
+      "subject_families": [
+        "galois_horizon_and_kummer_covers"
+      ],
+      "claim_status": "demonstrated",
+      "lifecycle_status": "released",
+      "provenance": {
+        "authors": [
+          "Will Lloyd"
+        ],
+        "created_utc": null,
+        "origin_repository": "Cella Framework",
+        "source_pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md"
+      },
+      "files": [
+        {
+          "role": "audit_report",
+          "path": "Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md",
+          "sha256": "7a93cb8720d53220bbf8a5b9c358a422168abd0acc56807bbb3d5eb3deb14ad7",
+          "media_type": "text/markdown"
+        }
+      ],
+      "claims": [
+        {
+          "claim_id": "STATUS-CLEANUP-03",
+          "statement": "The repaired R6 normalization and R7 reflection-descent proofs are valid under their stated hypotheses.",
+          "hypotheses": [
+            "Use the source document's stated hypotheses and scope fences."
+          ],
+          "scope": "Paper IV and Galois-k-ellipse succession status.",
+          "claim_status": "demonstrated",
+          "proof_ids": [],
+          "evidence_ids": []
+        }
+      ],
+      "relations": [],
+      "external_ids": {
+        "paper_artifacts": [
+          "PAP-0063"
+        ]
+      },
+      "declared_impacts": [
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:IV4",
+          "note": "Update current status and source digest after the 2026-07-17 succession cleanup."
+        }
+      ],
+      "llm": {
+        "one_sentence_purpose": "Audit R6/R7 correctness while preserving the chronology and identifying later closure successors.",
+        "key_terms": [
+          "Paper IV",
+          "succession",
+          "current status"
+        ],
+        "retrieval_questions": [
+          "What is the current status of the result recorded by this document?"
+        ],
+        "context_priority": "normal",
+        "context_role": "core"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "status_cleanup_date": "2026-07-17",
+        "source_sha256": "7a93cb8720d53220bbf8a5b9c358a422168abd0acc56807bbb3d5eb3deb14ad7"
+      }
+    },
+    {
+      "schema_version": 1,
+      "artifact_id": "PAP-0069",
+      "artifact_type": "proof",
+      "title": "R6 + R7 Generic Birationality and Reflection Descent — v2",
+      "summary": "Promoted R6/R7 proof log with a succession notice distinguishing its historical pre-closure status statements from the later exact R9 results.",
+      "subject_families": [
+        "galois_horizon_and_kummer_covers"
+      ],
+      "claim_status": "proved",
+      "lifecycle_status": "released",
+      "provenance": {
+        "authors": [
+          "Will Lloyd"
+        ],
+        "created_utc": null,
+        "origin_repository": "Cella Framework",
+        "source_pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/LOG_ENTRY_R6_R7_generic_descent_v2.md"
+      },
+      "files": [
+        {
+          "role": "proof_log",
+          "path": "Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/LOG_ENTRY_R6_R7_generic_descent_v2.md",
+          "sha256": "67a3cdfef98bfc6c361035c67362aea462f53a135d57ce53ed0907f91cfa56b2",
+          "media_type": "text/markdown"
+        }
+      ],
+      "claims": [
+        {
+          "claim_id": "STATUS-CLEANUP-04",
+          "statement": "The signed-distance incidence curve normalizes the axial curve and the signed radicals descend generically to the mass field.",
+          "hypotheses": [
+            "Use the source document's stated hypotheses and scope fences."
+          ],
+          "scope": "Paper IV and Galois-k-ellipse succession status.",
+          "claim_status": "proved",
+          "proof_ids": [],
+          "evidence_ids": []
+        }
+      ],
+      "relations": [],
+      "external_ids": {
+        "paper_artifacts": [
+          "PAP-0069"
+        ]
+      },
+      "declared_impacts": [
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:IV4",
+          "note": "Update current status and source digest after the 2026-07-17 succession cleanup."
+        }
+      ],
+      "llm": {
+        "one_sentence_purpose": "Provide the promoted R6/R7 proof and an unambiguous pointer to later crown and closure theorems.",
+        "key_terms": [
+          "Paper IV",
+          "succession",
+          "current status"
+        ],
+        "retrieval_questions": [
+          "What is the current status of the result recorded by this document?"
+        ],
+        "context_priority": "normal",
+        "context_role": "core"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "status_cleanup_date": "2026-07-17",
+        "source_sha256": "67a3cdfef98bfc6c361035c67362aea462f53a135d57ce53ed0907f91cfa56b2"
+      }
+    },
+    {
+      "schema_version": 1,
+      "artifact_id": "PAP-0044",
+      "artifact_type": "certificate",
+      "title": "Degree-20 Crown Certificate — Audit and Strengthened Proof",
+      "summary": "Exact degree-20 and sheet-level square-class certificate with a succession notice that the later rank-10 proof resolves static R9.",
+      "subject_families": [
+        "galois_horizon_and_kummer_covers"
+      ],
+      "claim_status": "machine-verified",
+      "lifecycle_status": "released",
+      "provenance": {
+        "authors": [
+          "Will Lloyd"
+        ],
+        "created_utc": null,
+        "origin_repository": "Cella Framework",
+        "source_pointer": "cella:Papers_Library/07_certificates_data_and_reproducibility/galois_horizon_and_kummer_covers/DEGREE_20_CROWN_CERTIFICATE_REPORT_2026-07-10.md"
+      },
+      "files": [
+        {
+          "role": "certificate_report",
+          "path": "Papers_Library/07_certificates_data_and_reproducibility/galois_horizon_and_kummer_covers/DEGREE_20_CROWN_CERTIFICATE_REPORT_2026-07-10.md",
+          "sha256": "7b4712026b1b772a68517ac6a911042ea9fe7f5f5cdb936b3eb87c90a478f4f5",
+          "media_type": "text/markdown"
+        }
+      ],
+      "claims": [
+        {
+          "claim_id": "STATUS-CLEANUP-05",
+          "statement": "The static ordered-horizon field has degree 20, with the required sheet-level square-class independence.",
+          "hypotheses": [
+            "Use the source document's stated hypotheses and scope fences."
+          ],
+          "scope": "Paper IV and Galois-k-ellipse succession status.",
+          "claim_status": "machine-verified",
+          "proof_ids": [],
+          "evidence_ids": []
+        }
+      ],
+      "relations": [],
+      "external_ids": {
+        "paper_artifacts": [
+          "PAP-0044"
+        ]
+      },
+      "declared_impacts": [
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:IV4",
+          "note": "Update current status and source digest after the 2026-07-17 succession cleanup."
+        }
+      ],
+      "llm": {
+        "one_sentence_purpose": "Certify the static four-charge degree-20 crown and preserve its role as the sheet-level input to the later closure theorem.",
+        "key_terms": [
+          "Paper IV",
+          "succession",
+          "current status"
+        ],
+        "retrieval_questions": [
+          "What is the current status of the result recorded by this document?"
+        ],
+        "context_priority": "normal",
+        "context_role": "supporting"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "status_cleanup_date": "2026-07-17",
+        "source_sha256": "7b4712026b1b772a68517ac6a911042ea9fe7f5f5cdb936b3eb87c90a478f4f5"
+      }
+    },
+    {
+      "schema_version": 1,
+      "artifact_id": "PAP-0048",
+      "artifact_type": "theorem",
+      "title": "Rotating Kummer Rank Jump and Axial–Horizon Decoupling",
+      "summary": "Proof of the rotating relative Kummer rank jump with a succession notice pointing to the later full rotating closure theorem.",
+      "subject_families": [
+        "galois_horizon_and_kummer_covers"
+      ],
+      "claim_status": "proved",
+      "lifecycle_status": "released",
+      "provenance": {
+        "authors": [
+          "Will Lloyd"
+        ],
+        "created_utc": null,
+        "origin_repository": "Cella Framework",
+        "source_pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ROTATING_KUMMER_RANK_JUMP_LEMMA_REPORT_2026-07-10.md"
+      },
+      "files": [
+        {
+          "role": "theorem_source",
+          "path": "Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ROTATING_KUMMER_RANK_JUMP_LEMMA_REPORT_2026-07-10.md",
+          "sha256": "1a64fdebf78fa10df70cf990621244a11a599e69b277184228657d02f74daeea",
+          "media_type": "text/markdown"
+        }
+      ],
+      "claims": [
+        {
+          "claim_id": "STATUS-CLEANUP-06",
+          "statement": "For transcendental J, the rotating axial and horizon Kummer characters separate as stated, with the controlled J=0 split fiber.",
+          "hypotheses": [
+            "Use the source document's stated hypotheses and scope fences."
+          ],
+          "scope": "Paper IV and Galois-k-ellipse succession status.",
+          "claim_status": "proved",
+          "proof_ids": [],
+          "evidence_ids": []
+        }
+      ],
+      "relations": [],
+      "external_ids": {
+        "paper_artifacts": [
+          "PAP-0048"
+        ]
+      },
+      "declared_impacts": [
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:IV4",
+          "note": "Update current status and source digest after the 2026-07-17 succession cleanup."
+        }
+      ],
+      "llm": {
+        "one_sentence_purpose": "Prove axial-horizon decoupling under rotation and distinguish that relative theorem from the later normal-closure result.",
+        "key_terms": [
+          "Paper IV",
+          "succession",
+          "current status"
+        ],
+        "retrieval_questions": [
+          "What is the current status of the result recorded by this document?"
+        ],
+        "context_priority": "normal",
+        "context_role": "core"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "status_cleanup_date": "2026-07-17",
+        "source_sha256": "1a64fdebf78fa10df70cf990621244a11a599e69b277184228657d02f74daeea"
+      }
+    }
+  ],
+  "graph_delta": {
+    "upsert_nodes": [
+      {
+        "id": "DBP:gap:IV1",
+        "label": "ALL_K theorem-status splice and successor binding (resolved)",
+        "type": "gap",
+        "claim_status": "proved",
+        "lifecycle_status": "released",
+        "reachability": "EASY",
+        "tracked": false,
+        "layer": "frontier",
+        "summary": "Resolved 2026-07-17: the note marks Theorem D proved, retains low-k certificates, and routes current proof authority to the weighted all-k successor.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md#L37",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0101",
+            "E-0104",
+            "U-1577",
+            "U-1578",
+            "U-1579",
+            "U-1589",
+            "U-1590",
+            "U-1596",
+            "U-1607",
+            "U-1634",
+            "U-1640",
+            "U-1646",
+            "U-1648",
+            "U-1657",
+            "U-1658",
+            "U-1659",
+            "U-1660",
+            "U-1693",
+            "U-1701",
+            "U-1706",
+            "U-1726",
+            "U-1731",
+            "U-1732",
+            "U-1733",
+            "U-1743"
+          ],
+          "paper_artifacts": [
+            "PAP-0075"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "cce_ledger": [
+            "GS-§9"
+          ],
+          "artifacts": [
+            "PAP-0075"
+          ]
+        },
+        "facets": {
+          "paper": "IV",
+          "subject_family": "galois_horizon_and_kummer_covers",
+          "reachability_class": "EASY",
+          "source_id": "dbp-frontier-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "frontier"
+        },
+        "extensions": {
+          "next_object": "Execute the GS §9 splice: replace ALL_K §7, mark Theorem D PROVED for all k>=3, delete the 'conjecture / single remaining obstruction' wording.",
+          "tracked_ref": "GS-§9",
+          "resolution": "ALL_K status splice applied; weighted successor bound",
+          "resolved_utc": "2026-07-17T00:00:00+10:00"
+        }
+      },
+      {
+        "id": "DBP:gap:IV4",
+        "label": "R9 closure status cleanup (resolved for k=4)",
+        "type": "gap",
+        "claim_status": "proved",
+        "lifecycle_status": "released",
+        "reachability": "EASY",
+        "tracked": false,
+        "layer": "frontier",
+        "summary": "Resolved 2026-07-17: the live map records static and rotating four-charge closures; dated pre-closure proofs and audits carry succession notices.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ROTATING_KUMMER_RANK_JUMP_LEMMA_REPORT_2026-07-10.md#L509",
+            "sha256": "1a64fdebf78fa10df70cf990621244a11a599e69b277184228657d02f74daeea"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "B-036",
+            "E-0120",
+            "E-0122"
+          ],
+          "paper_artifacts": [
+            "PAP-0048"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0048"
+          ]
+        },
+        "facets": {
+          "paper": "IV",
+          "subject_family": "galois_horizon_and_kummer_covers",
+          "reachability_class": "EASY",
+          "source_id": "dbp-frontier-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "frontier"
+        },
+        "extensions": {
+          "next_object": "Update the R9 status tags to RESOLVED(k=4), cross-citing the static (C_2^2≀S_5) and rotating (C_2^3≀S_5) closure derivations.",
+          "tracked_ref": "NEW",
+          "resolution": "Current-status surface corrected; historical records carry non-destructive succession notices",
+          "resolved_utc": "2026-07-17T00:00:00+10:00"
+        }
+      },
+      {
+        "id": "DBP:gap:IV5",
+        "label": "v1.6 research-map register cleanup (resolved)",
+        "type": "gap",
+        "claim_status": "proved",
+        "lifecycle_status": "released",
+        "reachability": "EASY",
+        "tracked": false,
+        "layer": "frontier",
+        "summary": "Resolved 2026-07-17: R8 established; R9 resolved for k=4; R10=S16; R11=S_delta_k for every k>=3; live fronts replaced with the actual remaining work.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/GALOIS_K_ELLIPSE_RESEARCH_MAP_v1_6.md#L89",
+            "sha256": "2661294d209e5cc7c51e7bd57dfb4e26d057e2e28e2ad1d3ff6875dc32a09471"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [],
+          "paper_artifacts": [
+            "PAP-0067"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0067"
+          ]
+        },
+        "facets": {
+          "paper": "IV",
+          "subject_family": "galois_horizon_and_kummer_covers",
+          "reachability_class": "EASY",
+          "source_id": "dbp-frontier-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "frontier"
+        },
+        "extensions": {
+          "next_object": "Promote R8->Established, R9->Resolved(k=4), R10 k=5-group->Established, R11->Established; update the live-fronts list.",
+          "tracked_ref": "NEW",
+          "resolution": "R8/R9/R10/R11 and live-front table updated",
+          "resolved_utc": "2026-07-17T00:00:00+10:00"
+        }
+      },
+      {
+        "id": "DBP:map:kellipse_v16",
+        "label": "GALOIS_K_ELLIPSE Research Map v1_6 (true head)",
+        "type": "report",
+        "claim_status": "demonstrated",
+        "lifecycle_status": "active",
+        "reachability": null,
+        "tracked": false,
+        "layer": "succession",
+        "summary": "Current Galois-k-ellipse dashboard: R8 established, R9 resolved for k=4 static/rotating closure, R10=S16, R11=S_delta_k for all k>=3, and arbitrary-k decorated closure isolated as R=0.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/GALOIS_K_ELLIPSE_RESEARCH_MAP_v1_6.md",
+            "sha256": "2661294d209e5cc7c51e7bd57dfb4e26d057e2e28e2ad1d3ff6875dc32a09471"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [],
+          "paper_artifacts": [
+            "PAP-0067"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0067"
+          ]
+        },
+        "facets": {
+          "paper": "IV",
+          "subject_family": "galois_horizon_and_kummer_covers",
+          "source_id": "dbp-frontier-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "normal",
+          "retrieval_questions": [],
+          "context_role": "supporting"
+        },
+        "extensions": {
+          "status_updated_utc": "2026-07-17T00:00:00+10:00"
+        }
+      },
+      {
+        "id": "DBP:note:allk_monodromy",
+        "label": "ALL_K Monodromy Theorem Note",
+        "type": "theorem",
+        "claim_status": "proved",
+        "lifecycle_status": "superseded",
+        "reachability": null,
+        "tracked": false,
+        "layer": "succession",
+        "summary": "All-k equal-weight theorem and k=3..6 certificates; Theorem D is now marked proved. Retained as a computational/development supplement; the weighted paper is the current proof authority.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0101",
+            "E-0104",
+            "U-1577",
+            "U-1578",
+            "U-1579",
+            "U-1589",
+            "U-1590",
+            "U-1596",
+            "U-1607",
+            "U-1634",
+            "U-1640",
+            "U-1646",
+            "U-1648",
+            "U-1657",
+            "U-1658",
+            "U-1659",
+            "U-1660",
+            "U-1693",
+            "U-1701",
+            "U-1706",
+            "U-1726",
+            "U-1731",
+            "U-1732",
+            "U-1733",
+            "U-1743"
+          ],
+          "paper_artifacts": [
+            "PAP-0075"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0075"
+          ]
+        },
+        "facets": {
+          "paper": "IV",
+          "subject_family": "galois_horizon_and_kummer_covers",
+          "source_id": "dbp-frontier-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "normal",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "superseded_by": "DBP:paper:weighted_multiquadratic_monodromy",
+          "status_updated_utc": "2026-07-17T00:00:00+10:00"
+        }
+      },
+      {
+        "id": "DBP:wall:IV_rotselect",
+        "label": "Rotating physical selection / indefinite spectral geometry (R13b)",
+        "type": "gap",
+        "claim_status": "open",
+        "lifecycle_status": "active",
+        "reachability": "WALL",
+        "tracked": false,
+        "layer": "frontier",
+        "summary": "Indefinite pencil, no off-the-shelf tool; distinct from the (done) algebraic rotating rank-jump.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/GALOIS_K_ELLIPSE_RESEARCH_MAP_v1_6.md#L72",
+            "sha256": "2661294d209e5cc7c51e7bd57dfb4e26d057e2e28e2ad1d3ff6875dc32a09471"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [],
+          "paper_artifacts": [
+            "PAP-0067"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0067"
+          ]
+        },
+        "facets": {
+          "paper": "IV",
+          "subject_family": "galois_horizon_and_kummer_covers",
+          "reachability_class": "WALL",
+          "source_id": "dbp-frontier-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "normal",
+          "retrieval_questions": [],
+          "context_role": "frontier"
+        },
+        "extensions": {
+          "tracked_ref": "NEW"
+        }
+      },
+      {
+        "id": "U-1296",
+        "label": "Boundary footnote — even-k leading-coefficient M-weight degeneration at M=0",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "*Boundary footnote (counter-audit):* at even `k` the leading coefficient\ncarries `M`-weight (`-2^24 M^6` at `k = 4`); on `M = 0` the `u`-degree drops\nand the discriminant's degree bookkeeping changes. This is a boundary-grade\ndegeneration off the physical chamber (`M > 0`) — recorded to prevent\nmisreading, **not** claimed as a discriminant component.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/LOG_ENTRY_R6_R7_generic_descent_v2.md",
+            "sha256": "67a3cdfef98bfc6c361035c67362aea462f53a135d57ce53ed0907f91cfa56b2"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0116",
+            "E-0117",
+            "E-0119",
+            "E-0122",
+            "E-0123",
+            "U-1296",
+            "U-1297",
+            "U-1299",
+            "U-1300",
+            "U-1302",
+            "U-1309",
+            "U-1315",
+            "U-1348",
+            "U-1356",
+            "U-1366",
+            "U-1367",
+            "U-1369",
+            "U-1385",
+            "U-1386",
+            "U-1387",
+            "U-1409",
+            "U-1419",
+            "U-1421",
+            "U-1423"
+          ],
+          "paper_artifacts": [
+            "PAP-0069"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0069"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": false,
+          "kind": "corollary",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "normal",
+          "retrieval_questions": [],
+          "context_role": "supporting"
+        },
+        "extensions": {
+          "claim_key": "90345b519ce9",
+          "loc": "§9 Failure loci — boundary footnote"
+        }
+      },
+      {
+        "id": "U-1297",
+        "label": "C1 — generic radical collapse",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "**C1 (generic radical collapse — Stage 2, item 4).** For each `i` there is\n`g_i ∈ F[u]`, `deg g_i <= delta_k - 1`, with\n\n```text\nw_i = g_i(u)      in K = F[u]/(N_k).\n```\n\nThis is the generic form of the pointwise radical-collapse certificates\n(Branch G). For `k = 4`: `deg g_i <= 4`, matching the certified shapes.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/LOG_ENTRY_R6_R7_generic_descent_v2.md",
+            "sha256": "67a3cdfef98bfc6c361035c67362aea462f53a135d57ce53ed0907f91cfa56b2"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0116",
+            "E-0117",
+            "E-0119",
+            "E-0122",
+            "E-0123",
+            "U-1296",
+            "U-1297",
+            "U-1299",
+            "U-1300",
+            "U-1302",
+            "U-1309",
+            "U-1315",
+            "U-1348",
+            "U-1356",
+            "U-1366",
+            "U-1367",
+            "U-1369",
+            "U-1385",
+            "U-1386",
+            "U-1387",
+            "U-1409",
+            "U-1419",
+            "U-1421",
+            "U-1423"
+          ],
+          "paper_artifacts": [
+            "PAP-0069"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0069"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": true,
+          "kind": "corollary",
+          "cluster_role": "canonical",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "9730027f1a9b",
+          "loc": "§8 Corollaries — C1",
+          "tag_from_source": "COMPLETE"
+        }
+      },
+      {
+        "id": "U-1298",
+        "label": "C1: polynomial representatives g_i(u)",
+        "type": "definition",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "C1: polynomial representatives `g_i(u)`",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md",
+            "sha256": "7a93cb8720d53220bbf8a5b9c358a422168abd0acc56807bbb3d5eb3deb14ad7"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0106",
+            "E-0117",
+            "E-0119",
+            "U-1298",
+            "U-1301",
+            "U-1326",
+            "U-1327",
+            "U-1336",
+            "U-1340",
+            "U-1342",
+            "U-1351",
+            "U-1354",
+            "U-1355",
+            "U-1357",
+            "U-1368",
+            "U-1375",
+            "U-1406",
+            "U-1420",
+            "U-1424",
+            "U-1425"
+          ],
+          "paper_artifacts": [
+            "PAP-0063"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0063"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": true,
+          "kind": "construction",
+          "cluster_role": "member",
+          "cluster_id": "U-1297",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "4fac693afc90",
+          "loc": "§2 Claim-by-claim audit (table row C1)",
+          "tag_from_source": "PASS | None"
+        }
+      },
+      {
+        "id": "U-1299",
+        "label": "C2 — k=4 degree-20 tower: unconditional entropy tower and conditional degree-20 count",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "C2 (k=4: the degree-20 tower). Unconditional (generic): w_i ∈ K ⟹ e_j(w) ∈ K ⟹ alpha, beta ∈ K, gamma = 2(alpha+P) ∈ K, so the entropy tower K ⊂ K(m), K(y) ⊂ K(m,y) is generically defined, with [W:K]=2 and deck tau. Conditional layer (Entry 4 gate): the degree-20 count needs [u],[gamma],[u*gamma] all nontrivial in K*/K*^2 (independence). The correct transfer route from point B is eliminant irreducibility: E_u and E_{u*gamma} irreducible of degree 10 at B implies irreducible generically, implies nonsquare generically. A naive \"nonsquareness lifts\" argument is NOT valid on its own — a hypothetical square root has an unknown denominator locus that a single point could a priori inhabit. The transfer is licensed only with a recorded good-specialization statement for B (the quintic is separable at B; leading coefficients remain nonzero at B; u, gamma, u*gamma are regular and nonzero at B; B avoids all denominator and ramification loci of the data involved). Upon closure of the gate: [K(m,y):K]=4, Gal(K(m,y)/K)=V_4, [K(m,y):F]=20 generically, and by Proposition P6, K(m,y)=F(Shat_+,Shat_-) is THE ordered-horizon field, with [F(Shat_+):F]=20.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/LOG_ENTRY_R6_R7_generic_descent_v2.md",
+            "sha256": "67a3cdfef98bfc6c361035c67362aea462f53a135d57ce53ed0907f91cfa56b2"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0116",
+            "E-0117",
+            "E-0119",
+            "E-0122",
+            "E-0123",
+            "U-1296",
+            "U-1297",
+            "U-1299",
+            "U-1300",
+            "U-1302",
+            "U-1309",
+            "U-1315",
+            "U-1348",
+            "U-1356",
+            "U-1366",
+            "U-1367",
+            "U-1369",
+            "U-1385",
+            "U-1386",
+            "U-1387",
+            "U-1409",
+            "U-1419",
+            "U-1421",
+            "U-1423"
+          ],
+          "paper_artifacts": [
+            "PAP-0069"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0069"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": false,
+          "kind": "corollary",
+          "cluster_role": "member",
+          "cluster_id": "U-1618",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "normal",
+          "retrieval_questions": [],
+          "context_role": "supporting"
+        },
+        "extensions": {
+          "claim_key": "0b7bd4502afa",
+          "loc": "§8 Corollaries — C2",
+          "tag_from_source": "CONDITIONAL"
+        }
+      },
+      {
+        "id": "U-1300",
+        "label": "C3 — one-line reproof of AB = P^2",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "**C3 (one-line reproof of `AB = P^2`).** With `A = prod(w_i + m)`,\n`B = prod(w_i - m)`:\n\n```text\nAB = prod_i (w_i^2 - m^2) = prod_i N_i^2 = P^2.\n```",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/LOG_ENTRY_R6_R7_generic_descent_v2.md",
+            "sha256": "67a3cdfef98bfc6c361035c67362aea462f53a135d57ce53ed0907f91cfa56b2"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0116",
+            "E-0117",
+            "E-0119",
+            "E-0122",
+            "E-0123",
+            "U-1296",
+            "U-1297",
+            "U-1299",
+            "U-1300",
+            "U-1302",
+            "U-1309",
+            "U-1315",
+            "U-1348",
+            "U-1356",
+            "U-1366",
+            "U-1367",
+            "U-1369",
+            "U-1385",
+            "U-1386",
+            "U-1387",
+            "U-1409",
+            "U-1419",
+            "U-1421",
+            "U-1423"
+          ],
+          "paper_artifacts": [
+            "PAP-0069"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0069"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": true,
+          "kind": "worked-result",
+          "cluster_role": "canonical",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "b150e33f0f01",
+          "loc": "§8 Corollaries — C3"
+        }
+      },
+      {
+        "id": "U-1301",
+        "label": "C3: AB = P^2",
+        "type": "formula",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "C3: `AB=P^2`",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md",
+            "sha256": "7a93cb8720d53220bbf8a5b9c358a422168abd0acc56807bbb3d5eb3deb14ad7"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0106",
+            "E-0117",
+            "E-0119",
+            "U-1298",
+            "U-1301",
+            "U-1326",
+            "U-1327",
+            "U-1336",
+            "U-1340",
+            "U-1342",
+            "U-1351",
+            "U-1354",
+            "U-1355",
+            "U-1357",
+            "U-1368",
+            "U-1375",
+            "U-1406",
+            "U-1420",
+            "U-1424",
+            "U-1425"
+          ],
+          "paper_artifacts": [
+            "PAP-0063"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0063"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": true,
+          "kind": "formula",
+          "cluster_role": "member",
+          "cluster_id": "U-1300",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "55d197d4cdde",
+          "loc": "§2 Claim-by-claim audit (table row C3)",
+          "tag_from_source": "PASS | None"
+        }
+      },
+      {
+        "id": "U-1302",
+        "label": "C4 — generic minimality of the physical seed for higher k",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "**C4 (generic minimality, higher k).** Theorem 4(b) is `k`-uniform: the\ngeneric physical seed has minimal degree `delta_k` for **every** `k`\nsatisfying (H1), (H2). In particular the \"(irreducibility open)\" clauses in\ntable §3.1 close at the generic level for `k = 5` (degree 16) and `k = 6`\n(degree 22), and the generic half of R10 is supplied. **Not supplied:**\nirreducibility at specialized rational charges (Hilbert/Dedekind — Branch I),\nwhich the census (Stage 6) still requires for group witnesses.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/LOG_ENTRY_R6_R7_generic_descent_v2.md",
+            "sha256": "67a3cdfef98bfc6c361035c67362aea462f53a135d57ce53ed0907f91cfa56b2"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0116",
+            "E-0117",
+            "E-0119",
+            "E-0122",
+            "E-0123",
+            "U-1296",
+            "U-1297",
+            "U-1299",
+            "U-1300",
+            "U-1302",
+            "U-1309",
+            "U-1315",
+            "U-1348",
+            "U-1356",
+            "U-1366",
+            "U-1367",
+            "U-1369",
+            "U-1385",
+            "U-1386",
+            "U-1387",
+            "U-1409",
+            "U-1419",
+            "U-1421",
+            "U-1423"
+          ],
+          "paper_artifacts": [
+            "PAP-0069"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0069"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": false,
+          "kind": "corollary",
+          "cluster_role": "member",
+          "cluster_id": "U-1423",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "normal",
+          "retrieval_questions": [],
+          "context_role": "supporting"
+        },
+        "extensions": {
+          "claim_key": "a2a4d917b89e",
+          "loc": "§8 Corollaries — C4",
+          "tag_from_source": "ESTABLISHED (generic)"
+        }
+      },
+      {
+        "id": "U-1309",
+        "label": "Convention: axial k-ellipse polynomial Phi_k(m,M) and resultant identity",
+        "type": "definition",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "**Convention.** Display polynomial `Phi_k(m, M)` denotes the axial `k`-ellipse\npolynomial with the radius `4M` promoted to a coordinate:\n\n```text\nPhi_k(m, M) = product_{eps in {+1,-1}^k} ( 4M - sum_i eps_i w_i ).\n```\n\nEquivalently `Phi_k = ± Res_u(N_k(u), m^2 - u)` up to unit, matching the ledger's `E_u` construction.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/LOG_ENTRY_R6_R7_generic_descent_v2.md",
+            "sha256": "67a3cdfef98bfc6c361035c67362aea462f53a135d57ce53ed0907f91cfa56b2"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0116",
+            "E-0117",
+            "E-0119",
+            "E-0122",
+            "E-0123",
+            "U-1296",
+            "U-1297",
+            "U-1299",
+            "U-1300",
+            "U-1302",
+            "U-1309",
+            "U-1315",
+            "U-1348",
+            "U-1356",
+            "U-1366",
+            "U-1367",
+            "U-1369",
+            "U-1385",
+            "U-1386",
+            "U-1387",
+            "U-1409",
+            "U-1419",
+            "U-1421",
+            "U-1423"
+          ],
+          "paper_artifacts": [
+            "PAP-0069"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0069"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": true,
+          "kind": "notation",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "120174929c08",
+          "loc": "§1 Setup and conventions (general k)"
+        }
+      },
+      {
+        "id": "U-1315",
+        "label": "Discriminant mechanisms — sheet collision and critical sheet",
+        "type": "formula",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "```text\n1. Sheet collision:   s_eps(u) = s_eps'(u), eps != eps'\n                      <=> a signed sub-balance vanishes\n                      (D = the disagreement set);\n\n2. Critical sheet:    d/du [ 4M - s_eps(u) ] = 0\n                      <=> sum_i eps_i / w_i = 0\n                      (since ds_eps/du = sum_i eps_i/(2 w_i)) —\n                      a double root WITHIN one signed sheet.\n```\n\nSigned sub-balance varieties contribute the **sheet-collision** components; critical-sheet components must be stratified separately (feeds R12).",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/LOG_ENTRY_R6_R7_generic_descent_v2.md",
+            "sha256": "67a3cdfef98bfc6c361035c67362aea462f53a135d57ce53ed0907f91cfa56b2"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0116",
+            "E-0117",
+            "E-0119",
+            "E-0122",
+            "E-0123",
+            "U-1296",
+            "U-1297",
+            "U-1299",
+            "U-1300",
+            "U-1302",
+            "U-1309",
+            "U-1315",
+            "U-1348",
+            "U-1356",
+            "U-1366",
+            "U-1367",
+            "U-1369",
+            "U-1385",
+            "U-1386",
+            "U-1387",
+            "U-1409",
+            "U-1419",
+            "U-1421",
+            "U-1423"
+          ],
+          "paper_artifacts": [
+            "PAP-0069"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0069"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": true,
+          "kind": "formula",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "11ed1ca3adb5",
+          "loc": "§9 Failure loci — [v2] Discriminant mechanisms"
+        }
+      },
+      {
+        "id": "U-1326",
+        "label": "Four-charge specialization: [K:F]=5",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "For four charges:\n\n```text\n[K:F] = 5,\n[W:K] = 2,\nW^tau = K,\nw_i in K.\n```",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md",
+            "sha256": "7a93cb8720d53220bbf8a5b9c358a422168abd0acc56807bbb3d5eb3deb14ad7"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0106",
+            "E-0117",
+            "E-0119",
+            "U-1298",
+            "U-1301",
+            "U-1326",
+            "U-1327",
+            "U-1336",
+            "U-1340",
+            "U-1342",
+            "U-1351",
+            "U-1354",
+            "U-1355",
+            "U-1357",
+            "U-1368",
+            "U-1375",
+            "U-1406",
+            "U-1420",
+            "U-1424",
+            "U-1425"
+          ],
+          "paper_artifacts": [
+            "PAP-0063"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0063"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": true,
+          "kind": "worked-result",
+          "cluster_role": "member",
+          "cluster_id": "U-1425",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "61bb5ad8cb88",
+          "loc": "§12 Final audit judgment"
+        }
+      },
+      {
+        "id": "U-1327",
+        "label": "Full-degree corollary for either ordered horizon",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "Once square-class independence holds, this gives\n\n```text\n[F(S_+):F] = [F(S_-):F] = 20.\n```\n\nIndeed\n\n```text\nS_+ S_- in F,\nS_- = (S_+S_-)/S_+,\n```\n\nso either individual horizon generates the full ordered-horizon field.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md",
+            "sha256": "7a93cb8720d53220bbf8a5b9c358a422168abd0acc56807bbb3d5eb3deb14ad7"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0106",
+            "E-0117",
+            "E-0119",
+            "U-1298",
+            "U-1301",
+            "U-1326",
+            "U-1327",
+            "U-1336",
+            "U-1340",
+            "U-1342",
+            "U-1351",
+            "U-1354",
+            "U-1355",
+            "U-1357",
+            "U-1368",
+            "U-1375",
+            "U-1406",
+            "U-1420",
+            "U-1424",
+            "U-1425"
+          ],
+          "paper_artifacts": [
+            "PAP-0063"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0063"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": true,
+          "kind": "corollary",
+          "cluster_role": "member",
+          "cluster_id": "U-1366",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "80e321826ea4",
+          "loc": "§8 Required theorem — identify the ordered-horizon field"
+        }
+      },
+      {
+        "id": "U-1336",
+        "label": "Generic minimal degree formula D_k / delta_k for all k",
+        "type": "formula",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "deg_F(m) = D_k,\ndeg_F(u) = delta_k = D_k/2,\n\nD_k = 2^k                              for k odd,\nD_k = 2^k - binom(k,k/2)               for k even.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md",
+            "sha256": "7a93cb8720d53220bbf8a5b9c358a422168abd0acc56807bbb3d5eb3deb14ad7"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0106",
+            "E-0117",
+            "E-0119",
+            "U-1298",
+            "U-1301",
+            "U-1326",
+            "U-1327",
+            "U-1336",
+            "U-1340",
+            "U-1342",
+            "U-1351",
+            "U-1354",
+            "U-1355",
+            "U-1357",
+            "U-1368",
+            "U-1375",
+            "U-1406",
+            "U-1420",
+            "U-1424",
+            "U-1425"
+          ],
+          "paper_artifacts": [
+            "PAP-0063"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0063"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": true,
+          "kind": "formula",
+          "cluster_role": "member",
+          "cluster_id": "U-1423",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "b24cc90655b1",
+          "loc": "§1 Executive conclusion",
+          "tag_from_source": "Generic minimal degrees for all k | PASS | Clarify generic versus fully specialized"
+        }
+      },
+      {
+        "id": "U-1340",
+        "label": "Good-specialization statement (point B transfer conditions)",
+        "type": "definition",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "If nonsquareness is transferred from point B, record that B is a good specialization:\n\n```text\nthe quintic is separable;\nleading coefficients remain nonzero;\nu, gamma and u*gamma are regular and nonzero;\nthe specialization avoids all denominator and ramification loci.\n```",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md",
+            "sha256": "7a93cb8720d53220bbf8a5b9c358a422168abd0acc56807bbb3d5eb3deb14ad7"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0106",
+            "E-0117",
+            "E-0119",
+            "U-1298",
+            "U-1301",
+            "U-1326",
+            "U-1327",
+            "U-1336",
+            "U-1340",
+            "U-1342",
+            "U-1351",
+            "U-1354",
+            "U-1355",
+            "U-1357",
+            "U-1368",
+            "U-1375",
+            "U-1406",
+            "U-1420",
+            "U-1424",
+            "U-1425"
+          ],
+          "paper_artifacts": [
+            "PAP-0063"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0063"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": true,
+          "kind": "definition",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "a6acfdb63093",
+          "loc": "§7 Conditional degree-20 theorem",
+          "tag_from_source": "Required good-specialization statement"
+        }
+      },
+      {
+        "id": "U-1342",
+        "label": "Hypotheses H1, H2",
+        "type": "definition",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "H1: N_i != 0,\nH2: N_i^2 != N_j^2 for i != j,",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md",
+            "sha256": "7a93cb8720d53220bbf8a5b9c358a422168abd0acc56807bbb3d5eb3deb14ad7"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0106",
+            "E-0117",
+            "E-0119",
+            "U-1298",
+            "U-1301",
+            "U-1326",
+            "U-1327",
+            "U-1336",
+            "U-1340",
+            "U-1342",
+            "U-1351",
+            "U-1354",
+            "U-1355",
+            "U-1357",
+            "U-1368",
+            "U-1375",
+            "U-1406",
+            "U-1420",
+            "U-1424",
+            "U-1425"
+          ],
+          "paper_artifacts": [
+            "PAP-0063"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0063"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": true,
+          "kind": "notation",
+          "cluster_role": "member",
+          "cluster_id": "U-1409",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "287db41b3526",
+          "loc": "§1 Executive conclusion"
+        }
+      },
+      {
+        "id": "U-1348",
+        "label": "Isolation upgrade — physical sheet free of both discriminant mechanisms",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "**[v2] Isolation upgrade.** On the real physical chamber the all-plus sheet\nhas\n\n```text\nsum_i 1/w_i > 0    strictly    (all w_i > 0),\n```\n\nso the physical sheet contains **no critical point**; combined with the\ncollision-free theorem (Branch E), the physical sheet is free of **both**\ndiscriminant mechanisms. Status: ESTABLISHED (prose); folds into the R17\nwrite-up.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/LOG_ENTRY_R6_R7_generic_descent_v2.md",
+            "sha256": "67a3cdfef98bfc6c361035c67362aea462f53a135d57ce53ed0907f91cfa56b2"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0116",
+            "E-0117",
+            "E-0119",
+            "E-0122",
+            "E-0123",
+            "U-1296",
+            "U-1297",
+            "U-1299",
+            "U-1300",
+            "U-1302",
+            "U-1309",
+            "U-1315",
+            "U-1348",
+            "U-1356",
+            "U-1366",
+            "U-1367",
+            "U-1369",
+            "U-1385",
+            "U-1386",
+            "U-1387",
+            "U-1409",
+            "U-1419",
+            "U-1421",
+            "U-1423"
+          ],
+          "paper_artifacts": [
+            "PAP-0069"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0069"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": false,
+          "kind": "proposition",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "normal",
+          "retrieval_questions": [],
+          "context_role": "supporting"
+        },
+        "extensions": {
+          "claim_key": "5498e341c292",
+          "loc": "§9 Failure loci — isolation upgrade",
+          "tag_from_source": "ESTABLISHED (prose)"
+        }
+      },
+      {
+        "id": "U-1351",
+        "label": "k=5, k=6 generic degrees",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "k=5: [F(u):F] = 16,\nk=6: [F(u):F] = 22",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md",
+            "sha256": "7a93cb8720d53220bbf8a5b9c358a422168abd0acc56807bbb3d5eb3deb14ad7"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0106",
+            "E-0117",
+            "E-0119",
+            "U-1298",
+            "U-1301",
+            "U-1326",
+            "U-1327",
+            "U-1336",
+            "U-1340",
+            "U-1342",
+            "U-1351",
+            "U-1354",
+            "U-1355",
+            "U-1357",
+            "U-1368",
+            "U-1375",
+            "U-1406",
+            "U-1420",
+            "U-1424",
+            "U-1425"
+          ],
+          "paper_artifacts": [
+            "PAP-0063"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0063"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": true,
+          "kind": "corollary",
+          "cluster_role": "member",
+          "cluster_id": "U-1423",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "ae66e96f45be",
+          "loc": "§1 Executive conclusion",
+          "tag_from_source": "generically"
+        }
+      },
+      {
+        "id": "U-1354",
+        "label": "Lemma 0 — square-class independence",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "The UFD proof in `F0[m]` is correct. Under `H1` and `H2`,\n\n```text\nd_i = m^2 + N_i^2\n```\n\nare individually squarefree and pairwise coprime. Every nonempty product\n\n```text\nprod_{i in S} d_i\n```\n\ntherefore has an irreducible factor of odd valuation and is not a square in\n\n```text\nL = F0(m).\n```\n\nThus\n\n```text\n[W:L] = 2^k,\nGal(W/L) = (Z/2)^k.\n```",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md",
+            "sha256": "7a93cb8720d53220bbf8a5b9c358a422168abd0acc56807bbb3d5eb3deb14ad7"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0106",
+            "E-0117",
+            "E-0119",
+            "U-1298",
+            "U-1301",
+            "U-1326",
+            "U-1327",
+            "U-1336",
+            "U-1340",
+            "U-1342",
+            "U-1351",
+            "U-1354",
+            "U-1355",
+            "U-1357",
+            "U-1368",
+            "U-1375",
+            "U-1406",
+            "U-1420",
+            "U-1424",
+            "U-1425"
+          ],
+          "paper_artifacts": [
+            "PAP-0063"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0063"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": true,
+          "kind": "lemma",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "bc1970e7eb3c",
+          "loc": "§3.1 Lemma 0 — square-class independence",
+          "tag_from_source": "PASS | None"
+        }
+      },
+      {
+        "id": "U-1355",
+        "label": "Lemma 1 — sub-balance nonvanishing",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "This is correct. If\n\n```text\nt = sum_{i in S} eps_i w_i = 0,\n```\n\nthen flipping one radical in the nonempty support gives\n\n```text\nsigma_j(t) - t = -2 eps_j w_j = 0,\n```\n\ncontradicting\n\n```text\nw_j^2 = d_j != 0.\n```",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md",
+            "sha256": "7a93cb8720d53220bbf8a5b9c358a422168abd0acc56807bbb3d5eb3deb14ad7"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0106",
+            "E-0117",
+            "E-0119",
+            "U-1298",
+            "U-1301",
+            "U-1326",
+            "U-1327",
+            "U-1336",
+            "U-1340",
+            "U-1342",
+            "U-1351",
+            "U-1354",
+            "U-1355",
+            "U-1357",
+            "U-1368",
+            "U-1375",
+            "U-1406",
+            "U-1420",
+            "U-1424",
+            "U-1425"
+          ],
+          "paper_artifacts": [
+            "PAP-0063"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0063"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": true,
+          "kind": "lemma",
+          "cluster_role": "member",
+          "cluster_id": "U-1356",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "0684b7cce3e8",
+          "loc": "§3.2 Lemma 1 — sub-balance nonvanishing",
+          "tag_from_source": "PASS | None"
+        }
+      },
+      {
+        "id": "U-1356",
+        "label": "Lemma 1 — sub-balance nonvanishing (function-field level)",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "**Lemma 1.** Assume (H1), (H2). For every nonempty `S ⊆ {1, ..., k}` and every\nchoice of signs `sigma_i ∈ {+1, -1}` (`i ∈ S`),\n\n```text\nt := sum_{i in S} sigma_i w_i  !=  0     in W.\n```",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/LOG_ENTRY_R6_R7_generic_descent_v2.md",
+            "sha256": "67a3cdfef98bfc6c361035c67362aea462f53a135d57ce53ed0907f91cfa56b2"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0116",
+            "E-0117",
+            "E-0119",
+            "E-0122",
+            "E-0123",
+            "U-1296",
+            "U-1297",
+            "U-1299",
+            "U-1300",
+            "U-1302",
+            "U-1309",
+            "U-1315",
+            "U-1348",
+            "U-1356",
+            "U-1366",
+            "U-1367",
+            "U-1369",
+            "U-1385",
+            "U-1386",
+            "U-1387",
+            "U-1409",
+            "U-1419",
+            "U-1421",
+            "U-1423"
+          ],
+          "paper_artifacts": [
+            "PAP-0069"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0069"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": false,
+          "kind": "lemma",
+          "cluster_role": "canonical",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "normal",
+          "retrieval_questions": [],
+          "context_role": "supporting"
+        },
+        "extensions": {
+          "claim_key": "7c80718fca4d",
+          "loc": "§3 Lemma 1 — sub-balance nonvanishing",
+          "tag_from_source": "unconditional"
+        }
+      },
+      {
+        "id": "U-1357",
+        "label": "Lemma 3 — transcendence of s over F0",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "The derivation proof is valid:\n\n```text\nD(s) = m sum_i 1/w_i\n     = m e_{k-1}(w)/e_k(w).\n```\n\nThe sign-flip argument correctly proves\n\n```text\ne_{k-1}(w) != 0.\n```\n\nHence `D(s)!=0`, while every element algebraic over `F0` is killed by the extended derivation. Therefore `s` is transcendental over `F0`.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md",
+            "sha256": "7a93cb8720d53220bbf8a5b9c358a422168abd0acc56807bbb3d5eb3deb14ad7"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0106",
+            "E-0117",
+            "E-0119",
+            "U-1298",
+            "U-1301",
+            "U-1326",
+            "U-1327",
+            "U-1336",
+            "U-1340",
+            "U-1342",
+            "U-1351",
+            "U-1354",
+            "U-1355",
+            "U-1357",
+            "U-1368",
+            "U-1375",
+            "U-1406",
+            "U-1420",
+            "U-1424",
+            "U-1425"
+          ],
+          "paper_artifacts": [
+            "PAP-0063"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0063"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": true,
+          "kind": "lemma",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "785724756757",
+          "loc": "§3.4 Lemma 3 — transcendence",
+          "tag_from_source": "PASS | None"
+        }
+      },
+      {
+        "id": "U-1366",
+        "label": "P6 area-product pivot — single normalized horizon entropy generates the ordered-horizon field",
+        "type": "formula",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "*Area-product pivot.* `y^2 - z^2 = 2(alpha + P) - 2(alpha - P) = 4P`, so\n\n```text\nShat_+ * Shat_- = P = prod_i N_i ∈ F        (exactly — no pi^2 residue),\n```\n\nhence `Shat_- = P / Shat_+` and\n\n```text\nF(Shat_+) = F(Shat_+, Shat_-) = K(m, y):\n```\n\n**either normalized horizon entropy alone generates the full ordered-horizon\nfield**, pivoting on the universal area product. The degree consequence\n`[F(Shat_+) : F] = 20` is CONDITIONAL on the C2 gate (Entry 4\nre-verification). The proposition itself is unconditional. Register: R19.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/LOG_ENTRY_R6_R7_generic_descent_v2.md",
+            "sha256": "67a3cdfef98bfc6c361035c67362aea462f53a135d57ce53ed0907f91cfa56b2"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0116",
+            "E-0117",
+            "E-0119",
+            "E-0122",
+            "E-0123",
+            "U-1296",
+            "U-1297",
+            "U-1299",
+            "U-1300",
+            "U-1302",
+            "U-1309",
+            "U-1315",
+            "U-1348",
+            "U-1356",
+            "U-1366",
+            "U-1367",
+            "U-1369",
+            "U-1385",
+            "U-1386",
+            "U-1387",
+            "U-1409",
+            "U-1419",
+            "U-1421",
+            "U-1423"
+          ],
+          "paper_artifacts": [
+            "PAP-0069"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0069"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": true,
+          "kind": "formula",
+          "cluster_role": "canonical",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "e37430998013",
+          "loc": "§8 Corollaries — P6, area-product pivot",
+          "tag_from_source": "unconditional"
+        }
+      },
+      {
+        "id": "U-1367",
+        "label": "Physical qualifier (guardrail 12) — signed axial-contact divisor vs. physical extremal locus",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "**Physical qualifier (guardrail 12).** The divisor `u = 0` lies over the full\nzero locus of `N_k(0)` — the entire signed wall arrangement. As the fixed\ndivisor of `tau` it is the **signed axial-contact divisor**; only its\nall-plus component inside the physical chamber is the static BPS/extremal\ncontact locus (Branch H, locus 1 = 2 = 6, statically). Do not identify the\nwhole signed algebraic divisor with the physical extremal locus. The trunk\nclause (R18) is promoted in this corrected form.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/LOG_ENTRY_R6_R7_generic_descent_v2.md",
+            "sha256": "67a3cdfef98bfc6c361035c67362aea462f53a135d57ce53ed0907f91cfa56b2"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0116",
+            "E-0117",
+            "E-0119",
+            "E-0122",
+            "E-0123",
+            "U-1296",
+            "U-1297",
+            "U-1299",
+            "U-1300",
+            "U-1302",
+            "U-1309",
+            "U-1315",
+            "U-1348",
+            "U-1356",
+            "U-1366",
+            "U-1367",
+            "U-1369",
+            "U-1385",
+            "U-1386",
+            "U-1387",
+            "U-1409",
+            "U-1419",
+            "U-1421",
+            "U-1423"
+          ],
+          "paper_artifacts": [
+            "PAP-0069"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0069"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": false,
+          "kind": "corollary",
+          "cluster_role": "canonical",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "normal",
+          "retrieval_questions": [],
+          "context_role": "supporting"
+        },
+        "extensions": {
+          "claim_key": "464746783eab",
+          "loc": "§7 Theorem 5 (R7) — reflection descent"
+        }
+      },
+      {
+        "id": "U-1368",
+        "label": "Physical qualifier on the signed axial-contact divisor",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "The divisor\n\n```text\nu = 0\n```\n\ncontains all signed axial-contact wall components. Only its all-plus component in the physical chamber is the physical BPS/extremal contact locus.\n\nUse:\n\n```text\nThe finite fixed divisor is the signed axial-contact divisor u=0;\nits all-plus physical component is the static BPS/extremal locus.\n```",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md",
+            "sha256": "7a93cb8720d53220bbf8a5b9c358a422168abd0acc56807bbb3d5eb3deb14ad7"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0106",
+            "E-0117",
+            "E-0119",
+            "U-1298",
+            "U-1301",
+            "U-1326",
+            "U-1327",
+            "U-1336",
+            "U-1340",
+            "U-1342",
+            "U-1351",
+            "U-1354",
+            "U-1355",
+            "U-1357",
+            "U-1368",
+            "U-1375",
+            "U-1406",
+            "U-1420",
+            "U-1424",
+            "U-1425"
+          ],
+          "paper_artifacts": [
+            "PAP-0063"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0063"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": true,
+          "kind": "proposition",
+          "cluster_role": "member",
+          "cluster_id": "U-1367",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "1a8e38285f79",
+          "loc": "§5 Required repair — ramification and physical interpretation",
+          "tag_from_source": "Required physical qualifier"
+        }
+      },
+      {
+        "id": "U-1369",
+        "label": "Physical seed field K",
+        "type": "definition",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "Physical seed field, once irreducibility is in hand (Theorem 4):\n\n```text\nK = F[u]/(N_k(u)),           u = m^2.\n```",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/LOG_ENTRY_R6_R7_generic_descent_v2.md",
+            "sha256": "67a3cdfef98bfc6c361035c67362aea462f53a135d57ce53ed0907f91cfa56b2"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0116",
+            "E-0117",
+            "E-0119",
+            "E-0122",
+            "E-0123",
+            "U-1296",
+            "U-1297",
+            "U-1299",
+            "U-1300",
+            "U-1302",
+            "U-1309",
+            "U-1315",
+            "U-1348",
+            "U-1356",
+            "U-1366",
+            "U-1367",
+            "U-1369",
+            "U-1385",
+            "U-1386",
+            "U-1387",
+            "U-1409",
+            "U-1419",
+            "U-1421",
+            "U-1423"
+          ],
+          "paper_artifacts": [
+            "PAP-0069"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0069"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": true,
+          "kind": "definition",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "3524445b4401",
+          "loc": "§1 Setup and conventions (general k)"
+        }
+      },
+      {
+        "id": "U-1375",
+        "label": "Pure anti-invariant covariant Theta = S*T",
+        "type": "formula",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "The pure anti-invariant covariant is\n\n```text\nTheta = S*T,\ntau(Theta) = -Theta.\n```",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md",
+            "sha256": "7a93cb8720d53220bbf8a5b9c358a422168abd0acc56807bbb3d5eb3deb14ad7"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0106",
+            "E-0117",
+            "E-0119",
+            "U-1298",
+            "U-1301",
+            "U-1326",
+            "U-1327",
+            "U-1336",
+            "U-1340",
+            "U-1342",
+            "U-1351",
+            "U-1354",
+            "U-1355",
+            "U-1357",
+            "U-1368",
+            "U-1375",
+            "U-1406",
+            "U-1420",
+            "U-1424",
+            "U-1425"
+          ],
+          "paper_artifacts": [
+            "PAP-0063"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0063"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": true,
+          "kind": "formula",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "28e4e2a27a58",
+          "loc": "§9 Temperature parity remains a separate paper correction"
+        }
+      },
+      {
+        "id": "U-1385",
+        "label": "Remark (Branch E shadow) — specialization failure locus of Lemma 1",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "**Remark (Branch E shadow).** Lemma 1 is unconditional at the function-field\nlevel. Under **specialization** of the parameters, its conclusion fails\nexactly on the signed sub-balance varieties `sum_{i in D} sigma_i w_i = 0`\n— the certified discriminant components of Branch E. See §9.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/LOG_ENTRY_R6_R7_generic_descent_v2.md",
+            "sha256": "67a3cdfef98bfc6c361035c67362aea462f53a135d57ce53ed0907f91cfa56b2"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0116",
+            "E-0117",
+            "E-0119",
+            "E-0122",
+            "E-0123",
+            "U-1296",
+            "U-1297",
+            "U-1299",
+            "U-1300",
+            "U-1302",
+            "U-1309",
+            "U-1315",
+            "U-1348",
+            "U-1356",
+            "U-1366",
+            "U-1367",
+            "U-1369",
+            "U-1385",
+            "U-1386",
+            "U-1387",
+            "U-1409",
+            "U-1419",
+            "U-1421",
+            "U-1423"
+          ],
+          "paper_artifacts": [
+            "PAP-0069"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0069"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": false,
+          "kind": "corollary",
+          "cluster_role": "member",
+          "cluster_id": "U-1356",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "normal",
+          "retrieval_questions": [],
+          "context_role": "supporting"
+        },
+        "extensions": {
+          "claim_key": "e31a3186da01",
+          "loc": "§3 Lemma 1 — sub-balance nonvanishing"
+        }
+      },
+      {
+        "id": "U-1386",
+        "label": "Remark (legitimacy of the identification)",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "**Remark (legitimacy of the identification).** The observable field `F` is\nby construction purely transcendental over `F0` — the model's observables\ncarry no relations. Lemma 3 shows the incidence curve realizes exactly such\nan `F` via `M = s/4`, with the `k`-channel mass relation holding\ntautologically on `C`. The identification is the unique `F0`-embedding\nsending the abstract mass observable to the curve's mass function;\nphysically, \"`4M` is the sum of channel distances\" is the definition of the\nmodel.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/LOG_ENTRY_R6_R7_generic_descent_v2.md",
+            "sha256": "67a3cdfef98bfc6c361035c67362aea462f53a135d57ce53ed0907f91cfa56b2"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0116",
+            "E-0117",
+            "E-0119",
+            "E-0122",
+            "E-0123",
+            "U-1296",
+            "U-1297",
+            "U-1299",
+            "U-1300",
+            "U-1302",
+            "U-1309",
+            "U-1315",
+            "U-1348",
+            "U-1356",
+            "U-1366",
+            "U-1367",
+            "U-1369",
+            "U-1385",
+            "U-1386",
+            "U-1387",
+            "U-1409",
+            "U-1419",
+            "U-1421",
+            "U-1423"
+          ],
+          "paper_artifacts": [
+            "PAP-0069"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0069"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": false,
+          "kind": "corollary",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "normal",
+          "retrieval_questions": [],
+          "context_role": "supporting"
+        },
+        "extensions": {
+          "claim_key": "dad88c5e61b3",
+          "loc": "§6 Theorem 4"
+        }
+      },
+      {
+        "id": "U-1387",
+        "label": "Remark (ramification, corrected) — ord_v(u)-odd criterion",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "**Remark (ramification, corrected) [v2].** For the quadratic `W = K(m)`,\n`m^2 = u`, in characteristic 0, a place `v` of `K` ramifies precisely when\n\n```text\nord_v(u) is odd.\n```\n\nGenerically the finite ramification is supported exactly on the zero divisor\n`u = 0` (the constant term `N_k(0)` is the wall product, nonzero at generic\ncharges, so the zeros of `u` are simple — odd). The places above infinity\nrequire a separate valuation computation — **unswept**.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/LOG_ENTRY_R6_R7_generic_descent_v2.md",
+            "sha256": "67a3cdfef98bfc6c361035c67362aea462f53a135d57ce53ed0907f91cfa56b2"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0116",
+            "E-0117",
+            "E-0119",
+            "E-0122",
+            "E-0123",
+            "U-1296",
+            "U-1297",
+            "U-1299",
+            "U-1300",
+            "U-1302",
+            "U-1309",
+            "U-1315",
+            "U-1348",
+            "U-1356",
+            "U-1366",
+            "U-1367",
+            "U-1369",
+            "U-1385",
+            "U-1386",
+            "U-1387",
+            "U-1409",
+            "U-1419",
+            "U-1421",
+            "U-1423"
+          ],
+          "paper_artifacts": [
+            "PAP-0069"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0069"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": true,
+          "kind": "proposition",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "76d78f877a75",
+          "loc": "§7 Theorem 5 (R7) — reflection descent",
+          "tag_from_source": "ESTABLISHED (finite part, corrected form)"
+        }
+      },
+      {
+        "id": "U-1406",
+        "label": "Smoothness of curve C via Jacobian rank argument (R6 normalization repair)",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "Under (H1) and (H2), C is smooth.\n\nThe Jacobian rows of\n\n    w_i^2 - m^2 - N_i^2 = 0\n\nare\n\n    (-2m, 0,...,2w_i,...,0).\n\nA rank failure can occur only if some w_i=0. By (H2), at most one\nw_i can vanish. By (H1), w_i=0 implies m^2=-N_i^2 and hence m!=0.\nThe m-column then prevents a nontrivial linear dependence among the\nJacobian rows. Thus C is smooth, hence normal.\n\nThe coordinate ring A_C is finite over A_X because each w_i is integral\nover F0[m] and F0[m] is contained in A_X. The map C -> X is finite and\nbirational, with the same function field. Since C is normal, C is the\naffine normalization of X.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md",
+            "sha256": "7a93cb8720d53220bbf8a5b9c358a422168abd0acc56807bbb3d5eb3deb14ad7"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0106",
+            "E-0117",
+            "E-0119",
+            "U-1298",
+            "U-1301",
+            "U-1326",
+            "U-1327",
+            "U-1336",
+            "U-1340",
+            "U-1342",
+            "U-1351",
+            "U-1354",
+            "U-1355",
+            "U-1357",
+            "U-1368",
+            "U-1375",
+            "U-1406",
+            "U-1420",
+            "U-1424",
+            "U-1425"
+          ],
+          "paper_artifacts": [
+            "PAP-0063"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0063"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": true,
+          "kind": "proposition",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "61235dbe9f5a",
+          "loc": "§4 Required repair — normalization in Theorem 2(v)",
+          "tag_from_source": "Required replacement proof"
+        }
+      },
+      {
+        "id": "U-1409",
+        "label": "Standing genericity hypotheses (H1),(H2)",
+        "type": "definition",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "**Standing genericity hypotheses.**\n\n```text\n(H1)  N_i != 0            for all i;\n(H2)  N_i^2 != N_j^2      for all i != j.\n```\n\nBoth hold automatically for independent transcendentals. They are listed\nbecause their failure strata are exactly the Branch E/H degeneracies (§9).",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/LOG_ENTRY_R6_R7_generic_descent_v2.md",
+            "sha256": "67a3cdfef98bfc6c361035c67362aea462f53a135d57ce53ed0907f91cfa56b2"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0116",
+            "E-0117",
+            "E-0119",
+            "E-0122",
+            "E-0123",
+            "U-1296",
+            "U-1297",
+            "U-1299",
+            "U-1300",
+            "U-1302",
+            "U-1309",
+            "U-1315",
+            "U-1348",
+            "U-1356",
+            "U-1366",
+            "U-1367",
+            "U-1369",
+            "U-1385",
+            "U-1386",
+            "U-1387",
+            "U-1409",
+            "U-1419",
+            "U-1421",
+            "U-1423"
+          ],
+          "paper_artifacts": [
+            "PAP-0069"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0069"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": true,
+          "kind": "definition",
+          "cluster_role": "canonical",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "8c58d8136c74",
+          "loc": "§1 Setup and conventions (general k)"
+        }
+      },
+      {
+        "id": "U-1419",
+        "label": "Theorem 2(i)–(ii) — full Galois orbit and trivial stabilizer of s",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "(i)    The 2^k conjugates s_eps are pairwise distinct in W, and they form\n       the full Gal(W/L)-orbit of s.\n\n(ii)   L(s) = W.    (The stabilizer of s is trivial.)",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/LOG_ENTRY_R6_R7_generic_descent_v2.md",
+            "sha256": "67a3cdfef98bfc6c361035c67362aea462f53a135d57ce53ed0907f91cfa56b2"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0116",
+            "E-0117",
+            "E-0119",
+            "E-0122",
+            "E-0123",
+            "U-1296",
+            "U-1297",
+            "U-1299",
+            "U-1300",
+            "U-1302",
+            "U-1309",
+            "U-1315",
+            "U-1348",
+            "U-1356",
+            "U-1366",
+            "U-1367",
+            "U-1369",
+            "U-1385",
+            "U-1386",
+            "U-1387",
+            "U-1409",
+            "U-1419",
+            "U-1421",
+            "U-1423"
+          ],
+          "paper_artifacts": [
+            "PAP-0069"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0069"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": false,
+          "kind": "proposition",
+          "cluster_role": "member",
+          "cluster_id": "U-1420",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "normal",
+          "retrieval_questions": [],
+          "context_role": "supporting"
+        },
+        "extensions": {
+          "claim_key": "10be7f307621",
+          "loc": "§4 Theorem 2 (R6) — primitivity and birationality",
+          "tag_from_source": "ESTABLISHED"
+        }
+      },
+      {
+        "id": "U-1420",
+        "label": "Theorem 2(i–iv) — primitivity and irreducibility",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "The proof that\n\n```text\ns = sum_i w_i\n```\n\nis primitive is correct. Its `2^k` signed sums are pairwise distinct, so\n\n```text\n[L(s):L] = 2^k,\nL(s) = W.\n```\n\nThe norm\n\n```text\nPhi_k(m,M)\n = product_{eps in {+1,-1}^k}\n   (4M - sum_i eps_i w_i)\n```\n\nis therefore the minimal polynomial of `s/4` over `L`, up to a nonzero scalar. It is irreducible in\n\n```text\nL[M]\n```\n\nand, by Gauss's lemma, in\n\n```text\nF0[m,M].\n```\n\nThe evenness in `m` is valid. State it directly through\n\n```text\nm -> -m,\nw_i -> w_i,\n```\n\nwhich fixes `Phi_k`.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md",
+            "sha256": "7a93cb8720d53220bbf8a5b9c358a422168abd0acc56807bbb3d5eb3deb14ad7"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0106",
+            "E-0117",
+            "E-0119",
+            "U-1298",
+            "U-1301",
+            "U-1326",
+            "U-1327",
+            "U-1336",
+            "U-1340",
+            "U-1342",
+            "U-1351",
+            "U-1354",
+            "U-1355",
+            "U-1357",
+            "U-1368",
+            "U-1375",
+            "U-1406",
+            "U-1420",
+            "U-1424",
+            "U-1425"
+          ],
+          "paper_artifacts": [
+            "PAP-0063"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0063"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": true,
+          "kind": "theorem",
+          "cluster_role": "canonical",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "371151b2a6f0",
+          "loc": "§3.3 Theorem 2(i–iv) — primitivity and irreducibility",
+          "tag_from_source": "PASS | Minor wording improvement only"
+        }
+      },
+      {
+        "id": "U-1421",
+        "label": "Theorem 2(v) — birational geometric form; C is the affine normalization of X",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "(v)   Geometric form [v2, strengthened]: let\n       C = Spec F0[m, w_1..w_k]/(w_i^2 - d_i) and let\n       X = V(Phi_k) ⊂ A^2_(m,M) be the axial curve. Then\n       phi : C -> X, (m, w) |-> (m, s/4), is birational; moreover, under\n       (H1) and (H2), C is smooth, hence normal, and\n\n           C is the affine normalization of X\n\n       — the precise content of \"incidence normalization\" (Stage 2, item 2),\n       now at scheme level rather than function-field level only.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/LOG_ENTRY_R6_R7_generic_descent_v2.md",
+            "sha256": "67a3cdfef98bfc6c361035c67362aea462f53a135d57ce53ed0907f91cfa56b2"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0116",
+            "E-0117",
+            "E-0119",
+            "E-0122",
+            "E-0123",
+            "U-1296",
+            "U-1297",
+            "U-1299",
+            "U-1300",
+            "U-1302",
+            "U-1309",
+            "U-1315",
+            "U-1348",
+            "U-1356",
+            "U-1366",
+            "U-1367",
+            "U-1369",
+            "U-1385",
+            "U-1386",
+            "U-1387",
+            "U-1409",
+            "U-1419",
+            "U-1421",
+            "U-1423"
+          ],
+          "paper_artifacts": [
+            "PAP-0069"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0069"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": false,
+          "kind": "theorem",
+          "cluster_role": "canonical",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "normal",
+          "retrieval_questions": [],
+          "context_role": "supporting"
+        },
+        "extensions": {
+          "claim_key": "be6e94f48b01",
+          "loc": "§4 Theorem 2 (R6) — primitivity and birationality",
+          "tag_from_source": "ESTABLISHED"
+        }
+      },
+      {
+        "id": "U-1423",
+        "label": "Theorem 4 — identification with the physical field; generic minimality for all k",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "Theorem 4. Assume (H1), (H2). Let psi : F0[M, m] -> W be the F0-algebra map M |-> s/4, m |-> m. (0) ker psi = (Phi_k), and psi induces an isomorphism of fields over F: F[m]/(Phi_k) ≅ W, M |-> s/4. Consequences: (a) Phi_k is irreducible over F; [W:F] = deg_m Phi_k = D_k. (b) N_k(u) is irreducible over F; [K:F] = delta_k. The physical seed has minimal degree delta_k GENERICALLY, for every k; this settles the §3.1 \"important distinction\" clause at the generic level: k=5 minimal degree 16; k=6 minimal degree 22. (c) Under the isomorphism, W = F(m) is the ledger field K(m), generically; in particular each signed radical satisfies w_i ∈ F(m). (d) (a)-(b) re-derive, generically and independently, the DEGREE content of the point-B certificates (E_u irreducible degree 10 at k=4; the prose wall-norm proof). Both routes are retained. Group statements (S_5, closure groups) are NOT touched by this theorem.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/LOG_ENTRY_R6_R7_generic_descent_v2.md",
+            "sha256": "67a3cdfef98bfc6c361035c67362aea462f53a135d57ce53ed0907f91cfa56b2"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0116",
+            "E-0117",
+            "E-0119",
+            "E-0122",
+            "E-0123",
+            "U-1296",
+            "U-1297",
+            "U-1299",
+            "U-1300",
+            "U-1302",
+            "U-1309",
+            "U-1315",
+            "U-1348",
+            "U-1356",
+            "U-1366",
+            "U-1367",
+            "U-1369",
+            "U-1385",
+            "U-1386",
+            "U-1387",
+            "U-1409",
+            "U-1419",
+            "U-1421",
+            "U-1423"
+          ],
+          "paper_artifacts": [
+            "PAP-0069"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0069"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": false,
+          "kind": "theorem",
+          "cluster_role": "canonical",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "normal",
+          "retrieval_questions": [],
+          "context_role": "supporting"
+        },
+        "extensions": {
+          "claim_key": "a7d759342269",
+          "loc": "§6 Theorem 4",
+          "tag_from_source": "PASS"
+        }
+      },
+      {
+        "id": "U-1424",
+        "label": "Theorem 4 — observable-field identification",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "This is the key successful proof move. Under\n\n```text\nM -> s/4,\nm -> m,\n```\n\nthe kernel is exactly\n\n```text\n(Phi_k).\n```\n\nAfter localization at\n\n```text\nF = F0(M),\n```\n\nthe source is a finite-dimensional field over `F`. Its image contains `m` and `s`, hence is all of\n\n```text\nF0(m,s) = L(s) = W.\n```\n\nThus\n\n```text\nF[m]/(Phi_k) ~= W,\nW = F(m),\n[W:F] = D_k.\n```\n\nSince\n\n```text\nPhi_k(m,M) = N_k(m^2),\n```\n\na factorization of `N_k(u)` would factor `Phi_k(m,M)`.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md",
+            "sha256": "7a93cb8720d53220bbf8a5b9c358a422168abd0acc56807bbb3d5eb3deb14ad7"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0106",
+            "E-0117",
+            "E-0119",
+            "U-1298",
+            "U-1301",
+            "U-1326",
+            "U-1327",
+            "U-1336",
+            "U-1340",
+            "U-1342",
+            "U-1351",
+            "U-1354",
+            "U-1355",
+            "U-1357",
+            "U-1368",
+            "U-1375",
+            "U-1406",
+            "U-1420",
+            "U-1424",
+            "U-1425"
+          ],
+          "paper_artifacts": [
+            "PAP-0063"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0063"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": true,
+          "kind": "theorem",
+          "cluster_role": "member",
+          "cluster_id": "U-1423",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "0645e71f9814",
+          "loc": "§3.5 Theorem 4 — observable-field identification",
+          "tag_from_source": "PASS | None"
+        }
+      },
+      {
+        "id": "U-1425",
+        "label": "Theorem 5 — reflection descent",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "The reflection\n\n```text\ntau(m) = -m,\ntau(w_i) = w_i\n```\n\nis a valid automorphism of `W`. It fixes `s`, `M=s/4`, `u=m^2`, `F`, and `K=F(u)`. Because\n\n```text\n[W:K] = D_k/delta_k = 2,\n```\n\nit generates the full relative Galois group:\n\n```text\nGal(W/K) = <tau>,\nW^tau = K.\n```\n\nConsequently\n\n```text\nw_i in K.\n```\n\nThis is the generic reflection-descent theorem required by R7.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md",
+            "sha256": "7a93cb8720d53220bbf8a5b9c358a422168abd0acc56807bbb3d5eb3deb14ad7"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0106",
+            "E-0117",
+            "E-0119",
+            "U-1298",
+            "U-1301",
+            "U-1326",
+            "U-1327",
+            "U-1336",
+            "U-1340",
+            "U-1342",
+            "U-1351",
+            "U-1354",
+            "U-1355",
+            "U-1357",
+            "U-1368",
+            "U-1375",
+            "U-1406",
+            "U-1420",
+            "U-1424",
+            "U-1425"
+          ],
+          "paper_artifacts": [
+            "PAP-0063"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0063"
+          ]
+        },
+        "facets": {
+          "subject": "kummer-wreath-towers",
+          "reusable": true,
+          "kind": "theorem",
+          "cluster_role": "canonical",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "62d9aef10dff",
+          "loc": "§3.6 Theorem 5 — reflection descent",
+          "tag_from_source": "PASS | None"
+        }
+      },
+      {
+        "id": "U-1577",
+        "label": "(I1) Galois group of E over F_0(u)",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "(I1) `[E : F_0(u)] = 2^k` with Galois group `H = (C_2)^k`, because the square classes of the `u + N_i^2` (distinct monic linear polynomials in `u`, hence squarefree and coprime) are independent.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0101",
+            "E-0104",
+            "U-1577",
+            "U-1578",
+            "U-1579",
+            "U-1589",
+            "U-1590",
+            "U-1596",
+            "U-1607",
+            "U-1634",
+            "U-1640",
+            "U-1646",
+            "U-1648",
+            "U-1657",
+            "U-1658",
+            "U-1659",
+            "U-1660",
+            "U-1693",
+            "U-1701",
+            "U-1706",
+            "U-1726",
+            "U-1731",
+            "U-1732",
+            "U-1733",
+            "U-1743"
+          ],
+          "paper_artifacts": [
+            "PAP-0075"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0075"
+          ]
+        },
+        "facets": {
+          "subject": "monodromy-branched-covers",
+          "reusable": true,
+          "kind": "lemma",
+          "cluster_role": "member",
+          "cluster_id": "U-1644",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "b5d74a46b29b",
+          "loc": "Section 1, Imported facts",
+          "tag_from_source": "Imported facts (the generic normalization–reflection chain; banked)"
+        }
+      },
+      {
+        "id": "U-1578",
+        "label": "(I2) Trivial H-stabilizer of sigma",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "(I2) The `H`-stabilizer of `sigma` is trivial: a nontrivial sign flip on a set `D` changes `sigma` by `-2 sum_{i in D} w_i`, which is nonzero because at a place over `u = -N_i^2` (any `i in D`) the term `w_i` has odd valuation while the others are units. Hence `E = F_0(u)(sigma)`.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0101",
+            "E-0104",
+            "U-1577",
+            "U-1578",
+            "U-1579",
+            "U-1589",
+            "U-1590",
+            "U-1596",
+            "U-1607",
+            "U-1634",
+            "U-1640",
+            "U-1646",
+            "U-1648",
+            "U-1657",
+            "U-1658",
+            "U-1659",
+            "U-1660",
+            "U-1693",
+            "U-1701",
+            "U-1706",
+            "U-1726",
+            "U-1731",
+            "U-1732",
+            "U-1733",
+            "U-1743"
+          ],
+          "paper_artifacts": [
+            "PAP-0075"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0075"
+          ]
+        },
+        "facets": {
+          "subject": "monodromy-branched-covers",
+          "reusable": true,
+          "kind": "lemma",
+          "cluster_role": "member",
+          "cluster_id": "U-1644",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "25b630ee8539",
+          "loc": "Section 1, Imported facts",
+          "tag_from_source": "Imported facts (the generic normalization–reflection chain; banked)"
+        }
+      },
+      {
+        "id": "U-1579",
+        "label": "(I3) Irreducibility of N_k",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "(I3) `N_k` is irreducible over `F_0(M)` of `u`-degree `delta_k`.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0101",
+            "E-0104",
+            "U-1577",
+            "U-1578",
+            "U-1579",
+            "U-1589",
+            "U-1590",
+            "U-1596",
+            "U-1607",
+            "U-1634",
+            "U-1640",
+            "U-1646",
+            "U-1648",
+            "U-1657",
+            "U-1658",
+            "U-1659",
+            "U-1660",
+            "U-1693",
+            "U-1701",
+            "U-1706",
+            "U-1726",
+            "U-1731",
+            "U-1732",
+            "U-1733",
+            "U-1743"
+          ],
+          "paper_artifacts": [
+            "PAP-0075"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0075"
+          ]
+        },
+        "facets": {
+          "subject": "monodromy-branched-covers",
+          "reusable": true,
+          "kind": "lemma",
+          "cluster_role": "member",
+          "cluster_id": "U-1644",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "996af7cd0455",
+          "loc": "Section 1, Imported facts",
+          "tag_from_source": "Imported facts (the generic normalization–reflection chain; banked)"
+        }
+      },
+      {
+        "id": "U-1589",
+        "label": "Axial family setup: E, sigma, N_k(u;M), delta_k",
+        "type": "definition",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "E = F_0(u)(w_1, ..., w_k),   w_i^2 = u + N_i^2,\nsigma = w_1 + ... + w_k in E,\nN_k(u; M) = prod over eta in {+-1}^k of (4M - sum_i eta_i w_i)\n          = Norm_{E / F_0(u)} (4M - sigma),\ndelta_k = 2^(k-1)                        (k odd)\n        = 2^(k-1) - (1/2) binom(k, k/2)  (k even).",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0101",
+            "E-0104",
+            "U-1577",
+            "U-1578",
+            "U-1579",
+            "U-1589",
+            "U-1590",
+            "U-1596",
+            "U-1607",
+            "U-1634",
+            "U-1640",
+            "U-1646",
+            "U-1648",
+            "U-1657",
+            "U-1658",
+            "U-1659",
+            "U-1660",
+            "U-1693",
+            "U-1701",
+            "U-1706",
+            "U-1726",
+            "U-1731",
+            "U-1732",
+            "U-1733",
+            "U-1743"
+          ],
+          "paper_artifacts": [
+            "PAP-0075"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0075"
+          ]
+        },
+        "facets": {
+          "subject": "monodromy-branched-covers",
+          "reusable": true,
+          "kind": "notation",
+          "cluster_role": "member",
+          "cluster_id": "U-1644",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "02c791a79394",
+          "loc": "Section 1, setup display"
+        }
+      },
+      {
+        "id": "U-1590",
+        "label": "Base field F_0 hypotheses",
+        "type": "definition",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "Fix k >= 3 and a base field `F_0` of characteristic zero containing `N_1, ..., N_k` with `N_i != 0`, `N_i^2` pairwise distinct, and (for even k) `sum_i eta_i N_i^2 != 0` for every balanced sign vector `eta` (`sum eta_i = 0`). The two cases used below are `F_0 = C(N)` (geometry, N generic) and `F_0 = Q(N)` (arithmetic).",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0101",
+            "E-0104",
+            "U-1577",
+            "U-1578",
+            "U-1579",
+            "U-1589",
+            "U-1590",
+            "U-1596",
+            "U-1607",
+            "U-1634",
+            "U-1640",
+            "U-1646",
+            "U-1648",
+            "U-1657",
+            "U-1658",
+            "U-1659",
+            "U-1660",
+            "U-1693",
+            "U-1701",
+            "U-1706",
+            "U-1726",
+            "U-1731",
+            "U-1732",
+            "U-1733",
+            "U-1743"
+          ],
+          "paper_artifacts": [
+            "PAP-0075"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0075"
+          ]
+        },
+        "facets": {
+          "subject": "monodromy-branched-covers",
+          "reusable": true,
+          "kind": "definition",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "31e74171032c",
+          "loc": "Section 1, opening paragraph"
+        }
+      },
+      {
+        "id": "U-1596",
+        "label": "Caustic count (ramification divisor degree of sigma)",
+        "type": "formula",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "**Caustic count.** Riemann–Hurwitz for `sigma : X -> P^1` of degree `delta_k`:\n\ndeg(ramification divisor) = 2g - 2 + 2 delta_k\n                          = 2^(k-1) (k-3) + 2 delta_k,\n\nsupported entirely on the critical-sheet locus (Theorem A). Under (GS) this is exactly the number of folds. Values: 8 (k=3), 18 (k=4), 64 (k=5), 140 (k=6). Unconditionally this counts the solutions of `sum_i eta_i / w_i = 0` on `X` with multiplicity — a closed-form census of the critical-sheet mechanism.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0101",
+            "E-0104",
+            "U-1577",
+            "U-1578",
+            "U-1579",
+            "U-1589",
+            "U-1590",
+            "U-1596",
+            "U-1607",
+            "U-1634",
+            "U-1640",
+            "U-1646",
+            "U-1648",
+            "U-1657",
+            "U-1658",
+            "U-1659",
+            "U-1660",
+            "U-1693",
+            "U-1701",
+            "U-1706",
+            "U-1726",
+            "U-1731",
+            "U-1732",
+            "U-1733",
+            "U-1743"
+          ],
+          "paper_artifacts": [
+            "PAP-0075"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0075"
+          ]
+        },
+        "facets": {
+          "subject": "monodromy-branched-covers",
+          "reusable": true,
+          "kind": "formula",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "175700e47512",
+          "loc": "Section 5, Caustic count"
+        }
+      },
+      {
+        "id": "U-1607",
+        "label": "Corollary 2.2 (degree law = pole count)",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "**Corollary 2.2 (degree law = pole count).** `deg(sigma : X -> P^1) = #{unbalanced classes} = delta_k.` This re-derives the NPS degree law (R2) as the pole divisor of `sigma` and identifies the even-k binomial correction as the count of balanced places, where `sigma` is finite.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0101",
+            "E-0104",
+            "U-1577",
+            "U-1578",
+            "U-1579",
+            "U-1589",
+            "U-1590",
+            "U-1596",
+            "U-1607",
+            "U-1634",
+            "U-1640",
+            "U-1646",
+            "U-1648",
+            "U-1657",
+            "U-1658",
+            "U-1659",
+            "U-1660",
+            "U-1693",
+            "U-1701",
+            "U-1706",
+            "U-1726",
+            "U-1731",
+            "U-1732",
+            "U-1733",
+            "U-1743"
+          ],
+          "paper_artifacts": [
+            "PAP-0075"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0075"
+          ]
+        },
+        "facets": {
+          "subject": "monodromy-branched-covers",
+          "reusable": true,
+          "kind": "corollary",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "d0bca6a79917",
+          "loc": "Section 2"
+        }
+      },
+      {
+        "id": "U-1634",
+        "label": "First even case beyond k=4 behaves like odd cases",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "The first even case beyond k = 4 behaves identically to the odd cases: the balanced classes are zeros of `sigma`, unramified and monodromically invisible (Lemma 2.1), exactly as the fold principle predicts.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0101",
+            "E-0104",
+            "U-1577",
+            "U-1578",
+            "U-1579",
+            "U-1589",
+            "U-1590",
+            "U-1596",
+            "U-1607",
+            "U-1634",
+            "U-1640",
+            "U-1646",
+            "U-1648",
+            "U-1657",
+            "U-1658",
+            "U-1659",
+            "U-1660",
+            "U-1693",
+            "U-1701",
+            "U-1706",
+            "U-1726",
+            "U-1731",
+            "U-1732",
+            "U-1733",
+            "U-1743"
+          ],
+          "paper_artifacts": [
+            "PAP-0075"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0075"
+          ]
+        },
+        "facets": {
+          "subject": "monodromy-branched-covers",
+          "reusable": false,
+          "kind": "example",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "normal",
+          "retrieval_questions": [],
+          "context_role": "supporting"
+        },
+        "extensions": {
+          "claim_key": "66af1b7ea875",
+          "loc": "Section 6, closing remark"
+        }
+      },
+      {
+        "id": "U-1640",
+        "label": "Gal(N_k / C(N)(M)) as monodromy group",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "Gal(N_k / C(N)(M)) = monodromy group of the map  sigma/4 : X -> P^1.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0101",
+            "E-0104",
+            "U-1577",
+            "U-1578",
+            "U-1579",
+            "U-1589",
+            "U-1590",
+            "U-1596",
+            "U-1607",
+            "U-1634",
+            "U-1640",
+            "U-1646",
+            "U-1648",
+            "U-1657",
+            "U-1658",
+            "U-1659",
+            "U-1660",
+            "U-1693",
+            "U-1701",
+            "U-1706",
+            "U-1726",
+            "U-1731",
+            "U-1732",
+            "U-1733",
+            "U-1743"
+          ],
+          "paper_artifacts": [
+            "PAP-0075"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0075"
+          ]
+        },
+        "facets": {
+          "subject": "monodromy-branched-covers",
+          "reusable": true,
+          "kind": "corollary",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "792ea540e32f",
+          "loc": "Section 1, consequence of Proposition 1.1"
+        }
+      },
+      {
+        "id": "U-1646",
+        "label": "Genus derivation checks (g=0 at k=2, g=1 at k=3, values at k=4,5,6)",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "Checks: `g = 0` at `k = 2` — the curve is rational, which **is** the two-charge closed form (the wall-product seed); `g = 1` at `k = 3` — the solvable quartic rides an elliptic curve; `g = 5, 17, 49` at `k = 4, 5, 6`.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0101",
+            "E-0104",
+            "U-1577",
+            "U-1578",
+            "U-1579",
+            "U-1589",
+            "U-1590",
+            "U-1596",
+            "U-1607",
+            "U-1634",
+            "U-1640",
+            "U-1646",
+            "U-1648",
+            "U-1657",
+            "U-1658",
+            "U-1659",
+            "U-1660",
+            "U-1693",
+            "U-1701",
+            "U-1706",
+            "U-1726",
+            "U-1731",
+            "U-1732",
+            "U-1733",
+            "U-1743"
+          ],
+          "paper_artifacts": [
+            "PAP-0075"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0075"
+          ]
+        },
+        "facets": {
+          "subject": "monodromy-branched-covers",
+          "reusable": true,
+          "kind": "worked-result",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "5c8fa090264e",
+          "loc": "Section 5, Genus"
+        }
+      },
+      {
+        "id": "U-1648",
+        "label": "Guardrail: banked degenerate special-charge example",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "Generic is not universal: special charge vectors degenerate (the banked `2^30 (3-u)(15-u)^4` example); physical instances need per-point certificates, unchanged.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0101",
+            "E-0104",
+            "U-1577",
+            "U-1578",
+            "U-1579",
+            "U-1589",
+            "U-1590",
+            "U-1596",
+            "U-1607",
+            "U-1634",
+            "U-1640",
+            "U-1646",
+            "U-1648",
+            "U-1657",
+            "U-1658",
+            "U-1659",
+            "U-1660",
+            "U-1693",
+            "U-1701",
+            "U-1706",
+            "U-1726",
+            "U-1731",
+            "U-1732",
+            "U-1733",
+            "U-1743"
+          ],
+          "paper_artifacts": [
+            "PAP-0075"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0075"
+          ]
+        },
+        "facets": {
+          "subject": "monodromy-branched-covers",
+          "reusable": false,
+          "kind": "example",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "normal",
+          "retrieval_questions": [],
+          "context_role": "supporting"
+        },
+        "extensions": {
+          "claim_key": "e6ca1d05d298",
+          "loc": "Section 8, Guardrails item 1"
+        }
+      },
+      {
+        "id": "U-1657",
+        "label": "Lemma (GS), open for general k",
+        "type": "theorem",
+        "claim_status": "conjectured",
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "**Lemma (GS), open for general k.** For each k >= 7 there exists N with all critical points of `sigma` nondegenerate and all critical values distinct.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0101",
+            "E-0104",
+            "U-1577",
+            "U-1578",
+            "U-1579",
+            "U-1589",
+            "U-1590",
+            "U-1596",
+            "U-1607",
+            "U-1634",
+            "U-1640",
+            "U-1646",
+            "U-1648",
+            "U-1657",
+            "U-1658",
+            "U-1659",
+            "U-1660",
+            "U-1693",
+            "U-1701",
+            "U-1706",
+            "U-1726",
+            "U-1731",
+            "U-1732",
+            "U-1733",
+            "U-1743"
+          ],
+          "paper_artifacts": [
+            "PAP-0075"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0075"
+          ]
+        },
+        "facets": {
+          "subject": "monodromy-branched-covers",
+          "reusable": true,
+          "kind": "conjecture",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "849a38d8e5a2",
+          "loc": "Section 7",
+          "tag_from_source": "open"
+        }
+      },
+      {
+        "id": "U-1658",
+        "label": "Lemma 2.1 (places over u = infinity)",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "**Lemma 2.1 (places over u = infinity).** The completion of `E` at `u = infinity` is a product of `2^(k-1)` copies of `C(N)((t))`, `t = u^(-1/2)`, indexed by sign classes `{eta, -eta}`. At the place of class `eta`,\n\nsigma = a_eta t^(-1) + (B_eta / 2) t + O(t^3),\na_eta = sum_i eta_i,      B_eta = sum_i eta_i N_i^2.\n\nIf `a_eta != 0` (unbalanced class): `sigma` has a simple pole, so the map `sigma : X -> P^1` is **unramified** there and the place maps to `M = infinity` with local degree one. If `a_eta = 0` (balanced class, even k): by the standing hypothesis `B_eta != 0`, `sigma` has a simple zero, so the map is **unramified** there as well.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0101",
+            "E-0104",
+            "U-1577",
+            "U-1578",
+            "U-1579",
+            "U-1589",
+            "U-1590",
+            "U-1596",
+            "U-1607",
+            "U-1634",
+            "U-1640",
+            "U-1646",
+            "U-1648",
+            "U-1657",
+            "U-1658",
+            "U-1659",
+            "U-1660",
+            "U-1693",
+            "U-1701",
+            "U-1706",
+            "U-1726",
+            "U-1731",
+            "U-1732",
+            "U-1733",
+            "U-1743"
+          ],
+          "paper_artifacts": [
+            "PAP-0075"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0075"
+          ]
+        },
+        "facets": {
+          "subject": "monodromy-branched-covers",
+          "reusable": true,
+          "kind": "lemma",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "88e5cf566646",
+          "loc": "Section 2"
+        }
+      },
+      {
+        "id": "U-1659",
+        "label": "Lemma 2.3 (contact places)",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "**Lemma 2.3 (contact places).** At each of the `2^(k-1)` places over `u = -N_i^2`, with uniformizer `tau = w_i` (so `u = tau^2 - N_i^2`),\n\nsigma = eta_i tau + sum_{j != i} eta_j w_j(tau^2 - N_i^2),\nd sigma / d tau = eta_i + O(tau) != 0.\n\nThe map `sigma` is **unramified** at every contact place.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0101",
+            "E-0104",
+            "U-1577",
+            "U-1578",
+            "U-1579",
+            "U-1589",
+            "U-1590",
+            "U-1596",
+            "U-1607",
+            "U-1634",
+            "U-1640",
+            "U-1646",
+            "U-1648",
+            "U-1657",
+            "U-1658",
+            "U-1659",
+            "U-1660",
+            "U-1693",
+            "U-1701",
+            "U-1706",
+            "U-1726",
+            "U-1731",
+            "U-1732",
+            "U-1733",
+            "U-1743"
+          ],
+          "paper_artifacts": [
+            "PAP-0075"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0075"
+          ]
+        },
+        "facets": {
+          "subject": "monodromy-branched-covers",
+          "reusable": true,
+          "kind": "lemma",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "1527c1d528d7",
+          "loc": "Section 2"
+        }
+      },
+      {
+        "id": "U-1660",
+        "label": "Lemma 2.4 (finite non-contact places)",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "**Lemma 2.4 (finite non-contact places).** At every other place of `X`, `u` is a local uniformizer and\n\nd sigma / d u = (1/2) sum_i eta_i / w_i .\n\nThe map `sigma` ramifies exactly where this vanishes.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0101",
+            "E-0104",
+            "U-1577",
+            "U-1578",
+            "U-1579",
+            "U-1589",
+            "U-1590",
+            "U-1596",
+            "U-1607",
+            "U-1634",
+            "U-1640",
+            "U-1646",
+            "U-1648",
+            "U-1657",
+            "U-1658",
+            "U-1659",
+            "U-1660",
+            "U-1693",
+            "U-1701",
+            "U-1706",
+            "U-1726",
+            "U-1731",
+            "U-1732",
+            "U-1733",
+            "U-1743"
+          ],
+          "paper_artifacts": [
+            "PAP-0075"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0075"
+          ]
+        },
+        "facets": {
+          "subject": "monodromy-branched-covers",
+          "reusable": true,
+          "kind": "lemma",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "b79fd7b806d7",
+          "loc": "Section 2"
+        }
+      },
+      {
+        "id": "U-1693",
+        "label": "Proposition 1.1 (normalization identification)",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "**Proposition 1.1 (normalization identification).** The normalization of the plane curve `{N_k(u, M) = 0}` over `C(N)` is `X`, via the pair of functions `(u, sigma/4)`.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0101",
+            "E-0104",
+            "U-1577",
+            "U-1578",
+            "U-1579",
+            "U-1589",
+            "U-1590",
+            "U-1596",
+            "U-1607",
+            "U-1634",
+            "U-1640",
+            "U-1646",
+            "U-1648",
+            "U-1657",
+            "U-1658",
+            "U-1659",
+            "U-1660",
+            "U-1693",
+            "U-1701",
+            "U-1706",
+            "U-1726",
+            "U-1731",
+            "U-1732",
+            "U-1733",
+            "U-1743"
+          ],
+          "paper_artifacts": [
+            "PAP-0075"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0075"
+          ]
+        },
+        "facets": {
+          "subject": "monodromy-branched-covers",
+          "reusable": true,
+          "kind": "proposition",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "8da305fc5335",
+          "loc": "Section 1"
+        }
+      },
+      {
+        "id": "U-1701",
+        "label": "Remark: the banked two-mechanism decomposition, explained",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "**Remark (the banked two-mechanism decomposition, explained).** The corpus's discriminant decomposition — sheet-collision plus critical-sheet — acquires its monodromic content: the collisions are monodromically inert; the critical sheets generate everything. This also explains structurally why the k = 5 computation destroyed the affine (C_2)^4 torsor labeling: a fold exchanges two roots of a single local analytic branch, an operation with no relation to the sign-class labels, so no label structure can be monodromy-invariant once folds exist.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0101",
+            "E-0104",
+            "U-1577",
+            "U-1578",
+            "U-1579",
+            "U-1589",
+            "U-1590",
+            "U-1596",
+            "U-1607",
+            "U-1634",
+            "U-1640",
+            "U-1646",
+            "U-1648",
+            "U-1657",
+            "U-1658",
+            "U-1659",
+            "U-1660",
+            "U-1693",
+            "U-1701",
+            "U-1706",
+            "U-1726",
+            "U-1731",
+            "U-1732",
+            "U-1733",
+            "U-1743"
+          ],
+          "paper_artifacts": [
+            "PAP-0075"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0075"
+          ]
+        },
+        "facets": {
+          "subject": "monodromy-branched-covers",
+          "reusable": false,
+          "kind": "example",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "normal",
+          "retrieval_questions": [],
+          "context_role": "supporting"
+        },
+        "extensions": {
+          "claim_key": "7e1932ee3b72",
+          "loc": "Section 3, Remark following Theorem A"
+        }
+      },
+      {
+        "id": "U-1706",
+        "label": "Routes to proving Lemma (GS)",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "1. Per fixed k, (GS) is a finite computation (a resultant discriminant check on the caustic), and the Dedekind certificate is a cheaper substitute; the verified range can be extended indefinitely one k at a time.\n2. For all k uniformly, two candidate proofs: (a) hierarchical charges `N_i ~ t^i, t -> 0`, localizing each critical point into an effective three-charge cell where the k = 3 caustic (8 points on an elliptic curve) is explicit; (b) the real fold sequence along the chamber boundary, using the real sheet arrangement already controlled by the saturation theorem.\n3. No symmetry obstruction exists (Section 5, caustic symmetry).",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0101",
+            "E-0104",
+            "U-1577",
+            "U-1578",
+            "U-1579",
+            "U-1589",
+            "U-1590",
+            "U-1596",
+            "U-1607",
+            "U-1634",
+            "U-1640",
+            "U-1646",
+            "U-1648",
+            "U-1657",
+            "U-1658",
+            "U-1659",
+            "U-1660",
+            "U-1693",
+            "U-1701",
+            "U-1706",
+            "U-1726",
+            "U-1731",
+            "U-1732",
+            "U-1733",
+            "U-1743"
+          ],
+          "paper_artifacts": [
+            "PAP-0075"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0075"
+          ]
+        },
+        "facets": {
+          "subject": "monodromy-branched-covers",
+          "reusable": false,
+          "kind": "worked-result",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "normal",
+          "retrieval_questions": [],
+          "context_role": "supporting"
+        },
+        "extensions": {
+          "claim_key": "fb46cfa470c2",
+          "loc": "Section 7, Status and routes"
+        }
+      },
+      {
+        "id": "U-1726",
+        "label": "Symmetry of the caustic",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "**Symmetry of the caustic.** The global sign flip `w_i -> -w_i` (all i) is an automorphism of `X` carrying `sigma` to `-sigma`; critical points pair off with opposite critical values. Branch points of the M-cover therefore come in pairs `4M = +-c`. No further deck symmetry preserves `sigma`, so no symmetry forces critical-value coincidences: there is no structural obstruction to (GS).",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0101",
+            "E-0104",
+            "U-1577",
+            "U-1578",
+            "U-1579",
+            "U-1589",
+            "U-1590",
+            "U-1596",
+            "U-1607",
+            "U-1634",
+            "U-1640",
+            "U-1646",
+            "U-1648",
+            "U-1657",
+            "U-1658",
+            "U-1659",
+            "U-1660",
+            "U-1693",
+            "U-1701",
+            "U-1706",
+            "U-1726",
+            "U-1731",
+            "U-1732",
+            "U-1733",
+            "U-1743"
+          ],
+          "paper_artifacts": [
+            "PAP-0075"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0075"
+          ]
+        },
+        "facets": {
+          "subject": "monodromy-branched-covers",
+          "reusable": true,
+          "kind": "proposition",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "d9f5756e7b4f",
+          "loc": "Section 5, Symmetry of the caustic"
+        }
+      },
+      {
+        "id": "U-1731",
+        "label": "Theorem B (fold criterion)",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "**Theorem B.** (GS)(k, N) at a single point N implies `Gal(N_k / Q(M, N_1..N_k)) = S_{delta_k}` for generic N at that k.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0101",
+            "E-0104",
+            "U-1577",
+            "U-1578",
+            "U-1579",
+            "U-1589",
+            "U-1590",
+            "U-1596",
+            "U-1607",
+            "U-1634",
+            "U-1640",
+            "U-1646",
+            "U-1648",
+            "U-1657",
+            "U-1658",
+            "U-1659",
+            "U-1660",
+            "U-1693",
+            "U-1701",
+            "U-1706",
+            "U-1726",
+            "U-1731",
+            "U-1732",
+            "U-1733",
+            "U-1743"
+          ],
+          "paper_artifacts": [
+            "PAP-0075"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0075"
+          ]
+        },
+        "facets": {
+          "subject": "monodromy-branched-covers",
+          "reusable": true,
+          "kind": "theorem",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "bd49c6f1eebc",
+          "loc": "Section 4"
+        }
+      },
+      {
+        "id": "U-1732",
+        "label": "Theorem B proof: transposition-graph connectivity argument",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "Under (GS), each branch point of `sigma` lies under exactly one simple fold; the fiber degenerates by exactly one quadratic merge, so the local monodromy is a single transposition. The monodromy group `G` is generated by these transpositions (Theorem A(1)) and is transitive (I3). The orbits of the subgroup generated by all transpositions in `G` are the connected components of the transposition graph; since that subgroup is `G` itself, transitivity makes the graph connected; a connected transposition graph on `delta_k` vertices generates `S_{delta_k}`. Hence the geometric group is full; the arithmetic group, squeezed between it and `S_{delta_k}`, is full. (GS) is a Zariski-open condition on N (simplicity and distinctness of critical values are open), so one witness point gives the generic statement.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0101",
+            "E-0104",
+            "U-1577",
+            "U-1578",
+            "U-1579",
+            "U-1589",
+            "U-1590",
+            "U-1596",
+            "U-1607",
+            "U-1634",
+            "U-1640",
+            "U-1646",
+            "U-1648",
+            "U-1657",
+            "U-1658",
+            "U-1659",
+            "U-1660",
+            "U-1693",
+            "U-1701",
+            "U-1706",
+            "U-1726",
+            "U-1731",
+            "U-1732",
+            "U-1733",
+            "U-1743"
+          ],
+          "paper_artifacts": [
+            "PAP-0075"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0075"
+          ]
+        },
+        "facets": {
+          "subject": "monodromy-branched-covers",
+          "reusable": false,
+          "kind": "worked-result",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "normal",
+          "retrieval_questions": [],
+          "context_role": "supporting"
+        },
+        "extensions": {
+          "claim_key": "5d30550c3c39",
+          "loc": "Section 4, proof of Theorem B"
+        }
+      },
+      {
+        "id": "U-1733",
+        "label": "Theorem C (verified range k=3,4,5,6)",
+        "type": "theorem",
+        "claim_status": "machine-verified",
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "k = 3, degree 4  (point 4M=32,  N=(4,8,16)):\n  p=17 irreducible [4] (transitive + odd); p=7 type [1,3] (3-cycle:\n  among transitive quartic groups only A4, S4 contain 3-torsion);\n  p=11 type [1,1,2] (odd)  =>  S_4.\n  Primitive lc = 9 = 1^(2*3) * 3^2: the odd-k pole formula\n  lc = prod over sign-pair classes of (imbalance)^2, confirmed.\n\nk = 4, degree 5:  banked S_5 certificate (points A, B, C).\n\nk = 5, degree 16 (point 4M=128, N=(4,8,16,32,64)):\n  p=73 irreducible [16]; p=37 type [1,4,11] (11-cycle => primitive +\n  Jordan); p=23 type [1,3,12] (odd)  =>  S_16.\n\nk = 6, degree 22 (point 4M=256, N=(4,8,16,32,64,128)):\n  p=199 irreducible [22]; p=43 type [1,8,13] (sigma^8 is a pure 13-cycle,\n  13 > 22/2 kills both block shapes 2x11 and 11x2; Jordan with\n  13 <= 19 = n-3 gives A_22; parity of [1,8,13] is odd)  =>  S_22.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0101",
+            "E-0104",
+            "U-1577",
+            "U-1578",
+            "U-1579",
+            "U-1589",
+            "U-1590",
+            "U-1596",
+            "U-1607",
+            "U-1634",
+            "U-1640",
+            "U-1646",
+            "U-1648",
+            "U-1657",
+            "U-1658",
+            "U-1659",
+            "U-1660",
+            "U-1693",
+            "U-1701",
+            "U-1706",
+            "U-1726",
+            "U-1731",
+            "U-1732",
+            "U-1733",
+            "U-1743"
+          ],
+          "paper_artifacts": [
+            "PAP-0075"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0075"
+          ]
+        },
+        "facets": {
+          "subject": "monodromy-branched-covers",
+          "reusable": true,
+          "kind": "theorem",
+          "cluster_role": "canonical",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "fd2b3f51da00",
+          "loc": "Section 6, Theorem C display",
+          "tag_from_source": "CERTIFIED"
+        }
+      },
+      {
+        "id": "U-1743",
+        "label": "Uniform primitivity mechanism (large-prime-cycle argument)",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "The primitivity mechanism, uniform in n: a p-cycle with prime `p > n/2` acts trivially on any block system (p exceeds the block count, so each block is preserved; then its cycle would have to fit inside a block of size < p). Combined with Jordan (`p <= n-3`) this forces `A_n <= G`.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0101",
+            "E-0104",
+            "U-1577",
+            "U-1578",
+            "U-1579",
+            "U-1589",
+            "U-1590",
+            "U-1596",
+            "U-1607",
+            "U-1634",
+            "U-1640",
+            "U-1646",
+            "U-1648",
+            "U-1657",
+            "U-1658",
+            "U-1659",
+            "U-1660",
+            "U-1693",
+            "U-1701",
+            "U-1706",
+            "U-1726",
+            "U-1731",
+            "U-1732",
+            "U-1733",
+            "U-1743"
+          ],
+          "paper_artifacts": [
+            "PAP-0075"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0075"
+          ]
+        },
+        "facets": {
+          "subject": "monodromy-branched-covers",
+          "reusable": true,
+          "kind": "worked-result",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "be01482ab94e",
+          "loc": "Section 6, paragraph after Theorem C display"
+        }
+      }
+    ],
+    "upsert_edges": [
+      {
+        "id": "e::DBP:gap:IV1::depends_on::DBP:proof:gs_morse",
+        "from": "DBP:gap:IV1",
+        "to": "DBP:proof:gs_morse",
+        "relation": "depends_on",
+        "label": "DBP:gap:IV1 depends_on DBP:proof:gs_morse",
+        "basis": "GS proof + its §9 splice script. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md#L37",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "facets": {
+          "source_id": "dbp-frontier-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:gap:IV4::depends_on::DBP:doc:rotating_three_channel",
+        "from": "DBP:gap:IV4",
+        "to": "DBP:doc:rotating_three_channel",
+        "relation": "depends_on",
+        "label": "DBP:gap:IV4 depends_on DBP:doc:rotating_three_channel",
+        "basis": "Rotating closure proved. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ROTATING_KUMMER_RANK_JUMP_LEMMA_REPORT_2026-07-10.md#L509",
+            "sha256": "1a64fdebf78fa10df70cf990621244a11a599e69b277184228657d02f74daeea"
+          }
+        ],
+        "facets": {
+          "source_id": "dbp-frontier-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:gap:IV4::depends_on::DBP:proof:r9_static",
+        "from": "DBP:gap:IV4",
+        "to": "DBP:proof:r9_static",
+        "relation": "depends_on",
+        "label": "DBP:gap:IV4 depends_on DBP:proof:r9_static",
+        "basis": "Static closure proved. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ROTATING_KUMMER_RANK_JUMP_LEMMA_REPORT_2026-07-10.md#L509",
+            "sha256": "1a64fdebf78fa10df70cf990621244a11a599e69b277184228657d02f74daeea"
+          }
+        ],
+        "facets": {
+          "source_id": "dbp-frontier-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:gap:IV5::depends_on::DBP:gap:IV1",
+        "from": "DBP:gap:IV5",
+        "to": "DBP:gap:IV1",
+        "relation": "depends_on",
+        "label": "DBP:gap:IV5 depends_on DBP:gap:IV1",
+        "basis": "R11 row resolved by the GS splice. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/GALOIS_K_ELLIPSE_RESEARCH_MAP_v1_6.md#L89",
+            "sha256": "2661294d209e5cc7c51e7bd57dfb4e26d057e2e28e2ad1d3ff6875dc32a09471"
+          }
+        ],
+        "facets": {
+          "source_id": "dbp-frontier-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:gap:IV5::depends_on::DBP:gap:IV4",
+        "from": "DBP:gap:IV5",
+        "to": "DBP:gap:IV4",
+        "relation": "depends_on",
+        "label": "DBP:gap:IV5 depends_on DBP:gap:IV4",
+        "basis": "R9 row resolved by the closure tags. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/GALOIS_K_ELLIPSE_RESEARCH_MAP_v1_6.md#L89",
+            "sha256": "2661294d209e5cc7c51e7bd57dfb4e26d057e2e28e2ad1d3ff6875dc32a09471"
+          }
+        ],
+        "facets": {
+          "source_id": "dbp-frontier-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:note:allk_monodromy::supplements::DBP:paper:IV",
+        "from": "DBP:note:allk_monodromy",
+        "to": "DBP:paper:IV",
+        "relation": "supplements",
+        "label": "DBP:note:allk_monodromy supplements DBP:paper:IV",
+        "basis": "All-k generalization beyond the k=4,5 paper. DBP succession audit v1.0; disposition + proof-location analysis.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "facets": {
+          "source_id": "dbp-frontier-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::U-1297::supersedes::U-1298",
+        "from": "U-1297",
+        "to": "U-1298",
+        "relation": "supersedes",
+        "label": "U-1297 supersedes U-1298",
+        "basis": "Cluster fold: canonical supersedes earlier 'corrected-earlier-form'. Encyclopedia consolidated/*.json.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/LOG_ENTRY_R6_R7_generic_descent_v2.md",
+            "sha256": "67a3cdfef98bfc6c361035c67362aea462f53a135d57ce53ed0907f91cfa56b2"
+          }
+        ],
+        "facets": {
+          "source_id": "encyclopedia-units-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::U-1300::supersedes::U-1301",
+        "from": "U-1300",
+        "to": "U-1301",
+        "relation": "supersedes",
+        "label": "U-1300 supersedes U-1301",
+        "basis": "Cluster fold: canonical supersedes earlier 'corrected-earlier-form'. Encyclopedia consolidated/*.json.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/LOG_ENTRY_R6_R7_generic_descent_v2.md",
+            "sha256": "67a3cdfef98bfc6c361035c67362aea462f53a135d57ce53ed0907f91cfa56b2"
+          }
+        ],
+        "facets": {
+          "source_id": "encyclopedia-units-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::U-1302::same_content_as::U-1423",
+        "from": "U-1302",
+        "to": "U-1423",
+        "relation": "same_content_as",
+        "label": "U-1302 same_content_as U-1423",
+        "basis": "Cluster fold: 'corollary-of' of the canonical statement. Encyclopedia consolidated/*.json.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/LOG_ENTRY_R6_R7_generic_descent_v2.md",
+            "sha256": "67a3cdfef98bfc6c361035c67362aea462f53a135d57ce53ed0907f91cfa56b2"
+          }
+        ],
+        "facets": {
+          "source_id": "encyclopedia-units-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::U-1326::same_content_as::U-1425",
+        "from": "U-1326",
+        "to": "U-1425",
+        "relation": "same_content_as",
+        "label": "U-1326 same_content_as U-1425",
+        "basis": "Cluster fold: 'special-case' of the canonical statement. Encyclopedia consolidated/*.json.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md",
+            "sha256": "7a93cb8720d53220bbf8a5b9c358a422168abd0acc56807bbb3d5eb3deb14ad7"
+          }
+        ],
+        "facets": {
+          "source_id": "encyclopedia-units-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::U-1327::same_content_as::U-1366",
+        "from": "U-1327",
+        "to": "U-1366",
+        "relation": "same_content_as",
+        "label": "U-1327 same_content_as U-1366",
+        "basis": "Cluster fold: 'restatement' of the canonical statement. Encyclopedia consolidated/*.json.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md",
+            "sha256": "7a93cb8720d53220bbf8a5b9c358a422168abd0acc56807bbb3d5eb3deb14ad7"
+          }
+        ],
+        "facets": {
+          "source_id": "encyclopedia-units-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::U-1336::same_content_as::U-1423",
+        "from": "U-1336",
+        "to": "U-1423",
+        "relation": "same_content_as",
+        "label": "U-1336 same_content_as U-1423",
+        "basis": "Cluster fold: 'restatement' of the canonical statement. Encyclopedia consolidated/*.json.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md",
+            "sha256": "7a93cb8720d53220bbf8a5b9c358a422168abd0acc56807bbb3d5eb3deb14ad7"
+          }
+        ],
+        "facets": {
+          "source_id": "encyclopedia-units-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::U-1342::same_content_as::U-1409",
+        "from": "U-1342",
+        "to": "U-1409",
+        "relation": "same_content_as",
+        "label": "U-1342 same_content_as U-1409",
+        "basis": "Cluster fold: 'restatement' of the canonical statement. Encyclopedia consolidated/*.json.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md",
+            "sha256": "7a93cb8720d53220bbf8a5b9c358a422168abd0acc56807bbb3d5eb3deb14ad7"
+          }
+        ],
+        "facets": {
+          "source_id": "encyclopedia-units-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::U-1351::same_content_as::U-1423",
+        "from": "U-1351",
+        "to": "U-1423",
+        "relation": "same_content_as",
+        "label": "U-1351 same_content_as U-1423",
+        "basis": "Cluster fold: 'special-case' of the canonical statement. Encyclopedia consolidated/*.json.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md",
+            "sha256": "7a93cb8720d53220bbf8a5b9c358a422168abd0acc56807bbb3d5eb3deb14ad7"
+          }
+        ],
+        "facets": {
+          "source_id": "encyclopedia-units-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::U-1355::same_content_as::U-1356",
+        "from": "U-1355",
+        "to": "U-1356",
+        "relation": "same_content_as",
+        "label": "U-1355 same_content_as U-1356",
+        "basis": "Cluster fold: 'restatement' of the canonical statement. Encyclopedia consolidated/*.json.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md",
+            "sha256": "7a93cb8720d53220bbf8a5b9c358a422168abd0acc56807bbb3d5eb3deb14ad7"
+          }
+        ],
+        "facets": {
+          "source_id": "encyclopedia-units-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::U-1368::same_content_as::U-1367",
+        "from": "U-1368",
+        "to": "U-1367",
+        "relation": "same_content_as",
+        "label": "U-1368 same_content_as U-1367",
+        "basis": "Cluster fold: 'restatement' of the canonical statement. Encyclopedia consolidated/*.json.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md",
+            "sha256": "7a93cb8720d53220bbf8a5b9c358a422168abd0acc56807bbb3d5eb3deb14ad7"
+          }
+        ],
+        "facets": {
+          "source_id": "encyclopedia-units-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::U-1385::same_content_as::U-1356",
+        "from": "U-1385",
+        "to": "U-1356",
+        "relation": "same_content_as",
+        "label": "U-1385 same_content_as U-1356",
+        "basis": "Cluster fold: 'corollary-of' of the canonical statement. Encyclopedia consolidated/*.json.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/LOG_ENTRY_R6_R7_generic_descent_v2.md",
+            "sha256": "67a3cdfef98bfc6c361035c67362aea462f53a135d57ce53ed0907f91cfa56b2"
+          }
+        ],
+        "facets": {
+          "source_id": "encyclopedia-units-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::U-1419::same_content_as::U-1420",
+        "from": "U-1419",
+        "to": "U-1420",
+        "relation": "same_content_as",
+        "label": "U-1419 same_content_as U-1420",
+        "basis": "Cluster fold: 'restatement' of the canonical statement. Encyclopedia consolidated/*.json.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/LOG_ENTRY_R6_R7_generic_descent_v2.md",
+            "sha256": "67a3cdfef98bfc6c361035c67362aea462f53a135d57ce53ed0907f91cfa56b2"
+          }
+        ],
+        "facets": {
+          "source_id": "encyclopedia-units-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::U-1423::supersedes::U-1424",
+        "from": "U-1423",
+        "to": "U-1424",
+        "relation": "supersedes",
+        "label": "U-1423 supersedes U-1424",
+        "basis": "Cluster fold: canonical supersedes earlier 'corrected-earlier-form'. Encyclopedia consolidated/*.json.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/LOG_ENTRY_R6_R7_generic_descent_v2.md",
+            "sha256": "67a3cdfef98bfc6c361035c67362aea462f53a135d57ce53ed0907f91cfa56b2"
+          }
+        ],
+        "facets": {
+          "source_id": "encyclopedia-units-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::U-1425::supersedes::U-0951",
+        "from": "U-1425",
+        "to": "U-0951",
+        "relation": "supersedes",
+        "label": "U-1425 supersedes U-0951",
+        "basis": "Cluster fold: canonical supersedes earlier 'earlier-conjecture'. Encyclopedia consolidated/*.json.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md",
+            "sha256": "7a93cb8720d53220bbf8a5b9c358a422168abd0acc56807bbb3d5eb3deb14ad7"
+          }
+        ],
+        "facets": {
+          "source_id": "encyclopedia-units-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::U-1577::same_content_as::U-1644",
+        "from": "U-1577",
+        "to": "U-1644",
+        "relation": "same_content_as",
+        "label": "U-1577 same_content_as U-1644",
+        "basis": "Cluster fold: 'restatement' of the canonical statement. Encyclopedia consolidated/*.json.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "facets": {
+          "source_id": "encyclopedia-units-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::U-1578::same_content_as::U-1644",
+        "from": "U-1578",
+        "to": "U-1644",
+        "relation": "same_content_as",
+        "label": "U-1578 same_content_as U-1644",
+        "basis": "Cluster fold: 'restatement' of the canonical statement. Encyclopedia consolidated/*.json.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "facets": {
+          "source_id": "encyclopedia-units-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::U-1579::same_content_as::U-1644",
+        "from": "U-1579",
+        "to": "U-1644",
+        "relation": "same_content_as",
+        "label": "U-1579 same_content_as U-1644",
+        "basis": "Cluster fold: 'restatement' of the canonical statement. Encyclopedia consolidated/*.json.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "facets": {
+          "source_id": "encyclopedia-units-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::U-1589::same_content_as::U-1644",
+        "from": "U-1589",
+        "to": "U-1644",
+        "relation": "same_content_as",
+        "label": "U-1589 same_content_as U-1644",
+        "basis": "Cluster fold: 'restatement' of the canonical statement. Encyclopedia consolidated/*.json.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+            "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+          }
+        ],
+        "facets": {
+          "source_id": "encyclopedia-units-v1"
+        },
+        "extensions": {}
+      }
+    ],
+    "retire_nodes": [],
+    "remove_edges": [
+      "e::DBP:gap:IV1::opens_gap::DBP:note:allk_monodromy",
+      "e::DBP:gap:IV5::opens_gap::DBP:map:kellipse_v16"
+    ]
+  },
+  "declared_impacts": [
+    {
+      "kind": "reevaluate",
+      "target_id": "DBP:gap:IV1",
+      "note": "ALL_K note status splice is complete and the weighted successor is explicit."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "DBP:gap:IV4",
+      "note": "Current R9 statuses are corrected and dated pre-closure records carry succession notices."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "DBP:gap:IV5",
+      "note": "The v1.6 map register and live-front table are current."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "DBP:gap:IV2",
+      "note": "Released Paper IV TeX/PDF/package integration remains open and is not falsely closed."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "DBP:gap:IV3",
+      "note": "All-k decorated Kummer rank R=0 remains open and is now the explicit live front."
+    }
+  ],
+  "extensions": {
+    "requested_by": "William Lloyd",
+    "protocol": "validate-impact-preview-stage-apply",
+    "source_files": [
+      "Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+      "Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/GALOIS_K_ELLIPSE_RESEARCH_MAP_v1_6.md",
+      "Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md",
+      "Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/LOG_ENTRY_R6_R7_generic_descent_v2.md",
+      "Papers_Library/07_certificates_data_and_reproducibility/galois_horizon_and_kummer_covers/DEGREE_20_CROWN_CERTIFICATE_REPORT_2026-07-10.md",
+      "Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ROTATING_KUMMER_RANK_JUMP_LEMMA_REPORT_2026-07-10.md"
+    ],
+    "resolved_gaps": [
+      "DBP:gap:IV1",
+      "DBP:gap:IV4",
+      "DBP:gap:IV5"
+    ],
+    "preserved_open_gaps": [
+      "DBP:gap:IV2",
+      "DBP:gap:IV3",
+      "DBP:gap:IV7"
+    ]
+  }
+}

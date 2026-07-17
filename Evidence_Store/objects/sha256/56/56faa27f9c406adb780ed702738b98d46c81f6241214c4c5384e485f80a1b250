@@ -1,0 +1,607 @@
+"""
+Substrate Fingerprint Atlas — Phase δ.
+
+Three tests:
+  1. Cheap-fingerprint discrimination — does a subset of cheap slots
+     distinguish all 6 fixtures?
+  2. Redesigned slot 16 (channel_spread_log10) — orthogonal to slot 13?
+  3. Near-miss robustness — perturbed-window SR cheap fingerprint
+     still closest to canonical SR?
+
+This phase shifts focus from slot design to slot USE — the user's
+strategic frame: "scan a barcode, identify the surface trivially."
+
+Preregistry: Build_Docs/Reports/substrate_fingerprint_atlas_phase_delta/preregistry.md
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import math
+import sys
+from pathlib import Path
+from typing import Any
+
+sys.path.insert(0, "src")
+
+from scratch.substrate_fingerprint_atlas import (
+    Slot,
+    _na_slot,
+    _unobs_slot,
+    _failed_slot,
+    _defined_slot,
+    _lifted_entry,
+    _values_equal,
+    slot_06_observability_ratio,
+    slot_07_sterbenz_applicable_mass_fraction,
+    PHASE_ALPHA_FIXTURES,
+    LIFTED_AUDIT_NAMES,
+)
+from scratch.substrate_fingerprint_atlas_phase_beta import (
+    _ulp,
+    _four_form_at,
+    _route_a_four_form_residual,
+    _route_b_four_form_residual,
+)
+from scratch.substrate_fingerprint_atlas_phase_gamma import (
+    PROBE_WINDOW,
+    slot_13r_critical_curvature_log10,
+    slot_14r_conditioning_index_log10,
+    slot_15r_route_variation_signature,
+)
+
+
+ROOT = Path(__file__).resolve().parents[1]
+REPORT_DIR = (
+    ROOT / "Build_Docs" / "Reports" / "substrate_fingerprint_atlas_phase_delta"
+)
+ARTIFACT = REPORT_DIR / "atlas_artifact_phase_delta.json"
+
+
+# Perturbed probe window for SR — used for the near-miss test
+PERTURBED_SR_WINDOW: tuple[float, ...] = (0.80, 0.82, 0.84)
+
+
+# ---------------------------------------------------------------------------
+# Redesigned slot 16d: channel_spread_log10
+# ---------------------------------------------------------------------------
+
+
+def _channel_spread_log10_at_window(
+    fixture: str, window: tuple[float, ...]
+) -> Slot:
+    """For four-form fixtures: log10(max nonzero |F_i| / min nonzero |F_i|)
+    over the 3-point window. For lifted fixtures: log10 ratio of two non-
+    extreme eigenvalues."""
+    name = "slot_16d_channel_spread_log10"
+    if fixture in PROBE_WINDOW or fixture == "SR_perturbed":
+        all_mags: list[float] = []
+        for var in window:
+            forms = _four_form_at(fixture if fixture != "SR_perturbed" else "SR", var)
+            if forms is None:
+                continue
+            all_mags.extend(abs(v) for v in forms.values())
+        nonzero = sorted(m for m in all_mags if m > 0.0)
+        if len(nonzero) < 2:
+            return _unobs_slot(name)
+        spread = math.log10(nonzero[-1] / nonzero[0])
+        return _defined_slot(name, round(spread, 4), bits=16)
+    # Lifted-singularity fixtures: middle eigenvalue spread
+    entry = _lifted_entry(fixture)
+    if entry is None:
+        return _na_slot(name)
+    eigs = entry.get("hessian_eigenvalues_ascending")
+    if eigs is None:
+        return _unobs_slot(name)
+    try:
+        magnitudes = sorted(abs(float(e)) for e in eigs if abs(float(e)) > 0.0)
+    except (TypeError, ValueError):
+        return _failed_slot(name, "eigenvalues")
+    if len(magnitudes) < 3:
+        # Not enough for non-extreme spread; fall back to outer spread
+        if len(magnitudes) < 2:
+            return _unobs_slot(name)
+        return _defined_slot(
+            name, round(math.log10(magnitudes[-1] / magnitudes[0]), 4), bits=16
+        )
+    # Use middle eigenvalues (drop max and min)
+    middle = magnitudes[1:-1]
+    if len(middle) < 2:
+        # Only 1 middle; use the spread between max and min of remaining
+        return _defined_slot(
+            name,
+            round(math.log10(magnitudes[-2] / magnitudes[1]), 4),
+            bits=16,
+        )
+    return _defined_slot(
+        name, round(math.log10(middle[-1] / middle[0]), 4), bits=16
+    )
+
+
+def slot_16d_channel_spread(fixture: str, variant: str) -> Slot:
+    """Phase δ slot 16: channel_spread_log10."""
+    if fixture in PROBE_WINDOW:
+        return _channel_spread_log10_at_window(fixture, PROBE_WINDOW[fixture])
+    return _channel_spread_log10_at_window(fixture, ())
+
+
+# ---------------------------------------------------------------------------
+# Cheap fingerprint computation
+# ---------------------------------------------------------------------------
+
+
+CHEAP_SLOTS = [
+    slot_06_observability_ratio,
+    slot_07_sterbenz_applicable_mass_fraction,
+    slot_13r_critical_curvature_log10,
+    slot_14r_conditioning_index_log10,
+    slot_15r_route_variation_signature,
+    slot_16d_channel_spread,
+]
+
+
+def compute_cheap_fingerprint(fixture: str, variant: str = "A") -> dict:
+    slots: list[Slot] = []
+    for fn in CHEAP_SLOTS:
+        try:
+            slot = fn(fixture, variant)
+        except Exception as exc:  # noqa: BLE001
+            slot = _failed_slot(fn.__name__, str(exc))
+        slots.append(slot)
+    return {
+        "fixture": fixture,
+        "variant": variant,
+        "fingerprint": {
+            s.name: {"value": s.value, "status": s.status} for s in slots
+        },
+    }
+
+
+def compute_perturbed_sr_cheap_fingerprint() -> dict:
+    """SR cheap fingerprint computed at the perturbed window {0.80, 0.82, 0.84}.
+
+    Slots 6 and 7 don't depend on the probe window — they use the canonical
+    β-grid. Slots 13r/14r/15r/16d use the perturbed window.
+    """
+    slots: list[Slot] = []
+    # Slot 06: observability ratio — independent of probe window
+    slots.append(slot_06_observability_ratio("SR", "A"))
+    # Slot 07: Sterbenz mass — independent of probe window
+    slots.append(slot_07_sterbenz_applicable_mass_fraction("SR", "A"))
+    # Slots 13r/14r/15r/16d at the perturbed window
+    fixture = "SR"
+    window = PERTURBED_SR_WINDOW
+    all_mags: list[float] = []
+    for var in window:
+        forms = _four_form_at(fixture, var)
+        if forms is None:
+            continue
+        all_mags.extend(abs(v) for v in forms.values())
+    nonzero = sorted(m for m in all_mags if m > 0.0)
+    # Slot 13r — max magnitude
+    if nonzero:
+        slots.append(
+            Slot(
+                name="slot_13r_critical_curvature_log10",
+                value=round(math.log10(max(nonzero)), 4),
+                status="defined",
+                bits=16,
+            )
+        )
+    else:
+        slots.append(
+            Slot(
+                name="slot_13r_critical_curvature_log10",
+                value=None,
+                status="unobservable",
+                bits=4,
+            )
+        )
+    # Slot 14r — outer spread
+    if len(nonzero) >= 2:
+        slots.append(
+            Slot(
+                name="slot_14r_conditioning_index_log10",
+                value=round(math.log10(nonzero[-1] / nonzero[0]), 4),
+                status="defined",
+                bits=16,
+            )
+        )
+    else:
+        slots.append(
+            Slot(
+                name="slot_14r_conditioning_index_log10",
+                value=None,
+                status="unobservable",
+                bits=4,
+            )
+        )
+    # Slot 15r — max route variation across window
+    max_dev = 0.0
+    any_computed = False
+    for var in window:
+        a = _route_a_four_form_residual(fixture, var)
+        b = _route_b_four_form_residual(fixture, var)
+        if a is None or b is None:
+            continue
+        f = 1.0 - var * var
+        dev = abs(a - b) / _ulp(f)
+        max_dev = max(max_dev, dev)
+        any_computed = True
+    if any_computed:
+        slots.append(
+            Slot(
+                name="slot_15r_route_variation_signature",
+                value=round(max_dev, 3),
+                status="defined",
+                bits=24,
+            )
+        )
+    else:
+        slots.append(
+            Slot(
+                name="slot_15r_route_variation_signature",
+                value=None,
+                status="unobservable",
+                bits=4,
+            )
+        )
+    # Slot 16d — channel spread at perturbed window
+    slots.append(_channel_spread_log10_at_window("SR", window))
+    return {
+        "fixture": "SR_perturbed",
+        "variant": "A_perturbed_window",
+        "perturbed_window": list(window),
+        "fingerprint": {
+            s.name: {"value": s.value, "status": s.status} for s in slots
+        },
+    }
+
+
+# ---------------------------------------------------------------------------
+# Distinguishability metric on cheap fingerprint
+# ---------------------------------------------------------------------------
+
+
+def distinguishability_matrix(
+    fingerprints: list[dict],
+) -> tuple[list[list[int]], list[str]]:
+    n = len(fingerprints)
+    names = [fp["fixture"] for fp in fingerprints]
+    matrix = [[0] * n for _ in range(n)]
+    for i in range(n):
+        for j in range(n):
+            if i == j:
+                continue
+            fp_i = fingerprints[i]["fingerprint"]
+            fp_j = fingerprints[j]["fingerprint"]
+            for sn, s_i in fp_i.items():
+                s_j = fp_j[sn]
+                if s_i["status"] != "defined" or s_j["status"] != "defined":
+                    continue
+                if _values_equal(s_i["value"], s_j["value"]):
+                    continue
+                matrix[i][j] += 1
+    return matrix, names
+
+
+# ---------------------------------------------------------------------------
+# Near-miss distance metric
+# ---------------------------------------------------------------------------
+
+
+def _slot_ranges(
+    cheap_fingerprints: list[dict],
+) -> dict[str, tuple[float, float]]:
+    """For each numeric defined slot across the canonical fingerprints,
+    compute (min, max) range for normalization."""
+    ranges: dict[str, list[float]] = {}
+    for fp in cheap_fingerprints:
+        for sn, s in fp["fingerprint"].items():
+            if s["status"] != "defined":
+                continue
+            v = s["value"]
+            if isinstance(v, (int, float)):
+                ranges.setdefault(sn, []).append(float(v))
+    result: dict[str, tuple[float, float]] = {}
+    for sn, vals in ranges.items():
+        if not vals:
+            continue
+        result[sn] = (min(vals), max(vals))
+    return result
+
+
+def near_miss_distance(
+    a: dict, b: dict, ranges: dict[str, tuple[float, float]]
+) -> float:
+    """Compute normalized L2 distance between two cheap fingerprints.
+    Each numeric slot is normalized by its observed range. Status
+    mismatches (defined vs unobservable etc.) count 1 unit of distance per
+    slot mismatch."""
+    fp_a = a["fingerprint"]
+    fp_b = b["fingerprint"]
+    sq = 0.0
+    for sn in fp_a:
+        s_a = fp_a[sn]
+        s_b = fp_b[sn]
+        if s_a["status"] != s_b["status"]:
+            sq += 1.0
+            continue
+        if s_a["status"] != "defined":
+            continue
+        v_a = s_a["value"]
+        v_b = s_b["value"]
+        if isinstance(v_a, (int, float)) and isinstance(v_b, (int, float)):
+            lo, hi = ranges.get(sn, (0.0, 1.0))
+            scale = max(hi - lo, 1e-12)
+            sq += ((float(v_a) - float(v_b)) / scale) ** 2
+        else:
+            if not _values_equal(v_a, v_b):
+                sq += 1.0
+    return math.sqrt(sq)
+
+
+# ---------------------------------------------------------------------------
+# Slot 16d redundancy check vs slot 13
+# ---------------------------------------------------------------------------
+
+
+def slot_16d_orthogonality(fingerprints: list[dict]) -> dict:
+    """Check whether slot 16d discriminations are a strict subset of slot 13's."""
+    pairs_disc_by_13: set[tuple[int, int]] = set()
+    pairs_disc_by_16d: set[tuple[int, int]] = set()
+    n = len(fingerprints)
+    s13_name = "slot_13r_critical_curvature_log10"
+    s16d_name = "slot_16d_channel_spread_log10"
+    for i in range(n):
+        for j in range(i + 1, n):
+            s13_i = fingerprints[i]["fingerprint"].get(s13_name, {})
+            s13_j = fingerprints[j]["fingerprint"].get(s13_name, {})
+            if (
+                s13_i.get("status") == "defined"
+                and s13_j.get("status") == "defined"
+                and not _values_equal(s13_i["value"], s13_j["value"])
+            ):
+                pairs_disc_by_13.add((i, j))
+            s16d_i = fingerprints[i]["fingerprint"].get(s16d_name, {})
+            s16d_j = fingerprints[j]["fingerprint"].get(s16d_name, {})
+            if (
+                s16d_i.get("status") == "defined"
+                and s16d_j.get("status") == "defined"
+                and not _values_equal(s16d_i["value"], s16d_j["value"])
+            ):
+                pairs_disc_by_16d.add((i, j))
+    is_subset = pairs_disc_by_16d.issubset(pairs_disc_by_13)
+    unique_to_16d = pairs_disc_by_16d - pairs_disc_by_13
+    return {
+        "pairs_disc_by_13_count": len(pairs_disc_by_13),
+        "pairs_disc_by_16d_count": len(pairs_disc_by_16d),
+        "pairs_unique_to_16d_count": len(unique_to_16d),
+        "is_strict_subset_of_13": is_subset and len(unique_to_16d) == 0,
+        "is_orthogonal_enough": len(unique_to_16d) > 0,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Pull canonical full fingerprints from Phase γ artifact for P_δ5 check
+# ---------------------------------------------------------------------------
+
+
+def _load_phase_gamma_full_matrix() -> list[list[int]]:
+    path = (
+        ROOT
+        / "Build_Docs"
+        / "Reports"
+        / "substrate_fingerprint_atlas_phase_gamma"
+        / "atlas_artifact_phase_gamma.json"
+    )
+    with path.open() as f:
+        d = json.load(f)
+    return d["distinguishability_matrix"]
+
+
+# ---------------------------------------------------------------------------
+# Phase δ predictions
+# ---------------------------------------------------------------------------
+
+
+def evaluate_phase_delta_predictions(
+    cheap_fingerprints: list[dict],
+    cheap_matrix: list[list[int]],
+    perturbed_sr_fingerprint: dict,
+    perturbed_sr_distances: dict,
+    s16d_redundancy: dict,
+    phase_gamma_full_matrix: list[list[int]],
+) -> dict:
+    n = len(cheap_fingerprints)
+    pair_count = 0
+    distinguishable = 0
+    for i in range(n):
+        for j in range(i + 1, n):
+            pair_count += 1
+            if cheap_matrix[i][j] >= 1:
+                distinguishable += 1
+
+    # P_δ1: all 6 cheap fingerprints unique (distinguishable pairwise)
+    p_d1 = distinguishable == pair_count  # 15 of 15
+
+    # P_δ2: ≥ 12 of 15 distinguishable on cheap subset alone
+    p_d2 = distinguishable >= 12
+
+    # P_δ3: slot 16d not strict-subset of slot 13's discriminations
+    p_d3 = not s16d_redundancy["is_strict_subset_of_13"]
+
+    # P_δ4: perturbed-SR closer to canonical SR than to any other fixture
+    sr_distance = perturbed_sr_distances.get("SR", float("inf"))
+    other_distances = {
+        k: v for k, v in perturbed_sr_distances.items() if k != "SR"
+    }
+    min_other = min(other_distances.values()) if other_distances else float("inf")
+    p_d4 = sr_distance < min_other
+
+    # P_δ5: full-fingerprint pairs still all distinguishable (no regression)
+    full_pairs = 0
+    full_dist = 0
+    nf = len(phase_gamma_full_matrix)
+    for i in range(nf):
+        for j in range(i + 1, nf):
+            full_pairs += 1
+            if phase_gamma_full_matrix[i][j] >= 1:
+                full_dist += 1
+    p_d5 = full_dist == full_pairs
+
+    # P_δ6: slot 16d defined on every cheap fingerprint
+    s16d_defined = sum(
+        1
+        for fp in cheap_fingerprints
+        if fp["fingerprint"]["slot_16d_channel_spread_log10"]["status"]
+        == "defined"
+    )
+    p_d6 = s16d_defined == n
+
+    return {
+        "P_delta_1_all_cheap_fingerprints_unique": bool(p_d1),
+        "P_delta_2_cheap_pairs_distinguishable_geq_12": bool(p_d2),
+        "P_delta_3_slot_16d_orthogonal_to_13": bool(p_d3),
+        "P_delta_4_perturbed_sr_closest_to_canonical_sr": bool(p_d4),
+        "P_delta_5_full_fingerprint_no_regression": bool(p_d5),
+        "P_delta_6_slot_16d_defined_on_every_fixture": bool(p_d6),
+        "diag_cheap_distinguishable_count": distinguishable,
+        "diag_cheap_pair_count": pair_count,
+        "diag_perturbed_sr_distances": perturbed_sr_distances,
+        "diag_perturbed_sr_distance_to_canonical_sr": sr_distance,
+        "diag_perturbed_sr_min_distance_to_others": min_other,
+        "diag_s16d_orthogonality": s16d_redundancy,
+        "diag_s16d_defined_count": s16d_defined,
+    }
+
+
+def identify_failure_modes_delta(
+    predictions: dict, cheap_matrix: list[list[int]]
+) -> list[str]:
+    failures = []
+    if predictions["diag_s16d_orthogonality"]["is_strict_subset_of_13"]:
+        failures.append("F_delta_1")
+    n = len(cheap_matrix)
+    indistinguishable = sum(
+        1
+        for i in range(n)
+        for j in range(i + 1, n)
+        if cheap_matrix[i][j] == 0
+    )
+    if indistinguishable >= 4:
+        failures.append("F_delta_2")
+    if not predictions["P_delta_4_perturbed_sr_closest_to_canonical_sr"]:
+        failures.append("F_delta_3")
+    if not predictions["P_delta_6_slot_16d_defined_on_every_fixture"]:
+        failures.append("F_delta_4")
+    return failures
+
+
+def derive_verdict_delta(predictions: dict, failures: list[str]) -> str:
+    # The use-case test: cheap discrimination + near-miss
+    cheap_disc = predictions["P_delta_2_cheap_pairs_distinguishable_geq_12"]
+    near_miss = predictions["P_delta_4_perturbed_sr_closest_to_canonical_sr"]
+    if cheap_disc and near_miss:
+        if all(
+            predictions[k]
+            for k in predictions
+            if k.startswith("P_delta_") and isinstance(predictions[k], bool)
+        ):
+            return "barcode_scan_use_case_validated_at_phase_delta"
+        return "barcode_scan_use_case_validated_with_caveats"
+    if not cheap_disc or not near_miss:
+        return "barcode_scan_use_case_not_validated"
+    return "barcode_scan_use_case_validated_with_caveats"
+
+
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
+
+
+def run_atlas_delta() -> dict:
+    # Build cheap fingerprints for the 6 canonical fixtures
+    cheap_fingerprints = [
+        compute_cheap_fingerprint(f, "A") for f in PHASE_ALPHA_FIXTURES
+    ]
+    # Compute perturbed-SR cheap fingerprint
+    perturbed_sr = compute_perturbed_sr_cheap_fingerprint()
+
+    # Distinguishability on cheap subset
+    cheap_matrix, names = distinguishability_matrix(cheap_fingerprints)
+
+    # Slot 16d redundancy
+    s16d_redundancy = slot_16d_orthogonality(cheap_fingerprints)
+
+    # Near-miss distances
+    ranges = _slot_ranges(cheap_fingerprints)
+    perturbed_sr_distances: dict[str, float] = {}
+    for fp in cheap_fingerprints:
+        d = near_miss_distance(perturbed_sr, fp, ranges)
+        perturbed_sr_distances[fp["fixture"]] = round(d, 4)
+
+    # Phase γ full matrix for P_δ5
+    phase_gamma_full = _load_phase_gamma_full_matrix()
+
+    predictions = evaluate_phase_delta_predictions(
+        cheap_fingerprints,
+        cheap_matrix,
+        perturbed_sr,
+        perturbed_sr_distances,
+        s16d_redundancy,
+        phase_gamma_full,
+    )
+    failures = identify_failure_modes_delta(predictions, cheap_matrix)
+    verdict = derive_verdict_delta(predictions, failures)
+
+    return {
+        "atlas_version": "phase_delta_v1",
+        "fixtures": list(PHASE_ALPHA_FIXTURES),
+        "cheap_fingerprints": cheap_fingerprints,
+        "perturbed_sr_fingerprint": perturbed_sr,
+        "cheap_distinguishability_matrix": cheap_matrix,
+        "cheap_distinguishability_row_labels": names,
+        "slot_ranges_used_for_distance": {
+            k: [round(v[0], 4), round(v[1], 4)] for k, v in ranges.items()
+        },
+        "perturbed_sr_distances": perturbed_sr_distances,
+        "slot_16d_orthogonality": s16d_redundancy,
+        "predictions": predictions,
+        "failure_modes_observed": failures,
+        "verdict": verdict,
+    }
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", default=str(ARTIFACT))
+    args = parser.parse_args()
+    REPORT_DIR.mkdir(parents=True, exist_ok=True)
+    data = run_atlas_delta()
+    Path(args.output).write_text(json.dumps(data, indent=2, sort_keys=True))
+    print(f"atlas-δ artifact written to {args.output}")
+    print(f"  verdict: {data['verdict']}")
+    print(f"  failure_modes_observed: {data['failure_modes_observed']}")
+    print(f"  predictions:")
+    for k, v in data["predictions"].items():
+        if isinstance(v, bool):
+            marker = "✓" if v else "✗"
+            print(f"    {marker} {k}")
+    print()
+    print(f"  Slot 16d orthogonality: {data['slot_16d_orthogonality']}")
+    print()
+    print(f"  Cheap distinguishability matrix:")
+    labels = data["cheap_distinguishability_row_labels"]
+    print("    " + " ".join(f"{n[:7]:>8}" for n in labels))
+    for i, row in enumerate(data["cheap_distinguishability_matrix"]):
+        print(f"    {labels[i][:7]:>7} " + " ".join(f"{c:>8}" for c in row))
+    print()
+    print(f"  Perturbed-SR distances:")
+    for k, v in sorted(data["perturbed_sr_distances"].items(), key=lambda x: x[1]):
+        marker = " ← (canonical SR)" if k == "SR" else ""
+        print(f"    {k:20}: {v}{marker}")
+
+
+if __name__ == "__main__":
+    main()

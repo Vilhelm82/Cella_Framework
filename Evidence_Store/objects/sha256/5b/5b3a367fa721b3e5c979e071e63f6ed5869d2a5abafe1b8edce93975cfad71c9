@@ -1,0 +1,190 @@
+# Substrate Invariant Search — Phase F — Invariant Synthesis
+
+**Status:** Phase F complete. Substrate-as-probe instrument synthesised as a 4-channel `StructuredReading` with documented attribution decision rule. P1–P5 verified at composite level. **Decision: proceed to Phase G.**
+
+**Date:** 2026-05-23
+**Authority:** [`Build_Docs/Agent_tasks/substrate_invariant_search_2026_05_23.md`](../../Agent_tasks/substrate_invariant_search_2026_05_23.md)
+**Pre-registry:** [`Build_Docs/Agent_tasks/substrate_invariant_search_phase_f_synthesis.md`](../../Agent_tasks/substrate_invariant_search_phase_f_synthesis.md)
+**Source chain:** Phase E observable sha256 prefix `29c4dc01e7522ff4...`
+
+---
+
+## 1. The synthesis form
+
+`I(F, x)` is a **multi-channel `StructuredReading`**, not a single scalar:
+
+```
+StructuredReading = {
+    Channel 1 — ulp_spread_log2          (BACL spectrum, substrate granularity)
+    Channel 2 — E_log2_base_operand      (endpoint-distance substrate image)
+    Channel 3 — two_form_partition       (algebraic-route silent/residual, fixture-level)
+    Channel 4 — K_G                       (canonical curvature, Phase E eval-layer)
+
+    Derived:
+      bacl_predicted_noise_floor   = max_ulp / 2
+      attribution                  = one of {phenomenon, substrate, ambiguous, format_precision_pinned}
+      attribution_confidence       = scalar in [0, 1]
+      attribution_signal_ratio     = K_G / bacl_predicted_noise_floor
+      attribution_rationale        = string
+}
+```
+
+**Scalar synthesis considered and rejected.** A weighted-scalar synthesis (e.g., `a·ulp_spread + b·E + c·K_G`) would require arbitrary coefficient choices and would average away route-dependent information. The multi-channel form preserves what would otherwise be lost.
+
+---
+
+## 2. The attribution decision rule (pre-registered)
+
+```
+Let:
+    signal_ratio = |K_G| / bacl_predicted_noise_floor
+    e_safe       = E_log2_base_operand > log2(1e-4) ≈ -13.3
+
+Decision:
+    if E is computable AND e_safe is False:
+        attribution = format_precision_pinned, confidence = 0.0
+
+    elif signal_ratio > 1000:
+        attribution = phenomenon
+        confidence = min(1, log10(signal_ratio) / 16)
+
+    elif signal_ratio > 1:
+        attribution = ambiguous
+        confidence = 0.5
+
+    else:
+        attribution = substrate
+        confidence = min(1, 1 - signal_ratio)
+```
+
+Thresholds (`1e3`, `1.0`, `log2(1e-4)`) are pre-registered. Phase F does not adjust them post-hoc.
+
+---
+
+## 3. P1–P5 verification
+
+### Per channel
+
+| Channel | P1 | P2 | P3 | P4 | P5 |
+|---|---|---|---|---|---|
+| `ulp_spread_log2` | ✓ | partial (substrate granularity) | by design route-varying (preserved as instrument structure) | ✓ (log2-ratio invariance) | contributes to noise-floor prediction |
+| `E_log2_base_operand` | ✓ | ✓ | ✓ | conditional (Phase D scope caveat) | primary precision-pinning channel |
+| `two_form_partition` | ✓ | partial (algebraic-structural) | by design route-distinguishing | ✓ (IEEE 754 exact cancellation) | contributes to noise-floor prediction |
+| `K_G` | ✓ | ✓ | ✓ | satisfied within float64 ulp tolerance | primary geometric channel |
+
+### Composite
+
+| Property | Status | Rationale |
+|---|---|---|
+| **P1 input-derivable** | satisfied | All 4 channels P1-satisfied |
+| **P2 geometric** | satisfied | Composite carries geometric content via channels 2/4 (point-level) and 1/3 (substrate/algebraic structural) |
+| **P3 route-invariant** | satisfied as multi-channel | Channels 1, 3 carry route-dependent diagnostic info explicitly; channels 2, 4 are route-invariant; the composite preserves route information rather than averaging it away |
+| **P4 format-invariant** | conditional | Composite is format-invariant when channel 2 (E) is in safe range; the decision rule explicitly handles format-precision-pinned regimes |
+| **P5 substrate-phenomenon discriminating** | satisfied | The decision rule produces a categorical verdict per probe with documented rationale |
+
+All composite properties satisfied.
+
+---
+
+## 4. Structured readings at the 9 probe points
+
+All 9 probes classify as `phenomenon`:
+
+| Probe | K_G | signal_ratio | Attribution |
+|---|---|---|---|
+| sr_lightspeed_approach | 1.0 | 9.01e+15 | phenomenon |
+| sr_sterbenz_center | 1.0 | 9.01e+15 | phenomenon |
+| schw_horizon_approach | 1.98 | 1.78e+16 | phenomenon |
+| schw_sterbenz_center | 0.038 | 3.43e+14 | phenomenon |
+| pa_near_singular | 1.89 | 1.70e+16 | phenomenon |
+| pa_sterbenz_center | 0.349 | 3.15e+15 | phenomenon |
+| sphere_axis | 1.0 | 9.01e+15 | phenomenon |
+| sphere_equator_45 | 1.0 | 9.01e+15 | phenomenon |
+| sphere_diagonal | 1.0 | 9.01e+15 | phenomenon |
+
+This is an observation about the **probe set** — these are all clean fixtures with real geometric content, far above substrate noise floor. Signal ratios range from `3.4e+14` to `1.8e+16`, all well above the `1e+3` phenomenon threshold.
+
+**The probe-set homogeneity is not a rule degeneracy.** The decision rule has 4 structurally distinct categories defined; the substrate / ambiguous / format_precision_pinned categories are exercised by Phase G's pathological probes, not by Phase F's clean fixtures.
+
+---
+
+## 5. Freeze-or-proceed decision
+
+**Decision: `proceed_to_phase_g`.**
+
+Rationale:
+- Composite P1–P5 verification satisfied
+- Decision rule has 4 structurally distinct categories defined
+- Probe-set homogeneity (all `phenomenon`) is correctly attributed to the probe-set composition (clean fixtures), not to rule degeneracy
+- Phase G is the appropriate test bench for the substrate / ambiguous / format_precision_pinned categories
+
+No freeze condition is met.
+
+---
+
+## 6. Closeout answers
+
+### Q1 — Does the synthesis satisfy P1–P5?
+Yes at composite level. See §3 above. Per-channel statuses recorded; the only conditional channel is `E_log2_base_operand` under P4 (format invariance), which the decision rule explicitly handles via the `format_precision_pinned` attribution category.
+
+### Q2 — Attribution per probe?
+All 9 probes classified as `phenomenon` with signal_ratio between 3.4e+14 and 1.8e+16. See §4 table.
+
+### Q3 — Multi-channel information preserved?
+Yes. The 4-channel form retains route-dependent information (channels 1, 3) and precision-conditional information (channel 2) that a single-scalar synthesis would average away. The attribution itself is a categorical multi-state output, not a scalar score.
+
+### Q4 — Threshold-calibration concerns?
+The thresholds `1e3` (phenomenon), `1.0` (substrate), and `log2(1e-4)` (format-safe) are pre-registered constants. Phase F does not recalibrate them. The probe-set homogeneity (all phenomenon) is consistent with these thresholds correctly classifying clean fixtures; the categorical resolution will be tested empirically in Phase G with pathological probes. Future-campaign open item: derive the thresholds from format-precision properties rather than fix them as magic numbers.
+
+### Q5 — Freeze or proceed?
+`proceed_to_phase_g`. See §5.
+
+### Q6 — Phase G requirements?
+Phase G must demonstrate the substrate-as-probe instrument on a Newton-failure-mode case: a pathological root configuration (e.g., multiplicity ≥ 2 root, near-singular Jacobian, ill-conditioned at noise floor) where Newton produces spurious convergence or fails to terminate. The instrument should correctly classify the substrate/phenomenon regime at probe points near the pathology, providing information Newton cannot.
+
+### Q7 — Structural critiques recorded?
+Three critiques recorded:
+1. **Thresholds are magic numbers.** Currently pre-registered constants; a future revision could derive them from format-precision properties.
+2. **K_G is the "signal" by default.** Future versions could use other channels (e.g., E variation along the surface) as alternative signals depending on what the instrument is trying to detect.
+3. **`two_form_partition` is fixture-level.** A richer per-probe partition observable would strengthen the synthesis. The current MCG four-form battery doesn't provide per-probe partition information.
+
+---
+
+## 7. What Phase F does *not* claim
+
+- Phase F does **not** modify substrate or architecture files.
+- Phase F does **not** call lv3 / V3 substrate.
+- Phase F does **not** propose a single-scalar "magic invariant."
+- Phase F does **not** recalibrate decision-rule thresholds based on probe-set results.
+- Phase F does **not** run the Newton failure-mode demo (that is Phase G).
+- Phase F does **not** claim the substrate-as-probe instrument has been validated against an actual residual-solver failure (that is Phase G's job).
+
+---
+
+## 8. Open work items carried forward
+
+- Decision-rule threshold calibration (research-grade)
+- Substrate-derivation of K_G (carried from Phase E)
+- Multi-D extension of E (carried from Phase 2h MD_Q1)
+- Format-precision-pinned attribution alternative — higher-precision arithmetic to extend the format-safe range
+
+---
+
+## 9. Source artefact chain
+
+| Artefact | sha256 prefix |
+|---|---|
+| `phase_e_kg_observable.json` | `29c4dc01e7522ff4` |
+| `phase_d_transformation_invariance_audit.json` | `5ea2deaf55d2bd52` |
+| `phase_c_irreducible_basis.json` | `fbddb9fbe9889f87` |
+| `phase_b_invariant_vector_table.json` | `58574ba766e34bcc` |
+| `phase_a_candidate_catalogue.json` | `18bd80e6fc395df0` |
+| `phase_f_invariant_synthesis.json` | (recorded live post-build) |
+
+---
+
+## 10. References
+
+- Campaign authority: [`Build_Docs/Agent_tasks/substrate_invariant_search_2026_05_23.md`](../../Agent_tasks/substrate_invariant_search_2026_05_23.md)
+- Phase F pre-registry: [`Build_Docs/Agent_tasks/substrate_invariant_search_phase_f_synthesis.md`](../../Agent_tasks/substrate_invariant_search_phase_f_synthesis.md)
+- Phase A–E prior artefacts: see source chain above

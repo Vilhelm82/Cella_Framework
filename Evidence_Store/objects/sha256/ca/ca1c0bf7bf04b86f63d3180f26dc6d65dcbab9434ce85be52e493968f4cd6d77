@@ -1,0 +1,251 @@
+# MCG Discovery — Phase 1 — Candidate Slate
+
+**Status:** Discovery characterization log. **No tests pre-registered.** Phase 1 enumerates candidate G observables, states a mechanism for each, applies the Phase 0 criteria, and ranks the slate. Confirmatory machinery is forbidden here per Discipline Rule 1; criterion 4 (named mechanism) is the graduation gate to Phase 3.
+
+**Authority:** [`mcg_discovery_campaign_handoff_2026_05_19.md`](../../Agent_tasks/mcg_discovery_campaign_handoff_2026_05_19.md) §Phase 1.
+**Criteria:** [`phase_0_g_candidate_criteria.md`](phase_0_g_candidate_criteria.md).
+
+---
+
+## 0. A reframe that affects the whole slate (drawn from the c2/Gate-3 lesson)
+
+There are two ontologically distinct classes of observable, and a candidate's relationship to the M-subtraction filter depends on which class it lives in:
+
+- **Magnitude/residue observables** — real-valued quantities like `|c_schw|`, `|f_float − f_exact|`, `|f_route_A − f_route_B|`. These are *on* the BACL integer-ulp lattice whenever the load-bearing subtractions satisfy the BACL proviso (in-scope c2). Integer-j subtraction collapses them to literal zero. **These fail criterion 2 by structural certainty.** They are anti-candidates per Phase 0 §6.
+
+- **Symbol/structure observables** — discrete-valued or distributional quantities like the j_BACL sequence as a function of a sweep parameter, the difference of integer-j sequences between two routes, the histogram of j_BACL over a parameter range, the cross-binade transition counts. **These are not on the BACL lattice** — they live in the integer lattice itself (or in distributions over it). BACL mandates that magnitudes lie on the lattice; BACL does **not** mandate which lattice point a specific computation lands on. **That underdetermination is the slot a G candidate must occupy.**
+
+The Phase 0 criterion-2 filter must be applied differently to the two classes:
+
+- For magnitude observables: integer-j subtraction; survival = nontrivial structure in `O − j · ulp`. (Mostly fails.)
+- For symbol observables: **the filter is whether the symbol stream depends on factors BACL alone does not determine.** BACL fixes the lattice; the route, the fixture's geometric structure, and the algebraic identities a specific computation traverses are *not* BACL-determined. A symbol observable passes criterion 2 iff its variation across (route, fixture, x) is not predictable from BACL hypotheses alone.
+
+All four candidates in this slate are **symbol/structure observables**. This is not a coincidence — by the Phase 0 §6 anti-candidate rule, magnitude residues are excluded a priori. Phase 1's substantive enumeration is in the symbol class.
+
+---
+
+## 1. Candidate G-1 — Post-M-subtraction route divergence (j-symbol form) [PRIMARY SEED]
+
+**Status:** Highest-ranked in the slate. Mechanism already exists via the forensic/refinery duality. No criterion-4-gate completion yet; the counterfactual and calibration controls are still in the stating-it-clearly phase.
+
+### Definition
+
+For a fixture computing a real value `f(x)` (e.g., `f(r) = 1 − 2/r`), specify two algebraically-equivalent routes `r_A, r_B` whose evaluation trees differ but whose real-valued outputs are equal. In float64:
+```
+f_A(x) = round_route_A(f, x)          # explicit operation sequence
+f_B(x) = round_route_B(f, x)          # different explicit sequence, same algebra
+```
+For each route, compute the integer-j of its residue against the high-precision oracle `f_exact(x)` (mpmath, 100 dps):
+```
+residue_A(x) = f_A(x) − f_exact(x)    # real value, mpmath
+j_A(x)       = round(residue_A(x) / ulp(f_A(x)))   # integer
+j_B(x)       = round(residue_B(x) / ulp(f_B(x)))   # integer
+```
+The **route-divergence symbol** is:
+```
+Δj(x) = j_A(x) − j_B(x)               # integer-valued sweep
+```
+The observable is `Δj` as a function of `x` (a sweep) and the fixture: `O_G1(fixture; route_A, route_B) := { Δj(x) }_{x ∈ sweep}`.
+
+Note: the candidate observable is *not* `f_A − f_B` (magnitude — an anti-candidate by §0). It is the integer-symbol stream `Δj(x)`.
+
+### Mechanism (stated, not yet calibration-tested)
+
+**(a) Generative phenomenon.** Distinct algebraic routes traverse distinct sequences of float64 operations. Each rounding step picks the nearest representable value to a real intermediate; the cumulative effect is a route-specific path through the float lattice. When the two routes' float outputs are compared to a common oracle, their residues differ by `(j_A − j_B) · ulp ± (cross-binade adjustment)`. The integer `Δj(x)` is a fingerprint of the divergence of the two rounding paths.
+
+**(b) Counterfactual.** If routes diverged only because of arithmetic noise without geometric content, `Δj(x)` would be an unstructured zero-mean sequence with variance proportional to the number of operations differing between routes. Specifically, no correlation with `x`, no dependence on the fixture's geometric parameters (e.g., proximity to a singular surface), no preserved shape across fixtures.
+
+**(c) Calibration control.** Two fixtures with identical algebraic structure but reparameterizations of the input (e.g., `r ↦ r + 0` versus `r ↦ r` for Schwarzschild — a trivial reparam): `Δj` should be invariant under the reparam if the mechanism is purely route-dependent. Conversely, two distinct fixtures with the same route structure: `Δj` patterns should differ.
+
+**(d) Separation from M and C.**
+- **From M.** `Δj` lives in the integer lattice itself, not on a BACL-mandated magnitude lattice; M does not mandate which `j` either route picks. M-only would predict no structure beyond "both `j`s are integers."
+- **From C.** Two routes of *equal conditioning* applied to the same fixture should produce `Δj ≡ 0` under a pure-C explanation (same condition number → same C-amplified error → same residue → same j → `Δj = 0`). A nonzero structured `Δj` between equal-conditioning routes is, by elimination, neither M nor C.
+
+The mechanism's load-bearing assumption is that *equal-conditioning* route pairs are constructable. This is the central confound to control in Phase 1 characterization (see §1.4 below).
+
+### Phase 0 criteria scoring
+
+| Criterion | Status | Notes |
+|---|---|---|
+| 1. Computable | **provisional pass** | Implementation straightforward (two float64 routes + mpmath oracle + integer-j extraction). Byte-stable. No randomness. |
+| 2. Survives M-subtraction | **provisional pass (symbol-class)** | `Δj` is itself integer-valued; the M-filter applied to symbol observables is "does it depend on more than BACL hypotheses?" — yes, by construction (depends on route). Pending: empirical check that variation across x and across fixtures is nontrivial. |
+| 3. Discriminates | **untested** | Mechanism predicts route-discriminating, fixture-discriminating variation. Within-cell reproducibility floor: trivially zero for deterministic implementation; cross-cell discrimination is the open question. |
+| 4. Named mechanism | **provisional pass** | (a)–(d) stated above. Counterfactual is concrete; calibration control is stated; separation from M and C is stated. Open issue: the *equal-conditioning route pairs* construction needs to be made operational before mechanism statement is solid. **Not yet at graduation gate.** |
+
+**Ranking:** Highest in the slate. The strongest seed because:
+- It directly inherits the forensic/refinery duality's mechanism (a real prior, not retrofitted).
+- The reframe to j-symbol form (rather than the naive route-magnitude form) lets it survive the c2 anti-candidate exclusion.
+- The C-confound (equal-conditioning routes) is **stateable** — there's an obvious construction (algebraically-equivalent expression trees on the same fixture have equal conditioning if measured at the real-valued derivative, which is route-independent).
+
+### Confound risks
+
+- **Equal-conditioning is harder than it sounds.** Conditioning is usually defined at the input level (e.g., `‖∂f/∂x‖`). Algebraically-equivalent routes share that derivative. But *operation-level* conditioning differs: a route that subtracts two near-equal floats has higher cancellation amplification than a route that doesn't. If C is "input conditioning," equal-conditioning is automatic; if C is "operation-level rounding amplification," it's not. **The C-definition (Phase 2) must precede a sharp confound test.** Phase 1 can characterize `Δj` exploratorily without resolving this; Phase 3 cannot.
+- **Cross-binade transitions** in either route's output can introduce a one-binade ulp scale change in `j_A` or `j_B` that is mechanism-irrelevant. Detect and mark such records; consider whether to drop or to use binade-normalized `j`.
+- **Sterbenz-exact regimes.** When both routes' load-bearing subtractions are Sterbenz-exact, both residues are exactly zero, both `j`s are zero, `Δj = 0` identically. This is not a failure of the candidate; it's a regime where the candidate has no discrimination to offer because there is no rounding error. The candidate's domain is the *cancellation regime* where rounding error is nontrivial.
+
+### Exploratory characterization shape (what would constitute Phase 1 evidence)
+
+**Exploratory positive (would advance candidate to criterion-4 graduation):**
+- `Δj(x)` is non-zero and structured across a parameter sweep (not random-walk-like).
+- The structure correlates with a geometric property of the fixture (e.g., distance to horizon for Schwarzschild) in a way that is not explained by trivial input-conditioning differences.
+- The pattern is reproducible across 2–3 fixtures of differing geometry, with fixture-distinguishable signatures.
+- (Cleanest:) at least one well-conditioned fixture/route pair shows zero `Δj` (no signal where mechanism predicts none); at least one nontrivial pair shows structured `Δj`.
+
+**Exploratory null (would drop or revise the candidate):**
+- `Δj(x)` is constant or random-walk-like across all tested fixtures.
+- The structure is fully explained by per-operation rounding-error variance (i.e., a C-only model fits as well).
+- Cross-fixture patterns are indistinguishable.
+
+Either outcome is filtering information per Discipline Rule 5. A null is "drop," not "HALT."
+
+### Fixtures proposed for Phase 1 exploratory characterization
+
+The handoff §Immediate next action item 2 suggests "2–3 fixtures of differing geometry." Candidate set:
+- **Schwarzschild** `f(r) = 1 − 2/r`, `r > 2`. Route A: `f = 1 − (2/r)`; Route B: `f = (r − 2)/r`. Algebraically equal, distinct operation trees.
+- **Special-Relativity-like** `f(β) = √(1 − β²)`, `β ∈ (0, 1)`. Route A: `f = √(1 − β·β)`; Route B: `f = √((1−β)·(1+β))`. Algebraically equal.
+- **Conical compatibility** `f(θ) = 1 − cos(θ)`, `θ` small. Route A: `f = 1 − cos(θ)`; Route B: `f = 2·sin(θ/2)²`. Algebraically equal.
+
+These three are distinct in geometric structure (radial / boost / angular) and exercise distinct cancellation patterns. **Pure exploration — no pre-registry, no decision rules.** The output of Phase 1 characterization is a writeup describing what `Δj(x)` looks like in each, with the criterion-4 gate either satisfied or not.
+
+---
+
+## 2. Candidate G-2 — Single-route j_BACL sequence structure
+
+**Status:** Provisional candidate. Weaker than G-1 because mechanism is more speculative. Worth characterizing in parallel.
+
+### Definition
+
+For a single fixture and single route, sweep `x` and record the integer-j sequence:
+```
+j(x) = round((f_route(x) − f_exact(x)) / ulp(f_route(x)))
+```
+The candidate observable is the **shape** of this sequence as a function of `x` — e.g., its histogram, its serial correlation, its first-difference distribution, its frequency content.
+
+### Mechanism (stated, more speculative)
+
+**(a) Generative phenomenon.** The j-value picked at a given `x` depends on where `f_exact(x)` lies relative to the nearest float lattice point. As `x` sweeps continuously, `f_exact(x)` sweeps continuously; the discrete j-sequence is the float lattice's quantization of this continuous trajectory. The *pattern* of j-values may carry information about how the trajectory crosses the lattice, which depends on the relative density of the float lattice versus the function's local slope — a substrate-geometric quantity.
+
+**(b) Counterfactual.** If the j-sequence is determined entirely by the float lattice (M alone), then for a continuous `f` the j-sequence's shape is a known function of the slope `f'` and the local ulp scale — predictable from BACL hypotheses without geometric content. A discrepancy from that prediction would indicate non-M content.
+
+**(c) Calibration control.** A purely linear `f(x) = ax + b` (no curvature) should produce a j-sequence whose statistics are determined by the ratio `a / ulp(f)`. Any deviation (e.g., for a curved `f`) would indicate higher-order content.
+
+**(d) Separation from M and C.** Harder than G-1. M alone predicts a j-distribution depending on slope/ulp; C might amplify the j-distribution's variance. A G-content claim requires the j-pattern to depend on a *higher-order* property (curvature, family identity) that neither M nor C predicts.
+
+### Phase 0 criteria scoring
+
+| Criterion | Status | Notes |
+|---|---|---|
+| 1. Computable | **provisional pass** | Same implementation pattern as G-1. |
+| 2. Survives M-subtraction | **provisional pass (symbol-class)** | The j-sequence as a structure is not collapsed by integer-j subtraction; the symbol stream IS the relevant content. |
+| 3. Discriminates | **untested, weaker prior** | Less obvious that cross-fixture j-shapes differ in a structured way. Linear-fixture calibration is the natural baseline. |
+| 4. Named mechanism | **partial** | (a)–(c) stated. (d) is the weakest — the M-only prediction's exact form needs derivation before the gate can be assessed. |
+
+**Ranking:** Second in the slate. Worth characterizing in parallel with G-1; may merge into G-1 if its content reduces to a single-route projection of `Δj`.
+
+---
+
+## 3. Candidate G-3 — Cross-binade transition statistics
+
+**Status:** Speculative candidate. Mechanism not yet stated cleanly; high M-risk.
+
+### Definition
+
+Sweep `x`; record the binade index `k(x)` of `f_route(x)` (i.e., `f_route(x) ∈ [2^k, 2^(k+1))`). Define cross-binade events `T(x) = (k(x+δ) ≠ k(x))` for adjacent sweep points. The candidate observable is the **statistics** of `T` and any j-anomaly near transitions.
+
+### Mechanism (TBD — currently incomplete)
+
+**(a) Generative phenomenon.** At binade transitions, the ulp doubles (or halves); the float lattice spacing changes discontinuously. The j-extraction can produce anomalous values near transitions because the residue's "natural" scale shifts. This anomaly might encode the fixture's local rate-of-change at the transition.
+
+**(b)–(d)** **Not yet stated** in a form that distinguishes from M (BACL's behaviour at binade boundaries is well-understood substrate) or C (conditioning near a boundary may be high regardless of fixture).
+
+### Phase 0 criteria scoring
+
+| Criterion | Status | Notes |
+|---|---|---|
+| 1. Computable | **pass** | Trivial. |
+| 2. Survives M-subtraction | **uncertain** | Binade transitions are very much M-substrate content; the criterion-2 question reduces to whether anything *beyond* BACL's transition behaviour survives — unclear. |
+| 3. Discriminates | **untested** | |
+| 4. Named mechanism | **fail (incomplete)** | (b)–(d) not stated. |
+
+**Ranking:** Third (low). Keep on the list for completeness; do not invest characterization effort until mechanism is sharpened. **Not eligible for Phase 3 testing until criterion 4 is met.**
+
+---
+
+## 4. Candidate G-4 — Fingerprint-atlas slot structure after M-subtraction
+
+**Status:** Inherits from prior fingerprint-atlas Phases α–δ; uses an existing instrument; mechanism needs articulation.
+
+### Definition
+
+The fingerprint-atlas (prior arc, see [`substrate_fingerprint_atlas_phase_delta/`](../substrate_fingerprint_atlas_phase_delta/)) extracts a vector of slot values per fixture. The candidate is: which slots retain discriminating power after M-subtraction is applied to the per-record residues that feed each slot. Slots that retain power are G-candidates; slots that collapse are M.
+
+### Mechanism (existing infrastructure, mechanism partial)
+
+**(a) Generative phenomenon.** The atlas slots are designed to capture distinguishable substrate signatures (route, family, parameter regime). If some slots survive M-subtraction with their discrimination intact, those slots are picking up content the BACL lattice does not mandate.
+
+**(b) Counterfactual.** Slots that survive would discriminate fixtures even when the magnitude residue is collapsed; slots that don't survive would lose discrimination under M-subtraction (and thus were riding on substrate content all along).
+
+**(c) Calibration control.** Pre-existing canonical SR and perturbed SR fingerprints: byte-identical pre-M-subtraction (atlas distance = 0.0). Post-M-subtraction, the calibration is: do they remain byte-identical? If so, the slots that captured them are M-only.
+
+**(d) Separation from M and C.** Slot-level granularity helps: slots that depend on integer-j patterns are distinct from slots that depend on magnitudes. Phase 1 characterization can sort the atlas's existing slot set by post-M-subtraction discrimination.
+
+### Phase 0 criteria scoring
+
+| Criterion | Status | Notes |
+|---|---|---|
+| 1. Computable | **pass** | Atlas infrastructure exists. |
+| 2. Survives M-subtraction | **per-slot question, untested** | Some slots will fail (magnitude residue slots); some may pass (integer-j or pattern slots). |
+| 3. Discriminates | **untested post-M** | Atlas's discrimination is established pre-M-subtraction; post-M is the open question. |
+| 4. Named mechanism | **partial** | A per-slot mechanism is needed; the atlas as a whole does not yet have a unified mechanism statement. |
+
+**Ranking:** Fourth. Uses existing infrastructure; characterization is low-cost (slot survey under M-subtraction). May surface unexpected survivors. Mechanism per-slot must be articulated before Phase 3 graduation.
+
+---
+
+## 5. Anti-candidates (excluded a priori, per Phase 0 §6)
+
+Recorded here for closure so they are not proposed again:
+
+- **σ1 on c2-style cancellation residue.** The Gate 3 case study. Fails criterion 2 by structural certainty (c2 lattice theorem in scope). See [`mcg_gate_3_killswitch/closeout.md`](../mcg_gate_3_killswitch/closeout.md).
+- **Any magnitude residue of the form `round(V − f)` where V and f share a binade.** Same structural reason.
+- **`|f_route_A − f_route_B|` (route divergence magnitude).** Subtracts two floats that are both BACL-mandated to be on lattices very close to each other; the difference is also on the lattice; integer-j subtraction collapses it. The j-symbol form (G-1) is the survivable reformulation.
+- **Pure rounding-error magnitude `|f_float − f_exact|` after M-subtraction.** Magnitude alone; even if non-zero, it has no information content of the kind criterion 2 requires (G-1's reformulation as symbol-class is the right move).
+
+---
+
+## 6. Ranking summary
+
+| Candidate | Mechanism completeness | Criteria 1–3 status | Recommended Phase 1 effort | Phase 3 readiness |
+|---|---|---|---|---|
+| **G-1: route-divergence j-symbol** | (a)(b)(c)(d) all stated; equal-conditioning construction needs Phase 2 input | provisional pass on 1, 2; 3 untested | **High** — primary characterization target | Pending Phase 2 (C-extractor) for full criterion 4(d) |
+| **G-2: single-route j-sequence shape** | (a)(b)(c) stated; (d) requires M-only prediction derivation | pass on 1, 2; 3 untested | Medium — parallel characterization | Not until (d) sharpened |
+| **G-3: cross-binade transition stats** | (a) stated; (b)–(d) not | uncertain on 2 | Low — keep on list, do not invest | Not eligible |
+| **G-4: fingerprint-atlas slots post-M** | per-slot; partial overall | per-slot question | Low–medium — slot survey is cheap | Per-slot pending |
+
+**Two candidates worth Phase 1 investment now:** G-1 (route-divergence j-symbol) and, in parallel and lower priority, G-2. G-3 and G-4 are on the slate but await mechanism work before characterization effort.
+
+---
+
+## 7. Open questions to revisit as Phase 1 / Phase 2 progress
+
+- **The C-definition (Phase 2) is upstream of a clean G-1 separation argument.** Until C is positively defined, "equal-conditioning route pair" is a working notion, not an operational one. Phase 1 can characterize `Δj` exploratorily, but the G-vs-C separation claim is gated by Phase 2.
+- **The reframe in §0 (magnitude vs symbol observables)** is itself a discovery of this Phase 1 work — not in the original handoff. Worth flagging to the user: if the user agrees, the reframe should propagate into Phase 0 §6 (anti-candidate justification) and the campaign discipline rules.
+- **Cross-binade behaviour** appears as a confound in G-1 and as a candidate in G-3. The two roles need separating: in G-1 it's noise-to-control; in G-3 it's the signal. Both views are admissible at this characterization stage.
+
+---
+
+## 8. Iteration log
+
+- **2026-05-19** — Initial slate: G-1 through G-4 enumerated; magnitude/symbol reframe in §0; anti-candidates §5; ranking §6. No characterization runs yet; mechanisms stated, criteria scored, fixtures proposed.
+
+---
+
+## 9. References
+
+- [`phase_0_g_candidate_criteria.md`](phase_0_g_candidate_criteria.md) — Criteria applied.
+- [`Agent_tasks/mcg_discovery_campaign_handoff_2026_05_19.md`](../../Agent_tasks/mcg_discovery_campaign_handoff_2026_05_19.md) §Phase 1 — Source authority + G-1 seed.
+- [`bacl_invariant_audit/closeout.md`](../bacl_invariant_audit/closeout.md) — M (the filter).
+- [`c2_lattice_sharpness_audit/closeout.md`](../c2_lattice_sharpness_audit/closeout.md) Amendment IV — sqrt-specific tightened j-bound.
+- [`mcg_gate_3_killswitch/closeout.md`](../mcg_gate_3_killswitch/closeout.md) §7.A — Anti-candidate methodology finding (cancellation residue is substrate-dominated by construction).
+- [`substrate_fingerprint_atlas_phase_delta/`](../substrate_fingerprint_atlas_phase_delta/) — Existing atlas infrastructure (G-4 seed).
+- [`hardened_dual_arm_probe/`](../hardened_dual_arm_probe/) — Dual-arm route-comparison infrastructure (relevant to G-1 implementation).

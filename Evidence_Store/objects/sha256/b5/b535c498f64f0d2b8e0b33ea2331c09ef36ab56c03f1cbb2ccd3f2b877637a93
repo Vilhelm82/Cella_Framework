@@ -1,0 +1,156 @@
+# Blow-Up Exponent V4-Native Audit — Preregistry
+
+> **Status: FROZEN 2026-05-18 pre-measurement.** Per `CAMPAIGN_DISCIPLINE.md` Rule 1.1, binding.
+>
+> **Pre-measurement amendment 2026-05-18 (after a methodology shake-down run):** A trial run with 6-digit-precision reference zero values produced σ1 exponents ≈ 0.66 universally across all three functions — but this turned out to be a systematic regression-bias artifact caused by the imprecise reference zeros (at small δ, the actual residual `|f(zero_approx + δ)|` is `|f'·δ + f(zero_approx)|` rather than `|f'·δ|`, and the regression flattens). The trial run revealed a *method* issue, not a substantive finding.
+>
+> Correction: use library-provided precise zeros (mpmath `zetazero` for ζ, scipy `jn_zeros` for J₀, scipy `ai_zeros` for Ai) so that `|f(zero)| < float64 ULP`. Re-run; the precise-zeros run is the binding measurement. Recorded here for honest provenance.
+
+## 0. Source and isolation
+
+V3 reference test: `lloyd_v3_supplementary/tests/domain/Domain_tests/blowup_exponent_analysis.py`. Per V3_REFERENCE_LEDGER + REFERENCE_HYGIENE: V3 is reference for **what to attempt**, not what to copy. No imports of `lloyd_core_nvar`, no use of V3's `K_G` quantity, no V3 vocabulary in the audit.
+
+V3 framed the test as: log|K_G| = a · log|η| + b near zeros of zeta η, Bessel J₀, Airy Ai. The question: is the exponent `a` universal across zeros / functions?
+
+V4 cannot use V3's `K_G` as substrate — it does not exist in V4. V4 reframes the question using its own substrate signatures: float64 residual collapse rate, binade-loss depth power law, route-variation power law, observability boundary location near zeros.
+
+## 1. Purpose
+
+Test whether the V4 substrate produces a **distinguishable signature** at zeros of three functions — Riemann zeta η(½+it), Bessel J₀(x), Airy Ai(x) — and whether that signature is:
+
+- **(H1) Universal across zeros within each function** (constant exponent within ζ; within J₀; within Ai)
+- **(H2) Universal across all three functions** (same exponent in ζ, J₀, Ai)
+- **(H3) Function-specific** (constant within each function; varies between functions)
+
+V3's framing distinguished these three. V4 will do the same, but with substrate observables instead of V3's K_G.
+
+## 2. V4-native blow-up signatures (FROZEN)
+
+Five candidate signatures, each measured as a function of δ = distance from a zero, swept logarithmically. We fit `log(signature) = α · log(δ) + β` and report α.
+
+| Signature | Definition | Predicted α | Type |
+|---|---|---|---|
+| **σ1: residual magnitude** | `log\|f(x_0 + δ)\|` | ≈ +1 for simple zeros (linearization) | structural sanity-check |
+| **σ2: binade-loss depth** | `log2\|x_0\|  − log2\|f(x_0 + δ)\|` | ≈ −1 for simple zeros (mirrors σ1) | structural |
+| **σ3: conditioning index** | `log10(\|f'(x_0 + δ)\| / \|f(x_0 + δ)\|)` | varies; empirical | empirical |
+| **σ4: route-variation signature** | `\|f_routeA(x_0 + δ) − f_routeB(x_0 + δ)\| / ulp(\|f\|)` | empirical | empirical |
+| **σ5: observability boundary δ** | the smallest δ where the observability rule `e_f < e_x` flips | empirical | empirical |
+
+σ1 and σ2 are structural sanity checks: the linearization predicts power laws by calculus. σ3, σ4, σ5 are empirical — the V4-native finds.
+
+## 3. Functions and zeros (FROZEN)
+
+We use the first five real zeros of each function. Reference values from standard tables; using scipy.special / mpmath for evaluation (eval-layer per Axiom 11).
+
+| Function | First 5 zeros (reference values) |
+|---|---|
+| **Riemann ζ(½+it)** | t₁=14.134725, t₂=21.022040, t₃=25.010858, t₄=30.424876, t₅=32.935062 |
+| **Bessel J₀(x)** | x₁=2.404826, x₂=5.520078, x₃=8.653728, x₄=11.791534, x₅=14.930918 |
+| **Airy Ai(x)** | x₁=−2.338107, x₂=−4.087949, x₃=−5.520560, x₄=−6.786708, x₅=−7.944134 |
+
+Note: ζ and Ai have x₃ values that coincidentally collide numerically near 5.52 — this is a coincidence; not the same zero, just close magnitudes. Worth flagging in the closeout if it causes confusion.
+
+## 4. Sweep design (FROZEN)
+
+For each (function, zero) pair, the sweep:
+
+- δ ∈ {10⁻¹, 10⁻², 10⁻³, …, 10⁻¹⁰}, both signs: x = x_zero ± δ (where applicable; for ζ on the critical line, x = (½, t_zero ± δ))
+- For each δ, compute: f(x_zero + δ), f(x_zero − δ), |f'| via finite difference, the route-A and route-B variants of f, and ulp(|f|)
+- Repeat at three precisions: float32, float64, mpmath-50 (high-precision oracle)
+
+For mpmath-50, evaluation precision is set high enough that the high-precision result is the truth oracle; float32 / float64 deviation is the substrate signature.
+
+## 5. Frozen predictions
+
+Strict pre-registered predictions:
+
+### P_B1 — σ1 exponent is ≈ +1 universally (structural)
+
+For every (function, zero), `log|f(x_0 + δ)| = α · log|δ| + β` with α within [0.9, 1.1] across the swept δ range (away from the float64 ULP floor). This is the linearization sanity-check; **failure indicates a non-simple zero or numerical pathology**, not a substantive finding.
+
+### P_B2 — σ2 exponent mirrors σ1 (structural)
+
+`log(σ2) = α_2 · log|δ| + β_2` with α_2 ≈ −α_1 ≈ −1. Binade-loss depth grows logarithmically as the function magnitude shrinks; α_2 mirrors α_1 because both derive from |f|.
+
+### P_B3 — σ3 (conditioning index) exponent is empirical
+
+α_3 may differ across (function, zero) pairs. Pre-registered hypothesis: α_3 is *function-specific universal* — constant within each function, distinct between functions. This is V3's H3 mapped onto a V4 substrate observable. Threshold: within-function std(α_3) < 0.15; between-function range(α_3) > 0.3.
+
+### P_B4 — σ4 (route variation) exponent is empirical
+
+α_4 is the V4 substrate signature most aligned with "how the round-off chain reacts at the zero." Pre-registered hypothesis: α_4 is bounded but not constant — varies smoothly across (function, zero) without falling into a clean universal vs function-specific dichotomy. Threshold: 0 ≤ α_4 ≤ 2 across all 15 cases.
+
+### P_B5 — σ5 (observability boundary δ) is fixture-distinguishing
+
+The smallest δ at which the observability rule fires takes distinct values across functions. Pre-registered hypothesis: ζ has the smallest observability δ (most aggressive cancellation), Airy Ai has the largest (zeros more "spread out" in operand). Threshold: δ_ζ < δ_J₀ < δ_Ai.
+
+### P_B6 — exponent verdict on V3's H1 / H2 / H3 question
+
+Combining σ3 and σ4 across the 15 (function, zero) pairs, V4 emits an aggregated verdict on whether the V4 substrate signature is universal / function-universal / function-specific. The pre-registered prediction: **function-specific** for σ3 (H3); inconclusive for σ4.
+
+## 6. Pre-registered failure modes
+
+| ID | Condition |
+|---|---|
+| F_B1 | σ1 exponent ≠ ≈ 1 (linearization breaks — non-simple zero or evaluation precision issue) |
+| F_B2 | float64 evaluation of η/J₀/Ai near zero hits ULP floor before the regression has enough decades to fit |
+| F_B3 | σ3/σ4 exponents are wildly inconsistent across the same zero at different δ ranges (not a power law at all) |
+| F_B4 | Cross-precision disagreement: float64 and mpmath-50 produce different exponents (substrate signature is precision-specific noise rather than structural) |
+
+## 7. V4 typed outputs
+
+Each (function, zero, precision) emits a record:
+
+```json
+{
+  "function": "zeta" | "j0" | "airy_ai",
+  "zero_index": 1..5,
+  "zero_value": float,
+  "precision": "float32" | "float64" | "mpmath_50",
+  "exponents": {
+    "sigma_1_residual_magnitude": float,
+    "sigma_2_binade_loss_depth": float,
+    "sigma_3_conditioning_index": float,
+    "sigma_4_route_variation": float,
+    "sigma_5_observability_boundary_delta": float
+  },
+  "fit_quality": {
+    "sigma_1_r_squared": float,
+    ...
+  },
+  "ulp_floor_reached_at_delta": float | null,
+  "v4_validity": {defined, finite, observable, selectable, advanceable}
+}
+```
+
+Cross-fixture aggregator: emits per-function summary (mean / std of each σ exponent across 5 zeros), cross-function H1/H2/H3 verdict.
+
+## 8. Closeout criteria
+
+1. 15 (function, zero) pairs × 3 precisions × 5 signatures = 225 exponent fits emitted.
+2. Per-function aggregation completed (mean/std of each σ).
+3. P_B1–P_B6 audited explicitly.
+4. Failure modes named.
+5. Verdict on V3's H1/H2/H3 question:
+   - `universal_within_and_across` (H2)
+   - `universal_within_function_specific_across` (H3) ← pre-registered prediction
+   - `function_zero_specific` (each zero has its own α — H1 violated)
+   - `no_power_law` (F_B3 triggered)
+6. Byte-stable rerun verified.
+7. Structural-vs-empirical separation explicit (σ1/σ2 are structural; σ3/σ4/σ5 are empirical).
+
+## 9. Out of scope (logged)
+
+- Phase ε fingerprint atlas integration. The σ exponents would naturally slot in as new universal cross-family fingerprint slots — but that's downstream.
+- Non-real zeros of ζ (we use critical-line zeros only).
+- Higher-order zeros (these would have α = order ≠ 1; we use simple zeros).
+- More than 5 zeros per function.
+- Establishing the V3 result. V4 will *not* attempt to reproduce V3's specific K_G exponent values; V4's signatures are different objects.
+
+## 10. References
+
+- V3 source: `lloyd_v3_supplementary/tests/domain/Domain_tests/blowup_exponent_analysis.py` (read for substrate-question identification only)
+- V4 axioms: `Build_Docs/Architecture/AXIOMS.md` (especially Axiom 6 — zero must be measured; Axiom 11 — epistemic stance; Axiom 12 — derivation discipline)
+- V3 isolation: `V3_REFERENCE_LEDGER`, `REFERENCE_HYGIENE`
+- Pre-registration: `CAMPAIGN_DISCIPLINE.md` Rule 1.1
+- Strategic frame: 2026-05-18 conversation, "noise as fingerprint barcode" + "turbulence-as-diagnostic" parallel.

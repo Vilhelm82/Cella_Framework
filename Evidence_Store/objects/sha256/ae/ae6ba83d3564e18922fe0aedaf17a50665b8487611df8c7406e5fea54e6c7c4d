@@ -1,0 +1,66 @@
+{
+  "probe": "foldreadback_probe0",
+  "preregistry": "v5",
+  "mb": 24,
+  "bands_present": [
+    -2,
+    -1,
+    0
+  ],
+  "band_report": {
+    "-2": {
+      "band": -2,
+      "n_A1": 1,
+      "n_A2": 1,
+      "nz_A1": 1,
+      "nz_A2": 1,
+      "cancellation_relevant": true,
+      "ols_design_ok": false,
+      "occupancy_ok": false,
+      "per_slope_resid_ok": false,
+      "nondegenerate_functionals": [],
+      "gate0_pass": false
+    },
+    "-1": {
+      "band": -1,
+      "n_A1": 37,
+      "n_A2": 37,
+      "nz_A1": 36,
+      "nz_A2": 37,
+      "cancellation_relevant": false,
+      "ols_design_ok": true,
+      "occupancy_ok": true,
+      "per_slope_resid_ok": true,
+      "nondegenerate_functionals": [
+        "level_histogram",
+        "signed_occ",
+        "sign_pattern",
+        "lattice_rank"
+      ],
+      "gate0_pass": true
+    },
+    "0": {
+      "band": 0,
+      "n_A1": 37,
+      "n_A2": 37,
+      "nz_A1": 37,
+      "nz_A2": 37,
+      "cancellation_relevant": false,
+      "ols_design_ok": false,
+      "occupancy_ok": true,
+      "per_slope_resid_ok": false,
+      "nondegenerate_functionals": [],
+      "gate0_pass": false
+    }
+  },
+  "region_bands": [],
+  "gate0": null,
+  "gate1": null,
+  "gate2_nullband": {},
+  "gate3": {},
+  "gate4": {},
+  "gate5": {},
+  "outcome": "fixture_refused_no_viable_region",
+  "interpretation": "No binade band is BOTH Gate-0-viable AND cancellation-relevant. Clean fixture-level result: pure_algebraic 1-x on this grid cannot host the probe (its cancelling regime e_f<e_x requires x near 1; the grid max x=0.7 leaves cancellation-relevant bands unpopulated). Next fixture chosen in a separate pre-registry. NOT a failed hypothesis.",
+  "runtime_s": 0.07
+}

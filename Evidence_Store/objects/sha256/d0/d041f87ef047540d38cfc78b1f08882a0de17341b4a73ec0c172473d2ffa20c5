@@ -1,0 +1,198 @@
+# Task 050 — Module-to-Layer Mapping
+
+**Audit date:** 2026-05-26
+**Repository:** `/home/william_lloydlt/projects/V4/Lloyd_Engine_V4` (spec said `/mnt/fast/Lloyd_Engine_V4`; adapted)
+**Source tree commit:** see `git log -1` at audit time
+
+## Method
+
+Layers per the task spec §Layering Definitions:
+
+- **L0 — Core substrate.** Status calculus, validity, conditioning, provenance, typed result envelopes, protocol machinery, errors. No domain semantics, no arithmetic primitives.
+- **L1 — Substrate primitives.** Atomic typed operations.
+- **L2 — Composition layer.** Typed protocols consuming L1 and emitting higher-order typed results.
+- **L3 — Consumer methods.** Domain-aware analyses composing against L2.
+- **L4+ — Application consumers.** Domain-facing entry points.
+- **Unclear.** Documented.
+
+The project's own `Build_Docs/Architecture/LAYER_MANIFEST.md` subdivides L2 into projection / metrology / branch / refinery / history (each declaring its own parent layers) and puts solver at L3. The mapping below uses the spec's coarser scheme as the `actual_layer` field and notes the LAYER_MANIFEST sub-layer in the `notes` column. **See `task050_summary.md` §Deviations** for the layering-scheme reconciliation note.
+
+`scratch/` modules are flagged `not_integrated` per the spec; they are inventoried as transplantation candidates rather than as committed substrate.
+
+`Evidence` is one-line. Heavy detail (DRY duplication, hidden constants, Axiom 11 use) lives in `drift_inventory.md`.
+
+---
+
+## Group 1 — Layer 0 (Core substrate)
+
+| module_path | declared_purpose | claimed_layer | actual_layer | evidence | dependencies | dependents | notes |
+|---|---|---|---|---|---|---|---|
+| `src/lloyd_v4/core/__init__.py` | re-exports core types | L0 | L0 | only `from .transitions import …` | none | all of `src/lloyd_v4/*` | re-export shim |
+| `src/lloyd_v4/core/calculus.py` | status join + propagate-invalid + protocol predicate | L0 | L0 | imports `.errors`, `.status` only | core internal | substrate-wide | provides `join_statuses`, `propagate_invalid`, `require_handled_status`, `require_protocol_ok` |
+| `src/lloyd_v4/core/conditioning.py` | typed Conditioning carrier (dataclass with status + diagnostic) | L0 | L0 | imports `.status` only | core internal | all primitives + L2 | **not** the IEEE-754 conditioning *primitive* called for in SUBSTRATE_CONSTRUCTION §9; it is the typed carrier |
+| `src/lloyd_v4/core/errors.py` | exception classes | L0 | L0 | no V4 imports | none | substrate-wide | `LloydV4Error`, `ProtocolViolationError`, `ScalarizationError`, `HiddenGuardRailError`, `UnhandledStratumError` |
+| `src/lloyd_v4/core/protocols.py` | producer/consumer protocol dataclasses + validator | L0 | L0 | imports `.result`, `.status` | core internal | substrate-wide | `validate_protocol`, `ProducerProtocol`, `ConsumerProtocol`, `ProtocolCheck` |
+| `src/lloyd_v4/core/provenance.py` | Provenance dataclass, trace ID, hashing | L0 | L0 | `hashlib`, `json`, `.serialization`, `.status` | core internal | substrate-wide | uses `hashlib.sha256` for trace IDs |
+| `src/lloyd_v4/core/result.py` | `TypedResult`, `TypedRefusal` | L0 | L0 | `.conditioning`, `.provenance`, `.serialization`, `.status` | core internal | substrate-wide | generic result envelope |
+| `src/lloyd_v4/core/serialization.py` | JSON-safe converter | L0 | L0 | `math` (isnan/isinf only) | none | substrate-wide | `to_json_safe`; only `math.isnan` / `math.isinf` — predicates, not named-math content |
+| `src/lloyd_v4/core/status.py` | StrEnum status families | L0 | L0 | no V4 imports | none | substrate-wide | 46 status codes across 10 families |
+| `src/lloyd_v4/core/transitions.py` | StatusTransitionRule registry | L0 | L0 | `.errors` only | core internal | substrate-wide | `apply_status_transition`, `assert_transition_rule_complete` |
+| `src/lloyd_v4/core/validity.py` | multi-field `Validity` dataclass | L0 | L0 | no V4 imports | none | substrate-wide | Axiom 4 carrier |
+
+---
+
+## Group 2 — Layer 1 (Substrate primitives)
+
+LAYER_MANIFEST groups all these under `primitives`. The task spec mentions only `ProjectiveRatio` and `StratifiedQuadraticRoots` as currently L1; project state has 10 L1 primitives. This drift is recorded in the summary.
+
+| module_path | declared_purpose | claimed_layer | actual_layer | evidence | dependencies | dependents | notes |
+|---|---|---|---|---|---|---|---|
+| `src/lloyd_v4/primitives/__init__.py` | re-export shim | L1 | L1 | only re-exports | siblings | substrate-wide | |
+| `src/lloyd_v4/primitives/projective_ratio.py` | `[n:d]` projective state + scalarization refusal | L1 | L1 | imports L0 only | L0 | projection, evals | atomic; Axiom-11 clean (no `math.*` calls) |
+| `src/lloyd_v4/primitives/stratified_quadratic_roots.py` | stratified roots of `ax²+bx+c=0` | L1 | L1 | imports L0 only | L0 | projection, evals | uses **`math.sqrt(discriminant)`** at line 248 — Axiom 11 named-math (sqrt); flagged in drift |
+| `src/lloyd_v4/primitives/typed_collection.py` | typed sequence boundary primitive | L1 | L1 | imports L0 only | L0 | callers | Axiom-11 clean |
+| `src/lloyd_v4/primitives/typed_value.py` | typed scalar boundary primitive | L1 | L1 | imports L0 only | L0 | callers | Axiom-11 clean |
+| `src/lloyd_v4/primitives/typed_finite_difference.py` | `T_{δf}(f)=|Δg/δf|` typed transfer observation | L1 | L1 | imports L0; only `math.isfinite` | L0 | log_log_slope, alpha_probe, sweep_signature | also exposes `_precision_floor` constants table (declared) |
+| `src/lloyd_v4/primitives/typed_log_log_slope.py` | log-log slope fit on typed transfer collection | L1 | L1 | imports L0 only at module level; uses primitives sibling result | L0 | alpha_probe, sweep_signature, branch slope_flow | uses **`math.log`** (104,105) and **`math.sqrt`** (177) — Axiom 11 named-math; flagged |
+| `src/lloyd_v4/primitives/directional_alpha_probe.py` | α-at-branch directional probe | L1 | L1 | imports L0 + sibling typed_finite_difference, typed_log_log_slope | L0, L1 siblings | scalar_alpha_jet_bundle, singular_alpha_jet_bundle, evals, scratch | uses **`math.log`**, **`math.sqrt`** in slope/SE fit; declares `K_BOUNDARY`, `K_DRIFT`, `ALPHA_NUMERIC_FLOOR`, `DEFAULT_ALPHA_MATERIALITY` (declared parameters, Axiom 3 compliant) |
+| `src/lloyd_v4/primitives/sweep_signature_probe.py` | low-sensitivity sweep screening primitive | L1 | L1 | imports L0 + typed_finite_difference + typed_log_log_slope | L0, L1 siblings | alpha_probe (companion call) | uses **`math.log`** at 302, 313; declares `CANCELLATION_GRADE_THRESHOLD = 0.70`, `DROP_RATE_THRESHOLD = 0.30` (declared parameters) |
+| `src/lloyd_v4/primitives/scalar_alpha_jet_bundle.py` | regular-region α jet bundle | L1 | L1 | imports L0 + directional_alpha_probe | L0, L1 sibling | evals, scratch | only `math.isfinite`; Axiom-11 clean modulo dependency on directional_alpha_probe |
+| `src/lloyd_v4/primitives/singular_alpha_jet_bundle.py` | singular-region α jet bundle | L1 | L1 | imports L0 + directional_alpha_probe | L0, L1 sibling | evals, scratch | only `math.isfinite`; Axiom-11 clean modulo dependency |
+
+**L1 sibling-import note.** `directional_alpha_probe`, `sweep_signature_probe`, `scalar_alpha_jet_bundle`, `singular_alpha_jet_bundle` import other L1 primitives. This is consistent with `LAYER_MANIFEST.md` (the manifest declares only `core` as the parent of `primitives`, but allows intra-layer composition). The task spec's "L1 = atomic" framing is in tension with this: see `parent_primitive_gaps.md` GAP-009.
+
+---
+
+## Group 3 — Layer 2 (Composition layer)
+
+The task spec's L2 is the project's `projection` (L1.5 in LAYER_MANIFEST) + `metrology` + `branch` + `refinery` + `history`.
+
+### 3a — Projection (LAYER_MANIFEST L1.5)
+
+| module_path | declared_purpose | claimed_layer | actual_layer | evidence | dependencies | dependents | notes |
+|---|---|---|---|---|---|---|---|
+| `src/lloyd_v4/projection/__init__.py` | re-export | L2 | L2 | only re-exports | siblings | refinery, evals | |
+| `src/lloyd_v4/projection/branches.py` | typed `BranchSelection` ({positive, negative, unique}) | L2 | L2 | L0 only | L0 | exact_projection, refinery, branch | replaces raw-string branch flags per LAYER_MANIFEST |
+| `src/lloyd_v4/projection/exact_projection.py` | `exact_quadratic_projection(root_state, branch)` consumer | L2 | L2 | L0 + L1 primitives + L2 sibling (branches) | L0, L1, L2 | refinery, evals | Axiom-11 clean (no `math.*`) |
+
+### 3b — Metrology (LAYER_MANIFEST L2)
+
+| module_path | declared_purpose | claimed_layer | actual_layer | evidence | dependencies | dependents | notes |
+|---|---|---|---|---|---|---|---|
+| `src/lloyd_v4/metrology/__init__.py` | re-export | L2 | L2 | only re-exports | siblings | refinery, evals | |
+| `src/lloyd_v4/metrology/noise_floor.py` | `b_k` noise floor declare / estimate / classify | L2 | L2 | L0 only; `math.isfinite` only | L0 | refinery, evals | Axiom-11 clean |
+| `src/lloyd_v4/metrology/proxy_calibration.py` | `K_q` proxy calibration + uncalibrated typed result | L2 | L2 | L0 only; `math.isfinite` only | L0 | refinery, evals | Axiom-11 clean |
+
+### 3c — Branch (LAYER_MANIFEST L2)
+
+| module_path | declared_purpose | claimed_layer | actual_layer | evidence | dependencies | dependents | notes |
+|---|---|---|---|---|---|---|---|
+| `src/lloyd_v4/branch/__init__.py` | re-export | L2 | L2 | only re-exports | siblings | refinery, evals | |
+| `src/lloyd_v4/branch/fingerprint.py` | `BranchFingerprint` evidence | L2 | L2 | L0 + slope_flow + L1 transfer status; `math.isfinite` only | L0, L1, L2 sibling | refinery, evals | |
+| `src/lloyd_v4/branch/slope_flow.py` | transfer-flow vs model residual comparison | L2 | L2 | L0 only; uses **`math.log`** (244, 245) | L0 | branch/fingerprint, refinery, evals | named-math; flagged in drift |
+
+### 3d — Refinery (LAYER_MANIFEST L2)
+
+| module_path | declared_purpose | claimed_layer | actual_layer | evidence | dependencies | dependents | notes |
+|---|---|---|---|---|---|---|---|
+| `src/lloyd_v4/refinery/__init__.py` | re-export | L2 | L2 | only re-exports | siblings | history, solver, evals | |
+| `src/lloyd_v4/refinery/decision.py` | `RefineryDecision`, accept/reject typed rewrites | L2 | L2 | L0 + L1 + L2 (projection, metrology, branch) + sibling slag/observations | L0, L1, L2 | history, solver, evals | Axiom-11 clean |
+| `src/lloyd_v4/refinery/observations.py` | `TypedResultSnapshot`, `RefineryObservation` | L2 | L2 | L0 + L1 + L2 | L0, L1, L2 | refinery/decision, refinery/slag, sterbenz_audit | |
+| `src/lloyd_v4/refinery/slag.py` | `SlagVector`, slag-componentwise comparison | L2 | L2 | L0 + refinery/observations | L0, L2 | refinery/decision | |
+
+### 3e — History (LAYER_MANIFEST L2)
+
+| module_path | declared_purpose | claimed_layer | actual_layer | evidence | dependencies | dependents | notes |
+|---|---|---|---|---|---|---|---|
+| `src/lloyd_v4/history/__init__.py` | re-export | L2 | L2 | only re-exports | siblings | solver, evals | |
+| `src/lloyd_v4/history/status_trace.py` | `StatusTrace`, `record_status_event`, `compare_status_events`, `build_status_trace` | L2 | L2 | L0 only | L0 | solver, evals | Axiom-11 clean |
+
+---
+
+## Group 4 — Layer 3 (Consumer methods)
+
+### 4a — Solver (LAYER_MANIFEST L3)
+
+| module_path | declared_purpose | claimed_layer | actual_layer | evidence | dependencies | dependents | notes |
+|---|---|---|---|---|---|---|---|
+| `src/lloyd_v4/solver/typed_projection_solver.py` | typed projection solver with policy + 11 SolverStatus strata | L3 | L3 | L0 + L1 + L2 (projection, metrology, branch, refinery, history); `math.isfinite` only | L0, L1, L2 | none in src; reserved for L4+ consumers | LAYER_MANIFEST marks **non-authoritative** until L3 promotion gates close |
+
+### 4b — Evals (consumer scripts; 67+ modules)
+
+These are all L3 consumer scripts that compose against L1 primitives and/or L2 typed observations. They are inventoried in groups by topic; the per-module purpose is the filename (each one is a research campaign or audit). Most have `argparse`-driven entry points and emit JSON artifacts to `Build_Docs/Reports/`.
+
+**Common dependency pattern:** `from lloyd_v4.core.serialization import to_json_safe`. Most also import one or more of `numpy`, `math`, `decimal`, `struct` for fixture-side computation. Per task spec, `math` for basic arithmetic is permitted at this layer; named-math uses noted below are L3 concessions, not substrate violations.
+
+| group | modules (count) | actual_layer | purpose | notes |
+|---|---|---|---|---|
+| Four-form battery, per-fixture | `cbrt_four_form.py`, `sr_four_form.py`, `pure_algebraic_four_form.py`, `pure_algebraic_quartic_four_form.py`, `schwarzschild_four_form.py`, `schwarzschild_cbrt_four_form.py`, `schwarzschild_quartic_four_form.py`, `multi_precision_four_form.py` (8) | L3 | F1/F2/F3/F4 per-record computation at `(fixture, precision)` | **DRY cluster**: every fixture re-implements the four_form_floatXX functions. See `drift_inventory.md` DRY-001. |
+| Lattice campaigns, per-fixture | `cbrt_lattice_campaign.py`, `sr_lattice_campaign.py`, `pure_algebraic_lattice_campaign.py`, `pure_algebraic_quartic_lattice_campaign.py`, `schwarzschild_cbrt_lattice_campaign.py`, `schwarzschild_quartic_lattice_campaign.py`, `lattice_anomaly_campaign.py` (7) | L3 | lattice grain classification per fixture | numpy-heavy |
+| Polarity-grid stability, per-fixture | `cbrt_polarity_grid_stability.py`, `sr_polarity_grid_stability.py`, `pure_algebraic_polarity_grid_stability.py`, `pure_algebraic_quartic_polarity_grid_stability.py`, `schwarzschild_cbrt_polarity_grid_stability.py`, `schwarzschild_quartic_polarity_grid_stability.py`, `polarity_grid_stability.py` (7) | L3 | F1 ∥ F2 polarity coupling tests under perturbation | |
+| Campaign drivers | `cbrt_four_form_campaign.py`, `schwarzschild_four_form_campaign.py`, `schwarzschild_quartic_campaign.py`, `schwarzschild_cbrt_campaign.py`, `pure_algebraic_quartic_campaign.py`, `multi_precision_campaign.py` (6) | L3 | top-level campaign orchestration | |
+| MCG geometry-first phase scripts | `mcg_geometry_first_geometry.py`, `mcg_geometry_first_readback.py`, `mcg_geometry_first_c_profile.py`, `mcg_geometry_first_grid_stability.py`, `mcg_geometry_first_cdef1_calibration.py`, `mcg_geometry_first_solve_for_scout.py`, `mcg_geometry_first_e_reducibility.py`, `mcg_geometry_first_pa_e_uniform_grid.py`, `mcg_geometry_first_v3_bridge.py` (9) | L3 | MCG decomposition discovery phases | all docstring-headed; some use `math.sqrt`, `math.log2`, `math.cos`, etc. |
+| Substrate-invariant-search phase scripts | `substrate_invariant_search_phase_a.py` … `substrate_invariant_search_phase_i.py` (9) | L3 | substrate-invariant-search phases A–I | phase_i uses `math.pi`, `math.cos`, `math.sin` (named-math at L3 — concession permitted) |
+| Path basis / clustering / distance / signature / catalog / law | `path_law_campaign.py`, `path_law_discovery.py`, `path_catalog.py`, `path_clustering.py`, `path_distance.py`, `path_signature.py`, `basis_rank_comparison.py`, `refined_f5_report.py` (8) | L3 | path-basis cluster/discovery analyses | |
+| Refinery MVP eval subpackage | `refinery_mvp/burden_vector.py`, `refinery_mvp/geometry_admissibility.py`, `refinery_mvp/mvp_run.py`, `refinery_mvp/pareto_decision.py`, `refinery_mvp/__init__.py` (5) | L3 | Task 030 refinery MVP — burden vector + Pareto comparison | reads committed JSON; no campaign re-execution |
+| Sterbenz audit eval subpackage | `sterbenz_audit/audit_run.py`, `sterbenz_audit/measurement_extension.py`, `sterbenz_audit/n_way_pareto.py`, `sterbenz_audit/rewrite_candidates.py`, `sterbenz_audit/__init__.py` (5) | L3 | Task 031 Sterbenz audit | depends on refinery_mvp |
+| Precision linear fit / bound fixtures / unit roundoff | `precision/linear_fit.py`, `precision/precision_bound_fixtures.py`, `precision/unit_roundoff.py`, `precision/multi_precision_campaign.py` (4) | L3 | multi-precision metrology helpers | numpy-using; eval-layer linear fit |
+| Probe-search / dither / route / hard-cell audits | `controlled_offset_dither_readback.py`, `dual_q_source_companion_gap_search.py`, `early_operand_phase_lock_search.py`, `early_rounding_comb_utilization.py`, `f1_f2_natural_phase.py`, `f2_operand_route_search.py`, `f2_phase_drift_diagnostics.py`, `f4_route_comb_search.py`, `hard_cell_q_source_exhaustion_search.py`, `inverse_half_grid_design_audit.py`, `joint_signed_lattice_analysis.py`, `route_bank_offset_guard_audit.py`, `route_pair_selection_stability_audit.py`, `split_constant_half_grid_form_search.py`, `split_constant_integer_cell_diagnostic.py`, `zero_offset_transcendental_q_source_search.py`, `sqrt_roundtrip_residual.py`, `decimal_scaled_form_audit.py`, `conditional_mask_analysis.py`, `cross_fixture_comparison.py`, `scale_invariant_clustering.py`, `scale_invariant_signature.py` (22) | L3 | individual probe / route / fingerprint audits | `zero_offset_transcendental_q_source_search.py` self-documents its use of `math.pow(math.e, math.log(...))` as a rounded-transcendental route; explicitly declared not-substrate (intentional Axiom 11 exemption documented in code) |
+| `evals/__init__.py` | re-export shim | L3 | L3 | duplicated docstring (literally two `"""Deterministic V4 discovery campaigns."""` lines) — minor cleanup item |
+
+**L3 axiom-11 note.** `evals/zero_offset_transcendental_q_source_search.py` uses `math.e` and `math.log` deliberately as documented in its own docstring (lines 89, 173, 184, 370, 479, 482). The author has framed this as a controlled, *declared* deviation, not a hidden one — comparable evidence vs an algebraic q-route, not as substrate. Logged in `drift_inventory.md` as INFO-level only.
+
+---
+
+## Group 5 — Layer 4+ (Application consumers)
+
+**Empty.** No L4 / application consumer module is present in `src/lloyd_v4/`. The L3 `solver` is the highest authoritative-pending module; everything else under `evals/` is L3 discovery code.
+
+---
+
+## Group 6 — Scratch (`scratch/`, not-integrated)
+
+Per the spec, every scratch prototype is `not_yet_integrated`. The table groups by family. The full per-module dissection-gate assessment is in `transplantation_readiness.md`.
+
+| group | modules (count) | candidate_layer_if_admitted | purpose | notes |
+|---|---|---|---|---|
+| **Symbolic cancellation analyzer** (the "symbolic cancellation analyzer" the task spec mentions) | `symbolic_analyzer/analyzer.py`, `symbolic_analyzer/classifier.py`, `symbolic_analyzer/dsl.py`, `symbolic_analyzer/probe.py`, `symbolic_analyzer/__init__.py`, `symbolic_analyzer_calibration.py`, `symbolic_analyzer_extended_calibration.py`, `symbolic_analyzer_mvp.py`, `symbolic_analyzer_v2.py` (9) | L1 (primitive) / L3 (calibration scripts) | typed-arithmetic DSL → cancellation pattern classifier → predicted burden vector | self-contained subpackage; uses `math.cos`, `math.sqrt`, `Fraction` for symbolic operations; imports do NOT touch `lloyd_v4.*` |
+| **BACL audit prototypes** | `bacl_invariant_audit.py`, `bacl_multi_format_audit.py`, `bacl_subnormal_audit.py`, `bacl_boundary_and_composite_probe.py`, `bacl_composite_probe_v2.py`, `bacl_grain_probe.py` (6) | candidate L1 primitive (BACL grain), L3 audits | BACL theorem audits + composite probe + per-format `ulp_*` helpers | **DRY cluster** with eval `_bacl_spectrum*` (drift_inventory.md DRY-002) |
+| **c2 lattice prototypes** | `c2_lattice_binade_danger_zone.py`, `c2_lattice_sharpness_audit.py`, `c2_lattice_substrate_derivation.py`, `c2_theorem_scope_gate.py` (4) | L3 audits | c2 lattice theorem derivation + sharpness + binade danger zone + scope gate | depend on local `_ulp_f64` helpers; reference Conjecture C |
+| **Conjecture C prototypes** | `conjecture_c_proof_audit.py`, `conjecture_c_definition_grounded.py` (2) | L3 audit | Conjecture C proof audit, definition grounding | uses `mpmath` as oracle — **Axiom 11 forbidden import in scratch** (allowed only as cross-validation tool, see notes) |
+| **Foldreadback / dual-arm precursors** | `run_foldreadback_probe0.py`, `run_foldreadback_probe0_v5.py`, `run_foldreadback_probe0_v6.py`, `run_foldreadback_probe0_v7.py`, `run_foldreadback_probe0_v8_outcomelaw.py` (in scratch as `foldreadback_probe0_v8_outcomelaw.py`), `run_foldreadback_probe0_v9.py`, `run_foldreadback_probe0_v10_active_dualarm.py`, `run_foldreadback_probe0_v11_genuine_separation.py`, `hardened_dual_arm_probe.py` (9) | L3 instrument | dual-arm probe lineage; v10/v11 superseded by `hardened_dual_arm_probe.py` (V1) which is currently the production probe but lives in `scratch/` not `src/` | **status:** hardened V1 is operative in production but has not been integrated into `src/`. See `transplantation_readiness.md` candidate-1. |
+| **α-probe precursors** | `cbrt_alpha_probe.py`, `cbrt_alpha_probe_mpmath_oracle.py`, `sqrt_alpha_probe.py`, `radical_family_alpha_probe.py`, `negative_alpha_baseline_probe.py`, `regular_integer_probe.py`, `regular_integer_probe_with_band.py`, `hard_case_singular_probe.py`, `n6_routing_diversity_probe.py` (9) | precursors to existing L1 `directional_alpha_probe` | exploratory α recovery in various regimes | these now duplicate `directional_alpha_probe`'s coverage; calibration-class artifacts |
+| **MCG killswitch / divergence** | `mcg_gate_3_killswitch.py`, `mcg_phase_1_g1_route_divergence.py` (2) | L3 audit | MCG killswitch (closed) + phase-1 G1 route divergence | use `mpmath` |
+| **Substrate fingerprint atlas** | `substrate_fingerprint_atlas.py`, `substrate_fingerprint_atlas_phase_beta.py`, `substrate_fingerprint_atlas_phase_gamma.py`, `substrate_fingerprint_atlas_phase_delta.py` (4) | L3 audit | 12-slot fingerprint vector closed campaign; partially absorbed into substrate-invariant-search | import `lloyd_v4.evals.{sr,pa,cbrt}_four_form` |
+| **Kerr / ISCO / photon-sphere / Choptuik** | `kerr_isco_pro_deep_sweep.py`, `kerr_extremal_alpha_recovery.py`, `isco_alpha_recovery_probe.py`, `isco_alpha_recovery_extended.py`, `isco_alpha_recovery_task036.py`, `isco_pathological_minimal.py`, `isco_pathological_cleaner.py`, `gr_photon_sphere_singularity_probe.py`, `gr_photon_sphere_singularity_probe_stable.py`, `choptuik_step1_synthetic.py`, `choptuik_step2_amr_noise.py` (11) | L3 probe scripts | domain-specific GR probes | import `lloyd_v4.primitives.directional_alpha_probe`; not substrate-relevant |
+| **Spectral / channel analysis** | `spectral_image_reconstruction.py`, `spectral_stack_test.py`, `channel_dial_analysis.py`, `dial_behaviour_matrix.py`, `common_mode_rejection_test.py`, `local_slope_field.py`, `transfer_function_slope_test.py` (7) | L3 audits | spectral / channel-dial / slope-field readback analyses | mostly read pre-generated JSON; analytical only |
+| **Other one-offs** | `blowup_exponent_v4_audit.py`, `lifted_singularity_v4_audit.py`, `observability_rule_audit_F4.py`, `cross_fixture_refinery_audit.py`, `read_F1_schwarzschild.py`, `run_phase4A.py` (6) | L3 audits | individual closed audits | `blowup_exponent_v4_audit.py` uses `scipy.special` indirectly via `mpmath` and a hidden `epsilon = 1e-14` (drift_inventory.md GUARD-001) |
+
+**Total scratch modules accounted for:** 69 (including `__init__.py` in `symbolic_analyzer/`). Two archives (`mcg_geometry_first.zip`, `substrate_invariant_search.zip`) and one stale `phase4A_artifact.json` (per `CLAUDE.md` §10 note about Vera duplicates) are tracked but not in the inventory.
+
+---
+
+## Unclear classifications
+
+| module | classification | reason |
+|---|---|---|
+| `src/lloyd_v4/branch/slope_flow.py` | L2-but-borderline | LAYER_MANIFEST puts it in `branch` (L2). It uses `math.log` for slope flow computation. Could be argued to belong at L1 (atomic log-difference primitive that branch fingerprints then compose). Not flagged as misplaced — composition language is genuinely there — but **Borderline**. |
+| `src/lloyd_v4/primitives/directional_alpha_probe.py` | L1-but-composes-siblings | The task spec calls L1 atomic. This primitive imports `typed_finite_difference` and `typed_log_log_slope` from the same layer. LAYER_MANIFEST allows this (siblings within `primitives`); the spec doesn't. Treated as L1 (the project layering wins) but logged in gaps as a "L1 atomicity" question. |
+| `scratch/hardened_dual_arm_probe.py` | should-be L3 instrument in src/ | The only V4 dataset satisfying full operational discipline (per LIVE_CAMPAIGNS_LEDGER `hardened-dual-arm-probe` campaign) uses this prototype. It is operatively production but architecturally not-integrated. **Transplantation candidate 1.** |
+| `scratch/symbolic_analyzer/*` | should-be L1 candidate if dissected | Self-contained, no V4 imports; produces a `PredictedBurdenVector`. Maps to a candidate primitive at L1 (per task spec "candidates for future Layer 1: …, measured-constant primitive"). **Transplantation candidate 3.** |
+| `scratch/run_phase4A.py` | one-off | Per `CLAUDE.md` §10, this is partially a byte-identical Vera duplicate (`phase4A_artifact.json` matches Vera's `phase4A_artifact_full.json`). Separate cleanup decision; not substrate. |
+
+---
+
+## Counts
+
+- L0: 11 modules (10 `.py` + `__init__.py`)
+- L1: 11 modules (10 primitives + `__init__.py`)
+- L2: 13 modules across projection (3), metrology (3), branch (3), refinery (4 incl. `__init__`), history (2 incl. `__init__`)
+- L3: 70+ modules — `solver` (1) + `evals/*` (~67) + sub-packages refinery_mvp (5), sterbenz_audit (5), precision (4)
+- L4+: 0
+- Unclear: 4 documented
+- Scratch (not-integrated): 69
+
+**Total source modules audited under `src/lloyd_v4/`:** 105 + the `__init__.py` files.
+**Total scratch prototypes audited:** 69.
+
+The Layer-3 count exceeds the L0/L1/L2 substrate combined by ~2×. This is consistent with V4's stated posture (substrate is small, eval-layer campaigns are the bulk of the codebase).

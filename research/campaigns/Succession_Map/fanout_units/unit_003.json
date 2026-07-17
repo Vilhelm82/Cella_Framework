@@ -1,0 +1,63 @@
+{
+  "seq": 3,
+  "uid": "U-0817",
+  "type": "theorem",
+  "claim_status": "machine-verified",
+  "label": "E_lambda is 2-isogenous to E_128",
+  "path": "/home/wlloyd/Cella Framework/Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/16-DBP_Curvature_Constants_Corrected_Formulation.md",
+  "already_linked_objects": [
+    {
+      "id": "OBJ:e-128",
+      "label": "E_128"
+    },
+    {
+      "id": "OBJ:e-128-minimal-dbp-curve",
+      "label": "E_128 / minimal DBP curve"
+    },
+    {
+      "id": "OBJ:e-lambda-legendre-curve",
+      "label": "E_lambda / Legendre curve"
+    },
+    {
+      "id": "OBJ:theta-trace-differential-on-e-128",
+      "label": "Theta (trace differential on E_128)"
+    }
+  ],
+  "priority_candidate_pairs": [
+    {
+      "a": "OBJ:e-128",
+      "b": "OBJ:theta-trace-differential-on-e-128",
+      "la": "E_128",
+      "lb": "Theta (trace differential on E_128)",
+      "lift": 73.8
+    },
+    {
+      "a": "OBJ:e-128-minimal-dbp-curve",
+      "b": "OBJ:theta-trace-differential-on-e-128",
+      "la": "E_128 / minimal DBP curve",
+      "lb": "Theta (trace differential on E_128)",
+      "lift": 73.8
+    },
+    {
+      "a": "OBJ:e-128",
+      "b": "OBJ:e-lambda-legendre-curve",
+      "la": "E_128",
+      "lb": "E_lambda / Legendre curve",
+      "lift": 36.9
+    },
+    {
+      "a": "OBJ:e-128-minimal-dbp-curve",
+      "b": "OBJ:e-lambda-legendre-curve",
+      "la": "E_128 / minimal DBP curve",
+      "lb": "E_lambda / Legendre curve",
+      "lift": 36.9
+    },
+    {
+      "a": "OBJ:e-lambda-legendre-curve",
+      "b": "OBJ:theta-trace-differential-on-e-128",
+      "la": "E_lambda / Legendre curve",
+      "lb": "Theta (trace differential on E_128)",
+      "lift": 36.9
+    }
+  ]
+}

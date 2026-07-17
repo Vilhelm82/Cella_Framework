@@ -1,0 +1,179 @@
+# Binade-Aligned Cancellation Lattice (BACL) — Invariant Audit Preregistry
+
+> **Status: FROZEN 2026-05-18 pre-measurement.** Per `CAMPAIGN_DISCIPLINE.md` Rule 1.1, binding.
+
+## 0. Context
+
+The c2 lattice theorem ([`../c2_lattice_sharpness_audit/closeout.md`](../c2_lattice_sharpness_audit/closeout.md), Amendments I–III) was proven for a specific algebraic chain `c2 = round(V_2 + round(x_term − 1))` where `V_2 = round(R · R)` and `R = round(sqrt(f_float))`. The proof's actual content, stripped of fixture-specific framing, is a property of float **pairs**, not of any algebraic computation.
+
+This audit promotes that content to an explicit candidate geometric invariant — BACL — and tests it on its own terms:
+
+1. State BACL precisely as a property of `(a, b) ∈ 𝔽⁺ × 𝔽⁺`.
+2. Prove the sufficient direction from IEEE 754 binade-spacing axioms.
+3. Demonstrate the sharpness empirically.
+4. Verify BACL across multiple algebraic chains producing close-magnitude pairs.
+5. Verify BACL at float32 and float64.
+6. Audit literature for prior naming.
+7. Promote to V4 substrate-lemma collection or de-promote with reason.
+
+## 1. The invariant statement (FROZEN)
+
+> **BACL — Binade-Aligned Cancellation Lattice.**
+>
+> Let `a, b ∈ 𝔽⁺` (positive normal-range floats in IEEE 754 binary format).
+>
+> **(BACL-S, sufficient direction):** If `floor_binade(a) ≥ floor_binade(b)`, then the real difference `a − b` is an integer multiple of `ulp(b)`:
+>
+> ```
+>     a − b = j · ulp(b)  for some integer j ∈ ℤ.
+> ```
+>
+> If additionally `|j| · ulp(b)` is exactly representable as a float (which holds for any `|j| ≤ 2^53 − 1`), then `round-to-nearest-even(a − b) = a − b` exactly in float arithmetic.
+>
+> **(BACL-N, sharpness / necessity):** The proviso `floor_binade(a) ≥ floor_binade(b)` is sharp: for every pair of binades `(k_a, k_b)` with `k_a < k_b` in normal range, there exist floats `a, b` with `floor_binade(a) = k_a` and `floor_binade(b) = k_b` such that `a − b` is **not** an integer multiple of `ulp(b)` (specifically, a half-integer multiple or finer).
+
+Here `floor_binade(x) = ⌊log₂ |x|⌋` (the binade index), and `ulp(b) = 2^(floor_binade(b) − 52)` in float64 (analogously for other binary formats).
+
+## 2. The proof of BACL-S (FROZEN)
+
+**Proof.**
+
+1. By IEEE 754 binade spacing: every positive normal float `x` in binade `[2^k, 2^(k+1))` has the form `x = N · ulp(x)` where `N ∈ [2^52, 2^53)` is an integer and `ulp(x) = 2^(k−52)`.
+2. Let `k_a = floor_binade(a)` and `k_b = floor_binade(b)`. Then `ulp(a) = 2^(k_a − 52)` and `ulp(b) = 2^(k_b − 52)`.
+3. By hypothesis, `k_a ≥ k_b`. So `ulp(a) = ulp(b) · 2^(k_a − k_b)` is a non-negative integer multiple of `ulp(b)`.
+4. `a = N_a · ulp(a) = N_a · 2^(k_a − k_b) · ulp(b)`, an integer multiple of `ulp(b)`.
+5. `b = N_b · ulp(b)`, an integer multiple of `ulp(b)`.
+6. Therefore `a − b = (N_a · 2^(k_a − k_b) − N_b) · ulp(b)`, an integer multiple of `ulp(b)`. ∎
+
+The proof uses only IEEE 754 binade structure. No Sterbenz invocation, no rounding-mode dependence, no cancellation hypothesis. **5 lines, fully deductive, axiomatic.**
+
+The second part of BACL-S (rounding preserves the exact value when `|a − b|` is small enough) follows from float representability: `|j| · ulp(b) = |j| · 2^(k_b − 52)`. For `|j| ≤ 2^53 − 1`, this is exactly representable (mantissa fits in 53 bits). For typical cancellation regimes, `|j|` is at most a few — far below this bound.
+
+## 3. The sharpness argument (BACL-N)
+
+For any binade pair `(k_a, k_b)` with `k_a < k_b`, set `d = k_b − k_a > 0`. Then `ulp(a) = ulp(b) · 2^(−d)`. Floats in `a`'s binade are at positions `m · ulp(a) = m · ulp(b) / 2^d` for integer `m`. For `a − b` to be an integer multiple of `ulp(b)`, we need `m / 2^d` to be such that the result is integer — requiring `m` to be divisible by `2^d`.
+
+For random `a` in `a`'s binade, the fraction of values where `m` is divisible by `2^d` is `2^(−d)`. For `d ≥ 1`, **at least half** of floats in `a`'s binade produce non-integer differences with `b`.
+
+This is the empirical sharpness: lower-binade pairs *can* produce integer differences (when `m` happens to be divisible by `2^d`) but typically *don't*.
+
+## 4. Algebraic chains to verify BACL on
+
+Pre-registered list of chains, each generating close-magnitude float pairs. For each, verify that the chain's natural pair satisfies the BACL proviso, and that BACL's conclusion holds.
+
+| Chain | Pair generator | Expected proviso satisfaction |
+|---|---|---|
+| **C1: sqrt + square** (the c2 chain) | `a = round(sqrt(f) · sqrt(f))`, `b = f` | YES, by Conjecture C |
+| **C2: cbrt + cube** | `a = round(cbrt(f) · cbrt(f) · cbrt(f))`, `b = f` | Likely YES (n=3 analog of C); empirically check |
+| **C3: nextafter pair** | `a = nextafter(b, ∞)`, `b ∈ 𝔽⁺` | YES (same binade) |
+| **C4: TwoSum residual** | `(s, r) = TwoSum(x, y)`; `a = s + r`, `b = s` for representative x, y | YES (residual r is in lower binade of s but pair (s, s+r) trivially satisfies BACL) — interpret carefully |
+| **C5: FMA round + multiplication** | `a = FMA(R, R, 0) = R·R`, `b = f`. Compare to C1 with non-FMA chain. | Same as C1 |
+| **C6: arbitrary close pair** | `a, b` drawn from same binade randomly | YES by construction |
+| **C7: lower-binade pair** (sharpness demo) | `a` in lower binade of `b` | NO — should produce non-integer lattice |
+
+For each, run empirical verification: enumerate or sample many pairs, check `(a − b) / ulp(b) ∈ ℤ` to representational precision.
+
+## 5. Pre-registered predictions
+
+| # | Prediction | Threshold |
+|---|---|---|
+| P_BACL_1 | BACL-S proof is deductively sound | proof structure review (qualitative) |
+| P_BACL_2 | Empirical verification of BACL-S across chains C1–C6: zero violations | strict |
+| P_BACL_3 | Empirical demonstration of BACL-N (sharpness): non-integer differences observed for ≥ 50% of lower-binade pairs in chain C7 | strict |
+| P_BACL_4 | BACL holds identically at float32 (same proof structure, same conclusion) | strict |
+| P_BACL_5 | The c2 lattice theorem is a corollary of BACL applied to chain C1 | proof-derivation check |
+| P_BACL_6 | Literature audit: identify whether BACL is a known named result | qualitative |
+
+## 6. Pre-registered failure modes
+
+| ID | Condition |
+|---|---|
+| F_BACL_1 | Empirical violation of BACL-S on any chain C1–C6 (would refute the proof) |
+| F_BACL_2 | Sharpness not demonstrable: lower-binade pairs always produce integer differences (would mean the proviso is sufficient but unnecessarily restrictive) |
+| F_BACL_3 | Float32 verification fails (would suggest format-specific structure) |
+| F_BACL_4 | c2 theorem does not reduce to BACL (would refute the geometric framing) |
+| F_BACL_5 | Literature shows BACL is named with conflicting definition (would require rephrase) |
+
+## 7. Literature audit plan
+
+Search for the named invariant in the following sources (qualitative, based on training-data familiarity; future Phase: web search):
+
+- **Sterbenz's lemma** (classical): provides exactness under factor-2 cone. BACL is a *different* statement (lattice structure, not exactness).
+- **Goldberg "What Every Computer Scientist..."** (1991, ACM Computing Surveys): comprehensive coverage of IEEE 754 properties. Check for binade-spacing-derived results.
+- **Higham "Accuracy and Stability of Numerical Algorithms"** (2002): floating-point error analysis reference.
+- **Boldo, Daumas, et al.** — error-free transforms (Dekker's TwoSum, TwoProd, etc.). BACL is closely related but distinct.
+- **Markstein "IA-64 and Elementary Functions"** (2000): correctly-rounded operations.
+- **Knuth TAOCP Vol 2** (Seminumerical Algorithms): foundational float-point.
+
+Candidates for prior naming:
+- "Exact difference theorem" — too generic.
+- "Binade-floor lemma" — possibly used in float analysis but no canonical reference I know.
+- "Cancellation lattice" — possibly.
+- "Integer-ulp property" — too generic.
+
+The honest expectation: BACL-S is a **folklore corollary of binade spacing** that has likely been observed but possibly not named. The novelty would be the *use* of it as a substrate primitive in V4, not the property itself.
+
+## 8. V4 typed outputs
+
+Per chain, per format, per (a, b) pair:
+
+```json
+{
+  "chain": "C1_sqrt_square" | "C2_cbrt_cube" | "C3_nextafter" | ...,
+  "format": "float32" | "float64",
+  "a": float,
+  "b": float,
+  "floor_binade_a": int,
+  "floor_binade_b": int,
+  "proviso_satisfied": bool,
+  "diff_a_minus_b": float,
+  "ulp_b": float,
+  "diff_over_ulp_b": float,
+  "is_integer_lattice": bool,
+  "lattice_residual": float
+}
+```
+
+Cross-chain aggregator:
+
+```json
+{
+  "audit_name": "bacl_invariant_audit",
+  "n_chains_tested": int,
+  "n_formats_tested": int,
+  "total_records": int,
+  "BACL_S_violations_count": int,
+  "BACL_N_demonstration_count": int,
+  "literature_audit_summary": str,
+  "predictions": { P_BACL_1..P_BACL_6 },
+  "verdict": "BACL_proven_and_promoted" | "BACL_proven_already_known" | "BACL_disproven" | "BACL_partial"
+}
+```
+
+## 9. Closeout criteria
+
+1. BACL-S proof from binade-spacing axioms emitted and reviewed.
+2. Empirical verification across all 7 chains × 2 formats (where applicable).
+3. Sharpness demonstration with explicit non-integer examples.
+4. c2 theorem reduction to BACL emitted.
+5. Literature audit conclusion stated.
+6. All 6 predictions audited.
+7. Verdict assigned.
+8. Reproducibility check.
+9. Applications list: V4 results that derive from BACL.
+
+## 10. Out of scope
+
+- **Subnormal range** — BACL hypothesis is "normal range." Subnormal floats have uniform spacing, not per-binade. A separate invariant statement is required (matching Conjecture C_subnormal's role).
+- **Non-binary IEEE formats** (decimal, posit). BACL is binary-radix-specific.
+- **Overflow boundary** — near 2^1023.
+- **Negative or zero values** — BACL stated for positive normals; sign extension is straightforward but separate.
+- **Promotion to substrate Layer 0/1/2** — BACL would live as an eval-layer / substrate-lemma reference, not as a primitive operation.
+
+## 11. References
+
+- c2 lattice sharpness audit (Amendment III): [`../c2_lattice_sharpness_audit/closeout.md`](../c2_lattice_sharpness_audit/closeout.md)
+- Conjecture C proof: [`../conjecture_c_proof_audit/closeout.md`](../conjecture_c_proof_audit/closeout.md)
+- 2026-05-18 conversation: user direction to promote to "natural geometric invariant of IEEE 754"
+- IEEE 754 binary standard
+- Discipline: `CAMPAIGN_DISCIPLINE.md` Rule 1.1

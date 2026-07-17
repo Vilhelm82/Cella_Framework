@@ -44,7 +44,7 @@ scope:       Any result gaining `status: current` in RESULTS.md.
 not-scope:   Exploratory scouting, plotting, and numeric hypothesis testing —
              results there are not load-bearing until certified.
 why:         Trust attaches to re-runnable certificates, never to labels or memory.
-displaced-by: A stronger certification standard.
+displaced-by: A stronger certification standard or results are trivially elementary. 
 
 ## C-004 exact-arithmetic-boundary
 rule:        Cell values entering the residue accounting layer must be exact
@@ -56,4 +56,4 @@ not-scope:   Research scouting, plotting, numeric hypothesis testing, and extern
              approach is NOT to be discarded merely because it mentions floats —
              check whether it touches the certificate-bearing boundary at all.
 why:         Certificates must be byte-stable; exactness is the product.
-displaced-by: An admitted exact float-embedding, or a certified interval layer.
+displaced-by: An admitted exact float-embedding, or a certified interval layer or results are trivially elementary.

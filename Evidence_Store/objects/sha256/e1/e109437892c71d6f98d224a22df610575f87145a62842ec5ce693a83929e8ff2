@@ -1,0 +1,80 @@
+{
+  "R_squared_strictly_above_failures_count": 0,
+  "all_R_squared_strictly_above_2k": true,
+  "all_bitpattern_match_definition": true,
+  "all_libm_match_definition": true,
+  "audit_name": "conjecture_c_definition_grounded_audit",
+  "bitpattern_mismatches_count": 0,
+  "first_3_records": [
+    {
+      "R_bitpattern": 2.1095373229726e-154,
+      "R_definition_grounded": 2.1095373229726e-154,
+      "R_libm": 2.1095373229726e-154,
+      "R_squared_minus_2k_mpmath": "6.084071658368299329543952847516030337491589775599384631179909823890313891650553043362739606050252927e-324",
+      "R_squared_strictly_above_2k": true,
+      "bitpattern_matches_definition": true,
+      "k": -1021,
+      "libm_matches_definition": true
+    },
+    {
+      "R_bitpattern": 4.2190746459452e-154,
+      "R_definition_grounded": 4.2190746459452e-154,
+      "R_libm": 4.2190746459452e-154,
+      "R_squared_minus_2k_mpmath": "2.433628663347319731817581139006412134996635910239753852471963929556125556660221217345095842420101171e-323",
+      "R_squared_strictly_above_2k": true,
+      "bitpattern_matches_definition": true,
+      "k": -1019,
+      "libm_matches_definition": true
+    },
+    {
+      "R_bitpattern": 8.4381492918904e-154,
+      "R_definition_grounded": 8.4381492918904e-154,
+      "R_libm": 8.4381492918904e-154,
+      "R_squared_minus_2k_mpmath": "9.734514653389278927270324556025648539986543640959015409887855718224502226640884869380383369680404684e-323",
+      "R_squared_strictly_above_2k": true,
+      "bitpattern_matches_definition": true,
+      "k": -1017,
+      "libm_matches_definition": true
+    }
+  ],
+  "k_range": [
+    -1021,
+    1021
+  ],
+  "last_3_records": [
+    {
+      "R_bitpattern": 1.1850939885136472e+153,
+      "R_definition_grounded": 1.1850939885136472e+153,
+      "R_libm": 1.1850939885136472e+153,
+      "R_squared_minus_2k_mpmath": "1.920107233611128496978927363431167946649144575756298328599386289349954634323175783568860523395839906e+290",
+      "R_squared_strictly_above_2k": true,
+      "bitpattern_matches_definition": true,
+      "k": 1017,
+      "libm_matches_definition": true
+    },
+    {
+      "R_bitpattern": 2.3701879770272943e+153,
+      "R_definition_grounded": 2.3701879770272943e+153,
+      "R_libm": 2.3701879770272943e+153,
+      "R_squared_minus_2k_mpmath": "7.680428934444513987915709453724671786596578303025193314397545157399818537292703134275442093583359625e+290",
+      "R_squared_strictly_above_2k": true,
+      "bitpattern_matches_definition": true,
+      "k": 1019,
+      "libm_matches_definition": true
+    },
+    {
+      "R_bitpattern": 4.740375954054589e+153,
+      "R_definition_grounded": 4.740375954054589e+153,
+      "R_libm": 4.740375954054589e+153,
+      "R_squared_minus_2k_mpmath": "3.07217157377780559516628378148986871463863132121007732575901806295992741491708125371017683743334385e+291",
+      "R_squared_strictly_above_2k": true,
+      "bitpattern_matches_definition": true,
+      "k": 1021,
+      "libm_matches_definition": true
+    }
+  ],
+  "libm_mismatches_count": 0,
+  "n_odd_k_values_tested": 1022,
+  "purpose": "Re-establish Conjecture C's load-bearing empirical step (R = R_above(m) for every odd k) by deriving R_above from the RN-even definition applied to mpmath exact sqrt, rather than asserting it via bit pattern + libm cross-check. Per user direction (2026-05-18), this grounds the proof in the RN-even definition; libm cross-check becomes a separate IEEE conformance sanity check, not part of the proof.",
+  "verdict": "Proof_grounded_in_RN_even_definition"
+}

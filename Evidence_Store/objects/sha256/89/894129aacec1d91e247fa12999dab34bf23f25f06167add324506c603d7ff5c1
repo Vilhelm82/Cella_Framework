@@ -1,0 +1,46 @@
+# Test V3 — Diagnostic-Route Detection Audit
+
+Preregistry: `preregistry.md` §3 Test V3.
+
+## Part (a): Code-inspection — absence in arms code
+
+**Grep targets:** `diagnostic`, `route_kind`, `rounded_base`, `_route_kind`.
+
+**Scope:** the arms-framework codebase:
+- `scratch/run_foldreadback_probe0_v10_active_dualarm.py`
+- `scratch/run_foldreadback_probe0_v9.py`
+- `scratch/foldreadback_probe0_v8_outcomelaw.py`
+- `scratch/run_foldreadback_probe0_v7.py`
+
+**Result:** **Zero matches across all four files.** The diagnostic-vs-production-route concept is wholly absent from the arms-framework code.
+
+**For comparison**, the same grep against the eval-layer offset-comb code:
+- `src/lloyd_v4/evals/zero_offset_transcendental_q_source_search.py` — **17 matches.** `("nextafter_up_diagnostic", lambda ...)`; status strings `"rounded_base_route_resolves_zero_offset_cell"`, `"rounded_base_route_control_disqualified"`; explicit text "useful diagnostic evidence for the operand-offset model, not a clean algebraic form candidate."
+- `src/lloyd_v4/evals/hard_cell_q_source_exhaustion_search.py` — **5 matches.** `diagnostic_route_ids: frozenset[str]`; `_route_kind(...)` classifier; per-route `route_kind="natural_companion"` vs diagnostic.
+
+The diagnostic distinction is a fully-realized eval-layer concept. It is **not lifted into the arms framework**. Any arms-level claim about diagnostic-vs-production routes is an interpretation imposed on the arms data from outside; it is not enforced or observed by arms code itself.
+
+**Outcome:** `not_applicable` for verification-as-written. The claim "the arms framework can distinguish diagnostic from production routes" is not testable on the current arms code because the distinction does not exist there.
+
+## Part (b): Design sketch — smallest plausible addition
+
+If the user wants to make diagnostic-route detection observable at the arms level, the minimum-touch change is:
+
+1. **Add a `route_kind` field to ARM-N's `inference` dict** (currently a dict of functional-name → `"separated"` / `"searched_no_separation"` / `"untested"`). The new field would be either `"production"` or `"diagnostic"`, set by route-selection metadata.
+
+2. **Source the classification from the eval-layer's existing `_route_kind` function** (`src/lloyd_v4/evals/hard_cell_q_source_exhaustion_search.py:221`) when ARM-N routes are sourced from the offset-comb route bank. Currently, ARM-N runs distributional functionals on lattice levels — the routes that *produced* those levels are not visible to ARM-N as it stands.
+
+3. **Add an outcome label** to the SR_OUTCOMES map (`v10:76-88`): `"diagnostic_only": "active_handoff_diagnostic_only"`. The outcome selector logic would gate against this label when any ARM-N route is marked diagnostic.
+
+4. **Add a unit test** (in this verification's test file) that exercises the outcome-gate: construct a record where ARM-N's route metadata is `diagnostic`, run the outcome selector, and verify the outcome is `active_handoff_diagnostic_only`.
+
+**Estimated scope:** ~40 lines of v10 code + ~20 lines of test.
+
+**Open question for the user:** is the right approach to add this to v10 scratch, or is this a sign that the arms framework should be refactored into `src/lloyd_v4/evals/` with the route-kind concept native to the framework rather than bolted on?
+
+**Recommended deferral.** This is *new feature work*, not behavior verification. Per Rule 1.2 of CAMPAIGN_DISCIPLINE.md, no substrate promotion within a campaign. Adding diagnostic-detection to arms is an out-of-scope extension; record this finding (the concept is absent) and proceed.
+
+## Verdict
+
+- (a) `not_applicable` — the claim cannot be tested on the current arms code because the diagnostic distinction is absent.
+- (b) Design sketch provided above. Implementation deferred.

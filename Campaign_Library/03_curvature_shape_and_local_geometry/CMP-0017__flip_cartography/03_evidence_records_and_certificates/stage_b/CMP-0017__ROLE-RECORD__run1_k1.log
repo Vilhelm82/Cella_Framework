@@ -1,0 +1,23 @@
+[    0.0s] forward run
+[    0.3s] h=1/40 inv: t1-degs [4, 4]
+[    0.9s]   raw resultant deg (x1,x2) = 32,32
+[    1.3s] h=1/40 bot: t1-degs [4, 4]
+[    1.9s]   raw resultant deg (x1,x2) = 32,28
+[    2.2s] backward run (PB.2)
+[    2.3s] h=-1/40 inv: t1-degs [4, 4]
+[    2.9s]   raw resultant deg (x1,x2) = 32,32
+[    3.2s] h=-1/40 bot: t1-degs [4, 4]
+[    3.8s]   raw resultant deg (x1,x2) = 32,28
+============================================================
+[inv] raw degs (32, 32)  ghosts [(x2**2 + 1, 2), (x1**2 + 1, 9)]
+[inv] honest factor shape (dx1,dx2,mult): [(0, 1, 4), (14, 24, 1)]
+[inv] PB.2 forward==backward (exact, normalized): True
+[inv] honest sha16: b8aa470b174e7c45
+[bot] raw degs (32, 28)  ghosts [(x2**2 + 1, 2), (x1**2 + 1, 9)]
+[bot] honest factor shape (dx1,dx2,mult): [(14, 24, 1)]
+[bot] PB.2 forward==backward (exact, normalized): True
+[bot] honest sha16: a3a500c8b5af736b
+============================================================
+PB.1: 68 real witnesses scanned, energy-gate violations = 20
+VERDICT PB.1: KB.1 FIRED — HALT
+[   18.8s] done

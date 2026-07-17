@@ -1,0 +1,63 @@
+{
+  "seq": 37,
+  "uid": "U-0993",
+  "type": "formula",
+  "claim_status": null,
+  "label": "Exact identities for ell_epsilon and R_epsilon",
+  "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md",
+  "already_linked_objects": [
+    {
+      "id": "OBJ:bar-m-epsilon",
+      "label": "bar m_epsilon"
+    },
+    {
+      "id": "OBJ:ell-epsilon-r-epsilon",
+      "label": "ell_epsilon, R_epsilon"
+    },
+    {
+      "id": "OBJ:m-epsilon-n-epsilon-a-epsilon-b-epsilon",
+      "label": "m_epsilon, n_epsilon, A_epsilon, B_epsilon"
+    },
+    {
+      "id": "OBJ:signed-contact-walls-and-parity-ell-epsilon-s-epsilon",
+      "label": "Signed contact walls and parity (ell_epsilon, s_epsilon)"
+    }
+  ],
+  "priority_candidate_pairs": [
+    {
+      "a": "OBJ:ell-epsilon-r-epsilon",
+      "b": "OBJ:signed-contact-walls-and-parity-ell-epsilon-s-epsilon",
+      "la": "ell_epsilon, R_epsilon",
+      "lb": "Signed contact walls and parity (ell_epsilon, s_epsilon)",
+      "lift": 72.89
+    },
+    {
+      "a": "OBJ:m-epsilon-n-epsilon-a-epsilon-b-epsilon",
+      "b": "OBJ:signed-contact-walls-and-parity-ell-epsilon-s-epsilon",
+      "la": "m_epsilon, n_epsilon, A_epsilon, B_epsilon",
+      "lb": "Signed contact walls and parity (ell_epsilon, s_epsilon)",
+      "lift": 7.45
+    },
+    {
+      "a": "OBJ:ell-epsilon-r-epsilon",
+      "b": "OBJ:m-epsilon-n-epsilon-a-epsilon-b-epsilon",
+      "la": "ell_epsilon, R_epsilon",
+      "lb": "m_epsilon, n_epsilon, A_epsilon, B_epsilon",
+      "lift": 7.45
+    },
+    {
+      "a": "OBJ:bar-m-epsilon",
+      "b": "OBJ:signed-contact-walls-and-parity-ell-epsilon-s-epsilon",
+      "la": "bar m_epsilon",
+      "lb": "Signed contact walls and parity (ell_epsilon, s_epsilon)",
+      "lift": 9.11
+    },
+    {
+      "a": "OBJ:bar-m-epsilon",
+      "b": "OBJ:ell-epsilon-r-epsilon",
+      "la": "bar m_epsilon",
+      "lb": "ell_epsilon, R_epsilon",
+      "lift": 9.11
+    }
+  ]
+}

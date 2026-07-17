@@ -1,0 +1,275 @@
+{
+  "audit_name": "c2_theorem_scope_gate",
+  "gate_summary": {
+    "any_below_floor": false,
+    "any_subnormal_observed": false,
+    "min_margin_log2_above_floor": 970.0,
+    "verdict": "GATE_PASSES_actual_fixtures_in_normal_range"
+  },
+  "per_grid_results": {
+    "c2_sharpness_CubeRoot": {
+      "f_max": 0.999,
+      "f_min": 0.0010000000000000009,
+      "f_min_binade_k": -10,
+      "f_min_geq_floor_2_to_neg_1021": true,
+      "f_min_is_subnormal": false,
+      "grid": "c2_sharpness_CubeRoot",
+      "grid_size": 10000,
+      "margin_log2": 1011.034215715338,
+      "n_positive_f": 10000,
+      "smallest_5_f_values": [
+        0.0010000000000000009,
+        0.0010998099809981232,
+        0.0011996199619962455,
+        0.0012994299429943679,
+        0.0013992399239924902
+      ]
+    },
+    "c2_sharpness_PureAlgebraic": {
+      "f_max": 0.999,
+      "f_min": 0.0010000000000000009,
+      "f_min_binade_k": -10,
+      "f_min_geq_floor_2_to_neg_1021": true,
+      "f_min_is_subnormal": false,
+      "grid": "c2_sharpness_PureAlgebraic",
+      "grid_size": 10000,
+      "margin_log2": 1011.034215715338,
+      "n_positive_f": 10000,
+      "smallest_5_f_values": [
+        0.0010000000000000009,
+        0.0010998099809981232,
+        0.0011996199619962455,
+        0.0012994299429943679,
+        0.0013992399239924902
+      ]
+    },
+    "c2_sharpness_SR": {
+      "f_max": 0.999999,
+      "f_min": 0.001998999999999973,
+      "f_min_binade_k": -9,
+      "f_min_geq_floor_2_to_neg_1021": true,
+      "f_min_is_subnormal": false,
+      "grid": "c2_sharpness_SR",
+      "grid_size": 10000,
+      "margin_log2": 1012.0334941874204,
+      "n_positive_f": 10000,
+      "smallest_5_f_values": [
+        0.001998999999999973,
+        0.002198410380001903,
+        0.0023978008359393232,
+        0.0025971713678120123,
+        0.002796521975620081
+      ]
+    },
+    "c2_sharpness_Schwarzschild": {
+      "f_max": 0.999998,
+      "f_min": 0.0004997501249375258,
+      "f_min_binade_k": -11,
+      "f_min_geq_floor_2_to_neg_1021": true,
+      "f_min_is_subnormal": false,
+      "grid": "c2_sharpness_Schwarzschild",
+      "grid_size": 10000,
+      "margin_log2": 1010.0334945480943,
+      "n_positive_f": 10000,
+      "smallest_5_f_values": [
+        0.0004997501249375258,
+        0.0018105515940296524,
+        0.003119634003530436,
+        0.004426999607912152,
+        0.005732650658690441
+      ]
+    },
+    "c2_substrate_CubeRoot": {
+      "f_max": 0.999,
+      "f_min": 0.5,
+      "f_min_binade_k": -1,
+      "f_min_geq_floor_2_to_neg_1021": true,
+      "f_min_is_subnormal": false,
+      "grid": "c2_substrate_CubeRoot",
+      "grid_size": 5000,
+      "margin_log2": 1020.0,
+      "n_positive_f": 5000,
+      "smallest_5_f_values": [
+        0.5,
+        0.5000998199639928,
+        0.5001996399279856,
+        0.5002994598919783,
+        0.5003992798559711
+      ]
+    },
+    "c2_substrate_PureAlgebraic": {
+      "f_max": 0.999,
+      "f_min": 0.5,
+      "f_min_binade_k": -1,
+      "f_min_geq_floor_2_to_neg_1021": true,
+      "f_min_is_subnormal": false,
+      "grid": "c2_substrate_PureAlgebraic",
+      "grid_size": 5000,
+      "margin_log2": 1020.0,
+      "n_positive_f": 5000,
+      "smallest_5_f_values": [
+        0.5,
+        0.5000998199639928,
+        0.5001996399279856,
+        0.5002994598919783,
+        0.5003992798559711
+      ]
+    },
+    "c2_substrate_SR": {
+      "f_max": 0.999999,
+      "f_min": 0.5000000000000001,
+      "f_min_binade_k": -1,
+      "f_min_geq_floor_2_to_neg_1021": true,
+      "f_min_is_subnormal": false,
+      "grid": "c2_substrate_SR",
+      "grid_size": 5000,
+      "margin_log2": 1020.0,
+      "n_positive_f": 5000,
+      "smallest_5_f_values": [
+        0.5000000000000001,
+        0.5001997371572582,
+        0.5003994344116138,
+        0.5005990917630667,
+        0.5007987092116173
+      ]
+    },
+    "c2_substrate_Schwarzschild": {
+      "f_max": 0.98,
+      "f_min": 0.5,
+      "f_min_binade_k": -1,
+      "f_min_geq_floor_2_to_neg_1021": true,
+      "f_min_is_subnormal": false,
+      "grid": "c2_substrate_Schwarzschild",
+      "grid_size": 5000,
+      "margin_log2": 1020.0,
+      "n_positive_f": 5000,
+      "smallest_5_f_values": [
+        0.5,
+        0.5023890105514632,
+        0.5047553001783238,
+        0.5070991914809702,
+        0.5094210009813542
+      ]
+    },
+    "deep_SR_near_1": {
+      "f_max": 0.75,
+      "f_min": 4.440892098500626e-16,
+      "f_min_binade_k": -51,
+      "f_min_geq_floor_2_to_neg_1021": true,
+      "f_min_is_subnormal": false,
+      "grid": "deep_SR_near_1",
+      "grid_size": 52,
+      "margin_log2": 970.0,
+      "n_positive_f": 52,
+      "smallest_5_f_values": [
+        4.440892098500626e-16,
+        8.881784197001252e-16,
+        1.7763568394002505e-15,
+        3.552713678800501e-15,
+        7.105427357601002e-15
+      ]
+    },
+    "test_a_CubeRoot": {
+      "f_max": 0.99,
+      "f_min": 0.5,
+      "f_min_binade_k": -1,
+      "f_min_geq_floor_2_to_neg_1021": true,
+      "f_min_is_subnormal": false,
+      "grid": "test_a_CubeRoot",
+      "grid_size": 100,
+      "margin_log2": 1020.0,
+      "n_positive_f": 100,
+      "smallest_5_f_values": [
+        0.5,
+        0.504949494949495,
+        0.5098989898989899,
+        0.5148484848484849,
+        0.5197979797979798
+      ]
+    },
+    "test_a_PureAlgebraic": {
+      "f_max": 0.99,
+      "f_min": 0.5,
+      "f_min_binade_k": -1,
+      "f_min_geq_floor_2_to_neg_1021": true,
+      "f_min_is_subnormal": false,
+      "grid": "test_a_PureAlgebraic",
+      "grid_size": 100,
+      "margin_log2": 1020.0,
+      "n_positive_f": 100,
+      "smallest_5_f_values": [
+        0.5,
+        0.504949494949495,
+        0.5098989898989899,
+        0.5148484848484849,
+        0.5197979797979798
+      ]
+    },
+    "test_a_SR": {
+      "f_max": 0.9999,
+      "f_min": 0.5000000000000001,
+      "f_min_binade_k": -1,
+      "f_min_geq_floor_2_to_neg_1021": true,
+      "f_min_is_subnormal": false,
+      "grid": "test_a_SR",
+      "grid_size": 100,
+      "margin_log2": 1020.0,
+      "n_positive_f": 100,
+      "smallest_5_f_values": [
+        0.5000000000000001,
+        0.5099085777684802,
+        0.519717990581471,
+        0.5294282384389721,
+        0.5390393213409839
+      ]
+    },
+    "test_a_Schwarzschild": {
+      "f_max": 0.96,
+      "f_min": 0.5,
+      "f_min_binade_k": -1,
+      "f_min_geq_floor_2_to_neg_1021": true,
+      "f_min_is_subnormal": false,
+      "grid": "test_a_Schwarzschild",
+      "grid_size": 100,
+      "margin_log2": 1020.0,
+      "n_positive_f": 100,
+      "smallest_5_f_values": [
+        0.5,
+        0.5520361990950227,
+        0.5942622950819672,
+        0.6292134831460674,
+        0.6586206896551724
+      ]
+    },
+    "v11_densified_SR": {
+      "f_max": 0.999999,
+      "f_min": 2.517834974657962e-05,
+      "f_min_binade_k": -16,
+      "f_min_geq_floor_2_to_neg_1021": true,
+      "f_min_is_subnormal": false,
+      "grid": "v11_densified_SR",
+      "grid_size": 165,
+      "margin_log2": 1005.722543253797,
+      "n_positive_f": 165,
+      "smallest_5_f_values": [
+        2.517834974657962e-05,
+        3.169761266064164e-05,
+        3.990484819216267e-05,
+        5.0237097672822806e-05,
+        6.324455320350086e-05
+      ]
+    }
+  },
+  "purpose": "Verify campaign fixtures stay above proven floor f_float >= 2^(-1021) before promoting theorem to unconditional",
+  "theorem_floor": 4.450147717014403e-308,
+  "theorem_floor_binade_k": -1021,
+  "theoretical_reachability_per_fixture": {
+    "CubeRoot_theoretical_min_f": 2.220446049250313e-16,
+    "PureAlgebraic_theoretical_min_f": 2.220446049250313e-16,
+    "SR_theoretical_min_f": 2.220446049250313e-16,
+    "Schwarzschild_theoretical_min_f": 1.1102230246251565e-16,
+    "all_theoretical_min_geq_floor": true,
+    "theorem_floor": 4.450147717014403e-308,
+    "theorem_floor_binade_k": -1021
+  }
+}

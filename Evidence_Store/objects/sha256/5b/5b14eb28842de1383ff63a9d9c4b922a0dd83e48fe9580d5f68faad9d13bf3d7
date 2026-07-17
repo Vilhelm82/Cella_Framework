@@ -1,0 +1,127 @@
+{
+  "campaign_id": "shared_residual_geometry_arm",
+  "claims": {
+    "CL-G5": "symbolic-axis Richardson refusal localisation"
+  },
+  "code_pins_sha256": {
+    "fixtures_c.py": "315cc9d7f66b6f45967d67c97842d1b7a2b63e78f50e1068e7cbc087fc5075e1",
+    "run_stage_c.py": "de78a5018af22345b44af5eff13352f9b13b7bf8625cb7b620dcf8c3488ef39a",
+    "symbolic.py": "ddaec9c022a00d1cd4e914ecdb9f54a502581cae3024e7991fa3ce8629d6317e"
+  },
+  "controls": {
+    "K_G4_detects_bleed": {
+      "cell": "SYM-PYTHAGOREAN",
+      "lawful_verdict": "symbolic_refused_localised",
+      "leaky_verdict": "FAIL_bleed"
+    },
+    "informativeness_control_fails": {
+      "cell": "SYM-PYTHAGOREAN",
+      "lawful_verdict": "richardson_undecidable",
+      "lesson": "without the transcendental guard the naive classifier reads a Richardson identity (identically zero) as a genuine non-identity; Axiom 6 requires the refusal",
+      "naive_verdict": "detected_nonzero",
+      "transcendental_present": true
+    }
+  },
+  "depends_on": {
+    "manifest_v1_sha256": "648975d082407aebdb3b0ead340639a59820f11e98231f10a0fd412fb171a7ee"
+  },
+  "expectations_pinned_at_dry_run": {
+    "cells": [
+      {
+        "combine": "x*y",
+        "d": 3,
+        "entangle": "additive",
+        "label": "SYM-POLY-ID",
+        "localised": true,
+        "numeric_verdict": "coupled",
+        "q": 10,
+        "sym_class": "poly_identity",
+        "symbolic_verdict": "identity_zero",
+        "verdict": "symbolic_certified_sharp"
+      },
+      {
+        "combine": "x*y",
+        "d": 4,
+        "entangle": "additive",
+        "label": "SYM-FORMAL-ID",
+        "localised": true,
+        "numeric_verdict": "coupled",
+        "q": 10,
+        "sym_class": "formal_identity",
+        "symbolic_verdict": "identity_zero",
+        "verdict": "symbolic_certified_sharp"
+      },
+      {
+        "combine": "1/(x+y)",
+        "d": 3,
+        "entangle": "additive",
+        "label": "SYM-POLY-NONZERO",
+        "localised": true,
+        "numeric_verdict": "coupled",
+        "q": 10,
+        "sym_class": "poly_nonzero",
+        "symbolic_verdict": "detected_nonzero",
+        "verdict": "symbolic_certified_sharp"
+      },
+      {
+        "combine": "x*y",
+        "d": 3,
+        "entangle": "additive",
+        "label": "SYM-PYTHAGOREAN",
+        "localised": true,
+        "numeric_verdict": "coupled",
+        "q": 10,
+        "sym_class": "richardson",
+        "symbolic_verdict": "richardson_undecidable",
+        "verdict": "symbolic_refused_localised"
+      },
+      {
+        "combine": "1/(x+y)",
+        "d": 4,
+        "entangle": "additive",
+        "label": "SYM-EXP-RECIP",
+        "localised": true,
+        "numeric_verdict": "coupled",
+        "q": 10,
+        "sym_class": "richardson",
+        "symbolic_verdict": "richardson_undecidable",
+        "verdict": "symbolic_refused_localised"
+      },
+      {
+        "combine": "x*y",
+        "d": 4,
+        "entangle": "additive",
+        "label": "SYM-LN-EXP",
+        "localised": true,
+        "numeric_verdict": "coupled",
+        "q": 10,
+        "sym_class": "richardson",
+        "symbolic_verdict": "richardson_undecidable",
+        "verdict": "symbolic_refused_localised"
+      },
+      {
+        "combine": "x*y",
+        "d": 3,
+        "entangle": "multiplicative",
+        "label": "SYM-PYTHAG-MULT",
+        "localised": false,
+        "numeric_verdict": "coupled",
+        "q": 10,
+        "sym_class": "richardson_multiplicative",
+        "symbolic_verdict": "richardson_undecidable",
+        "verdict": "holonomy_entangled_undecidable"
+      }
+    ],
+    "n_cells": 7
+  },
+  "frozen": true,
+  "grader_clauses": {
+    "PMG-C.1": "the decidable column resolves exactly (CL-G5): every decidable symbolic identity is resolved by the kernel \u2014 `identity_zero` for the polynomial and formal-transcendental identities, `detected_nonzero` for the transcendental-free non-identity \u2014 and the numeric (q,d) account on the SAME cell is exact/sharp (a real coupling verdict). Units: cell.",
+    "PMG-C.2": "the Richardson refusal localises (CL-G5 keystone, ADDITIVE): every additive Richardson-class identity (sin\u00b2+cos\u00b2\u22121; exp(x)exp(\u2212x)\u22121; ln(exp(x))\u2212x) yields a TYPED `richardson_undecidable` refusal on the symbolic coordinate, AND the numeric (q,d) account on the same cell stays exact and constant-offset invariant (the symbolic term cancels in the mixed second difference) \u2014 the refusal does NOT bleed into the analytic/algebraic account; the holonomy stays a clean \u211a detector. Two-sided: decidable certifies, Richardson refuses, numeric stays sharp in both. Units: cell.",
+    "PMG-C.3": "the typed-zero discipline holds (Axiom 6): the three symbolic outcomes are DISTINCT and never conflated \u2014 a syntactically-nonzero normal form carrying an uninterpreted transcendental symbol is NEVER reported as `detected_nonzero` (that would be a false non-identity certification); it refuses. sin/cos/exp/ln stay uninterpreted (Axiom 11; no numeric evaluation, no transcendental import). Units: cell.",
+    "PMG-C.4": "the detection boundary holds (the NEGATIVE CONTROL, MULTIPLICATIVE, pinned to contaminate): when the SAME Richardson factor multiplies the coupling, it SURVIVES the mixed second difference \u2014 the holonomy becomes S\u00b7holonomy_g and is handed an undecidable factor. The organ REFUSES the holonomy (`holonomy_entangled_undecidable`), never certifying a clean \u211a value. The two models are NOT symmetric: additive keeps the holonomy a clean early-warning detector; multiplicative does not. This bounds CL-G5 (localisation is a property of the additive structure, not universal). Units: cell.",
+    "PMG-C.5": "determinism: the Stage-C record set is byte-identical across two runs (sha256 over records)."
+  },
+  "stage": "C",
+  "status_move_rules": "CL-G5 -> DEMONSTRATED iff (positive fitness, ADDITIVE) every decidable cell resolves exactly (identity_zero / detected_nonzero) with a sharp numeric (q,d) account AND every additive Richardson cell refuses-localised (typed `richardson_undecidable` on the symbolic coordinate, numeric account exact and constant-offset invariant, holonomy a clean \u211a detector) AND (the boundary, MULTIPLICATIVE) the negative control CONTAMINATES as pinned \u2014 the holonomy is handed the undecidable factor and is REFUSED (`holonomy_entangled_undecidable`), never falsely certified clean. K-G4 (REFUTE-ROW, continue \u2014 NOT a halt): any ADDITIVE cell where the symbolic refusal contaminates the numeric account though it was decidable (verdict `FAIL_bleed`) -> CL-G5 REFUTED, scope reduced, witness and chain preserved. (The multiplicative negative control is NOT a K-G4 event: its contamination is genuine and correct, not a false bleed.) PARTIAL until both runs match (PMG-C.5)."
+}

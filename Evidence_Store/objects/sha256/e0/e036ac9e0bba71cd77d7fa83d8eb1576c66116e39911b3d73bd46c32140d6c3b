@@ -1,0 +1,45 @@
+{
+ "A-P1": {
+  "corroboration_200bit": [
+   {
+    "a": 1.5,
+    "b": 2.25,
+    "gap_200bit": 0.0
+   },
+   {
+    "a": 1.0000000009313226,
+    "b": -1.0,
+    "gap_200bit": 0.0
+   },
+   {
+    "a": 3.75,
+    "b": -3.5,
+    "gap_200bit": 0.0
+   },
+   {
+    "a": 1e+16,
+    "b": 1.0,
+    "gap_200bit": 0.0
+   },
+   {
+    "a": 8.095e-320,
+    "b": 2.0237e-320,
+    "gap_200bit": 0.0
+   }
+  ],
+  "failures": [],
+  "n_cases": 68,
+  "n_flagged_lawful": 6,
+  "n_zero_gap": 62,
+  "pass": true
+ },
+ "A-P2": {
+  "bacl_membership": "60/60",
+  "c2_invariants": "40/40",
+  "pass": true
+ },
+ "A-P3": {
+  "measured_boundary_note": "truth-rounded equality held through cond=2.01e+16; exact lane account == truth (Fraction) on ALL cases including every cond level",
+  "pass": true
+ }
+}

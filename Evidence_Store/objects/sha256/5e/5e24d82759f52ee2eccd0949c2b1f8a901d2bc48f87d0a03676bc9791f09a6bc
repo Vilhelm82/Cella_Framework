@@ -1,0 +1,89 @@
+#!/usr/bin/env python3
+"""False-accept probe for phase2C harness (fixed importlib for py3.14).
+
+Constructs NEW borderline non-algebraic observables and runs each through the
+harness's OWN classify(). A false-accept = a NON-algebraic generator the harness
+labels 'algebraic_branch'. Writes a NAME-ENCODED sentinel so the result survives
+a dark display channel.
+"""
+import importlib.util, json, os, sys
+import numpy as np
+import mpmath as mp
+mp.mp.dps = 80
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+HARNESS = os.path.join(HERE, "phase2C_nested_window_harness.py")
+
+# FIX: register the module in sys.modules BEFORE exec, so frozen @dataclass can
+# resolve cls.__module__ via sys.modules (py3.14 dataclasses needs this).
+spec = importlib.util.spec_from_file_location("p2c_mod", HARNESS)
+p2c = importlib.util.module_from_spec(spec)
+sys.modules["p2c_mod"] = p2c
+spec.loader.exec_module(p2c)
+
+def grid(f_max, ratio, n):
+    return [mp.mpf(f_max) * mp.power(mp.mpf(ratio), k) for k in range(n)]
+SCALES = grid(0.25, 0.5, 28)
+
+def realize(genf):
+    f = np.array([float(x) for x in SCALES], dtype=np.float64)
+    s = np.array([float(genf(x)) for x in SCALES], dtype=np.float64)
+    return f, s
+
+def harness_classify(f, s, sinf):
+    probe = p2c.FixtureSpec(name="p", kind="iterated_log", description="adv",
+                            s_inf=sinf, coeff=0.0, rho=0.0, sub_coeff=0.0, sub_rho=0.0)
+    p2c.FIXTURES["_PROBE_"] = probe
+    try:
+        d = p2c.classify("_PROBE_", f, s)
+    finally:
+        del p2c.FIXTURES["_PROBE_"]
+    return {"classification": d.classification, "winner_aic": d.winner_aic,
+            "winner_bic": d.winner_bic, "nw_status": d.nested_window.stability_status,
+            "nw_drift": round(d.nested_window.drift_ratio, 6),
+            "delta_aic": round(d.delta_aic_runnerup, 4)}
+
+# 7 borderline NON-algebraic generators (all should be REJECTED as branch) + tuned
+# stress cases designed to maximize the chance of a false-accept.
+G = {
+ "P1_sqrt+small_iterlog":   (lambda f: mp.mpf("1.0")+mp.mpf("0.4")*mp.sqrt(f)-mp.mpf("0.02")*mp.log(f)*mp.log(mp.log(1/f)), 1.0),
+ "P2_log_squared":          (lambda f: mp.mpf("3.0")+mp.mpf("0.05")*mp.log(f)*mp.log(f), 3.0),
+ "P3_sqrt*log":             (lambda f: mp.mpf("1.5")+mp.mpf("0.3")*mp.sqrt(f)*mp.log(1/f), 1.5),
+ "P4_sqrt_of_loginv":       (lambda f: mp.mpf("0.5")+mp.mpf("0.2")*mp.sqrt(mp.log(1/f)), 0.5),
+ "P5_large_iterlog":        (lambda f: mp.mpf("2.0")-mp.mpf("0.6")*mp.log(f)*mp.log(mp.log(1/f)), 2.0),
+ "P6_strong_sqrt+tiny_iterlog": (lambda f: mp.mpf("1.0")+mp.mpf("0.5")*mp.sqrt(f)-mp.mpf("0.003")*mp.log(f)*mp.log(mp.log(1/f)), 1.0),
+ "P7_sqrt+logf":            (lambda f: mp.mpf("1.2")+mp.mpf("0.4")*mp.sqrt(f)-mp.mpf("0.05")*mp.log(f), 1.2),
+ "P8_microscopic_iterlog_under_sqrt": (lambda f: mp.mpf("1.0")+mp.mpf("0.5")*mp.sqrt(f)-mp.mpf("0.0003")*mp.log(f)*mp.log(mp.log(1/f)), 1.0),
+ "P9_sqrt+microscopic_logf": (lambda f: mp.mpf("1.0")+mp.mpf("0.5")*mp.sqrt(f)-mp.mpf("0.0005")*mp.log(f), 1.0),
+}
+probes = {}; fa = []
+for nm, (g, si) in G.items():
+    f, s = realize(g)
+    h = harness_classify(f, s, si)
+    wrong = (h["classification"] == "algebraic_branch")
+    probes[nm] = {**h, "FALSE_ACCEPT": wrong}
+    if wrong: fa.append(nm)
+
+# true-accept control (genuine algebraic, must be accepted)
+f, s = realize(lambda f: mp.mpf("0.9")+mp.mpf("0.7")*mp.sqrt(f)+mp.mpf("0.2")*f*f)
+tac = harness_classify(f, s, 0.9)
+tac_ok = (tac["classification"] == "algebraic_branch")
+
+report = {"false_accept_probes": probes, "false_accepts_found": fa,
+          "any_false_accept": len(fa) > 0,
+          "true_accept_control": {**tac, "correct": tac_ok}}
+
+with open(os.path.join(HERE, "_p2c_false_accept_report.json"), "w") as fh:
+    json.dump(report, fh, indent=2, sort_keys=True); fh.write("\n")
+
+# name-encoded sentinel
+for vf in os.listdir(HERE):
+    if vf.startswith("_FA_VERDICT_"):
+        os.remove(os.path.join(HERE, vf))
+tok = ("NOFALSEACCEPT" if not fa else "FALSEACCEPT_" + "_".join(x.split("_")[0] for x in fa))
+tok += "__TACTRL_" + ("ok" if tac_ok else "FAIL")
+vname = "_FA_VERDICT_" + tok + ".txt"
+with open(os.path.join(HERE, vname), "w") as fh:
+    fh.write(json.dumps(report, indent=2, sort_keys=True) + "\n")
+print(vname)
+print(json.dumps(report, indent=2, sort_keys=True))

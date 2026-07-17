@@ -1,0 +1,203 @@
+# Cella — Arithmetic Operation Inventory (scope & limitations)
+
+**Date:** 2026-06-13 (machine date). **Authority:** descriptive
+reference compiled at Will's request after the beyond-the-cradle
+charter close (HR137). **Standing:** report to Will's box — a focused
+companion to `CELLA_V4_TECHNICAL_CAPABILITY_SPECIFICATION.md` (§3.1,
+§3.10, §3.11), narrowed to *the operations themselves*. **Nothing
+here is normative**; every row is sourced to a file in the tree and a
+demonstrated campaign result. No substrate was touched.
+
+**Method:** direct reads of the operation definitions — Arm M
+`mexpr.py` (`eval_q` / `eval_dual_q`), Arm I `intops.py`, the float
+core's `RATIONAL_OPS` and the certified elementary observers. Status
+words are from the project's status calculus; shas are the pinned
+battery records.
+
+---
+
+## 0. What "an operation" means here
+
+Cella does not merely compute `a ⊕ b`. For every operation it carries,
+it returns the result **and an exact account of what the operation
+discarded** — the rounding residue, the wrapped bits, the shifted-out
+low part — graded by the standing identity
+
+> **value + account == TRUE in ℚ** (exactly, not approximately).
+
+That is the line between "arithmetic" and "a Cella operation." The
+account is composable (folds across a chain), lawful under precision
+change, and verdict-bearing. The inventory below is therefore an
+inventory of *operations whose discard the engine can exactly
+account for*, organized by substrate.
+
+**One standing scope caveat for the whole document:** these are
+**eval-tier campaign instruments** — status DEMONSTRATED / PARTIAL,
+meaning measured, referee-graded, and byte-stable ×2, but **not
+promoted Layer-0/1 substrate primitives**. This is what the engine
+has *certified it can do*, not a released API surface. Promotion to
+substrate is a separate, fenced exercise (FENCE_REGISTER F13).
+
+---
+
+## 1. Float64, univariate — the Cella core (HR132 / HR133 / HR134)
+
+### 1.1 The rational-op class — exact account in ℚ
+
+| Operation | Account it carries | Status |
+|---|---|---|
+| `add`, `sub` | exact rounding residue (error-free transform) | DEMONSTRATED |
+| `mul` | exact rounding residue | DEMONSTRATED |
+| `div` | exact residue; typed refusal at poles | DEMONSTRATED |
+| `pow` (integer exponent) | exact residue via repeated mul | DEMONSTRATED |
+| `neg`, `abs` | exact (no rounding) | DEMONSTRATED |
+| `sqrt` | certified route into the rational class (Sterbenz / EFT regime) | DEMONSTRATED |
+
+**Scope.** Float value + residue lanes equal the true real answer
+*exactly in ℚ*, universally on the tested battery. The account is
+lawful under precision doubling (the Refinement Law, certified over
+120,096 steps), supports an exact difference/derivative tower (every
+Taylor coefficient recovered exactly by falling-factorial inversion),
+and certifies root-closure objects (the atlas, HR135).
+
+**Limitations.**
+- Exactness is **class-scoped**: it holds only for operations whose
+  exact result is rational given rational inputs. Step outside the
+  class and the guarantee weakens to enclosure-or-refusal (§1.2).
+- **Univariate** at the certification layer (the lift to several
+  variables is §3, a separate substrate).
+- `div` refuses (`pole`) at a zero denominator rather than emitting.
+- Source: `evals/bigraded_jet.py`, `evals/difference_tower/`
+  (`RATIONAL_OPS`); HR132/133/134.
+
+### 1.2 The certified elementary annex — enclosure-or-refusal
+
+`sqrt`, `log`, `log2`, `exp`, `pow` (general real), `sin`, `cos`,
+`tan`, `atan`, `asin`, `acos`.
+
+**Scope.** Correctly-rounded-or-honest-refusal per value, on the
+`typed_refine` kernel: working precision is raised until both
+enclosure ends round to the same p-bit value, else a typed refusal.
+
+**Limitations.**
+- These operations **break rationality**, so they get a certified
+  **enclosure**, *not* an exact ℚ account. Correctness is
+  unconditional per value; *totality* is budget-relative (Axiom 3) —
+  the honest failure mode is `REFINED_BUDGET_EXCEEDED` /
+  `REFINED_DOMAIN_REFUSED`, never a silent guess.
+- Source: `observers/typed_*.py`; HR123–128 lineage.
+
+---
+
+## 2. Integer & bitwise — Arm I (HR136)
+
+Fixed widths **w ∈ {32, 64}** (`WIDTHS = (32, 64)`; any other width is
+a typed refusal `unsupported_width`).
+
+| Operation | Discard kind accounted | Refusal / edge behavior |
+|---|---|---|
+| `add_w`, `sub_w` | `wrap` | — |
+| `mul_w` | `wrap` + `high_word` (full product) | — |
+| `shl_w` (left shift) | `shifted_out_bits` (high) | refuses `shift_amount_out_of_range` outside `[0,w)` |
+| `shr_w` (arithmetic right shift) | `shifted_out_bits` (low) | same range refusal |
+| `divmod` — `trunc` / `floor` / `euclid` | `remainder` (per-semantics) | refuses `division_by_zero`; `INT_MIN // -1` wraps as a width event |
+| `int_to_f64` | `cast_residue` | refuses `int_to_f64_overflow` |
+| `f64_to_int_trunc` | `cast_residue` | refuses `f64_to_int_nonfinite` |
+| `bitcast` f64↔u64 | `seam_bitcast` | refuses `bitcast_operand_out_of_range` |
+| `hull_dobell(m,a,c)` | (LCG full-period predicate — analysis, not an op) | — |
+
+Discard taxonomy (`DISCARD_KINDS`): `wrap`, `high_word`, `remainder`,
+`shifted_out_bits`, `cast_residue`, `seam_bitcast`.
+
+**Scope.** The discarded complement is exactly representable, lawful
+under composition (the deviation fold `D′ = b·D + d·2^w` class), and
+verdict-bearing — proven over 5-op chains, 65,536 composed orbit
+steps, and across the int↔float seam (`8b153575…`). Headline: integer
+residue-death and float dyadic-death are **one law**
+(`ν₂(operand) ≥ window_floor`), 19/19 both substrates.
+
+**Limitations.**
+- Widths **32 and 64 only**; shift amounts must be in range.
+- The fast-inverse-sqrt exhibit (CL-I6) is **demo-tier** vocabulary —
+  it accounts every stage but mints no law.
+- **No G-claims** carried (T2 / FENCE_REGISTER F8).
+- Bitwise *scope* is unbounded by Will's ruling ("if we can get an
+  account it's fair game"), but *coverage* is what was tested on the
+  frozen FX-I-A..F fixtures — covered means tested, not fenced.
+- Source: `evals/cradle_arm_i/intops.py`; HR136.
+
+---
+
+## 3. Multivariate — Arm M (HR137)
+
+Variables **x, y, z**; arities **n ∈ {2, 3}** (the cap-at-bivariate
+was rejected by ruling — n = 3 is scored). Heads: `add`, `sub`,
+`mul`, `div`, `neg`, `abs`, `pow`, `max`.
+
+Two evaluation paths share the head set:
+
+| Path | Returns | Refusals |
+|---|---|---|
+| `eval_q` | exact ℚ value | `pole` at division-by-zero |
+| `eval_dual_q` | exact value **+ all first partials** (forward dual) | `pole`; **kink loci**: `kink_locus_abs_at_zero`, `kink_locus_max_at_tie` |
+
+Per-head constraints:
+
+| Head | Constraint / behavior |
+|---|---|
+| `add`, `sub`, `mul`, `neg` | exact, total on the rational class |
+| `div` | exact; refuses `pole` when denominator == 0 |
+| `pow` | integer exponent **n ≥ 1** (amendment #M1); dual treats `pow 0` as constant 1 |
+| `abs` | exact in *value* everywhere; in the dual, **refuses at 0** rather than inventing a subgradient |
+| `max` | exact in *value*; in the dual, **refuses at a tie** |
+
+**Derived calculus built on the per-op accounts** (each its own
+DEMONSTRATED claim row): the mixed difference tower (Clairaut-exact,
+197 orderings); tensor inversion (every mixed partial, all orders, all
+variables, recovered exactly in ℚ — the keystone); the commutator /
+plaquette bookkeeping (the Clairaut defect *is* the account gap,
+`bd2a5b2d…`); directional smoothness, two-scale gated (`7509d700…`);
+Newton landing decomposition, geometry ⊕ substrate fully attributed
+(`4666201c…`); the curvature bridge (κ², H² rational and exactly equal
+to analytic).
+
+**Scope.** n ≤ 3, exact in ℚ; the account gains *direction* —
+exposure partitions exactly into per-variable, coupling, and constant
+channels.
+
+**Limitations.**
+- **n ≤ 3 only**; frozen FX-M-A..F fixture classes.
+- **No G-claims and no cross-fixture-invariant claims** anywhere (T2,
+  verbatim in the frozen manifest; FENCE_REGISTER F8/F9).
+- Grid-blind along locus-tangent rays — handled as a *typed* refusal
+  (`ray_in_locus`), honest rather than a guess.
+- Curvature is a **registered measurement on named fixtures, never an
+  invariant search** (T3); the κ-measurement does not reopen the
+  closed K_G hunt.
+- `div` poles and `abs`/`max` loci refuse in the derivative channel.
+- Source: `evals/cradle_arm_m/mexpr.py`, `lanes_m.py`,
+  `mixed_tower.py`, `plaquette_probe.py`, `landing_m.py`; HR137.
+
+---
+
+## 4. One-screen summary
+
+| Substrate | Operations | Account closes in ℚ? | Hard limits |
+|---|---|---|---|
+| Float64 univariate (rational class) | `+ − × ÷`, int `pow`, `neg`, `abs`, `sqrt`-route | **Yes, exact** | class-scoped; univariate; `÷` refuses at poles |
+| Float64 elementary annex | `sqrt log log2 exp pow sin cos tan atan asin acos` | No — certified **enclosure** | budget-relative totality; refusal not guess |
+| Integer / bitwise (w∈{32,64}) | `add sub mul` (wrap), `shl shr`, `divmod×3 semantics`, `cast×2`, `bitcast` | **Yes, exact** | widths 32/64; FISR demo-tier; no G-claims |
+| Multivariate (x,y,z; n≤3) | `add sub mul div neg abs pow(n≥1) max` | **Yes, exact** | n≤3; frozen fixtures; no invariants; kink/pole refusals |
+
+**The boundaries deliberately *not* crossed** (fenced, not failed):
+substrate promotion to released primitives (F13); n > 3 variables;
+integer widths beyond 32/64; anything in G / cross-fixture-invariant
+territory (F8/F9); transcendental *exactness* (the annex stays
+enclosure-or-refusal by the nature of the operations).
+
+---
+
+*Charter line, carried: Cella performs ordinary arithmetic and, for
+each operation, hands back an exact and composable account of what was
+lost — on floats, on integers, and now in several variables. The
+account was born in float64; it was never about floats.*

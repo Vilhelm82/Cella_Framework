@@ -1,0 +1,571 @@
+"""Structural cancellation analyzer -- MVP prototype.
+
+Implements the analytical core described in codex_task041 as a scratch
+prototype.  Walks a small expression-tree DSL, classifies each subtraction
+node by its cancellation pattern, predicts the precision-floor-crossing
+epsilon, and produces a PredictedBurdenVector.
+
+NOT YET integrated into src/lloyd_v4/ -- that's the agent's job following
+the task041 pre-reg.  This script demonstrates the analytical idea works
+on the four canonical ISCO outer formulations from our exploration, and
+shows the predicted Pareto ordering matches the empirical one.
+
+Usage:
+    python scratch/symbolic_analyzer_mvp.py
+"""
+
+from __future__ import annotations
+
+import math
+from dataclasses import dataclass, field
+from enum import Enum
+from fractions import Fraction
+from typing import Union
+
+
+# ============================================================================
+# DSL types
+# ============================================================================
+
+@dataclass(frozen=True)
+class Magnitude:
+    """Scaling class of a quantity in the sweep variable.
+
+    Conceptually q ~ coefficient * eps^exponent.
+    has_constant_part=True means the quantity has a non-zero O(1) contribution
+    (the constant dominates as eps -> 0, so its effective exponent is 0).
+    """
+    exponent: Fraction
+    has_constant_part: bool = False
+    constant_value: float = 0.0          # the O(1) part, if any
+    coefficient_magnitude: float = 1.0   # approximate, for crossing predictions
+    is_unknown: bool = False
+
+    @classmethod
+    def constant(cls, value: float) -> "Magnitude":
+        return cls(
+            exponent=Fraction(0),
+            has_constant_part=True,
+            constant_value=value,
+            coefficient_magnitude=abs(value),
+        )
+
+    @classmethod
+    def power(cls, exponent: Fraction, coef: float = 1.0) -> "Magnitude":
+        return cls(
+            exponent=exponent,
+            has_constant_part=False,
+            coefficient_magnitude=abs(coef),
+        )
+
+    @classmethod
+    def constant_plus_perturbation(
+        cls,
+        constant: float,
+        perturb_exponent: Fraction,
+        perturb_coef: float = 1.0,
+    ) -> "Magnitude":
+        """Represent (constant + coef * eps^perturb_exponent).
+
+        The constant dominates as eps -> 0 (exponent=0), but we record the
+        perturbation so subtraction classifiers can see it.
+        """
+        return cls(
+            exponent=Fraction(0),
+            has_constant_part=True,
+            constant_value=constant,
+            coefficient_magnitude=abs(constant),
+            # Perturbation info stored in _extra (see below) -- here we keep
+            # the public Magnitude type simple and let the classifier read
+            # the AST when it needs to inspect perturbations.
+        )
+
+    @classmethod
+    def unknown(cls) -> "Magnitude":
+        return cls(exponent=Fraction(0), is_unknown=True)
+
+
+class BinaryOpKind(Enum):
+    ADD = "add"
+    SUB = "sub"
+    MUL = "mul"
+    DIV = "div"
+
+
+class UnaryOpKind(Enum):
+    SQRT = "sqrt"
+    NEG = "neg"
+
+
+@dataclass(frozen=True)
+class Variable:
+    name: str
+    expected_magnitude: Magnitude
+
+
+@dataclass(frozen=True)
+class Constant:
+    value: float
+
+
+@dataclass(frozen=True)
+class BinaryOp:
+    op: BinaryOpKind
+    left: "Node"
+    right: "Node"
+
+
+@dataclass(frozen=True)
+class UnaryOp:
+    op: UnaryOpKind
+    operand: "Node"
+
+
+Node = Union[Variable, Constant, BinaryOp, UnaryOp]
+
+
+# DSL ergonomic helpers ------------------------------------------------------
+
+def _wrap(x) -> Node:
+    if isinstance(x, (int, float)):
+        return Constant(float(x))
+    return x
+
+
+def add(a, b) -> Node: return BinaryOp(BinaryOpKind.ADD, _wrap(a), _wrap(b))
+def sub(a, b) -> Node: return BinaryOp(BinaryOpKind.SUB, _wrap(a), _wrap(b))
+def mul(a, b) -> Node: return BinaryOp(BinaryOpKind.MUL, _wrap(a), _wrap(b))
+def div(a, b) -> Node: return BinaryOp(BinaryOpKind.DIV, _wrap(a), _wrap(b))
+def neg(a) -> Node:    return UnaryOp(UnaryOpKind.NEG, _wrap(a))
+def sqrtN(a) -> Node:  return UnaryOp(UnaryOpKind.SQRT, _wrap(a))
+
+
+# ============================================================================
+# Magnitude propagation
+# ============================================================================
+
+def propagate_magnitude(node: Node) -> Magnitude:
+    if isinstance(node, Constant):
+        return Magnitude.constant(node.value)
+
+    if isinstance(node, Variable):
+        return node.expected_magnitude
+
+    if isinstance(node, UnaryOp):
+        m = propagate_magnitude(node.operand)
+        if m.is_unknown:
+            return Magnitude.unknown()
+        if node.op == UnaryOpKind.SQRT:
+            if m.has_constant_part and m.constant_value > 0:
+                return Magnitude.constant(math.sqrt(m.constant_value))
+            if not m.has_constant_part:
+                return Magnitude.power(m.exponent / 2, math.sqrt(m.coefficient_magnitude))
+            return Magnitude.unknown()
+        if node.op == UnaryOpKind.NEG:
+            return m
+        return Magnitude.unknown()
+
+    if isinstance(node, BinaryOp):
+        ml = propagate_magnitude(node.left)
+        mr = propagate_magnitude(node.right)
+        if ml.is_unknown or mr.is_unknown:
+            return Magnitude.unknown()
+
+        if node.op == BinaryOpKind.MUL:
+            return Magnitude(
+                exponent=ml.exponent + mr.exponent,
+                has_constant_part=(ml.has_constant_part and mr.has_constant_part),
+                constant_value=ml.constant_value * mr.constant_value,
+                coefficient_magnitude=ml.coefficient_magnitude * mr.coefficient_magnitude,
+            )
+
+        if node.op == BinaryOpKind.DIV:
+            return Magnitude(
+                exponent=ml.exponent - mr.exponent,
+                has_constant_part=(ml.has_constant_part and mr.has_constant_part),
+                constant_value=(ml.constant_value / mr.constant_value) if mr.constant_value != 0 else 0.0,
+                coefficient_magnitude=ml.coefficient_magnitude / max(mr.coefficient_magnitude, 1e-300),
+            )
+
+        if node.op in (BinaryOpKind.ADD, BinaryOpKind.SUB):
+            sign = 1.0 if node.op == BinaryOpKind.ADD else -1.0
+            # Case 1: both have non-zero constant parts -> they dominate.
+            if ml.has_constant_part and mr.has_constant_part:
+                combined_const = ml.constant_value + sign * mr.constant_value
+                if combined_const != 0.0:
+                    return Magnitude(
+                        exponent=Fraction(0),
+                        has_constant_part=True,
+                        constant_value=combined_const,
+                        coefficient_magnitude=abs(combined_const),
+                    )
+                # Constants cancel -- the perturbation parts now dominate.
+                # We don't know their exact magnitude here without more info;
+                # the classifier will inspect the AST for this case.
+                return Magnitude.power(min(ml.exponent, mr.exponent))
+            # Case 2: one has constant part, the other is a perturbation.
+            if ml.has_constant_part and not mr.has_constant_part:
+                return Magnitude(
+                    exponent=Fraction(0),
+                    has_constant_part=True,
+                    constant_value=ml.constant_value,
+                    coefficient_magnitude=ml.coefficient_magnitude,
+                )
+            if mr.has_constant_part and not ml.has_constant_part:
+                return Magnitude(
+                    exponent=Fraction(0),
+                    has_constant_part=True,
+                    constant_value=sign * mr.constant_value,
+                    coefficient_magnitude=mr.coefficient_magnitude,
+                )
+            # Case 3: both are perturbations. Lower exponent dominates.
+            return Magnitude.power(
+                min(ml.exponent, mr.exponent),
+                ml.coefficient_magnitude + mr.coefficient_magnitude,
+            )
+
+    return Magnitude.unknown()
+
+
+# ============================================================================
+# Cancellation classification
+# ============================================================================
+
+class CancellationPattern(Enum):
+    NO_SUBTRACTION = "no_subtraction"
+    SELF_CANCELLATION = "self_cancellation"
+    CONSTANT_CANCELLATION = "constant_cancellation"
+    STERBENZ_SAFE_BENIGN = "sterbenz_safe_benign"
+    STERBENZ_SAFE_CATASTROPHIC = "sterbenz_safe_catastrophic"
+    UNRECOGNISED = "unrecognised"
+
+
+@dataclass(frozen=True)
+class CancellationSite:
+    pattern: CancellationPattern
+    signal_exponent: Fraction
+    constant_magnitude: float          # the O(1) operand magnitude
+    predicted_crossing_eps: float | None
+    description: str
+    location_hint: str = ""
+
+
+def _structural_equal(a: Node, b: Node) -> bool:
+    """Strict structural equality on the AST."""
+    if type(a) != type(b):
+        return False
+    if isinstance(a, Constant):
+        return a.value == b.value
+    if isinstance(a, Variable):
+        return a.name == b.name
+    if isinstance(a, BinaryOp):
+        return (
+            a.op == b.op
+            and _structural_equal(a.left, b.left)
+            and _structural_equal(a.right, b.right)
+        )
+    if isinstance(a, UnaryOp):
+        return a.op == b.op and _structural_equal(a.operand, b.operand)
+    return False
+
+
+def _signal_after_constant_cancellation(left: Node, right: Node) -> Fraction:
+    """For a subtraction (X) - (Y) where X and Y share the same constant part,
+    return the magnitude exponent of the surviving perturbation.
+
+    Recognises specific patterns:
+        (c + p) - c            -> exponent of p
+        (c + p)^2 - c^2        -> exponent of p (signal is 2*c*p, leading)
+        sqrt(...) variants
+    """
+    # Pattern: (c + p) - c
+    if isinstance(left, BinaryOp) and left.op == BinaryOpKind.ADD:
+        if isinstance(left.left, Constant) and _structural_equal(left.right, right) is False:
+            if isinstance(right, Constant) and right.value == left.left.value:
+                return propagate_magnitude(left.right).exponent
+        if isinstance(left.right, Constant) and isinstance(right, Constant) and right.value == left.right.value:
+            return propagate_magnitude(left.left).exponent
+
+    # Pattern: (c + p)^2 - c^2  represented as ((c+p) * (c+p)) - <const = c*c>
+    if isinstance(left, BinaryOp) and left.op == BinaryOpKind.MUL:
+        if _structural_equal(left.left, left.right):
+            inner = left.left
+            inner_mag = propagate_magnitude(inner)
+            if inner_mag.has_constant_part and isinstance(right, Constant):
+                if abs(inner_mag.constant_value ** 2 - right.value) < 1e-9 * max(abs(right.value), 1):
+                    # Signal after cancellation is 2*c*p; exponent is exponent of p
+                    # The perturbation lives inside (c + p), find it:
+                    if isinstance(inner, BinaryOp) and inner.op == BinaryOpKind.ADD:
+                        if isinstance(inner.left, Constant):
+                            return propagate_magnitude(inner.right).exponent
+                        if isinstance(inner.right, Constant):
+                            return propagate_magnitude(inner.left).exponent
+
+    # Unknown: signal scaling could not be derived
+    return Fraction(0)
+
+
+def _predicted_crossing_eps(constant_magnitude: float, signal_exponent: Fraction) -> float | None:
+    """When does the signal cross the precision floor?
+
+    Precision floor for resolving a small quantity revealed by subtracting
+    a constant C is approximately eps_machine * |C|.  If the signal scales
+    as coef * eps^p, crossing happens when:
+
+        coef * eps^p  ~  eps_machine * |C|
+        eps           ~  (eps_machine * |C| / coef) ^ (1/p)
+
+    We use coef = 1 as a conservative default.  Returns None if signal is
+    constant (no crossing) or scaling unknown.
+    """
+    if signal_exponent <= 0:
+        return None
+    EPS_MACHINE = 2.22e-16
+    p = float(signal_exponent)
+    return (EPS_MACHINE * constant_magnitude) ** (1.0 / p)
+
+
+def classify_subtraction(node: BinaryOp, parent_path: str = "") -> CancellationSite:
+    """Classify a single subtraction node."""
+    assert node.op == BinaryOpKind.SUB
+    left, right = node.left, node.right
+    ml = propagate_magnitude(left)
+    mr = propagate_magnitude(right)
+
+    # Self-cancellation
+    if _structural_equal(left, right):
+        return CancellationSite(
+            pattern=CancellationPattern.SELF_CANCELLATION,
+            signal_exponent=Fraction(0),
+            constant_magnitude=0.0,
+            predicted_crossing_eps=None,
+            description="X - X (always zero)",
+            location_hint=parent_path,
+        )
+
+    # Constant cancellation: both operands have same non-zero constant part
+    if (
+        ml.has_constant_part and mr.has_constant_part
+        and abs(ml.constant_value - mr.constant_value) < 1e-9 * max(abs(ml.constant_value), 1.0)
+        and not (isinstance(left, Variable) and isinstance(right, Variable) and left.name == right.name)
+    ):
+        signal_exp = _signal_after_constant_cancellation(left, right)
+        const_mag = max(abs(ml.constant_value), abs(mr.constant_value))
+        crossing = _predicted_crossing_eps(const_mag, signal_exp)
+        if signal_exp >= 1:
+            pattern = CancellationPattern.STERBENZ_SAFE_CATASTROPHIC
+            desc = (
+                f"(C + p) - C with C ~ {const_mag:.3g}, signal ~ eps^{signal_exp}"
+                f"  --  O(eps) or steeper signal, crosses precision floor at eps ~ {crossing:.2e}"
+            )
+        elif signal_exp > 0:
+            pattern = CancellationPattern.STERBENZ_SAFE_BENIGN
+            desc = (
+                f"(C + p) - C with C ~ {const_mag:.3g}, signal ~ eps^{signal_exp}"
+                f"  --  sub-linear signal, crosses precision floor at eps ~ {crossing:.2e}"
+            )
+        else:
+            pattern = CancellationPattern.CONSTANT_CANCELLATION
+            desc = f"(C + p) - C with C ~ {const_mag:.3g}, signal scaling not derivable"
+        return CancellationSite(
+            pattern=pattern,
+            signal_exponent=signal_exp,
+            constant_magnitude=const_mag,
+            predicted_crossing_eps=crossing,
+            description=desc,
+            location_hint=parent_path,
+        )
+
+    # Sterbenz-safe-benign: one operand has constant, other doesn't, but magnitudes match
+    # (less common in pure-symbolic land; we treat as Sterbenz-safe sub-linear)
+    if (
+        ml.has_constant_part and not mr.has_constant_part
+        and mr.exponent > 0 and mr.exponent < 1
+    ):
+        return CancellationSite(
+            pattern=CancellationPattern.STERBENZ_SAFE_BENIGN,
+            signal_exponent=mr.exponent,
+            constant_magnitude=abs(ml.constant_value),
+            predicted_crossing_eps=_predicted_crossing_eps(abs(ml.constant_value), mr.exponent),
+            description=f"Sterbenz-safe: C - O(eps^{mr.exponent}) with sub-linear signal",
+            location_hint=parent_path,
+        )
+
+    # Subtraction of operands at different scales: no real cancellation
+    if ml.exponent != mr.exponent or (ml.has_constant_part != mr.has_constant_part):
+        return CancellationSite(
+            pattern=CancellationPattern.NO_SUBTRACTION,
+            signal_exponent=min(ml.exponent, mr.exponent),
+            constant_magnitude=0.0,
+            predicted_crossing_eps=None,
+            description="Operands at different scales; subtraction is benign",
+            location_hint=parent_path,
+        )
+
+    return CancellationSite(
+        pattern=CancellationPattern.UNRECOGNISED,
+        signal_exponent=Fraction(0),
+        constant_magnitude=0.0,
+        predicted_crossing_eps=None,
+        description=f"Pattern not in v1 vocabulary (operand magnitudes: {ml.exponent}, {mr.exponent})",
+        location_hint=parent_path,
+    )
+
+
+# ============================================================================
+# Walker
+# ============================================================================
+
+@dataclass(frozen=True)
+class PredictedBurdenVector:
+    expression_label: str
+    n_catastrophic_cancellations: int
+    n_sterbenz_safe_cancellations: int
+    n_benign_subtractions: int
+    n_unrecognised: int
+    predicted_precision_crossing_epsilon: float | None
+    cancellation_sites: tuple[CancellationSite, ...]
+
+
+def walk_and_classify(node: Node, path: str = "root") -> list[CancellationSite]:
+    """Walk the AST, classify every subtraction node we encounter."""
+    sites: list[CancellationSite] = []
+    if isinstance(node, BinaryOp):
+        if node.op == BinaryOpKind.SUB:
+            sites.append(classify_subtraction(node, parent_path=path))
+        sites.extend(walk_and_classify(node.left, f"{path}.left"))
+        sites.extend(walk_and_classify(node.right, f"{path}.right"))
+    elif isinstance(node, UnaryOp):
+        sites.extend(walk_and_classify(node.operand, f"{path}.op"))
+    return sites
+
+
+def analyze_expression(root: Node, label: str) -> PredictedBurdenVector:
+    sites = walk_and_classify(root)
+    n_cat = sum(1 for s in sites if s.pattern == CancellationPattern.STERBENZ_SAFE_CATASTROPHIC)
+    n_sterbenz = sum(1 for s in sites if s.pattern == CancellationPattern.STERBENZ_SAFE_BENIGN)
+    n_benign = sum(1 for s in sites if s.pattern == CancellationPattern.NO_SUBTRACTION)
+    n_unrec = sum(1 for s in sites if s.pattern == CancellationPattern.UNRECOGNISED)
+
+    crossings = [s.predicted_crossing_eps for s in sites if s.predicted_crossing_eps is not None]
+    overall_crossing = max(crossings) if crossings else None  # most-restrictive site wins
+
+    return PredictedBurdenVector(
+        expression_label=label,
+        n_catastrophic_cancellations=n_cat,
+        n_sterbenz_safe_cancellations=n_sterbenz,
+        n_benign_subtractions=n_benign,
+        n_unrecognised=n_unrec,
+        predicted_precision_crossing_epsilon=overall_crossing,
+        cancellation_sites=tuple(sites),
+    )
+
+
+# ============================================================================
+# Canonical ISCO calibration set
+# ============================================================================
+
+EPS = Variable("eps", Magnitude.power(Fraction(1)))
+
+
+def build_outer_stable() -> Node:
+    """(eps + sqrt(12+eps) * sqrt(eps)) / 2  --  no cancellation"""
+    L_sq = add(12.0, EPS)
+    L = sqrtN(L_sq)
+    return div(add(EPS, mul(L, sqrtN(EPS))), 2.0)
+
+
+def build_outer_naive() -> Node:
+    """((12+eps) + sqrt(12+eps)*sqrt(eps))/2 - 6  --  Sterbenz-safe O(sqrt(eps)) signal"""
+    L_sq = add(12.0, EPS)
+    L = sqrtN(L_sq)
+    r_plus = div(add(L_sq, mul(L, sqrtN(EPS))), 2.0)
+    return sub(r_plus, 6.0)
+
+
+def build_r_plus_sq_minus_36() -> Node:
+    """(r_+^2 - 36) / (r_+ + 6)  --  difference-of-squares pattern"""
+    L_sq = add(12.0, EPS)
+    L = sqrtN(L_sq)
+    r_plus = div(add(L_sq, mul(L, sqrtN(EPS))), 2.0)
+    numerator = sub(mul(r_plus, r_plus), 36.0)
+    denominator = add(r_plus, 6.0)
+    return div(numerator, denominator)
+
+
+def build_twelve_plus_eps_sq_minus_144() -> Node:
+    """sqrt((12+eps)^2 - 144) / sqrt(8)  --  catastrophic with O(eps) signal"""
+    twelve_plus = add(12.0, EPS)
+    inner = sub(mul(twelve_plus, twelve_plus), 144.0)
+    return div(sqrtN(inner), Constant(math.sqrt(8.0)))
+
+
+# ============================================================================
+# Demo
+# ============================================================================
+
+def fmt_eps(v: float | None) -> str:
+    return f"{v:.2e}" if v is not None else "never"
+
+
+def main() -> None:
+    print("=" * 100)
+    print("Structural cancellation analyzer -- MVP calibration on four ISCO outer formulations")
+    print("=" * 100)
+
+    forms = [
+        ("outer_stable          ", build_outer_stable()),
+        ("outer_naive           ", build_outer_naive()),
+        ("r_+^2 - 36 form       ", build_r_plus_sq_minus_36()),
+        ("(12+eps)^2 - 144 form ", build_twelve_plus_eps_sq_minus_144()),
+    ]
+
+    predictions: list[PredictedBurdenVector] = []
+    for label, expr in forms:
+        pred = analyze_expression(expr, label.strip())
+        predictions.append(pred)
+        print(f"\n{label}")
+        print(f"  n_catastrophic        : {pred.n_catastrophic_cancellations}")
+        print(f"  n_sterbenz_safe_benign: {pred.n_sterbenz_safe_cancellations}")
+        print(f"  n_benign              : {pred.n_benign_subtractions}")
+        print(f"  n_unrecognised        : {pred.n_unrecognised}")
+        print(f"  precision crossing    : {fmt_eps(pred.predicted_precision_crossing_epsilon)}")
+        if pred.cancellation_sites:
+            print(f"  sites:")
+            for site in pred.cancellation_sites:
+                print(f"    [{site.pattern.value}] {site.description}")
+
+    print()
+    print("=" * 100)
+    print("PREDICTED PARETO ORDERING (least burdened first)")
+    print("=" * 100)
+    def burden_key(p: PredictedBurdenVector):
+        # Catastrophic count dominates; then Sterbenz-safe; then crossing-eps (smaller is better)
+        cross = p.predicted_precision_crossing_epsilon or 0.0
+        return (p.n_catastrophic_cancellations, p.n_sterbenz_safe_cancellations, cross)
+
+    ordered = sorted(predictions, key=burden_key)
+    for i, p in enumerate(ordered, 1):
+        print(f"  {i}. {p.expression_label:30s}  "
+              f"catastrophic={p.n_catastrophic_cancellations}  "
+              f"sterbenz_safe={p.n_sterbenz_safe_cancellations}  "
+              f"crossing_eps={fmt_eps(p.predicted_precision_crossing_epsilon)}")
+
+    print()
+    print("=" * 100)
+    print("EMPIRICAL EVIDENCE (from scratch/ exploration, for cross-check)")
+    print("=" * 100)
+    empirical = {
+        "outer_stable":            ("clean across full grid (eps in [1e-2, 1e-15])", None),
+        "outer_naive":             ("clean across full grid -- Sterbenz protects",   None),
+        "r_+^2 - 36 form":         ("clean (rel_err 1.4e-8 at eps=1e-15)",            "below 1e-15"),
+        "(12+eps)^2 - 144 form":   ("rel_err 54% at eps=1e-15; high_drop_rate fired", "~1e-13"),
+    }
+    for label, expr in forms:
+        k = label.strip()
+        ev = empirical.get(k, ("(not yet measured)", None))
+        print(f"  {k:30s}  empirical: {ev[0]}   crossing: {ev[1] or 'never'}")
+
+
+if __name__ == "__main__":
+    main()

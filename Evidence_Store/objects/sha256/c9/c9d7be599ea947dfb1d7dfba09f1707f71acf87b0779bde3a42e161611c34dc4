@@ -1,0 +1,159 @@
+# MCG Geometry-First — Phase 0 — M Contract
+
+**Date:** 2026-05-19.
+**Phase:** 0 — M contract and aperture setup.
+**Status:** Discovery campaign deliverable. Not a scientific conclusion.
+**Authority:** [`Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md`](../../Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md) §1, §8.
+
+---
+
+## 0. Purpose of this contract
+
+This contract pins what M (substrate) explains and what remains eligible for C and G discovery in this campaign. It is the boundary condition for everything in Phases 1–4. The contract is referenced by all subsequent characterizations, ledger entries, and confirmatory pre-registries.
+
+The contract is **stable for the duration of the campaign**. If a future discovery requires the contract to change (e.g., a sub-result of BACL is sharpened, or M's coverage shifts), update by a dated entry in the iteration log §6 below — do not rewrite silently.
+
+---
+
+## 1. What M explains (BACL as consumed substrate law)
+
+**M is the BACL law as the M-filter of the campaign.** It is not a research target in this campaign; the BACL invariant audit suite already proved and verified it.
+
+### 1.1 The BACL primitive (M's core claim, restated)
+
+For `a, b ∈ 𝔽⁺` in any IEEE 754 binary format, if `ulp(a) ≥ ulp(b)`, then `a − b = j · ulp(b)` for some integer `j ∈ ℤ`.
+
+This is a **statement of lattice membership**: the real-valued subtraction `a − b` lies on the integer-multiples lattice of `ulp(b)`. M is responsible for that membership.
+
+References:
+- [`bacl_invariant_audit/closeout.md`](../bacl_invariant_audit/closeout.md) — proof + 7-chain × 2-format × 7,000-record verification.
+- [`bacl_subnormal_audit/closeout.md`](../bacl_subnormal_audit/closeout.md) — subnormal extension; unified hypothesis.
+- [`bacl_multi_format_audit/closeout.md`](../bacl_multi_format_audit/closeout.md) — float16, float32 verification.
+
+### 1.2 Consequence chains M is responsible for
+
+- **The c2 lattice theorem** (in-scope `f_float ≥ 2^(−1021)`): `c2 = j · ulp(f_float)` for integer j. Amendments I–IV. M-owned, with the sqrt-specific tightening `|j| ≤ 1` empirically observed (Amendment IV).
+- **Conjecture C** (definition-grounded, Gate 0 landed 2026-05-19): `V_2 = round(R · R) ≥ 2^k` for `f ∈ [2^k, 2^(k+1))` in float64 normal range. M-owned scope condition.
+- **Cancellation-residue-magnitude observables** (anti-candidates): residues of the form `round(V − f)` where V and f share a binade are *on* the BACL lattice; their magnitude is M-owned. Identified empirically (Gate 3 closeout §7.A) and structurally (c2 lattice theorem).
+
+### 1.3 Cancellation-residue-magnitude observables are anti-candidates
+
+By construction, any candidate G observable whose form is "the magnitude of a cancellation residue between BACL-conformant operands" fails the M-filter trivially: integer-j subtraction at the natural ulp collapses it to literal zero. **The Gate 3 audit is the canonical case study** ([`mcg_gate_3_killswitch/closeout.md`](../mcg_gate_3_killswitch/closeout.md) §7.A). This is the load-bearing methodology rule the present campaign inherits — see §3 below.
+
+---
+
+## 2. What M does NOT explain
+
+The boundary of M's coverage is the boundary of the campaign's discovery aperture.
+
+### 2.1 M does not explain which lattice state is selected
+
+BACL says: residue is on the lattice. **BACL does not say which lattice point j ∈ ℤ a specific computation selects.**
+
+For a specific (fixture, route, parameter point) triple, the computation produces a specific float result, which corresponds to a specific integer j. That j is not predicted by BACL alone. The selection depends on:
+- The fixture's algebraic structure (which intermediates round, in what order, at what scale).
+- The route's specific operation sequence.
+- The parameter point's relationship to the float lattice (where in a binade the operands fall, ulp ratios at rounding steps).
+- Whatever else exists.
+
+**It is the "whatever else exists" that this campaign investigates.** Specifically, whether geometric features of the constraint surface (curvature, Hessian signature, principal-curvature ratios, null-tangent alignment events, etc.) organize the j-selection.
+
+### 2.2 M does not explain transition grammar between states
+
+The sequence of j values across a parameter sweep — its run-length structure, transition statistics, autocorrelation, family of repeating patterns — is also not predicted by BACL alone. BACL says each value is on the lattice; it does not say how the trajectory walks the lattice as parameters change.
+
+### 2.3 M does not explain route-pair phase relationships
+
+For two algebraically-equivalent routes A and B, their respective j-values `(j_A, j_B)` form a bivariate symbol. BACL predicts each j individually is on its own lattice but does not predict their joint distribution or correlation structure. The route-pair phase is in M's complement.
+
+### 2.4 M does not explain conditioning amplification
+
+M's lattice prediction is value-level. The *amplification* of rounding error by ill-conditioned operations (cancellation, near-singular maps, ill-conditioned eigenvalue structure) is a separate phenomenon. This is what C is responsible for, and is **structurally upstream of any G claim**: variation in observables can be conditioning-driven even when geometry varies along with conditioning.
+
+---
+
+## 3. Promotion / demotion rules implied by the M contract
+
+These rules are derived from §1 and §2 and are binding for the campaign's candidate ledger.
+
+### 3.1 Magnitude-only residue collapse is M-owned
+
+> *Magnitude-only residue collapse is M-owned unless symbolic structure remains.*
+
+Operationalized:
+- A candidate observable whose form is `|residue|` or `|f_route_A − f_route_B|` or `|round(V − f)|` is **anti-candidate** by structural certainty when BACL hypothesis applies to the load-bearing subtractions.
+- A candidate observable that *survives* M-subtraction with non-trivial symbolic structure (e.g., a j-sequence, a route-pair joint distribution, a transition grammar) remains eligible.
+- Symbolic structure means: discrete-valued, distributional, or topological content that is *not* predicted by M alone. Variance > 0 across a sweep is the minimal qualifier; richer structural fingerprints (entropy, mutual information with a geometric covariate) are stronger qualifiers.
+
+### 3.2 G candidates must target selection / organization among BACL-admissible states
+
+> *G candidates must target selection/organization among BACL-admissible states.*
+
+Operationalized:
+- A G candidate's observable is a function of which j is selected at each point — not the magnitude of the residue. The j-symbol, the j-sequence, the route-pair (j_A, j_B), the transition class between adjacent j's, the fingerprint slot identifying a route-pair pattern: these are the eligible carrier types.
+- A G candidate's mechanism must state *why geometry organizes the selection*, with a concrete counterfactual and at least one geometry-strata-vs-route-pair-phase relation that is not predicted by C alone.
+
+### 3.3 C candidates must target conditioning amplification / stiffness
+
+> *C candidates must target conditioning amplification/stiffness.*
+
+Operationalized:
+- A C candidate is a positively-defined quantity that tracks a recognized conditioning property (condition number, Hessian spectrum, finite-difference perturbation amplification slope, near-null spectral gap, etc.) monotonically on known-conditioning fixtures.
+- C is **not defined by residual elimination** ("whatever is left after M and G"). That definition is forbidden; cf. §17 banned-claims rule of the campaign handoff.
+- C is **a vector**, not a scalar (per §11 of the campaign handoff): different conditioning aspects (Jacobian sensitivity, Hessian spread, near-null gap, perturbation slope, rank stability, null-direction stability) are separate components of the C profile.
+
+### 3.4 No G claim without C profile in scope
+
+A correlation between geometry and a symbolic readback is **C-confounded by default**. The candidate ledger state for such an observable is `C_confounded` until a C profile is run on the same data and the conditioning explanation is empirically excluded.
+
+### 3.5 No route-pair G claim without path/operand separation telemetry
+
+Per the active dual-arm lesson (campaign handoff §1.4): any route-divergence or dual-readback observable that lacks path identity, operand identity, operand offset, local lattice unit, offset level, and separation class **cannot be admitted as independent G evidence**, regardless of how striking its correlation. A same-path or zero-offset read fails this requirement structurally.
+
+### 3.6 No G claim that is grid-family-dependent
+
+If a candidate's distinguishing structure varies with grid family (canonical, linear, log-spaced, jittered) in a way that destroys the geometric interpretation, the candidate is `grid_artifact_candidate`. Grid-stability characterization (Phase 2c) is part of the ledger's evidence base.
+
+### 3.7 Normalization provenance is part of the candidate, not metadata
+
+Every lattice/phase readback observable must declare its normalization unit (`ulp(final_output)` / `ulp(rounding_step_operand)` / `ulp(control_coordinate)`), its unit source value and binade, the route stage, and the normalization role. If two defensible normalizations exist (e.g., `J_final` vs `J_step`), they are **sibling observables**, not the "same" observable; the ledger entries are distinct.
+
+---
+
+## 4. The campaign's central question (stated for reference)
+
+Per the campaign handoff §0:
+
+> *Does restraint curvature organize the selection of BACL-admissible lattice states?*
+
+The intended decomposition `R = M ⊕ C ⊕ G` with:
+- **M:** substrate-mandated lattice membership / availability (per §1).
+- **C:** conditioning amplification and stiffness response (per §3.3, characterized by Phase 2b).
+- **G:** geometry-conditioned selection among BACL-admissible lattice states (per §3.2, investigated by Phases 1, 2, 2d).
+
+The campaign tests the discovery aperture, not a fixed hypothesis. **The most valuable early outcomes are likely sharpenings of the aperture (e.g., "this observable is grid-artifact"), not positive G discoveries** (campaign handoff §20).
+
+---
+
+## 5. The contract's relationship to prior campaigns
+
+- **`mcg_discovery/`** (residue-first discovery campaign, 2026-05-19): SUPERSEDED by the current geometry-first campaign. See [`../mcg_discovery/SUPERSEDED.md`](../mcg_discovery/SUPERSEDED.md). Findings re-absorbed into this contract: the magnitude-vs-symbol reframe (§1.3, §3.1), the normalization-ambiguity discovery (§3.7), and the empirical confirmation that route-divergence-magnitude is anti-candidate.
+- **`mcg_gate_3_killswitch/`** (Gate 3 kill-switch audit, 2026-05-19): closed independent artifact. Cited by this contract for the c2-style cancellation-residue methodology finding (§3.1). Not reopened.
+- **`bacl_*` audits + `conjecture_c_proof_audit` + `c2_lattice_sharpness_audit`**: all M-side substrate results. Consumed as tools by this campaign per §1. Not relitigated.
+
+---
+
+## 6. Iteration log
+
+- **2026-05-19** — Initial M contract drafted. Adopts BACL primitive + c2 + Conjecture C as M-owned; specifies M's complement in §2; encodes promotion/demotion rules in §3; references prior campaigns in §5.
+
+---
+
+## 7. References
+
+- [`Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md`](../../Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md) — Campaign authority document.
+- [`bacl_invariant_audit/closeout.md`](../bacl_invariant_audit/closeout.md) — BACL primitive.
+- [`conjecture_c_proof_audit/closeout.md`](../conjecture_c_proof_audit/closeout.md) — Conjecture C, definition-grounded.
+- [`c2_lattice_sharpness_audit/closeout.md`](../c2_lattice_sharpness_audit/closeout.md) — c2 lattice theorem, Amendments I–IV.
+- [`mcg_gate_3_killswitch/closeout.md`](../mcg_gate_3_killswitch/closeout.md) §7.A — Cancellation-residue methodology lesson (anti-candidate rule).
+- [`../mcg_discovery/SUPERSEDED.md`](../mcg_discovery/SUPERSEDED.md) — Provenance of the abandoned residue-first campaign.

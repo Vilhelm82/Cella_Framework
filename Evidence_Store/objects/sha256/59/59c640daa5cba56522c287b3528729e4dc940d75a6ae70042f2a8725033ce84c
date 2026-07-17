@@ -1,0 +1,47 @@
+{
+  "task": "grok_f1_f2_common_mode_ulp_lattice_geometry",
+  "n_points_per_fixture": 30001,
+  "sampling": "log_dense_sterbenz_boundary",
+  "results": {
+    "schwarzschild": {
+      "n_points": 30001,
+      "j_variance": 0.5010003660855938,
+      "j_max_abs": 1.0,
+      "j_median": 0.0,
+      "unique_rounded_to_0.1": 3,
+      "fraction_within_0.1_of_discrete_lattice": 1.0,
+      "negative_control_j_variance_f1f4": 92170258.2545659,
+      "negative_control_j_max_abs_f1f4": 522751.0
+    },
+    "sr": {
+      "n_points": 30001,
+      "j_variance": 0.13551549712104535,
+      "j_max_abs": 0.9998229549957515,
+      "j_median": -0.022755702957510948,
+      "unique_rounded_to_0.1": 21,
+      "fraction_within_0.1_of_discrete_lattice": 0.44551848271724276,
+      "negative_control_j_variance_f1f4": 0.5074255332895302,
+      "negative_control_j_max_abs_f1f4": 2.0
+    },
+    "pure_algebraic": {
+      "n_points": 30001,
+      "j_variance": 0.08384525086591609,
+      "j_max_abs": 0.5,
+      "j_median": 0.0,
+      "unique_rounded_to_0.1": 11,
+      "fraction_within_0.1_of_discrete_lattice": 0.40008666377787405,
+      "negative_control_j_variance_f1f4": 0.46735146271653955,
+      "negative_control_j_max_abs_f1f4": 1.0
+    },
+    "cbrt": {
+      "n_points": 30001,
+      "j_variance": 0.08384525086591609,
+      "j_max_abs": 0.5,
+      "j_median": 0.0,
+      "unique_rounded_to_0.1": 11,
+      "fraction_within_0.1_of_discrete_lattice": 0.40008666377787405,
+      "negative_control_j_variance_f1f4": 4.610153477979075,
+      "negative_control_j_max_abs_f1f4": 8.0
+    }
+  }
+}

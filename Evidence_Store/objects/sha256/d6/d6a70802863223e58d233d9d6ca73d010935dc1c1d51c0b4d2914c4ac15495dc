@@ -1,0 +1,203 @@
+"""
+Dual-arm v10 behavior verification tests.
+
+Frozen 2026-05-17.
+Preregistry: Build_Docs/Reports/dual_arm_behavior_verification/preregistry.md
+
+Tests V1, V2, V4, V5 from the verification preregistry. Each test traces explicitly
+to the preregistry section. V3 is a code-inspection audit and lives as markdown at
+Build_Docs/Reports/dual_arm_behavior_verification/test_v3_diagnostic_route_audit.md
+(not a pytest test).
+"""
+import re
+from pathlib import Path
+
+import scratch.run_foldreadback_probe0_v10_active_dualarm as v10
+
+
+ROOT = Path(__file__).resolve().parents[1]
+V10_SOURCE = ROOT / "scratch" / "run_foldreadback_probe0_v10_active_dualarm.py"
+
+
+# === Test V1: Path separation plumbing ===
+# Preregistry §3, Test V1.
+
+def test_v1a_sr_fixture_structurally_produces_zero_separation() -> None:
+    """V1a: The SR fixture's path-separation function produces zero separation by
+    construction. This is the negative control. The function literally assigns
+    arm_n_operand = arm_w_operand (v10:702-703), so operand_delta is always 0.0
+    on the SR fixture as currently coded.
+    """
+    sample_record = {
+        "beta": 0.5,
+        "armN": {"active": True, "valid": True},
+        "level_unit": None,
+    }
+    sample_scan: dict[str, object] = {}
+    result = v10.sr_path_separation_for_record(sample_scan, sample_record)
+    assert result["separation_observable"] is True
+    assert result["operand_equal"] is True
+    assert result["operand_delta"] == 0.0
+    assert result["offset_level"] == 0.0
+    assert result["separation_class"] == "zero_operand_offset"
+
+
+def test_v1b_classification_logic_handles_nonzero_separation_branch() -> None:
+    """V1b: The classification conditional in sr_path_separation_for_record correctly
+    maps non-zero operand_delta to 'nonzero_operand_offset'. Verified via
+    source-inspection because the SR fixture as written cannot reach this branch
+    (arm_n_operand = arm_w_operand is hardcoded).
+    """
+    source = V10_SOURCE.read_text(encoding="utf-8")
+    # The classification logic uses: if operand_delta != 0.0 -> nonzero_operand_offset
+    has_nonzero_branch = re.search(
+        r"if\s+operand_delta\s*!=\s*0\.0\s*:\s*\n\s*separation_class\s*=\s*\"nonzero_operand_offset\"",
+        source,
+    )
+    assert has_nonzero_branch, (
+        "Expected classification branch (operand_delta != 0.0 -> 'nonzero_operand_offset') "
+        "not found in v10 source. The conditional logic for nonzero separation must exist."
+    )
+
+
+def test_v1c_arm_n_operand_is_hardcoded_copy_of_arm_w_operand() -> None:
+    """V1c: Document that the SR fixture's arm_n_operand is a literal copy of
+    arm_w_operand. This is the structural constraint that makes V1a a negative
+    control rather than a meaningful positive test on the operational fixture.
+    """
+    source = V10_SOURCE.read_text(encoding="utf-8")
+    has_copy = re.search(r"arm_n_operand\s*=\s*arm_w_operand", source)
+    assert has_copy, (
+        "Expected literal 'arm_n_operand = arm_w_operand' in v10 source. "
+        "If this changes, V1a's interpretation as a negative control must be reassessed."
+    )
+
+
+# === Test V2: ARM-N validity uses own predicate ===
+# Preregistry §3, Test V2.
+# Note: existing test_armN_validity_independent_of_armW_validity in
+# test_foldreadback_probe0_v10_active_dualarm.py already covers this. This test
+# is a duplicate with explicit traceability to the verification preregistry.
+
+def test_v2_armN_validity_independent_of_armW_data() -> None:
+    """V2: ARM-N's valid field depends only on ARM-N's own data (enough_points +
+    at least one nondegenerate ARM-N functional), not on ARM-W's verdict.
+    """
+    arm_n_valid_when_any_nondegenerate = v10.arm_n_validity_from_parts(
+        True,
+        {
+            "level_histogram": "nondegenerate",
+            "transition": "saturated",
+            "signed_occ": "collapsed",
+            "lattice_rank": "collapsed",
+        },
+    )
+    assert arm_n_valid_when_any_nondegenerate is True
+
+    arm_n_invalid_when_all_degenerate = v10.arm_n_validity_from_parts(
+        True,
+        {
+            "level_histogram": "saturated",
+            "transition": "saturated",
+            "signed_occ": "collapsed",
+            "lattice_rank": "collapsed",
+        },
+    )
+    assert arm_n_invalid_when_all_degenerate is False
+
+    arm_n_invalid_when_not_enough_points = v10.arm_n_validity_from_parts(
+        False, {"level_histogram": "nondegenerate"}
+    )
+    assert arm_n_invalid_when_not_enough_points is False
+
+
+# === Test V4: Pre-declared selection ===
+# Preregistry §3, Test V4.
+
+def test_v4a_arm_func_lists_are_module_level_literals() -> None:
+    """V4a: ARM_W_FUNCS and ARM_N_FUNCS are pre-declared at module level with
+    the expected functional names.
+    """
+    assert v10.ARM_W_FUNCS == ["sign_pattern"]
+    assert v10.ARM_N_FUNCS == ["level_histogram", "transition", "signed_occ", "lattice_rank"]
+
+
+def test_v4b_arm_func_lists_not_reassigned_in_source() -> None:
+    """V4b: Source-inspect that ARM_W_FUNCS and ARM_N_FUNCS are not reassigned
+    anywhere beyond their module-level declaration, and that no mutating method
+    is called on them. This verifies pre-declaration is HONORED by the code;
+    it does not prove it's ENFORCED (no assertion guards a future refactor).
+    """
+    source = V10_SOURCE.read_text(encoding="utf-8")
+
+    arm_w_assignments = re.findall(r"^ARM_W_FUNCS\s*=", source, re.MULTILINE)
+    arm_n_assignments = re.findall(r"^ARM_N_FUNCS\s*=", source, re.MULTILINE)
+    assert len(arm_w_assignments) == 1, (
+        f"ARM_W_FUNCS reassigned {len(arm_w_assignments)} times, expected 1 (module-level only)"
+    )
+    assert len(arm_n_assignments) == 1, (
+        f"ARM_N_FUNCS reassigned {len(arm_n_assignments)} times, expected 1 (module-level only)"
+    )
+
+    for mutator in ("append", "remove", "extend", "insert", "pop", "clear"):
+        assert f"ARM_W_FUNCS.{mutator}" not in source, (
+            f"ARM_W_FUNCS.{mutator} found in source — list mutation breaks pre-declaration"
+        )
+        assert f"ARM_N_FUNCS.{mutator}" not in source, (
+            f"ARM_N_FUNCS.{mutator} found in source — list mutation breaks pre-declaration"
+        )
+
+
+# === Test V5: ARM-W-derived activation ===
+# Preregistry §3, Test V5.
+# Note: existing test_armN_activation_depends_on_armW_falloff_not_W_overlap in
+# test_foldreadback_probe0_v10_active_dualarm.py covers part of this. We add
+# more cases for completeness.
+
+def test_v5a_no_falloff_means_no_activation() -> None:
+    """V5a: When ARM-W produces no below_floor states, no activation intervals exist."""
+    assert v10.activation_intervals_from_falloff(["readable"] * 5, guard=1) == []
+    assert v10.activation_intervals_from_falloff(["readable", "warning", "recovered"], guard=1) == []
+
+
+def test_v5b_falloff_creates_activation_with_guard_window() -> None:
+    """V5b: When ARM-W declares below_floor, an activation interval forms with
+    the configured guard window expanding around the core.
+    """
+    one_below = v10.activation_intervals_from_falloff(
+        ["readable", "below_floor", "readable"], guard=1
+    )
+    assert one_below == [{"core_start": 1, "core_end": 1, "active_start": 0, "active_end": 2, "guard": 1}]
+
+    two_below = v10.activation_intervals_from_falloff(
+        ["readable", "below_floor", "below_floor", "readable"], guard=1
+    )
+    assert two_below == [{"core_start": 1, "core_end": 2, "active_start": 0, "active_end": 3, "guard": 1}]
+
+
+def test_v5c_activation_reason_classifies_core_vs_guard_vs_none() -> None:
+    """V5c: activation_reason correctly classifies a record index as 'core_gap',
+    'guard', or 'none' depending on whether it falls in the core or guard window.
+    """
+    interval = [{"core_start": 5, "core_end": 7, "active_start": 4, "active_end": 8, "guard": 1}]
+    # Core gap
+    assert v10.activation_reason(5, interval) == "core_gap"
+    assert v10.activation_reason(6, interval) == "core_gap"
+    assert v10.activation_reason(7, interval) == "core_gap"
+    # Guard window
+    assert v10.activation_reason(4, interval) == "guard"
+    assert v10.activation_reason(8, interval) == "guard"
+    # Outside
+    assert v10.activation_reason(3, interval) == "none"
+    assert v10.activation_reason(9, interval) == "none"
+
+
+def test_v5d_multiple_falloff_intervals_are_distinct() -> None:
+    """V5d: Multiple non-adjacent falloff regions produce separate activation intervals."""
+    two_intervals = v10.activation_intervals_from_falloff(
+        ["readable", "below_floor", "readable", "readable", "below_floor", "readable"],
+        guard=1,
+    )
+    assert len(two_intervals) == 2
+    assert two_intervals[0]["core_start"] == 1
+    assert two_intervals[1]["core_start"] == 4

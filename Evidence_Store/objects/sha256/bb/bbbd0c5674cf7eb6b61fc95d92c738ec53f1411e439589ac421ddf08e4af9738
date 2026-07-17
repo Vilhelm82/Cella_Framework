@@ -1,0 +1,54 @@
+{
+  "schwarzschild_r5": {
+    "same_Rp_bits": true,
+    "Rp_hex": "0x1.3333333333334p-1",
+    "F1": 1.1102230246251565e-16,
+    "F2": 1.1102230246251565e-16,
+    "observed_float_diff": 0.0,
+    "closed_form_float": 0.0,
+    "float_resid": 0.0,
+    "rp_cancels_in_exact_reals": true,
+    "exact_diff_minus_closed": 0.0
+  },
+  "sr_b0.6": {
+    "same_Rp_bits": true,
+    "Rp_hex": "0x1.47ae147ae147cp-1",
+    "F1": 1.1102230246251565e-16,
+    "F2": 1.1102230246251565e-16,
+    "observed_float_diff": 0.0,
+    "closed_form_float": 0.0,
+    "float_resid": 0.0,
+    "rp_cancels_in_exact_reals": true,
+    "exact_diff_minus_closed": 0.0
+  },
+  "pa_x0.3": {
+    "same_Rp_bits": true,
+    "Rp_hex": "0x1.6666666666667p-1",
+    "F1": 1.1102230246251565e-16,
+    "F2": 5.551115123125783e-17,
+    "observed_float_diff": 5.551115123125783e-17,
+    "closed_form_float": 0.0,
+    "float_resid": 5.551115123125783e-17,
+    "rp_cancels_in_exact_reals": true,
+    "exact_diff_minus_closed": 0.0
+  },
+  "cbrt_x0.3": {
+    "same_Rp_bits": true,
+    "Rp_hex": "0x1.6666666666667p-1",
+    "F1": 1.1102230246251565e-16,
+    "F2": 5.551115123125783e-17,
+    "observed_float_diff": 5.551115123125783e-17,
+    "closed_form_float": 0.0,
+    "float_resid": 5.551115123125783e-17,
+    "rp_cancels_in_exact_reals": true,
+    "exact_diff_minus_closed": 0.0
+  },
+  "_summary": {
+    "subclaim_A_same_Rp_bits_in_F1_and_F2": true,
+    "subclaim_A_note": "F1 and F2 are evaluated from the SAME R**p float64 value (bit-identical). Verified via .hex() equality.",
+    "subclaim_B_float_F1minusF2_equals_closed_exactly": false,
+    "subclaim_B_max_float_resid": 5.551115123125783e-17,
+    "subclaim_B_note": "In EXACT reals R**p cancels and F1-F2 == (1-x_term)-f_direct exactly (rp_cancels_in_exact_reals=True). In float64 the already-rounded F1,F2 leave a residual bounded by ~1 ULP of the F magnitude (~1e-16). So R**p's *value* cancels algebraically and is common-mode, but its round-off is not bit-erased by the float subtraction.",
+    "rp_cancels_in_exact_reals_all": true
+  }
+}

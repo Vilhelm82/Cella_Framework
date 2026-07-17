@@ -1,0 +1,43 @@
+{
+  "rank": 70,
+  "lift": 9.11,
+  "count": 2,
+  "families": 2,
+  "a": {
+    "id": "OBJ:bar-m-epsilon",
+    "label": "bar m_epsilon",
+    "standard_term": "complementary elliptic modulus m' = 1 - m",
+    "nomenclature": "identical-to",
+    "symbols": [
+      "m_epsilon"
+    ]
+  },
+  "b": {
+    "id": "OBJ:signed-contact-walls-and-parity-ell-epsilon-s-epsilon",
+    "label": "Signed contact walls and parity (ell_epsilon, s_epsilon)",
+    "standard_term": "sign-indexed hyperplane arrangement in mass parameters with an associated parity function",
+    "nomenclature": "novel",
+    "symbols": [
+      "ell_epsilon",
+      "s_epsilon"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-0993",
+      "type": "formula",
+      "claim_status": null,
+      "label": "Exact identities for ell_epsilon and R_epsilon",
+      "summary": "\\ell_\\epsilon^2=z_{0,\\epsilon}, \\qquad R_\\epsilon\\ell_\\epsilon = \\frac{t^7A_\\epsilon m_\\epsilon}{2d_\\epsilon} \\tag{5.6} are exact.",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md"
+    },
+    {
+      "uid": "U-1832",
+      "type": "theorem",
+      "claim_status": "refuted",
+      "label": "Verification checklist (Section 10)",
+      "summary": "Run:\n    python3 verify_dbp_landen_trace_theorem_v1_1.py\nThe verifier first executes every v1.0 isogeny, trace, residue, modular-polynomial, and non-torsion gate. It then checks:\n- \\(n_\\epsilon=-m_\\epsilon^2/(1-2m_\\epsil",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md"
+    }
+  ]
+}

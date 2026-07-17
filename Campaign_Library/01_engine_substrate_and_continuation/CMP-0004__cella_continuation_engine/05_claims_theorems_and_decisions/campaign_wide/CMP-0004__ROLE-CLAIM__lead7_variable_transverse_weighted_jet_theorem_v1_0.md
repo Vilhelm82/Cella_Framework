@@ -1,0 +1,1 @@
+../../../../../Papers_Library/02_theorems_and_lemmas/local_curvature_and_black_hole_metrics/LEAD7_VARIABLE_TRANSVERSE_WEIGHTED_JET_THEOREM_v1.0.md

@@ -1,0 +1,503 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue}
+
+\theoremstyle{plain}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{construction}{Construction}
+\newtheorem{conjecture}{Conjecture}
+\theoremstyle{remark}
+\newtheorem{result}{Computational Result}
+\newtheorem{remark}{Remark}
+
+% --- certainty-tier tags, used throughout ---
+\newcommand{\Proven}{\textsf{[proven]}}
+\newcommand{\Symbolic}{\textsf{[symbolic, all $m_D$]}}
+\newcommand{\Measured}{\textsf{[computer-verified]}}
+\newcommand{\Conj}{\textsf{[conjecture]}}
+\newcommand{\Interp}{\textsf{[interpretation]}}
+
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\Gal}{\operatorname{Gal}}
+\newcommand{\Ftil}{\widetilde{F}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+
+\title{\textbf{Imprimitive Wreath Monodromy of Self-Composed\\ Constraint Surfaces}\\[4pt]
+\large The seam as imprimitivity system, the omega substrate,\\ and a forward/backward recovery asymmetry}
+\author{William Lloyd\\ \small Independent researcher, Coffs Harbour NSW, Australia\\[2pt]
+\small \emph{Draft --- session results; certainty tiers marked inline.}}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We study the branched-cover structure that arises when a constraint surface
+$F(D,S,P)=0$, carrying a directive--substrate--product (DBP) role assignment, is
+composed with itself by identifying the product of one stage with the directive
+of the next. Eliminating the shared variable (the \emph{seam}) yields a
+four-variable hypersurface $\Ftil(D_1,S_1,S_2,P_2)=0$ whose monodromy we compute
+directly. Three findings stand out. First, there is no single monodromy group:
+each role-output cover carries its own, and each is a \emph{full wreath product
+that is imprimitive with respect to the seam}. For $F = D^{m_D}+DS+P^{m_P}-3$ the
+product cover is $\Sym(m_P)\wr\Sym(m_P)$ and, at $m_P=2$, the directive cover is
+$\Sym(m_D)\wr\Sym(m_D)$, with degree spectrum $(m_D^2,m_D,m_P,m_P^2)$. Second, the
+second-stage substrate $S_2$ is an \emph{omega role}: it controls the position of
+the downstream product branch while leaving the seam invariant
+($\partial A/\partial S_2=0$, $\partial C/\partial S_2=1$), and looping it steers
+exactly one product branch pair at a time. Third, iterated composition produces a
+sharp recovery asymmetry: reconstructing the root directive over $n$ stages is
+degree $m_D^{\,n}$ while producing the final product is degree $m_P^{\,n}$. We
+also bound a tempting ``wave/phase'' reading: the abelianisation of the directive
+group is $(\Z/2)^2$, so its $U(1)$ characters are signs and the higher (cubic)
+structure is non-abelian and phaseless. Results are computer-verified on two
+surfaces, the cubic ($m_D=3,m_P=2$) and the keystone ($m_D=m_P=2$); the keystone
+was chosen as an adversarial falsification test and passed.
+\end{abstract}
+
+\tableofcontents
+
+\section{Introduction}
+
+A directive-based product (DBP) presents an algebraic relation
+$D\oplus S=P$ as a constraint surface $F(D,S,P)=0$ together with an assignment of
+\emph{roles}: $D$ is the directive (the active operator), $S$ the substrate (the
+passive operand), and $P$ the product. The framework's defining intuition is an
+asymmetry: $D$ acting on $S$ yields $P$, whereas ``$S$ acting on $D$'' is a
+category error. As an \emph{algebraic} object, however, $F=0$ is symmetric---one
+may solve for any variable---so the directional restriction appears to dissolve.
+The first contribution of this paper is to show that it does not dissolve; it is
+\emph{re-encoded in the geometry}, as an asymmetry in the degree and monodromy of
+the inverse problems.
+
+The natural way to probe this is composition. We compose a DBP surface with itself
+by the \emph{forward glue} $D_2 := P_1$: the product of stage one becomes the
+directive of stage two (output feeds next operator). Eliminating the shared
+variable produces a single hypersurface $\Ftil=0$, and we ask what survives of the
+role structure in its branched-cover geometry.
+
+\paragraph{Summary of results and certainty tiers.}
+Throughout we tag each statement by how strongly it is established: \Proven\ (an
+exact algebraic fact), \Symbolic\ (verified symbolically for the whole family
+$m_D=2,3,4,\dots$ at $m_P=2$ but not proved in closed form for all $m_D$),
+\Measured\ (established by numerically certified monodromy on a specific surface,
+with the gates of \S\ref{sec:methods}), \Conj\ (a conjecture, with the supporting
+evidence stated), and \Interp\ (an interpretive reading, not a theorem).
+
+\begin{enumerate}[leftmargin=1.4em]
+\item \textbf{No single Galois group; per-cover wreaths.} Each role-output cover of
+$\Ftil$ has its own monodromy group, and each is a full wreath product imprimitive
+with respect to the seam (\S\ref{sec:product}--\ref{sec:directive}). \Measured/\Symbolic
+\item \textbf{Degree spectrum law.} For $F=D^{m_D}+DS+P^{m_P}-3$ at $m_P=2$, the
+spectrum of $(D_1,S_1,S_2,P_2)$ in $\Ftil$ is $(m_D^2,m_D,m_P,m_P^2)$. \Symbolic
+\item \textbf{Product cover $\cong \Sym(m_P)\wr\Sym(m_P)$}, directive cover
+$\cong\Sym(m_D)\wr\Sym(m_D)$ at $m_P=2$; the seam is the block system in both.
+Cubic: $D_4$ (product) and $S_3\wr S_3$ of order $1296$ (directive). Keystone:
+$D_4$ on both. \Measured
+\item \textbf{$D_4$ equals the seam-partition stabiliser.} For the product cover,
+the monodromy group is exactly the stabiliser in $S_4$ of the seam-aligned
+partition $\{\{D_1,S_1\},\{S_2,P_2\}\}$; three independent derivations agree
+(\S\ref{sec:product}). \Measured
+\item \textbf{The omega substrate.} $S_2$ controls the downstream product-branch
+position with the signature $\partial A/\partial S_2=0$, $\partial C/\partial
+S_2=1$; loops in $S_2$ steer exactly one product pair (\S\ref{sec:omega}). \Measured
+\item \textbf{Recovery asymmetry.} Over $n$ stages, root-directive recovery is
+degree $m_D^{\,n}$ and final-product production is degree $m_P^{\,n}$; for the cubic
+$3^n$ vs $2^n$ (\S\ref{sec:iterate}). \Symbolic
+\item \textbf{Abelian boundary on the phase reading.} The abelianisation of
+$S_3\wr S_3$ is $(\Z/2)^2$; its $U(1)$ characters take values in $\{\pm1\}$, and the
+cube-root structure lives in the non-abelian part with no $U(1)$ character
+(\S\ref{sec:abelian}). \Measured
+\end{enumerate}
+
+\section{The self-glue construction}
+\label{sec:construction}
+
+\begin{definition}[DBP surface, worked family]
+We work with
+\[
+  F(D,S,P) \;=\; D^{m_D} + D\,S + P^{m_P} - 3 \;=\; 0,
+\]
+with integers $m_D,m_P\ge 2$, role assignment $(D,S,P)=(\text{directive},
+\text{substrate},\text{product})$. The two running examples are the
+\emph{cubic} ($m_D=3,m_P=2$, i.e.\ $D^3+DS+P^2-3$) and the \emph{keystone}
+($m_D=m_P=2$, i.e.\ $D^2+DS+P^2-3$).
+\end{definition}
+
+\begin{construction}[Forward self-glue]
+\label{con:glue}
+Take two copies of $F$. Stage one is $F(D_1,S_1,P_1)=0$; stage two is
+$F(D_2,S_2,P_2)=0$ with the \emph{seam identification} $D_2:=P_1$. Writing
+\[
+  A \;:=\; 3 - D_1^{m_D} - D_1 S_1, \qquad\text{so that}\qquad P_1^{m_P}=A,
+\]
+stage two becomes $P_1^{m_D}+P_1 S_2 + P_2^{m_P}-3=0$. Eliminating the seam
+variable $P_1$ (by resultant with $P_1^{m_P}-A$) yields a four-variable
+hypersurface
+\[
+  \Ftil(D_1,S_1,S_2,P_2) = 0 .
+\]
+\end{construction}
+
+\noindent At $m_P=2$ the seam relation is $P_1^2=A$ and the elimination is
+explicit. For the cubic, with $C:=A+S_2$ and $B:=3-P_2^2$, stage two reads
+$P_1 C = B$, so $P_1^2 = A$ gives
+\[
+  \boxed{\;\Ftil_{\text{cubic}} = B^2 - A\,C^2\;}\qquad (A = 3-D_1^3-D_1S_1,\; C=A+S_2,\; B=3-P_2^2).
+\]
+For the keystone, $P_1^2=A$ makes the directive term $D_2^2=P_1^2=A$ a constant in
+$P_1$, so stage two reads $P_1 S_2 = 3-A-P_2^2$ and hence
+\[
+  \boxed{\;\Ftil_{\text{key}} = (3-A-P_2^2)^2 - A\,S_2^2\;}\qquad (A=3-D_1^2-D_1S_1).
+\]
+
+\begin{definition}[Lifted correspondence]
+Rather than work on $\Ftil$ alone we retain the seam $P_1$ as an explicit fibre
+coordinate. At $m_P=2$ the lifted system is the tower of two quadratics
+\[
+  P_1^2 = A, \qquad P_2^2 = 3 - P_1\,(\text{stage-two coupling}),
+\]
+which for the cubic is $P_2^2 = 3 - P_1 C$ and for the keystone $P_2^2 = 3 -
+P_1(P_1+S_2)$. The seam is the intermediate sheet over which the product sits.
+\end{definition}
+
+\section{Role-output covers and the degree spectrum}
+\label{sec:spectrum}
+
+$\Ftil=0$ is a three-dimensional hypersurface in four variables; fixing which
+three variables form the base and solving for the fourth gives a finite branched
+cover. We call these the \emph{role-output covers}.
+
+\begin{proposition}[No single Galois group]
+\label{prop:nosingle}
+The monodromy group of $\Ftil$ depends on the choice of output role. Concretely,
+the directive cover (solve for $D_1$) and the product cover (solve for $P_2$) have
+different degrees and different groups. A naive ``$\Gal(\Ftil/\text{base})$'' over
+a base in which the seam variable $A$ is treated as a free parameter is the group
+of a \emph{decoupled} problem and does not describe any actual cover.
+\end{proposition}
+
+\begin{remark}
+Proposition~\ref{prop:nosingle} is a correction of a natural error: one is tempted
+to assign $\Ftil$ a single group (e.g.\ a product $S_3\times D_4$ obtained by
+treating $A$ as free). This fails on a counting obstruction---the directive cover
+is transitive of degree $9$, so $9$ must divide its order, but
+$|S_3\times D_4|=48$ is not divisible by $9$. The honest object is the
+per-output-cover group.
+\end{remark}
+
+\begin{result}[Degree spectrum law, $m_P=2$]
+\label{res:spectrum}
+For $F=D^{m_D}+DS+P^2-3$ the degrees of $(D_1,S_1,S_2,P_2)$ in $\Ftil$ are
+\[
+  (\deg_{D_1},\deg_{S_1},\deg_{S_2},\deg_{P_2}) \;=\; (m_D^2,\; m_D,\; m_P,\; m_P^2),
+\]
+verified symbolically for $m_D\in\{2,3,4\}$. \Symbolic\quad The directive and its
+own substrate carry $m_D$-powers; the product and its substrate (the omega role,
+\S\ref{sec:omega}) carry $m_P$-powers.
+\end{result}
+
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+surface & $\deg_{D_1}$ & $\deg_{S_1}$ & $\deg_{S_2}$ & $\deg_{P_2}$ \\
+\midrule
+cubic $(m_D{=}3,m_P{=}2)$ & $9$ & $3$ & $2$ & $4$ \\
+keystone $(m_D{=}2,m_P{=}2)$ & $4$ & $2$ & $2$ & $4$ \\
+generic $m_D$ (at $m_P{=}2$) & $m_D^2$ & $m_D$ & $2$ & $4$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent The keystone spectrum $(4,2,2,4)$ is symmetric under $D_1\leftrightarrow
+P_2$ precisely because $m_D=m_P$; the cubic cannot be, because $m_D\neq m_P$. This
+$D_1\leftrightarrow P_2$ symmetry is the algebraic shadow of the directive/product
+duality.
+
+\section{The product cover}
+\label{sec:product}
+
+Solving $\Ftil$ for $P_2$ over $(D_1,S_1,S_2)$: $A$ is single-valued, the seam
+$P_1$ has $m_P$ values ($P_1^{m_P}=A$), and the product $P_2$ has $m_P$ values.
+Both layers are $m_P$-fold extractions, so the cover factors as $m_P$ seam blocks
+of $m_P$ sheets each.
+
+\begin{result}[Product-cover monodromy]
+\label{res:product}
+The product cover is the full wreath $\Sym(m_P)\wr\Sym(m_P)$, of degree $m_P^2$,
+imprimitive with the seam ($\pm P_1$ for $m_P=2$) as block system. \Measured\ at
+$m_P=2$. For both the cubic and the keystone this group is
+\[
+  \Sym(2)\wr\Sym(2) \;\cong\; D_4 \quad(\text{order } 8).
+\]
+\end{result}
+
+\noindent The measurement uses three based loops from the basepoint $A_0=1$,
+$C_0=1$ (cubic) on the four lifted sheets
+$0{=}({+}P_1,{+}P_2)$, $1{=}({+}P_1,{-}P_2)$, $2{=}({-}P_1,{+}P_2)$,
+$3{=}({-}P_1,{-}P_2)$. With residual gates on \emph{both} equations
+($\le 4\times10^{-15}$), bijective closure, and motion-ratio safety:
+\[
+  \tau_A=(0\,2)(1\,3)\ \text{(seam)},\quad
+  \tau_+=(0\,1)\ \text{($+P_1$ product)},\quad
+  \tau_-=(2\,3)\ \text{($-P_1$ product)}.
+\]
+The conjugation $\tau_A\tau_+\tau_A^{-1}=\tau_-$ holds, so the group is
+non-abelian; it contains the $4$-cycle $(0\,2\,1\,3)$ and has order $8$.
+
+\begin{result}[$D_4$ is the seam-partition stabiliser]
+\label{res:stab}
+The product-cover group equals the stabiliser in $S_4$ of the seam-aligned
+partition $\{\{D_1,S_1\},\{S_2,P_2\}\}$ (equivalently $\{\{0,1\},\{2,3\}\}$ on the
+lifted sheets), the order-$8$ ``$V_4$-core''. \Measured
+\end{result}
+
+\noindent Three independent derivations agree on this order-$8$ group: (i) the
+degree spectrum $(9,3,2,4)$ is faithful with four distinct degrees, ruling out a
+transitive $S_4$; (ii) the seam-lock gradient identity
+$\partial\Ftil/\partial D_1 : \partial\Ftil/\partial S_1 = (3D_1^2+S_1):D_1$, the
+first-stage normal ratio, distinguishes the seam-aligned pairing; (iii) the lifted
+monodromy realises exactly the partition stabiliser. The group is dihedral, not
+the Klein four group, because the product sits \emph{over} the seam
+($P_2^2 = 3-P_1 C$): circling the seam swaps which product branch point is
+encircled, which is the relation $\tau_+\leftrightarrow\tau_-$.
+
+\section{The directive cover}
+\label{sec:directive}
+
+Solving $\Ftil$ for $D_1$ over $(S_1,S_2,P_2)$: now $P_2$ (hence $B$) is fixed, so
+$A$ is no longer single-valued---it satisfies the \emph{$A$-block polynomial}
+obtained by eliminating $D_1$ from the stage-two relation. Each admissible $A$
+then yields $m_D$ values of $D_1$ through $A=3-D_1^{m_D}-D_1 S_1$.
+
+\begin{result}[$A$-block count, $m_P=2$]
+\label{res:ablock}
+At $m_P=2$ the $A$-block polynomial has degree $m_D$ in $A$, verified symbolically
+for $m_D\in\{2,3,4\}$. \Symbolic\ Hence the directive cover factors as $m_D$
+blocks (the $A$-values) of $m_D$ sheets (the $D_1$-roots within each block), total
+degree $m_D^2$, in agreement with Result~\ref{res:spectrum}.
+\end{result}
+
+\begin{result}[Directive-cover monodromy]
+\label{res:directive}
+At $m_P=2$ the directive cover is the full wreath $\Sym(m_D)\wr\Sym(m_D)$ of order
+$(m_D!)^{m_D}\,m_D!$, imprimitive with the $A$-values as block system. \Measured\
+at $m_D\in\{2,3\}$:
+\[
+  \text{cubic: } S_3\wr S_3 \ (\text{order } 1296),\qquad
+  \text{keystone: } \Sym(2)\wr\Sym(2)\cong D_4 \ (\text{order } 8).
+\]
+\end{result}
+
+\noindent For the cubic, the $9$ sheets split into $3$ $A$-blocks of $3$; nine
+``within-block'' lassos realise $S_3$ in each block (the base $S_3^3$), and three
+``$A$-branch'' lassos realise $S_3$ on the blocks. The generated group has order
+$1296=6^3\cdot 6$, is transitive and imprimitive, with block kernel of order
+$216=6^3$ and block action $S_3$---the full wreath. For the keystone, the $4$
+sheets split into $2$ $A$-blocks of $2$; within-block lassos give $(0\,3),(1\,2)$
+and a block-swap lasso (reached by looping $P_2$, not $S_1$) gives $(0\,1)(2\,3)$,
+generating $D_4$. The cover is connected because the $A$-block discriminant
+$\Delta = S_2^2(12-4P_2^2+S_2^2)$ is not a square in $\Q(S_2,P_2)$, so the two
+$A$-values fuse.
+
+\begin{remark}[The directive blow-up]
+The contrast is the central asymmetry of the paper: when $m_D\neq m_P$, inverting
+toward the directive is vastly larger than producing the product. For the cubic
+the directive cover ($1296$) dwarfs the product cover ($8$).
+\end{remark}
+
+\section{The omega substrate}
+\label{sec:omega}
+
+The second-stage substrate $S_2$ enters $\Ftil$ only through the stage-two
+coupling and never through the seam. We make this quantitative.
+
+\begin{result}[Omega signature]
+\label{res:omega}
+$S_2$ satisfies $\partial A/\partial S_2 = 0$ and (writing $C$ for the stage-two
+directive) $\partial C/\partial S_2 = 1$: it moves the product directive one-to-one
+while leaving the seam invariant. No other coordinate does this---
+$\partial A/\partial S_1 = -D_1\neq 0$ and $\partial A/\partial D_1 = -m_D
+D_1^{m_D-1}-S_1\neq 0$. \Proven
+\end{result}
+
+\begin{result}[Branch authority]
+\label{res:authority}
+With $A$ held fixed, the product branches sit at $C = \pm 3/\sqrt{A}$, i.e.\ at
+\[
+  S_2^{(+)} = +\tfrac{3}{\sqrt A}-A \quad(\text{the }{+}P_1\text{ branch}),\qquad
+  S_2^{(-)} = -\tfrac{3}{\sqrt A}-A \quad(\text{the }{-}P_1\text{ branch}).
+\]
+A loop of $S_2$ around $S_2^{(+)}$ swaps \emph{only} the $+P_1$ product pair
+($(0\,1)$); a loop around $S_2^{(-)}$ swaps \emph{only} the $-P_1$ pair
+($(2\,3)$). \Measured\ (residuals $\sim10^{-15}$).
+\end{result}
+
+\noindent Thus $S_2$ is an \emph{omega role}: a downstream branch-position
+controller. It carries no seam structure and no directive structure; it sets where
+the second-stage product branch lands, independently for each seam sign, and
+steering it moves exactly the targeted product pair. Tying $S_2$ to another role
+removes this: $S_2{=}0$ slaves the product branch to the seam, $S_2{=}S_1$ and
+$S_2{=}D_1$ make the controlling knob co-move $A$ (contaminating the seam), and
+$S_2{=}\text{const}$ freezes it. This also explains the substrate asymmetry that
+runs through the construction: \emph{$S_1$ builds the seam, $S_2$ positions the
+product}---first-stage substrate is upstream geometry, second-stage substrate is
+the composition environment.
+
+\section{Iterated composition and the recovery asymmetry}
+\label{sec:iterate}
+
+The glue iterates: stage three identifies $D_3:=P_2$, and so on.
+
+\begin{result}[Recovery exponents]
+\label{res:iterate}
+For the three-stage composite of the cubic, the degree spectrum of
+$(D_1,S_1,S_2,S_3,P_3)$ is $(27,9,6,4,8)$. \Symbolic\ In general the root-directive
+recovery degree after $n$ stages is $m_D^{\,n}$ and the final-product production
+degree is $m_P^{\,n}$:
+\[
+  \text{cubic backward: } 3,9,27,\dots=3^n;\qquad
+  \text{cubic forward: } 2,4,8,\dots=2^n.
+\]
+\end{result}
+
+\noindent Producing the product is monotonically cheaper than reconstructing the
+directive, and the gap widens by a factor $m_D/m_P$ per stage. This is the
+information-theoretic residue of the original ``category error'': inverting toward
+the operator is not the same operation as producing the product run backwards---it
+is a strictly higher-degree, more-branched cover, and the cost compounds through
+every seam. No stage is ever cheaper than the previous: the seam never rejects.
+
+\section{The abelian boundary on a phase interpretation}
+\label{sec:abelian}
+
+Covering-space monodromy and wave phase share their formalism: $\pi_1$ of a
+punctured base mapping to automorphisms, and for cyclic (abelian) covers this is a
+character into $U(1)$, with a lasso generating a phase $e^{2\pi i/k}$ and a branch
+point as a phase singularity. It is therefore tempting to read the whole monodromy
+as ``wave structure'' and the exponents $m_D^n, m_P^n$ as a frequency spectrum.
+The following bounds that reading.
+
+\begin{result}[Abelianisation]
+\label{res:abelian}
+For the directive cover of the cubic, $G=S_3\wr S_3$ has $|G|=1296$,
+$|[G,G]|=324$, and abelianisation
+\[
+  G^{\mathrm{ab}} \;\cong\; (\Z/2)^2 \quad(\text{Klein four}).
+\]
+Hence every $U(1)$ character of $G$ takes values in $\{\pm 1\}$ (the parities of
+the within-block and block permutations); an order-$3$ element maps to $+1$ under
+every one of them. The cube-root phase $e^{2\pi i/3}$ is \emph{not} a character
+value. \Measured
+\end{result}
+
+\noindent The cube roots are real but live elsewhere: they are the eigenvalues
+$e^{\pm 2\pi i/3}$ of a $3$-cycle inside the $2$-dimensional irreducible
+representation, which does not factor through $U(1)$. Thus the phase reading is
+exact for the \emph{abelian shadow}---the $\pm1$ sign-phases, the
+$m_P$-frequency---and categorically fails for the higher (cubic) structure, which
+is the non-abelian part carrying the directive and the backward cost. In
+particular, the forward/cheap structure is abelian and phase-like, while the
+backward/expensive structure is non-abelian and phaseless; the boundary between
+them is the boundary between $U(1)$ and what does not embed in it.
+
+\section{Two-surface evidence: the keystone as falsification test}
+\label{sec:keystone}
+
+The keystone $m_D=m_P=2$ was chosen to be able to break the morphology: if the
+directive cover threw up an $S_3$ or any $3$-cycle when both roles enter
+quadratically, the law ``layer group $=\Sym(\text{entry degree})$'' would die. It
+does not.
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+ & cubic $(m_D{=}3,m_P{=}2)$ & keystone $(m_D{=}m_P{=}2)$ \\
+\midrule
+degree spectrum $(D_1,S_1,S_2,P_2)$ & $(9,3,2,4)$ & $(4,2,2,4)$ \\
+product cover & $D_4$ (order $8$) & $D_4$ (order $8$) \\
+directive cover & $S_3\wr S_3$ (order $1296$) & $D_4$ (order $8$) \\
+cube-root strata & yes (directive) & none \\
+block structure & $3{\times}3$ / $2{\times}2$ & $2{\times}2$ on both \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent Every entry matches the frozen prediction: both covers $D_4$, both
+degree $4$, both imprimitive with $2$ blocks of $2$, and no $3$-cycle anywhere
+(all branching is quadratic). The wreath-with-seam-imprimitivity structure now
+stands on two surfaces, the second adversarial.
+
+\section{Discussion and open problems}
+\label{sec:discussion}
+
+\paragraph{The seam as the fourth structural element.}\Interp\ The seam---the
+directed identification $P_1=D_2$---is the load-bearing object: it is the
+imprimitivity system of every cover, it carries the forward orientation of the
+composition, and eliminating it \emph{is} enforcing that the product was produced
+and passed on. Read as direction, it orients composition forward; iterated, it
+orders the stages (an ordinal, not metric, arrow---there is no duration in the
+construction); read as confirmation, it certifies the product. We emphasise this
+is interpretation, and that the construction's confirmation is unconditional: the
+seam has no failure branch (Result~\ref{res:iterate}), so ``feedback'' overreaches.
+
+\paragraph{Beyond $m_P=2$.}\Conj\ The product cover is structurally
+$\Sym(m_P)\wr\Sym(m_P)$ for any $m_P$ (two $m_P$-fold extractions), but this is
+tested only at $m_P=2$. The decisive open test is $m_P=3$: does the product side
+climb to $S_3\wr S_3$ as the directive side did? At $m_P\ge3$ the seam is a higher
+root and the directive-cover $A$-block degree is no longer a clean power of $A$;
+the directive-cover law $\Sym(m_D)\wr\Sym(m_D)$ is established (block structure) only
+for $m_P=2$.
+
+\paragraph{Fullness of the wreath.}\Conj\ The block structure of both covers is
+symbolic for all $m_D$ (at $m_P=2$); that the monodromy realises the \emph{full}
+wreath rather than a proper subgroup is computer-verified only at $m_D\in\{2,3\}$.
+A proof that the lassos generate the full base and full block actions for all
+$m_D$ would upgrade Results~\ref{res:product},\ref{res:directive} to theorems.
+
+\paragraph{Universality across DBP surfaces.} All results are for the specific
+family $D^{m_D}+DS+P^{m_P}-3$. Whether the seam-imprimitive wreath structure holds
+for general separable DBP surfaces $h(P)=k(D,S)$ is open; separability of the
+product is likely a genuine hypothesis (non-separable cross terms break the clean
+radical tower).
+
+\appendix
+\section{Computational protocol}
+\label{sec:methods}
+
+Monodromy groups are obtained by numerical analytic continuation of the sheets
+around based loops in the punctured base, under the following gates, all of which
+must pass at every accepted continuation step:
+\begin{enumerate}[leftmargin=1.4em,nosep]
+\item \textbf{Root residual} on \emph{every} defining equation
+(e.g.\ $|P_1^2-A|$ and $|P_2^2-(3-P_1C)|$), required $<10^{-9}$ (achieved
+$\le4\times10^{-15}$).
+\item \textbf{Bijective closure}: the nearest-neighbour sheet assignment must be a
+bijection.
+\item \textbf{Motion-ratio safety}: max sheet motion over min sheet separation is
+tracked and kept small ($\sim10^{-5}$).
+\item \textbf{Group from permutations}: the group is generated from the measured
+permutations and its order computed by a permutation-group routine, never inferred.
+\item \textbf{Byte-stability}: each run is repeated and the report's
+content hash (timestamp excluded) compared; runs are byte-identical.
+\end{enumerate}
+Symbolic results (degree spectra, $A$-block degrees, the omega derivatives, the
+abelianisation) are exact computer algebra. The product-cover artifact (loops,
+generators, gates, generated group, partition-stabiliser check, and a test that
+re-derives $D_4$ from the measured permutations) is archived separately.
+
+\section*{Acknowledgements}
+Computational consultation and verification were carried out in an interactive
+session; all stated groups were re-derived from measured permutations under the
+gates of Appendix~\ref{sec:methods}. \emph{[To be completed.]}
+
+\end{document}

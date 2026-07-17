@@ -1,0 +1,365 @@
+{
+  "schema_version": 1,
+  "submission_id": "submit-weighted-multiquadratic-monodromy-v1-0",
+  "base_revision": "sha256:acd9d4c392fb9e65353db0d4a35d82dcb69f5e1ef913dc99435cd1254fe39ca3",
+  "idempotency_key": "paper:PAP-0509:3cefa244a61d701a",
+  "submitted_by": "codex.claire",
+  "summary": "Register the released all-k weighted multiquadratic symmetric-monodromy paper and its Kummer-wreath interface.",
+  "artifacts": [
+    {
+      "schema_version": 1,
+      "artifact_id": "PAP-0509",
+      "artifact_type": "paper",
+      "title": "Generic Symmetric Monodromy of Weighted Multiquadratic Sums",
+      "summary": "A self-contained all-k proof for arbitrary fixed nonzero weights: exact degree, genus and ramification, generic full symmetric monodromy, the equal-weight DBP specialization, and an exact conditional Kummer-wreath lifting criterion.",
+      "subject_families": [
+        "galois_horizon_and_kummer_covers"
+      ],
+      "claim_status": "proved",
+      "lifecycle_status": "released",
+      "provenance": {
+        "authors": [
+          "Will Lloyd"
+        ],
+        "created_utc": "2026-07-16T13:14:20Z",
+        "origin_repository": "Cella Framework",
+        "source_pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/GENERIC_SYMMETRIC_MONODROMY_OF_WEIGHTED_MULTIQUADRATIC_SUMS_v1.0.md"
+      },
+      "files": [
+        {
+          "role": "paper_source",
+          "path": "Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/GENERIC_SYMMETRIC_MONODROMY_OF_WEIGHTED_MULTIQUADRATIC_SUMS_v1.0.md",
+          "sha256": "3cefa244a61d701a9f0184ae5756e62c71efbbb7f30274ca12f951ae351df6fd",
+          "media_type": "text/markdown"
+        }
+      ],
+      "claims": [
+        {
+          "claim_id": "WMMS-C1",
+          "statement": "For every k at least 3 and every fixed weight vector with all entries nonzero over a characteristic-zero field, a nonempty Zariski-open parameter locus exists on which the weighted multiquadratic radical-sum map has geometric and generic arithmetic monodromy S_d, where d is the exact nonvanishing signed pole count.",
+          "hypotheses": [
+            "Characteristic zero.",
+            "k >= 3.",
+            "All weights c_i are nonzero.",
+            "The parameters a_i are pairwise distinct and lie in the stated generic boundary-good locus."
+          ],
+          "scope": "Weighted multiquadratic covers and their generic parameter fibers.",
+          "claim_status": "proved",
+          "proof_ids": [
+            "DBP:paper:weighted_multiquadratic_monodromy"
+          ],
+          "evidence_ids": []
+        },
+        {
+          "claim_id": "WMMS-C2",
+          "statement": "The source curve has genus 1 + 2^(k-2)(k-3), and the ramification divisor of the weighted radical-sum map has degree 2^(k-1)(k-3) + 2d.",
+          "hypotheses": [
+            "The hypotheses of WMMS-C1.",
+            "The parameter lies in the boundary-good locus."
+          ],
+          "scope": "Exact geometry of the weighted multiquadratic source and map.",
+          "claim_status": "proved",
+          "proof_ids": [
+            "DBP:paper:weighted_multiquadratic_monodromy"
+          ],
+          "evidence_ids": []
+        },
+        {
+          "claim_id": "WMMS-C3",
+          "statement": "For equal weights, d equals delta_k = 2^(k-1) for odd k and 2^(k-1) - one half binomial(k,k/2) for even k, and the generic DBP axial mass-norm group is S_delta_k for every k at least 3.",
+          "hypotheses": [
+            "The hypotheses of WMMS-C1.",
+            "c_i = 1 for every i.",
+            "The charge parameters are algebraically independent in the generic arithmetic statement."
+          ],
+          "scope": "All-k equal-weight DBP axial mass-norm specialization.",
+          "claim_status": "proved",
+          "proof_ids": [
+            "DBP:paper:weighted_multiquadratic_monodromy"
+          ],
+          "evidence_ids": []
+        },
+        {
+          "claim_id": "WMMS-C4",
+          "statement": "For a finite separable sheet field in characteristic different from two, the conjugate Kummer extension has kernel dual to the conjugate square-class module; full column valuation-parity rank sd is sufficient for the exact maximal wreath product C_2^s wr G.",
+          "hypotheses": [
+            "Characteristic different from two.",
+            "The sheet field is finite separable.",
+            "For maximality, the sd conjugate square classes are independent; full column valuation-parity rank sd is one sufficient certificate."
+          ],
+          "scope": "Standalone conjugate Kummer modules and their application above the symmetric base cover.",
+          "claim_status": "proved",
+          "proof_ids": [
+            "DBP:paper:weighted_multiquadratic_monodromy"
+          ],
+          "evidence_ids": []
+        }
+      ],
+      "relations": [
+        {
+          "target_id": "DBP:note:allk_monodromy",
+          "relation": "supersedes",
+          "basis": "The paper replaces the stale theorem note as proof authority, repairs its primitive-element argument, and strengthens equal weights to arbitrary fixed nonzero weights.",
+          "source_pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/GENERIC_SYMMETRIC_MONODROMY_OF_WEIGHTED_MULTIQUADRATIC_SUMS_v1.0.md"
+        },
+        {
+          "target_id": "DBP:paper:IV",
+          "relation": "supplements",
+          "basis": "The paper supplies the arbitrary-k weighted base-monodromy theorem beyond Paper IV's k=4,5 scope.",
+          "source_pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/GENERIC_SYMMETRIC_MONODROMY_OF_WEIGHTED_MULTIQUADRATIC_SUMS_v1.0.md"
+        },
+        {
+          "target_id": "DBP:proof:gs_morse",
+          "relation": "cites",
+          "basis": "The paper reconstructs and strengthens the generic Morse/value-separation argument through a finite relative ramification scheme.",
+          "source_pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/GENERIC_SYMMETRIC_MONODROMY_OF_WEIGHTED_MULTIQUADRATIC_SUMS_v1.0.md"
+        },
+        {
+          "target_id": "DBP:thm:kummer_wreath_lift",
+          "relation": "supplements",
+          "basis": "The paper restates the general Kummer-wreath lift with exact base-field, rank, action-convention and necessity-versus-sufficiency boundaries.",
+          "source_pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/GENERIC_SYMMETRIC_MONODROMY_OF_WEIGHTED_MULTIQUADRATIC_SUMS_v1.0.md"
+        }
+      ],
+      "external_ids": {
+        "paper_artifacts": [
+          "PAP-0509"
+        ]
+      },
+      "declared_impacts": [
+        {
+          "kind": "supersede",
+          "target_id": "DBP:note:allk_monodromy",
+          "note": "Use the new paper as the complete weighted/all-k proof authority; retain the note as historical provenance."
+        },
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:IV1",
+          "note": "The stale-note splice is no longer needed to obtain a complete all-k proof source, though the historical note itself remains unedited."
+        },
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:IV2",
+          "note": "The arbitrary-k base theorem now exists as a released corpus paper; integration into Paper IV remains editorial work."
+        },
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:IV3",
+          "note": "The symmetric base and general Kummer criterion are now consolidated; the concrete crown square-class rank computation remains open."
+        }
+      ],
+      "llm": {
+        "one_sentence_purpose": "Provide the reusable all-k weighted symmetric-monodromy theorem and the exact Kummer-wreath interface for future DBP and arbitrary multiquadratic-cover work.",
+        "key_terms": [
+          "weighted multiquadratic sum",
+          "all-k monodromy",
+          "symmetric group",
+          "critical incidence",
+          "generic Morse",
+          "DBP mass norm",
+          "Kummer module",
+          "wreath product",
+          "valuation parity"
+        ],
+        "retrieval_questions": [
+          "What is the generic monodromy group of a weighted sum of square roots?",
+          "What is the exact degree of the all-k DBP axial mass-norm polynomial?",
+          "How are generic simple ramification and critical-value separation proved?",
+          "What must be checked to lift an S_d base to a maximal Kummer wreath product?"
+        ],
+        "context_priority": "high",
+        "context_role": "core"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "paper_version": "v1.0",
+        "dag_node_id": "DBP:paper:weighted_multiquadratic_monodromy",
+        "source_sha256": "3cefa244a61d701a9f0184ae5756e62c71efbbb7f30274ca12f951ae351df6fd",
+        "proof_audits": [
+          "geometry",
+          "kummer_wreath",
+          "claim_boundary"
+        ],
+        "verification": "symbolic formulas k=3..10; four norm-degree cases; three exact exceptional configurations; 2304 semidirect cocycle cases"
+      }
+    }
+  ],
+  "graph_delta": {
+    "upsert_nodes": [
+      {
+        "id": "DBP:paper:weighted_multiquadratic_monodromy",
+        "label": "Generic Symmetric Monodromy of Weighted Multiquadratic Sums",
+        "type": "paper",
+        "claim_status": "proved",
+        "lifecycle_status": "released",
+        "reachability": null,
+        "tracked": false,
+        "layer": "succession",
+        "summary": "Self-contained weighted all-k theorem: exact signed-pole degree d(c), genus and ramification, generic geometric and arithmetic S_d(c), equal-weight DBP group S_delta_k, sharp exceptional loci, and a precise conditional Kummer-wreath lift.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/GENERIC_SYMMETRIC_MONODROMY_OF_WEIGHTED_MULTIQUADRATIC_SUMS_v1.0.md",
+            "sha256": "3cefa244a61d701a9f0184ae5756e62c71efbbb7f30274ca12f951ae351df6fd"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [],
+          "paper_artifacts": [
+            "PAP-0509"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0509"
+          ]
+        },
+        "facets": {
+          "subject_family": "galois_horizon_and_kummer_covers",
+          "paper": "weighted_multiquadratic_monodromy_v1_0",
+          "reusable": true,
+          "scope": "all-k weighted multiquadratic monodromy",
+          "source_id": "cella-submissions-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [
+            "weighted multiquadratic sum",
+            "all-k monodromy",
+            "symmetric group",
+            "critical incidence",
+            "generic Morse",
+            "DBP mass norm",
+            "Kummer module",
+            "wreath product",
+            "valuation parity"
+          ],
+          "retrieval_questions": [
+            "What is the generic monodromy group of a weighted sum of square roots?",
+            "What is the exact degree of the all-k DBP axial mass-norm polynomial?",
+            "How are generic simple ramification and critical-value separation proved?",
+            "What must be checked to lift an S_d base to a maximal Kummer wreath product?"
+          ],
+          "context_priority": "high",
+          "context_role": "core"
+        },
+        "extensions": {
+          "artifact_id": "PAP-0509",
+          "proof_authority": true,
+          "source_digest": "3cefa244a61d701a9f0184ae5756e62c71efbbb7f30274ca12f951ae351df6fd"
+        }
+      }
+    ],
+    "upsert_edges": [
+      {
+        "id": "e::DBP:paper:weighted_multiquadratic_monodromy::supersedes::DBP:note:allk_monodromy",
+        "from": "DBP:paper:weighted_multiquadratic_monodromy",
+        "to": "DBP:note:allk_monodromy",
+        "relation": "supersedes",
+        "label": "DBP:paper:weighted_multiquadratic_monodromy supersedes DBP:note:allk_monodromy",
+        "basis": "The paper replaces the stale theorem note as proof authority, repairs its primitive-element argument, and strengthens equal weights to arbitrary fixed nonzero weights.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/GENERIC_SYMMETRIC_MONODROMY_OF_WEIGHTED_MULTIQUADRATIC_SUMS_v1.0.md",
+            "sha256": "3cefa244a61d701a9f0184ae5756e62c71efbbb7f30274ca12f951ae351df6fd"
+          }
+        ],
+        "facets": {
+          "source_id": "cella-submissions-v1",
+          "subject_family": "galois_horizon_and_kummer_covers"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:paper:weighted_multiquadratic_monodromy::supplements::DBP:paper:IV",
+        "from": "DBP:paper:weighted_multiquadratic_monodromy",
+        "to": "DBP:paper:IV",
+        "relation": "supplements",
+        "label": "DBP:paper:weighted_multiquadratic_monodromy supplements DBP:paper:IV",
+        "basis": "The paper supplies the arbitrary-k weighted base-monodromy theorem beyond Paper IV's k=4,5 scope.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/GENERIC_SYMMETRIC_MONODROMY_OF_WEIGHTED_MULTIQUADRATIC_SUMS_v1.0.md",
+            "sha256": "3cefa244a61d701a9f0184ae5756e62c71efbbb7f30274ca12f951ae351df6fd"
+          }
+        ],
+        "facets": {
+          "source_id": "cella-submissions-v1",
+          "subject_family": "galois_horizon_and_kummer_covers"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:paper:weighted_multiquadratic_monodromy::cites::DBP:proof:gs_morse",
+        "from": "DBP:paper:weighted_multiquadratic_monodromy",
+        "to": "DBP:proof:gs_morse",
+        "relation": "cites",
+        "label": "DBP:paper:weighted_multiquadratic_monodromy cites DBP:proof:gs_morse",
+        "basis": "The paper reconstructs and strengthens the generic Morse/value-separation argument through a finite relative ramification scheme.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/GENERIC_SYMMETRIC_MONODROMY_OF_WEIGHTED_MULTIQUADRATIC_SUMS_v1.0.md",
+            "sha256": "3cefa244a61d701a9f0184ae5756e62c71efbbb7f30274ca12f951ae351df6fd"
+          }
+        ],
+        "facets": {
+          "source_id": "cella-submissions-v1",
+          "subject_family": "galois_horizon_and_kummer_covers"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:paper:weighted_multiquadratic_monodromy::supplements::DBP:thm:kummer_wreath_lift",
+        "from": "DBP:paper:weighted_multiquadratic_monodromy",
+        "to": "DBP:thm:kummer_wreath_lift",
+        "relation": "supplements",
+        "label": "DBP:paper:weighted_multiquadratic_monodromy supplements DBP:thm:kummer_wreath_lift",
+        "basis": "The paper restates the general Kummer-wreath lift with exact base-field, rank, action-convention and necessity-versus-sufficiency boundaries.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/GENERIC_SYMMETRIC_MONODROMY_OF_WEIGHTED_MULTIQUADRATIC_SUMS_v1.0.md",
+            "sha256": "3cefa244a61d701a9f0184ae5756e62c71efbbb7f30274ca12f951ae351df6fd"
+          }
+        ],
+        "facets": {
+          "source_id": "cella-submissions-v1",
+          "subject_family": "galois_horizon_and_kummer_covers"
+        },
+        "extensions": {}
+      }
+    ],
+    "retire_nodes": [],
+    "remove_edges": []
+  },
+  "declared_impacts": [
+    {
+      "kind": "supersede",
+      "target_id": "DBP:note:allk_monodromy",
+      "note": "Use the new paper as the complete weighted/all-k proof authority; retain the note as historical provenance."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "DBP:gap:IV1",
+      "note": "The stale-note splice is no longer needed to obtain a complete all-k proof source, though the historical note itself remains unedited."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "DBP:gap:IV2",
+      "note": "The arbitrary-k base theorem now exists as a released corpus paper; integration into Paper IV remains editorial work."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "DBP:gap:IV3",
+      "note": "The symmetric base and general Kummer criterion are now consolidated; the concrete crown square-class rank computation remains open."
+    }
+  ],
+  "extensions": {
+    "artifact_id": "PAP-0509",
+    "dag_node_id": "DBP:paper:weighted_multiquadratic_monodromy",
+    "source_sha256": "3cefa244a61d701a9f0184ae5756e62c71efbbb7f30274ca12f951ae351df6fd",
+    "requested_by": "William Lloyd",
+    "protocol": "validate-impact-preview-stage-apply"
+  }
+}

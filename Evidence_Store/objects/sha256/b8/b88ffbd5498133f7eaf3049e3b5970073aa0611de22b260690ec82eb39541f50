@@ -1,0 +1,16 @@
+# REALFIBER — claim-boundary prior-art sweep (the pre-crown obligation, executed)
+**Date:** 2026-07-02 · **Scope:** field position of the full-fiber theorem (`REALFIBER_THEOREM.md`, cert `dfde6fbd`) · **Substrate:** [CONTAINER] web sweep, two targeted passes (zero-diagonal minimum rank; sparse/constrained Parseval frame topology).
+
+## Findings
+**KNOWN / KNOWN-adjacent (reclassifications):**
+1. **Structure law (i) belongs to the mr₀ literature.** "Minimum rank with zero diagonal" (Grood–Harmse–Hogben et al., ELA) studies exactly the zero-diagonal symmetric realization world; their boundary theorem `mr₀(G) ≤ 3 ⟺ complete multipartite` is the rank-3 neighbor of our law. The rank-2 statement (support = complete bipartite + isolated vertices; rank-one cross block; equivalently `W = xyᵀ + yxᵀ` with disjoint supports) is either recorded there or a one-line corollary of their framework. **(i) RECLASSIFIED: KNOWN-adjacent — cite, never claim.** (Hindsight check that stings pleasantly: C₄ *is* K₂,₂ — the bipartite law was staring at us from the witness pair all along.)
+2. **The frames dictionary.** Rotating the `(uᵢ, vᵢ)` columns by 45°, the fiber is exactly the space of **Parseval frames of ℝ² with every vector on a coordinate axis** — direction-constrained frames. The ambient theory is mature: Spectral Tetris constructs sparse frames with prescribed spectra/norms (Casazza et al. — existence/construction, not topology); the topology frontier for **norm-constrained** real Parseval frames is active *right now* (Caine–Needham–Shonkwiler 2025: new path-connectedness via Benedetto–Fickus-type optimization, generalizing the Frame Homotopy Theorem).
+
+**NOT LOCATED (the theorem's surviving weight):**
+- π₀ of **direction/support-constrained** Parseval frame varieties — equivalently the zero-diagonal isospectral sets — appears in neither pass. The norm-constrained results (frame homotopy line, CNS 2025) constrain a different quantity; Spectral Tetris builds points, not paths. Clauses (ii) m=2 disconnection, (iii) m≥3 connectivity, (iv) locking: **apparently unrecorded** — while being **elementary once the mr₀-style parametrization is in hand.**
+
+## Crown verdict (binding claim language)
+The theorem is real, apparently unrecorded, and elementary-once-seen. It wears **no standalone crown**. Correct size: *"an elementary connectivity result, apparently unrecorded [sweep S-2026-07-02], at the intersection of zero-diagonal minimum-rank theory (cite Grood et al. for the structure law), frame-space topology (direction-constrained analogue of the frame homotopy question), and real moment-fiber geometry."* Its actual value, in order: (a) proven closure of engine row 2; (b) base case for the general-spectrum real-fiber question; (c) a complete worked demonstration of the failure-geometry→mechanism→theorem pipeline; (d) the frames dictionary as a transfer bridge (noting honestly: the dictionary is itself rank-2-special). Re-sweep obligation stands at any manuscript boundary; the mr₀ realization-space corners were not exhaustively searched.
+
+## Ladder consequence
+The theorem climbs L6 → **L8-adjacent** (field-positioned with known boundaries): the top rungs were never "more proof" — they were "knows its neighbors."

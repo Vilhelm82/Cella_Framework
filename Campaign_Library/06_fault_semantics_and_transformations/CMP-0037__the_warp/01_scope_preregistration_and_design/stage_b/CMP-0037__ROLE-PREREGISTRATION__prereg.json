@@ -1,0 +1,73 @@
+{
+ "authority": "brief \u00a73/\u00a74 (CL-W4 + the CL-W5 keystone; the carrier classifier over FX-W-E/F) + \u00a710.5 RATIFIED 2026-06-14 (Will: additive-failure [ANALYTIC], M\u00f6bius-respects-quotient [MEASURED]; \u2119\u00b9 raw (num,den) + cross-multiply referee) + Stage A DEMONSTRATED (CL-W1/W2/W3) + standing rules 1.8/1.9 + the manifest SPINE FENCE",
+ "campaign_id": "the_warp_algebra_arm",
+ "date_stamped_from_machine": "2026-06-14",
+ "depends_on": {
+  "manifest_v1_sha256": "a90334be2f95d2c9088e6c83f9b85cff74b32fad34d26ea30d548aa7218984eb",
+  "note": "carrier.py (+ the rest) pinned inside the frozen manifest; enforced by require_frozen (rule 1.9). Stage A is DEMONSTRATED.",
+  "stage_a_records_sha256": "c540c1e0860406336e0639e015f0cf9cad9be7d1baa2c3da37583b9a28517c82"
+ },
+ "expectations": {
+  "free_rows": {
+   "FXWE1": {
+    "carrier": "Q",
+    "closes": true,
+    "residue_shape": "q",
+    "sort": "free_module"
+   },
+   "FXWE2": {
+    "carrier": "Q^n",
+    "closes": true,
+    "residue_shape": [
+     "q",
+     "q"
+    ],
+    "sort": "free_module"
+   },
+   "FXWE3": {
+    "carrier": "Q^{nxm}",
+    "closes": true,
+    "residue_shape": [
+     [
+      "q",
+      "q"
+     ],
+     [
+      "q",
+      "q"
+     ]
+    ],
+    "sort": "free_module"
+   }
+  },
+  "quotient_row": {
+   "additive_residue_representative_dependent": true,
+   "carrier": "P1(Q)",
+   "mobius_moves_point": true,
+   "mobius_respects_quotient": true,
+   "same_point": true,
+   "sort": "quotient"
+  }
+ },
+ "free_module_battery": [
+  "FXWE1",
+  "FXWE2",
+  "FXWE3"
+ ],
+ "frozen": true,
+ "predictions": {
+  "PMB.1": "free-module additive reconstruction (CL-W4, [ANALYTIC]+confirm): on every FX-W-E carrier (\u211a, \u211a\u207f, \u211a\u207f\u02e3\u1d50) the carrier classifier reports 'free_module' and additive reconstruction v \u2295_add \u03c1 == TRUE closes \u2014 the residue \u03c1 = TRUE \u2212 v lives in the module (same shape as the carrier) and the reconstruction recovers the pinned exact-\u211a TRUE (the independent truth, off the residue path), with ZERO failures across carrier shapes. The construction T,v in M => T-v in M is recorded (retired by proof); the battery confirms uniformly. K-W3 armed: any free-module carrier that fails additive is a refute-row. Units: (carrier, sample).",
+  "PMB.2": "the quotient edge \u2014 KEYSTONE (CL-W5): on \u2119\u00b9(\u211a) (FX-W-F) the carrier classifier reports 'quotient'. Additive reconstruction is ILL-DEFINED \u2014 the additive residue between two representatives of the same projective point DIFFERS while cross-multiply (a\u00b7d == b\u00b7c) certifies the representatives equal; this additive-failure half is graded [ANALYTIC] (foregone on \u2119\u00b9, \u00a710.5). The [MEASURED] weight: the PGL\u2082/M\u00f6bius action maps EQUAL points to EQUAL points \u2014 for every representative pair (r_i, r_j) of the point, p1_equal(M\u00b7r_i, M\u00b7r_j) \u2014 and moves the point non-trivially (M\u00b7r != r), so M\u00f6bius reconstructs where addition cannot. Hence \u2295 is additive IFF the carrier is a free \u211a-module: the family edge is LOCATED (a boundary, not a pass). K-W3 armed (refute-row-and-continue): if the additive residue is representative-INDEPENDENT on \u2119\u00b9 (\u2295 descends \u2192 the boundary is wrong) OR M\u00f6bius maps equal points to UNEQUAL \u2014 preserve the witness, name what reconstructs, reduce scope, CONTINUE; a named-boundary refutation is a result. Units: (representative pairs, M\u00f6bius action).",
+  "PMB.3": "determinism: battery byte-stable x2 (sha256 over records)."
+ },
+ "probe": "the carrier classifier (carrier.py, Stage-0-pinned): free_module vs quotient; free_module_reconstruct (additive); p1_equal (cross-multiply equality, the referee's equality); mobius (the PGL\u2082 action); additive_residue (the representative-dependent quantity). role=probe; the \u2119\u00b9 carrier consults the L1 projective_ratio primitive (Rule 1.2).",
+ "quotient_battery": [
+  "FXWF1"
+ ],
+ "referee": "exact-\u211a: the pinned carrier TRUE (off the residue path) for the free-module closure; cross-multiply (a\u00b7d==b\u00b7c) for \u2119\u00b9 equality. No external executed instrument (Axiom 10).",
+ "spine_fence_ack": "this stage MEASURES the \u2295-carrier on named fixtures; NO spine claim, NO cross-domain G-claim (manifest SPINE FENCE, verbatim law). [INFERENCE] stays [INFERENCE].",
+ "stage": "B",
+ "status_move_rules": "CL-W4 -> DEMONSTRATED iff PMB.1 PASS ([ANALYTIC]+confirm). CL-W5 -> DEMONSTRATED iff PMB.2 PASS (additive-failure [ANALYTIC]; M\u00f6bius-respects-quotient [MEASURED]; the family edge LOCATED). **K-W3 (refute-row-and-continue)** fires on any free-module additive failure OR any \u2119\u00b9 additive-descent / M\u00f6bius quotient-break: the row -> REFUTED-WITH-NAMED-BOUNDARY, preserve the chain, reduce scope, CONTINUE; route to Will. Every FAIL/refute: STOP, present; NO status move applied in-campaign.",
+ "telemetry": "permanently non-verdict-bearing (covenant 3).",
+ "version": 1
+}

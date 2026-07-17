@@ -1,0 +1,63 @@
+# Controlled Offset Dither Readback
+
+Accepted outcome: `controlled_offset_zero_selector_only_not_precision`
+Headline classification: `zero_cleanup_without_readback_gain`
+
+## Test Design
+
+This campaign applies manufactured q-nextafter offsets from `-4` through `+4`, corrects each read by subtracting the known q offset, then tests whether fixed reconstructions improve readback.
+
+Two targets are tracked:
+
+- `algebraic_zero`: the calibration-zero target of the exact form.
+- `clean_substrate_residual`: `R*R - f_float`, the local sqrt roundtrip residual.
+
+`min_abs_corrected` is reported only as a target-aware zero selector. It is not a promotable reconstruction.
+
+## Findings
+
+1. Controlled offsets improve predeclared readback: `False`.
+2. Predeclared reconstruction improves primary zero target: `False`.
+3. Predeclared reconstruction improves primary clean target: `False`.
+4. Target-aware zero selector improves primary zero target: `True`.
+5. Primary direct zero MAE: `5.440092820663267e-17`.
+6. Primary min-abs zero MAE: `4.829470157119431e-17`.
+7. Primary direct clean MAE: `1.9984014443252817e-17`.
+8. Best predeclared clean method/MAE: `midpoint_extreme_corrected` / `1.9984014443252817e-17`.
+9. Double-precision language justified: `False`.
+
+## Aggregate Summary
+
+- Primary zero: direct `5.440092820663267e-17`, min-abs `4.829470157119431e-17`, best predeclared `midpoint_extreme_corrected`.
+- Primary clean: direct `1.9984014443252817e-17`, best predeclared `midpoint_extreme_corrected` = `1.9984014443252817e-17`.
+- Control zero: direct `6.324906928167559e-17`, min-abs `5.380928236656846e-17`.
+- Control clean: direct `2.2204460492503132e-17`, best predeclared `midpoint_extreme_corrected` = `2.607341951771201e-17`.
+
+## Fixture Summary
+
+- `schwarzschild` / `native_grid`: support `25`, zero direct `5.773159728050814e-17`, zero min-abs `5.10702591327572e-17`, clean direct `3.552713678800501e-17`, clean best predeclared `midpoint_extreme_corrected`.
+- `schwarzschild` / `nextafter_up`: support `25`, zero direct `5.10702591327572e-17`, zero min-abs `4.3298697960381107e-17`, clean direct `1.5543122344752193e-17`, clean best predeclared `midpoint_extreme_corrected`.
+- `schwarzschild` / `nextafter_down`: support `25`, zero direct `4.662936703425657e-17`, zero min-abs `4.3298697960381107e-17`, clean direct `1.1102230246251566e-17`, clean best predeclared `midpoint_extreme_corrected`.
+- `schwarzschild` / `alternating_nextafter`: support `25`, zero direct `6.217248937900877e-17`, zero min-abs `5.551115123125783e-17`, clean direct `1.7763568394002505e-17`, clean best predeclared `midpoint_extreme_corrected`.
+- `sr` / `native_grid`: support `96`, zero direct `6.938893903907228e-17`, zero min-abs `5.86575962859918e-17`, clean direct `2.544261098099317e-17`, clean best predeclared `midpoint_extreme_corrected`.
+- `pure_affine_control` / `native_grid`: support `69`, zero direct `5.470664179312366e-17`, zero min-abs `4.7063802130849027e-17`, clean direct `1.769920763895177e-17`, clean best predeclared `midpoint_extreme_corrected`.
+
+## Interpretation
+
+The controlled offsets do not produce a useful readback comb. Fixed reconstructions either tie direct or worsen the clean substrate residual. The only consistent zero-target improvement comes from choosing the corrected sample closest to zero, which is a target-aware calibration-zero selector rather than independent information about the substrate residual.
+
+This answers the offset question negatively for precision: offsets can decorate or clean zero residuals, but the tested comb does not recover a better underlying read than the direct path.
+
+## Verification
+
+- `PYTHONPATH=src python -m lloyd_v4.evals.controlled_offset_dither_readback`
+  Result: passed; generated artifact_controlled_offset_dither_readback.json and controlled_offset_dither_readback_report.md.
+- `PYTHONPATH=src python -m pytest tests/test_controlled_offset_dither_readback.py -q`
+  Result: passed; focused controlled-offset dither tests.
+- `PYTHONPATH=src python -m pytest tests/test_controlled_offset_dither_readback.py tests/test_zero_offset_transcendental_q_source_search.py tests/test_route_bank_offset_guard_audit.py -q`
+  Result: passed; focused compatibility subset.
+
+## Artifacts
+
+- `Build_Docs/Reports/controlled_offset_dither_readback/artifact_controlled_offset_dither_readback.json`
+- `Build_Docs/Reports/controlled_offset_dither_readback/controlled_offset_dither_readback_report.md`

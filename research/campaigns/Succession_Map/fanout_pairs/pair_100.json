@@ -1,0 +1,38 @@
+{
+  "rank": 100,
+  "lift": 2.64,
+  "count": 2,
+  "families": 1,
+  "a": {
+    "id": "OBJ:constraint-surface",
+    "label": "Constraint Surface",
+    "standard_term": "implicit zero-level-set hypersurface F(D,S,P)=0",
+    "nomenclature": "identical-to",
+    "symbols": []
+  },
+  "b": {
+    "id": "OBJ:essential-dimension",
+    "label": "essential dimension",
+    "standard_term": "minimal number of essential variables of a polynomial under affine substitution (distinct from Reichstein's essential dimension)",
+    "nomenclature": "variant-of",
+    "symbols": []
+  },
+  "evidence": [
+    {
+      "uid": "U-0001",
+      "type": "theorem",
+      "claim_status": "proved",
+      "label": "\"If\" direction: Essential dim < n → K = 0",
+      "summary": "Essential dimension < n means F can be expressed in fewer variables via affine substitution. The constraint surface is a generalised cylinder with translation symmetry along (n − d) directions. At least (n − d) principal",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/06_hypotheses_conjectures_and_research_programs/geometric_fault_localization_and_decomposition/Essential Dimension Conjecture.md"
+    },
+    {
+      "uid": "U-1181",
+      "type": "theorem",
+      "claim_status": "conjectured",
+      "label": "Q4.3 — failure as geometric singularity",
+      "summary": "**The question.** When a physical system fails, does the constraint surface develop a geometric singularity (a point where curvature diverges, the gradient vanishes, or the topology changes)? ... What success looks like.",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/01_completed_papers/cella_residue_and_coupling_theory/coupling_field_theory_paper.md"
+    }
+  ]
+}

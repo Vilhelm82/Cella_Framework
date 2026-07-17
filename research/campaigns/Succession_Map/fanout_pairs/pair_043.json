@@ -1,0 +1,50 @@
+{
+  "rank": 43,
+  "lift": 21.83,
+  "count": 5,
+  "families": 1,
+  "a": {
+    "id": "OBJ:f-epsilon",
+    "label": "f_epsilon",
+    "standard_term": "rational uniformizing coordinate (y - ell_epsilon*u)/(y + ell_epsilon*u) used to construct the trace path",
+    "nomenclature": "novel",
+    "symbols": [
+      "f_epsilon"
+    ]
+  },
+  "b": {
+    "id": "OBJ:u-a-epsilon-b-weierstrass-model-coordinates",
+    "label": "u, a_epsilon, b (Weierstrass-model coordinates)",
+    "standard_term": "depressed-cubic (Tschirnhaus) substitution coordinates putting the curve in short Weierstrass form",
+    "nomenclature": "identical-to",
+    "symbols": [
+      "a_epsilon"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-0881",
+      "type": "formula",
+      "claim_status": null,
+      "label": "Alternate closed form of the anti-invariant coefficient",
+      "summary": "F_\\epsilon(u)-F_\\epsilon(b/u) = -\\frac{A_\\epsilon m_\\epsilon}{d_\\epsilon} \\frac{u^2-b} {(u-u_{0,\\epsilon})(u-u_{1,\\epsilon})}. \\tag{5.9}",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md"
+    },
+    {
+      "uid": "U-0924",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Constant d_epsilon and F_epsilon in u-coordinate",
+      "summary": "d_\\epsilon=m_\\epsilon(1-n_\\epsilon) = \\frac{1+\\epsilon s}{16}. In the u-coordinate, F_\\epsilon(u) = A_\\epsilon \\frac{m_\\epsilon}{d_\\epsilon-n_\\epsilon u} -B_\\epsilon. \\tag{3.6}",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md"
+    },
+    {
+      "uid": "U-0991",
+      "type": "formula",
+      "claim_status": null,
+      "label": "Exact anti-invariant rational coefficient",
+      "summary": "F_\\epsilon(u)-F_\\epsilon(b/u) = A_\\epsilon m_\\epsilon n_\\epsilon \\frac{u-b/u} {(d_\\epsilon-n_\\epsilon u) (d_\\epsilon-n_\\epsilon b/u)}. \\tag{4.2}",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md"
+    }
+  ]
+}

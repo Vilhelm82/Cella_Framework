@@ -1,0 +1,121 @@
+{
+  "campaign_id": "shared_residual_geometry_arm",
+  "claims": {
+    "CL-G4": "representation-exhaustion boundary (\u03a6-carried v2)",
+    "CL-G8-floor": "non-archimedean floor box (\u03a6-carried v2)"
+  },
+  "code_pins_sha256": {
+    "detection_v2.py": "f64dcb38501fded6d1758110272a7e7ebdf5edc08b90ca0fc76f9a6b3bd74d62",
+    "fixtures_v2.py": "156ebcb342133763a7d4b5728d0974d076f6d140878a415906e09d4d3f915ed2",
+    "run_v2.py": "e48e965ba6711509c2dfc48cff00b2db69e324a4f82724059de6366f3e168f25"
+  },
+  "controls": {
+    "cascade_ordering_control_fails": {
+      "cell": "UNDERFLOW-WITNESS-ULP",
+      "lesson": "below_detection is a subset of separated_accounted; without testing the T_token first the underflow reads as merely contaminated and the representation-exhaustion never surfaces",
+      "loose_order_verdict": "separated_accounted",
+      "pinned_order_verdict": "below_detection"
+    },
+    "dry_run_refuses": {
+      "float_witness": "below_detection",
+      "padic_witness": "below_detection_2adic"
+    }
+  },
+  "depends_on": {
+    "manifest_v1_sha256": "648975d082407aebdb3b0ead340639a59820f11e98231f10a0fd412fb171a7ee"
+  },
+  "expectations_pinned_at_dry_run": {
+    "cells": [
+      {
+        "account_nonzero": true,
+        "holonomy_float": "0",
+        "label": "UNDERFLOW-WITNESS-ULP",
+        "role": "witness_new",
+        "substrate": "float64",
+        "verdict": "below_detection"
+      },
+      {
+        "account_nonzero": false,
+        "holonomy_float": "-1/4398046511104",
+        "label": "V1-REGRADE-BOUND-BELOW",
+        "role": "v1_regrade",
+        "substrate": "float64",
+        "verdict": "separated_clean"
+      },
+      {
+        "account_nonzero": false,
+        "holonomy_float": "-1/274877906944",
+        "label": "V1-REGRADE-BOUND-ABOVE",
+        "role": "v1_regrade",
+        "substrate": "float64",
+        "verdict": "separated_clean"
+      },
+      {
+        "label": "2ADIC-UNDERFLOW-WITNESS",
+        "role": "witness_new",
+        "substrate": "2-adic",
+        "v2_value": 12,
+        "verdict": "below_detection_2adic"
+      },
+      {
+        "label": "V1-REGRADE-FLOOR-2ADIC",
+        "role": "v1_regrade",
+        "substrate": "2-adic",
+        "v2_value": 0,
+        "verdict": "nonarch_closed"
+      }
+    ],
+    "n_float": 3,
+    "n_padic": 2
+  },
+  "fixture_index": {
+    "fixture_class": "FX-G-B/E (v2 floor correction)",
+    "float_cells": [
+      {
+        "construction": "x,y each ONE ULP (2^-52) above 1; coupling = -\u0394x\u00b7\u0394y = -2^-104 is two ULPs deep \u2014 below the float holonomy's representable resolution. \u03a6_float underflows to EXACTLY 0 while the EFT account holds -2^-104 in \u211a. A genuine resolution-boundary witness (true ULP), not a pick.",
+        "expect": "below_detection",
+        "label": "UNDERFLOW-WITNESS-ULP",
+        "role": "witness_new"
+      },
+      {
+        "construction": "v1 graded this `below_detection` under the hardcoded 2^-40 floor. Its coupling -2^-42 is ABOVE float64's ULP 2^-52 (representable; holo_f != 0), so the corrected \u03a6-carried verdict is `separated_clean`. THE FLIP \u2014 the single most legible proof the breach mislabeled a representable cell.",
+        "expect": "separated_clean",
+        "label": "V1-REGRADE-BOUND-BELOW",
+        "role": "v1_regrade"
+      },
+      {
+        "construction": "v1 `separated_clean`; corrected verdict `separated_clean` (consistent \u2014 the above-floor cell was correctly clean; included so both v1 boundary cells are re-read under the corrected logic).",
+        "expect": "separated_clean",
+        "label": "V1-REGRADE-BOUND-ABOVE",
+        "role": "v1_regrade"
+      }
+    ],
+    "padic_cells": [
+      {
+        "construction": "v = 2^12/3 has v_2(v) = 12 \u2265 k = 12, so \u03a6_2(v,12) reads EXACTLY 0 for a nonzero v \u2014 the 2-adic observation underflows. A genuine resolution-boundary witness (the value's 2-adic expansion begins past the budget), not a pick.",
+        "expect": "below_detection_2adic",
+        "label": "2ADIC-UNDERFLOW-WITNESS",
+        "role": "witness_new"
+      },
+      {
+        "construction": "v1 graded this `below_detection_2adic` under the hardcoded floor_K=8 (residue v_2=13 > 8). But \u03a6_2(3/5,12) = 1639 \u2260 0 \u2014 the value IS fully resolved at 12 digits, NOT 2-adically underflowed; it closes. THE FLIP to `nonarch_closed` \u2014 the breach mislabeled a resolved cell as exhausted.",
+        "expect": "nonarch_closed",
+        "label": "V1-REGRADE-FLOOR-2ADIC",
+        "role": "v1_regrade"
+      }
+    ]
+  },
+  "frozen": true,
+  "grader_clauses": {
+    "PMG-v2.1": "the corrected detection is \u03a6-CARRIED, no floor constant (R14 fix): `below_detection` \u27fa holonomy_float == 0 \u2227 coupling \u2260 0 (float64); `below_detection_2adic` \u27fa \u03a6_2(v,k) == 0 \u2227 v \u2260 0 (2-adic). It is the `T_token` of the typed residue (design-doc Primitive 1), computed per-operand from the operand + precision \u2014 NOT a stored threshold. The NEW derived witnesses fire it at the genuine resolution boundary (true ULP 2^-52 \u2192 coupling 2^-104; v_2(v) \u2265 k). Units: cell.",
+    "PMG-v2.2": "the cascade ORDERING is pinned and load-bearing: `below_detection` is a SUBSET of `separated_accounted` (the float reading entirely gone vs merely contaminated \u2014 both have account \u2260 0). The cascade tests below_detection BEFORE separated_accounted (and \u03a6_2==0 before nonarch_closed), so the underflow witness (account \u2260 0) reads `below_detection`, not `separated_accounted`. Loose ordering would swallow the T_token. Units: cell.",
+    "PMG-v2.3": "the v1 RE-GRADE flips on frozen evidence VERBATIM (the breach demonstrated): operands read READ-ONLY from the frozen fixtures, BOUND-BELOW (coupling -2^-42, ABOVE float64's ULP 2^-52 \u2192 representable) flips `below_detection` \u2192 `separated_clean`; FLOOR-2ADIC (3/5, \u03a6_2 = 1639 \u2260 0 \u2192 fully resolved) flips `below_detection_2adic` \u2192 `nonarch_closed`. The frozen v1 records/modules are byte-identical and UNTOUCHED (no-tamper; rule-1.9 pins enforce it). Units: cell.",
+    "PMG-v2.4": "determinism: the v2 record set is byte-identical across two runs (sha256 over records)."
+  },
+  "stage": "v2_floor_correction",
+  "status_move_rules": "CL-G4 (re-emitted v2) -> DEMONSTRATED iff the float underflow witness reads `below_detection` (cascade-pinned: account \u2260 0, so the order is tested) AND the v1 BOUND-BELOW re-grade flips to `separated_clean` AND BOUND-ABOVE stays `separated_clean`. CL-G8 floor box (re-emitted v2) -> DEMONSTRATED iff the 2-adic underflow witness reads `below_detection_2adic` AND the v1 FLOOR-2ADIC re-grade flips to `nonarch_closed`. The v1 verdicts for these cells are recorded SUPERSEDED-BY-v2 (flawed-floor); the frozen v1 records are PRESERVED untouched. REFUTE-ROW (halt the correction, preserve chain): any FAIL_* or a witness that fails to fire its T_token -> the corrected design is wrong. PARTIAL until both runs match (PMG-v2.4).",
+  "supersedes": {
+    "claim": "CL-G4 (Stage B boundary) + CL-G8 floor box",
+    "reason": "R14 \u2014 v1 used a hardcoded floor constant (axiom breach); v1 records PRESERVED untouched"
+  }
+}

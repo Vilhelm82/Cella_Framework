@@ -1,0 +1,565 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{calc}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue!55!black,citecolor=blue!55!black,urlcolor=blue!55!black}
+
+% pandoc fragment helpers
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\providecommand{\real}[1]{#1}
+
+\theoremstyle{plain}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+\newcommand{\Sym}{\operatorname{Sym}}
+\newcommand{\Gal}{\operatorname{Gal}}
+\newcommand{\Ftil}{\widetilde{F}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+
+\title{\textbf{Imprimitive Wreath Monodromy of Self-Composed\\ Constraint Surfaces}\\[4pt]
+\large Cyclic product covers, symmetric directive covers,\\ and the seam as imprimitivity system}
+\author{William Lloyd\\ \small Independent researcher, Coffs Harbour NSW, Australia\\[2pt]
+\small\emph{Working draft. Foundations in ``The Active Role-Jet Orbit Calculus for Constraint-Surface Roles'';}\\
+\small\emph{companions ``Two Geometric Readings of a Thermodynamic Surface'' (GTD vs.\ DBP)}\\
+\small\emph{and ``Role-Channel Anisotropy of DBP Surfaces.'' Certainty tiers inline.}}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We study the branched-cover structure of a constraint surface $F(D,S,P)=0$ carrying a
+directive--substrate--product (DBP) role assignment, composed with itself by identifying the product
+of one stage with the directive of the next. Eliminating the shared variable---the \textbf{seam}---yields
+a four-variable hypersurface $\widetilde F(D_1,S_1,S_2,P_2)=0$ whose monodromy we compute directly and
+then prove in closed form. Four findings stand out. \textbf{First}, there is no single monodromy group:
+each role-output cover carries its own, and each is a full wreath product, imprimitive with respect to
+the seam. \textbf{Second}, the two covers are of \emph{opposite Galois type}, forced by how the solved
+role enters $F$: the product role enters as a pure power $P^{m_P}$, so its extractions are totally
+ramified and the product cover is the \textbf{cyclic} wreath $C_{m_P}\wr C_{m_P}$ of order
+$m_P^{\,m_P+1}$; the directive role enters as a coupled trinomial $D^{m_D}+DS$, whose generic Galois
+group is symmetric, so the directive cover is the \textbf{symmetric} wreath $S_{m_D}\wr S_{m_D}$ of
+order $(m_D!)^{m_D}\,m_D!$. Both laws hold for \emph{all} $m$---proven, not merely measured---via two
+monodromy lemmas (pure power $\Rightarrow C_m$; trinomial $\Rightarrow S_m$) verified independently at
+$m=4,5,6,7$. \textbf{Third}, the second-stage substrate $S_2$ is an \emph{omega role}: it positions the
+downstream product branch while leaving the seam invariant, and steering it moves exactly one product
+pair at a time. \textbf{Fourth}, iterated composition produces a recovery asymmetry that is a
+\emph{group-type} asymmetry---symmetric (scrambled) reconstruction of the directive versus cyclic
+(phased) production of the product; the forward product side carries genuine $U(1)$ phase characters
+$e^{2\pi i/m_P}$, while the backward directive side is non-abelian and phaseless. Results are
+computer-verified on the cubic and keystone surfaces and on the $(3,3)$ and $(4,4)$ surfaces,
+cross-checked by exact algebra, and closed by proof.
+\end{abstract}
+
+\paragraph{Certainty tiers (inline throughout).}
+\textbf{[proven]}: an exact algebraic fact by closed-form argument.
+\textbf{[symbolic]}: verified in exact computer algebra for the stated family (e.g.\ $m_D=2,3,4$), not
+proved in closed form for all parameters.
+\textbf{[computer-verified]}: established by numerically certified monodromy on a specific surface under
+the gates of the Appendix.
+\textbf{[conjecture]}: with supporting evidence stated.
+\textbf{[interpretation]}: an interpretive reading, not a theorem.
+
+\hypertarget{introduction}{%
+\section{Introduction}\label{introduction}}
+
+A directive-based product (DBP) presents an algebraic relation \(D\oplus S = P\) as a constraint surface \(F(D,S,P)=0\) together with an assignment of \textbf{roles}: \(D\) is the directive (the active operator), \(S\) the substrate (the passive operand), and \(P\) the product. The framework's defining intuition is an asymmetry: \(D\) acting on \(S\) yields \(P\), whereas ``\(S\) acting on \(D\)'' is a category error. As an \emph{algebraic} object, however, \(F=0\) is symmetric --- one may solve for any variable --- so the directional restriction appears to dissolve. The first contribution of this paper is to show that it does not dissolve; it is \textbf{re-encoded in the geometry}, as an asymmetry in the degree, the monodromy, and --- the new result of this draft --- the \emph{Galois type} of the inverse problems.
+
+The natural probe is composition. We compose a DBP surface with itself by the \textbf{forward glue} \(D_2 := P_1\): the product of stage one becomes the directive of stage two (output feeds next operator). Eliminating the shared variable produces a single hypersurface \(\widetilde F = 0\), and we ask what survives of the role structure in its branched-cover geometry.
+
+\hypertarget{summary-of-results}{%
+\subsection{Summary of results}\label{summary-of-results}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{No single Galois group; per-cover wreaths.} Each role-output cover of \(\widetilde F\) has its own monodromy group, and each is a full wreath product imprimitive with respect to the seam (§5--§6). \textbf{{[}proven{]}/{[}computer-verified{]}}
+\item
+  \textbf{Degree spectrum law.} For \(F = D^{m_D}+DS+P^{m_P}-3\) at \(m_P=2\), the spectrum of \((D_1,S_1,S_2,P_2)\) in \(\widetilde F\) is \((m_D^2,\,m_D,\,m_P,\,m_P^2)\). \textbf{{[}symbolic{]}}
+\item
+  \textbf{The extraction-type dichotomy (central).} The Galois type of each cover is fixed by how the solved role enters \(F\):
+
+  \begin{itemize}
+  \tightlist
+  \item
+    product cover \(\cong C_{m_P}\wr C_{m_P}\) (cyclic), order \(m_P^{\,m_P+1}\) --- because \(P\) enters as the pure power \(P^{m_P}\);
+  \item
+    directive cover \(\cong S_{m_D}\wr S_{m_D}\) (symmetric), order \((m_D!)^{m_D}m_D!\) --- because \(D\) enters as the trinomial \(D^{m_D}+DS\). Both are \textbf{proven for all \(m\)} (§4, §5, §6, §7). These are the two endpoints of a \(\gcd\)-indexed spectrum of layer types \(C_{\gcd(m,k)}\wr S_{m/\gcd(m,k)}\) (§4, Lemma C; §7). \textbf{{[}proven / computer-verified{]}}
+  \end{itemize}
+\item
+  \textbf{The omega substrate.} \(S_2\) controls the downstream product-branch position with the signature \(\partial A/\partial S_2=0\), \(\partial C/\partial S_2 = 1\); loops in \(S_2\) steer exactly one product pair (§8). \textbf{{[}computer-verified{]}}
+\item
+  \textbf{Recovery asymmetry, now group-type.} Over \(n\) stages, root-directive recovery is degree \(m_D^{\,n}\) and final-product production is degree \(m_P^{\,n}\); and these are not merely different degrees but different \emph{group types} --- symmetric versus cyclic (§7, §9). \textbf{{[}symbolic{]}/{[}proven{]}}
+\item
+  \textbf{Abelian boundary, now explained.} The product cover is cyclic, hence carries genuine \(U(1)\) phase characters \(e^{2\pi i/m_P}\); the directive cover is symmetric with abelianisation \((\mathbb Z/2)^2\), hence phaseless. The wave/phase reading is \emph{exact on the product side and fails on the directive side}, and the boundary between them is the cyclic/symmetric boundary (§10). \textbf{{[}computer-verified{]}}
+\end{enumerate}
+
+A note on revision: an earlier version of this work reported the product cover as the \emph{symmetric} wreath \(\mathrm{Sym}(m_P)\wr\mathrm{Sym}(m_P)\), generalising from \(m_P=2\). That generalisation was along the wrong axis. At \(m_P=2\) the cyclic and symmetric wreaths coincide (\(C_2 = \mathrm{Sym}(2)\), both giving \(D_4\) of order \(8\)), so the \(m_P=2\) measurement cannot distinguish them; the first place they differ, \(m_P=3\), settles it cyclic. The correct law \(C_{m_P}\wr C_{m_P}\) is \emph{cleaner} (order \(m_P^{\,m_P+1}\)) and comes with a proof, so the correction is a strengthening. Details in §5.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{the-self-glue-construction}{%
+\section{The self-glue construction}\label{the-self-glue-construction}}
+
+\textbf{Definition (DBP surface, worked family).} We work with \[
+F(D,S,P) = D^{m_D} + DS + P^{m_P} - 3 = 0,
+\] with integers \(m_D, m_P \ge 2\) and role assignment \((D,S,P) = (\text{directive}, \text{substrate}, \text{product})\). The two running examples are the \textbf{cubic} (\(m_D=3,\,m_P=2\), i.e.~\(D^3+DS+P^2-3\)) and the \textbf{keystone} (\(m_D=m_P=2\), i.e.~\(D^2+DS+P^2-3\)). Two higher fixtures, \((3,3)\) and \((4,4)\), appear in §4--§6.
+
+\textbf{Construction (forward self-glue).} Take two copies of \(F\). Stage one is \(F(D_1,S_1,P_1)=0\); stage two is \(F(D_2,S_2,P_2)=0\) with the \textbf{seam identification} \(D_2 := P_1\). Writing \[
+A := 3 - D_1^{m_D} - D_1 S_1, \qquad\text{so that}\qquad P_1^{m_P} = A,
+\] stage two becomes \(P_1^{m_D} + P_1 S_2 + P_2^{m_P} - 3 = 0\). Eliminating the seam variable \(P_1\) (by resultant with \(P_1^{m_P} - A\)) yields a four-variable hypersurface \(\widetilde F(D_1,S_1,S_2,P_2)=0\).
+
+Writing \(B := 3 - P_2^{m_P}\), the eliminant is a single resultant in the seam variable \(Z := P_1\): \[
+\boxed{\;\widetilde F_{m_D,m_P} = \operatorname{Res}_Z\!\big(Z^{m_P}-A,\; Z^{m_D}+S_2 Z - B\big) = 0\;}\qquad (A = 3 - D_1^{m_D} - D_1 S_1).
+\] This is the construction in full generality, exact in \(\mathbb Q[D_1,S_1,S_2,P_2]\) for every \((m_D,m_P)\). \textbf{{[}proven{]}}
+
+At \(m_P=2\) the seam relation is \(Z^2 = A\) and the eliminant closes in elementary form, split by the parity of the directive exponent (\textbf{{[}symbolic{]}}, verified \(m_D = 2,3,4,5\)): \[
+\begin{aligned}
+m_D = 2k:\quad Z^{m_D}=A^k &\;\Rightarrow\; \widetilde F_{2k,2} = (B - A^k)^2 - A\,S_2^2,\\
+m_D = 2k{+}1:\quad Z^{m_D}=Z A^k &\;\Rightarrow\; \widetilde F_{2k+1,2} = B^2 - A\,(A^k + S_2)^2.
+\end{aligned}
+\] The parity split is geometric: when \(m_D\) is even the seam directive \(Z^{m_D}=A^{m_D/2}\) is a power of \(A\) and drops out of the \(S_2\)-coupling; when \(m_D\) is odd a stray factor of \(Z\) survives, fusing the directive with the omega coupling into \(A^k+S_2\). The keystone is the even case at \(k=1\), \(\widetilde F_{2,2}=(B-A)^2 - A S_2^2\); the cubic is the odd case at \(k=1\), \(\widetilde F_{3,2}=B^2 - A(A+S_2)^2\), with \(C := A+S_2\).
+
+\textbf{Definition (lifted correspondence).} Rather than work on \(\widetilde F\) alone we retain the seam \(P_1\) as an explicit fibre coordinate. The lifted system is the tower \[
+P_1^{m_P} = A, \qquad P_2^{m_P} = 3 - P_1^{m_D} - P_1 S_2,
+\] which for the cubic is \(P_2^2 = 3 - P_1 C\) (\(C = A+S_2\)) and for the keystone \(P_2^2 = 3 - P_1(P_1+S_2)\). The seam is the intermediate sheet over which the product sits. This lift is the working object for every monodromy measurement below.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{role-output-covers-and-the-degree-spectrum}{%
+\section{Role-output covers and the degree spectrum}\label{role-output-covers-and-the-degree-spectrum}}
+
+\(\widetilde F = 0\) is a three-dimensional hypersurface in four variables; fixing which three variables form the base and solving for the fourth gives a finite branched cover. We call these the \textbf{role-output covers}. The degrees are operating-point-blind --- they see only the exponents --- and they were never affected by the corrections of this draft.
+
+\textbf{Proposition (no single Galois group).} The monodromy group of \(\widetilde F\) depends on the choice of output role. The directive cover (solve for \(D_1\)) and the product cover (solve for \(P_2\)) have different degrees and different groups. A naive ``\(\operatorname{Gal}(\widetilde F/\text{base})\)'' over a base in which the seam parameter \(A\) is treated as free is the group of a \emph{decoupled} problem and describes no actual cover.
+
+\emph{Remark.} This corrects a natural error: one is tempted to assign \(\widetilde F\) a single group (e.g.~a product \(S_3\times D_4\) obtained by treating \(A\) as free). This fails on a counting obstruction --- the directive cover is transitive of degree \(9\), so \(9\) must divide its order, but \(|S_3\times D_4| = 48\) is not divisible by \(9\). The honest object is the per-output-cover group.
+
+\textbf{Result (degree spectrum law, \(m_P=2\)).} For \(F = D^{m_D}+DS+P^2-3\) the degrees of \((D_1,S_1,S_2,P_2)\) in \(\widetilde F\) are \[
+(\deg_{D_1}, \deg_{S_1}, \deg_{S_2}, \deg_{P_2}) = (m_D^2,\; m_D,\; m_P,\; m_P^2),
+\] verified symbolically for \(m_D \in \{2,3,4\}\). \textbf{{[}symbolic{]}}
+
+\begin{longtable}[]{@{}lllll@{}}
+\toprule\noalign{}
+surface & \(\deg_{D_1}\) & \(\deg_{S_1}\) & \(\deg_{S_2}\) & \(\deg_{P_2}\) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+cubic \((m_D{=}3,m_P{=}2)\) & \(9\) & \(3\) & \(2\) & \(4\) \\
+keystone \((m_D{=}2,m_P{=}2)\) & \(4\) & \(2\) & \(2\) & \(4\) \\
+generic \(m_D\) (at \(m_P{=}2\)) & \(m_D^2\) & \(m_D\) & \(2\) & \(4\) \\
+\end{longtable}
+
+The keystone spectrum \((4,2,2,4)\) is symmetric under \(D_1\leftrightarrow P_2\) precisely because \(m_D=m_P\); the cubic cannot be, because \(m_D\neq m_P\). This \(D_1\leftrightarrow P_2\) symmetry is the algebraic shadow of the directive/product duality.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{two-monodromy-lemmas-the-engine}{%
+\section{Two monodromy lemmas (the engine)}\label{two-monodromy-lemmas-the-engine}}
+
+Everything below rests on two facts about single radical extractions. The solved role of each cover sits behind such an extraction at each layer of the tower, and the \emph{type} of the extraction --- pure power or coupled trinomial --- fixes the layer's monodromy. The two lemmas were verified independently at \(m = 4,5,6,7\): trinomial extraction realises the full \(S_m\) (orders \(24, 120, 720, 5040\); exactly \(m-1\) transpositions every time), pure-power extraction realises \(C_m\) (a single \(m\)-cycle). \textbf{{[}computer-verified{]}}
+
+\textbf{Lemma A (pure power \(\Rightarrow\) cyclic).} The cover \(x^m = c\) over the \(c\)-line has monodromy group \(C_m\).
+
+\emph{Proof.} \(x^m - c\) ramifies only at \(c = 0\) (and at \(c = \infty\)), where all \(m\) sheets meet --- total ramification. The local monodromy is the single \(m\)-cycle \(x_k \mapsto \omega x_k\) with \(\omega = e^{2\pi i/m}\), and \(\langle\,m\text{-cycle}\,\rangle = C_m\). \(\blacksquare\) \textbf{{[}proven{]}}
+
+\textbf{Lemma B (trinomial \(\Rightarrow\) symmetric).} The cover \(x^m + sx - c\) over the \(c\)-line (\(s \neq 0\) fixed) has monodromy group \(S_m\).
+
+\emph{Proof.} Three steps.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \emph{Connected.} The relation \(c = x^m + sx\) exhibits the cover as the graph of a function, so \(\mathbb C(s,c)(x) = \mathbb C(s,x)\) is a rational function field; hence \(x^m+sx-c\) is irreducible, the cover is connected, and the monodromy is transitive.
+\item
+  \emph{Branch points.} Let \(\varphi = x^m + sx - c\), \(\varphi' = mx^{m-1}+s\). The \(m-1\) critical points are the \((m{-}1)\)-th roots of \(-s/m\), all nonzero and simple. The critical values \(c_k = \varphi(x_k) = \tfrac{(m-1)s}{m}\,x_k\) are distinct (proportional to the distinct \(x_k\)), and \(\varphi''(x_k) = m(m-1)x_k^{m-2}\neq 0\), so each critical point is non-degenerate (Morse). Each of the \(m-1\) branch points therefore contributes a single \textbf{transposition}.
+\item
+  \emph{Assembly.} Transitivity forces the graph on \(m\) sheets whose edges are those \(m-1\) transpositions to be connected; a connected graph on \(m\) vertices with \(m-1\) edges is a \textbf{spanning tree}, and transpositions along a tree generate \(S_m\).
+\end{enumerate}
+
+(Riemann--Hurwitz check: \(m-1\) simple finite branch points plus a totally ramified point at infinity give \(2g-2 = -2m + 2(m-1) = -2\), so \(g = 0\), consistent with the cover being \(\mathbb P^1_x\).) \(\blacksquare\) \textbf{{[}proven{]}}
+
+\emph{Remark (the \(s\)-direction).} The same conclusion holds varying \(s\) at fixed \(c \neq 0\): now there are \(m\) simple branch points, over \(x^m = c/(1-m)\), the cover is still connected (since \(s = c/x - x^{m-1}\) again exhibits a rational field), and the \(m\) transpositions still generate \(S_m\). This \(s\)-direction is what supplies \emph{within-block independence} in the directive wreath (§6).
+
+The contrast between Lemma A and Lemma B is the whole story. A pure power collides \emph{all} sheets at once (one branch point, an \(m\)-cycle, cyclic); a trinomial collides sheets \emph{pairwise} at many branch points (transpositions, symmetric). On two sheets these are indistinguishable --- a 2-cycle is both the cyclic generator and the only transposition, so \(C_2 = S_2\). They first part company at \(m=3\).
+
+\textbf{Lemma B\('\) (coprime trinomial \(\Rightarrow\) symmetric, all \(k\)).} For \(\gcd(m,k)=1\) with \(1\le k\le m-1\) and \(s\neq0\) fixed, the cover \(x^m + s\,x^k - c\) over the \(c\)-line has monodromy \(S_m\). (Lemma B is the case \(k=1\); the argument below covers every coprime \(k\) uniformly and re-proves it.)
+
+\emph{Proof.} Four steps, all read off the branch data --- no external Galois input.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \emph{Transitive.} \(c = x^m + s x^k\) presents the cover as a degree-\(m\) map \(\mathbb P^1_x\to\mathbb P^1_c\), so \(x^m+sx^k-c\) is the minimal polynomial of \(x\) over \(\mathbb C(c)\) (its degree equals \([\mathbb C(x):\mathbb C(c)]=m\)); it is irreducible, the cover connected, the monodromy \(G\) transitive.
+\item
+  \emph{Branch inventory.} The critical points are the roots of \(\varphi'=x^{k-1}(m x^{m-k}+sk)\). At \(c=\infty\) the cover is totally ramified --- an \(m\)-cycle \(\rho\). At \(c=0\) the point \(x=0\) carries ramification index \(k\) (locally \(\varphi\sim s x^k\)), a \(k\)-cycle \(\sigma\) (absent when \(k=1\), where \(x=0\) is not critical); its other preimages are simple. The \(m-k\) outer critical points solve \(x^{m-k}=-sk/m\); there \(\varphi''=sk(k-m)x^{k-2}\neq0\), so each is a non-degenerate (Morse) double point --- a transposition \(\tau_j\) --- and the critical values \(c_j=\tfrac{(m-k)s}{m}\,x_j^k\) are \emph{distinct}, because \(x_j\) runs over the \((m-k)\)-th roots of \(-sk/m\) and \(j\mapsto x_j^k\) is injective exactly when \(\gcd(k,m-k)=\gcd(k,m)=1\). So the \(m-k\) outer branch points are distinct, each contributing one transposition.
+\item
+  \emph{Primitive.} Suppose a nontrivial block system: \(e=m/d\) blocks of size \(d\), \(1<d<m\). A transposition preserves such a system only with both points in one block (it cannot carry a size-\(\ge2\) block onto another), so every \(\tau_j\) acts trivially on blocks. The product-of-monodromies relation \(\rho\,\sigma\prod_j\tau_j=e\) projects to the block action \(G\to S_e\): the \(\bar\tau_j\) vanish, leaving \(\bar\sigma\,\bar\rho=e\), so \(\bar\sigma=\bar\rho^{-1}\) is an \(e\)-cycle on the blocks. But a single \(k\)-cycle inducing an \(e\)-cycle on the blocks has block-sequence of period \(e\) along the cycle, forcing \(e\mid k\); with \(e\mid m\) and \(\gcd(m,k)=1\) this gives \(e\mid 1\), hence \(e=1\) --- contradiction. (When \(k=1\) there is no \(\sigma\) and the relation reads \(\bar\rho=e\), but \(\bar\rho\) is an \(e\)-cycle, so again \(e=1\).) Thus \(G\) is primitive.
+\item
+  \emph{Finish.} On a primitive group the relation \(i\sim j\iff(i\,j)\in G\) is \(G\)-invariant (a conjugate of a transposition is a transposition), so its classes form a block system; primitivity forces them trivial, and the one transposition \(\tau_1\) forbids all-singletons --- so there is a single class, the transpositions in \(G\) connect all \(m\) sheets, they contain a spanning tree, and transpositions along a tree generate \(S_m\). Hence \(G=S_m\). \(\blacksquare\) \textbf{{[}proven{]}}
+\end{enumerate}
+
+The mechanism is the same one Lemma B used at \(k=1\) --- Morse double points are transpositions, and coprimality keeps their branch values apart --- now carried to all coprime \(k\), with primitivity supplying what the smaller transposition count no longer gives for free.
+
+\textbf{Lemma C (the \(\gcd\) law, interpolating A and B).} The cover \(x^m + s\,x^k - c\) over the \(c\)-line (\(s\neq 0\) fixed, \(0\le k\le m-1\)) has monodromy the imprimitive wreath \[
+C_{d}\wr S_{m/d}, \qquad d = \gcd(m,k), \quad \text{order } d^{\,m/d}\,(m/d)!,
+\] under the convention \(\gcd(m,0)=m\). Lemmas A and B\('\) are its endpoints: a pure power (\(k=0\)) gives \(d=m\), hence \(C_m\wr S_1 = C_m\); a coupling coprime to \(m\) (\(d=1\)) gives \(C_1\wr S_m = S_m\).
+
+\emph{Proof (reduction).} With \(d=\gcd(m,k)\), \(m=dm'\), \(k=dk'\), \(\gcd(m',k')=1\), substitute \(y=x^d\): \[
+x^m + s\,x^k - c \;=\; y^{m'} + s\,y^{k'} - c .
+\] The roots split into \(m'\) blocks of \(d\) --- the fibres of \(x\mapsto y=x^d\). Within a block \(x\) runs over the \(d\)-th roots of a fixed \(y\), the pure power \(x^d=y\), so by Lemma A the within-block monodromy is \(C_d\) (totally ramified where a block collides at \(x=0\), the locus \(c=0\)). The reduced trinomial \(y^{m'}+s\,y^{k'}-c\) has coprime exponents, hence full symmetric monodromy \(S_{m'}\) by Lemma B\('\). Block action \(S_{m'}\), within-block actions independent across blocks (distinct collision loci), assembling to \(C_d\wr S_{m'}\). \(\blacksquare\) \textbf{{[}proven{]}}
+
+Certified continuation confirms the law across the coprime cases \((m,k)=(3,2),(4,3),(6,5)\) --- returning \(S_3,S_4,S_6\) (orders \(6,24,720\)) --- and the non-coprime cases \((4,2),(6,2),(6,3),(9,3)\) --- returning \(C_2\wr S_2,\,C_2\wr S_3,\,C_3\wr S_2,\,C_3\wr S_3\) (orders \(8,48,18,162\)) --- each matching \(d^{m/d}(m/d)!\) with block-respecting generator cycle types (\(d\)-cycles within blocks, transpositions across them). The order pins the within-block factor cyclic, not symmetric: at \((9,3)\) the measured \(162=|C_3\wr S_3|\), against \(1296=|S_3\wr S_3|\). \textbf{{[}computer-verified{]}}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{the-product-cover-the-cyclic-wreath}{%
+\section{The product cover: the cyclic wreath}\label{the-product-cover-the-cyclic-wreath}}
+
+Solving \(\widetilde F\) for \(P_2\) over \((D_1,S_1,S_2)\): with \((D_1,S_1)\) fixed, \(A\) is a fixed scalar; the seam \(P_1\) has \(m_P\) values (\(P_1^{m_P} = A\)) and the product \(P_2\) has \(m_P\) values. Both layers are \(m_P\)-fold extractions, so the cover factors as \(m_P\) seam blocks of \(m_P\) sheets each. The directive exponent \(m_D\) enters only through the value of \(A\), frozen in this cover; hence the product cover is \textbf{independent of \(m_D\)}.
+
+Both layers are \textbf{pure powers} --- \(P_1^{m_P} = A\) and \(P_2^{m_P} = 3 - A - P_1 S_2\) (a pure \(m_P\)-th root of its radicand). By Lemma A each layer is cyclic.
+
+\textbf{Result (product-cover monodromy).} The product cover is the \textbf{cyclic wreath} \[
+\boxed{\;C_{m_P}\wr C_{m_P}, \quad \text{order } m_P^{\,m_P+1},\;}
+\] imprimitive with the seam (\(m_P\)-th roots of \(A\)) as block system. \textbf{{[}proven{]}} (upper bound by total ramification; realisation as below) \textbf{/ {[}computer-verified{]}} at \(m_P \in \{2,3,4\}\).
+
+\emph{Proof (structure).} The cover factors through the seam value (cover \(\to\) seam-cover \(\to\) base), a block system with \(m_P\) blocks of \(m_P\), giving \(G \subseteq \Gamma\wr\Gamma\) with \(\Gamma\) the layer group. Both layers are pure powers, so by Lemma~A: the block action---looping \(A\) around \(0\)---is the single \(m_P\)-cycle on the blocks, generating \(C_{m_P}\); and within block \(i\)---looping \(S_2\) around the product branch point \(P_2^{m_P} = 0\) for that seam sign---the product sheets carry a single \(m_P\)-cycle, \(C_{m_P}\), the within-block branch loci for distinct seam signs being distinct, so these are independent across blocks, generating \((C_{m_P})^{m_P}\).
+
+The block action conjugates the within-block generators cyclically across blocks, so \(G = (C_{m_P})^{m_P}\rtimes C_{m_P} = C_{m_P}\wr C_{m_P}\). With the upper bound, equality. \(\blacksquare\)
+
+\textbf{Measurement.} The lifted product cover was measured on the \((3,3)\), \((2,3)\), \((4,4)\) surfaces and three \(m_P=2\) surfaces, by numerically certified continuation of all sheets around based loops (seam loop in \(A\), one product lasso per block) under the gates of the Appendix:
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1429}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+surface \((m_D,m_P)\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+sheets
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+measured order
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(C_{m_P}\wr C_{m_P}\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(\mathrm{Sym}(m_P)\wr\mathrm{Sym}(m_P)\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+block action
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+block kernel
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\((3,2),(2,2),(4,2)\) & 4 & \textbf{8} & 8 & 8 & \(C_2\) & \((C_2)^2\) \\
+\((3,3),(2,3)\) & 9 & \textbf{81} & 81 & 1296 & \(C_3\) & \((C_3)^3\) \\
+\((4,4)\) & 16 & \textbf{1024} & 1024 & 7,962,624 & \(C_4\) & \((C_4)^4\) \\
+\end{longtable}
+
+Every measured group is \(C_{m_P}\wr C_{m_P}\), order \(m_P^{\,m_P+1}\), \(m_D\)-independent, stable across basepoints; residuals \(\le 1.5\times 10^{-14}\), bijective throughout. \textbf{{[}computer-verified{]}}
+
+\emph{Remark (the \(m_P=2\) degeneracy and the parity tell).} At \(m_P=2\) the group is \(D_4\) of order \(8\), which is simultaneously \(C_2\wr C_2\) and \(\mathrm{Sym}(2)\wr\mathrm{Sym}(2)\) --- the two wreaths coincide because \(C_2 = \mathrm{Sym}(2)\). The first place they differ is \(m_P=3\), where the measurement returns \(81 = |C_3\wr C_3|\), not \(1296 = |\mathrm{Sym}(3)\wr\mathrm{Sym}(3)|\). A clean one-bit diagnostic of the distinction: at \(m_P=3\) every generator is \emph{even} (the group lies in \(A_9\)), because cube-root branching produces only \(3\)-cycles --- and the symmetric wreath contains within-block transpositions, which are odd. (At \(m_P=4\) the group is \emph{not} in \(A_{16}\), since \(4\)-cycles are odd; so evenness is an \(m_P\)-parity artifact and the parity-independent invariant is \emph{cyclic block action and cyclic block kernel}, which the table confirms at every \(m_P\).)
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{the-directive-cover-the-symmetric-wreath}{%
+\section{The directive cover: the symmetric wreath}\label{the-directive-cover-the-symmetric-wreath}}
+
+Solving \(\widetilde F\) for \(D_1\) over \((S_1,S_2,P_2)\): now \(P_2\) (hence \(B = 3 - P_2^{m_P}\)) is fixed, so \(A\) is no longer single-valued. The seam \(Z\) satisfies the stage-two relation \(Z^{m_D} + S_2 Z - B = 0\) --- a \textbf{trinomial} of degree \(m_D\) --- giving \(m_D\) seam values; each yields \(A = Z^{m_P}\), and each admissible \(A\) then gives \(m_D\) values of \(D_1\) through \(D_1^{m_D} + S_1 D_1 - (3-A) = 0\) --- again a \textbf{trinomial}. Total degree \(m_D^2\), factoring as \(m_D\) blocks (the \(A\)-values) of \(m_D\) sheets.
+
+Both layers are trinomials of the form \(x^{m_D} + (\cdot)\,x - (\cdot)\). By Lemma B each layer is symmetric.
+
+\textbf{Result (directive-cover monodromy).} The directive cover is the \textbf{symmetric wreath} \[
+\boxed{\;S_{m_D}\wr S_{m_D}, \quad \text{order } (m_D!)^{m_D}\,m_D!,\;}
+\] imprimitive with the \(A\)-values as block system. Holds for all \(m_D, m_P \ge 2\) off the codimension-\(1\) block-collapse locus \(\mathrm{disc}_A=0\) (§7, \emph{Block completeness}; in particular the verified \((3,3)\)). \textbf{{[}proven{]}} (structure as below) \textbf{/ {[}computer-verified{]}} at \(m_D \in \{2,3\}\).
+
+\emph{Proof (structure).} The cover factors through \(A\) (cover \(\to\) \(A\)-cover \(\to\) base), a block system with \(m_D\) blocks of \(m_D\), giving \(G \subseteq S_{m_D}\wr S_{m_D}\). To fill it:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Within-block (the kernel).} On a block (fixed \(A_j\)), the \(m_D\) sheets are roots of \(D_1^{m_D} + S_1 D_1 - (3-A_j)\). Varying \(S_1\) with \((S_2,P_2)\) fixed holds every \(A_j\) fixed and distinct, and realises the \(s\)-line of the trinomial; by Lemma B, block \(j\) carries the full \(S_{m_D}\). Block \(j\)'s branch points lie over \(D_1^{m_D} = (3-A_j)/(1-m_D)\), distinct from block \(j'\neq j\) (distinct \(A\)), so each loop moves sheets in one block only and fixes the rest. The within-block monodromies are therefore independent across blocks and generate the full direct product \((S_{m_D})^{m_D}\).
+\item
+  \textbf{Block layer (the action).} The blocks are the values \(A = Z^{m_P}\), the seam \(Z\) a root of \(Z^{m_D} + S_2 Z - B\). Varying \(P_2\) realises the \(c\)-line of this trinomial; by Lemma B the seam carries the full \(S_{m_D}\), and since the \(A\)-block polynomial has degree \(m_D\), the map \(Z\mapsto A = Z^{m_P}\) is an equivariant bijection on the roots, descending the action isomorphically to \(S_{m_D}\) on the blocks.
+\item
+  The block action permutes blocks transitively and conjugates block \(j\)'s kernel to block \(j'\)'s, so \(G = (S_{m_D})^{m_D}\rtimes S_{m_D} = S_{m_D}\wr S_{m_D}\). With the upper bound, equality. \(\blacksquare\)
+\end{itemize}
+
+\textbf{Exact-algebra backbone.} The structural inputs are confirmed by exact computer algebra, independent of any numerics. At two rational specialisation points for \((3,3)\) and at \((3,2)\):
+
+\begin{itemize}
+\tightlist
+\item
+  the degree-\(9\) directive eliminant is \textbf{irreducible over \(\mathbb Q\)} (a single degree-\(9\) factor). Irreducibility at a specialisation forces generic irreducibility, so the cover is \textbf{connected} and the monodromy is \textbf{transitive};
+\item
+  the \(A\)-block cubic is \textbf{irreducible with non-square discriminant} (\(-679\), \(-128667771/262144\) for \((3,3)\); \(-31\) for \((3,2)\) --- none a perfect square in \(\mathbb Q\)), so the block action is \(S_3\) (order \(6\)), not \(A_3\) or trivial;
+\item
+  the within-block \(D_1\)-cubic has generic non-square discriminant, so the within-block action is \(S_3\).
+\end{itemize}
+
+Connected \(+\) block action \(S_3\) \(+\) within-block \(S_3\) \(+\) imprimitive \(\Rightarrow\) \(S_3\wr S_3 = 1296\). This is a third independent confirmation, agreeing with the original artifact and with the measurement below. \textbf{{[}symbolic{]}}
+
+\textbf{Measurement.} The directive cover was measured on the \((3,3)\) and \((3,2)\) surfaces by isolating the two trinomial layers in a clean two-dimensional base (block swaps via \(S_2\)-loops around the seam-trinomial discriminant; within-block via \(S_1\)-loops around the directive-trinomial discriminant; \(P_2\) fixed):
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1667}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 10\tabcolsep) * \real{0.1667}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+surface \((m_D,m_P)\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+sheets
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+measured order
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\(S_{m_D}\wr S_{m_D}\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+block action
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+block kernel
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+\((3,3)\) & 9 & \textbf{1296} & 1296 & \(S_3\) (order \(6\)) & \((S_3)^3\) (order \(216\)) \\
+\((3,2)\) & 9 & \textbf{1296} & 1296 & \(S_3\) (order \(6\)) & \((S_3)^3\) (order \(216\)) \\
+\end{longtable}
+
+Transitive, blocks preserved, stable across basepoints; residuals \(\le 1.5\times 10^{-13}\). The \((3,2)\) value retrodicts the original artifact's \(S_3\wr S_3\). \textbf{{[}computer-verified{]}}
+
+\emph{Remark (a harness cautionary tale).} A naive measurement that takes a single generic complex line through the full base and loops around all branch points is numerically fragile here: that line carries branch points spaced as tightly as \(10^{-4}\) and flung out to \(|\tau|\sim 10^2\), and the block-swap loops (where two whole blocks nearly collide) run on radii \(\sim 10^{-5}\) where nearest-neighbour sheet assignment breaks. One such run returned an \emph{intransitive} group of order \(216\) --- exactly the within-block kernel \((S_3)^3\) with the block swaps lost. The tell is the motion ratio (\(\sim 0.2\), against \(\sim 10^{-4}\) on the clean layered run): the protocol's motion-ratio gate must be \emph{enforced as a rejection criterion} (subdivide or shrink until it passes), not merely reported. An intransitive measured group on a provably connected cover is, in itself, a proof that the harness failed. The layered method sidesteps this by separating the two layers into well-conditioned one-parameter loops. See Appendix.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{the-wreath-law-and-the-extraction-type-dichotomy}{%
+\section{The wreath law and the extraction-type dichotomy}\label{the-wreath-law-and-the-extraction-type-dichotomy}}
+
+Sections 5 and 6 are two instances of one statement.
+
+\textbf{Theorem (self-glue wreath law).} For \(F = D^{m_D} + DS + P^{m_P} - 3\):
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{(a)} the product cover (solve for \(P_n\)) has monodromy \(C_{m_P}\wr C_{m_P}\), order \(m_P^{\,m_P+1}\);
+\item
+  \textbf{(b)} the directive cover (solve for \(D_1\)) has monodromy \(S_{m_D}\wr S_{m_D}\), order \((m_D!)^{m_D}\,m_D!\).
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{(\alph{enumi})}
+\tightlist
+\item
+  holds for all \(m_P\ge 2\); (b) for all \(m_D\ge 2\) at \(m_P=2\), and wherever the \(A\)-block polynomial has degree \(m_D\).
+\end{enumerate}
+
+\emph{Proof.} Both covers are imprimitive towers through the intermediate value \(A\), giving the upper bound \(G\subseteq \Gamma\wr\Gamma\). The layer group \(\Gamma\) is fixed by the radical type of the solved role's extraction: the product role enters \(F\) as the \textbf{pure power} \(P^{m_P}\), so both layers are pure powers and Lemma A gives \(\Gamma = C_{m_P}\); the directive role enters as the \textbf{coupled trinomial} \(D^{m_D}+DS\), so both layers are trinomials and Lemma B gives \(\Gamma = S_{m_D}\). In each case the block action realises \(\Gamma\) on the blocks and the within-block actions realise the full direct product \(\Gamma^{m}\) (independent across blocks, by distinct branch loci), assembling to the full wreath; the upper bound gives equality. \(\blacksquare\) \textbf{{[}proven{]}}
+
+\emph{Excluded fibers.} The only degeneracies are the trinomial-degenerate loci \(A = 3\) (within-block) and \(P_2^{m_P} = 3\) i.e.~\(B=0\) (block), plus the block-collapse locus where the seam-to-label map \(Z\mapsto A=h(Z)\) loses injectivity (characterised in \emph{Block completeness} below). Each is codimension \(\ge 1\); the monodromy of the connected cover is computed by loops in the base complement, so a clean generic configuration --- which exists off these loci --- gives the actual group.
+
+\textbf{Block completeness for separable surfaces.} Two assembly conditions remain for a general separable \(h(P)=k(D,S)\): full block count and full block kernel in the directive cover. Both are governed by one object --- the \emph{\(A\)-block polynomial}, the elimination of the seam \(Z\) from \(\{k(Z,S_2)=h(P_2),\;A=h(Z)\}\). Its roots are the block labels, because the within-block extraction is \(k(D_1,S_1)=A\): two seam values sharing an \(A\) merge their blocks, so the label is \(A=h(Z)\), not \(Z\). For pure-power \(h\) this polynomial is monic of degree \(m_D\), so the block count is exactly \(m_D\) off its repeated-root locus \(\mathrm{disc}_A=0\) --- codimension \(1\), for \emph{every} \(m_P\ge2\) (the \(m_P=2\) case is not special; it is the sub-locus where two seam values are negatives). On \((3,3)\), \(\mathrm{disc}_A = -S_2^{6}\,(27P_2^6-162P_2^3+4S_2^3+243)\), with two strata: \emph{total} collapse on \(S_2=0\), where the polynomial is the perfect cube \(-(A+P_2^3-3)^3\) and all blocks merge to one; \emph{partial} collapse on the quadratic factor, where it acquires a single double root (e.g.~\(-(A-12)(2A+3)^2/4\), block count \(2\)). Off the locus the \(m_D\) labels are distinct, and distinct labels force the \emph{full} block kernel: the within-block branch set is fixed by the \(A\)-dependent term of the within-block discriminant --- \(-27(A-3)^2\) for \((3,3)\) --- which takes distinct values at distinct labels, so a loop moves one block while fixing the rest, realising the full direct product \(\Gamma^{m_D}\). Verified exactly, including on the second surface \(D^3+DS^2+P^3-3\) (identical structure, \(\mathrm{disc}_A=-S_2^{12}(\,27P_2^6-162P_2^3+4S_2^6+243\,)\)). \textbf{{[}computer-verified, exact{]}}
+
+\textbf{The dichotomy, stated plainly.} The solved role's \emph{extraction type} determines its Galois factor, and the self-glue group is the wreath of two such factors:
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.3333}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+product cover (solve \(P\))
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+directive cover (solve \(D\))
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+how the role enters \(F\) & pure power \(P^{m_P}\) & trinomial \(D^{m_D}+DS\) \\
+ramification & total (all sheets at once) & simple (pairwise) \\
+local monodromy & \(m_P\)-cycle & transposition \\
+\textbf{Galois factor} & \(C_{m_P}\) (cyclic) & \(S_{m_D}\) (symmetric) \\
+\textbf{cover group} & \(C_{m_P}\wr C_{m_P}\) & \(S_{m_D}\wr S_{m_D}\) \\
+\((3,3)\) order & \(81\) & \(1296\) \\
+character of the role & ``phased'' (roots of unity) & ``scrambled'' (full symmetric) \\
+\end{longtable}
+
+A free corollary: the directive cover at \(m_D=4\) is \(S_4\wr S_4\), order \(7\,962\,624\) --- obtained without ever running a \(16\)-sheet continuation, because the proof covers every \(m\) the harness cannot reach.
+
+\textbf{The dichotomy is a \(\gcd\)-spectrum.} The cyclic and symmetric factors are the two ends of one interpolation (Lemma C). A role entering with leading power \(m\) and a coupling of degree \(k\) contributes the layer factor \(C_{\gcd(m,k)}\wr S_{m/\gcd(m,k)}\): a pure power (\(k=0\)) is fully cyclic; any coupling coprime to \(m\) is fully symmetric; a coupling sharing a factor \(d=\gcd(m,k)>1\) with the degree lands in between, a mixed wreath --- symmetric across \(m/d\) blocks, cyclic within blocks of size \(d\). This family realises only the two endpoints because its product role (\(P^{m_P}\), \(k=0\)) and directive role (\(D^{m_D}+DS\), \(k=1\) coprime to every \(m_D\)) sit exactly at them; a directive coupling \(D^{m_D}+D^{k}\phi(S)\) with \(\gcd(m_D,k)>1\) would instead realise the intermediate wreath at each directive layer. \textbf{{[}proven (Lemma C) / computer-verified at the cases above{]}}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{the-omega-substrate}{%
+\section{The omega substrate}\label{the-omega-substrate}}
+
+The second-stage substrate \(S_2\) enters \(\widetilde F\) only through the stage-two coupling and never through the seam.
+
+\textbf{Result (omega signature).} \(S_2\) satisfies \(\partial A/\partial S_2 = 0\) and (writing \(C\) for the stage-two directive) \(\partial C/\partial S_2 = 1\): it moves the product directive one-to-one while leaving the seam invariant. No other coordinate does this --- \(\partial A/\partial S_1 = -D_1 \neq 0\) and \(\partial A/\partial D_1 = -m_D D_1^{m_D-1} - S_1 \neq 0\). \textbf{{[}proven{]}}
+
+\textbf{Result (branch authority).} With \(A\) held fixed, the product branches sit at \(C = \pm 3/\sqrt A\) (for \(m_P=2\)), i.e.~at \[
+S_2^{(+)} = +\tfrac{3}{\sqrt A} - A \ (\text{the }{+}P_1\text{ branch}),\qquad S_2^{(-)} = -\tfrac{3}{\sqrt A} - A \ (\text{the }{-}P_1\text{ branch}).
+\] A loop of \(S_2\) around \(S_2^{(+)}\) swaps only the \(+P_1\) product pair (\((0\,1)\)); a loop around \(S_2^{(-)}\) swaps only the \(-P_1\) pair (\((2\,3)\)). \textbf{{[}computer-verified{]}} (residuals \(\sim 10^{-15}\)).
+
+Thus \(S_2\) is an \textbf{omega role}: a downstream branch-position controller. It carries no seam structure and no directive structure; it sets where the second-stage product branch lands, independently for each seam sign, and steering it moves exactly the targeted product pair. Tying \(S_2\) to another role removes this: \(S_2 = 0\) slaves the product branch to the seam; \(S_2 = S_1\) or \(S_2 = D_1\) makes the controlling knob co-move \(A\) (contaminating the seam); \(S_2 = \text{const}\) freezes it. This is the substrate asymmetry of the construction: \textbf{\(S_1\) builds the seam, \(S_2\) positions the product} --- first-stage substrate is upstream geometry, second-stage substrate is the composition environment. The independence of the within-block branch loci that this result establishes is exactly the independence used in §6 to obtain the \emph{full} direct-product block kernel.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{iterated-composition-and-the-recovery-asymmetry}{%
+\section{Iterated composition and the recovery asymmetry}\label{iterated-composition-and-the-recovery-asymmetry}}
+
+The glue iterates: stage three identifies \(D_3 := P_2\), and so on.
+
+\textbf{Result (\(n\)-stage degree spectrum).} For the \(n\)-stage composite with external variables \((D_1,S_1,\dots,S_n,P_n)\), the degrees in the full eliminant are \[
+\deg(D_1) = m_D^{\,n},\qquad \deg(S_j) = m_P^{\,j-1} m_D^{\,n-j}\ (1\le j\le n),\qquad \deg(P_n) = m_P^{\,n},
+\] verified symbolically for \(n=2,3\) across \((m_D,m_P)\in\{(2,2),(3,2),(2,3),(3,3)\}\). \textbf{{[}symbolic{]}} The cubic three-stage instance is \((27,9,6,4,8)\). The recovery-arrow ratio is \[
+\frac{\deg(D_1)}{\deg(P_n)} = \Big(\frac{m_D}{m_P}\Big)^{\!n}.
+\]
+
+The \((m_D,m_P)=(2,3)\) instance, with \(S\)-spectrum \((4,6,9)\), rules out the formula being an artefact of \(m_D=m_P\) or of \(m_P=2\): the interpolation \(m_P^{j-1}m_D^{n-j}\) is genuinely two-sided.
+
+\textbf{The asymmetry is group-type, not merely degree.} Producing the product is monotonically cheaper than reconstructing the directive, and the gap widens by a factor \(m_D/m_P\) per stage. By the wreath law (§7), this degree gap is the shadow of a \emph{Galois-type} gap: producing the product runs through pure-power extractions (cyclic \(C_{m_P}\), phased), while reconstructing the directive runs through coupled trinomials (symmetric \(S_{m_D}\), scrambled). On the same \((3,3)\) surface, both covers have degree \(9\) and the same nine-sheet imprimitive skeleton, yet the product cover is \(C_3\wr C_3\) (order \(81\)) and the directive cover is \(S_3\wr S_3\) (order \(1296\)). This is the information-theoretic residue of the original ``category error'': inverting toward the operator is not the same operation as producing the product run backwards --- it is a strictly larger, fully symmetric cover, and the cost compounds through every seam. No stage is ever cheaper than the previous: the seam never rejects.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{the-abelian-boundary-on-a-phase-interpretation}{%
+\section{The abelian boundary on a phase interpretation}\label{the-abelian-boundary-on-a-phase-interpretation}}
+
+Covering-space monodromy and wave phase share their formalism: \(\pi_1\) of a punctured base mapping to automorphisms, and for cyclic (abelian) covers a character into \(U(1)\), with a lasso generating a phase \(e^{2\pi i/k}\) and a branch point as a phase singularity. It is tempting to read the whole monodromy as ``wave structure'' and the exponents \(m_D^n, m_P^n\) as a frequency spectrum. The dichotomy of §7 bounds this reading exactly, and explains \emph{where the phase lives}.
+
+\textbf{Result (abelianisation of the directive cover).} For the directive cover of the cubic, \(G = S_3\wr S_3\) has \(|G| = 1296\), \(|[G,G]| = 324\), and abelianisation \[
+G^{\mathrm{ab}} \cong (\mathbb Z/2)^2 \quad(\text{Klein four}).
+\] Hence every \(U(1)\) character of \(G\) takes values in \(\{\pm 1\}\) (the parities of the within-block and block permutations); an order-\(3\) element maps to \(+1\) under every one of them, and the cube-root phase \(e^{2\pi i/3}\) is \emph{not} a character value. \textbf{{[}computer-verified{]}}
+
+The cube roots are real but live elsewhere --- as the eigenvalues \(e^{\pm 2\pi i/3}\) of a \(3\)-cycle inside the \(2\)-dimensional irreducible representation, which does not factor through \(U(1)\). These eigenvalues are a generic feature of that representation, shared by \emph{every} \(S_3\); §12 shows they do not identify this monodromy \(S_3\) with the role \(S_3\) of §11.
+
+\textbf{Where the phase actually lives.} By §5 the \emph{product} cover is the cyclic wreath \(C_{m_P}\wr C_{m_P}\) --- and a cyclic group \(C_{m_P}\) has genuine \(U(1)\) characters, the literal \(m_P\)-th roots of unity \(e^{2\pi i k/m_P}\). So the wave/phase reading is \textbf{exact on the product side}: the forward product structure \emph{is} a cyclic phase group of frequency \(m_P\). It \textbf{fails on the directive side}, where the symmetric \(S_{m_D}\) is non-abelian with only \(\pm 1\) characters. The forward/cheap structure is abelian and phase-like; the backward/expensive structure is non-abelian and phaseless; and the boundary between them is precisely the cyclic/symmetric boundary of the dichotomy, which is in turn the pure-power/trinomial boundary in \(F\) itself. The phase shadow and the phaseless bulk are the two roles, separated by how each enters the surface.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{two-surface-evidence-the-keystone-as-falsification-test}{%
+\section{Two-surface evidence: the keystone as falsification test}\label{two-surface-evidence-the-keystone-as-falsification-test}}
+
+The keystone \(m_D = m_P = 2\) was chosen to break the morphology: if the directive cover threw up an \(S_3\) or any \(3\)-cycle when both roles enter quadratically, the ``layer group \(=\) extraction-Galois'' law would die. It does not.
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule\noalign{}
+& cubic \((m_D{=}3,m_P{=}2)\) & keystone \((m_D{=}m_P{=}2)\) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+degree spectrum \((D_1,S_1,S_2,P_2)\) & \((9,3,2,4)\) & \((4,2,2,4)\) \\
+product cover & \(D_4\) (order \(8\)) & \(D_4\) (order \(8\)) \\
+directive cover & \(S_3\wr S_3\) (order \(1296\)) & \(D_4\) (order \(8\)) \\
+cube-root strata & yes (directive) & none \\
+block structure & \(3{\times}3\) / \(2{\times}2\) & \(2{\times}2\) on both \\
+\end{longtable}
+
+Every entry matches the frozen prediction: both covers imprimitive with the seam as block system, all branching quadratic on the keystone, no \(3\)-cycle anywhere. \textbf{{[}computer-verified{]}}
+
+In the language of §7 the keystone is the \textbf{maximally degenerate} fixture: with \(m_D = m_P = 2\), \emph{both} wreaths collapse, because \(C_2 = S_2\) makes the cyclic and symmetric wreaths the same group \(D_4\). The keystone therefore cannot exhibit the cyclic/symmetric split --- that is exactly what makes it a good falsification test (it cannot accidentally manufacture a \(3\)-cycle), and exactly why the split must be read off at \(m \ge 3\) surfaces such as the \((3,3)\), where the product cover (\(81\)) and directive cover (\(1296\)) part company while sharing the nine-sheet skeleton.
+
+\textbf{A local refinement: the role-channel companion.} The degree and group theory above is \emph{operating-point-blind}: it sees only the exponents \((m_D,m_P)\), not where on the surface one sits. A companion local theory---the foundational role-jet orbit calculus (W.~Lloyd, \emph{The Active Role-Jet Orbit Calculus for Constraint-Surface Roles}), with the point-local channels and anisotropy developed in the role-channel companion---sees more. To each point of a DBP surface one attaches the three role-output coupling curvatures \(\kappa_{c,P}, \kappa_{c,D}, \kappa_{c,S}\) (the mixed second-jet of each role's graph, normalised by \(q_0 = 1 + f_D^2 + f_S^2\)) and the \(S_3\)-symmetric \textbf{coupling anisotropy} \[
+\mathcal A_c = \sum_{i<j}(\kappa_{c,i} - \kappa_{c,j})^2 = 2\big(e_1^2 - 3e_2\big) = 3\,\big\|P_{\mathbf 2}\,\kappa_c\big\|^2,
+\] the squared norm of the projection of the channel vector onto the standard \(2\)-dimensional irrep of \(S_3\). This is a strict refinement of the global theory, and the keystone is the witness: globally it is symmetric (\(m_D=m_P=2\), recovery ratio \(1\)), yet locally it is irreducibly anisotropic --- at \((1,1,1)\), \(\mathcal A_c = \tfrac{42793}{1555848} > 0\), computer-verified by three independent closed forms. \textbf{{[}computer-verified{]}} Global symmetry and local role-distinction are different facts; the two theories are a quotient and (part of) its total space, not twins.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{discussion-and-open-problems}{%
+\section{Discussion and open problems}\label{discussion-and-open-problems}}
+
+\textbf{The seam as the fourth structural element.} \textbf{{[}interpretation{]}} The seam --- the directed identification \(P_1 = D_2\) --- is the load-bearing object: it is the imprimitivity system of every cover, it carries the forward orientation of the composition, and eliminating it \emph{is} enforcing that the product was produced and passed on. Read as direction, it orients composition forward; iterated, it orders the stages (an ordinal, not metric, arrow --- there is no duration in the construction); read as confirmation, it certifies the product. We emphasise this is interpretation, and that the construction's confirmation is unconditional: the seam has no failure branch, so ``feedback'' overreaches.
+
+\textbf{Resolved since the previous draft.}
+
+\begin{itemize}
+\item
+  \emph{Beyond \(m_P=2\) (product side).} Previously open: does the product cover climb to \(\mathrm{Sym}(m_P)\wr\mathrm{Sym}(m_P)\) at \(m_P=3\)? \textbf{Resolved (§5, §7): no.} The product cover is the cyclic wreath \(C_{m_P}\wr C_{m_P}\) for all \(m_P\), proven via total ramification (Lemma A) and measured at \(m_P\in\{2,3,4\}\). The earlier symmetric reading was the \(m_P=2\) coincidence \(C_2 = S_2\).
+\item
+  \emph{Fullness of the wreath.} Previously open: that the monodromy realises the \emph{full} wreath rather than a proper subgroup, established by measurement only at small \(m\). \textbf{Resolved (§4, §7).} Lemma B's spanning-tree argument gives the full \(S_{m_D}\) in each layer of the directive cover, and Lemma A the full \(C_{m_P}\) in each layer of the product cover, for \emph{all} \(m\); the independence of within-block loci (§8) gives the full direct-product block kernel. Both wreath laws are now theorems.
+\item
+  \emph{The same-\(S_3\) question.} Previously open: the cube-root phases of §10 and the local coupling content \(\mathcal A_c\) of §11 both live in the standard \(\mathbf 2\) of an \(S_3\) --- \emph{are these the same \(S_3\)?} \textbf{Resolved: no, they are independent.} The within-block monodromy \(S_3\) (global, permuting the \(m_D=3\) directive roots) and the role-permutation \(S_3\) (local, permuting the channels \(\kappa_{c,P},\kappa_{c,D},\kappa_{c,S}\)) act on incommensurable sets --- the three preimages of one solve versus the three role charts --- with no geometrically canonical bijection between them. At a point of the cubic the three directive roots each carry a full role-labelled channel triple, forming a \(3\times3\) bigraded array; the monodromy permutes its \emph{rows} (carrying each triple intact, since the role labels are intrinsic axes that continuation does not scramble) and the role group permutes its \emph{columns}. Row- and column-permutations commute, so the joint action is \(S_3\times S_3\) --- a commuting pair, not a single diagonal \(S_3\). \textbf{{[}proven{]}} Independently, the two groups \emph{degenerate on different loci}: the monodromy where two directive roots merge (\(\mathrm{disc}_D = -4S^3 - 27(D^3+DS)^2 = 0\)), the role group where two channels merge (\(\kappa_{c,P}=\kappa_{c,D}\), and cyclically); these loci share no common factor over \(\mathbb Q\) (gcd \(=1\)), and each group is non-degenerate at the other's locus. \textbf{{[}computer-verified{]}} The shared standard \(\mathbf 2\) is therefore a representation-theoretic coincidence: \(S_3\) has exactly one \(2\)-dimensional irreducible representation, and every \(3\)-cycle in it has eigenvalues \(e^{\pm 2\pi i/3}\) (trace \(-1\), determinant \(1\)), so both ``live in the standard \(\mathbf 2\)'' and both ``carry cube-root phases'' are automatic consequences of being \(S_3\) and carry no structural information. An abstract isomorphism between the two groups always exists; the geometric identification the question asked for does not.
+\item
+  \emph{Block count and kernel beyond \(m_P=2\) (the assembly).} Previously open (the ``general-\(m_P\) directive cover'' question): does the directive cover keep full block count \(m_D\) and full block kernel past \(m_P=2\)? \textbf{Resolved (§7, \emph{Block completeness}).} The block labels are the roots of the \(A\)-block polynomial, monic of degree \(m_D\) for pure-power \(h\); the block count is \(m_D\) off its discriminant locus \(\mathrm{disc}_A=0\), codimension \(1\) for \emph{all} \(m_P\ge2\) --- the \(m_P=2\) case is not special --- with two collapse strata (total on \(S_2=0\), partial on the residual factor) exhibited exactly on \((3,3)\) and on \(D^3+DS^2+P^3-3\). Off the locus the labels are distinct, and distinct labels give distinct within-block branch loci, hence the full direct-product block kernel. \textbf{{[}computer-verified, exact{]}}
+\end{itemize}
+
+\textbf{Still open.}
+
+\begin{itemize}
+\tightlist
+\item
+  \emph{Universality across DBP surfaces.} \textbf{{[}conjecture; layer law and assembly now established for the separable case{]}} The cover results began with the family \(D^{m_D}+DS+P^{m_P}-3\), but the ingredients now hold for a general separable surface \(h(P)=k(D,S)\) with \(h\) a pure power. The per-role \emph{layer} type is exact (Lemma C, §4): a role with leading power \(m\) and coupling degree \(k\) contributes \(C_{\gcd(m,k)}\wr S_{m/\gcd(m,k)}\), so the directive side is symmetric exactly when the coupling exponent is coprime to \(m_D\). The \emph{assembly} is exact too (§7, \emph{Block completeness}): imprimitivity through the seam, full block count and full block kernel off a codimension-\(1\) collapse locus. Together these give the full wreaths \(C_{m_P}\wr C_{m_P}\) and \(S_{m_D}\wr S_{m_D}\) (coprime directive coupling) for separable surfaces off a characterised codimension-\(1\) locus --- checked on the second surface \(D^3+DS^2+P^3-3\). One honest boundary remains: non-separable cross-terms break the clean radical tower, so separability is a genuine hypothesis rather than a convenience. (The coprime-trinomial base case inside Lemma C is now proven from branch data --- §4, Lemma B\('\) --- not cited.) The non-coprime directive case (\(\gcd>1\)) assembles into a richer iterated wreath whose block structure we have not worked out.
+\end{itemize}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{appendix-computational-and-algebraic-protocol}{%
+\section*{Appendix --- computational and algebraic protocol}\label{appendix-computational-and-algebraic-protocol}}
+
+\textbf{Certified numerical monodromy.} Monodromy groups are obtained by numerical analytic continuation of the sheets around based loops in the punctured base, under the following gates, all of which must pass at every accepted continuation step:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Root residual} on \emph{every} defining equation (e.g.~\(|P_1^{m_P} - A|\) and \(|P_2^{m_P} - (3 - P_1^{m_D} - P_1 S_2)|\)), required \(< 10^{-9}\) (achieved \(\le 1.5\times 10^{-13}\) across the runs reported here, and \(\le 4\times 10^{-15}\) on the well-conditioned product covers).
+\item
+  \textbf{Bijective closure}: the nearest-neighbour sheet assignment must be a bijection.
+\item
+  \textbf{Motion-ratio safety}: the maximum sheet motion over minimum sheet separation must stay small, and is \emph{enforced as a rejection criterion} --- a loop whose motion ratio exceeds threshold is subdivided or its radius shrunk until it passes, or it is flagged as failed. This gate is not optional: an unenforced motion-ratio gate silently accepts corrupted permutations near near-collisions, and was the cause of a spurious intransitive measurement of the directive cover (order \(216\) instead of \(1296\); see §6). The well-conditioned layered runs hold motion ratio at \(\sim 10^{-4}\).
+\item
+  \textbf{Group from permutations}: the group is generated from the measured permutations and its order computed by a permutation-group routine, never inferred.
+\item
+  \textbf{Byte-stability}: each run is repeated and the report's content hash (timestamp excluded) compared; runs are byte-identical. Independence is further checked by re-running at a second, unrelated basepoint and confirming the same group order and structure.
+\end{enumerate}
+
+\textbf{Layered measurement (preferred).} For an imprimitive wreath cover, the two layers are measured separately in a clean low-dimensional base rather than around a single generic line. For the directive cover: block swaps via \(S_2\)-loops around the seam-trinomial discriminant \(-4S_2^3 - 27 B^2 = 0\), and within-block permutations via \(S_1\)-loops around the directive-trinomial discriminant \(-4S_1^3 - 27(3-A)^2 = 0\), with \(P_2\) fixed. This keeps every loop well-conditioned and never runs a lasso through a near-collision of two blocks --- the failure mode of the naive generic-line method.
+
+\textbf{Exact algebra (independent of numerics).} Degree spectra, \(A\)-block polynomials, the omega derivatives, and the abelianisation are exact computer algebra. The connectivity and block structure of the directive cover are certified by: (i) irreducibility of the degree-\(m_D^2\) eliminant over \(\mathbb Q\) at rational specialisations (forcing generic irreducibility, hence a connected cover and transitive monodromy); (ii) irreducibility of the \(A\)-block polynomial with non-square discriminant (forcing block action \(S_{m_D}\)); (iii) non-square discriminant of the within-block trinomial (forcing within-block \(S_{m_D}\)). The two monodromy lemmas of §4 are proven in closed form and independently verified at \(m = 4,5,6,7\).
+
+\textbf{Reproducibility note.} The \(A\)-block polynomials used above are, at \(m_P=2\), \(A(A+S_2)^2 - B^2 = 0\), and at \(m_P=3\) for \((3,3)\), \(A S_2^3 - (B-A)^3 = 0\) (both degree \(3\) in \(A\), both irreducible with non-square discriminant at the tested points).
+
+\textbf{The same-\(S_3\) verdict (§12).} The independence result is obtained under a falsification protocol built for the specific hazard that \emph{every} \(S_3\) is abstractly isomorphic to every other, so an unconstrained search for an intertwining bijection always succeeds and a bare ``same'' is vacuous. The protocol (i) admits only a geometrically \emph{forced} identifying bijection, never a searched one, and is validated on controls that return ``different'' for two genuinely unrelated \(S_3\)'s under a forced labelling and ``same'' for genuinely identical ones; (ii) runs the commuting test of §12 with a positive control confirming that two actions placed on the \emph{same} factor fail to commute (so entanglement is detected when present); and (iii) runs the degeneration-locus comparison with a positive control confirming that a deliberately linked pair of loci is flagged as sharing a component. The within-block monodromy was measured on the cubic with worst root residual \(5.8\times10^{-15}\) and bijective closure; the role-channel machinery is gated throughout by retrodicting the keystone value \(\mathcal A_c = \tfrac{42793}{1555848}\) exactly.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\hypertarget{acknowledgements}{%
+\section*{Acknowledgements}\label{acknowledgements}}
+
+Computational consultation and verification were carried out in an interactive session; all stated groups were re-derived from measured permutations under the gates above, or proven in closed form. \emph{{[}To be completed.{]}}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\emph{Draft status: §4--§7 and §10 incorporate the cyclic/symmetric dichotomy and its proof; §5 supersedes the earlier symmetric-product reading. Open items tracked in §12. Companion-paper cross-references to the foundational orbit calculus and the role-channel companion are included.}
+
+\end{document}

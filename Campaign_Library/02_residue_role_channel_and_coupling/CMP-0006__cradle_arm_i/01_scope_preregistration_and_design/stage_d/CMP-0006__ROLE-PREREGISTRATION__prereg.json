@@ -1,0 +1,125 @@
+{
+ "authority": "brief section 7 Arm I Stage D + Will's Stage-D GO (Stage C ACCEPTED, the bar cleared; last stage, then the arm's close draft)",
+ "campaign_id": "beyond_the_cradle_arm_i",
+ "date_stamped_from_machine": "2026-06-12",
+ "depends_on": {
+  "manifest_v1_sha256": "9b92fad78fd850a3fcf1d079e031258524e9119aceeb3f0aa5e747fb2e12a534",
+  "note": "bench code pinned inside the frozen manifest, enforced by require_frozen (rule 1.9); no external executed instrument (struct is representation plumbing; isqrt is stdlib integer arithmetic)."
+ },
+ "expectations": {
+  "float_casts": {
+   "-0x1.0000000000000p-1": {
+    "residue": "-1/2",
+    "value": "0"
+   },
+   "-0x1.6000000000000p+1": {
+    "residue": "-3/4",
+    "value": "-2"
+   },
+   "0x1.0000000000000p-1": {
+    "residue": "1/2",
+    "value": "0"
+   },
+   "0x1.6000000000000p+1": {
+    "residue": "3/4",
+    "value": "2"
+   },
+   "0x1.d6f3457800000p+26": {
+    "residue": "7/8",
+    "value": "123456789"
+   }
+  },
+  "int_casts": {
+   "-1152921504606859321": {
+    "residue": "-57",
+    "value_hex": "-0x1.0000000000030p+60"
+   },
+   "42": {
+    "residue": "0",
+    "value_hex": "0x1.5000000000000p+5"
+   },
+   "9007199254740992": {
+    "residue": "0",
+    "value_hex": "0x1.0000000000000p+53"
+   },
+   "9007199254740993": {
+    "residue": "1",
+    "value_hex": "0x1.0000000000000p+53"
+   },
+   "9007199254740995": {
+    "residue": "-1",
+    "value_hex": "0x1.0000000000002p+53"
+   }
+  },
+  "magic_profile": {
+   "0x5f3759de": "-4674493348063/70368744177664",
+   "0x5f3759df": "-18697940971455/281474976710656",
+   "0x5f3759e0": "-18259676319/274877906944"
+  },
+  "pipeline": {
+   "final": "108086391056891936",
+   "fold_closes": true
+  },
+  "poster": {
+   "0x1.0000000000000p+0": {
+    "eps0": "-18697940971455/281474976710656",
+    "eps1": "-952172806431/281474976710656",
+    "gap_hi": "-32744123652339044216561/19342813113834066812076032",
+    "gap_lo": "-28401/16777216",
+    "n_ledger_entries": 8,
+    "y0_hex": "0x1.eeb3be0000000p-1",
+    "y1_hex": "0x1.ff221e0000000p-1"
+   },
+   "0x1.0000000000000p+1": {
+    "eps0": "3649050693697/140737488355328",
+    "eps1": "-17586323551/35184372088832",
+    "gap_hi": "-2417348009830090992865/13677434320016147444924416",
+    "gap_lo": "-151084250614381057689/854839645001009214783488",
+    "n_ledger_entries": 8,
+    "y0_hex": "0x1.6eb3be0000000p-1",
+    "y1_hex": "0x1.69f2bc0000000p-1"
+   },
+   "0x1.0000000000000p+2": {
+    "eps0": "-18697940971455/281474976710656",
+    "eps1": "-952172806431/281474976710656",
+    "gap_hi": "-65488247304678105181937/77371252455336267214749696",
+    "gap_lo": "-28401/33554432",
+    "n_ledger_entries": 8,
+    "y0_hex": "0x1.eeb3be0000000p-2",
+    "y1_hex": "0x1.ff221e0000000p-2"
+   },
+   "0x1.4000000000000p-3": {
+    "eps0": "38482411655493/562949953421312",
+    "eps1": "-1928041823067/562949953421312",
+    "gap_hi": "-8287979016570987923851/1911479556084044887228416",
+    "gap_lo": "-2071994754142749629127/477869889021011220758528",
+    "n_ledger_entries": 8,
+    "y0_hex": "0x1.4eb3be0000000p+1",
+    "y1_hex": "0x1.4343220000000p+1"
+   },
+   "0x1.9000000000000p+6": {
+    "eps0": "292726730544729/4503599627370496",
+    "eps1": "-13961094665271/4503599627370496",
+    "gap_hi": "-240035951416136313308295/1547425049106725343758123008",
+    "gap_lo": "-104099/671088640",
+    "n_ledger_entries": 8,
+    "y0_hex": "0x1.a6b3be0000000p-4",
+    "y1_hex": "0x1.98f6f20000000p-4"
+   }
+  }
+ },
+ "frozen": true,
+ "organ": "II_d_seam_probe_v1: casts as rounding/truncation ops with exact-Q accounts in the shared ledger shape; the seam fold (Stage-A multiplier weighting across the int/float boundary); the poster bit-route with every stage accounted via the exact residual functional eps(y) = y^2*x - 1 (no irrational ever needed) and an isqrt 1/sqrt(x) enclosure as certified reference.",
+ "predictions": {
+  "PID.1": "seam closure: every int->f64 cast row closes Fraction(v) + residue == Fraction(a) exactly; every f64->int trunc row closes v + residue == Fraction(x) exactly with |residue| < 1 and sign(residue) == sign(x) or 0; the pipeline row closes the SEAM FOLD scale*start == final + r3 + r2 + scale*r1 exactly in Q (Stage-A's multiplier-weighted fold, across the seam). Units: rows.",
+  "PID.2": "schema indistinguishability: cast_residue entries carry the same common-core key set {kind, discard, weight_log2} as arithmetic entries, with kind drawn from the SAME shared enum, validating under the SAME record schema with no special-case fields; every Stage-D record roundtrips from_json(to_json) intact. Units: entries + records.",
+  "PID.3": "the poster, demo-tier: the bit-route fully accounted per stage on every pinned input - the i>>1 shifted-out bit as a Stage-A ledger entry; both bitcasts as zero-discard typed seam events; all five float32 roundings of the Newton step as exact-Q residues; eps(y) = y^2*x - 1 exact at y0 and y1 == pinned; Newton contraction certified |eps(y1)| < |eps(y0)| on every input by exact comparison; y1's gap from the certified isqrt 1/sqrt(x) enclosure (60 bits, exact interval arithmetic) == pinned exact interval; the magic-constant profile (0x5F3759DF vs +-1 neighbors at x = 1.0) == pinned. Demo-tier: exhibits the vocabulary, mints no law. Units: inputs x stages.",
+  "PID.4": "refusal honesty: nonfinite and overflow casts refuse TYPED; non-exact-f32 poster inputs refuse TYPED (no silent rounding of the QUESTION); zero refusals on the lawful battery. Units: probes.",
+  "PID.5": "determinism: battery byte-stable x2 (sha256 over records)."
+ },
+ "referee": "exact Q (Fraction) everywhere; integer isqrt for the certified enclosure (facet-A sqrt-atom lineage).",
+ "stage": "D",
+ "status_move_rules": "CL-I5 -> DEMONSTRATED iff PID.1 AND PID.2 AND PID.4 PASS. CL-I6 -> DEMONSTRATED (demo-tier noted) iff PID.3 PASS. Any FAIL: K-I1 halt-until-fixed, chain preserved, STOP, route to Will. On completion: the ARM'S CLOSE DRAFT (atlas pattern; stops at the draft for Will's sign-off).",
+ "telemetry": "permanently non-verdict-bearing (covenant 3).",
+ "version": 1
+}

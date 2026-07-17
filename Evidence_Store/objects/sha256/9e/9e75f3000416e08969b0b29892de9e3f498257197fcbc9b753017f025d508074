@@ -1,0 +1,30 @@
+# Task 035 Sweep Signature Calibration Observations
+
+Sweep: 8 log-spaced f-values from 1.0e-01 to 1.0e-09; eta = 3.0e-07.
+Declared limits: cancellation grade 0.7, drop rate 0.3, minimum fit observations 3.
+
+| Case | Expected | Observed | Match | cancellation_grade | drop_rate | n_observed |
+|---|---|---|---|---:|---:|---:|
+| stable_F1_along_r | sweep_signature_clean | sweep_signature_clean | yes | 5.02875267427e-07 | 0 | 8/8 |
+| stable_F1_along_B | sweep_signature_clean | sweep_signature_clean | yes | 0 | 0 | 8/8 |
+| stable_F1_along_M | sweep_signature_clean | sweep_signature_clean | yes | 0 | 0 | 8/8 |
+| stable_F2_along_r | sweep_signature_clean | sweep_signature_clean | yes | 0 | 0 | 8/8 |
+| stable_F2_along_B | sweep_signature_clean | sweep_signature_clean | yes | 0 | 0 | 8/8 |
+| stable_F2_along_M | sweep_signature_degenerate_input | sweep_signature_degenerate_input | yes | 0 | 0 | 8/8 |
+| stable_F1_along_tangent | sweep_signature_clean | sweep_signature_clean | yes | 3.54836703217e-05 | 0 | 8/8 |
+| stable_F2_along_tangent | sweep_signature_clean | sweep_signature_clean | yes | 3.54836702477e-05 | 0 | 8/8 |
+| naive_F1_along_r | sweep_signature_cancellation_dominated | sweep_signature_cancellation_dominated | yes | 0.985172682307 | 0 | 8/8 |
+| naive_F1_along_B | sweep_signature_clean | sweep_signature_clean | yes | 0.558520201728 | 0.125 | 7/8 |
+| naive_F1_along_M | sweep_signature_clean | sweep_signature_clean | yes | 0 | 0 | 8/8 |
+| naive_F2_along_r | sweep_signature_clean | sweep_signature_clean | yes | 0.335704810951 | 0.125 | 7/8 |
+| naive_F2_along_B | sweep_signature_clean | sweep_signature_clean | yes | 0.594664325259 | 0.25 | 6/8 |
+| naive_F2_along_M | sweep_signature_degenerate_input | sweep_signature_degenerate_input | yes | 0 | 0 | 8/8 |
+| naive_F1_along_tangent | sweep_signature_cancellation_dominated | sweep_signature_cancellation_dominated | yes | 0.989068229867 | 0 | 8/8 |
+| naive_F2_along_tangent | sweep_signature_cancellation_dominated | sweep_signature_cancellation_dominated | yes | 0.971615210307 | 0.375 | 5/8 |
+
+## Per-case Discussion
+
+- Stable non-zero cases are accepted as clean because their transfer chains are either high-quality power-law fits or stable near-zero-slope transfer chains.
+- `stable_F2_along_M` and `naive_F2_along_M` are degenerate-input cases: the observable is constant zero along the M direction.
+- `naive_F1_along_r`, `naive_F1_along_tangent`, and `naive_F2_along_tangent` exceed the cancellation-grade limit and are the catastrophic-cancellation cases.
+- `naive_F1_along_B` is accepted as clean: its cancellation grade is below the declared limit and the drop rate is below the declared limit, matching the low-sensitivity screening policy.

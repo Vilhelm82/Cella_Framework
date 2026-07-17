@@ -1,0 +1,38 @@
+# Form Generator v1 — Closeout (derive-don't-select proof of concept)
+
+**Date:** 2026-06-05 · research-grade, eval-layer, proof-of-concept (NOT promoted).
+Code: `scratch/form_generator_v1.py`. Fixture: pure_algebraic (f = 1 − x), atoms {R,1,x}, ops {+,−,×}, depth ≤ 3.
+Scope: substrate-invariant-search / layer-3-promotion Gate-2 (derive the form basis instead of picking it). Anti-restart: this is NOT a new campaign.
+
+## What it does (architecture, all confirmed working)
+- **Encoding A (syntax):** enumerate ASTs as codes, deduped by float64 value-vector.
+- **Membership:** keep expressions algebraically ≡ 0 on the surface (R²=1−x), via exact mpmath evaluation (`identity_zero`, coupling-free).
+- **Coordinate (burden):** float64 residual scored by **evaluation** (coupling-aware), two metrics — `greedy_per_op` (sum of local round-offs) and `global_int_residual` (deviation from integer-ulp lattice).
+
+## Results
+
+| outcome | status |
+|---|---|
+| Enumeration → membership pipeline runs | ✅ 120k codes (capped) → 1226 "members" |
+| **F1, F2, F3, c2 recovered by FREE enumeration** | ✅ all four fell out unaided |
+| Burden reproduces canonical grains | ✅ F2 → half (0.5), F1/c2/F3 → integer |
+| Greedy-vs-global **disagreement** (early-absorb principle) | ❌ **not demonstrated** (DISAGREE: False) |
+| Membership filter isolates genuine forms | ❌ **leaky** — admits degenerate zeros |
+
+Reference burdens: F1 greedy 9.57 / int_res 0 / integer; F2 greedy 10.51 / int_res 0.5 / half; c2 greedy 9.57 / int_res 0 / integer; F3 0 / 0 / integer.
+
+## Honest gaps (the v2 work — do not oversell v1)
+
+1. **Early-absorb disagreement NOT shown.** Task-031's "operation-exact-but-globally-worse" contrast is the **Schwarzschild Sterbenz-region c1 (final-op Sterbenz-exact) vs c2**. v1 used pure_algebraic and a sum-of-all-roundoffs "greedy" — neither sets up that contrast. So Will's principle (allow more rounding early → cleaner global) is in the record (Task 031) but **v1 did not reproduce it.** v2 must port the actual Task-031 setup and use **final-op exactness** as the greedy metric.
+
+2. **Membership is leaky — degenerate zeros flood the count.** Most of the 1226 are zero because of a zero *factor* (e.g. `(R−R)·g`) or trivial sign/reassoc variants, not genuine constraint residuals. **Fix (precise):** a genuine form is zero **on** the surface AND **nonzero off** it (constraint-sensitive). The identically-zero class (F3 + its multiples) is the calibration-zero / origin, not a form. Add the off-surface non-degeneracy test.
+
+3. **Enumeration capped at depth 3** (d3 hit the 120k cap) → not exhaustive. Smarter bounded enumeration (or restrict the depth-3 second operand to shallow) for completeness.
+
+## Verdict
+The **architecture is proven**: AST-code enumeration + `identity_zero` membership + coupling-aware burden **derives F1/F2/F3/c2 from a principle** and reproduces their grains. v1 is a working scaffold. Two fixes (non-degeneracy filter; proper Task-031 greedy-vs-global on Schwarzschild) make it the real instrument and decide whether the early-absorb principle holds under generation.
+
+## Next (v2)
+- Add off-surface non-degeneracy filter → genuine-form count.
+- Port Task-031 Schwarzschild Sterbenz comparison; greedy = final-op exactness; test the early-absorb disagreement properly.
+- Then the live payoff: any membership-genuine form NOT in {F1,F2,F4,F5+} with low global burden = a **derived** new form (candidate F5+), retrodiction-gated against the known set first.

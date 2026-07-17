@@ -1,0 +1,254 @@
+# MCG Geometry-First — Phase 2d — Candidate Characterization (Solve-For Scout)
+
+**Status:** Phase 2d discovery characterization log. **Candidate primitive defined; four relation families tested; per-candidate evidence emissions with proposed ledger states; campaign-level recommendation surfaced.** No G claim is made. No precision claim is made. G-curv-1 is reclassified to `C_confounded` per the user direction; other candidates carry tags reflecting their structural status.
+
+**Authority:** [`Build_Docs/Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md`](../../Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md) §13, with user-imposed Phase 2d direction (2026-05-19).
+
+**Deliverables landed:**
+- [`phase_2d_solve_for_scout.json`](phase_2d_solve_for_scout.json) — sha256 `ea4f29…3e43942` byte-stable; references all four prior artifacts by sha256.
+- [`src/lloyd_v4/evals/mcg_geometry_first_solve_for_scout.py`](../../../src/lloyd_v4/evals/mcg_geometry_first_solve_for_scout.py) — V4-native solve-for scout, no V3 oracle, no symbolic backend.
+- [`tests/test_mcg_geometry_first_solve_for_scout.py`](../../../tests/test_mcg_geometry_first_solve_for_scout.py) — 11 focused tests, all pass (test 10 reads this characterization).
+
+---
+
+## 1. The candidate primitive
+
+**`endpoint_distance_substrate_image`** — the substrate's binade-indexed image of "distance to the singular endpoint" via the base operand:
+
+$$
+E(\text{coord}) := \log_2(|\,1 - \psi(\text{coord})\,|)
+$$
+
+Per-fixture concrete form:
+
+| Fixture | E(coord) |
+|---|---|
+| `sr_four_form` | `log2(|1 − β·β|)` |
+| `schwarzschild_four_form` | `log2(|1 − 2/r|)` |
+| `pure_algebraic_four_form` | `log2(|1 − x|)` |
+
+**Substrate derivation chain (sketch — not a formal proof):**
+
+1. **BACL** (proven in [`bacl_invariant_audit/closeout.md`](../bacl_invariant_audit/closeout.md)): for `a, b ∈ 𝔽⁺` with `ulp(a) ≥ ulp(b)`, `a − b = j · ulp(b)` for integer j.
+2. For `1 − x_term` with x_term ∈ (0, 1): `ulp(1) ≥ ulp(x_term)` holds, so BACL applies; the lattice unit is `ulp(x_term) = 2^(k_x_term − 52)` where `k_x_term = ⌊log2(|x_term|)⌋`.
+3. The result `base_operand = 1 − x_term` sits in a binade `k_b = ⌊log2(|base_operand|)⌋`, so its float64 intrinsic granularity is `2^(k_b − 52)`.
+4. The ratio between the BACL lattice unit (`~ ulp(x_term)`) and the result's intrinsic granularity (`~ ulp(base_operand)`) governs how the route-pair rounding decisions distribute against the lattice — and that ratio depends on `k_b = ⌊E⌋`.
+5. Empirical observation across P1+P2+P2b+P2c: F1_to_F2 half_phase fraction varies with E systematically.
+
+A formal proof of the ratio-to-phase mapping is **out of scope** for Phase 2d. This pass produces the relation-family characterization; the formal derivation is a separate deliverable.
+
+---
+
+## 2. Relation family results
+
+Per the user direction, four relation families were tested against E. The findings — all descriptive, none promotional — are:
+
+### Relation 1: continuous monotone (linear-in-E fit on 10-bin half_phase_fraction)
+
+| Fixture | slope | R² | Interpretation |
+|---|---|---|---|
+| `sr_four_form` | +0.065 | **0.143** | weak — relation family is likely not linear-in-E |
+| `schwarzschild_four_form` | +0.067 | **0.474** | moderate — partial monotone trend; non-monotonic structure may dominate |
+| `pure_algebraic_four_form` | +0.079 | **0.114** | weak — no clean monotone relation |
+
+**Conclusion: linear-in-E is the wrong relation family** for two of three fixtures. Schwarzschild shows partial linearity (R² ~ 0.47), but SR and pure_algebraic do not.
+
+### Relation 2: threshold (best single-cut on E maximizing half_phase contrast)
+
+| Fixture | Best E threshold | frac_below | frac_above | abs contrast |
+|---|---|---|---|---|
+| `sr_four_form` | −0.949 | 0.000 | 0.305 | **0.305** |
+| `schwarzschild_four_form` | −0.750 | 0.009 | 0.682 | **0.673** |
+| `pure_algebraic_four_form` | −0.752 | 0.000 | 0.357 | **0.357** |
+
+**Conclusion: threshold is the dominant relation family.** All three fixtures show "below E ≈ −0.75 to −0.95, half_phase is essentially absent; above the threshold, it activates." This is consistent with a substrate-mandated lattice-granularity transition: when the radicand is small enough (E sufficiently negative), the half-phase signal is suppressed. The exact threshold values cluster around E ∈ [−0.95, −0.75], i.e., `|base_operand| ~ 0.5 to 0.6`, which is meaningful as it falls at the **Sterbenz/BACL boundary** of the natural function's domain.
+
+### Relation 3: per-fixture residual after the linear-in-E model
+
+After subtracting the linear fit, compute Pearson correlation of residuals with C-covariates:
+
+| Fixture | corr(resid, J_condition) | corr(resid, hessian_abs) | corr(resid, endpoint_distance) | Max |corr| | Interpretation |
+|---|---|---|---|---|---|
+| `sr_four_form` | +0.112 | +0.112 | −0.127 | 0.127 | weak — uncorrelated with C-covariates tested |
+| `schwarzschild_four_form` | +0.181 | +0.179 | **+0.416** | 0.416 | **strong residual structure** — additional C-covariate dependence beyond E |
+| `pure_algebraic_four_form` | +0.095 | +0.098 | +0.024 | 0.098 | weak |
+
+**Conclusion: Schwarzschild has strong residual structure correlating with `endpoint_distance`** (the raw distance `|r − 2|`, not its log-image E). The linear-in-E model does not capture this. SR and pure_algebraic have weak residuals — the threshold model in Relation 2 fits them better than the linear model.
+
+### Relation 4: transition grammar on the coordinate-sorted phase_class sequence
+
+For each fixture, sort coordinates, take the phase_separation_class sequence, compute marginal entropy `H(X)`, conditional entropy `H(X_{t+1} | X_t)`, mutual information `MI = H(X) − H(X_{t+1} | X_t)`.
+
+| Fixture | H_marginal (bits) | H_conditional (bits) | MI (bits) | MI / H_marginal ratio | Interpretation |
+|---|---|---|---|---|---|
+| `sr_four_form` | 1.530 | 1.008 | **0.522** | **0.34** | strong transition structure |
+| `schwarzschild_four_form` | 0.668 | 0.418 | **0.250** | **0.37** | strong transition structure |
+| `pure_algebraic_four_form` | 1.180 | 0.313 | **0.867** | **0.74** | very strong transition structure |
+
+**Conclusion: transition grammar carries strong structure across all three fixtures.** Consecutive phase classifications along the coordinate sweep are NOT independent given the marginal — there is substantial extra information in the *order* of phase classifications. The candidate G-curv-3 (transition grammar) is empirically validated as having structure, *but* whether that structure is reducible to E (i.e., C-driven via coordinate ordering correlating with E) or is a *second* independent primitive is **not yet known**. Resolving that is a separate Phase 2d-style follow-up.
+
+---
+
+## 3. Per-candidate evidence emissions
+
+Per the user direction (sense A within the discipline), candidates are reclassified honestly based on cumulative evidence.
+
+### G-curv-1 (Hessian/signature stratum vs j-selection) — **proposed: `C_confounded`**
+
+Across P1+P2+P2b+P2c+P2d the signature-driven hypothesis was progressively refuted:
+- P1: Hessian signature is uniformly negative across all 411 four_form_primary rows.
+- P2 / P2b: the readback variation that exists correlates with radicand magnitude, not signature.
+- P2c: the radicand-magnitude association is grid-stable.
+- P2d: the threshold-on-E relation captures the variation cleanly across all three fixtures; signature plays no role in the relation.
+
+**Proposed ledger state: `C_confounded`** (per handoff §7 allowed states). The original mechanism hypothesis is empirically refuted in 1D scope; the readback variation that does exist is fully C-explained. Tag: `phase_2d_reclassified_to_C_confounded`.
+
+### G-curv-2 (principal-curvature ratio vs route-pair phase) — `unresolved_candidate` + `structurally_rate_limited_in_1d_scope`
+
+`principal_curvature_ratio` is 1D-degenerate (only one principal curvature exists in a 1D curve). This candidate **cannot be tested without multi-D anchor extension**. Phase 2d does not change its state because no allowed ledger state captures "structurally untestable in current scope"; the explicit tag does the work.
+
+### G-curv-3 (null-tangent alignment vs transition grammar) — `unresolved_candidate` + `structurally_rate_limited_in_1d_scope`
+
+Transition grammar IS exercised in this pass and shows strong structure (§2.4). However:
+- The null-tangent-alignment side is 1D-degenerate (no genuine null-tangent direction in a 1D curve; we approximated with `1/√(1+J²)` in Phase 1).
+- Whether the transition-grammar structure is independent of E or reducible to E (via coordinate ordering correlating with E) is not yet resolved.
+
+State remains `unresolved_candidate`. The transition-grammar finding is recorded as evidence for follow-up. If a Phase 2d-style sub-pass shows the grammar is *not* reducible to E, the candidate would graduate to `unexplained_correlation`.
+
+### G-route-1 (path/operand-separated F1/F2 route-pair phase) — `unresolved_candidate` + `phase_2d_zero_offset_gap_unchanged`
+
+Phase 2d does not address the zero-operand-offset gap from §1.4. Status unchanged.
+
+### C-def-1 (finite-difference conditioning response) — `unresolved_candidate` + `phase_2d_operational_extractor_validated`
+
+The endpoint_distance_substrate_image primitive `E = log2(|base_operand|)` is operational, positively-defined, grid-stable, cross-fixture-portable, and V4-native. **The Phase 2b acceptance bar for "positively-defined C-extractor with named mechanism and characterized response" is essentially met for the 1D fixtures**, but the handoff §11 calibration ladder (well-conditioned → cancellation → near-singular) has not been run as a separate validation. The state stays `unresolved_candidate` pending the ladder run; the tag records the operational validation.
+
+### C-def-2 (Jacobian/Hessian spectral response) — `unresolved_candidate` + `structurally_rate_limited_in_1d_scope`
+
+Spectral content remains 1D-degenerate. Phase 2d does not advance.
+
+### C-def-3 (perturbation amplification ladder) — `unresolved_candidate` + `phase_2d_perturbation_ladder_still_pending`
+
+Parameter-perturbation ladder not exercised. Phase 2d does not advance.
+
+---
+
+## 4. Campaign-level recommendation
+
+**Recommendation: `investigate_residual_structure_in_1d_before_multi_d`.**
+
+**Rationale.** The Phase 2d findings indicate that 1D scope still has meaningful discovery juice before any sense (B) restructure to multi-D anchors:
+
+1. **Threshold is the dominant relation, not continuous monotone.** This sharpens what the primitive is doing — the substrate has a phase-activation threshold near `|base_operand| ~ 0.5`. Worth formalizing.
+2. **Schwarzschild has strong residual structure** (Pearson r = 0.416 between linear-fit residuals and `endpoint_distance`). The linear-in-E model is incomplete for Schwarzschild; a non-linear function of E, or a joint (E, endpoint_distance) model, is the natural next characterization.
+3. **Transition grammar carries strong structure in all three fixtures** (MI/H_marg ratios 0.34–0.74). Whether this structure is independent of E or fully reducible to E is the next unresolved question — a Phase 2d-style follow-up could answer it.
+
+**Candidates blocked by 1D scope (irreducible without multi-D extension):**
+- G-curv-2 (principal_curvature_ratio is 1D-degenerate)
+- G-curv-3 null-tangent side (1D-degenerate; transition-grammar side is in scope)
+- C-def-2 (spectral spread is 1D-degenerate)
+
+**Candidates advanced by 1D scope (significant Phase 2d evidence):**
+- C-def-1 (operational extractor validated; positively-defined V4-native primitive E)
+- G-curv-1 (signature-driven hypothesis empirically refuted; reclassified to `C_confounded`)
+
+**Campaign-level decision point (sense B, requires user buy-in):**
+
+> Extend to multi-D anchors as the next campaign phase, OR conclude 1D characterization and deliver a V3-diagnostic-bridge artifact (mapping E to V3's K_G / condition number / near_umbilic / lifted-singularity vocabulary).
+
+Either path is legitimate. The first opens G-curv-2, G-curv-3 (null-tangent side), and C-def-2 to testing. The second declares 1D characterization complete and pivots to the **bridge** the campaign's reframed goal is targeting. Phase 2d does not make this decision; it surfaces it.
+
+---
+
+## 5. What this pass does *not* claim
+
+- This pass does **not** claim G is discovered or confirmed.
+- This pass does **not** claim precision doubling, sub-noise-floor, or any precision-resolution gain.
+- This pass does **not** claim the primitive E is derived from IEEE 754 substrate — only that a derivation chain is sketched and the relation-family characterization is consistent with it.
+- This pass does **not** promote any candidate to `geometry_candidate` or `ready_for_phase3`. G-curv-1's reclassification to `C_confounded` is a *demotion* of an unsupported hypothesis, not a G promotion.
+- This pass does **not** address the §1.4 zero-operand-offset gap (G-route-1).
+
+---
+
+## 6. Tests and exact commands
+
+11 focused tests in [`tests/test_mcg_geometry_first_solve_for_scout.py`](../../../tests/test_mcg_geometry_first_solve_for_scout.py):
+
+| # | Assertion |
+|---|---|
+| 1 | Solve-for scout artifact generation — required top-level keys present |
+| 2 | All four source sha256 hashes recorded (P1, P2, P2b, P2c) |
+| 3 | Candidate primitive defined with substrate derivation chain |
+| 4 | All four relation families results recorded per fixture |
+| 5 | Candidate evidence emissions for all 7 candidates with allowed proposed ledger states |
+| 6 | G-curv-1 reclassified to `C_confounded` |
+| 7 | G-curv-2 and G-curv-3 carry `structurally_rate_limited_in_1d_scope` tag |
+| 8 | Campaign-level recommendation about multi-D anchors present |
+| 9 | No candidate promoted to `geometry_candidate` or `ready_for_phase3` (emissions OR actual ledger) |
+| 10 | No forbidden G/precision claim language in this characterization markdown |
+| 11 | JSON artifact byte-stable across reruns + `main()`-to-disk identity |
+
+### Exact commands and results
+
+```bash
+# 11 focused tests (Phase 2d)
+$ PYTHONPATH=src python -m pytest tests/test_mcg_geometry_first_solve_for_scout.py -v
+… 11 passed in <1s   (test 10 picks up this characterization)
+
+# Smallest reasonable existing subset (P1 + P2 + P2b + P2c + P2d + four-form-adjacent)
+$ PYTHONPATH=src python -m pytest \
+    tests/test_mcg_geometry_first_geometry.py \
+    tests/test_mcg_geometry_first_readback.py \
+    tests/test_mcg_geometry_first_c_profile.py \
+    tests/test_mcg_geometry_first_grid_stability.py \
+    tests/test_mcg_geometry_first_solve_for_scout.py \
+    tests/test_f1_f2_natural_phase.py \
+    tests/test_f4_route_comb_search.py
+… 62 passed in ~30s
+
+# Byte-stability of Phase 2d artifact
+$ cp Build_Docs/Reports/mcg_geometry_first/phase_2d_solve_for_scout.json /tmp/sf_run1.json
+$ PYTHONPATH=src python -m lloyd_v4.evals.mcg_geometry_first_solve_for_scout --output /tmp/sf_run2.json
+$ diff -q /tmp/sf_run1.json /tmp/sf_run2.json
+# (silent — files identical)
+$ sha256sum /tmp/sf_run1.json
+# ea4f29798a14484a17f06273673871b53ce7900520c16083c65ffd312ce43942
+```
+
+No manifest, status family, primitive, fixture definition, architecture document, or protocol was modified.
+
+---
+
+## 7. Methodology notes (for the iteration log)
+
+- **Threshold > continuous monotone.** Picking the relation family adaptively (per user-permitted sense A) rather than running the §13 spec's family list verbatim surfaced threshold as the dominant fit. Linear-in-E would have been a poor characterization headline; threshold-on-E gives a sharp, interpretable result.
+- **Schwarzschild's `endpoint_distance` residual** is the only strong residual finding. Worth flagging as the most likely place a second 1D primitive lives, if one does. (Possibilities: non-linear function of E; an additive `endpoint_distance` component independent of E; a non-substrate covariate not yet computed.)
+- **Transition grammar's strong MI in all three fixtures** is the largest single Phase 2d surprise. The grammar is real; the question of whether it's E-reducible or independent is the natural next sub-pass.
+- **G-curv-1's reclassification is a demotion, not a promotion.** Demotions of empirically-refuted hypotheses are part of the discovery discipline; they're not promotions to G.
+- **The campaign discipline allows `unresolved_candidate` + tag**, which is what G-curv-2/G-curv-3 receive. No allowed ledger state matches "structurally untestable in current scope"; the tag carries that information.
+
+---
+
+## 8. What this pass did *not* attempt (logged honestly)
+
+- **Formal derivation of E from IEEE 754 axioms.** The derivation chain in §1 is a sketch, not a proof. Formal proof of "the ratio between BACL lattice unit and result intrinsic granularity governs route-pair phase distribution" is a separate deliverable.
+- **Joint (E, endpoint_distance) model for Schwarzschild's residual.** Single-covariate residual correlations were computed; joint modeling is a follow-up.
+- **Transition-grammar conditional on E-bin.** Does the grammar persist when conditioned on E? If yes → grammar is an independent primitive. If no → grammar is E-reducible.
+- **V3 lv3 oracle cross-check** of the E primitive against K_G / condition number. Per CLAUDE.md §4, this is a separate non-primary artifact; deferred.
+- **Multi-D anchor extension.** Recommended but not executed (requires sense B buy-in).
+- **Lifted-singularity geometry on the anchor class.** Same.
+
+---
+
+## 9. References
+
+- [`Build_Docs/Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md`](../../Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md) §13, §16, §17
+- [`phase_0_m_contract.md`](phase_0_m_contract.md)
+- [`phase_1_geometry_table.json`](phase_1_geometry_table.json) (sha256 recorded)
+- [`phase_2_joined_readback_table.json`](phase_2_joined_readback_table.json) (sha256 recorded)
+- [`phase_2b_c_profile.json`](phase_2b_c_profile.json) (sha256 recorded)
+- [`phase_2c_grid_stability.json`](phase_2c_grid_stability.json) (sha256 recorded)
+- [`phase_2d_solve_for_scout.json`](phase_2d_solve_for_scout.json) — Phase 2d artifact
+- [`candidate_ledger.json`](candidate_ledger.json) — updated with Phase 2d evidence + G-curv-1 reclassification
+- [`../../../src/lloyd_v4/evals/mcg_geometry_first_solve_for_scout.py`](../../../src/lloyd_v4/evals/mcg_geometry_first_solve_for_scout.py) — Phase 2d module
+- [`../../../tests/test_mcg_geometry_first_solve_for_scout.py`](../../../tests/test_mcg_geometry_first_solve_for_scout.py) — 11 focused tests

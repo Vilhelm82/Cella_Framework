@@ -1,0 +1,110 @@
+# V4-Native Lifted Singularity Audit — Preregistry
+
+> **Status: FROZEN 2026-05-17 pre-measurement.** Per `CAMPAIGN_DISCIPLINE.md` Rule 1.1, binding.
+
+## 1. Purpose
+
+Reproduce V3 "consistent lifted 4D conical in every singularity model" findings using V4-native eval-layer code. V3 reference: 8 tests in `/home/william_lloydlt/Documents/Lloyd_Engine/lloyd_v3_supplementary/tests/domain/Domain_tests/`. Per V3_REFERENCE_LEDGER + REFERENCE_HYGIENE: V3 is reference for **what to attempt**, not what to copy. No `lloyd_core_nvar` import, no `diagnose_nvar`, no `K_GK / kc / ks / ki / n_flat / n_edges` vocabulary. V4 builds from V4 primitives.
+
+## 2. The unified test pattern (extracted from V3)
+
+For a fixture defined by:
+- K physical constraints `F₁(x), ..., F_K(x)` on `n` physical variables `x = (x_1, ..., x_n)`
+- A simultaneous critical point `x*` where all `Fᵢ(x*) = 0`
+- (Optional) A family tangent direction `t` at `x*` representing how `x*` moves under a family parameter
+
+Lift to a scalar compatibility object in `n+1` variables `(x, X)`:
+```
+F_joint(x, X) = Σᵢ Fᵢ(x)² − X²
+```
+
+At `(x*, 0)`, audit:
+- Gradient ∇F_joint
+- Hessian H of F_joint
+- Eigenvalues / rank / signature of H
+- Coupling-graph structure of H's physical block
+- Jacobian J = ∂F/∂x of the original constraint vector
+- Null eigenvector direction; check alignment with family tangent `t`
+
+## 3. Structural vs. empirical separation (FROZEN)
+
+The V3 tests treat the following as findings. V4 audit will separate which are **structurally guaranteed** by the lift construction and which are **empirical**.
+
+### Structurally guaranteed (predicted to hold by construction):
+
+- **S1: H_XX = -2** — direct consequence of the `-X²` term in F_joint
+- **S2: cross-coupling block zero** — no Fᵢ depends on X
+- **S3: physical-block Hessian = 2·JᵀJ** when ∇F_joint = 0 (at the simultaneous zero) — this is the standard sum-of-squares Hessian identity
+- **S4: rank ≤ K + 1** — physical block has rank ≤ K (from JᵀJ), plus 1 from -X² term
+- **S5: signature** — physical-block JᵀJ is positive-semidefinite (K positive eigenvalues if J has rank K, else fewer), plus -X² adds exactly 1 negative
+
+The V3 tests' reported "discoveries" of H_XX = -2 across systems, rank = K+1, and signature (K positive, 1 negative, nullity zero) **are predicted by the construction itself**, not by the physics.
+
+### Empirically meaningful (predicted to hold, but not structurally guaranteed):
+
+- **E1: J has full rank K at x*** — the native constraints intersect transversally at the critical point. This is the real "regular intersection" claim and the V3 pair/triple-Jacobian determinant audits.
+- **E2: Null eigenvector alignment** — the Hessian's null direction (one of K eigenvectors of JᵀJ with eigenvalue 0 if K < n, plus possibly more if J is rank-deficient) aligns with the family tangent `t` in physical space.
+- **E3: Power-law scaling at extremal limits** — Kerr a→1 produces specific eigenvalue decay exponents; that's a physics finding, not a construction artifact.
+
+## 4. V4-native reproduction predictions
+
+For each fixture (Schwarzschild ISCO, Schwarzschild photon sphere, Morris-Thorne throat, Rayleigh-Bénard onset):
+
+| Claim | Predicted | Status type |
+|---|---|---|
+| H_XX | `-2` (to within float64 epsilon) | structural |
+| rank | K + 1 | structural |
+| signature | (K positive, 1 negative, (n-K) zero) | structural |
+| `\|∇F_joint\|` | 0 (to within float64 epsilon) | structural-ish (assumes x* exact) |
+| det(J) ≠ 0 | yes | empirical (E1) |
+| null eigenvector aligned with family tangent | cos(θ) > 0.99 where computable | empirical (E2) |
+
+**Cross-fixture invariance prediction:** The above pattern holds in **all 4 fixtures**, including the non-GR Rayleigh-Bénard fixture. The lift's spectral signature is universal because the construction is universal.
+
+## 5. Multi-precision audit (V4 strength)
+
+For each fixture, evaluate F_joint and its Hessian at the critical point under:
+- float64 (baseline)
+- float32 (downward stress)
+- decimal-100 (high-precision oracle)
+
+Per-precision check:
+- Is H_XX = -2 exactly at all precisions? (predicted: yes)
+- Does rank classification stay at K+1 as precision degrades? (predicted: yes at float32 and above; possibly N/A for fixtures whose constraint values become noise-dominated at float32)
+- Does signature stay (K+, 1-, zero)? (predicted: yes)
+
+The V4 strength is **emitting typed validity per precision** — including TypedRefusal when the apparatus cannot honestly classify at low precision.
+
+## 6. V4 typed output specification
+
+Each fixture run produces a record with:
+- `fixture_name`, `n_phys`, `K_constraints`, `critical_point`, `precision`
+- `F_joint_value` (should be 0)
+- `gradient_magnitude` (should be 0)
+- `hessian_eigenvalues` (sorted)
+- `rank` (integer)
+- `signature` (n_pos, n_neg, n_zero)
+- `H_XX` (the diagonal entry for the lift variable)
+- `pair_jacobian_determinant`
+- `pair_jacobian_singular_values`
+- `null_eigenvector` (when meaningful)
+- `null_alignment_cos_theta` with family tangent (where computable)
+- **V4 typed status**: one of {`structural_invariants_confirmed_with_regular_pair`, `structural_invariants_confirmed_with_degenerate_pair`, `structural_invariants_violated`, `unobservable_at_precision`}
+- **V4 validity**: {defined, finite, observable, selectable, advanceable}
+
+Cross-fixture aggregator: emits `cross_fixture_structural_invariance` boolean + per-fixture entries.
+
+## 7. Out of scope
+
+- Building a substrate-level `typed_gradient` / `typed_hessian` primitive. This audit lives in eval-layer; numpy linear-algebra is permitted there (per Axiom 11's substrate-only scope).
+- Kerr extremal limit power-law scaling (V3 Investigation 2). Out of scope; would require its own preregistry.
+- Coupling graph activation transitions (V3 Investigation 4). Out of scope.
+- Reproducing 5D Kerr ISCO. Out of scope (focus on 4D fixtures + Rayleigh-Bénard).
+
+## 8. Closeout criteria
+
+- Per fixture per precision: typed verdict emitted
+- Cross-fixture aggregator: structural invariance verdict
+- Comparison table: V3 numerical values vs V4 numerical values (where V3 reported them)
+- Explicit separation: which V3 "findings" reduce to construction structure; which remain empirical
+- Reproducibility check (V4 byte-stable JSON)

@@ -1,0 +1,31 @@
+# G Forward-Decomposition — Closeout (the definitive 1D G test + F2 boundary)
+
+**Date:** 2026-06-05 · **Status:** research-grade, eval-layer (oracles `Fraction`/`mpmath` only, no float128; Axiom 11 honoured). **Not substrate.**
+**Spec:** `Build_Docs/Agent_tasks/g_forward_decomposition_prereg_2026-06-05.md`.
+**Artifacts (scratch, byte-stable):** `g_forward_decomposition_exp1.py/_CLOSEOUT.md` (sha256 `8d34c0e8…`), `g_forward_decomposition_exp2.py/_CLOSEOUT.md` (sha256 `560d00db…`).
+**Origin:** the reopened G status (TASKS_TO_REVISIT R9; HR89/121; glossary G-entry) + the killswitch §7.A.2 demand for a positive named-mechanism G test + crown jewels J1 (exact-rational carry, no apparatus floor) and J2 (`e=√f−R` exactly computable forward).
+
+## Headline
+With the float128 apparatus floor removed (exact-rational carry) and conditioning made exactly computable (forward `e`), the four-form residual is **exactly M ⊕ C with G-as-unexplained-remainder ≡ 0 — floorlessly — in 1D and in the lifted multi-constraint construction.** This converts the (retracted) "G empirically absent in 1D" from an asserted/floor-limited null into a **proof**, and reframes the G question itself.
+
+## Results
+
+| experiment | result |
+|---|---|
+| **Exp 1 — 1D exact forward M⊕C** (Schw, SR, pure_algebraic) | **G ≡ 0 exactly** (max\|G\|=0, all fixtures); conditioning model `2√f·e+e²` matches exact R²−f to ~1e-63; dark-field F1−F2 leak = deterministic ±1-ulp BACL comb, boundary-concentrated, fully reconstructed (G=0) |
+| **Retrodiction gate** | F3≡0 ✓, F4 integer ✓; F2 "spread" = the proven **HR40 cancellation_operand_phase_inheritance** (`phase(F2/ulp)==phase(x_term/ulp)` 87/87·89/89·67/67) — gate GREEN |
+| **Exp 2 — lifted multi-D** (Morris-Thorne, Schw photon-sphere) | lattice survives 100%, fixtures distinguish (MT 0.50 vs photon 0.42), **G ≡ 0 exactly** (4000/4000) — but `residual=sos−X²` with `X=sqrt(sos)` **collapses to a scalar sqrt round-trip**, inheriting the 1D G=0 proof; the distinguishing is **conditioning-distribution (C), not a joint-state G remainder** |
+| **F2 boundary (J1/J2 + retest A)** | F2 Sterbenz residual = exact M⊕C, floorless, zero substrate remainder (this work). b_k≈0.72, ≈1.8× regular = **ULP rounding-floor coefficient, apparatus not substrate boundary** (cited: paper-revalidation retest A, HR132) |
+
+## Interpretation
+1. **1D G is a *proven* null.** Residual = exactly M(BACL lattice) ⊕ C(computed round-offs), zero remainder, no floor.
+2. **The lifted "multi-D" probe is effectively 1D** — `X=sqrt(sos)` launders the joint state through one sqrt. So the joint-coupling hypothesis is **still untested**; both probes are effective-dimension-1.
+3. **Category insight (research-grade hypothesis):** a finite-precision residual is a closed dyadic function of its inputs ⇒ exactly M⊕C, leaving structurally no room for a separate additive G. If this generalises, **"geometric content" is not a residual term — it lives in how C depends on the surface** (the operand/`sos` distribution encodes geometry; cf. E↔K_G). This reframes Q1: the patterns are cast by geometry *shaping the conditioning*, not by a hidden geometric residual.
+4. **Walked back:** the earlier "lifted lattice = candidate multi-D G signal" framing is corrected — it is C (conditioning-distribution), not G.
+
+## What this did NOT do / next
+- Did not test genuine joint-coupling — needs a multi-D construction **not** laundered through a single sqrt (cross-constraint cancellation BACL does not trivially close). That is the only thing that yields a real D>1 point.
+- Did not re-derive retest A's b_k fit (cited, not repeated — anti-re-derivation discipline).
+
+## Discipline
+Eval-layer, research-grade, one run per experiment, byte-stable. 1D "curvature" is M+C, never written as K_G. **Not promoted to a canonical "G absent" claim** beyond the proven 1D/effective-1D scope; the multi-D hypothesis remains open (R9).

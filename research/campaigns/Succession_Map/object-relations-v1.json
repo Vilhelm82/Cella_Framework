@@ -1,0 +1,1023 @@
+{
+  "schema_version": 1,
+  "graph_id": "cella-object-relations",
+  "revision": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "direction": "from is the grammatical subject: from -relation-> to",
+  "authority_policy": "Typed object->object mathematical relations (specializes_to/isomorphic_to/acts_on/has_base/quotient_of/parameterizes/same_content_as), extracted from evidence sources by a fan-out over the lift-weighted co-occurrence candidates and adversarially verified. Edge-only; the semantic layer over the statistical co_occurs_with heatmap.",
+  "nodes": [],
+  "edges": [
+    {
+      "id": "e::OBJ:active-chart-group-g-act-s-3::acts_on::OBJ:active-chart-jet-carrier-jet-carrier-o-r-r-r",
+      "from": "OBJ:active-chart-group-g-act-s-3",
+      "to": "OBJ:active-chart-jet-carrier-jet-carrier-o-r-r-r",
+      "relation": "acts_on",
+      "label": "OBJ:active-chart-group-g-act-s-3 acts_on OBJ:active-chart-jet-carrier-jet-carrier-o-r-r-r",
+      "basis": "Definition: carrier O_r(x)=G_act·J_r(x) is the S_3-orbit of the r-jet; G_act=S_3 acts on X_r by finite-jet recharting maps and the carrier is precisely that group orbit. Actor=S_3, acted-on=jet carrier.  [verified: Both sources state G_act=S_3 acts on X_r/jets by finite-jet recharting]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "evidence_uid": "U-1582",
+        "typed_from": "cooccurrence_fanout"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:active-chart-group-g-act-s-3::acts_on::OBJ:regular-active-role-locus-reg-1-reg-r",
+      "from": "OBJ:active-chart-group-g-act-s-3",
+      "to": "OBJ:regular-active-role-locus-reg-1-reg-r",
+      "relation": "acts_on",
+      "label": "OBJ:active-chart-group-g-act-s-3 acts_on OBJ:regular-active-role-locus-reg-1-reg-r",
+      "basis": "Proof: \"The maps T_sigma define an action of S_3 on the regular active-role locus\"; Thm: \"let G=S_3 act on X_r by active finite-jet recharting maps of §3.\" S_3 is the actor group, the regular locus the acted-on space.  [verified: Source states verbatim \"G=S_3 act on X_r\" and proof \"maps T_sigma defi]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "evidence_uid": "U-0525",
+        "typed_from": "cooccurrence_fanout"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:active-role-transposition::acts_on::OBJ:dbp-triple",
+      "from": "OBJ:active-role-transposition",
+      "to": "OBJ:dbp-triple",
+      "relation": "acts_on",
+      "label": "OBJ:active-role-transposition acts_on OBJ:dbp-triple",
+      "basis": "System modelled as DBP triple; 'compute the forward and inverse transpositions' and centrifuge tests all six assignments of quantities to Directive/Substrate/Product roles of the triple.  [harvest+verified: Source (LLOYD-010426-02.pdf, section 4.4 \"Method 3: Systemat]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 3,
+        "evidence_uids": [
+          "U-0223",
+          "U-0412",
+          "U-0631"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:augmented-axial-horizon-field-l-j-k-j-sqrt-u-sqrt-gamma-sqrt::has_base::OBJ:four-charge-galois-core-f-k-k-f-5-gal-k-gal-f-s-5",
+      "from": "OBJ:augmented-axial-horizon-field-l-j-k-j-sqrt-u-sqrt-gamma-sqrt",
+      "to": "OBJ:four-charge-galois-core-f-k-k-f-5-gal-k-gal-f-s-5",
+      "relation": "has_base",
+      "label": "OBJ:augmented-axial-horizon-field-l-j-k-j-sqrt-u-sqrt-gamma-sqrt has_base OBJ:four-charge-galois-core-f-k-k-f-5-gal-k-gal-f-s-5",
+      "basis": "L_J=K_J(√u,√γ,√δ_J) is a rank-3 Kummer-decorated cover built over the degree-5 four-charge base K/F ([K:F]=5, Gal=S_5); its normal closure is C_2^3 wreath S_5 with that S_5 as the base-monodromy quotient (seq 3.2).  [verified: Source U-1363 proves L_J=K_J(√u,√γ,√δ_J) is a rank-3 Kummer cover erec]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "evidence_uid": "U-1363",
+        "typed_from": "cooccurrence_fanout"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:augmented-axial-horizon-field-l-j-k-j-sqrt-u-sqrt-gamma-sqrt::has_base::OBJ:rotating-ordered-horizon-field-h-j-k-j-sqrt-gamma-sqrt-delta",
+      "from": "OBJ:augmented-axial-horizon-field-l-j-k-j-sqrt-u-sqrt-gamma-sqrt",
+      "to": "OBJ:rotating-ordered-horizon-field-h-j-k-j-sqrt-gamma-sqrt-delta",
+      "relation": "has_base",
+      "label": "OBJ:augmented-axial-horizon-field-l-j-k-j-sqrt-u-sqrt-gamma-sqrt has_base OBJ:rotating-ordered-horizon-field-h-j-k-j-sqrt-gamma-sqrt-delta",
+      "basis": "Source: L_J = K_J(sqrt u,sqrt gamma,sqrt delta_J) = H_J(sqrt u), H_J = K_J(sqrt gamma,sqrt delta_J). L_J is the degree-2 axial Kummer cover with base H_J; [L_J:K_J]=8=2*[H_J:K_J]=2*4.  [verified: Source confirms L_J=K_J(sqrt u,sqrt gamma,sqrt delta_J)=H_J(sqrt u), H]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "evidence_uid": "U-1396",
+        "typed_from": "cooccurrence_fanout"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:axial-k-ellipse-polynomial-phi-k-m-m-and-resultant-identity::same_content_as::OBJ:phi-k-m-m-n-k-norm-form",
+      "from": "OBJ:axial-k-ellipse-polynomial-phi-k-m-m-and-resultant-identity",
+      "to": "OBJ:phi-k-m-m-n-k-norm-form",
+      "relation": "same_content_as",
+      "label": "OBJ:axial-k-ellipse-polynomial-phi-k-m-m-and-resultant-identity same_content_as OBJ:phi-k-m-m-n-k-norm-form",
+      "basis": "U-1309 convention defines Phi_k as the sign-choice product (norm form, obj b) and states Phi_k = ±Res_u(N_k(u),m^2-u) up to unit (resultant identity, obj a); Thm 2(iii-iv) proves one polynomial Phi_k=N_k(m^2). Same object.  [verified: Source U-1309 convention + Thm 2(iii-iv) prove Phi_k=N_k(m^2)=±Res_u(N]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "evidence_uid": "U-1309",
+        "typed_from": "cooccurrence_fanout"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:carrier-o-gauge-normal-form::quotient_of::OBJ:self-coupling-hessian-split-h-h-c-h-s",
+      "from": "OBJ:carrier-o-gauge-normal-form",
+      "to": "OBJ:self-coupling-hessian-split-h-h-c-h-s",
+      "relation": "quotient_of",
+      "label": "OBJ:carrier-o-gauge-normal-form quotient_of OBJ:self-coupling-hessian-split-h-h-c-h-s",
+      "basis": "CALC-27: every H has a unique gauge-normal representative with diagonal killed, off-diagonals the obstruction O; Sym_n/Im(G_g) ≅ ℚ^{n(n−1)/2} via [H]↦O.  [harvest+verified: Source (dbp_four_role_calc_log_v8.md, CALC-27, line 733) sta]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 1,
+        "evidence_uids": [
+          "U-0112"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:carrier-o::same_content_as::OBJ:carrier-o-gauge-normal-form",
+      "from": "OBJ:carrier-o",
+      "to": "OBJ:carrier-o-gauge-normal-form",
+      "relation": "same_content_as",
+      "label": "OBJ:carrier-o same_content_as OBJ:carrier-o-gauge-normal-form",
+      "basis": "I.3: 'dim O = n(n−1)/2 = dim M^(n−2,2) (carrier = framework's gauge-invariant Hessian quotient)' identifies carrier O with its gauge-normal-form representative.  [harvest+verified: Source (DBP_STANDING_RESULTS_v1.1.md, I.3) explicitly states]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 1,
+        "evidence_uids": [
+          "U-0507"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:certified-keystone-channel-labels-kappa-c-kappa-s-kappa-int::specializes_to::OBJ:channel-vector-c-r",
+      "from": "OBJ:certified-keystone-channel-labels-kappa-c-kappa-s-kappa-int",
+      "to": "OBJ:channel-vector-c-r",
+      "relation": "specializes_to",
+      "label": "OBJ:certified-keystone-channel-labels-kappa-c-kappa-s-kappa-int specializes_to OBJ:channel-vector-c-r",
+      "basis": "The numeric keystone (κ_c, κ_s, κ_int) = (−1/49, 1/49, −3/49) is a concrete instance of the general channel vector C_r = (κ_{r;r,0},…,κ_{r;0,r}).  [harvest+verified: Verified against the source (DBP_Curvature_Role_Reduction.md]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 2,
+        "evidence_uids": [
+          "U-0475",
+          "U-0557"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:certified-keystone-channel-labels-kappa-c-kappa-s-kappa-int::specializes_to::OBJ:elementary-symmetric-curvatures-r-s",
+      "from": "OBJ:certified-keystone-channel-labels-kappa-c-kappa-s-kappa-int",
+      "to": "OBJ:elementary-symmetric-curvatures-r-s",
+      "relation": "specializes_to",
+      "label": "OBJ:certified-keystone-channel-labels-kappa-c-kappa-s-kappa-int specializes_to OBJ:elementary-symmetric-curvatures-r-s",
+      "basis": "This recovers the canonical kappa_c,kappa_s,kappa_int when n=3,r=2, giving a channel decomposition of every elementary curvature invariant.  [harvest+verified: Source (Three_Channel_KG_New_Math_Extension.md, lines 32-88,]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 1,
+        "evidence_uids": [
+          "U-0066"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:conjugate-kummer-module::quotient_of::OBJ:conjugate-square-class-module-v-f-2-s-tensor-f2-f-2-i",
+      "from": "OBJ:conjugate-kummer-module",
+      "to": "OBJ:conjugate-square-class-module-v-f-2-s-tensor-f2-f-2-i",
+      "relation": "quotient_of",
+      "label": "OBJ:conjugate-kummer-module quotient_of OBJ:conjugate-square-class-module-v-f-2-s-tensor-f2-f-2-i",
+      "basis": "Eq (2.3): 'R = ker(theta), W = im(theta) = V/R.' — the conjugate Kummer module W is explicitly defined as the quotient of V by the relation module R.  [harvest+verified: Source file (KUMMER_MODULE_WREATH_LIFT_THEOREM_2026-07-10.md]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 2,
+        "evidence_uids": [
+          "U-1313",
+          "U-1394"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:dbp-curvature-constant::has_base::OBJ:e-lambda-legendre-curve",
+      "from": "OBJ:dbp-curvature-constant",
+      "to": "OBJ:e-lambda-legendre-curve",
+      "relation": "has_base",
+      "label": "OBJ:dbp-curvature-constant has_base OBJ:e-lambda-legendre-curve",
+      "basis": "'The primary and dual DBP constants are third-kind curvature periods on the Legendre 2-isogenous model E_lambda.'  [harvest+verified: Source file 16-DBP_Curvature_Constants_Corrected_Formulation]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 1,
+        "evidence_uids": [
+          "U-0732"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:dbp-curvature-constant::same_content_as::OBJ:i-primary",
+      "from": "OBJ:dbp-curvature-constant",
+      "to": "OBJ:i-primary",
+      "relation": "same_content_as",
+      "label": "OBJ:dbp-curvature-constant same_content_as OBJ:i-primary",
+      "basis": "Text calls I_primary 'the primary scalar curvature constant', matching dictionary's DBP curvature constant (third-kind elliptic period).  [harvest+verified: Verified against U-0881's source (DBP_LANDEN_TRACE_THEOREM_C]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "medium",
+        "corroborating_units": 2,
+        "evidence_uids": [
+          "U-0881",
+          "U-1013"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:e-128-minimal-dbp-curve::quotient_of::OBJ:c-epsilon-genus-1-curve",
+      "from": "OBJ:e-128-minimal-dbp-curve",
+      "to": "OBJ:c-epsilon-genus-1-curve",
+      "relation": "quotient_of",
+      "label": "OBJ:e-128-minimal-dbp-curve quotient_of OBJ:c-epsilon-genus-1-curve",
+      "basis": "Same quotient-by-T_epsilon construction (Sec.2) realizing E_128: Y^2=X^3-X^2+X-1 as the image of C_epsilon.  [harvest+verified: Source file DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md, Secti]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 7,
+        "evidence_uids": [
+          "U-0097",
+          "U-0720",
+          "U-0724",
+          "U-0991",
+          "U-1030"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:e-128::quotient_of::OBJ:c-epsilon-genus-1-curve",
+      "from": "OBJ:e-128",
+      "to": "OBJ:c-epsilon-genus-1-curve",
+      "relation": "quotient_of",
+      "label": "OBJ:e-128 quotient_of OBJ:c-epsilon-genus-1-curve",
+      "basis": "Text: composite degree-two isogeny 'maps the quotient to E_{128}: Y^2=X^3-X^2+X-1' after quotienting C_epsilon by translation by the 2-torsion point T_epsilon.  [harvest+verified: Source (Sec. 2, eqs 2.1-2.10 of DBP_LANDEN_TRACE_THEOREM_COM]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 11,
+        "evidence_uids": [
+          "U-0090",
+          "U-0147",
+          "U-0755",
+          "U-0924",
+          "U-0991"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:e-128::same_content_as::OBJ:e-128-minimal-dbp-curve",
+      "from": "OBJ:e-128",
+      "to": "OBJ:e-128-minimal-dbp-curve",
+      "relation": "same_content_as",
+      "label": "OBJ:e-128 same_content_as OBJ:e-128-minimal-dbp-curve",
+      "basis": "Source defines one curve E_128: minimal Weierstrass form Y^2=X^3-X^2+X-1, j=128, Delta=-256. Object a (Weierstrass j=128) and b (that equation, disc -256) are the identical curve; both symbol e_128.  [verified: Source lines 43-64 define one curve E_128 via y^2=w(1-w)(1+w^2) \"equiv]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "evidence_uid": "U-0165",
+        "typed_from": "cooccurrence_fanout"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:elementary-symmetric-curvatures-r-s::quotient_of::OBJ:channel-density-polynomial",
+      "from": "OBJ:elementary-symmetric-curvatures-r-s",
+      "to": "OBJ:channel-density-polynomial",
+      "relation": "quotient_of",
+      "label": "OBJ:elementary-symmetric-curvatures-r-s quotient_of OBJ:channel-density-polynomial",
+      "basis": "sigma_r(S)=E_r(1,1)/q^{(r+2)/2}: the elementary symmetric curvature is literally the density E_r divided by the normalization q^{(r+2)/2}.  [harvest+verified: Unit U-0052's source (Three_Channel_KG_New_Math_Extension.md]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 1,
+        "evidence_uids": [
+          "U-0052"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:elementary-symmetric-curvatures-r-s::quotient_of::OBJ:channel-vector-c-r",
+      "from": "OBJ:elementary-symmetric-curvatures-r-s",
+      "to": "OBJ:channel-vector-c-r",
+      "relation": "quotient_of",
+      "label": "OBJ:elementary-symmetric-curvatures-r-s quotient_of OBJ:channel-vector-c-r",
+      "basis": "§2: 'Σ : C_r ↦ Σ κ_{r;p,q} = σ_r' — σ_r is the image/quotient of the channel vector C_r under the reduction map.  [harvest+verified: Unit U-0474's source path is DBP_Curvature_Role_Reduction.md]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 3,
+        "evidence_uids": [
+          "U-0474",
+          "U-0475",
+          "U-0557"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:ell-epsilon-r-epsilon::parameterizes::OBJ:f-epsilon",
+      "from": "OBJ:ell-epsilon-r-epsilon",
+      "to": "OBJ:f-epsilon",
+      "relation": "parameterizes",
+      "label": "OBJ:ell-epsilon-r-epsilon parameterizes OBJ:f-epsilon",
+      "basis": "f_epsilon=(y-ell_epsilon u)/(y+ell_epsilon u) (5.7) is defined directly using the constant ell_epsilon from (5.3).  [harvest+verified: Verified against /home/wlloyd/Cella Framework/Papers_Library]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 1,
+        "evidence_uids": [
+          "U-1013"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:four-charge-galois-core-f-k-k-f-5-gal-k-gal-f-s-5::acts_on::OBJ:channel-vector-static-u-i-gamma-i-rotating-gamma-i-delta-i-a",
+      "from": "OBJ:four-charge-galois-core-f-k-k-f-5-gal-k-gal-f-s-5",
+      "to": "OBJ:channel-vector-static-u-i-gamma-i-rotating-gamma-i-delta-i-a",
+      "relation": "acts_on",
+      "label": "OBJ:four-charge-galois-core-f-k-k-f-5-gal-k-gal-f-s-5 acts_on OBJ:channel-vector-static-u-i-gamma-i-rotating-gamma-i-delta-i-a",
+      "basis": "Gal(E/F)=S_5 of the degree-5 mass core permutes sheet labels sigma(i), acting on channel radicands sqrt(u_i),sqrt(gamma_i) -> ±sqrt(_{sigma(i)}); W is the S_5-stable Kummer module, giving (C_2^s)^5 wr S_5.  [verified: R9 source (Sec 7, eq 2.3, 7.1): S_5=Gal(E/F) permutes sheet labels sig]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "evidence_uid": "U-1322",
+        "typed_from": "cooccurrence_fanout"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:four-charge-galois-core-f-k-k-f-5-gal-k-gal-f-s-5::acts_on::OBJ:conjugate-embedding-labels-u-i-gamma-i-beta-i-delta-i",
+      "from": "OBJ:four-charge-galois-core-f-k-k-f-5-gal-k-gal-f-s-5",
+      "to": "OBJ:conjugate-embedding-labels-u-i-gamma-i-beta-i-delta-i",
+      "relation": "acts_on",
+      "label": "OBJ:four-charge-galois-core-f-k-k-f-5-gal-k-gal-f-s-5 acts_on OBJ:conjugate-embedding-labels-u-i-gamma-i-beta-i-delta-i",
+      "basis": "Source Sec.7/Sec.5: each Gal element restricts to a permutation sigma in S_5 of mass roots, sending sqrt(u_i)->±sqrt(u_{sigma(i)}), sqrt(gamma_i)->±sqrt(gamma_{sigma(i)}); S_5 permutes the conjugate labels.  [verified: R9 Sec.7 (U-1322): each Gal(H~/F) element restricts to sigma in S_5 pe]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "evidence_uid": "U-1322",
+        "typed_from": "cooccurrence_fanout"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:four-charge-galois-core-f-k-k-f-5-gal-k-gal-f-s-5::acts_on::OBJ:delta-j-third-kummer-channel-radicand",
+      "from": "OBJ:four-charge-galois-core-f-k-k-f-5-gal-k-gal-f-s-5",
+      "to": "OBJ:delta-j-third-kummer-channel-radicand",
+      "relation": "acts_on",
+      "label": "OBJ:four-charge-galois-core-f-k-k-f-5-gal-k-gal-f-s-5 acts_on OBJ:delta-j-third-kummer-channel-radicand",
+      "basis": "Base monodromy Gal(K^gal/F)=S_5 acts transitively on the 5 mass sheets, permuting the conjugate radicands delta_{J,i} (i=1..5); W_rot=span{[u_i],[gamma_i],[delta_{J,i}]} is the S_5-stable Kummer module.  [verified: S_5 base monodromy acts transitively on the 5 mass sheets and permutes]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "medium",
+        "evidence_uid": "U-1394",
+        "typed_from": "cooccurrence_fanout"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:four-charge-galois-core-f-k-k-f-5-gal-k-gal-f-s-5::quotient_of::OBJ:v-4-wr-s-5-headline-theorem-closure-group-notation",
+      "from": "OBJ:four-charge-galois-core-f-k-k-f-5-gal-k-gal-f-s-5",
+      "to": "OBJ:v-4-wr-s-5-headline-theorem-closure-group-notation",
+      "relation": "quotient_of",
+      "label": "OBJ:four-charge-galois-core-f-k-k-f-5-gal-k-gal-f-s-5 quotient_of OBJ:v-4-wr-s-5-headline-theorem-closure-group-notation",
+      "basis": "Source writes C_2^2 wr S_5 = (C_2^2)^5 semidirect S_5 (eq 1.1, 7.3); S_5 acts by permuting the five sheets, so the four-charge core's S_5 is the quotient of V_4 wr S_5 by its base (C_2^2)^5.  [verified: Source eq 1.1/7.3: C_2^2 wr S_5=(C_2^2)^5⋊S_5; quotient by base (C_2^2]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "evidence_uid": "U-1323",
+        "typed_from": "cooccurrence_fanout"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:gauge-transport-law-defining-function-gauge::acts_on::OBJ:channel-vector-c-r",
+      "from": "OBJ:gauge-transport-law-defining-function-gauge",
+      "to": "OBJ:channel-vector-c-r",
+      "relation": "acts_on",
+      "label": "OBJ:gauge-transport-law-defining-function-gauge acts_on OBJ:channel-vector-c-r",
+      "basis": "§6: 'the channel account shifts inside ker Σ: C_r(g̃, H̃) − C_r(g, H) ∈ ker Σ' under the gauge transport law.  [harvest+verified: Unit U-0474's source is DBP_Curvature_Role_Reduction.md. Sec]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 3,
+        "evidence_uids": [
+          "U-0474",
+          "U-0475",
+          "U-0557"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:gaussian-kronecker-curvature-k-gk-n-1-s::specializes_to::OBJ:elementary-symmetric-curvatures-r-s",
+      "from": "OBJ:gaussian-kronecker-curvature-k-gk-n-1-s",
+      "to": "OBJ:elementary-symmetric-curvatures-r-s",
+      "relation": "specializes_to",
+      "label": "OBJ:gaussian-kronecker-curvature-k-gk-n-1-s specializes_to OBJ:elementary-symmetric-curvatures-r-s",
+      "basis": "K_GK = σ_{n-1}(S) is the r=n-1 case of the σ_r family; §3 gives the bordered-minor formula as 'the r-th Gauss–Kronecker curvature numerator'.  [harvest+verified: Source file DBP_Curvature_Role_Reduction.md (path from unit_]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 5,
+        "evidence_uids": [
+          "U-0052",
+          "U-0066",
+          "U-0474",
+          "U-0475",
+          "U-0557"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:i-primary::specializes_to::OBJ:dbp-curvature-constant",
+      "from": "OBJ:i-primary",
+      "to": "OBJ:dbp-curvature-constant",
+      "relation": "specializes_to",
+      "label": "OBJ:i-primary specializes_to OBJ:dbp-curvature-constant",
+      "basis": "I_primary is introduced as 'Target 1 — Primary DBP Total-Curvature Constant', a specific certified instance of the general third-kind DBP curvature-constant class discussed in the doc.  [harvest+verified: Unit U-0723 = Section 12 \"Correct Theorem Spine\" of 16-DBP_C]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 4,
+        "evidence_uids": [
+          "U-0165",
+          "U-0723",
+          "U-0726",
+          "U-1030"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:i-primary::specializes_to::OBJ:i-epsilon",
+      "from": "OBJ:i-primary",
+      "to": "OBJ:i-epsilon",
+      "relation": "specializes_to",
+      "label": "OBJ:i-primary specializes_to OBJ:i-epsilon",
+      "basis": "'The primary channel is epsilon=+1'; I_primary is the epsilon=+1 instance of I_epsilon defined in eq 1.6, used throughout secs 6-7.  [harvest+verified: Source (DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md) confirms ]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 11,
+        "evidence_uids": [
+          "U-0720",
+          "U-0724",
+          "U-0755",
+          "U-0881",
+          "U-0971"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:k-dual-2::parameterizes::OBJ:im-omega-2-period-control",
+      "from": "OBJ:k-dual-2",
+      "to": "OBJ:im-omega-2-period-control",
+      "relation": "parameterizes",
+      "label": "OBJ:k-dual-2 parameterizes OBJ:im-omega-2-period-control",
+      "basis": "Source defines Im(omega_2) = -2^(3/4)*K(k_dual^2): the imaginary period is a function of the elliptic modulus k_dual^2 via complete elliptic integral K, so the modulus parameterizes the period.  [verified: Source states exactly Im(omega_2) = -2^(3/4)*K(k_dual^2) (lines 560-56]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "evidence_uid": "U-0729",
+        "typed_from": "cooccurrence_fanout"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:k-dual-2::same_content_as::OBJ:lambda-dual",
+      "from": "OBJ:k-dual-2",
+      "to": "OBJ:lambda-dual",
+      "relation": "same_content_as",
+      "label": "OBJ:k-dual-2 same_content_as OBJ:lambda-dual",
+      "basis": "k_dual^2 = (2+sqrt(2))/4 (sec.4) is the identical formula given for lambda_dual = (2+sqrt(2))/4 (sec.1); both are the Galois-conjugate Legendre modulus.  [harvest+verified: Source file 16-DBP_Curvature_Constants_Corrected_Formulation]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 1,
+        "evidence_uids": [
+          "U-0726"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:kappa-c-pinning-condition-c-0::specializes_to::OBJ:gauge-transport-law-defining-function-gauge",
+      "from": "OBJ:kappa-c-pinning-condition-c-0",
+      "to": "OBJ:gauge-transport-law-defining-function-gauge",
+      "relation": "specializes_to",
+      "label": "OBJ:kappa-c-pinning-condition-c-0 specializes_to OBJ:gauge-transport-law-defining-function-gauge",
+      "basis": "'For a single-axis gauge a = t·e_i ... t·e_i pins κ_c ⟺ H_jk = 0' is a special-case condition of the general gauge transport law of §6.  [harvest+verified: Source (DBP_Curvature_Role_Reduction.md) §6 \"Gauge transport]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 2,
+        "evidence_uids": [
+          "U-0474",
+          "U-0475"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:local-dbp-graph-and-jet-notation-a-b-a-b-c::parameterizes::OBJ:role-coupling-mixed-numerators-lambda-p-lambda-d-lambda-s",
+      "from": "OBJ:local-dbp-graph-and-jet-notation-a-b-a-b-c",
+      "to": "OBJ:role-coupling-mixed-numerators-lambda-p-lambda-d-lambda-s",
+      "relation": "parameterizes",
+      "label": "OBJ:local-dbp-graph-and-jet-notation-a-b-a-b-c parameterizes OBJ:role-coupling-mixed-numerators-lambda-p-lambda-d-lambda-s",
+      "basis": "CALC-05: 'Λ_P=B, Λ_D=(Ab−aB)/a, Λ_S=(Ca−bB)/b' are explicit functions of the symbolic 2-jet (a,b,A,B,C).  [harvest+verified: Source file dbp_four_role_calc_log_v8.md, CALC-05 (lines 101]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 1,
+        "evidence_uids": [
+          "U-0555"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:m-epsilon-n-epsilon-a-epsilon-b-epsilon::parameterizes::OBJ:f-epsilon-x",
+      "from": "OBJ:m-epsilon-n-epsilon-a-epsilon-b-epsilon",
+      "to": "OBJ:f-epsilon-x",
+      "relation": "parameterizes",
+      "label": "OBJ:m-epsilon-n-epsilon-a-epsilon-b-epsilon parameterizes OBJ:f-epsilon-x",
+      "basis": "Eq (3.6): F_ε(u)=A_ε m_ε/(d_ε−n_ε u)−B_ε, d_ε=m_ε(1−n_ε); and (1.9) F_ε(x)=A_ε m_ε/(m_ε−n_ε x)−B_ε. The kernel F_ε is explicitly constructed from the ε-family (m_ε,n_ε,A_ε,B_ε).  [verified: Eqs (1.9) and (3.6) define F_ε explicitly from the family constants m_]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "evidence_uid": "U-0924",
+        "typed_from": "cooccurrence_fanout"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:m-epsilon-n-epsilon-a-epsilon-b-epsilon::parameterizes::OBJ:i-epsilon",
+      "from": "OBJ:m-epsilon-n-epsilon-a-epsilon-b-epsilon",
+      "to": "OBJ:i-epsilon",
+      "relation": "parameterizes",
+      "label": "OBJ:m-epsilon-n-epsilon-a-epsilon-b-epsilon parameterizes OBJ:i-epsilon",
+      "basis": "Eq (1.6): I_ε = -t^7[A_ε Π(n_ε;m_ε) - B_ε K(m_ε)] defines the period value I_ε wholly in terms of the moduli/characteristics/coefficients m_ε,n_ε,A_ε,B_ε, which thus parameterize I_ε.  [verified: Eq (1.6) I_ε=-t^7[A_ε Π(n_ε;m_ε)-B_ε K(m_ε)] expresses I_ε wholly via ]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "evidence_uid": "U-0724",
+        "typed_from": "cooccurrence_fanout"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:m-epsilon-n-epsilon-a-epsilon-b-epsilon::parameterizes::OBJ:u-a-epsilon-b-weierstrass-model-coordinates",
+      "from": "OBJ:m-epsilon-n-epsilon-a-epsilon-b-epsilon",
+      "to": "OBJ:u-a-epsilon-b-weierstrass-model-coordinates",
+      "relation": "parameterizes",
+      "label": "OBJ:m-epsilon-n-epsilon-a-epsilon-b-epsilon parameterizes OBJ:u-a-epsilon-b-weierstrass-model-coordinates",
+      "basis": "Eq (2.1): the Weierstrass coordinates are functions of the epsilon-family modulus m_eps: u=x-m_eps, a_eps=2m_eps-1=-eps*s/2, b=m_eps(m_eps-1)=-1/8, yielding short form y^2=u^3+a_eps u^2+bu (2.2).  [verified: Eq (2.1) explicitly defines the Weierstrass coordinates as functions o]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "evidence_uid": "U-0147",
+        "typed_from": "cooccurrence_fanout"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:metric-valuation-vector-exponent-matrix-p-i-p-i-q-i::parameterizes::OBJ:diagonal-divisor-monomial-metric-germ",
+      "from": "OBJ:metric-valuation-vector-exponent-matrix-p-i-p-i-q-i",
+      "to": "OBJ:diagonal-divisor-monomial-metric-germ",
+      "relation": "parameterizes",
+      "label": "OBJ:metric-valuation-vector-exponent-matrix-p-i-p-i-q-i parameterizes OBJ:diagonal-divisor-monomial-metric-germ",
+      "basis": "g_i=h_i(z,y)z^{P_i}; 'The matrix P=(p_{ia}) ... is the metric valuation matrix' defining the germ's exponent structure.  [harvest+verified: Unit U-1456's source file (LOCAL_CURVATURE_CALCULUS_COMPLETE]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 1,
+        "evidence_uids": [
+          "U-1456"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:n-dual::parameterizes::OBJ:dbp-curvature-constant",
+      "from": "OBJ:n-dual",
+      "to": "OBJ:dbp-curvature-constant",
+      "relation": "parameterizes",
+      "label": "OBJ:n-dual parameterizes OBJ:dbp-curvature-constant",
+      "basis": "I_dual is built from Pi(n_dual ; k_dual^2), i.e. n_dual is the characteristic parameter of the complete third-kind elliptic integral forming the dual DBP curvature constant.  [harvest+verified: Source file 16-DBP_Curvature_Constants_Corrected_Formulation]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 1,
+        "evidence_uids": [
+          "U-1203"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:n-dual::parameterizes::OBJ:omega-bare",
+      "from": "OBJ:n-dual",
+      "to": "OBJ:omega-bare",
+      "relation": "parameterizes",
+      "label": "OBJ:n-dual parameterizes OBJ:omega-bare",
+      "basis": "Sec.5 sets n = n_dual = (4+3s)/8 then defines omega_bare = dx/((1-n*x^2)*y); n_dual fixes the pole location x0=1/sqrt(n) of the bare third-kind differential.  [harvest+verified: Source (Sec.5 of 16-DBP_Curvature_Constants_Corrected_Formul]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 1,
+        "evidence_uids": [
+          "U-0726"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:omega-dbp::has_base::OBJ:e-lambda-legendre-curve",
+      "from": "OBJ:omega-dbp",
+      "to": "OBJ:e-lambda-legendre-curve",
+      "relation": "has_base",
+      "label": "OBJ:omega-dbp has_base OBJ:e-lambda-legendre-curve",
+      "basis": "omega_DBP = P*omega_bare is the DBP-weighted third-kind differential whose periods are 'periods on the Legendre 2-isogenous model E_lambda'.  [harvest+verified: Source (16-DBP_Curvature_Constants_Corrected_Formulation.md)]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "medium",
+        "corroborating_units": 2,
+        "evidence_uids": [
+          "U-0732",
+          "U-0817"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:parity-law-normalization-boundary::same_content_as::OBJ:lovelock-parity",
+      "from": "OBJ:parity-law-normalization-boundary",
+      "to": "OBJ:lovelock-parity",
+      "relation": "same_content_as",
+      "label": "OBJ:parity-law-normalization-boundary same_content_as OBJ:lovelock-parity",
+      "basis": "\"The parity law is the Lovelock parity.\" (§4) and \"The §4 parity law IS the Lovelock parity.\" (§14.3) assert direct identity.  [harvest+verified: Source (§4 and §14.3 of DBP_Curvature_Role_Reduction.md) exp]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 2,
+        "evidence_uids": [
+          "U-0242",
+          "U-0474"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:regular-compatibility-point::specializes_to::OBJ:compatibility-point",
+      "from": "OBJ:regular-compatibility-point",
+      "to": "OBJ:compatibility-point",
+      "relation": "specializes_to",
+      "label": "OBJ:regular-compatibility-point specializes_to OBJ:compatibility-point",
+      "basis": "Source defines a compatibility point as any common zero of F_1..F_k; a \"regular\" one adds the condition that the k×n Jacobian has full row rank k (transverse). Regular = compatibility point + transversality, a strict special case.  [verified: Source (lines 18-20) defines regular = compatibility point + full-row-]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "evidence_uid": "U-1195",
+        "typed_from": "cooccurrence_fanout"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:rotating-ordered-horizon-field-h-j-k-j-sqrt-gamma-sqrt-delta::has_base::OBJ:four-charge-galois-core-f-k-k-f-5-gal-k-gal-f-s-5",
+      "from": "OBJ:rotating-ordered-horizon-field-h-j-k-j-sqrt-gamma-sqrt-delta",
+      "to": "OBJ:four-charge-galois-core-f-k-k-f-5-gal-k-gal-f-s-5",
+      "relation": "has_base",
+      "label": "OBJ:rotating-ordered-horizon-field-h-j-k-j-sqrt-gamma-sqrt-delta has_base OBJ:four-charge-galois-core-f-k-k-f-5-gal-k-gal-f-s-5",
+      "basis": "H_J=K_J(sqrt gamma,sqrt delta_J) is a Kummer-decorated cover; the theorem builds H=K(sqrt r_i) over base K/F ([K:F]=5,G=S_5) with 1->W^vee->Gal(L/F)->S_5->1, rotating template adds delta_J (sec 10).  [verified: Source (Eq 1.2, secs 9-10) builds the Kummer-decorated horizon field H]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "medium",
+        "evidence_uid": "U-1394",
+        "typed_from": "cooccurrence_fanout"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:rotating-ordered-horizon-field-h-j-k-j-sqrt-gamma-sqrt-delta::specializes_to::OBJ:decorated-sheet-field-h-k-sqrt-r-1-sqrt-r-s",
+      "from": "OBJ:rotating-ordered-horizon-field-h-j-k-j-sqrt-gamma-sqrt-delta",
+      "to": "OBJ:decorated-sheet-field-h-k-sqrt-r-1-sqrt-r-s",
+      "relation": "specializes_to",
+      "label": "OBJ:rotating-ordered-horizon-field-h-j-k-j-sqrt-gamma-sqrt-delta specializes_to OBJ:decorated-sheet-field-h-k-sqrt-r-1-sqrt-r-s",
+      "basis": "H_J=K_J(sqrt(gamma),sqrt(delta_J)) instantiates the generic H=K(sqrt(r_1),...,sqrt(r_s)) construction with base extended by J.  [harvest+verified: Source galois_horizon_cover_v1_0.tex confirms both objects a]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 2,
+        "evidence_uids": [
+          "U-1345",
+          "U-1604"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:shadow-law::quotient_of::OBJ:triangle-decomposition",
+      "from": "OBJ:shadow-law",
+      "to": "OBJ:triangle-decomposition",
+      "relation": "quotient_of",
+      "label": "OBJ:shadow-law quotient_of OBJ:triangle-decomposition",
+      "basis": "THEOREM: 'shadow(Q_ν) = s(g)·[(n−2)·I − A₁]', obtained via 'group-averaging' orbit-mean projection of the triangle-decomposed Q_ν.  [harvest+verified: Verified against the source (SHADOW_LAW_THEOREM.md) and the ]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 1,
+        "evidence_uids": [
+          "U-1248"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:sign-group-h-sign-c-2-k::acts_on::OBJ:channel-vector-static-u-i-gamma-i-rotating-gamma-i-delta-i-a",
+      "from": "OBJ:sign-group-h-sign-c-2-k",
+      "to": "OBJ:channel-vector-static-u-i-gamma-i-rotating-gamma-i-delta-i-a",
+      "relation": "acts_on",
+      "label": "OBJ:sign-group-h-sign-c-2-k acts_on OBJ:channel-vector-static-u-i-gamma-i-rotating-gamma-i-delta-i-a",
+      "basis": "Channel vector is the k-tuple of sheet radicands (u_i,gamma_i,delta_i); sign group (C_2)^k acts by independent sign flips sqrt(r)->+/-sqrt(r), one C_2 per radicand (A_i,G_i,D_i basis vectors).  [verified: Sources (U-1291 eq 2.1 A_i/G_i/D_i basis; U-1322 sqrt(r)->+/-sqrt(r)) ]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "evidence_uid": "U-1291",
+        "typed_from": "cooccurrence_fanout"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:sign-group-h-sign-c-2-k::acts_on::OBJ:e-f-0-u-w-1-w-k",
+      "from": "OBJ:sign-group-h-sign-c-2-k",
+      "to": "OBJ:e-f-0-u-w-1-w-k",
+      "relation": "acts_on",
+      "label": "OBJ:sign-group-h-sign-c-2-k acts_on OBJ:e-f-0-u-w-1-w-k",
+      "basis": "(I1): [E:F_0(u)]=2^k with Galois group H=(C_2)^k; U-1644: E/L multiquadratic with group H_sign=(C_2)^k. The sign group is the Galois group acting on E by sign flips w_i -> -w_i.  [verified: Sources support it as stated. U-1577 (I1): Gal(E/F_0(u))=H=(C_2)^k, ge]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "evidence_uid": "U-1577",
+        "typed_from": "cooccurrence_fanout"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:sign-group-h-sign-c-2-k::acts_on::OBJ:rotating-ordered-horizon-field-h-j-k-j-sqrt-gamma-sqrt-delta",
+      "from": "OBJ:sign-group-h-sign-c-2-k",
+      "to": "OBJ:rotating-ordered-horizon-field-h-j-k-j-sqrt-gamma-sqrt-delta",
+      "relation": "acts_on",
+      "label": "OBJ:sign-group-h-sign-c-2-k acts_on OBJ:rotating-ordered-horizon-field-h-j-k-j-sqrt-gamma-sqrt-delta",
+      "basis": "Thm 6.1 (§6): sign group (C_2^s) acts on square roots x_{alpha,i}=sqrt(r_{alpha,i}) by signs epsilon in {+1,-1}, i.e. sign changes on the radical generators of the Kummer field H_J; fiber of C_2^s wreath G.  [verified: Thm 6.1 eq (6.1) and §7 (7.1) explicitly show the sign group C_2^s act]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "evidence_uid": "U-1394",
+        "typed_from": "cooccurrence_fanout"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:signed-contact-walls-and-parity-ell-epsilon-s-epsilon::parameterizes::OBJ:f-epsilon",
+      "from": "OBJ:signed-contact-walls-and-parity-ell-epsilon-s-epsilon",
+      "to": "OBJ:f-epsilon",
+      "relation": "parameterizes",
+      "label": "OBJ:signed-contact-walls-and-parity-ell-epsilon-s-epsilon parameterizes OBJ:f-epsilon",
+      "basis": "Eq (5.7): f_epsilon=(y-ell_epsilon u)/(y+ell_epsilon u) is built from ell_epsilon and indexed by sign/parity epsilon (ell_epsilon^2=z_{0,eps}=-4*eps*s, 5.2/5.6); b's signed wall+parity parameters generate the family f_epsilon.  [verified: Eq 5.7 defines f_epsilon literally from ell_epsilon (a symbol of b), w]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "medium",
+        "evidence_uid": "U-1186",
+        "typed_from": "cooccurrence_fanout"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:static-ordered-horizon-field-h-k-sqrt-u-sqrt-gamma::has_base::OBJ:physical-seed-field-k-f-u-n-k-u",
+      "from": "OBJ:static-ordered-horizon-field-h-k-sqrt-u-sqrt-gamma",
+      "to": "OBJ:physical-seed-field-k-f-u-n-k-u",
+      "relation": "has_base",
+      "label": "OBJ:static-ordered-horizon-field-h-k-sqrt-u-sqrt-gamma has_base OBJ:physical-seed-field-k-f-u-n-k-u",
+      "basis": "C2 states 'the entropy tower K ⊂ K(m), K(y) ⊂ K(m, y) is generically defined', i.e. K(sqrt(u),sqrt(gamma)) is built as an extension over base field K.  [harvest+verified: Unit U-1421's source (LOG_ENTRY_R6_R7_generic_descent_v2.md,]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 2,
+        "evidence_uids": [
+          "U-0917",
+          "U-1421"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:static-ordered-horizon-field-h-k-sqrt-u-sqrt-gamma::specializes_to::OBJ:decorated-sheet-field-h-k-sqrt-r-1-sqrt-r-s",
+      "from": "OBJ:static-ordered-horizon-field-h-k-sqrt-u-sqrt-gamma",
+      "to": "OBJ:decorated-sheet-field-h-k-sqrt-r-1-sqrt-r-s",
+      "relation": "specializes_to",
+      "label": "OBJ:static-ordered-horizon-field-h-k-sqrt-u-sqrt-gamma specializes_to OBJ:decorated-sheet-field-h-k-sqrt-r-1-sqrt-r-s",
+      "basis": "H=K(sqrt(u),sqrt(gamma)) is the s=2 instance of the generic decorated field H=K(sqrt(r_1),...,sqrt(r_s)) of Sec.5, with r_1=u, r_2=gamma.  [harvest+verified: Verified in galois_horizon_cover_v1_0.tex. Sec.6 (line 557-6]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 1,
+        "evidence_uids": [
+          "U-1604"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:tangential-projector-p-i-gg-t-q::acts_on::OBJ:self-coupling-hessian-split-h-h-c-h-s",
+      "from": "OBJ:tangential-projector-p-i-gg-t-q",
+      "to": "OBJ:self-coupling-hessian-split-h-h-c-h-s",
+      "relation": "acts_on",
+      "label": "OBJ:tangential-projector-p-i-gg-t-q acts_on OBJ:self-coupling-hessian-split-h-h-c-h-s",
+      "basis": "tr(S_{X1}...S_{Xk}) = (-1)^k q^{-k/2} tr(P H_{X1} P H_{X2} ... P H_{Xk} P), avoiding a choice of tangent basis.  [harvest+verified: Source (Three_Channel_KG_New_Math_Extension.md, section 7, l]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 2,
+        "evidence_uids": [
+          "U-0066",
+          "U-0557"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:theta-trace-differential-on-e-128::has_base::OBJ:e-128",
+      "from": "OBJ:theta-trace-differential-on-e-128",
+      "to": "OBJ:e-128",
+      "relation": "has_base",
+      "label": "OBJ:theta-trace-differential-on-e-128 has_base OBJ:e-128",
+      "basis": "'On E_128, define Theta = 8(X-3)/(X+7) dX/Y' (eq 3.1) — Theta is a differential defined on the curve E_128.  [harvest+verified: Unit U-0924's source path (DBP_LANDEN_TRACE_THEOREM_COMPLETE]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 3,
+        "evidence_uids": [
+          "U-0812",
+          "U-0924",
+          "U-1154"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:triangle-weight-t-s::parameterizes::OBJ:triangle-decomposition",
+      "from": "OBJ:triangle-weight-t-s",
+      "to": "OBJ:triangle-decomposition",
+      "relation": "parameterizes",
+      "label": "OBJ:triangle-weight-t-s parameterizes OBJ:triangle-decomposition",
+      "basis": "'Q_ν = Σ_{|S|=3} T_S · (2I−J)_S' — the weights T_S, indexed by 3-subsets S, parameterize the triangle-decomposition sum.  [harvest+verified: Source (SHADOW_LAW_THEOREM.md, Lemma 3, lines 39-46) literal]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 2,
+        "evidence_uids": [
+          "U-0115",
+          "U-1248"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:v-4-wr-s-5-headline-theorem-closure-group-notation::acts_on::OBJ:channel-vector-static-u-i-gamma-i-rotating-gamma-i-delta-i-a",
+      "from": "OBJ:v-4-wr-s-5-headline-theorem-closure-group-notation",
+      "to": "OBJ:channel-vector-static-u-i-gamma-i-rotating-gamma-i-delta-i-a",
+      "relation": "acts_on",
+      "label": "OBJ:v-4-wr-s-5-headline-theorem-closure-group-notation acts_on OBJ:channel-vector-static-u-i-gamma-i-rotating-gamma-i-delta-i-a",
+      "basis": "R9 Sec.7: Gal(H_tilde/F)=C_2^2 wr S_5=V_4 wr S_5 acts on the static channel-vector radicands by signed permutation sqrt(u_i)->±sqrt(u_sigma(i)), sqrt(gamma_i)->±sqrt(gamma_sigma(i)).  [verified: Source R9 Sec.7/Thm 7.1 states Gal(H_tilde/F)=C_2^2 wr S_5=V_4 wr S_5 ]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "evidence_uid": "U-1322",
+        "typed_from": "cooccurrence_fanout"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:v-4-wr-s-5-headline-theorem-closure-group-notation::acts_on::OBJ:conjugate-embedding-labels-u-i-gamma-i-beta-i-delta-i",
+      "from": "OBJ:v-4-wr-s-5-headline-theorem-closure-group-notation",
+      "to": "OBJ:conjugate-embedding-labels-u-i-gamma-i-beta-i-delta-i",
+      "relation": "acts_on",
+      "label": "OBJ:v-4-wr-s-5-headline-theorem-closure-group-notation acts_on OBJ:conjugate-embedding-labels-u-i-gamma-i-beta-i-delta-i",
+      "basis": "Gal(H~/F)=C_2^2 wr S_5 (=V_4 wr S_5) acts faithfully on the conjugate radicals: each element gives sigma in S_5 with sqrt(u_i)->+/-sqrt(u_{sigma(i)}), sqrt(gamma_i)->+/-sqrt(gamma_{sigma(i)}); signed-permutation action.  [verified: R9 (U-1322) states Gal(H~/F)=C_2^2 wr S_5 acts faithfully via sqrt(u_i]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "evidence_uid": "U-1322",
+        "typed_from": "cooccurrence_fanout"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:v-4-wr-s-5-headline-theorem-closure-group-notation::has_base::OBJ:sign-group-h-sign-c-2-k",
+      "from": "OBJ:v-4-wr-s-5-headline-theorem-closure-group-notation",
+      "to": "OBJ:sign-group-h-sign-c-2-k",
+      "relation": "has_base",
+      "label": "OBJ:v-4-wr-s-5-headline-theorem-closure-group-notation has_base OBJ:sign-group-h-sign-c-2-k",
+      "basis": "Source writes V_4 wr S_5 = (C_2^2)^5 ⋊ S_5; automorphisms act as a permutation of 5 sheets plus signs on radical channels. The elementary abelian sign group (C_2)^k is exactly the base group of the wreath product.  [verified: Source eq 1.1 gives V_4 wr S_5 = (C_2^2)^5 ⋊ S_5; base group of C_2^2 ]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "medium",
+        "evidence_uid": "U-1323",
+        "typed_from": "cooccurrence_fanout"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::OBJ:v-4-wr-s-5-headline-theorem-closure-group-notation::specializes_to::OBJ:wreath-lift-theorem",
+      "from": "OBJ:v-4-wr-s-5-headline-theorem-closure-group-notation",
+      "to": "OBJ:wreath-lift-theorem",
+      "relation": "specializes_to",
+      "label": "OBJ:v-4-wr-s-5-headline-theorem-closure-group-notation specializes_to OBJ:wreath-lift-theorem",
+      "basis": "Gal(widetilde H/F)=C_2^2 wr S_5 is the s=2, G=S_5 instance of the general wreath-lift conclusion Gal(L/F)=(C_2^s)^I rtimes G=C_2^s wr_I G.  [harvest+verified: In galois_horizon_cover_v1_0.tex, Thm 574 (thm:kummermodule,]",
+      "source_refs": [],
+      "facets": {
+        "confidence": "high",
+        "corroborating_units": 2,
+        "evidence_uids": [
+          "U-1313",
+          "U-1604"
+        ],
+        "typed_from": "harvest_fanout",
+        "gate": "C_high_or_corroborated"
+      },
+      "extensions": {}
+    }
+  ],
+  "extensions": {
+    "role": "typed_object_relations"
+  }
+}

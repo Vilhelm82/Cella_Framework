@@ -1,0 +1,136 @@
+"""n=6 routing-diversity probe — V4-disciplined.
+
+Pre-registration (binding before measurement):
+
+Five routings of f^(1/6), mathematically identical:
+  R1 python_pow_one_sixth : f ** (1/6)
+  R2 sqrt_of_cbrt          : (f ** (1/3)) ** (1/2)      # sqrt(cbrt(f))
+  R3 cbrt_of_sqrt          : (f ** (1/2)) ** (1/3)      # cbrt(sqrt(f))
+  R4 math_exp_log_6        : math.exp(math.log(f) / 6)
+  R5 numpy_power           : float(np.power(f, 1.0/6.0))
+
+Each runs through directional_alpha_probe with the same 12-point f sweep,
+eta = 1e-6, declared_alpha_models empty.
+
+Oracle: 1/6 (established to 47 digits in prior radical-family probe).
+
+Predictions:
+- If n=6 outlier is a routing-composition artefact:
+    biases differ meaningfully across R1..R5
+    sqrt_of_cbrt vs cbrt_of_sqrt should DIFFER (operand-order matters in float64)
+- If n=6 outlier is something deeper:
+    all five biases land near -5.3e-11
+- If Python's `**(1/6)` is implemented as exp(log(f)/6):
+    R1 and R4 should be near-identical
+- numpy_power may match either R1 or R4, or differ from both
+
+Falsifiability:
+- Any routing that puts |bias| > 1e-9 or fails alpha_fractional_branch is unexpected
+- Routings giving identical observed_alpha to all displayed digits (16) would
+  rule out routing as the explanation
+"""
+from __future__ import annotations
+
+import math
+import sys
+from pathlib import Path
+
+import numpy as np
+
+ROOT = Path("/home/william_lloydlt/projects/V4/Lloyd_Engine_V4")
+sys.path.insert(0, str(ROOT / "src"))
+
+from lloyd_v4.primitives.directional_alpha_probe import directional_alpha_probe
+
+
+def make_sweep() -> list[float]:
+    return [10.0 ** (-2.0 - (7.0 / 11.0) * i) for i in range(12)]
+
+
+ROUTINGS = [
+    ("R1_python_pow_one_sixth", lambda f: f ** (1.0 / 6.0)),
+    ("R2_sqrt_of_cbrt",          lambda f: (f ** (1.0 / 3.0)) ** (1.0 / 2.0)),
+    ("R3_cbrt_of_sqrt",          lambda f: (f ** (1.0 / 2.0)) ** (1.0 / 3.0)),
+    ("R4_math_exp_log_6",        lambda f: math.exp(math.log(f) / 6.0)),
+    ("R5_numpy_power",           lambda f: float(np.power(f, 1.0 / 6.0))),
+]
+
+
+def main() -> None:
+    f_values = make_sweep()
+    eta = 1e-6
+    truth = 1.0 / 6.0
+
+    print("=" * 110)
+    print("n=6 routing-diversity probe")
+    print("=" * 110)
+    print(f"f sweep: 12 points log-spaced from 1e-2 to 1e-9")
+    print(f"eta = {eta}, oracle alpha = 1/6 = {truth!r}")
+    print()
+
+    results = []
+    for label, obs in ROUTINGS:
+        v4 = directional_alpha_probe(
+            observable=obs,
+            f_values=f_values,
+            probe_id=f"n6_routing_{label}_001",
+            function_label=label,
+            eta=eta,
+        )
+        bias = v4.value.observed_alpha - truth if v4.value.observed_alpha is not None else None
+        results.append({
+            "label": label,
+            "obs_alpha": v4.value.observed_alpha,
+            "bias": bias,
+            "status": v4.status.value,
+            "stability": v4.value.alpha_stability_status.value,
+            "window_span": v4.value.alpha_window_span,
+            "std_err": v4.value.standard_error,
+            "n_observed": v4.value.n_observed,
+            "n_input": v4.value.n_input_observations,
+        })
+
+    # --- Per-routing observed-value comparison (compute raw g(f) per routing) ---
+    print("Per-point g(f) values across the five routings:")
+    print(f"{'f':>14}  " + "  ".join(f"{name[:18]:>22}" for name, _ in ROUTINGS))
+    print("-" * 140)
+    g_table = []
+    for f in f_values:
+        row = [obs(f) for _, obs in ROUTINGS]
+        g_table.append(row)
+        print(f"{f:14.6e}  " + "  ".join(f"{v:>22.17e}" for v in row))
+
+    # --- Routing pair identity matrix ---
+    print()
+    print("Routing pair identity matrix (max abs diff in g(f) across the 12-point sweep):")
+    print(f"{'':>26}  " + "  ".join(f"{name[:18]:>18}" for name, _ in ROUTINGS))
+    for i, (li, _) in enumerate(ROUTINGS):
+        cells = []
+        for j in range(len(ROUTINGS)):
+            max_diff = max(abs(g_table[k][i] - g_table[k][j]) for k in range(len(f_values)))
+            cells.append(f"{max_diff:>18.3e}")
+        print(f"{li[:26]:>26}  " + "  ".join(cells))
+
+    # --- Bias summary ---
+    print()
+    print("=" * 130)
+    print("V4-bias per routing (vs 1/6)")
+    print("=" * 130)
+    print(f"{'routing':<28}  {'obs_alpha':>22}  {'bias':>14}  {'std_err':>14}  {'|bias/sigma|':>14}  {'status':>26}")
+    print("-" * 130)
+    for r in results:
+        if r["bias"] is None:
+            continue
+        sig = abs(r["bias"] / r["std_err"]) if r["std_err"] > 0 else float("inf")
+        print(f"{r['label']:<28}  {r['obs_alpha']!r:>22}  {r['bias']:>+14.3e}  "
+              f"{r['std_err']:>14.3e}  {sig:>14.2f}  {r['status']:>26}")
+
+    print()
+    print(f"{'routing':<28}  {'stability':>10}  {'window_span':>14}  {'n_obs/n_in':>10}")
+    for r in results:
+        n_str = f"{r['n_observed']}/{r['n_input']}"
+        print(f"{r['label']:<28}  {r['stability']:>10}  {r['window_span']:>14.3e}  {n_str:>10}")
+
+
+if __name__ == "__main__":
+    main()

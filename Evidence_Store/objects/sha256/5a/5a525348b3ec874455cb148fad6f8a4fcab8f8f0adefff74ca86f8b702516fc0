@@ -1,0 +1,7 @@
+# Obs 2 / R6 disposition — UPGRADE DRAFT (RESERVED TO WILL for commit)
+
+**For TASKS_TO_REVISIT R6 (append) and the ledger Obs-2 row (amend):**
+
+> **2026-06-11 — UPGRADED (precision-flow Stage D; characterisation → graded exact symmetry).** R6's 2026-06-05 characterisation (the self-similarity IS the BACL ulp doubling ladder = Obs 3; finite-band lattice scale-invariance) is PROMOTED, not contradicted: **D-P1 graded the substrate's ×2 discrete scale invariance as an exact symmetry** — every node's fractional account t invariant under global ×2^j operand rescaling (j = −4..+4), every node, every j, every step, all 35 pinned operand pairs, zero violations, exact in ℚ; covariance characterized by the homogeneity calculus (integer weight ⟹ invariance; multiplicative/divisive constants weight-transparent). **D-P2 graded its breaking as localized**: an additive constant (+⅓, the mass term — the only thing that pins an absolute scale) breaks the symmetry, and the broken set is CONTAINED in the breaker's descendant-closure (35/35 pairs; equality in 32, proper subset in 3 — observational). The ln-2 log-periodicity survey is filed observationally (PF-6 Sornette framing, zero claims). R6's nine-octave ladder was the empirical face of exactly the symmetry D-P1 now grades. **B7 stays closed**; Obs 2 resolves here.
+
+Records: `results/precision_flow/stage_d/` (manifest pinned, verdicts, survey). HR133 draft carries the same content.

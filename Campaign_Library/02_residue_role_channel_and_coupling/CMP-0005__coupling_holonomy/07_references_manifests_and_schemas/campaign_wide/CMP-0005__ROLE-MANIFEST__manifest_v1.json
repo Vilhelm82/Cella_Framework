@@ -1,0 +1,128 @@
+{
+  "arm": "geometry (coupling-as-holonomy & the boundary primitives)",
+  "campaign_id": "shared_residual_geometry_arm",
+  "charter": "The Shared Residual (working title; Will's to confirm)",
+  "code_pins_sha256": {
+    "encodings.py": "c34a8a59754ea0e91b2349f6e4e7f1a281c124fd597ea89904797542113810a5",
+    "fixtures.py": "afa6711bb2a9b28d189ec2783a6a88bca69366374a6d9d3b8b1719151fdbdbd3",
+    "holonomy.py": "1f6cefc6a30ecda86e508db7bbddff8fab47fc2c794a2b3946af5c5e68d62675",
+    "schema.py": "4e851a4aea72f7c65cd73aa3d6fb61ed9f812b650822fb07edb6ea31eb9f540b"
+  },
+  "economics_pins": {
+    "axis": "analytic (dyadic), d fixed",
+    "floor_crossing_q": 40,
+    "floor_p": 40,
+    "holonomy_denominator_bits_per_step": "~2^-q -> denominator bits grow ~1 per dyadic bit + cf-denominator base",
+    "samples": [
+      {
+        "below_floor": false,
+        "holonomy_den_bits": 20,
+        "q": 16,
+        "residue_den_bits": 35
+      },
+      {
+        "below_floor": false,
+        "holonomy_den_bits": 28,
+        "q": 24,
+        "residue_den_bits": 38
+      },
+      {
+        "below_floor": false,
+        "holonomy_den_bits": 36,
+        "q": 32,
+        "residue_den_bits": 52
+      },
+      {
+        "below_floor": true,
+        "holonomy_den_bits": 44,
+        "q": 40,
+        "residue_den_bits": 60
+      },
+      {
+        "below_floor": true,
+        "holonomy_den_bits": 48,
+        "q": 44,
+        "residue_den_bits": 62
+      },
+      {
+        "below_floor": true,
+        "holonomy_den_bits": 60,
+        "q": 56,
+        "residue_den_bits": 76
+      }
+    ]
+  },
+  "execution": {
+    "byte_stability": "every battery x2; sha256 over records",
+    "imports": "stdlib only (fractions); referee exact-\u211a; mpmath referee-side only if a transcendental fixture is ever added (not in FX-G-A)",
+    "seam_tests": "AST-asserted: probe never imports a referee that shares its arithmetic; verdict path independent"
+  },
+  "fixture_index": {
+    "X": "frac:12345/32767",
+    "Y": "frac:987/610",
+    "combines": {
+      "1/(x+y)": "coupled_nonlinear",
+      "x*y": "coupled_bilinear",
+      "x+y": "separable"
+    },
+    "detection_floor_p": 40,
+    "encoding_pair": [
+      "dyadic",
+      "continued_fraction"
+    ],
+    "fixture_class": "FX-G-A",
+    "live_points": [
+      [
+        10,
+        3
+      ],
+      [
+        10,
+        4
+      ],
+      [
+        10,
+        5
+      ]
+    ]
+  },
+  "frozen": true,
+  "kill_conditions": {
+    "K-G1": "HALT (campaign dies): any additively-separable cell with holonomy != 0 in Q. The construction would be manufacturing coupling from bookkeeping; the foundational claim dies, the campaign stops, chain preserved.",
+    "K-G2": "HALT (arm): any coupled cell where holonomy != the derived cross-term in Q (reading gap != account gap). Exact accountability broken.",
+    "K-G3": "REFUTE-ROW (continue): CL-G3 fails - coupling-holonomy and the rounding fingerprint stay entangled even under the protection predicate. The clean-representation-layer-primitive reading is REFUTED, scope reduced, chain preserved. (Stage B.)",
+    "K-G4": "REFUTE-ROW: CL-G5 fails - Richardson refusal bleeds into the analytic/algebraic accounts. (Stage C.)",
+    "K-G5": "DESCOPE (pre-declared): exact/high-precision bit growth exceeds the Stage-0 pinned budget before the planned depth -> horizons shorten per the pre-registered schedule, never silently."
+  },
+  "organ_id": "coupling_holonomy_organ_v1",
+  "rulings_applied": {
+    "CL_G6": "product-formula resonance = registered measurement only (\u00a76.5, F9 discipline)",
+    "campaigns": "two under one charter (\u00a76.1)",
+    "n_axis_cap": "n=2 ratified (\u00a76.4)",
+    "naming": "working labels only (F14); no name adopted"
+  },
+  "schema_version": "chl_record_v1",
+  "spine_fence": "SPINE FENCE (brief \u00a75; structural analog of Arm M's T2). This arm MEASURES coupling-holonomy and boundary behaviour on named fixtures. It carries NO claim that the coupling primitive is the universal substrate spine, and NO cross-domain G-claim. 'Encoding-agnostic' is a NAVIGATION TARGET the fixtures test (FX-G-E specifically), not an asserted invariant. [INFERENCE] stays [INFERENCE]. The spine is confirmed only at the charter level and only if BOTH arms survive; this arm alone does not confirm it. 'The metric is unnecessary' is a framing, not a theorem this arm proves: the arm measures the holonomy (which provably needs only the connection), nothing metaphysical.",
+  "stage": "0",
+  "stage0_controls": {
+    "K_G1_detects_planted_defect": {
+      "verdict": "FAIL_separable_nonzero"
+    },
+    "dry_run_refuses_dead_axis": {
+      "q": 0,
+      "refusal": "dead_axis"
+    },
+    "informativeness_control_fails": {
+      "at_dead_axis_q": 0,
+      "lesson": "without the live-axis gate, a dead axis manufactures a spurious holonomy==0 and mis-reads coupled as separable",
+      "naive_verdict": "separable",
+      "truth": "coupled"
+    },
+    "lawful_battery_no_kill": {
+      "add_separable": true,
+      "live_points": 3,
+      "mul_coupled": true,
+      "rec_coupled": true
+    }
+  }
+}

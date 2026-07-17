@@ -1,0 +1,27 @@
+# Task 036 Alpha + Sweep Signature Companion Joint Calibration (16 GR Photon-Sphere Cases)
+
+Sweep: 8 log-spaced f-values from 1.0e-01 to 1.0e-09; eta = 3.0e-07.
+All runs used `companion_sweep_signature=True`.
+
+Canonical patterns exercised (see STATUS_CALCULUS.md and acceptance criteria 8):
+
+| Case | Alpha Status | Companion Sweep Status | Pattern |
+|---|---|---|---|
+| stable_F1_along_r | alpha_fractional_branch | sweep_signature_clean | see joint_observations.json |
+| stable_F1_along_B | alpha_fractional_branch | sweep_signature_clean | see joint_observations.json |
+| stable_F1_along_M | alpha_fractional_branch | sweep_signature_clean | see joint_observations.json |
+| stable_F2_along_r | alpha_fractional_branch | sweep_signature_clean | see joint_observations.json |
+| stable_F2_along_B | alpha_fractional_branch | sweep_signature_clean | see joint_observations.json |
+| stable_F2_along_M | alpha_insufficient_data | sweep_signature_degenerate_input | see joint_observations.json |
+| stable_F1_along_tangent | alpha_fractional_branch | sweep_signature_clean | see joint_observations.json |
+| stable_F2_along_tangent | alpha_fractional_branch | sweep_signature_clean | see joint_observations.json |
+| naive_F1_along_r | alpha_unstable_window | sweep_signature_cancellation_dominated | see joint_observations.json |
+| naive_F1_along_B | alpha_fractional_branch | sweep_signature_clean | see joint_observations.json |
+| naive_F1_along_M | alpha_fractional_branch | sweep_signature_clean | see joint_observations.json |
+| naive_F2_along_r | alpha_fractional_branch | sweep_signature_clean | see joint_observations.json |
+| naive_F2_along_B | alpha_fractional_branch | sweep_signature_clean | see joint_observations.json |
+| naive_F2_along_M | alpha_insufficient_data | sweep_signature_degenerate_input | see joint_observations.json |
+| naive_F1_along_tangent | alpha_unstable_window | sweep_signature_cancellation_dominated | see joint_observations.json |
+| naive_F2_along_tangent | alpha_fractional_branch | sweep_signature_cancellation_dominated | see joint_observations.json |
+
+Full structured data in joint_observations.json.

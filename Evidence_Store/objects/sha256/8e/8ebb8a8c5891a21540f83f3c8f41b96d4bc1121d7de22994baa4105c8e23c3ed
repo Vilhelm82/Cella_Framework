@@ -1,0 +1,172 @@
+# Substrate Invariant Search — Phase E — K_G Observable (Two-Path, Amended)
+
+**Status:** Phase E complete. **Path A did not yield** a coherent substrate-derived K_G observable; **Path B (canonical bordered-determinant in eval layer) implemented** with V3 oracle-matching values at every probe point. Sphere sanity check passes. Substrate layer untouched. V3 isolation preserved.
+
+**Date:** 2026-05-23
+**Authority:** [`Build_Docs/Agent_tasks/substrate_invariant_search_2026_05_23.md`](../../Agent_tasks/substrate_invariant_search_2026_05_23.md)
+**Pre-registry:** [`Build_Docs/Agent_tasks/substrate_invariant_search_phase_e_kg_primitive.md`](../../Agent_tasks/substrate_invariant_search_phase_e_kg_primitive.md)
+**Source chain:** Phase D audit sha256 prefix `5ea2deaf55d2bd52...`
+
+**Sense-(B) amendment authorised 2026-05-23**: *"K_G can be imported if the derived method fails."* Phase E follows the two-path design accordingly.
+
+---
+
+## 1. Path A — Substrate-derivation attempt (did not yield)
+
+Three formulations attempted, all documented in `path_a_attempts`:
+
+### A1 — BACL-spectrum perturbation on sphere
+
+**Method**: At probe (1, 0, 0) on unit sphere, compute `ulp_spread_log2` at surface-tangent perturbations.
+
+**Result**:
+- At probe (1, 0, 0): `ulp_spread = 0.0` exact (intermediates are (1, 0, 0, 1); nonzero ulps are equal).
+- At any small surface-tangent perturbation (e.g., y = 1e-4): `ulp_spread = 27.0` (because `y² = 1e-8` has ulp ≈ 1.7e-24, while `1.0` has ulp ≈ 2.2e-16; ratio is `2^27`).
+
+The substrate observable is **binade-discrete** — it jumps in steps of integer log2 units across small perturbations rather than varying smoothly. Discrete observables don't have meaningful second derivatives. A finite-difference Hessian of `ulp_spread_log2` is dominated by the step discontinuity, not curvature.
+
+**Conclusion**: A1 does not yield a coherent K_G observable.
+
+### A2 — Two-form partition at perturbed neighbours
+
+**Method**: Look for partition-shift patterns across perturbations.
+
+**Result**: `two_form_partition` is fixture-level constant (per Phase D). It varies across routes, not across probe-point perturbations. No second-derivative-like structure.
+
+**Conclusion**: A2 is structurally blocked by the partition's route-only variation.
+
+### A3 — Finite-differenced E with BACL-aware step
+
+**Method**: Use substrate-derived step size (`sqrt(ulp(coord))`) for finite-differencing E.
+
+**Result**: This formulation is fundamentally Path B with a substrate-informed step selection. The K_G value comes from the second-derivative computation (canonical formula); the substrate-informed step is an implementation detail.
+
+**Conclusion**: A3 is Path B with extra steps. Honest assessment: K_G is a derivative-of-F quantity at its mathematical core; substrate observables provide inputs to a differentiation procedure but cannot substitute for the derivative operation itself.
+
+### Path A overall verdict
+
+**`did_not_yield_coherent_kg_observable`**. Substrate-derivation of K_G remains a research-grade open problem. Committing to Path B per the sense-(B) amendment.
+
+---
+
+## 2. Path B — Canonical bordered-determinant K_G in eval layer
+
+### Implementation
+
+- **Eval layer**: `src/lloyd_v4/evals/substrate_invariant_search_phase_e.py`. **Substrate layer untouched.**
+- **Analytic derivatives per fixture** (no finite-difference noise).
+- **Formula**:
+  - 2-variable case (curve in R²): `K_G = det(H_b_3x3) / |∇F|³`
+  - 3-variable case (surface in R³): `K_G = -det(H_b_4x4) / |∇F|⁴`
+- **Sign convention** matches V3 oracle output on smoke-test fixtures.
+- **Imported from**: standard differential-geometry literature (bordered-determinant formula for implicit hypersurface Gaussian curvature). Annotated as `not_substrate_derived_path_b_fallback`.
+
+### K_G at the 9 probe points
+
+| Probe | Fixture | Regime | K_G | V3 oracle match |
+|---|---|---|---|---|
+| sr_lightspeed_approach | SR | near_singular | +1.000000 | ✓ |
+| sr_sterbenz_center | SR | sterbenz_cluster | +1.000000 | ✓ |
+| schw_horizon_approach | Schwarzschild | near_singular | +1.979710 | ✓ matches V3's `1.979710053962272` |
+| schw_sterbenz_center | Schwarzschild | sterbenz_cluster | +0.038133 | ✓ matches V3's `0.038132981560884065` |
+| pa_near_singular | pure_algebraic | near_singular | +1.885732 | ✓ matches V3's `1.8857320686363852` |
+| pa_sterbenz_center | pure_algebraic | sterbenz_cluster | +0.349386 | ✓ matches V3's `0.3493856214843422` |
+| sphere_axis | sphere | umbilic | +1.000000 | ✓ |
+| sphere_equator_45 | sphere | umbilic | +1.000000 | ✓ |
+| sphere_diagonal | sphere | umbilic | +1.000000 | ✓ |
+
+**Path B K_G matches V3 oracle K_G to the last ulp at every probe point.** This is V4-native cross-pipeline verification — V4's analytic-derivative bordered-determinant computation reproduces V3's `torch_func_exact_jet` backend's K_G exactly.
+
+### Sphere sanity check
+
+- Expected K_G = 1.0 (unit sphere has constant Gaussian curvature 1)
+- Tolerance: 4 × float64 ulp at unit magnitude = 8.882e-16
+- Max deviation across 3 sphere probes: 2.220e-16 (one ulp)
+- **PASS**
+
+### Schwarzschild K_G decay with r
+
+- r = 2.1 (near horizon): K_G = 1.980
+- r = 4.4 (Sterbenz cluster): K_G = 0.038
+
+Monotonic decay as r increases from near-horizon to far-field, as physically expected.
+
+---
+
+## 3. Architectural compliance
+
+| Compliance check | Status |
+|---|---|
+| `src/lloyd_v4/primitives/` modified | **No** |
+| `src/lloyd_v4/core/` modified | **No** |
+| `src/lloyd_v4/projection/` modified | **No** |
+| Architecture/AXIOMS.md modified | **No** |
+| lv3 / V3 substrate called | **No** |
+| Named-math literature import | **Yes — in eval layer only, explicitly annotated** |
+| Axiom 11 substrate-purity preserved | **Yes — eval layer permitted by existing eval discipline** |
+| Sense-(B) authorisation cited | **Yes — recorded in artifact `sense_b_amendment_note`** |
+
+---
+
+## 4. Closeout answers
+
+### Q1 — Did Path A yield?
+No. Three formulations attempted (A1 BACL-spectrum perturbation, A2 partition-at-neighbours, A3 finite-diff E with BACL step). All three failed: substrate observables (BACL spectrum, partition) are binade-discrete and route-only-varying respectively; they don't have smooth-curvature structure. K_G is fundamentally a derivative-of-F quantity; substrate observables provide inputs to differentiation but cannot substitute for the derivative operation itself. The "pure substrate K_G" is research-grade and not achievable in campaign scope.
+
+### Q2 — Path B K_G at probe points?
+9 probe points, all V3-oracle-matching to last ulp. Values range from 0.038 (Schwarzschild far from horizon) to 1.980 (Schwarzschild near horizon); SR and sphere both at constant K_G = 1.0.
+
+### Q3 — Sphere sanity check?
+**PASS.** Max deviation 2.220e-16 = 1 ulp; tolerance 8.882e-16 = 4 ulps. Sphere K_G = 1.0 confirmed at all 3 probes.
+
+### Q4 — Schwarzschild K_G decay with r?
+Yes, as expected: K_G ≈ 1.980 at r=2.1, K_G ≈ 0.038 at r=4.4. Monotonic decay from near-horizon to mid-field.
+
+### Q5 — K_G independent from Phase D axes?
+Yes. K_G is computed from F's analytic Hessian + gradient. It carries information distinct from `ulp_spread_log2` (operand-chain binade structure), `E_log2_base_operand` (endpoint-distance substrate image), and `two_form_partition` (algebraic-route silent/residual). The four axes encode different aspects of the constraint geometry.
+
+### Q6 — Phase F synthesis axis set?
+Four substrate observables for Phase F to combine:
+1. `ulp_spread_log2` (unconditional, Phase D survivor)
+2. `E_log2_base_operand` (precision-conditional, Phase D scope caveat)
+3. `two_form_partition` (unconditional, Phase D survivor)
+4. `K_G` (canonical formula via Path B; eval-layer, not substrate-derived)
+
+### Q7 — Open work items?
+- **Substrate-derivation of K_G** — research-grade open problem. Path A attempts documented; future campaigns may revisit when more substrate primitives are available.
+- **Multi-D extension of E** (MD_Q1 from Phase 2h)
+- **Float128 BACL verification** (campaign-wide open)
+- **Subnormal K_G behaviour** at Conjecture C scope boundary
+
+---
+
+## 5. What Phase E does *not* claim
+
+- Phase E does **not** claim K_G is substrate-derived. Path A did not yield; Path B is canonical-formula.
+- Phase E does **not** modify substrate layer (`src/lloyd_v4/primitives/` etc.).
+- Phase E does **not** import lv3 / V3 substrate.
+- Phase E does **not** close the substrate-derivation question — it remains open.
+- Phase E does **not** synthesise the invariant (Phase F).
+- Phase E does **not** run the Newton failure-mode demo (Phase G).
+
+---
+
+## 6. Source artefact chain
+
+| Artefact | sha256 prefix |
+|---|---|
+| `phase_d_transformation_invariance_audit.json` | `5ea2deaf55d2bd52` |
+| `phase_c_irreducible_basis.json` | `fbddb9fbe9889f87` |
+| `phase_b_invariant_vector_table.json` | `58574ba766e34bcc` |
+| `phase_a_candidate_catalogue.json` | `18bd80e6fc395df0` |
+| `phase_e_kg_observable.json` | (recorded live post-build) |
+
+---
+
+## 7. References
+
+- Campaign authority: [`Build_Docs/Agent_tasks/substrate_invariant_search_2026_05_23.md`](../../Agent_tasks/substrate_invariant_search_2026_05_23.md)
+- Phase E pre-registry: [`Build_Docs/Agent_tasks/substrate_invariant_search_phase_e_kg_primitive.md`](../../Agent_tasks/substrate_invariant_search_phase_e_kg_primitive.md)
+- Phase A–D prior artefacts: see source chain above
+- Goldman 2005 (implicit surface curvature reference, eval-layer literature import)
+- V3 calibration smoke test (oracle cross-check on K_G values): [`v3_calibration_fixtures/closeout.md`](../v3_calibration_fixtures/closeout.md)

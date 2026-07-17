@@ -1,0 +1,513 @@
+#!/usr/bin/env python3
+"""Phase 2 Task B — Subnormal Topology Audit (f < 2^-1022).
+
+EVAL-LAYER scratch harness. Instruments only (numpy, fractions.Fraction, mpmath,
+struct, math) used strictly as MEASUREMENT APPARATUS. No substrate edits, no
+hardcoded mathematical constants as substrate truth. Every numerical claim is
+backed by raw IEEE 754 hex traces and/or exact fractions.Fraction reductions.
+
+GOAL
+----
+Map the breakdown of the c2 integer-lattice / Conjecture C structure when
+operands cross into the subnormal regime. In the subnormal regime the float64
+spacing is the FIXED uniform ulp = 2^-1074 (NOT binade-proportional), so the
+Conjecture-C claim "residual / ulp(f) is integer-valued and structured" is
+re-tested against this uniform lattice.
+
+The literal chain f = 1 - x_term CANNOT reach subnormals in float64 (it bottoms
+out at 2^-53). So per the user's decision we run a DECOUPLED bare-radical lattice
+test: pick subnormal f directly and probe R = f**(1/n), V = R**n, with
+residual = V - f measured against ulp(f) = 2^-1074 using an EXACT Fraction
+reference. n=2 (sqrt, IEEE correctly-rounded) and n=3 (cbrt, NOT IEEE-mandated:
+cross-check numpy.cbrt vs mpmath, report divergence).
+
+BURDEN GATES (reported in the JSON + structured return):
+  (i)   verdict: new subnormal-specific lattice vs unstructured noise, with
+        exact-Fraction evidence (integrality of residual/ulp).
+  (ii)  the (alpha - 1) log-log slope degradation as f -> 0+ in subnormals.
+  (iii) raw float64 hex traces of the 2^-1022-crossing transition pairs
+        (normal -> subnormal handoff), demonstrating Conjecture C breakdown.
+
+Outputs deterministic JSON to scratch/phase2B_subnormal_trace.json
+(sorted keys, no timestamps, fixed sample construction).
+"""
+from __future__ import annotations
+
+import json
+import math
+import struct
+from fractions import Fraction
+
+import numpy as np
+
+try:
+    import mpmath
+
+    _HAVE_MPMATH = True
+except Exception:  # pragma: no cover - instrument optional
+    _HAVE_MPMATH = False
+
+
+# ---------------------------------------------------------------------------
+# IEEE 754 binary64 instruments (raw hex, exact decompose)
+# ---------------------------------------------------------------------------
+
+# Structural constants of IEEE 754 binary64. These are NOT mathematical-constant
+# substrate; they are the *format definition* (exponent of smallest normal /
+# smallest subnormal / mantissa width). Used only as measurement apparatus.
+P53 = 53                      # significand precision (incl. implicit bit)
+EMIN_NORMAL = -1022           # exponent of smallest normal: 2^-1022
+EXP_SUBNORMAL_ULP = -1074     # fixed subnormal spacing exponent: 2^-1074
+
+
+def pow2(exp: int) -> float:
+    """Exact power of two as a float64 via ldexp.
+
+    INSTRUMENT CONTAMINATION CAVEAT (verified on this machine): the Python `**`
+    / C pow() route does NOT return exact powers of two for SUBNORMAL results.
+    e.g. 2.0**-1074 evaluates to 0x...0005 (5 ulp) rather than the true smallest
+    subnormal 0x...0001. math.ldexp(1.0, exp) IS exact for all representable
+    powers of two (normal and subnormal). All power-of-two floats in this
+    harness go through pow2() to avoid the contamination.
+    """
+    return math.ldexp(1.0, exp)
+
+
+SMALLEST_NORMAL = pow2(EMIN_NORMAL)
+SMALLEST_SUBNORMAL = pow2(EXP_SUBNORMAL_ULP)
+SUBNORMAL_ULP_FR = Fraction(2) ** EXP_SUBNORMAL_ULP  # exact symbolic, pow-safe
+
+
+def f64_to_hex(x: float) -> str:
+    return "0x" + struct.pack(">d", float(x)).hex()
+
+
+def hex_to_f64(h: str) -> float:
+    return struct.unpack(">d", bytes.fromhex(h.removeprefix("0x")))[0]
+
+
+def decompose_f64(x: float) -> dict:
+    """Exact IEEE 754 decomposition of a float64 (no error introduced)."""
+    bits = struct.unpack(">Q", struct.pack(">d", float(x)))[0]
+    sign = (bits >> 63) & 0x1
+    biased_exp = (bits >> 52) & 0x7FF
+    mantissa = bits & 0xFFFFFFFFFFFFF
+    is_subnormal = biased_exp == 0 and mantissa != 0
+    is_zero = biased_exp == 0 and mantissa == 0
+    return {
+        "hex": f64_to_hex(x),
+        "sign": sign,
+        "biased_exp": biased_exp,
+        "mantissa": mantissa,
+        "is_subnormal": bool(is_subnormal),
+        "is_zero": bool(is_zero),
+        "exact_value": str(Fraction(x)),
+    }
+
+
+def exact_ulp_fr(x: float) -> Fraction:
+    """Exact ulp(x) as a Fraction. Subnormal-aware (fixed 2^-1074 below 2^-1022).
+
+    Mirrors the substrate primitive lloyd_v4.primitives.typed_ulp semantics but is
+    a local instrument so the harness stays eval-layer and self-contained.
+    """
+    ax = abs(x)
+    if ax == 0.0:
+        return SUBNORMAL_ULP_FR
+    if ax < SMALLEST_NORMAL:
+        return SUBNORMAL_ULP_FR
+    m, e = math.frexp(ax)
+    # ax = m * 2^e, m in [0.5, 1); ulp = 2^(e - P53)
+    return Fraction(2) ** (e - P53)
+
+
+# ---------------------------------------------------------------------------
+# Subnormal magnitude sweep: log-spaced over the subnormal mantissa range,
+# plus boundary-dense sampling just below 2^-1022.
+# ---------------------------------------------------------------------------
+
+def subnormal_sweep() -> list[float]:
+    """Deterministic subnormal magnitudes in [2^-1074, 2^-1022).
+
+    Two families:
+      A. log-spaced powers 2^(-1074 + k) for k in 0..51 (exactly representable
+         subnormals; uniform in the bit-exponent, log-spaced in magnitude).
+      B. boundary-dense: the top subnormals just below 2^-1022, via nextafter
+         walking down from 2^-1022, to resolve the handoff region.
+    """
+    samples: list[float] = []
+
+    # Family A: log-spaced exact powers of two within the subnormal range.
+    # MUST use pow2()/ldexp: 2.0**(subnormal exp) is contaminated by pow rounding.
+    for k in range(0, 52):
+        samples.append(pow2(EXP_SUBNORMAL_ULP + k))  # 2^-1074 .. 2^-1023
+
+    # Family B: boundary-dense top subnormals (walk down from smallest normal).
+    x = SMALLEST_NORMAL
+    for _ in range(12):
+        x = math.nextafter(x, 0.0)  # strictly decreasing into subnormals
+        if x < SMALLEST_NORMAL and x > 0.0:
+            samples.append(x)
+
+    # Deduplicate while keeping determinism (sort descending by magnitude).
+    uniq = sorted(set(samples), reverse=True)
+    return uniq
+
+
+# ---------------------------------------------------------------------------
+# Bare-radical lattice probe for one f and one root order n.
+# ---------------------------------------------------------------------------
+
+def cbrt_mpmath_rounded(f: float) -> float:
+    """High-precision cbrt then round to nearest float64 (true reference)."""
+    if not _HAVE_MPMATH:
+        return float("nan")
+    mpmath.mp.dps = 60
+    # mpmath on a subnormal float64: feed exact value, take real cube root.
+    val = mpmath.cbrt(mpmath.mpf(Fraction(f).numerator) / mpmath.mpf(Fraction(f).denominator))
+    return float(val)
+
+
+def probe_one(f: float, n: int) -> dict:
+    """Round-trip residual probe for value f under root order n (n=2,3).
+
+    R = f**(1/n) (numpy/np backend), V = R**n, residual = V - f (EXACT Fraction).
+    Returns residual/ulp as an exact Fraction (float-rendered) plus integrality
+    and the raw hex of every intermediate.
+    """
+    ulp = exact_ulp_fr(f)  # = 2^-1074 for subnormal f
+
+    # Primary backend: numpy element op on a 0-d array to force float64 path.
+    if n == 2:
+        R = float(np.sqrt(np.float64(f)))
+    elif n == 3:
+        R = float(np.cbrt(np.float64(f)))
+    else:
+        raise ValueError("n must be 2 or 3")
+    V = float(np.power(np.float64(R), n))
+
+    res = Fraction(V) - Fraction(f)
+    res_over_ulp = res / ulp
+    # Integrality test on the exact rational res/ulp.
+    is_integer_multiple = res_over_ulp.denominator == 1
+    nearest_int = round(res_over_ulp)
+    frac_part_abs = abs(res_over_ulp - nearest_int)
+
+    record = {
+        "n": n,
+        "f_hex": f64_to_hex(f),
+        "f_exact": str(Fraction(f)),
+        "R_hex": f64_to_hex(R),
+        "V_hex": f64_to_hex(V),
+        "residual_exact": str(res),
+        "residual_over_ulp": float(res_over_ulp),
+        "residual_over_ulp_exact": f"{res_over_ulp.numerator}/{res_over_ulp.denominator}",
+        "is_integer_multiple_of_ulp": bool(is_integer_multiple),
+        "nearest_int_multiple": int(nearest_int),
+        "abs_frac_part": float(frac_part_abs),
+    }
+
+    # n=3 caveat: cbrt is NOT IEEE-mandated correctly-rounded. Cross-check.
+    if n == 3 and _HAVE_MPMATH:
+        R_mp = cbrt_mpmath_rounded(f)
+        record["R_mpmath_hex"] = f64_to_hex(R_mp)
+        record["cbrt_np_vs_mpmath_ulp"] = float(
+            (Fraction(R) - Fraction(R_mp)) / exact_ulp_fr(R if R != 0.0 else R_mp)
+        ) if (R != 0.0 or R_mp != 0.0) else 0.0
+        record["cbrt_divergent"] = bool(R != R_mp)
+
+    return record
+
+
+# ---------------------------------------------------------------------------
+# (alpha - 1) log-log slope of |residual| vs f as f -> 0+.
+# ---------------------------------------------------------------------------
+
+def loglog_slope(points: list[tuple[float, float]]) -> dict:
+    """Least-squares slope of log|residual| vs log f over (f, |res|) points.
+
+    Conjecture-C / lattice intuition: in the *normal* regime residual scales
+    with ulp(f) ~ f (binade-proportional), giving slope ~1 (alpha-1 ~ 0 when
+    measured as slope-of-(residual/ulp)). In subnormals ulp is FIXED, so the
+    residual/ulp relationship decouples from f; we report the raw residual-vs-f
+    slope and the residual/ulp-vs-f slope to expose the degradation.
+    """
+    xs, ys = [], []
+    for f, r in points:
+        if f > 0.0 and r > 0.0:
+            xs.append(math.log(f))
+            ys.append(math.log(r))
+    if len(xs) < 2:
+        return {"slope": None, "n_points": len(xs)}
+    xa = np.array(xs)
+    ya = np.array(ys)
+    A = np.vstack([xa, np.ones_like(xa)]).T
+    slope, intercept = np.linalg.lstsq(A, ya, rcond=None)[0]
+    # residuals for goodness
+    pred = slope * xa + intercept
+    ss_res = float(np.sum((ya - pred) ** 2))
+    ss_tot = float(np.sum((ya - ya.mean()) ** 2))
+    r2 = 1.0 - ss_res / ss_tot if ss_tot > 0 else None
+    return {
+        "slope": float(slope),
+        "intercept": float(intercept),
+        "r2": r2,
+        "n_points": len(xs),
+    }
+
+
+# ---------------------------------------------------------------------------
+# Transition-pair hex traces across 2^-1022 (normal -> subnormal handoff).
+# ---------------------------------------------------------------------------
+
+def transition_pairs() -> list[dict]:
+    """Raw float64 hex traces of the values straddling the 2^-1022 boundary.
+
+    We capture, for n=2 and n=3, the round-trip on:
+      - smallest normal               2^-1022
+      - the next normal up            nextafter(2^-1022, +inf)
+      - largest subnormal             nextafter(2^-1022, 0)
+      - a deep subnormal              2^-1074 (smallest subnormal)
+    The contrast in residual/ulp integrality and in ulp magnitude (binade-
+    proportional above, fixed 2^-1074 below) demonstrates the Conjecture C
+    breakdown at the handoff.
+    """
+    largest_subnormal = math.nextafter(SMALLEST_NORMAL, 0.0)
+    next_normal = math.nextafter(SMALLEST_NORMAL, math.inf)
+    # Normal anchors several binades up: here ulp is binade-PROPORTIONAL
+    # (ulp = 2^(e-53), grows with magnitude) -- the Conjecture-C regime. These
+    # contrast with the subnormal samples below, where ulp is FIXED at 2^-1074.
+    normal_anchor_p1000 = pow2(-1000)  # ulp = 2^-1052
+    normal_anchor_p100 = pow2(-100)    # ulp = 2^-152
+    boundary_values = [
+        ("normal_anchor_2^-100_binade_proportional", normal_anchor_p100),
+        ("normal_anchor_2^-1000_binade_proportional", normal_anchor_p1000),
+        ("next_normal_up", next_normal),
+        ("smallest_normal_2^-1022", SMALLEST_NORMAL),
+        ("largest_subnormal", largest_subnormal),
+        ("smallest_subnormal_2^-1074", SMALLEST_SUBNORMAL),
+    ]
+    out = []
+    for label, f in boundary_values:
+        entry = {
+            "label": label,
+            "decompose": decompose_f64(f),
+            "ulp_exact": str(exact_ulp_fr(f)),
+            "ulp_hex": f64_to_hex(float(exact_ulp_fr(f))),
+        }
+        for n in (2, 3):
+            entry[f"n{n}"] = probe_one(f, n)
+        out.append(entry)
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Boundary degeneracy demonstration: f = 1 - x_term cannot reach subnormals.
+# ---------------------------------------------------------------------------
+
+def boundary_note() -> dict:
+    """Demonstrate that the literal chain f = 1 - x_term bottoms out near 2^-52.
+
+    The nearest float below 1.0 is 1 - 2^-53; the nearest float that is < 1 and
+    representable is nextafter(1.0, 0). The smallest positive f = 1 - x reachable
+    with x a float in (0,1) is 1 - nextafter(1.0, 0) = 2^-53. This is ~2^969
+    times larger than the smallest normal 2^-1022 and ~2^1021 times larger than
+    the smallest subnormal 2^-1074: the chain CANNOT enter the subnormal regime.
+    """
+    largest_x_below_1 = math.nextafter(1.0, 0.0)
+    f_min_chain = 1.0 - largest_x_below_1  # = 2^-53
+    # also show 1 - (1 - tiny) catastrophic-cancellation floor
+    return {
+        "largest_x_below_1": {
+            "value": repr(largest_x_below_1),
+            "hex": f64_to_hex(largest_x_below_1),
+            "decompose": decompose_f64(largest_x_below_1),
+        },
+        "f_min_chain_1_minus_x": {
+            "value": repr(f_min_chain),
+            "hex": f64_to_hex(f_min_chain),
+            "exact": str(Fraction(f_min_chain)),
+            "log2": math.log2(f_min_chain),
+        },
+        "smallest_normal_2^-1022": {
+            "value": repr(SMALLEST_NORMAL),
+            "hex": f64_to_hex(SMALLEST_NORMAL),
+        },
+        "smallest_subnormal_2^-1074": {
+            "value": repr(SMALLEST_SUBNORMAL),
+            "hex": f64_to_hex(SMALLEST_SUBNORMAL),
+        },
+        "chain_floor_above_subnormal": bool(f_min_chain > SMALLEST_NORMAL),
+        "orders_of_magnitude_gap_log2_to_smallest_normal": math.log2(
+            f_min_chain / SMALLEST_NORMAL
+        ),
+        "verdict": (
+            "DEGENERATE: f = 1 - x_term floors at 2^-53 (~1.11e-16); it is "
+            "~2^969 above the smallest normal and cannot produce subnormal f in "
+            "float64. Subnormal lattice must be probed on bare radicals directly."
+        ),
+    }
+
+
+# ---------------------------------------------------------------------------
+# Instrument self-report (float128 caveat).
+# ---------------------------------------------------------------------------
+
+def instrument_report() -> dict:
+    f128 = np.finfo(np.float128)
+    # Demonstrate the pow contamination so the caveat is reproducible.
+    pow_1074 = 2.0 ** -1074  # contaminated path
+    ldexp_1074 = math.ldexp(1.0, -1074)  # exact path
+    return {
+        "numpy_version": np.__version__,
+        "mpmath_available": _HAVE_MPMATH,
+        "mpmath_version": getattr(mpmath, "__version__", None) if _HAVE_MPMATH else None,
+        "float128_caveat": {
+            "eps": repr(float(f128.eps)),
+            "nmant_bits": int(f128.nmant),
+            "note": (
+                "numpy.float128 is 80-bit x86 EXTENDED precision (~64-bit "
+                "mantissa, eps~1.08e-19), NOT IEEE binary128. High-precision "
+                "anchor in this harness is mpmath (dps=60), not float128."
+            ),
+        },
+        "pow_subnormal_contamination_caveat": {
+            "two_pow_neg1074_hex": f64_to_hex(pow_1074),
+            "ldexp_1_neg1074_hex": f64_to_hex(ldexp_1074),
+            "contaminated": bool(pow_1074 != ldexp_1074),
+            "note": (
+                "On this machine `2.0**-1074` (C pow path) returns 0x...0005 = "
+                "5 ulp, NOT the true smallest subnormal 0x...0001. pow rounds "
+                "through an intermediate for subnormal results. ALL power-of-two "
+                "floats in this harness use math.ldexp (exact). Normal-range "
+                "powers like 2.0**-1022 happen to be exact, but subnormal ones "
+                "are not -- treat `**` as unsafe below 2^-1022."
+            ),
+        },
+        "ieee754_binary64_format_constants": {
+            "P53": P53,
+            "EMIN_NORMAL": EMIN_NORMAL,
+            "EXP_SUBNORMAL_ULP": EXP_SUBNORMAL_ULP,
+            "smallest_normal_hex": f64_to_hex(SMALLEST_NORMAL),
+            "smallest_subnormal_hex": f64_to_hex(SMALLEST_SUBNORMAL),
+        },
+    }
+
+
+# ---------------------------------------------------------------------------
+# Main: assemble deterministic artifact.
+# ---------------------------------------------------------------------------
+
+def main() -> dict:
+    samples = subnormal_sweep()
+
+    sweep_n2 = [probe_one(f, 2) for f in samples]
+    sweep_n3 = [probe_one(f, 3) for f in samples]
+
+    # Burden gate (i): lattice-vs-noise verdict, per n, via exact integrality.
+    def integrality_summary(records: list[dict]) -> dict:
+        total = len(records)
+        integer_hits = sum(1 for r in records if r["is_integer_multiple_of_ulp"])
+        max_frac = max((r["abs_frac_part"] for r in records), default=0.0)
+        # collect the distinct integer multiples observed (the lattice points)
+        multiples = sorted({r["nearest_int_multiple"] for r in records})
+        return {
+            "total": total,
+            "integer_multiple_count": integer_hits,
+            "integer_multiple_fraction": integer_hits / total if total else 0.0,
+            "max_abs_frac_part": max_frac,
+            "distinct_integer_multiples": multiples,
+            "all_on_lattice": integer_hits == total,
+        }
+
+    gate_i_n2 = integrality_summary(sweep_n2)
+    gate_i_n3 = integrality_summary(sweep_n3)
+
+    # Burden gate (ii): (alpha - 1) slope degradation as f -> 0+.
+    # Raw residual-vs-f slope (residual magnitude vs magnitude of f) and the
+    # residual/ulp-vs-f slope (since ulp is fixed in subnormals, residual/ulp
+    # tracks raw residual exactly; slope ~ 0 would mean residual is frozen at a
+    # fixed lattice offset independent of f -> total decoupling from binade law).
+    def slope_for(records: list[dict]) -> dict:
+        pts_raw = []
+        pts_over_ulp = []
+        for r in records:
+            f = float(Fraction(r["f_exact"]))
+            res = abs(float(Fraction(r["residual_exact"]))) if r["residual_exact"] != "0" else 0.0
+            rou = abs(r["residual_over_ulp"])
+            pts_raw.append((f, res))
+            pts_over_ulp.append((f, rou))
+        return {
+            "raw_residual_vs_f": loglog_slope(pts_raw),
+            "residual_over_ulp_vs_f": loglog_slope(pts_over_ulp),
+        }
+
+    gate_ii_n2 = slope_for(sweep_n2)
+    gate_ii_n3 = slope_for(sweep_n3)
+
+    # Burden gate (iii): hex traces of the 2^-1022-crossing transition pairs.
+    gate_iii = transition_pairs()
+
+    artifact = {
+        "schema": "phase2B_subnormal_topology.v1",
+        "instrument_report": instrument_report(),
+        "boundary_note_degeneracy": boundary_note(),
+        "subnormal_sweep_count": len(samples),
+        "subnormal_sweep_f_hex": [f64_to_hex(f) for f in samples],
+        "gate_i_lattice_vs_noise": {
+            "method": (
+                "Exact fractions.Fraction: residual = V - f, residual/ulp with "
+                "ulp = 2^-1074 (fixed subnormal spacing). Integer denominator "
+                "==> exact lattice point. Non-integer ==> off-lattice / noise."
+            ),
+            "n2_sqrt": gate_i_n2,
+            "n3_cbrt": gate_i_n3,
+        },
+        "gate_ii_alpha_minus_1_degradation": {
+            "method": (
+                "log-log least-squares slope of |residual| vs f and of "
+                "|residual/ulp| vs f across the subnormal sweep. In the normal "
+                "regime residual ~ ulp(f) ~ f (slope~1, alpha-1~0 on the "
+                "ulp-normalized series). Subnormal ulp is FIXED at 2^-1074, so a "
+                "flat (slope~0) residual-over-ulp-vs-f series means the lattice "
+                "offset is frozen / decoupled from f (Conjecture C binade law "
+                "no longer drives the residual)."
+            ),
+            "n2_sqrt": gate_ii_n2,
+            "n3_cbrt": gate_ii_n3,
+        },
+        "gate_iii_transition_pairs_hex": gate_iii,
+        "sweep_records": {
+            "n2_sqrt": sweep_n2,
+            "n3_cbrt": sweep_n3,
+        },
+    }
+    return artifact
+
+
+if __name__ == "__main__":
+    art = main()
+    out_path = "scratch/phase2B_subnormal_trace.json"
+    with open(out_path, "w") as fh:
+        json.dump(art, fh, indent=2, sort_keys=True)
+        fh.write("\n")
+    # Console summary (not part of the byte-stable artifact).
+    gi2 = art["gate_i_lattice_vs_noise"]["n2_sqrt"]
+    gi3 = art["gate_i_lattice_vs_noise"]["n3_cbrt"]
+    print("=== Phase 2B Subnormal Topology Audit ===")
+    print("subnormal samples:", art["subnormal_sweep_count"])
+    print(
+        "gate(i) n2 sqrt: on-lattice=%s  int_frac=%.4f  max_frac_part=%.3e"
+        % (gi2["all_on_lattice"], gi2["integer_multiple_fraction"], gi2["max_abs_frac_part"])
+    )
+    print(
+        "gate(i) n3 cbrt: on-lattice=%s  int_frac=%.4f  max_frac_part=%.3e"
+        % (gi3["all_on_lattice"], gi3["integer_multiple_fraction"], gi3["max_abs_frac_part"])
+    )
+    s2 = art["gate_ii_alpha_minus_1_degradation"]["n2_sqrt"]["residual_over_ulp_vs_f"]["slope"]
+    s3 = art["gate_ii_alpha_minus_1_degradation"]["n3_cbrt"]["residual_over_ulp_vs_f"]["slope"]
+    print("gate(ii) residual/ulp-vs-f slope: n2=%s  n3=%s" % (s2, s3))
+    cbrt_div = sum(1 for r in art["sweep_records"]["n3_cbrt"] if r.get("cbrt_divergent"))
+    print("cbrt np-vs-mpmath divergent samples (n3):", cbrt_div, "/", art["subnormal_sweep_count"])
+    print("boundary note:", art["boundary_note_degeneracy"]["verdict"])
+    print("written:", out_path)

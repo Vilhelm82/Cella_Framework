@@ -1,0 +1,230 @@
+"""
+Observability rule audit: does F4 carry structured signal in the β-region
+where the current observability rule (e_f < e_x) declares the apparatus blind?
+
+The current rule filters out 96 of 137 SR grid points — the region where
+the operand f=1-β² has not yet dropped into a smaller binade than β.
+This audit computes F1/F2/F3/F4 residuals across the FULL unfiltered grid
+and runs statistical tests to distinguish structured signal from noise.
+
+Output: artifact.json + audit.md report.
+"""
+from __future__ import annotations
+
+import json
+import math
+from collections import Counter
+from pathlib import Path
+from typing import Sequence
+
+import sys
+sys.path.insert(0, "src")
+
+from lloyd_v4.evals.sr_four_form import beta_grid, four_form_float64
+from lloyd_v4.evals.multi_precision_four_form import ulp_of_double
+
+
+ROOT = Path(__file__).resolve().parents[1]
+REPORT_DIR = ROOT / "Build_Docs" / "Reports" / "observability_rule_audit_F4"
+ARTIFACT = REPORT_DIR / "artifact.json"
+
+
+def binade_exp_float(value: float) -> int:
+    """Binade exponent: largest k such that 2^k <= |value|, or 'underflow' if value=0."""
+    if value == 0.0:
+        return -1075  # below subnormal
+    _, exp = math.frexp(abs(value))
+    return exp - 1
+
+
+def compute_unfiltered_grid() -> list[dict[str, object]]:
+    """Compute F1/F2/F3/F4 across all 137 SR betas (no observability filter)."""
+    points = []
+    for beta in beta_grid():
+        f_value = 1.0 - beta * beta
+        residuals = four_form_float64(beta)
+        unit = ulp_of_double(f_value)
+        e_x = binade_exp_float(beta)
+        e_f = binade_exp_float(f_value)
+        passes_observability = e_f < e_x
+        points.append({
+            "beta": beta,
+            "f": f_value,
+            "ulp_f": unit,
+            "e_f": e_f,
+            "e_x": e_x,
+            "passes_observability_rule": passes_observability,
+            "F1": residuals["F1"],
+            "F2": residuals["F2"],
+            "F3": residuals["F3"],
+            "F4": residuals["F4"],
+            # Lattice level for each form
+            "L_F1": int(round(residuals["F1"] / unit)) if unit != 0.0 else 0,
+            "L_F2": int(round(residuals["F2"] / unit)) if unit != 0.0 else 0,
+            "L_F3": int(round(residuals["F3"] / unit)) if unit != 0.0 else 0,
+            "L_F4": int(round(residuals["F4"] / unit)) if unit != 0.0 else 0,
+        })
+    return points
+
+
+def split_observable_unobservable(points: list[dict]) -> tuple[list[dict], list[dict]]:
+    observable = [p for p in points if p["passes_observability_rule"]]
+    unobservable = [p for p in points if not p["passes_observability_rule"]]
+    return observable, unobservable
+
+
+def stats_for_series(values: Sequence[float]) -> dict[str, object]:
+    """Basic descriptive stats."""
+    if not values:
+        return {"count": 0}
+    n = len(values)
+    mean = sum(values) / n
+    var = sum((v - mean) ** 2 for v in values) / n
+    std = var ** 0.5
+    nonzero = sum(1 for v in values if v != 0.0)
+    pos = sum(1 for v in values if v > 0.0)
+    neg = sum(1 for v in values if v < 0.0)
+    zero = sum(1 for v in values if v == 0.0)
+    return {
+        "count": n,
+        "nonzero_count": nonzero,
+        "nonzero_fraction": nonzero / n if n else 0,
+        "positive_count": pos,
+        "negative_count": neg,
+        "zero_count": zero,
+        "mean": mean,
+        "std": std,
+        "min": min(values),
+        "max": max(values),
+        "abs_max": max(abs(v) for v in values) if values else 0.0,
+    }
+
+
+def lag1_autocorrelation(values: Sequence[float]) -> float | None:
+    """Lag-1 autocorrelation. Returns None if std is zero (constant series)."""
+    n = len(values)
+    if n < 2:
+        return None
+    mean = sum(values) / n
+    var = sum((v - mean) ** 2 for v in values) / n
+    if var == 0.0:
+        return None
+    cov = sum((values[i] - mean) * (values[i + 1] - mean) for i in range(n - 1)) / (n - 1)
+    return cov / var
+
+
+def sign_run_lengths(values: Sequence[float]) -> list[int]:
+    """Lengths of consecutive same-sign runs (treating zero as separate)."""
+    if not values:
+        return []
+    runs = []
+    current_sign = None
+    current_len = 0
+    for v in values:
+        s = "0" if v == 0.0 else ("+" if v > 0 else "-")
+        if s == current_sign:
+            current_len += 1
+        else:
+            if current_sign is not None:
+                runs.append(current_len)
+            current_sign = s
+            current_len = 1
+    runs.append(current_len)
+    return runs
+
+
+def reproducibility_check() -> dict[str, object]:
+    """Run F4 computation twice and verify byte-identical output."""
+    run_a = [four_form_float64(b)["F4"] for b in beta_grid()]
+    run_b = [four_form_float64(b)["F4"] for b in beta_grid()]
+    identical = run_a == run_b
+    # Also check bit-level (in case == is lax for NaN — but F4 here is just floats)
+    import struct
+    bytes_a = b"".join(struct.pack("<d", v) for v in run_a)
+    bytes_b = b"".join(struct.pack("<d", v) for v in run_b)
+    return {
+        "identical_by_equality": identical,
+        "identical_by_bytes": bytes_a == bytes_b,
+        "byte_hash_a": hash(bytes_a),
+        "byte_hash_b": hash(bytes_b),
+        "n_values": len(run_a),
+    }
+
+
+def main() -> None:
+    REPORT_DIR.mkdir(parents=True, exist_ok=True)
+    points = compute_unfiltered_grid()
+    observable, unobservable = split_observable_unobservable(points)
+
+    print(f"Total grid points: {len(points)}")
+    print(f"Observable (passes e_f < e_x): {len(observable)}")
+    print(f"Unobservable (filtered out by current rule): {len(unobservable)}")
+    print(f"Unobservable β range: {unobservable[0]['beta']:.4f}–{unobservable[-1]['beta']:.4f}")
+    print(f"Observable β range: {observable[0]['beta']:.4f}–{observable[-1]['beta']:.4f}")
+    print()
+
+    # Stats per form on the unobservable region (where the rule says no signal)
+    results = {}
+    for form in ("F1", "F2", "F3", "F4"):
+        unob_values = [p[form] for p in unobservable]
+        ob_values = [p[form] for p in observable]
+        unob_levels = [p[f"L_{form}"] for p in unobservable]
+        ob_levels = [p[f"L_{form}"] for p in observable]
+
+        results[form] = {
+            "unobservable_region_residual_stats": stats_for_series(unob_values),
+            "observable_region_residual_stats": stats_for_series(ob_values),
+            "unobservable_region_lattice_level_stats": stats_for_series([float(v) for v in unob_levels]),
+            "observable_region_lattice_level_stats": stats_for_series([float(v) for v in ob_levels]),
+            "unobservable_lag1_autocorr_residual": lag1_autocorrelation(unob_values),
+            "observable_lag1_autocorr_residual": lag1_autocorrelation(ob_values),
+            "unobservable_sign_runs": sign_run_lengths(unob_values),
+            "observable_sign_runs": sign_run_lengths(ob_values),
+        }
+
+    repro = reproducibility_check()
+
+    artifact = {
+        "audit_target": "Does F4 carry structured signal in the e_f >= e_x region?",
+        "grid_total_points": len(points),
+        "observable_count": len(observable),
+        "unobservable_count": len(unobservable),
+        "observable_beta_range": [observable[0]["beta"], observable[-1]["beta"]],
+        "unobservable_beta_range": [unobservable[0]["beta"], unobservable[-1]["beta"]],
+        "per_form_analysis": results,
+        "reproducibility_check": repro,
+        "sample_unobservable_records": unobservable[:5] + unobservable[-5:],
+        "sample_observable_records": observable[:3] + observable[-3:],
+    }
+
+    ARTIFACT.write_text(json.dumps(artifact, default=float, indent=2, sort_keys=True))
+    print(f"Artifact written to {ARTIFACT}")
+
+    # Print headline per form
+    print("\n=== Headline per form (unobservable region — where rule says blind) ===")
+    print(f"{'form':<6} {'nonzero':<10} {'nonzero%':<10} {'abs_max':<12} {'std':<12} {'lag1_corr':<12} {'sign_runs (lengths)':<30}")
+    for form in ("F1", "F2", "F3", "F4"):
+        r = results[form]["unobservable_region_residual_stats"]
+        lag1 = results[form]["unobservable_lag1_autocorr_residual"]
+        runs = results[form]["unobservable_sign_runs"]
+        lag1_str = f"{lag1:.4f}" if lag1 is not None else "N/A"
+        runs_str = f"{len(runs)} runs, max={max(runs) if runs else 0}"
+        print(f"{form:<6} {r['nonzero_count']:<10} {r['nonzero_fraction']*100:.1f}%      {r['abs_max']:<12.3e} {r['std']:<12.3e} {lag1_str:<12} {runs_str:<30}")
+
+    print("\n=== Headline per form (observable region — where rule says measure) ===")
+    print(f"{'form':<6} {'nonzero':<10} {'nonzero%':<10} {'abs_max':<12} {'std':<12} {'lag1_corr':<12} {'sign_runs':<30}")
+    for form in ("F1", "F2", "F3", "F4"):
+        r = results[form]["observable_region_residual_stats"]
+        lag1 = results[form]["observable_lag1_autocorr_residual"]
+        runs = results[form]["observable_sign_runs"]
+        lag1_str = f"{lag1:.4f}" if lag1 is not None else "N/A"
+        runs_str = f"{len(runs)} runs, max={max(runs) if runs else 0}"
+        print(f"{form:<6} {r['nonzero_count']:<10} {r['nonzero_fraction']*100:.1f}%      {r['abs_max']:<12.3e} {r['std']:<12.3e} {lag1_str:<12} {runs_str:<30}")
+
+    print("\n=== Reproducibility ===")
+    print(f"Byte-identical across two runs: {repro['identical_by_bytes']}")
+    print(f"N values: {repro['n_values']}")
+
+
+if __name__ == "__main__":
+    main()

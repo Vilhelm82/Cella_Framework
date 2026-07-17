@@ -1,0 +1,291 @@
+"""Common-mode rejection test: F1 - F2 substrate signature difference.
+
+Hypothesis: F1 and F2 both encode fixture-identity in correlated ways
+because they're different routes through the same fixture's algebra at
+the same probe point. The DIFFERENCE between their substrate signatures
+should cancel the shared fixture-encoding and preserve the part that
+isn't shared — the geometry-dependent resolution difference between
+late-cancellation (F1) and early-cancellation (F2).
+
+If common-mode rejection works, cross-fixture |Δ(F1-F2)_schw - Δ(F1-F2)_pa|
+at matched K_G should drop significantly below the single-form ceiling.
+
+Test discipline: same 22 matched-K_G pairs, same 15/7 train/held-out split,
+same unit-circle-normalised triangulation metric, same wrong-clean-emit
+audit as Phase I.
+"""
+from __future__ import annotations
+
+import json
+import math
+import random
+from pathlib import Path
+from typing import Dict, List, Tuple, Optional, Any
+
+# ---------------------------------------------------------------------------
+# F1 and F2 route chains (route-specific operand chains)
+# ---------------------------------------------------------------------------
+
+def _route_chain_F1(fixture: str, coord: float
+                    ) -> Tuple[Tuple[float, ...], float, float]:
+    """F1: residual computed as R² - base_operand (late cancellation).
+
+    Intermediates: (R, R², base_operand, R² - base_operand).
+    Critical operand for signature: base_operand (≈ R² for points on
+    the constraint surface).
+    """
+    if fixture == "schwarzschild_four_form":
+        r = coord
+        x_term = 2.0 / r
+        base = 1.0 - x_term  # f_r
+        R = base ** 0.5
+        R_sq = R * R
+        residual = R_sq - base
+        return (R, R_sq, base, residual), base, x_term
+    elif fixture == "pure_algebraic_four_form":
+        x = coord
+        x_term = x
+        base = 1.0 - x
+        R = base ** 0.5
+        R_sq = R * R
+        residual = R_sq - base
+        return (R, R_sq, base, residual), base, x_term
+    raise ValueError(f"unknown fixture {fixture!r}")
+
+
+def _route_chain_F2(fixture: str, coord: float
+                    ) -> Tuple[Tuple[float, ...], float, float]:
+    """F2: residual computed as (R² - 1) + x_term (early cancellation).
+
+    Intermediates: (R, R², 1.0, R²-1, x_term, residual).
+    Critical operand for signature: R²-1 (≈ -x_term).
+    """
+    if fixture == "schwarzschild_four_form":
+        r = coord
+        x_term = 2.0 / r
+        base = 1.0 - x_term
+        R = base ** 0.5
+        R_sq = R * R
+        r_sq_m1 = R_sq - 1.0
+        residual = r_sq_m1 + x_term
+        return (R, R_sq, 1.0, r_sq_m1, x_term, residual), r_sq_m1, x_term
+    elif fixture == "pure_algebraic_four_form":
+        x = coord
+        x_term = x
+        base = 1.0 - x
+        R = base ** 0.5
+        R_sq = R * R
+        r_sq_m1 = R_sq - 1.0
+        residual = r_sq_m1 + x_term
+        return (R, R_sq, 1.0, r_sq_m1, x_term, residual), r_sq_m1, x_term
+    raise ValueError(f"unknown fixture {fixture!r}")
+
+
+# ---------------------------------------------------------------------------
+# Substrate signature (6 channels) at scale=0
+# ---------------------------------------------------------------------------
+
+def _signature(intermediates: Tuple[float, ...],
+               base_operand: float,
+               x_term: float) -> Dict[str, Optional[float]]:
+    nonzero = [abs(v) for v in intermediates if v != 0.0]
+    ulps = [math.ulp(v) for v in nonzero] if nonzero else []
+    if not ulps:
+        return {k: None for k in (
+            "ulp_spread_log2", "log2_min_ulp", "log2_base_operand_ulp",
+            "log2_x_term_ulp", "signed_asymmetry", "E_log2_base_operand")}
+
+    min_ulp = min(ulps)
+    max_ulp = max(ulps)
+    ulp_spread = math.log2(max_ulp / min_ulp) if min_ulp > 0 else None
+
+    base_ulp = math.ulp(abs(base_operand)) if base_operand != 0 else None
+    x_ulp = math.ulp(abs(x_term)) if x_term != 0 else None
+    log2_min = math.log2(min_ulp) if min_ulp > 0 else None
+    log2_base = math.log2(base_ulp) if base_ulp and base_ulp > 0 else None
+    log2_x = math.log2(x_ulp) if x_ulp and x_ulp > 0 else None
+    signed_asym = (math.log2(base_ulp / x_ulp)
+                   if base_ulp and x_ulp and base_ulp > 0 and x_ulp > 0
+                   else None)
+    E = (math.log2(abs(base_operand))
+         if base_operand and abs(base_operand) > 0 else None)
+    return {
+        "ulp_spread_log2": ulp_spread,
+        "log2_min_ulp": log2_min,
+        "log2_base_operand_ulp": log2_base,
+        "log2_x_term_ulp": log2_x,
+        "signed_asymmetry": signed_asym,
+        "E_log2_base_operand": E,
+    }
+
+
+CHANNELS = (
+    "ulp_spread_log2", "log2_min_ulp", "log2_base_operand_ulp",
+    "log2_x_term_ulp", "signed_asymmetry", "E_log2_base_operand")
+
+
+# ---------------------------------------------------------------------------
+# Common-mode rejection: F1 - F2 difference signature
+# ---------------------------------------------------------------------------
+
+def _difference_signature(fixture: str, coord: float
+                          ) -> Dict[str, Optional[float]]:
+    """Compute D[ch] = sig_F1[ch] - sig_F2[ch] at this probe point."""
+    sig_F1 = _signature(*_route_chain_F1(fixture, coord))
+    sig_F2 = _signature(*_route_chain_F2(fixture, coord))
+    diff = {}
+    for ch in CHANNELS:
+        v1 = sig_F1.get(ch)
+        v2 = sig_F2.get(ch)
+        if v1 is not None and v2 is not None:
+            diff[ch] = v1 - v2
+        else:
+            diff[ch] = None
+    return diff
+
+
+# ---------------------------------------------------------------------------
+# Test runner
+# ---------------------------------------------------------------------------
+
+def run_test() -> Dict[str, Any]:
+    ROOT = Path("/home/william_lloydlt/projects/V4/Lloyd_Engine_V4")
+    phase_1 = json.loads(
+        (ROOT / "Build_Docs/Reports/mcg_geometry_first"
+                "/phase_1_geometry_table.json").read_text())
+    rows = phase_1["rows"]
+
+    # Identify matched-K_G pairs (same logic as Phase I)
+    schw = [r for r in rows if r.get("fixture") == "schwarzschild_four_form"
+            and r.get("principal_curvature") and r["principal_curvature"] > 0]
+    pa = [r for r in rows if r.get("fixture") == "pure_algebraic_four_form"
+          and r.get("principal_curvature") and r["principal_curvature"] > 0]
+
+    pairs = []
+    for s in schw:
+        for p in pa:
+            kg_s = s["principal_curvature"]
+            kg_p = p["principal_curvature"]
+            rel_diff = abs(kg_s - kg_p) / max(abs(kg_s), abs(kg_p))
+            if rel_diff < 0.005:
+                pairs.append({
+                    "schw_coord": s["coordinate_value"],
+                    "schw_kg": kg_s,
+                    "pa_coord": p["coordinate_value"],
+                    "pa_kg": kg_p,
+                    "kg_rel_diff": rel_diff,
+                    "kg_mean": (kg_s + kg_p) / 2.0,
+                })
+    pairs.sort(key=lambda p: p["kg_mean"])
+    pairs = pairs[:22]
+
+    # Same seeded split as Phase I
+    indices = list(range(len(pairs)))
+    rng = random.Random(42)
+    rng.shuffle(indices)
+    train_idx = set(sorted(indices[:15]))
+    held_idx = set(sorted(indices[15:22]))
+
+    # For each pair, compute D_schw and D_pa, then per-channel
+    # |D_schw[ch] - D_pa[ch]| at matched K_G
+    results = {"train": [], "held_out": []}
+    for i, pair in enumerate(pairs):
+        D_schw = _difference_signature(
+            "schwarzschild_four_form", pair["schw_coord"])
+        D_pa = _difference_signature(
+            "pure_algebraic_four_form", pair["pa_coord"])
+        cross_delta = {}
+        for ch in CHANNELS:
+            v_s = D_schw.get(ch)
+            v_p = D_pa.get(ch)
+            if v_s is not None and v_p is not None:
+                cross_delta[ch] = abs(v_s - v_p)
+            else:
+                cross_delta[ch] = None
+        bucket = "train" if i in train_idx else "held_out"
+        results[bucket].append({
+            "pair_index": i,
+            "kg_mean": pair["kg_mean"],
+            "D_schw": D_schw,
+            "D_pa": D_pa,
+            "cross_delta": cross_delta,
+        })
+
+    # Aggregate per-channel mean cross-delta on train and held-out
+    train_means = {}
+    held_means = {}
+    for ch in CHANNELS:
+        train_vals = [r["cross_delta"][ch] for r in results["train"]
+                      if r["cross_delta"][ch] is not None]
+        held_vals = [r["cross_delta"][ch] for r in results["held_out"]
+                     if r["cross_delta"][ch] is not None]
+        train_means[ch] = sum(train_vals) / len(train_vals) if train_vals else None
+        held_means[ch] = sum(held_vals) / len(held_vals) if held_vals else None
+
+    # Baseline comparison: single-form (F1 alone, F2 alone) cross-fixture deltas
+    baseline = {"F1": {}, "F2": {}}
+    for ch in CHANNELS:
+        for route_name, chain_fn in (("F1", _route_chain_F1),
+                                      ("F2", _route_chain_F2)):
+            vals = []
+            for pair in pairs:
+                if pairs.index(pair) not in held_idx:
+                    continue
+                sig_s = _signature(*chain_fn(
+                    "schwarzschild_four_form", pair["schw_coord"]))
+                sig_p = _signature(*chain_fn(
+                    "pure_algebraic_four_form", pair["pa_coord"]))
+                vs = sig_s.get(ch)
+                vp = sig_p.get(ch)
+                if vs is not None and vp is not None:
+                    vals.append(abs(vs - vp))
+            baseline[route_name][ch] = (sum(vals) / len(vals)
+                                          if vals else None)
+
+    return {
+        "n_pairs": len(pairs),
+        "train_size": len(results["train"]),
+        "held_size": len(results["held_out"]),
+        "per_channel_common_mode_rejected_mean_delta": {
+            "train": train_means,
+            "held_out": held_means,
+        },
+        "per_channel_baseline_single_form_held_out_delta": baseline,
+        "per_pair_results": results,
+    }
+
+
+if __name__ == "__main__":
+    out = run_test()
+    print(f"Pairs: {out['n_pairs']} ({out['train_size']} train, "
+          f"{out['held_size']} held-out)")
+    print()
+    print("=== Per-channel held-out cross-fixture |Δ| comparisons ===")
+    print()
+    print(f"{'channel':<28} {'F1-only':>10} {'F2-only':>10} "
+          f"{'(F1-F2)-diff':>14} {'improves?':>10}")
+    print("-" * 80)
+    for ch in CHANNELS:
+        f1_base = out["per_channel_baseline_single_form_held_out_delta"]["F1"][ch]
+        f2_base = out["per_channel_baseline_single_form_held_out_delta"]["F2"][ch]
+        cmr = out["per_channel_common_mode_rejected_mean_delta"]["held_out"][ch]
+        best_single = min(f1_base, f2_base) if f1_base and f2_base else None
+        improves = ("YES" if cmr and best_single and cmr < best_single * 0.5
+                    else "no")
+        f1_str = f"{f1_base:.4f}" if f1_base is not None else "N/A"
+        f2_str = f"{f2_base:.4f}" if f2_base is not None else "N/A"
+        cmr_str = f"{cmr:.4f}" if cmr is not None else "N/A"
+        print(f"{ch:<28} {f1_str:>10} {f2_str:>10} {cmr_str:>14} "
+              f"{improves:>10}")
+    print()
+    print("=== Verdict ===")
+    breaks = False
+    for ch in CHANNELS:
+        cmr = out["per_channel_common_mode_rejected_mean_delta"]["held_out"][ch]
+        if cmr is not None and cmr < 0.5:
+            print(f"  {ch}: held-out CMR delta {cmr:.4f} < 0.5 — "
+                  "BREAKS CEILING")
+            breaks = True
+    if not breaks:
+        print("  No channel's CMR delta breaks the 0.5 ceiling.")
+        print("  Common-mode rejection does not break the cross-fixture ceiling.")

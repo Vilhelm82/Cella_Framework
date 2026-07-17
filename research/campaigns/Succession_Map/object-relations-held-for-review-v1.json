@@ -1,0 +1,150 @@
+{
+  "gate": "C (high OR >=2 units) + acyclicity",
+  "held_count": 16,
+  "held": [
+    {
+      "reason": "gate_C_fail",
+      "from_id": "OBJ:im-omega-2-period-control",
+      "to_id": "OBJ:e-lambda-legendre-curve",
+      "relation": "has_base",
+      "confidence": "medium",
+      "n_units": 1,
+      "basis": "'Im(omega_2) = -2^(3/4)*K(k_dual^2)' is a period-normalization control pinning 'the Legendre lattice normalization' of E_lambda."
+    },
+    {
+      "reason": "gate_C_fail",
+      "from_id": "OBJ:dbp-surface-f-d-s-p-d-m-d-ds-p-m-p-3",
+      "to_id": "OBJ:constraint-surface",
+      "relation": "specializes_to",
+      "confidence": "medium",
+      "n_units": 1,
+      "basis": "the framework diagnoses 'constraint-surface geometry ... of a defining surface F=0', instantiated concretely as F=D²+DS+P²−3 in CALC-02/CALC-23."
+    },
+    {
+      "reason": "gate_C_fail",
+      "from_id": "OBJ:static-ordered-horizon-field-h-k-sqrt-u-sqrt-gamma",
+      "to_id": "OBJ:four-charge-galois-core-f-k-k-f-5-gal-k-gal-f-s-5",
+      "relation": "has_base",
+      "confidence": "medium",
+      "n_units": 1,
+      "basis": "K(sqrt u,sqrt gamma) is built as a degree-4 extension of K=F(u), the stem field of the S_5 quintic (four-charge Galois core): [K(sqrt u,sqrt gamma):K]=4."
+    },
+    {
+      "reason": "gate_C_fail",
+      "from_id": "OBJ:inverse-channel-subclass-parity-fixed-inverse-channel-face-g",
+      "to_id": "OBJ:parity-fixed-germ-convention",
+      "relation": "specializes_to",
+      "confidence": "medium",
+      "n_units": 1,
+      "basis": "Def 1.3 states the general parity-fixed convention (invariance under x->-x), then gives the specific inverse-channel pattern g_x=Bx^2+O(x^4), g_y=Ax^{-2}+O(1) satisfying it."
+    },
+    {
+      "reason": "gate_C_fail",
+      "from_id": "OBJ:curvature-support-and-its-newton-polyhedron-n-r",
+      "to_id": "OBJ:divisor-channel-decomposition",
+      "relation": "quotient_of",
+      "confidence": "medium",
+      "n_units": 1,
+      "basis": "Def 7.1 builds S_R and N_R by 'Expand the smooth coefficients in (3.2)' — the Newton polyhedron is a combinatorial support/convex-hull reduction of the divisor-channel decomposition's coefficient data"
+    },
+    {
+      "reason": "gate_C_fail",
+      "from_id": "OBJ:certified-keystone-channel-labels-kappa-c-kappa-s-kappa-int",
+      "to_id": "OBJ:channel-density-polynomial",
+      "relation": "specializes_to",
+      "confidence": "medium",
+      "n_units": 1,
+      "basis": "GATE-A shows the fixed keystone kappa_c/kappa_int/kappa_s labels arise as the r=2 evaluation Ĉ_2 of the general bordered-minor channel-density polynomial Ĉ_r(t,u)."
+    },
+    {
+      "reason": "gate_C_fail",
+      "from_id": "OBJ:six-ordered-role-charts",
+      "to_id": "OBJ:active-chart-jet-carrier-jet-carrier-o-r-r-r",
+      "relation": "specializes_to",
+      "confidence": "medium",
+      "n_units": 1,
+      "basis": "'This curvature reduction is the order-2 projection of that theorem [8.1′]' — the six ordered role charts are the order-2 instance of the general S₃ role-jet orbit carrier."
+    },
+    {
+      "reason": "gate_C_fail",
+      "from_id": "OBJ:gauge-transport-law-defining-function-gauge",
+      "to_id": "OBJ:self-coupling-hessian-split-h-h-c-h-s",
+      "relation": "acts_on",
+      "confidence": "medium",
+      "n_units": 1,
+      "basis": "Under Ftilde=mu F, on F=0: Htilde = H+G, G=ga^T+ag^T, a=grad log mu -- the gauge transport law transforming the Hessian split."
+    },
+    {
+      "reason": "gate_C_fail",
+      "from_id": "OBJ:sign-group-h-sign-c-2-k",
+      "to_id": "OBJ:incidence-cover-x-eq-incidence",
+      "relation": "acts_on",
+      "confidence": "medium",
+      "n_units": 1,
+      "basis": "H=(C_2)^k is the Galois/deck group of E/F_0(u); X is the smooth projective model of E, so H acts on X as deck transformations."
+    },
+    {
+      "reason": "gate_C_fail",
+      "from_id": "OBJ:four-charge-galois-core-f-k-k-f-5-gal-k-gal-f-s-5",
+      "to_id": "OBJ:phi-k-m-m-n-k-norm-form",
+      "relation": "specializes_to",
+      "confidence": "medium",
+      "n_units": 1,
+      "basis": "\"k=4, degree 5: banked S_5 certificate\" is the k=4 instance of the general N_k(u;M) norm-form family."
+    },
+    {
+      "reason": "gate_C_fail",
+      "from_id": "OBJ:coupling-kernel-k",
+      "to_id": "OBJ:dbp-triple",
+      "relation": "quotient_of",
+      "confidence": "medium",
+      "n_units": 1,
+      "basis": "K is T-invariant (Thm part i) and for kappa>0 is a complete invariant separating S_3-orbits of triples (Cor. Nonlinear domains), i.e. K factors through the orbit space of triples."
+    },
+    {
+      "reason": "gate_C_fail",
+      "from_id": "OBJ:spectral-channel-k-spec",
+      "to_id": "OBJ:coupling-kernel-k",
+      "relation": "quotient_of",
+      "confidence": "medium",
+      "n_units": 1,
+      "basis": "Def. Coupling kernel: K=(K_spec, K_hol, kappa) is a tuple; K_spec is the projection/image of K onto its spectral-data (Jacobian) component."
+    },
+    {
+      "reason": "gate_C_fail",
+      "from_id": "OBJ:v-4-wr-s-5-headline-theorem-closure-group-notation",
+      "to_id": "OBJ:four-charge-galois-core-f-k-k-f-5-gal-k-gal-f-s-5",
+      "relation": "has_base",
+      "confidence": "medium",
+      "n_units": 1,
+      "basis": "Eq (3.2) gives exact sequence 1->W^vee->Gal(L/F)->G->1; section 9 sets G=S_5 (the four-charge Galois core) as the base of the resulting C_2^2 wreath S_5 group."
+    },
+    {
+      "reason": "gate_C_fail",
+      "from_id": "OBJ:four-charge-galois-core-f-k-k-f-5-gal-k-gal-f-s-5",
+      "to_id": "OBJ:conjugate-embedding-labels-u-i-gamma-i-beta-i-delta-i",
+      "relation": "parameterizes",
+      "confidence": "medium",
+      "n_units": 1,
+      "basis": "'Label the five embeddings of K into E by i=1,...,5' where E is the S_5-Galois splitting field of the four-charge core (2.5), giving u_i,gamma_i,beta_i,delta_i."
+    },
+    {
+      "reason": "gate_C_fail",
+      "from_id": "OBJ:channel-barycentric-coordinates-r-c-r-s-r-int",
+      "to_id": "OBJ:certified-keystone-channel-labels-kappa-c-kappa-s-kappa-int",
+      "relation": "quotient_of",
+      "confidence": "medium",
+      "n_units": 1,
+      "basis": "R_c=kappa_c/K_G etc: the barycentric coordinates are ratios of the keystone channel labels kappa_c,kappa_s,kappa_int by the total curvature K_G, per section 14."
+    },
+    {
+      "reason": "would_create_cycle",
+      "from_id": "OBJ:i-epsilon",
+      "to_id": "OBJ:i-primary",
+      "relation": "specializes_to",
+      "confidence": "high",
+      "n_units": 1,
+      "basis": "I_epsilon is epsilon-parametrized (1.6); the primary channel epsilon=+1 gives I_primary, e.g. 'I_{\\rm primary}=\\frac12\\int_{\\Gamma_+}\\Theta-2\\pi' (7.4).  [harvest+verified: Source (U-1822, DBP_LANDEN_"
+    }
+  ]
+}

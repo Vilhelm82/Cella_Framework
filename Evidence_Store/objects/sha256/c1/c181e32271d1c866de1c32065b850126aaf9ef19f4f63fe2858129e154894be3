@@ -1,0 +1,169 @@
+#!/usr/bin/env python3
+"""Claire — Arm M + charter close canonical writes (Will's GO, 2026-06-13).
+Dispositions 1–6 ratified. HR137 (arm + charter), glossary Arm M kit (F14),
+FENCE_REGISTER F11 note, ledger compression, draft ratification stamp,
+WORKING_SET refresh."""
+import pathlib, re, sys
+
+ROOT = pathlib.Path('/home/wlloyd/Lloyd_Engine_V4')
+ok = []
+
+# ---------- 1. HR137 row ----------
+HR137 = ("| 137 | 2026-06-13 (high) | beyond-the-cradle ARM M close + CHARTER close "
+"(Stages 0,A,B,C,D,E; arm + charter ratified by Will same day) | Certify the exact "
+"account in n variables with the account gaining direction: lane lift (CL-M1), mixed "
+"tower (CL-M2), tensor-inversion keystone (CL-M3), conditional fingerprint law (CL-M4), "
+"plaquette holonomy (CL-M5), directional smoothness (CL-M6), landing decomposition "
+"(CL-M7), refusal coverage (CL-M8), curvature bridge (CL-M9) | **ALL NINE CLAIM ROWS "
+"RESOLVED AS DESIGNED: CL-M1..M7 + CL-M9 DEMONSTRATED, CL-M8 PARTIAL by design. Thesis "
+"CONFIRMED on every clause, n=2 AND n=3 scored; ZERO battery defects across five stages; "
+"K-M1..K-M4 never fired.** HEADLINE: the Clairaut defect IS the account gap — corner "
+"deviations common-mode, C_raw == D2−D1 == the signed residue-sum difference exactly in "
+"ℚ (protection theorem 7/7; predicate-selected witness 2.84e-14; coincidental class 3rd "
+"sighting; 4th substrate instance of the HR134 conditional-fingerprint family; sha "
+"bd2a5b2d). KEYSTONE: every mixed partial of a multivariate polynomial recovered exactly "
+"in ℚ from lattice samples, triple-verified (step-invariance / dual-eval slice / "
+"hand-pins); lattice Clairaut 197/197 orderings incl. complete 90-ordering trivariate "
+"sets — unconditional rearrangement identity, no C² hypothesis (sha e9c40ef4). CL-M1: "
+"reading+D==TRUE 20/20 via independent transformed-tree referee; exposure partitions by "
+"channel — balanced=protected, anisotropic=coupling (sha fd2224f7). CL-M5: \\|H\\| ≤ "
+"exposure with zero violations; channel partition closes onto the bound exactly; all 3 "
+"trivariate coordinate-plane faces scored. CL-M6: 13/13 directional verdicts, ZERO "
+"confidently-wrong under the live standing law; two-scale gate (born from a "
+"confidently-wrong sampling-aliasing mechanism caught pre-freeze by its own control) + "
+"ray_in_locus typed refusals incl. the exact diagonal; direction-resolved exhibit — "
+"axis-kink (0/1) vs near-diagonal gap exactly 1/64 (sha 7509d700). CL-M7: landings "
+"destination-resolved against 60-bit dyadic labels with arrival MODE separate; zero "
+"unattributed per step (every F-lane closes; J deviations exact ℚ matrices); FXMD1 prize "
+"— float Newton cannot fix √(2+√3), terminal attractor = certified exact 2-cycle "
+"straddling it (SUBSTRATE_TINTED); FXMD3 T1 stretch — float snaps exactly onto (1,0) at "
+"step 4 while geometry approaches forever (sha 4666201c). CL-M9: κ² (circle) and H² "
+"(sphere) from the Stage-B tensor == analytic EXACTLY in ℚ, two tensor routes identical, "
+"rational graded object so no enclosure needed; measure-never-search (T3) — HR129's "
+"univariate non-recoverability negative does NOT bind multivariate | CLOSED, verdict "
+"arm_complete_claims_resolved + **CHARTER beyond-the-cradle CLOSED, verdict "
+"meta_thesis_confirmed_both_axes** (Arm I HR136 inheritance axis ⊕ Arm M directional "
+"axis — the account was born in float64 and was never about floats; ratified Will "
+"2026-06-13; organ measurements DEMONSTRATED referee-graded byte-stable ×2 per stage; "
+"eval-tier instruments, no TypedResults minted; canonical applications this row) | "
+"results/cradle_arm_m/{ARM_CLOSE_DRAFT.md (ratified),CLAIM_LEDGER.md,stage_0..stage_e "
+"reports,records}; commits 6c736c3d-prereg/d5e2809/99de337/e97b619/38fceb0/4252db7/"
+"a51b059/95c287e | Governance: rules 1.8/1.9 active from birth on every prereg; "
+"amendment #M1 = rule 1.9's FIRST live self-enforcement (refused its own author's "
+"post-freeze pow-hardening; reverted, blessed, re-stamped 6c736c3d); lanes_m "
+"eager-evaluation latent fix verified the strong way — all three prior stage batteries "
+"re-ran byte-identical AND committed records independently recomputed to pinned shas "
+"chat-side; two drafting catches generator-caught pre-freeze. Fences: F8/F9 HONORED, "
+"zero G-claims; T2 honored (plaquette holonomy = account bookkeeping on named fixtures, "
+"never a geometric-primitive claim); F11 note applied — TWO-CURVATURES upstream "
+"infrastructure COMPLETE (fence unchanged; opens only on Will's GO). Economics pins "
+"held (2.57×/2.71× bits-per-step measured at Stage 0 with defining series; K-M4 descope "
+"never approached). Glossary Arm M kit applied per F14 (no name adoptions). Successors "
+"queued NO GO IMPLIED: TWO-CURVATURES brief (F11), G-brief consuming Arm M apparatus "
+"(F8), certified-form-synthesis (kill-search owed), paper v5, R7 regression tests |")
+
+hr = ROOT / 'Build_Docs/Architecture/HISTORICAL_RECORD.md'
+lines = hr.read_text().splitlines(keepends=True)
+idx = next(i for i, l in enumerate(lines) if l.startswith('| 136 |'))
+assert not any(l.startswith('| 137 |') for l in lines), 'HR137 already exists'
+lines.insert(idx + 1, HR137 + '\n')
+hr.write_text(''.join(lines))
+ok.append('HR137 inserted after row 136')
+
+# ---------- 2. Glossary Arm M kit (F14, before next heading after Arm I kit) ----------
+KIT = """### Arm M kit (beyond-the-cradle, working labels per F14 - no adoptions; HR137)
+
+- **multivariate deviation fold** — Stage-A organ: per-channel exact-ℚ residue fold over ℚⁿ expression trees; reading + D == TRUE graded via an independent transformed-tree referee; exposure partitions per-variable ⊕ coupling (balanced points = the protected class). *Status: demonstrated (sha fd2224f7).* Source: `src/lloyd_v4/evals/cradle_arm_m/lanes_m.py`, `results/cradle_arm_m/stage_a/`.
+- **mixed tensor inversion (lattice Taylor recovery)** — Newton coefficients per multi-index → falling factorials expanded exactly per axis → full shifted-monomial coefficient tensor → every mixed partial at the base point exactly in ℚ; triple-verified (step-invariance / dual-eval slice / hand-pins). *Status: demonstrated (sha e9c40ef4).* Source: `results/cradle_arm_m/stage_b/`.
+- **lattice Clairaut identity** — iterated lane differences are ordering-invariant: 197/197 distinct axis orderings identical incl. complete 90-ordering trivariate sets; an unconditional rearrangement identity on lane-certified samples (no C² hypothesis). *Status: demonstrated.* Source: `results/cradle_arm_m/stage_b/`.
+- **commutator attribution identity (Clairaut defect)** — C_raw == D₂ − D₁ == the signed residue-sum gap, exactly in ℚ; corner deviations are common-mode and cancel; protection is a theorem (six exact subtractions ⇒ C_raw == 0 regardless of corner rounding); 4th substrate instance of the HR134 conditional-fingerprint family, with the coincidental-cancellation class's 3rd sighting. *Status: demonstrated (sha bd2a5b2d).* Source: `results/cradle_arm_m/stage_c/`.
+- **plaquette holonomy + exposure partition** — the ledger-folded deviation of the pinned loop order, fully attributed; \\|H\\| ≤ exposure with zero violations; per-variable ⊕ coupling ⊕ loop channel partition closes onto the bound exactly. T2 honored: account bookkeeping on named fixtures, never a geometric-primitive claim. *Status: demonstrated.* Source: `results/cradle_arm_m/stage_c/`.
+- **two-scale gate** — directional certification requires identical derivative recovery at h and h/2; converts the sampling-aliasing confidently-wrong mechanism (per-side termination certifying a kink at a smooth point) into a refusal; the crossing-ladder control refuses permanently. *Status: demonstrated (sha 7509d700).* Source: `results/cradle_arm_m/stage_d/`.
+- **ray_in_locus refusal** — typed refusal class for locus-tangent rays where every sample sits on the kink (axis probe along a kink axis; the exact diagonal at a tie): the instrument refuses rather than inventing an unwarranted verdict. *Status: demonstrated.* Source: `results/cradle_arm_m/stage_d/`.
+- **destination-resolved landing labels** — landings graded against pinned 60-bit dyadic label points with arrival MODE carried separately (exact snap / asymptotic approach / certified terminal cycle), so substrate snaps are textures, not false disagreements. FXMD1 exhibit: float Newton's terminal attractor at √(2+√3) is a certified exact 2-cycle straddling the irrational root (SUBSTRATE_TINTED). *Status: demonstrated (sha 4666201c).* Source: `results/cradle_arm_m/stage_e/`.
+- **curvature bridge** — κ² (circle) and mean-curvature H² (sphere) computed from the recovered tensor equal analytic values exactly in ℚ; the graded object is rational (no enclosure needed; isqrt enclosure of κ reported alongside); measured, never searched (T3). HR129's univariate non-recoverability negative does not bind the multivariate tensor. *Status: demonstrated.* Source: `results/cradle_arm_m/stage_e/`.
+
+"""
+gl = ROOT / 'Build_Docs/Architecture/V4_GLOSSARY.md'
+glines = gl.read_text().splitlines(keepends=True)
+i = next(k for k, l in enumerate(glines) if l.startswith('### Arm I kit'))
+j = next(k for k in range(i + 1, len(glines))
+         if glines[k].startswith('## ') or glines[k].startswith('### '))
+assert not any('Arm M kit' in l for l in glines), 'Arm M kit already exists'
+glines.insert(j, KIT)
+gl.write_text(''.join(glines))
+ok.append(f'glossary Arm M kit inserted before line {j+1} heading')
+
+# ---------- 3. FENCE_REGISTER F11 note ----------
+fr = ROOT / 'Build_Docs/Architecture/FENCE_REGISTER.md'
+t = fr.read_text()
+old = 'Arm M is its upstream infrastructure. Not a ban — a queue position.'
+new = ('Arm M is its upstream infrastructure — **COMPLETE (Arm M closed, HR137, '
+       '2026-06-13)**. Not a ban — a queue position; fence unchanged, opens only on '
+       "Will's GO on a brief.")
+assert t.count(old) == 1, 'F11 anchor not unique'
+fr.write_text(t.replace(old, new))
+ok.append('F11 infrastructure-COMPLETE note applied')
+
+# ---------- 4. ARM_CLOSE_DRAFT ratification stamp ----------
+dr = ROOT / 'results/cradle_arm_m/ARM_CLOSE_DRAFT.md'
+t = dr.read_text()
+old_draft = ("**This is a DRAFT. Nothing below is canonical until Will's hand — no\n"
+             "HR row, no glossary entries, no charter close, no fence changes.**")
+new_draft = ('**RATIFIED — Will, 2026-06-13 ("GO", dispositions 1–6). Canonical writes '
+             'executed same day (Claire, per the canonical-write ruling): HR137 (arm '
+             'close + CHARTER close, verdict meta_thesis_confirmed_both_axes), glossary '
+             'Arm M kit per F14, FENCE_REGISTER F11 infrastructure-COMPLETE note, '
+             'campaigns-ledger compression, this ratification stamp.**')
+assert old_draft in t, 'draft banner anchor missing'
+t = t.replace(old_draft, new_draft)
+old_end = "**END OF DRAFT — awaiting Will's hand on dispositions 1–6.**"
+assert old_end in t, 'draft end anchor missing'
+t = t.replace(old_end, '**END — RATIFIED; canonical record at HR137.**')
+dr.write_text(t)
+ok.append('ARM_CLOSE_DRAFT ratification-stamped')
+
+# ---------- 5. LIVE_CAMPAIGNS_LEDGER compression ----------
+lp = ROOT / 'Build_Docs/Architecture/LIVE_CAMPAIGNS_LEDGER.md'
+t = lp.read_text()
+NEW_STATUS = ('**CHARTER CLOSED (HR137, 2026-06-13): verdict '
+'meta_thesis_confirmed_both_axes — Arm I (HR136) ⊕ Arm M (HR137), both '
+'arm_complete_claims_resolved. The account was born in float64 and was never about '
+'floats. Arm M final: 9/9 rows as designed (CL-M1..M7+M9 DEMONSTRATED, CL-M8 PARTIAL '
+'by design); ZERO battery defects across 5 stages; K-M1..M4 never fired; amendment #M1 '
+"= rule 1.9's first live self-enforcement. Headlines: Clairaut defect == account gap "
+'(4th conditional-fingerprint instance); keystone tensor inversion (every mixed partial '
+'exact in ℚ); rational κ²/H² (HR129 negative does not bind); FXMD1 certified exact '
+'2-cycle straddling √(2+√3). Queue (NO GO implied): TWO-CURVATURES brief (F11, upstream '
+'infrastructure COMPLETE), G-brief (F8), CFS (kill-search owed), paper v5, R7.** '
+'Charter document ratified and CLOSED at HR137.')
+t2, n = re.subn(r'ARM M EXECUTING:.*?Draft \(ratified\)', NEW_STATUS, t, flags=re.S)
+assert n == 1, f'ledger status span matched {n} times'
+old_blk = ("| **Blockers** | ARM M COMPLETE — close draft awaits Will's dispositions "
+           "1–6, incl. the CHARTER-close question (both arms done; candidate "
+           "meta_thesis_confirmed_both_axes). |")
+assert old_blk in t2, 'ledger blockers anchor missing'
+t2 = t2.replace(old_blk, "| **Blockers** | None — charter CLOSED (HR137). Queue items "
+                "await Will's GOs (no GO implied). |")
+lp.write_text(t2)
+ok.append('campaigns ledger compressed to charter-closed')
+
+# ---------- 6. WORKING_SET refresh ----------
+wp = ROOT / 'WORKING_SET.md'
+t = wp.read_text()
+NEW_WS = ('**BEYOND-THE-CRADLE CHARTER CLOSED (HR137, 2026-06-13): '
+'meta_thesis_confirmed_both_axes** — Arm I (HR136) ⊕ Arm M (HR137), both '
+'arm_complete_claims_resolved; Arm M 9/9 rows as designed, zero defects 5 stages, kills '
+'silent. Canonical writes EXECUTED (Claire, on Will\'s GO): HR137 carries arm + charter '
+'close; glossary Arm M kit per F14; FENCE_REGISTER F11 infrastructure-COMPLETE note; '
+'ledger compressed; ARM_CLOSE_DRAFT ratification-stamped. **The account was never about '
+'floats.** NEXT (no GO implied): TWO-CURVATURES brief leads (F11 satisfied, prior wins = '
+'Facet E + CL-M5/M9); G-brief (F8); CFS kill-search; paper v5; R7.')
+t2, n = re.subn(r'\*\*ARM M EXECUTING:\*\*.*?per the Arm I pattern\.\*\*', NEW_WS, t,
+                flags=re.S)
+assert n == 1, f'WORKING_SET span matched {n} times'
+wp.write_text(t2)
+ok.append('WORKING_SET refreshed to charter-closed')
+
+print('\n'.join('OK: ' + s for s in ok))
+print('ALL CANONICAL WRITES COMPLETE')

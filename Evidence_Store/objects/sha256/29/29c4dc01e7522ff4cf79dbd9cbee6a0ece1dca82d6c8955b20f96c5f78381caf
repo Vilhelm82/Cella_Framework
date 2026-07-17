@@ -1,0 +1,232 @@
+{
+  "audit_name": "substrate_invariant_search_phase_e_kg_observable",
+  "authority": "Build_Docs/Agent_tasks/substrate_invariant_search_2026_05_23.md",
+  "campaign": "substrate_invariant_search",
+  "closeout_questions": {
+    "Q1_path_a_outcome": "Path A attempted via three formulations (BACL-spectrum perturbation, partition-at-neighbours, finite-diff E with BACL step). None yielded a coherent substrate-derived K_G. Primary obstacle: substrate observables (BACL spectrum, partition) are binade-discrete and route-only-varying respectively; they don't have smooth-curvature structure. K_G is at its core a derivative-of-F quantity; substrate observables provide inputs to a differentiation procedure but cannot substitute for the derivative operation itself.",
+    "Q2_path_b_kg_at_probes": "Path B K_G observable computed at 9 probe points via canonical bordered-determinant formula with analytic derivatives per fixture. Values range from ~1.98 (Schwarzschild near-horizon r=2.1) to ~0.025 (Schwarzschild Sterbenz r=4.4). Sphere K_G = 1.0 at all 3 probe points. SR K_G = 1.0 at all SR probe points (unit-circle constant curvature).",
+    "Q3_sphere_sanity_pass": "Sphere K_G sanity check: PASS. Expected K_G = 1.0; max deviation across 3 sphere probes = 2.220e-16; tolerance = 8.882e-16.",
+    "Q4_schwarzschild_decay_with_r": "Schwarzschild K_G decays from large at near-horizon to small at far-field, as physically expected. K_G values at sampled r (r, K_G): [(0.03813298156088406, 4.4), (1.9797100539622696, 2.1)].",
+    "Q5_kg_independence_from_phase_d_axes": "K_G is computed from F's analytic derivatives (Hessian + gradient). It carries different information than ulp_spread_log2 (operand-chain binade structure), E_log2_base_operand (endpoint-distance substrate image), and two_form_partition (algebraic-route silent/residual structure). The four axes encode different aspects of the constraint geometry. Phase F synthesis combines them.",
+    "Q6_synthesis_axis_set_for_phase_f": "Four substrate observables for Phase F synthesis: (1) ulp_spread_log2 (unconditional, Phase D survivor), (2) E_log2_base_operand (precision-conditional, Phase D scope), (3) two_form_partition (unconditional, Phase D survivor), (4) K_G (canonical formula via Path B; eval-layer, not substrate-derived).",
+    "Q7_open_work_items": "Substrate-derivation of K_G remains a research-grade open problem. Path A attempts documented; future campaigns may revisit. Other open items (carried from prior phases): multi-D extension of E (MD_Q1), float128 verification, subnormal K_G behaviour at Conjecture C scope boundary."
+  },
+  "date": "2026-05-23",
+  "eval_layer_annotation": {
+    "lv3_called": false,
+    "module_is_eval_layer": true,
+    "module_path": "src/lloyd_v4/evals/substrate_invariant_search_phase_e.py",
+    "substrate_primitives_added": [],
+    "v3_isolation_preserved": true
+  },
+  "kg_per_probe": [
+    {
+      "ambient_dim": 2,
+      "coordinates": {
+        "coord": 0.999,
+        "gamma": 0.04471017781221601
+      },
+      "det_H_b": 8.0,
+      "fixture": "sr_four_form",
+      "formula": "K_G = det(H_b_3x3) / |grad F|^3",
+      "grad_norm_power": 8.0,
+      "kg": 1.0,
+      "probe_id": "sr_lightspeed_approach",
+      "regime": "near_singular"
+    },
+    {
+      "ambient_dim": 2,
+      "coordinates": {
+        "coord": 0.671,
+        "gamma": 0.7414573487396291
+      },
+      "det_H_b": 8.0,
+      "fixture": "sr_four_form",
+      "formula": "K_G = det(H_b_3x3) / |grad F|^3",
+      "grad_norm_power": 8.0,
+      "kg": 1.0,
+      "probe_id": "sr_sterbenz_center",
+      "regime": "sterbenz_cluster"
+    },
+    {
+      "ambient_dim": 2,
+      "coordinates": {
+        "coord": 2.1,
+        "z": 0.2182178902359925
+      },
+      "det_H_b": 0.4936214848751292,
+      "fixture": "schwarzschild_four_form",
+      "formula": "K_G = det(H_b_3x3) / |grad F|^3",
+      "grad_norm_power": 0.24934029298238686,
+      "kg": 1.9797100539622696,
+      "probe_id": "schw_horizon_approach",
+      "regime": "near_singular"
+    },
+    {
+      "ambient_dim": 2,
+      "coordinates": {
+        "coord": 4.4,
+        "z": 0.7385489458759964
+      },
+      "det_H_b": 0.12379618878491902,
+      "fixture": "schwarzschild_four_form",
+      "formula": "K_G = det(H_b_3x3) / |grad F|^3",
+      "grad_norm_power": 3.246433499758286,
+      "kg": 0.03813298156088406,
+      "probe_id": "schw_sterbenz_center",
+      "regime": "sterbenz_cluster"
+    },
+    {
+      "ambient_dim": 2,
+      "coordinates": {
+        "coord": 0.99,
+        "y": 0.10000000000000005
+      },
+      "det_H_b": 2.0,
+      "fixture": "pure_algebraic_four_form",
+      "formula": "K_G = det(H_b_3x3) / |grad F|^3",
+      "grad_norm_power": 1.0605960588272993,
+      "kg": 1.8857320686363848,
+      "probe_id": "pa_near_singular",
+      "regime": "near_singular"
+    },
+    {
+      "ambient_dim": 2,
+      "coordinates": {
+        "coord": 0.45,
+        "y": 0.7416198487095663
+      },
+      "det_H_b": 2.0,
+      "fixture": "pure_algebraic_four_form",
+      "formula": "K_G = det(H_b_3x3) / |grad F|^3",
+      "grad_norm_power": 5.724334022399461,
+      "kg": 0.3493856214843422,
+      "probe_id": "pa_sterbenz_center",
+      "regime": "sterbenz_cluster"
+    },
+    {
+      "ambient_dim": 3,
+      "coordinates": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "det_H_b": -16.0,
+      "fixture": "sphere_multi_d",
+      "formula": "K_G = -det(H_b_4x4) / |grad F|^4",
+      "grad_norm_power": 16.0,
+      "kg": 1.0,
+      "probe_id": "sphere_axis",
+      "regime": "umbilic_axis"
+    },
+    {
+      "ambient_dim": 3,
+      "coordinates": {
+        "x": 0.7071067811865476,
+        "y": 0.7071067811865476,
+        "z": 0.0
+      },
+      "det_H_b": -16.000000000000004,
+      "fixture": "sphere_multi_d",
+      "formula": "K_G = -det(H_b_4x4) / |grad F|^4",
+      "grad_norm_power": 16.0,
+      "kg": 1.0000000000000002,
+      "probe_id": "sphere_equator_45",
+      "regime": "umbilic_equator"
+    },
+    {
+      "ambient_dim": 3,
+      "coordinates": {
+        "x": 0.5773502691896258,
+        "y": 0.5773502691896258,
+        "z": 0.5773502691896258
+      },
+      "det_H_b": -16.000000000000004,
+      "fixture": "sphere_multi_d",
+      "formula": "K_G = -det(H_b_4x4) / |grad F|^4",
+      "grad_norm_power": 16.0,
+      "kg": 1.0000000000000002,
+      "probe_id": "sphere_diagonal",
+      "regime": "umbilic_diagonal"
+    }
+  ],
+  "open_work_items_for_future_campaigns": [
+    "Substrate-derivation of K_G from BACL / E / partition / fingerprint primitives \u2014 research-grade; Path A attempts did not yield within scope",
+    "Multi-D extension of E primitive (MD_Q1 from Phase 2h)",
+    "Float128 BACL verification (campaign-wide open)",
+    "Subnormal K_G behaviour (Conjecture C scope boundary)"
+  ],
+  "path_a_attempts": [
+    {
+      "attempt_id": "A1_bacl_spectrum_perturbation",
+      "conclusion": "BACL-spectrum perturbation does NOT yield a coherent K_G observable. The substrate observable is binade-stepped, not smooth. Path A formulation A1 fails.",
+      "executed": true,
+      "method": "At probe point x_0, compute ulp_spread_log2. At small surface-constrained perturbations x_0 + delta_i, recompute. Look for a quadratic / curvature-like pattern across perturbations that could encode K_G.",
+      "name": "K_G from BACL-spectrum perturbation pattern at surface-constrained neighbours",
+      "observation": "ulp_spread_log2 is binade-discrete: at probe (1,0,0) on unit sphere, ulp_spread = 0.0 exact (all intermediates O(1)); at any small perturbation (e.g., y = 1e-4), ulp_spread jumps to 27.0 (because y*y = 1e-8 has ulp 1.7e-24, while 1.0 has ulp 2.2e-16; ratio is 2^27). The observable is discrete-stepped in binade units, not smoothly varying in delta. Discrete observables do not have meaningful second derivatives; the naive finite-difference Hessian of ulp_spread is dominated by the step discontinuity, not curvature.",
+      "outcome": "did_not_yield"
+    },
+    {
+      "attempt_id": "A2_partition_neighbours",
+      "conclusion": "Partition-based K_G derivation is structurally blocked by the partition's route-only variation. Path A formulation A2 fails by inapplicability.",
+      "executed": false,
+      "method": "At probe and small perturbations, compute the silent / residual_carrying partition for the four-form battery. Look for a pattern of partition shifts that encodes geometric structure.",
+      "name": "K_G from two-form partition behaviour at perturbed neighbours",
+      "observation": "two_form_partition is fixture-level constant by Phase D construction (F3 silent, F1/F2/F4 residual-carrying for all 1-x_term fixtures across all probe points within scope). The partition does not vary across perturbations; it varies only across routes. No second-derivative-like structure available.",
+      "outcome": "structurally_blocked"
+    },
+    {
+      "attempt_id": "A3_finite_diff_E_with_bacl_step",
+      "conclusion": "A3 is Path B with extra steps. Honest assessment: K_G is a derivative-of-F quantity at its mathematical core; substrate observables provide inputs to a differentiation procedure but cannot substitute for the derivative operation itself. Path A as 'pure substrate K_G' is research-grade and not achievable within campaign scope.",
+      "executed": false,
+      "method": "Use substrate-derived step size (e.g., sqrt(ulp(coord))) for finite-differencing E across the constraint surface; the second derivative of E gives a curvature-like signal.",
+      "name": "K_G from finite-differenced E with BACL-aware step",
+      "observation": "This formulation is fundamentally Path B with a substrate-informed step selection. The K_G value comes from the second derivative computation (canonical formula); substrate-informed step choice is an implementation detail. Not a substrate-derived K_G in the Axiom-11 sense.",
+      "outcome": "reduces_to_path_b"
+    }
+  ],
+  "path_a_outcome": "did_not_yield_coherent_kg_observable",
+  "path_b_implementation": {
+    "derivatives_method": "Analytic per fixture (no finite differences)",
+    "eval_layer_placement": "src/lloyd_v4/evals/substrate_invariant_search_phase_e.py",
+    "formulas": {
+      "2_variables_curve_in_R2": "K_G = det(H_b_3x3) / |grad F|^3",
+      "3_variables_surface_in_R3": "K_G = -det(H_b_4x4) / |grad F|^4"
+    },
+    "imported_from_literature": "Bordered-determinant formula for implicit hypersurface Gaussian curvature (standard differential-geometry result; named-math import permitted in eval layer per existing eval discipline)",
+    "method": "Canonical bordered-determinant formula for implicit hypersurface Gaussian curvature",
+    "sign_convention_note": "Sign convention matches V3 oracle output on smoke-test fixtures (SR K_G=+1, Schwarzschild K_G>0, sphere K_G=+1). For 2-variable case no sign flip; for 3-variable case negation aligns with V3's reported K_G sign.",
+    "substrate_derivation_status": "not_substrate_derived_path_b_fallback",
+    "substrate_layer_modifications": "none"
+  },
+  "phase": "E",
+  "phase_d_audit_sha256": "5ea2deaf55d2bd5256307ca68d69126882ba263021697718621325a331fbb907",
+  "preregistry": "Build_Docs/Agent_tasks/substrate_invariant_search_phase_e_kg_primitive.md",
+  "sense_b_amendment_note": "Phase E follows a two-path design per the sense-(B) amendment authorised by user on 2026-05-23: 'K_G can be imported if the derived method fails.' Path A (substrate-derivation) attempted and did not yield a coherent K_G observable. Path B (canonical bordered-determinant formula in eval layer) implemented as the K_G observable for Phase F synthesis.",
+  "sphere_sanity_check": {
+    "all_within_tolerance": true,
+    "expected_kg": 1.0,
+    "max_deviation": 2.220446049250313e-16,
+    "per_probe_kg": [
+      1.0,
+      1.0000000000000002,
+      1.0000000000000002
+    ],
+    "tolerance_float64_ulp": 8.881784197001252e-16
+  },
+  "synthesis_axis_added": {
+    "axis_kind": "canonical_curvature_observable",
+    "axis_name": "K_G",
+    "p1_input_derivable": true,
+    "p1_note": "K_G is computed from F's analytic derivatives at the probe point. Inputs are (F, x); no iteration on F(x_k). P1-satisfied.",
+    "phase_f_role": "fourth_substrate_axis_alongside_ulp_spread_E_partition"
+  },
+  "what_phase_e_does_not_claim": [
+    "Phase E does NOT claim K_G is substrate-derived (Path A did not yield)",
+    "Phase E does NOT modify src/lloyd_v4/primitives/ or any substrate-layer file",
+    "Phase E does NOT import lv3 / V3 substrate",
+    "Phase E does NOT synthesise the invariant (Phase F)",
+    "Phase E does NOT run the Newton failure-mode demo (Phase G)",
+    "Phase E does NOT close the substrate-derivation of K_G open work item; it remains research-grade"
+  ]
+}

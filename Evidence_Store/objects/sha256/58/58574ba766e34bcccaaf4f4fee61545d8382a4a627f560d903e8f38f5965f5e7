@@ -1,0 +1,813 @@
+{
+  "audit_name": "substrate_invariant_search_phase_b_vector_table",
+  "authority": "Build_Docs/Agent_tasks/substrate_invariant_search_2026_05_23.md",
+  "campaign": "substrate_invariant_search",
+  "closeout_questions": {
+    "Q1_table_size": "18 probe points x 6 P1-satisfied candidates + 7 protocol placeholders = 115 table entries (excluding nulls).",
+    "Q2_meaningful_variation": "BACL_grain varies across probe points (range 2.220e-16 to 2.220e-16). E_log2_base_operand varies across the 1-x_term fixtures (range -8.967 to -0.014 when defined). Conjecture C in_normal_range and c2_lattice_chain_applies are constant True for all 1-x_term probes (none reach subnormal). in_sterbenz_cluster varies: 3/15 1-x_term probes inside cluster.",
+    "Q3_constants": "Constant across probe set: two_form_partition (algebraic-form property, not point property). For 1-x_term fixtures: conjecture_c_in_normal_range and c2_lattice_chain_applies are constant True (all probe points well above 2^-1021 floor).",
+    "Q4_obvious_correlations": "BACL_grain and E_log2_base_operand are not independent: both derive from the binade structure of the operand. Specifically BACL_grain ~ 2^(floor(E) - 52) for 1-x_term fixtures where the dominant intermediate is the cancellation operand. Phase C will quantify. in_sterbenz_cluster is a deterministic function of E (boolean from interval test). Conjecture C / c2_lattice are constant True in this probe set, providing no discriminating signal.",
+    "Q5_surprises": "Sphere probe points produce non-null BACL_grain (~2.22e-16 for unit-magnitude intermediates) while E / sterbenz / Conjecture C all null. Confirms BACL is the most general invariant; the 1-x_term-specific candidates are family-bound.",
+    "Q6_supports_phase_c": "Yes. The table contains enough variation in BACL_grain and E across regimes to test correlation structure. The constant-True Conjecture C / c2_lattice for all in-scope probes shows the probe set is fully in their applicability regime \u2014 Phase C must either extend the probe set to subnormal (out of current scope) or accept these as non-discriminating for the current basis."
+  },
+  "date": "2026-05-23",
+  "float64_normal_floor": "2^-1021",
+  "invariant_vectors": [
+    {
+      "BACL_grain": 2.220446049250313e-16,
+      "E_log2_base_operand": -8.966505812579566,
+      "base_operand": 0.001998999999999973,
+      "c2_lattice_chain_applies": true,
+      "conjecture_c_in_normal_range": true,
+      "coordinates": {
+        "beta": 0.999
+      },
+      "fixture": "sr_four_form",
+      "in_sterbenz_cluster": false,
+      "intermediates_for_BACL": [
+        1.0,
+        0.998001,
+        0.001998999999999973
+      ],
+      "probe_id": "sr_lightspeed_approach",
+      "regime": "near_singular_endpoint",
+      "two_form_partition": {
+        "F1": {
+          "form": "R**2 - (1 - beta**2)",
+          "partition": "residual_carrying"
+        },
+        "F2": {
+          "form": "R**2 - 1 + beta**2",
+          "partition": "residual_carrying"
+        },
+        "F3": {
+          "form": "R - sqrt(1 - beta**2)",
+          "partition": "silent"
+        },
+        "F4": {
+          "form": "R - sqrt((1-beta)*(1+beta))",
+          "partition": "residual_carrying"
+        }
+      }
+    },
+    {
+      "BACL_grain": 2.220446049250313e-16,
+      "E_log2_base_operand": -2.3959286763311396,
+      "base_operand": 0.18999999999999995,
+      "c2_lattice_chain_applies": true,
+      "conjecture_c_in_normal_range": true,
+      "coordinates": {
+        "beta": 0.9
+      },
+      "fixture": "sr_four_form",
+      "in_sterbenz_cluster": false,
+      "intermediates_for_BACL": [
+        1.0,
+        0.81,
+        0.18999999999999995
+      ],
+      "probe_id": "sr_near_lightspeed",
+      "regime": "mid_regime_high_E",
+      "two_form_partition": {
+        "F1": {
+          "form": "R**2 - (1 - beta**2)",
+          "partition": "residual_carrying"
+        },
+        "F2": {
+          "form": "R**2 - 1 + beta**2",
+          "partition": "residual_carrying"
+        },
+        "F3": {
+          "form": "R - sqrt(1 - beta**2)",
+          "partition": "silent"
+        },
+        "F4": {
+          "form": "R - sqrt((1-beta)*(1+beta))",
+          "partition": "residual_carrying"
+        }
+      }
+    },
+    {
+      "BACL_grain": 2.220446049250313e-16,
+      "E_log2_base_operand": -0.863128777527745,
+      "base_operand": 0.5497589999999999,
+      "c2_lattice_chain_applies": true,
+      "conjecture_c_in_normal_range": true,
+      "coordinates": {
+        "beta": 0.671
+      },
+      "fixture": "sr_four_form",
+      "in_sterbenz_cluster": true,
+      "intermediates_for_BACL": [
+        1.0,
+        0.45024100000000006,
+        0.5497589999999999
+      ],
+      "probe_id": "sr_sterbenz_center",
+      "regime": "inside_sterbenz_cluster_center",
+      "two_form_partition": {
+        "F1": {
+          "form": "R**2 - (1 - beta**2)",
+          "partition": "residual_carrying"
+        },
+        "F2": {
+          "form": "R**2 - 1 + beta**2",
+          "partition": "residual_carrying"
+        },
+        "F3": {
+          "form": "R - sqrt(1 - beta**2)",
+          "partition": "silent"
+        },
+        "F4": {
+          "form": "R - sqrt((1-beta)*(1+beta))",
+          "partition": "residual_carrying"
+        }
+      }
+    },
+    {
+      "BACL_grain": 2.220446049250313e-16,
+      "E_log2_base_operand": -0.4150374992788438,
+      "base_operand": 0.75,
+      "c2_lattice_chain_applies": true,
+      "conjecture_c_in_normal_range": true,
+      "coordinates": {
+        "beta": 0.5
+      },
+      "fixture": "sr_four_form",
+      "in_sterbenz_cluster": false,
+      "intermediates_for_BACL": [
+        1.0,
+        0.25,
+        0.75
+      ],
+      "probe_id": "sr_mid",
+      "regime": "mid_regime_low_E",
+      "two_form_partition": {
+        "F1": {
+          "form": "R**2 - (1 - beta**2)",
+          "partition": "residual_carrying"
+        },
+        "F2": {
+          "form": "R**2 - 1 + beta**2",
+          "partition": "residual_carrying"
+        },
+        "F3": {
+          "form": "R - sqrt(1 - beta**2)",
+          "partition": "silent"
+        },
+        "F4": {
+          "form": "R - sqrt((1-beta)*(1+beta))",
+          "partition": "residual_carrying"
+        }
+      }
+    },
+    {
+      "BACL_grain": 2.220446049250313e-16,
+      "E_log2_base_operand": -0.014499569695115089,
+      "base_operand": 0.99,
+      "c2_lattice_chain_applies": true,
+      "conjecture_c_in_normal_range": true,
+      "coordinates": {
+        "beta": 0.1
+      },
+      "fixture": "sr_four_form",
+      "in_sterbenz_cluster": false,
+      "intermediates_for_BACL": [
+        1.0,
+        0.010000000000000002,
+        0.99
+      ],
+      "probe_id": "sr_non_relativistic",
+      "regime": "far_from_singular",
+      "two_form_partition": {
+        "F1": {
+          "form": "R**2 - (1 - beta**2)",
+          "partition": "residual_carrying"
+        },
+        "F2": {
+          "form": "R**2 - 1 + beta**2",
+          "partition": "residual_carrying"
+        },
+        "F3": {
+          "form": "R - sqrt(1 - beta**2)",
+          "partition": "silent"
+        },
+        "F4": {
+          "form": "R - sqrt((1-beta)*(1+beta))",
+          "partition": "residual_carrying"
+        }
+      }
+    },
+    {
+      "BACL_grain": 2.220446049250313e-16,
+      "E_log2_base_operand": -4.392317422778759,
+      "base_operand": 0.04761904761904767,
+      "c2_lattice_chain_applies": true,
+      "conjecture_c_in_normal_range": true,
+      "coordinates": {
+        "r": 2.1
+      },
+      "fixture": "schwarzschild_four_form",
+      "in_sterbenz_cluster": false,
+      "intermediates_for_BACL": [
+        1.0,
+        0.9523809523809523,
+        0.04761904761904767
+      ],
+      "probe_id": "schw_horizon_approach",
+      "regime": "near_horizon_endpoint",
+      "two_form_partition": {
+        "F1": {
+          "form": "R**2 - (1 - 2/r)",
+          "partition": "residual_carrying"
+        },
+        "F2": {
+          "form": "R**2 - 1 + 2/r",
+          "partition": "residual_carrying"
+        },
+        "F3": {
+          "form": "R - sqrt(1 - 2/r)",
+          "partition": "silent"
+        },
+        "F4": {
+          "form": "R - sqrt((r-2)/r)",
+          "partition": "residual_carrying"
+        }
+      }
+    },
+    {
+      "BACL_grain": 2.220446049250313e-16,
+      "E_log2_base_operand": -1.584962500721156,
+      "base_operand": 0.33333333333333337,
+      "c2_lattice_chain_applies": true,
+      "conjecture_c_in_normal_range": true,
+      "coordinates": {
+        "r": 3.0
+      },
+      "fixture": "schwarzschild_four_form",
+      "in_sterbenz_cluster": false,
+      "intermediates_for_BACL": [
+        1.0,
+        0.6666666666666666,
+        0.33333333333333337
+      ],
+      "probe_id": "schw_near_horizon",
+      "regime": "mid_regime_high_E",
+      "two_form_partition": {
+        "F1": {
+          "form": "R**2 - (1 - 2/r)",
+          "partition": "residual_carrying"
+        },
+        "F2": {
+          "form": "R**2 - 1 + 2/r",
+          "partition": "residual_carrying"
+        },
+        "F3": {
+          "form": "R - sqrt(1 - 2/r)",
+          "partition": "silent"
+        },
+        "F4": {
+          "form": "R - sqrt((r-2)/r)",
+          "partition": "residual_carrying"
+        }
+      }
+    },
+    {
+      "BACL_grain": 2.220446049250313e-16,
+      "E_log2_base_operand": -0.8744691179161412,
+      "base_operand": 0.5454545454545454,
+      "c2_lattice_chain_applies": true,
+      "conjecture_c_in_normal_range": true,
+      "coordinates": {
+        "r": 4.4
+      },
+      "fixture": "schwarzschild_four_form",
+      "in_sterbenz_cluster": true,
+      "intermediates_for_BACL": [
+        1.0,
+        0.45454545454545453,
+        0.5454545454545454
+      ],
+      "probe_id": "schw_sterbenz_center",
+      "regime": "inside_sterbenz_cluster_center",
+      "two_form_partition": {
+        "F1": {
+          "form": "R**2 - (1 - 2/r)",
+          "partition": "residual_carrying"
+        },
+        "F2": {
+          "form": "R**2 - 1 + 2/r",
+          "partition": "residual_carrying"
+        },
+        "F3": {
+          "form": "R - sqrt(1 - 2/r)",
+          "partition": "silent"
+        },
+        "F4": {
+          "form": "R - sqrt((r-2)/r)",
+          "partition": "residual_carrying"
+        }
+      }
+    },
+    {
+      "BACL_grain": 2.220446049250313e-16,
+      "E_log2_base_operand": -0.7369655941662062,
+      "base_operand": 0.6,
+      "c2_lattice_chain_applies": true,
+      "conjecture_c_in_normal_range": true,
+      "coordinates": {
+        "r": 5.0
+      },
+      "fixture": "schwarzschild_four_form",
+      "in_sterbenz_cluster": false,
+      "intermediates_for_BACL": [
+        1.0,
+        0.4,
+        0.6
+      ],
+      "probe_id": "schw_mid",
+      "regime": "mid_regime_low_E",
+      "two_form_partition": {
+        "F1": {
+          "form": "R**2 - (1 - 2/r)",
+          "partition": "residual_carrying"
+        },
+        "F2": {
+          "form": "R**2 - 1 + 2/r",
+          "partition": "residual_carrying"
+        },
+        "F3": {
+          "form": "R - sqrt(1 - 2/r)",
+          "partition": "silent"
+        },
+        "F4": {
+          "form": "R - sqrt((r-2)/r)",
+          "partition": "residual_carrying"
+        }
+      }
+    },
+    {
+      "BACL_grain": 2.220446049250313e-16,
+      "E_log2_base_operand": -0.029146345659516508,
+      "base_operand": 0.98,
+      "c2_lattice_chain_applies": true,
+      "conjecture_c_in_normal_range": true,
+      "coordinates": {
+        "r": 100.0
+      },
+      "fixture": "schwarzschild_four_form",
+      "in_sterbenz_cluster": false,
+      "intermediates_for_BACL": [
+        1.0,
+        0.02,
+        0.98
+      ],
+      "probe_id": "schw_far_field",
+      "regime": "far_from_singular",
+      "two_form_partition": {
+        "F1": {
+          "form": "R**2 - (1 - 2/r)",
+          "partition": "residual_carrying"
+        },
+        "F2": {
+          "form": "R**2 - 1 + 2/r",
+          "partition": "residual_carrying"
+        },
+        "F3": {
+          "form": "R - sqrt(1 - 2/r)",
+          "partition": "silent"
+        },
+        "F4": {
+          "form": "R - sqrt((r-2)/r)",
+          "partition": "residual_carrying"
+        }
+      }
+    },
+    {
+      "BACL_grain": 2.220446049250313e-16,
+      "E_log2_base_operand": -6.6438561897747235,
+      "base_operand": 0.010000000000000009,
+      "c2_lattice_chain_applies": true,
+      "conjecture_c_in_normal_range": true,
+      "coordinates": {
+        "x": 0.99
+      },
+      "fixture": "pure_algebraic_four_form",
+      "in_sterbenz_cluster": false,
+      "intermediates_for_BACL": [
+        1.0,
+        0.99,
+        0.010000000000000009
+      ],
+      "probe_id": "pa_near_singular",
+      "regime": "near_singular_endpoint",
+      "two_form_partition": {
+        "F1": {
+          "form": "R**2 - (1 - x)",
+          "partition": "residual_carrying"
+        },
+        "F2": {
+          "form": "R**2 - 1 + x",
+          "partition": "residual_carrying"
+        },
+        "F3": {
+          "form": "R - sqrt(1 - x)",
+          "partition": "silent"
+        },
+        "F4": {
+          "form": "R - sqrt(1 - x)",
+          "partition": "silent"
+        }
+      }
+    },
+    {
+      "BACL_grain": 2.220446049250313e-16,
+      "E_log2_base_operand": -3.3219280948873626,
+      "base_operand": 0.09999999999999998,
+      "c2_lattice_chain_applies": true,
+      "conjecture_c_in_normal_range": true,
+      "coordinates": {
+        "x": 0.9
+      },
+      "fixture": "pure_algebraic_four_form",
+      "in_sterbenz_cluster": false,
+      "intermediates_for_BACL": [
+        1.0,
+        0.9,
+        0.09999999999999998
+      ],
+      "probe_id": "pa_near_singular_mid",
+      "regime": "mid_regime_high_E",
+      "two_form_partition": {
+        "F1": {
+          "form": "R**2 - (1 - x)",
+          "partition": "residual_carrying"
+        },
+        "F2": {
+          "form": "R**2 - 1 + x",
+          "partition": "residual_carrying"
+        },
+        "F3": {
+          "form": "R - sqrt(1 - x)",
+          "partition": "silent"
+        },
+        "F4": {
+          "form": "R - sqrt(1 - x)",
+          "partition": "silent"
+        }
+      }
+    },
+    {
+      "BACL_grain": 2.220446049250313e-16,
+      "E_log2_base_operand": -0.862496476250065,
+      "base_operand": 0.55,
+      "c2_lattice_chain_applies": true,
+      "conjecture_c_in_normal_range": true,
+      "coordinates": {
+        "x": 0.45
+      },
+      "fixture": "pure_algebraic_four_form",
+      "in_sterbenz_cluster": true,
+      "intermediates_for_BACL": [
+        1.0,
+        0.45,
+        0.55
+      ],
+      "probe_id": "pa_sterbenz_center",
+      "regime": "inside_sterbenz_cluster_center",
+      "two_form_partition": {
+        "F1": {
+          "form": "R**2 - (1 - x)",
+          "partition": "residual_carrying"
+        },
+        "F2": {
+          "form": "R**2 - 1 + x",
+          "partition": "residual_carrying"
+        },
+        "F3": {
+          "form": "R - sqrt(1 - x)",
+          "partition": "silent"
+        },
+        "F4": {
+          "form": "R - sqrt(1 - x)",
+          "partition": "silent"
+        }
+      }
+    },
+    {
+      "BACL_grain": 2.220446049250313e-16,
+      "E_log2_base_operand": -1.0,
+      "base_operand": 0.5,
+      "c2_lattice_chain_applies": true,
+      "conjecture_c_in_normal_range": true,
+      "coordinates": {
+        "x": 0.5
+      },
+      "fixture": "pure_algebraic_four_form",
+      "in_sterbenz_cluster": false,
+      "intermediates_for_BACL": [
+        1.0,
+        0.5,
+        0.5
+      ],
+      "probe_id": "pa_mid",
+      "regime": "mid_regime",
+      "two_form_partition": {
+        "F1": {
+          "form": "R**2 - (1 - x)",
+          "partition": "residual_carrying"
+        },
+        "F2": {
+          "form": "R**2 - 1 + x",
+          "partition": "residual_carrying"
+        },
+        "F3": {
+          "form": "R - sqrt(1 - x)",
+          "partition": "silent"
+        },
+        "F4": {
+          "form": "R - sqrt(1 - x)",
+          "partition": "silent"
+        }
+      }
+    },
+    {
+      "BACL_grain": 2.220446049250313e-16,
+      "E_log2_base_operand": -0.15200309344504995,
+      "base_operand": 0.9,
+      "c2_lattice_chain_applies": true,
+      "conjecture_c_in_normal_range": true,
+      "coordinates": {
+        "x": 0.1
+      },
+      "fixture": "pure_algebraic_four_form",
+      "in_sterbenz_cluster": false,
+      "intermediates_for_BACL": [
+        1.0,
+        0.1,
+        0.9
+      ],
+      "probe_id": "pa_far_from_singular",
+      "regime": "far_from_singular",
+      "two_form_partition": {
+        "F1": {
+          "form": "R**2 - (1 - x)",
+          "partition": "residual_carrying"
+        },
+        "F2": {
+          "form": "R**2 - 1 + x",
+          "partition": "residual_carrying"
+        },
+        "F3": {
+          "form": "R - sqrt(1 - x)",
+          "partition": "silent"
+        },
+        "F4": {
+          "form": "R - sqrt(1 - x)",
+          "partition": "silent"
+        }
+      }
+    },
+    {
+      "BACL_grain": 2.220446049250313e-16,
+      "E_log2_base_operand": null,
+      "base_operand": null,
+      "c2_lattice_chain_applies": null,
+      "conjecture_c_in_normal_range": null,
+      "coordinates": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "fixture": "sphere_multi_d",
+      "in_sterbenz_cluster": null,
+      "intermediates_for_BACL": [
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "probe_id": "sphere_axis",
+      "regime": "umbilic_axis",
+      "two_form_partition": null
+    },
+    {
+      "BACL_grain": 2.220446049250313e-16,
+      "E_log2_base_operand": null,
+      "base_operand": null,
+      "c2_lattice_chain_applies": null,
+      "conjecture_c_in_normal_range": null,
+      "coordinates": {
+        "x": 0.7071067811865476,
+        "y": 0.7071067811865476,
+        "z": 0.0
+      },
+      "fixture": "sphere_multi_d",
+      "in_sterbenz_cluster": null,
+      "intermediates_for_BACL": [
+        0.5000000000000001,
+        0.5000000000000001,
+        0.0,
+        1.0
+      ],
+      "probe_id": "sphere_equator_45",
+      "regime": "umbilic_equator",
+      "two_form_partition": null
+    },
+    {
+      "BACL_grain": 2.220446049250313e-16,
+      "E_log2_base_operand": null,
+      "base_operand": null,
+      "c2_lattice_chain_applies": null,
+      "conjecture_c_in_normal_range": null,
+      "coordinates": {
+        "x": 0.5773502691896258,
+        "y": 0.5773502691896258,
+        "z": 0.5773502691896258
+      },
+      "fixture": "sphere_multi_d",
+      "in_sterbenz_cluster": null,
+      "intermediates_for_BACL": [
+        0.3333333333333334,
+        0.3333333333333334,
+        0.3333333333333334,
+        1.0
+      ],
+      "probe_id": "sphere_diagonal",
+      "regime": "umbilic_diagonal",
+      "two_form_partition": null
+    }
+  ],
+  "n_probe_points": 18,
+  "phase": "B",
+  "phase_a_catalogue_sha256": "18bd80e6fc395df076755f792f60c2706dfac4f2eaf6fb4b2e41e77d9cb76a3f",
+  "preregistry": "Build_Docs/Agent_tasks/substrate_invariant_search_phase_b_probe_set.md",
+  "probe_set": {
+    "pure_algebraic_four_form": [
+      {
+        "probe_id": "pa_near_singular",
+        "regime": "near_singular_endpoint",
+        "x": 0.99
+      },
+      {
+        "probe_id": "pa_near_singular_mid",
+        "regime": "mid_regime_high_E",
+        "x": 0.9
+      },
+      {
+        "probe_id": "pa_sterbenz_center",
+        "regime": "inside_sterbenz_cluster_center",
+        "x": 0.45
+      },
+      {
+        "probe_id": "pa_mid",
+        "regime": "mid_regime",
+        "x": 0.5
+      },
+      {
+        "probe_id": "pa_far_from_singular",
+        "regime": "far_from_singular",
+        "x": 0.1
+      }
+    ],
+    "schwarzschild_four_form": [
+      {
+        "probe_id": "schw_horizon_approach",
+        "r": 2.1,
+        "regime": "near_horizon_endpoint"
+      },
+      {
+        "probe_id": "schw_near_horizon",
+        "r": 3.0,
+        "regime": "mid_regime_high_E"
+      },
+      {
+        "probe_id": "schw_sterbenz_center",
+        "r": 4.4,
+        "regime": "inside_sterbenz_cluster_center"
+      },
+      {
+        "probe_id": "schw_mid",
+        "r": 5.0,
+        "regime": "mid_regime_low_E"
+      },
+      {
+        "probe_id": "schw_far_field",
+        "r": 100.0,
+        "regime": "far_from_singular"
+      }
+    ],
+    "sphere_multi_d": [
+      {
+        "probe_id": "sphere_axis",
+        "regime": "umbilic_axis",
+        "x": 1.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      {
+        "probe_id": "sphere_equator_45",
+        "regime": "umbilic_equator",
+        "x": 0.7071067811865476,
+        "y": 0.7071067811865476,
+        "z": 0.0
+      },
+      {
+        "probe_id": "sphere_diagonal",
+        "regime": "umbilic_diagonal",
+        "x": 0.5773502691896258,
+        "y": 0.5773502691896258,
+        "z": 0.5773502691896258
+      }
+    ],
+    "sr_four_form": [
+      {
+        "beta": 0.999,
+        "probe_id": "sr_lightspeed_approach",
+        "regime": "near_singular_endpoint"
+      },
+      {
+        "beta": 0.9,
+        "probe_id": "sr_near_lightspeed",
+        "regime": "mid_regime_high_E"
+      },
+      {
+        "beta": 0.671,
+        "probe_id": "sr_sterbenz_center",
+        "regime": "inside_sterbenz_cluster_center"
+      },
+      {
+        "beta": 0.5,
+        "probe_id": "sr_mid",
+        "regime": "mid_regime_low_E"
+      },
+      {
+        "beta": 0.1,
+        "probe_id": "sr_non_relativistic",
+        "regime": "far_from_singular"
+      }
+    ]
+  },
+  "protocol_placeholders": [
+    {
+      "candidate_id": "F1_to_F2_BACL_phase_signature",
+      "protocol_reference": "MCG Phase 2 (phase_delta_mod_1 classification at F1/F2 route pair)",
+      "scope_in_phase_b": "placeholder",
+      "source_artifact": "Build_Docs/Reports/mcg_geometry_first/phase_2_joined_readback_table.json",
+      "value": "requires_protocol_run"
+    },
+    {
+      "candidate_id": "sigma1_universal_linearization_exponent",
+      "protocol_reference": "Blowup-exponent V4 audit (delta-sweep around probe point + linearization-order fit)",
+      "scope_in_phase_b": "placeholder",
+      "source_artifact": "Build_Docs/Reports/blowup_exponent_v4_audit/closeout.md",
+      "value": "requires_protocol_run"
+    },
+    {
+      "candidate_id": "fingerprint_atlas_distance_metric",
+      "protocol_reference": "Fingerprint atlas Phase delta 6-slot fingerprint computation per probe window",
+      "scope_in_phase_b": "placeholder",
+      "source_artifact": "Build_Docs/Reports/substrate_fingerprint_atlas_phase_delta/closeout.md",
+      "value": "requires_protocol_run"
+    },
+    {
+      "candidate_id": "null_tangent_alignment_unity",
+      "protocol_reference": "Phase 1 geometry table per-row null_tangent_alignment = 1/sqrt(1+J^2)",
+      "scope_in_phase_b": "placeholder",
+      "source_artifact": "Build_Docs/Reports/mcg_geometry_first/phase_1_geometry_table.json",
+      "value": "requires_protocol_run"
+    },
+    {
+      "candidate_id": "F3_calibration_exact_zero",
+      "protocol_reference": "F3 route evaluation (known a priori = 0.0 for in-scope 1-x_term fixtures per IEEE 754 exact cancellation)",
+      "scope_in_phase_b": "placeholder",
+      "source_artifact": "Build_Docs/Reports/mcg_geometry_first/phase_2g_cdef1_calibration.json",
+      "value": "requires_protocol_run"
+    },
+    {
+      "candidate_id": "doubling_ladder_rung_index",
+      "protocol_reference": "BACL-lattice rung population at residual: rung(r) = floor(log2(|r| / ulp))",
+      "scope_in_phase_b": "placeholder",
+      "source_artifact": "Build_Docs/Reports/bacl_invariant_audit/closeout.md",
+      "value": "requires_protocol_run"
+    },
+    {
+      "candidate_id": "v3_minus_2_eigenvalue_319_pts",
+      "protocol_reference": "V3 oracle cross-check (lv3 eigenvalue computation across 319 GR points; non-primary, separate artefact)",
+      "scope_in_phase_b": "placeholder",
+      "source_artifact": "Build_Docs/PROBE_READINESS.md",
+      "value": "requires_protocol_run"
+    }
+  ],
+  "sterbenz_cluster_bounds_log2": [
+    -0.949,
+    -0.75
+  ],
+  "what_phase_b_does_not_claim": [
+    "Phase B does NOT run measurement protocols for F-evaluation-dependent candidates",
+    "Phase B does NOT perform correlation analysis (that is Phase C)",
+    "Phase B does NOT propose elimination of any candidate",
+    "Phase B does NOT invent new candidates beyond Phase A catalogue",
+    "Phase B does NOT modify substrate or architecture files"
+  ]
+}

@@ -1,0 +1,424 @@
+{
+ "authority": "CAMPAIGN_BRIEF_BEYOND_THE_CRADLE.md Arm I + Will's rulings 2026-06-12 (Arm I first; bitwise scope UNBOUNDED, domain seam = typed record mechanism; no names - working labels only) + Stage -1 prior-wins audit",
+ "campaign_id": "beyond_the_cradle_arm_i",
+ "code_pins_sha256": {
+  "fixtures.py": "64e988818d95ba2adb5c4827431b0c32f03c7d276fed13486d0a18ae5ad7a239",
+  "intops.py": "ac6a6bc4a12a34c0802466247d30adfb7962db4f530d85416114239933b8aae9",
+  "schema.py": "461024917e2c4c1b52920c4ac22f2ebb5f4fc70a65cf279b1ad9793a2a161d6d"
+ },
+ "date_stamped_from_machine": "2026-06-12",
+ "economics_pins": {
+  "note": "native-Z referee is free; budgets are record counts + orbit step caps only (brief section 7)",
+  "stage_a_record_budget": 200,
+  "stage_b_record_budget": 120,
+  "stage_c_minstd_observational_cap": 200000,
+  "stage_c_orbit_step_budget_per_fixture": 70000,
+  "stage_d_record_budget": 80
+ },
+ "fixtures": [
+  {
+   "fixture_id": "FXIA1",
+   "fx_class": "FX-I-A",
+   "notes": "canonical composed-wrap chain",
+   "pathology": "add wraps once, mul wraps again \u2014 composed wrap chain; value drifts far from truth, ledger holds it",
+   "program": [
+    [
+     "const",
+     2147483600
+    ],
+    [
+     "add",
+     100
+    ],
+    [
+     "mul",
+     3
+    ],
+    [
+     "sub",
+     7
+    ]
+   ],
+   "width": 32
+  },
+  {
+   "fixture_id": "FXIA2",
+   "fx_class": "FX-I-A",
+   "notes": "",
+   "pathology": "int64 wrap chain (both directions)",
+   "program": [
+    [
+     "const",
+     9223372036854775805
+    ],
+    [
+     "add",
+     5
+    ],
+    [
+     "mul",
+     9
+    ],
+    [
+     "add",
+     -3074457345618258603
+    ]
+   ],
+   "width": 64
+  },
+  {
+   "fixture_id": "FXIA3",
+   "fx_class": "FX-I-A",
+   "notes": "",
+   "pathology": "alternating wrap/unwrap \u2014 discards cancel in truth but each is individually nonzero",
+   "program": [
+    [
+     "const",
+     1073741824
+    ],
+    [
+     "add",
+     1073741824
+    ],
+    [
+     "sub",
+     3
+    ],
+    [
+     "add",
+     1073741824
+    ],
+    [
+     "add",
+     1073741824
+    ],
+    [
+     "sub",
+     2147483648
+    ]
+   ],
+   "width": 32
+  },
+  {
+   "fixture_id": "FXIA4",
+   "fx_class": "FX-I-A",
+   "notes": "the value-tells-nothing exhibit",
+   "pathology": "65536^2 wraps int32 to EXACTLY 0: the value carries no information at all; the ledger carries all of it",
+   "program": [
+    [
+     "const",
+     65536
+    ],
+    [
+     "mul",
+     65536
+    ]
+   ],
+   "width": 32
+  },
+  {
+   "fixture_id": "FXIA5",
+   "fx_class": "FX-I-A",
+   "notes": "",
+   "pathology": "int64 high-word extraction mid-chain",
+   "program": [
+    [
+     "const",
+     81985529216486895
+    ],
+    [
+     "mul",
+     4294967297
+    ],
+    [
+     "add",
+     1
+    ]
+   ],
+   "width": 64
+  },
+  {
+   "div_pairs": [
+    [
+     -7,
+     2
+    ],
+    [
+     7,
+     -2
+    ],
+    [
+     -7,
+     -2
+    ],
+    [
+     7,
+     2
+    ]
+   ],
+   "fixture_id": "FXIB1",
+   "fx_class": "FX-I-B",
+   "notes": "semantics fingerprint battery core",
+   "pathology": "the (-7)//2 family: trunc/floor/euclid disagree exactly when signs do \u2014 three rounding modes on one lattice",
+   "width": 32
+  },
+  {
+   "div_pairs": [
+    [
+     -2147483648,
+     -1
+    ]
+   ],
+   "fixture_id": "FXIB2",
+   "fx_class": "FX-I-B",
+   "notes": "quotient-wrap exhibit",
+   "pathology": "INT_MIN // -1: the quotient itself wraps \u2014 the remainder ledger alone is not enough; the wrap entry completes it",
+   "width": 32
+  },
+  {
+   "div_pairs": [
+    [
+     -4611686018427387907,
+     5
+    ],
+    [
+     4611686018427387907,
+     -5
+    ],
+    [
+     -4611686018427387907,
+     -5
+    ]
+   ],
+   "fixture_id": "FXIB3",
+   "fx_class": "FX-I-B",
+   "notes": "",
+   "pathology": "int64 signed family, large magnitudes",
+   "width": 64
+  },
+  {
+   "fixture_id": "FXIC1",
+   "fx_class": "FX-I-C",
+   "notes": "death boundary pinned at val2==k exactly",
+   "pathology": "val2(a) vs k both sides of the boundary: residue == 0 iff val2(a) >= k \u2014 the integer shift-death biconditional (CL-I2's integer half)",
+   "shift_pairs": [
+    [
+     45056,
+     4
+    ],
+    [
+     45056,
+     12
+    ],
+    [
+     45056,
+     13
+    ],
+    [
+     45056,
+     16
+    ],
+    [
+     1099512676352,
+     20
+    ],
+    [
+     1099512676352,
+     21
+    ]
+   ],
+   "width": 64
+  },
+  {
+   "fixture_id": "FXIC2",
+   "fx_class": "FX-I-C",
+   "notes": "sign coverage",
+   "pathology": "negative operands: two's-complement arithmetic shift discards are still exact and non-negative",
+   "shift_pairs": [
+    [
+     -45056,
+     4
+    ],
+    [
+     -45056,
+     12
+    ],
+    [
+     -45056,
+     13
+    ],
+    [
+     -1,
+     1
+    ],
+    [
+     -1,
+     31
+    ]
+   ],
+   "width": 32
+  },
+  {
+   "fixture_id": "FXIC3",
+   "fx_class": "FX-I-C",
+   "notes": "",
+   "pathology": "MSB-only operand: val2 == w-1 boundary case (width-wrapped negative)",
+   "shift_pairs": [
+    [
+     9223372036854775808,
+     1
+    ]
+   ],
+   "width": 64
+  },
+  {
+   "expected": "full_period",
+   "fixture_id": "FXID1",
+   "fx_class": "FX-I-D",
+   "lcg": {
+    "a": 5,
+    "c": 1,
+    "m": 65536,
+    "seed": 0
+   },
+   "notes": "the bar's positive arm",
+   "pathology": "Hull\u2013Dobell satisfied: full period 65536"
+  },
+  {
+   "expected": "broken_c1",
+   "fixture_id": "FXID2",
+   "fx_class": "FX-I-D",
+   "lcg": {
+    "a": 5,
+    "c": 2,
+    "m": 65536,
+    "seed": 0
+   },
+   "notes": "",
+   "pathology": "c shares a factor with m (condition 1 broken)"
+  },
+  {
+   "expected": "broken_c3",
+   "fixture_id": "FXID3",
+   "fx_class": "FX-I-D",
+   "lcg": {
+    "a": 3,
+    "c": 1,
+    "m": 65536,
+    "seed": 0
+   },
+   "notes": "",
+   "pathology": "a-1 = 2 not divisible by 4 while 4 | m (condition 3 broken)"
+  },
+  {
+   "expected": "broken_c1",
+   "fixture_id": "FXID4",
+   "fx_class": "FX-I-D",
+   "lcg": {
+    "a": 16807,
+    "c": 0,
+    "m": 2147483647,
+    "seed": 1
+   },
+   "notes": "period budget capped; observational",
+   "pathology": "MINSTD multiplicative Lehmer: c = 0 fails condition 1 by construction; the classical full-period story lives in a different theorem \u2014 honest contrast row"
+  },
+  {
+   "expected": "f2_linear_orbit",
+   "fixture_id": "FXID5",
+   "fx_class": "FX-I-D",
+   "notes": "domain_seam = F2 typed on every record",
+   "pathology": "xorshift32: pure F2-linear map \u2014 period = order of the companion matrix; XOR/shift ledger is exact by birth (bitwise scope unbounded per Will's ruling)",
+   "xorshift": {
+    "seed": 1,
+    "shifts": [
+     13,
+     17,
+     5
+    ],
+    "width": 32
+   }
+  },
+  {
+   "cast_ints": [
+    9007199254740993,
+    9007199254740995,
+    -1152921504606859321,
+    9007199254740992,
+    42
+   ],
+   "fixture_id": "FXIE1",
+   "fx_class": "FX-I-E",
+   "notes": "residues pinned by exact Fraction arithmetic",
+   "pathology": "int64 -> float64 above 2^53: rounding residue on an INTEGER input \u2014 the cast is a rounding op and gets a rounding account"
+  },
+  {
+   "cast_floats": [
+    2.75,
+    -2.75,
+    0.5,
+    -0.5,
+    123456789.875
+   ],
+   "fixture_id": "FXIE2",
+   "fx_class": "FX-I-E",
+   "notes": "",
+   "pathology": "float64 -> int truncation: the discarded fraction is the account"
+  },
+  {
+   "fixture_id": "FXIE3",
+   "fx_class": "FX-I-E",
+   "notes": "",
+   "pathology": "mixed pipeline int -> float -> *3 -> trunc -> int: cast residues + float rounding compose; closure graded in exact \u211a end-to-end",
+   "pipeline": {
+    "back": "trunc",
+    "scale": 3,
+    "start": 36028797018963975
+   }
+  },
+  {
+   "fixture_id": "FXIF1",
+   "fx_class": "FX-I-F",
+   "notes": "demo-tier; CL-I6; bitcasts are typed seam events",
+   "pathology": "fast inverse square root: bitcast -> shift -> subtract -> bitcast -> one Newton step, vs the certified route (typed_sqrt + division); the gap exactly accounted per stage, the magic constant's error decomposed",
+   "poster": {
+    "inputs": [
+     1.0,
+     2.0,
+     4.0,
+     0.15625,
+     100.0
+    ],
+    "magic": 1597463007
+   }
+  }
+ ],
+ "freeze_authority": "Will's GO, 2026-06-12 (Stage-0 checkpoint sign-off)",
+ "frozen": true,
+ "governance": "rules 1.1-1.9 standing (1.8 clause embedding binds Stage A+ graders; 1.9 content pins enforced by require_frozen from birth); two-run byte-stability; three-roles separation via the schema role gate; covenant 3.",
+ "manifest_version": 1,
+ "referee": "native Z (Python bignum) for ring ops; exact Q (Fraction) at float seams; Hull-Dobell decided by exact integer arithmetic as the external theorem (CL-I4). V3 oracle NOT APPLICABLE (integer domain; recorded per the oracle-role question).",
+ "semantics_pinned": {
+  "cast_residue": "Fraction(value) + discard == Fraction(true) (int<->float64 casts are rounding ops with exact Q accounts)",
+  "remainder": "q*divisor + discard == dividend under the named semantics; trunc: sign(discard)==sign(dividend) or 0; floor: sign(discard)==sign(divisor) or 0; euclid: 0 <= discard < |divisor|",
+  "seam_bitcast": "lossless reinterpretation; discard == 0 by law; the typed SEAM event records the domain change (mechanism, not fence \u2014 Will 2026-06-12)",
+  "shifted_out_bits": "value*2^k + discard == input, 0 <= discard < 2^k (arithmetic shift; holds for negatives)",
+  "two_complement": "width-w values live in [-2^(w-1), 2^(w-1)); wrap(x) = ((x + 2^(w-1)) mod 2^w) - 2^(w-1)",
+  "wrap": "value + discard*2^w == true Z result (add/sub/shl; mul as high_word)"
+ },
+ "stage0_controls": {
+  "cast_seam": "exact residue; typed overflow refusal",
+  "fxia4_wipeout": "value 0, discard 1 \u2014 ledger carries all",
+  "hull_dobell_pins": "fixture expectations == exact arithmetic",
+  "quotient_wrap": "remainder + wrap entries both present",
+  "schema_gates": "roundtrip; ad-hoc refused; role gate refused",
+  "semantics_split": "trunc/floor/euclid split on signs as pinned",
+  "shift_death": "residue==0 iff val2(a)>=k on boundary samples",
+  "wrap_identity": "holds; corrupted discard fails"
+ },
+ "thesis": "for fixed-width integer and shift operations the discarded complement is exactly representable, lawful under composition, and verdict-bearing; at least one law unifies with a float-side law (CL-I2: shift-death == dyadic death, HR133).",
+ "widths": [
+  32,
+  64
+ ]
+}

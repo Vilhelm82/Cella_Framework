@@ -1,0 +1,45 @@
+{
+  "C": {
+    "A_k": 5,
+    "A_rss": 4.437342591868191e-31,
+    "class": "algebraic_branch",
+    "dAIC": 1873.5409942390615,
+    "dBIC": 1869.544380708536,
+    "nw": "STABLE",
+    "nw_slopes": [
+      0.5299517414723998,
+      0.502801817188763,
+      0.5003004511500353,
+      0.5000375769310144
+    ],
+    "rho_pair": [
+      0.5,
+      1.0
+    ],
+    "sinf": 1.25,
+    "sinf_err": 0.0,
+    "winA": "M_A_algebraic",
+    "winB": "M_A_algebraic"
+  },
+  "D": {
+    "class": "non_algebraic_drift",
+    "dAIC": 1711.166808439375,
+    "nw": "STABLE",
+    "winA": "M_L_logarithmic",
+    "winB": "M_L_logarithmic"
+  },
+  "E": {
+    "class": "non_algebraic_drift",
+    "dAIC": 1749.0489664623246,
+    "dBIC": 1753.0455799928504,
+    "nw": "UNSTABLE",
+    "rejected": true,
+    "winA": "M_E_essential",
+    "winB": "M_E_essential"
+  },
+  "all_pass": true,
+  "artifact_bytes": 36500,
+  "byte_stable": true,
+  "fails": [],
+  "sha256_artifact": "1400781319d313758b9555002764fa08c1b594966558b3b9e7e20acc8bdf9198"
+}

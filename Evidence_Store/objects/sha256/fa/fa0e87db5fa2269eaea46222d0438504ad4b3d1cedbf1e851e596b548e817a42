@@ -1,0 +1,396 @@
+"""
+MCG Gate 3 — Kill-Switch.
+
+Pre-registered 2026-05-19 (binding pre-measurement).
+See Build_Docs/Reports/mcg_gate_3_killswitch/preregistry.md.
+
+Decision arm (interpretation (3), single, terminal):
+    c_schw(r) = round(V_2 + round(x_term − 1))
+    j_BACL    = round(c_schw / ulp(f_float))
+    m_subtracted_residue = c_schw − j_BACL · ulp(f_float)
+    α_raw  = OLS slope of log|c_schw|             vs log(r − 2)
+    α_msub = OLS slope of log|m_subtracted_residue| vs log(r − 2)
+    GREEN ⟺ |α_msub − α_raw| ≤ 0.10 AND fraction_nonzero(m_sub) ≥ 0.50
+    HALT  ⟺ otherwise (terminal)
+
+Positive-control channel (interpretation (1)):
+    BACL_predicted_f_float = j_BACL_for_(1,x_term) · ulp(x_term)
+    f_msub_positive_control = f_float − BACL_predicted_f_float
+    MUST be 0 in all records, else VOID.
+
+Interpretation (2) is excluded by user direction.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import math
+from pathlib import Path
+
+import mpmath
+import numpy as np
+from lloyd_v4.primitives import typed_ulp
+
+
+mpmath.mp.dps = 100
+
+ROOT = Path(__file__).resolve().parents[1]
+REPORT_DIR = ROOT / "Build_Docs" / "Reports" / "mcg_gate_3_killswitch"
+ARTIFACT = REPORT_DIR / "artifact.json"
+
+R_HORIZON = 2.0
+LOG2_DR_MIN = -40
+LOG2_DR_MAX = -2
+N_GRID = 200
+
+
+# ---------------------------------------------------------------------------
+# Substrate primitives
+# ---------------------------------------------------------------------------
+
+
+def ulp_float64(x: float) -> float:
+    """ulp of a float64 value via the ``typed_ulp`` substrate primitive (GAP-003).
+
+    Behaviour change vs the original inline implementation: subnormal inputs
+    now return 2**-1074 instead of underflowing to 0.0 (DRY-003 bug fix; see
+    scratch/dry003_ulp_reconciliation_audit.py for the reconciliation audit
+    that established the canonical behaviour). For finite normal inputs the
+    return value is unchanged.
+    """
+    return float(typed_ulp(x).value.ulp)
+
+
+def integer_j_from_lattice(c: float, lattice_step: float) -> int:
+    """Round c / lattice_step to nearest integer.
+
+    For our fixture c is small and lattice_step is a power-of-two ulp, so the
+    division is exact-or-near-exact and the rounding picks out the correct
+    integer multiple j with no ambiguity. Python's round() uses banker's
+    rounding (RNE) which matches the c2 lattice theorem's evaluation context.
+    """
+    if lattice_step == 0.0:
+        return 0
+    return int(round(c / lattice_step))
+
+
+def positive_control_f_msub(f_float: float, one: float, x_term: float) -> float:
+    """Interpretation (1) positive-control residue.
+
+    BACL on (1, x_term) — if ulp(1) ≥ ulp(x_term), then 1 − x_term = j · ulp(x_term)
+    in real arithmetic. The BACL-predicted lattice value is j · ulp(x_term).
+
+    For r > 2 in the sweep range, the proviso ulp(1) ≥ ulp(x_term) holds and
+    Sterbenz (a subset condition) further guarantees 1 − x_term is exactly
+    representable, so f_float = real(1 − x_term) = j · ulp(x_term) exactly.
+    The residue MUST therefore be 0 identically (any non-zero is VOID).
+    """
+    u_one = ulp_float64(one)
+    u_x = ulp_float64(x_term)
+    if u_one < u_x:
+        return float("nan")
+    j_bacl = integer_j_from_lattice(one - x_term, u_x)
+    predicted = j_bacl * u_x
+    return f_float - predicted
+
+
+# ---------------------------------------------------------------------------
+# Sweep
+# ---------------------------------------------------------------------------
+
+
+def sweep() -> tuple[list[dict], dict]:
+    log2_dr = np.linspace(LOG2_DR_MIN, LOG2_DR_MAX, N_GRID)
+    dr_targets = 2.0 ** log2_dr
+
+    records: list[dict] = []
+    for dr_target in dr_targets:
+        r = R_HORIZON + float(dr_target)
+        dr_actual = r - R_HORIZON
+
+        x_term = 2.0 / r              # round(2 / r)
+        f_float = 1.0 - x_term        # round(1 − x_term); Sterbenz-exact in this range
+        R = math.sqrt(f_float)        # correctly-rounded sqrt (IEEE 754-2019 §5.4.1)
+        V_2 = R * R                   # round(R · R)
+        delta_term = x_term - 1.0     # round(x_term − 1); Sterbenz-exact, = −f_float
+        c_schw = V_2 + delta_term     # round(V_2 + round(x_term − 1))
+
+        u_f = ulp_float64(f_float)
+        u_x = ulp_float64(x_term)
+        u_V2 = ulp_float64(V_2)
+        u_one = ulp_float64(1.0)
+
+        # Decision arm M-subtraction
+        j_BACL = integer_j_from_lattice(c_schw, u_f)
+        m_sub_residue = c_schw - j_BACL * u_f
+
+        # Positive control
+        f_msub = positive_control_f_msub(f_float, 1.0, x_term)
+
+        # BACL provisos
+        proviso_1 = bool(u_one >= u_x)
+        proviso_c = bool(u_V2 >= u_f)
+
+        records.append({
+            "r": r,
+            "r_minus_horizon": dr_actual,
+            "x_term": x_term,
+            "f_float": f_float,
+            "R": R,
+            "V_2": V_2,
+            "c_schw": c_schw,
+            "ulp_f_float": u_f,
+            "j_BACL_integer": j_BACL,
+            "m_subtracted_residue": m_sub_residue,
+            "f_msub_positive_control": f_msub,
+            "bacl_proviso_1_subtraction_holds": proviso_1,
+            "bacl_proviso_c_schw_subtraction_holds": proviso_c,
+            "v4_validity": {
+                "defined": True,
+                "finite": (
+                    math.isfinite(c_schw)
+                    and math.isfinite(m_sub_residue)
+                    and math.isfinite(f_msub)
+                ),
+                "selectable": True,
+                "advanceable": True,
+                "observable": True,
+                "policy_accepted": True,
+            },
+        })
+
+    sweep_meta = {
+        "n_grid": N_GRID,
+        "log2_dr_min": LOG2_DR_MIN,
+        "log2_dr_max": LOG2_DR_MAX,
+        "spacing": "log2-uniform",
+        "horizon_r_value": R_HORIZON,
+    }
+    return records, sweep_meta
+
+
+# ---------------------------------------------------------------------------
+# σ1 fit
+# ---------------------------------------------------------------------------
+
+
+def sigma1_fit(records: list[dict], y_key: str) -> tuple[float | None, float | None, int]:
+    """OLS slope of log|y| vs log(r − r_h). Returns (slope, R², n_nonzero_records).
+
+    Per preregistry §3.1, records with |y| = 0 or non-finite y are dropped.
+    """
+    xs: list[float] = []
+    ys: list[float] = []
+    for rec in records:
+        y = rec[y_key]
+        dr = rec["r_minus_horizon"]
+        if y is None or not math.isfinite(y):
+            continue
+        if y == 0.0:
+            continue
+        if dr <= 0.0:
+            continue
+        xs.append(math.log(dr))
+        ys.append(math.log(abs(y)))
+    n = len(xs)
+    if n < 5:
+        return None, None, n
+    xs_np = np.array(xs)
+    ys_np = np.array(ys)
+    slope, intercept = np.polyfit(xs_np, ys_np, 1)
+    y_pred = slope * xs_np + intercept
+    ss_res = float(np.sum((ys_np - y_pred) ** 2))
+    ss_tot = float(np.sum((ys_np - np.mean(ys_np)) ** 2))
+    r_squared = (1.0 - ss_res / ss_tot) if ss_tot > 0 else None
+    return float(slope), r_squared, n
+
+
+# ---------------------------------------------------------------------------
+# Decision rule (FROZEN, terminal)
+# ---------------------------------------------------------------------------
+
+
+def apply_decision_rule(
+    alpha_raw: float | None,
+    alpha_msub: float | None,
+    frac_nonzero_msub: float,
+    positive_control_void: bool,
+) -> tuple[str, str]:
+    if positive_control_void:
+        return "VOID", (
+            "positive_control_channel_produced_nonzero_records;"
+            "_harness_broken;_fix_and_rerun"
+        )
+
+    # HALT branch A: m_subtracted_residue collapsed
+    if frac_nonzero_msub < 0.50:
+        return "HALT", (
+            f"fraction_nonzero_m_subtracted_residue={frac_nonzero_msub:.6f}_below_0.50_threshold;"
+            "_sigma_1_vanishes_under_M_subtraction;"
+            "_candidate_G_observable_was_substrate_universality_masquerade"
+        )
+
+    if alpha_raw is None:
+        return "VOID", (
+            "alpha_raw_unfittable_below_5_nonzero_records;"
+            "_harness_or_fixture_problem"
+        )
+
+    if alpha_msub is None:
+        return "HALT", (
+            "alpha_msub_unfittable_below_5_nonzero_records;"
+            "_sigma_1_vanishes_under_M_subtraction;"
+            "_candidate_G_observable_was_substrate_universality_masquerade"
+        )
+
+    delta = abs(alpha_msub - alpha_raw)
+    if delta <= 0.10:
+        return "GREEN", (
+            f"alpha_raw={alpha_raw:.6f};_alpha_msub={alpha_msub:.6f};"
+            f"_abs_delta={delta:.6f}_below_threshold_0.10;"
+            "_sigma_1_survives_M_subtraction;_G_plausibly_real_post_decomposition"
+        )
+    return "HALT", (
+        f"alpha_raw={alpha_raw:.6f};_alpha_msub={alpha_msub:.6f};"
+        f"_abs_delta={delta:.6f}_exceeds_threshold_0.10;"
+        "_sigma_1_changes_substantially_under_M_subtraction;"
+        "_candidate_G_observable_was_substrate_universality_masquerade"
+    )
+
+
+# ---------------------------------------------------------------------------
+# Aggregate + predictions audit + I/O
+# ---------------------------------------------------------------------------
+
+
+def aggregate(records: list[dict]) -> dict:
+    n = len(records)
+    alpha_raw, r2_raw, n_nz_raw = sigma1_fit(records, "c_schw")
+    alpha_msub, r2_msub, n_nz_msub = sigma1_fit(records, "m_subtracted_residue")
+
+    frac_nz_c_schw = n_nz_raw / n
+    frac_nz_msub = n_nz_msub / n
+    frac_nz_pc = sum(
+        1
+        for rec in records
+        if rec["f_msub_positive_control"] is not None
+        and math.isfinite(rec["f_msub_positive_control"])
+        and rec["f_msub_positive_control"] != 0.0
+    ) / n
+
+    positive_control_void = frac_nz_pc > 0.0
+
+    bacl_coverage = sum(
+        1
+        for rec in records
+        if rec["bacl_proviso_1_subtraction_holds"]
+        and rec["bacl_proviso_c_schw_subtraction_holds"]
+    ) / n
+
+    verdict, reasoning = apply_decision_rule(
+        alpha_raw, alpha_msub, frac_nz_msub, positive_control_void
+    )
+
+    delta_alpha = (
+        abs(alpha_msub - alpha_raw)
+        if (alpha_msub is not None and alpha_raw is not None)
+        else None
+    )
+
+    aggregator = {
+        "fixture": "schwarzschild_horizon_approach_f_eq_1_minus_2_over_r",
+        "r_grid_points": n,
+        "r_minus_horizon_range": [
+            float(2.0 ** LOG2_DR_MIN),
+            float(2.0 ** LOG2_DR_MAX),
+        ],
+        "alpha_raw": alpha_raw,
+        "alpha_raw_r_squared": r2_raw,
+        "alpha_msub": alpha_msub,
+        "alpha_msub_r_squared": r2_msub,
+        "alpha_raw_minus_alpha_msub_abs": delta_alpha,
+        "fraction_nonzero_c_schw": frac_nz_c_schw,
+        "fraction_nonzero_m_subtracted_residue": frac_nz_msub,
+        "fraction_nonzero_f_msub_positive_control": frac_nz_pc,
+        "bacl_coverage_fraction": bacl_coverage,
+        "scope_limited": bacl_coverage < 1.0,
+        "verdict": verdict,
+        "verdict_reasoning": reasoning,
+    }
+
+    # Pre-registered predictions audit (informational; verdict not modified)
+    aggregator["pre_registered_predictions_audit"] = {
+        "EP_1_alpha_raw_near_1": {
+            "predicted": "alpha_raw ≈ 1.000 ± 0.05",
+            "measured": alpha_raw,
+            "satisfied": (alpha_raw is not None) and (abs(alpha_raw - 1.0) <= 0.05),
+        },
+        "EP_2_msub_residue_zero_majority": {
+            "predicted": ">= 90% of records have m_subtracted_residue = 0",
+            "measured_fraction_zero": 1.0 - frac_nz_msub,
+            "satisfied": (1.0 - frac_nz_msub) >= 0.90,
+        },
+        "EP_3_alpha_msub_undefined_or_zero": {
+            "predicted": "alpha_msub undefined or effectively zero",
+            "measured": alpha_msub,
+            "satisfied": (alpha_msub is None) or (abs(alpha_msub) < 0.10),
+        },
+        "EP_4_verdict_halt": {
+            "predicted": "HALT",
+            "measured": verdict,
+            "satisfied": verdict == "HALT",
+        },
+        "EP_5_bacl_coverage_unity": {
+            "predicted": "BACL coverage = 1.000",
+            "measured": bacl_coverage,
+            "satisfied": bacl_coverage == 1.0,
+        },
+        "EP_6_positive_control_trivial_zero": {
+            "predicted": "f_msub_positive_control = 0 in all records",
+            "measured_fraction_nonzero": frac_nz_pc,
+            "satisfied": frac_nz_pc == 0.0,
+        },
+    }
+
+    return aggregator
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", default=str(ARTIFACT))
+    args = parser.parse_args()
+
+    REPORT_DIR.mkdir(parents=True, exist_ok=True)
+    records, sweep_meta = sweep()
+    aggregator = aggregate(records)
+
+    output = {
+        "audit_name": "mcg_gate_3_killswitch",
+        "preregistry_frozen": "2026-05-19",
+        "sweep_meta": sweep_meta,
+        "records": records,
+        "aggregator": aggregator,
+    }
+
+    Path(args.output).write_text(json.dumps(output, indent=2, sort_keys=True))
+
+    a = aggregator
+    print(f"Gate 3 artifact written to {args.output}")
+    print(f"  verdict: {a['verdict']}")
+    print(f"  reasoning: {a['verdict_reasoning']}")
+    print(f"  alpha_raw : {a['alpha_raw']} (R²={a['alpha_raw_r_squared']})")
+    print(f"  alpha_msub: {a['alpha_msub']} (R²={a['alpha_msub_r_squared']})")
+    print(f"  |Δα|      : {a['alpha_raw_minus_alpha_msub_abs']}")
+    print(f"  fraction nonzero c_schw            : {a['fraction_nonzero_c_schw']:.6f}")
+    print(f"  fraction nonzero m_sub residue     : {a['fraction_nonzero_m_subtracted_residue']:.6f}")
+    print(f"  fraction nonzero positive control  : {a['fraction_nonzero_f_msub_positive_control']:.6f}")
+    print(f"  BACL coverage                      : {a['bacl_coverage_fraction']:.6f}")
+    print()
+    print(f"  Pre-registered predictions audit:")
+    for ep_id, ep in a["pre_registered_predictions_audit"].items():
+        status = "PASS" if ep["satisfied"] else "FAIL"
+        print(f"    {ep_id}: {status}  (predicted: {ep['predicted']})")
+
+
+if __name__ == "__main__":
+    main()

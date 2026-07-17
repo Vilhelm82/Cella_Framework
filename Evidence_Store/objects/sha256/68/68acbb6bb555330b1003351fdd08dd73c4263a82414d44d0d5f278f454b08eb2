@@ -1,0 +1,55 @@
+"""Exhaustive contiguous-block check for CLAIM 2 (vectorized for speed).
+Checks EVERY subnormal mantissa in large contiguous blocks at both ends and
+several interior binades, vectorized with numpy. Reports total exhaustively checked.
+"""
+from __future__ import annotations
+import numpy as np
+
+ULP = 2.0 ** -1074
+MAXM = (1 << 52) - 1
+
+
+def exhaustive_block(m_lo: int, m_hi: int, chunk: int = 5_000_000) -> tuple[int, int]:
+    """Check every m in [m_lo, m_hi] inclusive. Build f via uint64 bit-reinterpret."""
+    total = 0
+    bad = 0
+    m = m_lo
+    while m <= m_hi:
+        top = min(m + chunk - 1, m_hi)
+        ms = np.arange(m, top + 1, dtype=np.uint64)
+        f = ms.view(np.float64)            # subnormal: exponent 0, mantissa=m => f=m*2^-1074
+        R = np.sqrt(f)
+        V = R * R
+        n_bad = int(np.count_nonzero(V != f))
+        bad += n_bad
+        total += ms.size
+        if n_bad:
+            idx = np.nonzero(V != f)[0]
+            for i in idx[:10]:
+                mm = int(ms[i])
+                print(f"   COUNTEREXAMPLE m={mm} f={float(f[i]).hex()} R={float(R[i]).hex()} V={float(V[i]).hex()} j={(float(V[i])-float(f[i]))/ULP}")
+        m = top + 1
+    return total, bad
+
+
+def main():
+    grand = 0
+    grand_bad = 0
+    # Bottom 30M subnormals (exhaustive)
+    t, b = exhaustive_block(1, 30_000_000)
+    print(f"[exhaustive m=1..30,000,000] checked={t} bad={b}")
+    grand += t; grand_bad += b
+    # Top 30M subnormals near 2^-1022 seam (exhaustive)
+    t, b = exhaustive_block(MAXM - 30_000_000 + 1, MAXM)
+    print(f"[exhaustive top 30M near seam] checked={t} bad={b}")
+    grand += t; grand_bad += b
+    # An interior contiguous block around mid-range
+    mid = MAXM // 2
+    t, b = exhaustive_block(mid, mid + 30_000_000 - 1)
+    print(f"[exhaustive interior 30M @ m~2^51] checked={t} bad={b}")
+    grand += t; grand_bad += b
+    print(f"\nGRAND TOTAL exhaustively checked = {grand}, counterexamples = {grand_bad}")
+
+
+if __name__ == "__main__":
+    main()

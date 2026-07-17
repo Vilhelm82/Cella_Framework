@@ -1,0 +1,227 @@
+"""Choptuik Step 2 honesty audit: pure-power-law control.
+
+QUESTION: is the matched-filter SNR in choptuik_step2_amr_noise.py honest, or
+is it leakage-dominated by structure of the noise/window/projection rather
+than actual DSS content?
+
+TEST: generate residuals from a PURE POWER LAW (no DSS modulation), apply
+the same OLS-style residual extraction, the same matched-filter projection
+at the same predicted omega = 4*pi*gamma/Delta, and the same median-
+background SNR formula. Sweep the same noise levels as the original.
+
+EXPECTED if the matched filter is honest:
+  - SNR near 0 dB (no signal at predicted omega when no DSS is present)
+  - matched_amplitude near 0 (or scales with noise but stays small)
+  - detection_verdict = 'not_detected' across the board
+
+EXPECTED if the matched filter is leakage-dominated:
+  - SNR still ~15 dB even on pure power law
+  - detection_verdict = 'detected' on signals containing no DSS
+"""
+
+from __future__ import annotations
+
+import json
+import math
+import random
+import struct as _struct
+from pathlib import Path
+
+
+# Same parameters as choptuik_step2_amr_noise.py
+GAMMA = 0.374
+DELTA = 3.445
+P_LN = DELTA / (2.0 * GAMMA)
+ANGULAR_FREQ = 4.0 * math.pi * GAMMA / DELTA
+REFINEMENT_RATIO = 2.0
+NOISE_SEED = 42
+
+N_POINTS = 100
+EPS_START = 1e-2
+EPS_END = 1e-12
+
+log_start = math.log10(EPS_START)
+log_end = math.log10(EPS_END)
+EPS_GRID = tuple(
+    10.0 ** (log_start + (log_end - log_start) * i / (N_POINTS - 1))
+    for i in range(N_POINTS)
+)
+
+
+def _stable_int_seed(*parts) -> int:
+    s = "|".join(str(p) for p in parts)
+    h = 0
+    for ch in s.encode("utf-8"):
+        h = (h * 1000003 + ch) & 0x7FFFFFFFFFFFFFFF
+    return h
+
+
+def amr_noise_factor(eps, baseline_level, jump_level,
+                     refinement_ratio=REFINEMENT_RATIO, seed=NOISE_SEED):
+    refinement_level = int(-math.log(eps) / math.log(refinement_ratio))
+    rng_jump = random.Random(_stable_int_seed(seed, "jump", refinement_level))
+    jump_contribution = jump_level * rng_jump.gauss(0.0, 1.0)
+    eps_bits = _struct.unpack("<Q", _struct.pack("<d", eps))[0]
+    rng_white = random.Random(_stable_int_seed(seed, "white", eps_bits))
+    white_contribution = baseline_level * rng_white.gauss(0.0, 1.0)
+    return jump_contribution + white_contribution
+
+
+def pure_power_law_clean(eps):
+    """g(eps) = eps^gamma. NO DSS modulation."""
+    return eps ** GAMMA
+
+
+def pure_power_law_noisy(eps, baseline_level, jump_level):
+    clean = pure_power_law_clean(eps)
+    noise = amr_noise_factor(eps, baseline_level, jump_level)
+    return clean * (1.0 + noise)
+
+
+def residual_spectral_fit_control(baseline_level, jump_level, gamma_assumed=GAMMA):
+    log_g_values = [math.log(abs(pure_power_law_noisy(eps, baseline_level, jump_level)))
+                    for eps in EPS_GRID]
+    log_eps_values = [math.log(eps) for eps in EPS_GRID]
+    mean_log_g = sum(log_g_values) / len(log_g_values)
+    mean_log_eps = sum(log_eps_values) / len(log_eps_values)
+    intercept = mean_log_g - gamma_assumed * mean_log_eps
+    residuals = [log_g - gamma_assumed * log_eps - intercept
+                 for log_g, log_eps in zip(log_g_values, log_eps_values)]
+    n = len(residuals)
+
+    def _project(omega):
+        Bc = (2.0 / n) * sum(residuals[i] * math.cos(omega * log_eps_values[i]) for i in range(n))
+        Bs = (2.0 / n) * sum(residuals[i] * math.sin(omega * log_eps_values[i]) for i in range(n))
+        return Bc, Bs, Bc * Bc + Bs * Bs
+
+    wide_omega_grid = [0.3 + 0.0025 * i for i in range(int((3.5 - 0.3) / 0.0025) + 1)]
+    wide_powers = [_project(om)[2] for om in wide_omega_grid]
+
+    Bc_match, Bs_match, power_match = _project(ANGULAR_FREQ)
+    matched_amplitude = math.sqrt(power_match)
+    median_bg = sorted(wide_powers)[len(wide_powers) // 2]
+    if median_bg > 0 and power_match > 0:
+        matched_snr_db = 10.0 * math.log10(power_match / median_bg)
+    elif power_match == 0:
+        matched_snr_db = float("-inf")
+    else:
+        matched_snr_db = float("inf")
+
+    detection = ("detected" if matched_amplitude > 3.0 * math.sqrt(median_bg)
+                 else "marginal" if matched_amplitude > math.sqrt(median_bg)
+                 else "not_detected")
+
+    residual_rms = math.sqrt(sum(r * r for r in residuals) / n)
+
+    return {
+        "baseline_level": baseline_level,
+        "jump_level": jump_level,
+        "residual_rms": residual_rms,
+        "matched_amplitude": matched_amplitude,
+        "matched_power": power_match,
+        "median_background_power": median_bg,
+        "matched_snr_db": matched_snr_db,
+        "detection_verdict": detection,
+    }
+
+
+def main():
+    print("=" * 100)
+    print("Choptuik Step 2 honesty audit: pure-power-law control")
+    print("=" * 100)
+    print(f"Signal: g(eps) = eps^{GAMMA}  (NO DSS modulation)")
+    print(f"Matched filter at predicted omega = 4*pi*gamma/Delta = {ANGULAR_FREQ:.6f}")
+    print(f"True P_ln = {P_LN:.4f}")
+    print()
+    print("Comparison reference (from choptuik_step2_results.json):")
+    print("  no noise:    SNR=19.4 dB  matched_amp=0.102")
+    print("  0.1% noise:  SNR=14.9 dB  matched_amp=0.106")
+    print("  1% noise:    SNR=14.9 dB  matched_amp=0.111")
+    print("  5% noise:    SNR=14.6 dB  matched_amp=0.132")
+    print("  10% noise:   SNR=13.2 dB  matched_amp=0.161")
+    print()
+
+    noise_cases = [
+        (0.000, 0.000, "no noise (machine epsilon residuals)"),
+        (0.001, 0.000, "white only, 0.1%"),
+        (0.000, 0.001, "jump only, 0.1%"),
+        (0.001, 0.001, "both at 0.1%"),
+        (0.005, 0.005, "both at 0.5%"),
+        (0.010, 0.010, "both at 1%"),
+        (0.020, 0.020, "both at 2%"),
+        (0.050, 0.050, "both at 5%"),
+        (0.100, 0.100, "both at 10%"),
+    ]
+
+    print(f"{'baseline':>9} {'jump':>9} {'desc':38s} {'res_rms':>11} {'match_amp':>12} {'med_bg':>13} {'match_SNR':>12} {'verdict':>14}")
+    print("-" * 140)
+
+    results = []
+    for baseline, jump, desc in noise_cases:
+        spec = residual_spectral_fit_control(baseline, jump)
+        results.append({**spec, "description": desc})
+        if math.isfinite(spec['matched_snr_db']):
+            snr_str = f"{spec['matched_snr_db']:>10.2f}dB"
+        else:
+            snr_str = f"{'inf' if spec['matched_snr_db'] > 0 else '-inf':>12s}"
+        print(f"{baseline:>9.4f} {jump:>9.4f} {desc:38s} "
+              f"{spec['residual_rms']:>11.3e} {spec['matched_amplitude']:>12.4e} "
+              f"{spec['median_background_power']:>13.4e} "
+              f"{snr_str} {spec['detection_verdict']:>14s}")
+
+    print()
+    print("=" * 100)
+    print("VERDICT")
+    print("=" * 100)
+
+    nonzero_snrs = [r['matched_snr_db'] for r in results
+                    if (r['baseline_level'] > 0 or r['jump_level'] > 0)
+                    and math.isfinite(r['matched_snr_db'])]
+    if nonzero_snrs:
+        avg_nonzero_snr = sum(nonzero_snrs) / len(nonzero_snrs)
+        print(f"Average matched-SNR across nonzero-noise cases (pure power law): {avg_nonzero_snr:.2f} dB")
+        print(f"For comparison, original Step 2 plateau was: ~14.6 to 14.9 dB")
+        print()
+        if avg_nonzero_snr > 10.0:
+            print(">>> LEAKAGE-DOMINATED: pure-power-law residuals produce SNR comparable")
+            print(">>> to the noisy-DSS case. The matched filter does not distinguish DSS")
+            print(">>> from no-DSS. The Step 2 SNR plateau reported earlier is not measuring")
+            print(">>> signal-to-noise honestly.")
+        elif avg_nonzero_snr > 3.0:
+            print(">>> AMBIGUOUS: pure-power-law SNRs are elevated but not at the plateau level.")
+            print(">>> The matched filter has some leakage but may still distinguish DSS at")
+            print(">>> moderate-strength signals.")
+        else:
+            print(">>> HONEST: pure-power-law SNRs collapse to near zero. The matched filter")
+            print(">>> requires actual DSS content to fire. The Step 2 plateau was real signal.")
+
+    detection_counts = {"detected": 0, "marginal": 0, "not_detected": 0}
+    for r in results:
+        if r['baseline_level'] > 0 or r['jump_level'] > 0:
+            detection_counts[r['detection_verdict']] += 1
+    n_nonzero = sum(detection_counts.values())
+    print()
+    print(f"Detection verdict on pure power law (nonzero-noise cases, n={n_nonzero}):")
+    for verdict, count in detection_counts.items():
+        print(f"  {verdict:>14s}: {count}")
+
+    out_path = Path(__file__).parent / "choptuik_step2_pure_noise_control_results.json"
+    with out_path.open("w") as fh:
+        json.dump({
+            "test": "pure_power_law_control",
+            "description": "matched filter applied to pure-power-law signal (no DSS); falsifies whether Step 2 SNR plateau is honest signal-to-noise or leakage-dominated",
+            "parameters": {
+                "gamma": GAMMA, "delta": DELTA, "P_ln": P_LN,
+                "angular_freq": ANGULAR_FREQ,
+            },
+            "sweep": {
+                "n_points": N_POINTS, "eps_start": EPS_START, "eps_end": EPS_END,
+            },
+            "reference_step2_snr_plateau_db": [14.87, 14.86, 14.77, 14.85, 14.85, 14.61, 13.16],
+            "results": results,
+        }, fh, indent=2)
+    print(f"\nResults: {out_path}")
+
+
+if __name__ == "__main__":
+    main()

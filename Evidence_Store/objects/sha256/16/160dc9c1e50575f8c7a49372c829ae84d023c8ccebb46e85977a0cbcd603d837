@@ -1,0 +1,39 @@
+# Fold-Readback Probe 0 v10 SR Path-Separation Closeout
+
+Old accepted label: `active_handoff_gap_resolved`
+Corrected accepted outcome: `active_handoff_gap_unresolved_zero_separation`
+
+## Required Answers
+
+1. ARM-W still entered warning or below-floor near the SR singular endpoint: `True`.
+   Near-endpoint band checked: beta in [`0.9052772058823529`, `0.9999`].
+   ARM-W state counts: `{'readable': 13, 'warning': 5, 'below_floor': 19, 'recovered': 4, 'underpopulated': 0}`.
+2. ARM-N still activated from ARM-W falloff telemetry: `True`.
+3. ARM-N still produced valid reads inside ARM-W core-gap intervals: `True` (`13` contexts).
+4. ARM-N path/operand separation from ARM-W in valid core-gap reads: `False`.
+   Separation classes: `{'nonzero_operand_offset': 0, 'zero_operand_offset': 13, 'same_path_duplicate': 0, 'path_distinct_operand_equal': 0, 'separation_unobservable': 0, 'separation_not_applicable': 0}`.
+5. Nonzero offset levels in local lattice units: `[0.0]`.
+6. Previous gap-resolved label downgraded because separation was zero/unproven: `True`.
+7. Exact-zero and matched-affine controls remained silent: `True`.
+8. Partition invariance held: `True`; guard invariance held: `True`.
+9. Corrected accepted outcome label: `active_handoff_gap_unresolved_zero_separation`.
+
+## Interpretation
+
+ARM-N made the gap readable but did not prove independent resolution. The valid ARM-N core-gap reads use the same SR `F4_float64` readback surface as ARM-W and the measured operand offset is zero in the declared `ulp(1-beta^2)` lattice unit.
+
+No double-precision, precision-doubling, or half-ULP resolution claim is made by this audit.
+
+## Verification
+
+- `PYTHONPATH=src python scratch/run_foldreadback_probe0_v10_active_dualarm.py --sr-pathsep`
+  Result: passed; accepted_outcome=active_handoff_gap_unresolved_zero_separation.
+- `PYTHONPATH=src python -m pytest tests/test_foldreadback_probe0_v10_sr_pathsep.py -q`
+  Result: passed; 9 tests.
+- `PYTHONPATH=src python -m pytest tests/test_foldreadback_probe0_v10_sr_pathsep.py tests/test_foldreadback_probe0_v10_sr.py tests/test_foldreadback_probe0_v10_active_dualarm.py tests/test_task027_sr_four_form_cross_fixture.py::test_beta_grid_deterministic_and_bounded tests/test_task027_sr_four_form_cross_fixture.py::test_F3_sr_is_identically_zero tests/test_task027_sr_four_form_cross_fixture.py::test_sr_four_form_byte_stable -q`
+  Result: passed; 34 tests.
+
+## Artifacts
+
+- `Build_Docs/Reports/foldreadback_probe0_v10_active_dualarm/artifact_v10_sr_pathsep.json`
+- `Build_Docs/Reports/foldreadback_probe0_v10_active_dualarm/closeout_v10_sr_pathsep.md`

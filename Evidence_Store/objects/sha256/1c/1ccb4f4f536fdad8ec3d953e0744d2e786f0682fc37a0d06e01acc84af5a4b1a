@@ -1,0 +1,169 @@
+{
+  "ladder": [
+    "float32",
+    "float64",
+    "float128",
+    "decimal_30",
+    "decimal_50",
+    "decimal_80",
+    "decimal_120"
+  ],
+  "n_cells": 2047,
+  "path": "F2",
+  "per_tier": {
+    "decimal_120": {
+      "frac_nonzero": 0.41182217879824135,
+      "max_abs_residual_over_u_p": 0.2,
+      "n_nonzero": 843,
+      "n_total": 2047,
+      "residual_over_u_p_histogram_top": [
+        [
+          0.0,
+          1204
+        ],
+        [
+          0.2,
+          425
+        ],
+        [
+          -0.2,
+          418
+        ]
+      ],
+      "u_p": 5e-120
+    },
+    "decimal_30": {
+      "frac_nonzero": 0.4049829018075232,
+      "max_abs_residual_over_u_p": 0.2,
+      "n_nonzero": 829,
+      "n_total": 2047,
+      "residual_over_u_p_histogram_top": [
+        [
+          0.0,
+          1218
+        ],
+        [
+          0.2,
+          440
+        ],
+        [
+          -0.2,
+          389
+        ]
+      ],
+      "u_p": 5e-30
+    },
+    "decimal_50": {
+      "frac_nonzero": 0.4211040547142159,
+      "max_abs_residual_over_u_p": 0.2,
+      "n_nonzero": 862,
+      "n_total": 2047,
+      "residual_over_u_p_histogram_top": [
+        [
+          0.0,
+          1185
+        ],
+        [
+          -0.2,
+          441
+        ],
+        [
+          0.2,
+          421
+        ]
+      ],
+      "u_p": 5e-50
+    },
+    "decimal_80": {
+      "frac_nonzero": 0.4142647777234978,
+      "max_abs_residual_over_u_p": 0.2,
+      "n_nonzero": 848,
+      "n_total": 2047,
+      "residual_over_u_p_histogram_top": [
+        [
+          0.0,
+          1199
+        ],
+        [
+          0.2,
+          433
+        ],
+        [
+          -0.2,
+          415
+        ]
+      ],
+      "u_p": 5e-80
+    },
+    "float128": {
+      "frac_nonzero": 0.41866145578895947,
+      "max_abs_residual_over_u_p": 1.0,
+      "n_nonzero": 857,
+      "n_total": 2047,
+      "residual_over_u_p_histogram_top": [
+        [
+          0.0,
+          1190
+        ],
+        [
+          -1.0,
+          431
+        ],
+        [
+          1.0,
+          426
+        ]
+      ],
+      "u_p": 5.421010862427522e-20
+    },
+    "float32": {
+      "frac_nonzero": 0.41035661944308743,
+      "max_abs_residual_over_u_p": 1.0,
+      "n_nonzero": 840,
+      "n_total": 2047,
+      "residual_over_u_p_histogram_top": [
+        [
+          0.0,
+          1207
+        ],
+        [
+          1.0,
+          424
+        ],
+        [
+          -1.0,
+          416
+        ]
+      ],
+      "u_p": 5.960464477539063e-08
+    },
+    "float64": {
+      "frac_nonzero": 0.41866145578895947,
+      "max_abs_residual_over_u_p": 1.0,
+      "n_nonzero": 857,
+      "n_total": 2047,
+      "residual_over_u_p_histogram_top": [
+        [
+          0.0,
+          1190
+        ],
+        [
+          1.0,
+          437
+        ],
+        [
+          -1.0,
+          420
+        ]
+      ],
+      "u_p": 1.1102230246251565e-16
+    }
+  },
+  "region": "sterbenz (engineered dyadic, x in (0,1/2), bits=12)",
+  "task": "retestA_f2_residual_floor_diagnosis",
+  "verdict": {
+    "all_tiers_residual_within_8_ulp": true,
+    "interpretation": "Each precision tier's F2 Sterbenz residual is at that tier's own rounding floor: |residual| <= a few ULP of the tier, with sign set by sqrt rounding parity. residual_p ~ c_p * u_p, c_p a small parity-random integer. Therefore C_p = residual_p ~ c_p*u_p, and a per-cell linear fit C = a + u_p*b yields b ~ c_p (the floor coefficient), NOT an identifiable path-conditioning amplitude. This is the SAME degeneracy Phase 2A reported for float128 -- exact rationals merely expose it at every tier instead of hiding it as a single nonzero tier.",
+    "max_abs_residual_over_u_p_overall": 1.0
+  }
+}

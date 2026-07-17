@@ -1,0 +1,103 @@
+# Observability Rule Audit — F4 in the Unobservable Region
+
+Date: 2026-05-17.
+Audit code: `scratch/observability_rule_audit_F4.py`.
+Artifact: `artifact.json`.
+
+## 1. Question
+
+The current observability rule (`e_f < e_x` in `creg`) filters 96 of 137 SR grid points as "blind" — the apparatus declines to measure them. Does F4's microscope-precision form actually carry **structured signal** in that excluded region, or just rounding noise?
+
+If structured signal exists, the observability rule could be extended; if it's noise, the rule is correctly tuned for the existing instrument set.
+
+## 2. Method
+
+For all 137 SR betas (full unfiltered grid):
+- Compute F1, F2, F3, F4 residuals via `four_form_float64`.
+- Compute lattice levels `L = round(F / ulp(f))`.
+- Split records into observable (41 records, β ≥ 0.7088) and unobservable (96 records, β < 0.7088).
+- Per region per form: count non-zero residuals, std, magnitude range, lag-1 autocorrelation, sign-run lengths.
+- Run computation twice; verify byte-identical output.
+
+## 3. Reproducibility
+
+✓ Byte-identical across two runs.
+
+## 4. Per-form analysis
+
+### F4 (the candidate microscope for rule extension)
+
+| Region | Non-zero | Max \|F4\| | Lag-1 corr | Sign runs |
+|---|---|---|---|---|
+| **Unobservable** (β = 0.01–0.70, 96 records) | 13 (13.5%) | 1.11e-16 (~1 ULP) | -0.086 | 26 runs, max=15 |
+| **Observable** (β = 0.71–0.9999, 41 records) | 14 (34.1%) | 1.776e-15 (~16 ULP) | -0.122 | 14 runs, max=14 |
+
+**Key contrast:** F4's max magnitude is **16× larger in the observable region**. In the unobservable region, residuals are at the single-ULP level — the floor of float64 representability. In the observable region, F4 reaches 16 ULP — clearly above the noise floor.
+
+Densified-grid extension (see v11 closeout): in β ∈ [0.99, 0.9999], F4 reaches **±505,856 ULP**. The magnitude grows monotonically toward the singularity. **That's the structured signal — magnitude profile vs β.**
+
+### F2 (the wide lens — surprise finding)
+
+| Region | Non-zero | Max \|F2\| | Lag-1 corr | Pearson corr with β² |
+|---|---|---|---|---|
+| **Unobservable** | 86 (89.6%) | 1.67e-16 | -0.158 | 0.127 |
+| **Observable** | 9 (22.0%) | 1.11e-16 | 0.114 | — |
+
+F2's non-zero rate in the unobservable region is **89.6%** — but every value is sub-ULP. Lag-1 autocorrelation is weak (-0.16). Pearson correlation with β², 1-β², or sqrt(1-β²) is all ~0.1 — barely above zero. Correlation with a random oscillator (sin(β·100)) is -0.03. **F2's broad "signal" is rounding noise that scales slightly with operand magnitude, not cancellation phenomenology.**
+
+### F1 and F3
+
+- **F1:** 35% non-zero in unobservable, 0% in observable. Sub-ULP magnitudes. Similar profile to F2 — rounding noise in the broad region.
+- **F3:** 0% non-zero in **both** regions. `eta - sqrt(1-β²)` cancels exactly because `sqrt(1-β²)` is bit-identical to how `eta` was originally computed.
+
+## 5. Signal-vs-noise verdict
+
+**F4's residuals in the unobservable region are noise, not structured signal:**
+- Sparse (only 13.5% non-zero)
+- Single-ULP magnitudes (no growth with β)
+- No autocorrelation (lag-1 ≈ -0.09)
+- 26 short sign runs (longest 15) — alternating-with-noise pattern
+
+**F4's residuals in the observable region are structured signal:**
+- Magnitudes grow systematically toward singularity (1 ULP → 65,536 ULP → 500,000+ ULP)
+- The growth follows the predicted `1/(1-β²)` scaling of factored-form precision advantage
+- (Sequential autocorrelation is still near zero — but that's the right behavior because each β is an independent float computation. The structure is in the magnitude-vs-β profile, not in temporal correlation.)
+
+## 6. Substrate-level reason the rule is correct
+
+The observability rule `e_f < e_x` is the apparatus's pre-commitment to **Axiom 6: zero must be measured, not assumed.** At `e_f ≥ e_x`, the operand `f = 1-β²` has not lost binade information relative to its parameter `β`. There is no cancellation event in the substrate's transfer chain that could be captured as a meaningful residual.
+
+Concretely, when `e_f ≥ e_x`:
+- The arithmetic `1 - β*β` does not produce catastrophic cancellation — the result fits in the same binade as its inputs, and rounding is at the standard ULP/2 level.
+- Any nonzero F-form residual in this region comes from the float-point chain's own rounding (each `*`, `+`, `sqrt` introduces ULP/2 errors), not from cancellation physics.
+- Reading those points as "zero detected" or "small structure observed" would be assuming what hasn't been measured — a direct Axiom 6 violation.
+
+The dual-arm probe (F4 microscope) extends **instrument sensitivity** within the existing observability region. It does **not** extend the region itself, because there is nothing structured to measure outside it for the SR fixture as currently defined.
+
+## 7. Verdict on the proposed rule extension
+
+**Do NOT extend the observability rule based on this evidence.**
+
+The rule as written is correctly tuned to Axiom 6. F4's microscope precision is genuinely useful — but its usefulness is within the existing observable region, not as a justification to extend the region into noise territory.
+
+A future fixture (different physics, different binade-loss pattern) might surface structured F-form signal at small β. If that happens, the rule could be re-evaluated. For the SR four-form fixture, the rule stands.
+
+## 8. Implication for the methodology doc
+
+The chain proposed earlier (test → stat tests → reproducibility → substrate reason → doc) hit a negative result: no rule extension is warranted from this evidence.
+
+**Decision: do NOT draft `AXIOM_IMPLEMENTATION_EVOLUTION.md` yet.** The doc would be motivated by a successful extension; this audit produced a confirmation-of-status-quo instead. A worthwhile related doc would be the **inverse** one: *"How the observability rule defends Axiom 6 — why what looks like 'extra signal' outside the rule is actually noise."* That's a methodology doc justified by this audit's findings.
+
+## 9. Open follow-up questions (not required, noted for completeness)
+
+- Do other physics fixtures (Schwarzschild, Bell strain, etc.) exhibit different observability patterns? Would the rule's binade-loss criterion still cleanly separate signal from noise?
+- Is F2's broad-region noise correlated with anything substrate-meaningful (e.g., the K_q proxy calibration factor at each β)? If yes, it could be a calibration-input rather than a measurement-input.
+- F3's exact cancellation across the grid — is there ever a fixture where `sqrt(1-x)` is **not** bit-identical to the way `eta`-equivalent was originally computed? If F3 ever has signal, the apparatus's "redundant computation" assumption breaks.
+
+## 10. References
+
+- v10 probe + observability rule: `scratch/run_foldreadback_probe0_v10_active_dualarm.py` (`creg` at line 104).
+- v11 probe (dual-arm extension): `scratch/run_foldreadback_probe0_v11_genuine_separation.py`.
+- Source SR four-form: `src/lloyd_v4/evals/sr_four_form.py`.
+- Audit code: `scratch/observability_rule_audit_F4.py`.
+- Axiom 6: `Build_Docs/Architecture/AXIOMS.md` (zero must be measured or proven, not assumed).

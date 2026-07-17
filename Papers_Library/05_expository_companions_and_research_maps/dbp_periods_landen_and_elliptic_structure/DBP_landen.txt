@@ -1,0 +1,116 @@
+Generally, the Landen–Trace theorem is a reusable method for reducing a meromorphic
+  differential on a 2-isogenous elliptic curve to:
+
+  1. a common differential on a simpler target curve; and
+  2. an explicit logarithmic correction.
+
+  The reusable pattern is:
+
+  [
+  \phi:C\rightarrow E,\qquad \deg\phi=2,
+  ]
+
+  with deck involution (T:C\to C), and a meromorphic differential (\omega) on (C).
+
+  Compute its invariant and anti-invariant parts:
+
+  [
+  \omega^{+}=\frac{\omega+T^*\omega}{2},
+  \qquad
+  \omega^{-}=\frac{\omega-T^\omega}{2}.
+  ]
+
+  If the invariant part descends to a differential (\Theta) on (E),
+
+  [
+  \omega+T^\omega=\phi^\Theta,
+  ]
+
+  and the anti-invariant part is logarithmic,
+
+  [
+  \omega-T^*\omega=R,d\log f,
+  ]
+
+  then
+
+  [
+  \boxed{
+  \omega=\frac12\phi^*\Theta+\frac{R}{2},d\log f.
+  }
+  ]
+
+  Consequently, for any admissible relative path (\gamma\subset C),
+
+  [
+  \boxed{
+  \int_\gamma\omega
+
+  \frac12\int_{\phi(\gamma)}\Theta
+  +
+  \frac{R}{2}
+  \left[
+  \log f(\gamma(1))-\log f(\gamma(0))
+  +2\pi i,\operatorname{wind}_\gamma(f)
+  \right].
+  }
+  ]
+
+  That is the genuinely useful general result: the difficult elliptic integral is
+  transported to a shared curve, while all sheet, endpoint, pole-bypass, and branch
+  information is isolated in an exact logarithmic term.
+
+  ## How to apply it elsewhere
+
+  For another elliptic integral:
+
+  1. Write its integrand as a meromorphic differential (\omega) on an algebraic curve
+     (C).
+
+  2. Find an explicit degree-two isogeny (\phi:C\to E).
+  3. Determine the nontrivial deck transformation (T).
+  4. Calculate (\omega+T^*\omega) exactly.
+  5. Prove that this equals (\phi^*\Theta) for some target differential.
+  6. Calculate (\omega-T^*\omega).
+  7. Factor its pole divisor and test whether it is (R,d\log f).
+  8. Transport the relative path through (\phi).
+  9. Record endpoint values, winding numbers, CPV prescriptions, and pole bypasses.
+  10. Verify every identity using rational or algebraic arithmetic.
+
+  For several source curves (C_\epsilon) mapping to the same (E), their non-elementary
+  parts become periods of the same (\Theta). Their values may then differ through:
+
+  - different target paths;
+  - different sheets;
+  - logarithmic endpoint terms;
+  - winding numbers;
+  - CPV or lateral-continuation choices.
+
+  ## What the DBP theorem gives you now
+
+  In the existing theorem,
+
+  [
+  \Theta=8\frac{X-3}{X+7}\frac{dX}{Y}
+  ]
+
+  is the common target differential on (E_{128}), and
+
+  [
+  (\phi_\epsilon)*\omega\epsilon
+  =\iota_\epsilon^{-1}\Theta.
+  ]
+
+  You can therefore use it to:
+
+  - translate the primary and dual DBP constants onto (E_{128});
+  - compare their algebraic differential structures;
+  - separate the trace period from elementary logarithmic corrections;
+  - transport poles and residues exactly;
+  - construct certified relative-period evaluators;
+  - analyze alternative paths without redoing the entire Legendre reduction.
+
+  Run the exact theorem verifier with:
+
+  cd "/home/wlloyd/Cella Framework/campaigns/DBP_NATIVE_RELATIVE_PERIOD_EVALUATOR"
+  python3 verify_dbp_landen_trace_theorem_v1_1.py

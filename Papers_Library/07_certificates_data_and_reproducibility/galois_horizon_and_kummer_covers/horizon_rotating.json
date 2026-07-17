@@ -1,0 +1,62 @@
+{
+  "name": "horizon_rotating",
+  "ring": {
+    "variables": ["M", "N1", "N2", "N3", "N4", "J", "u", "w1", "w2", "w3", "w4"],
+    "weights": [1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 1],
+    "order": "GRevLex",
+    "coefficients": "QQ"
+  },
+  "base_cover": {
+    "incidence_gens": [
+      "w1^2-u-N1^2",
+      "w2^2-u-N2^2",
+      "w3^2-u-N3^2",
+      "w4^2-u-N4^2",
+      "w1+w2+w3+w4-4*M"
+    ],
+    "sheet_vars": ["u", "w1", "w2", "w3", "w4"],
+    "degree": 5,
+    "expected_codim": 5,
+    "ramification_det_identity": "8*(w1*w2*w3+w1*w2*w4+w1*w3*w4+w2*w3*w4)",
+    "group": {
+      "name": "S5",
+      "order": 120,
+      "claimed_by": "K5 Galois certificate + all-k symmetric monodromy theorem"
+    }
+  },
+  "channels": [
+    { "name": "u", "radicand": "u" },
+    {
+      "name": "gamma",
+      "radicand": "2*(w1*w2*w3*w4+u*(w1*w2+w1*w3+w1*w4+w2*w3+w2*w4+w3*w4)+u^2+N1*N2*N3*N4)"
+    },
+    { "name": "delta", "radicand": "gamma-4*N1*N2*N3*N4-16*J^2" }
+  ],
+  "divisors": [
+    {
+      "name": "even_contact",
+      "gens": ["u", "w1-N1", "w2-N2", "w3-N3", "w4-N4"],
+      "claimed_parity_row": [1, 0, 0],
+      "type": "contact",
+      "expected_base_image": "4*M-N1-N2-N3-N4"
+    },
+    {
+      "name": "odd_contact",
+      "gens": ["u", "w1+N1", "w2-N2", "w3-N3", "w4-N4"],
+      "claimed_parity_row": [1, 1, 0],
+      "type": "contact",
+      "expected_base_image": "4*M+N1-N2-N3-N4"
+    },
+    {
+      "name": "delta_private",
+      "gens": ["delta"],
+      "claimed_parity_row": [0, 0, 1],
+      "type": "private",
+      "note": "the difference divisor IZ = IX + (delta), certified prime (deg 64) in the 2026-07-10 realization run; delta odd of order 1, u and gamma even on it"
+    }
+  ],
+  "generic_denominator": "2*M*N1*N2*N3*N4*(N1^2-N2^2)*(N1^2-N3^2)*(N1^2-N4^2)*(N2^2-N3^2)*(N2^2-N4^2)*(N3^2-N4^2)",
+  "slices": [
+    { "name": "R9", "assignments": { "N1": 4, "N2": 8, "N3": 12, "N4": 20 } }
+  ]
+}

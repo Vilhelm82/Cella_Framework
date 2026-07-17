@@ -1,0 +1,36 @@
+{
+ "battery": "PA.1",
+ "byte_stable_x2": true,
+ "env": {
+  "numpy": "2.4.4",
+  "python": "3.14.6",
+  "sympy": "1.14.0"
+ },
+ "expected_records_sha": "39bed5552c805f4d",
+ "predecl_pin": "44a2c8019b2929b2",
+ "runs": [
+  {
+   "last_line": "ALL_PASS",
+   "rc": 0,
+   "records_sha": "39bed5552c805f4d",
+   "run": 1,
+   "stderr_tail": "",
+   "stdout_sha16": "2162e0f9bbfd337b",
+   "terminal_ok": true,
+   "wall_s": 0.29
+  },
+  {
+   "last_line": "ALL_PASS",
+   "rc": 0,
+   "records_sha": "39bed5552c805f4d",
+   "run": 2,
+   "stderr_tail": "",
+   "stdout_sha16": "2162e0f9bbfd337b",
+   "terminal_ok": true,
+   "wall_s": 0.27
+  }
+ ],
+ "script": "portfolio/campaigns/shape_witness/witness_battery.py",
+ "terminal_required": "ALL_PASS",
+ "verdict": "PASS"
+}

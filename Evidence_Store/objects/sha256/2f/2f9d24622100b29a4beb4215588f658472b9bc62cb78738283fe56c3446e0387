@@ -1,0 +1,215 @@
+#!/usr/bin/env python3
+"""INDEPENDENT adversarial verification of Task B subnormal topology claims.
+
+Does NOT import the build harness. Re-derives from scratch:
+  - residual = V - f as exact fractions.Fraction
+  - ulp_subnormal = 2^-1074 (derived locally via nextafter, not read from substrate)
+  - new-lattice-vs-noise verdict (n=2 sqrt, n=3 cbrt)
+  - numpy.cbrt vs mpmath correctly-rounded cbrt divergence
+  - whether cbrt mis-rounding CONFOUNDS the lattice verdict (key adversarial test)
+
+Eval-layer scratch only. Instruments = measurement apparatus.
+"""
+import math
+import struct
+from fractions import Fraction
+from collections import Counter
+
+import numpy as np
+import mpmath as mp
+
+
+def hexd(x):
+    return "0x" + struct.pack(">d", float(x)).hex()
+
+
+def dec(x):
+    bits = struct.unpack(">Q", struct.pack(">d", float(x)))[0]
+    return (bits >> 63, (bits >> 52) & 0x7FF, bits & ((1 << 52) - 1))
+
+
+# ---- Local independent derivation of subnormal ulp = 2^-1074 ----
+smallest_sub = math.nextafter(0.0, 1.0)
+ULP = Fraction(smallest_sub)
+assert ULP == Fraction(1, 2 ** 1074), "subnormal ulp derivation mismatch"
+
+
+def round_to_f64(fr):
+    """Round exact Fraction to nearest float64 via mpmath at high dps."""
+    with mp.workdps(80):
+        return float(mp.mpf(fr.numerator) / mp.mpf(fr.denominator))
+
+
+def mp_root_rounded(x, n):
+    """Correctly-rounded n-th root of float64 x -> float64, mpmath dps=60."""
+    with mp.workdps(60):
+        return float(mp.root(mp.mpf(x), n))
+
+
+def subnormal_sweep():
+    """52 log-spaced exact powers 2^(-1074+k) plus boundary-dense top
+    subnormals. Independent reconstruction (does not import build code)."""
+    vals = set()
+    for k in range(0, 52):
+        v = math.ldexp(1.0, -1074 + k)
+        if Fraction(v) < Fraction(1, 2 ** 1022):  # strictly subnormal
+            vals.add(v)
+    # boundary-dense: walk down from smallest normal
+    x = math.nextafter(math.ldexp(1.0, -1022), 0.0)
+    for _ in range(12):
+        if dec(x)[1] != 0:  # stop if not subnormal
+            break
+        vals.add(x)
+        x = math.nextafter(x, 0.0)
+    return sorted(vals, reverse=True)
+
+
+def analyze(n, samples, root_fn):
+    integer_count = 0
+    max_abs_frac = Fraction(0)
+    multiples = Counter()
+    for f in samples:
+        R = float(root_fn(np.float64(f)))
+        V = round_to_f64(Fraction(R) ** n)
+        ratio = (Fraction(V) - Fraction(f)) / ULP
+        if ratio.denominator == 1:
+            integer_count += 1
+            multiples[int(ratio)] += 1
+        else:
+            frac = abs(ratio - round(ratio))
+            if frac > max_abs_frac:
+                max_abs_frac = frac
+    return {
+        "n": n,
+        "count": len(samples),
+        "integer_count": integer_count,
+        "all_on_lattice": integer_count == len(samples),
+        "max_abs_frac_part": str(max_abs_frac),
+        "distinct_multiples": sorted(multiples),
+        "multiples_counts": dict(sorted(multiples.items())),
+    }
+
+
+def cbrt_root_divergence(samples):
+    div = 0
+    examples = []
+    for f in samples:
+        np_r = float(np.cbrt(np.float64(f)))
+        mp_r = mp_root_rounded(f, 3)
+        if np_r != mp_r:
+            div += 1
+            gap = abs(Fraction(np_r) - Fraction(mp_r))
+            ulp_R = abs(math.nextafter(mp_r, math.inf) - mp_r)
+            if len(examples) < 6:
+                examples.append((hexd(f), hexd(np_r), hexd(mp_r),
+                                 float(gap / Fraction(ulp_R))))
+    return div, examples
+
+
+def cbrt_confound(samples):
+    """KEY: does numpy.cbrt mis-rounding change the residual lattice verdict?"""
+    np_mults = Counter()
+    mp_mults = Counter()
+    np_nonint = 0
+    mp_nonint = 0
+    differs = 0
+    examples = []
+    for f in samples:
+        R_np = float(np.cbrt(np.float64(f)))
+        R_mp = mp_root_rounded(f, 3)
+        r_np = (Fraction(round_to_f64(Fraction(R_np) ** 3)) - Fraction(f)) / ULP
+        r_mp = (Fraction(round_to_f64(Fraction(R_mp) ** 3)) - Fraction(f)) / ULP
+        if r_np.denominator == 1:
+            np_mults[int(r_np)] += 1
+        else:
+            np_nonint += 1
+        if r_mp.denominator == 1:
+            mp_mults[int(r_mp)] += 1
+        else:
+            mp_nonint += 1
+        if r_np != r_mp:
+            differs += 1
+            if len(examples) < 8:
+                examples.append((hexd(f), str(r_np), str(r_mp)))
+    return {
+        "np_mults": dict(sorted(np_mults.items())),
+        "mp_mults": dict(sorted(mp_mults.items())),
+        "np_all_integer": np_nonint == 0,
+        "mp_all_integer": mp_nonint == 0,
+        "n_residual_differs": differs,
+        "np_spread": sorted(np_mults),
+        "mp_spread": sorted(mp_mults),
+        "examples": examples,
+    }
+
+
+def main():
+    samples = subnormal_sweep()
+    print("subnormal ulp hex =", hexd(smallest_sub), " == 2^-1074:",
+          ULP == Fraction(1, 2 ** 1074))
+    print("sweep count =", len(samples), " top =", hexd(samples[0]),
+          " bottom =", hexd(samples[-1]))
+
+    r2 = analyze(2, samples, np.sqrt)
+    r3 = analyze(3, samples, np.cbrt)
+    print("\n=== n=2 (sqrt) ===")
+    print("all_on_lattice =", r2["all_on_lattice"],
+          f"({r2['integer_count']}/{r2['count']})")
+    print("max_abs_frac_part =", r2["max_abs_frac_part"])
+    print("distinct multiples =", r2["distinct_multiples"], r2["multiples_counts"])
+
+    print("\n=== n=3 (cbrt, numpy) ===")
+    print("all_on_lattice =", r3["all_on_lattice"],
+          f"({r3['integer_count']}/{r3['count']})")
+    print("max_abs_frac_part =", r3["max_abs_frac_part"])
+    print("distinct multiples =", r3["distinct_multiples"], r3["multiples_counts"])
+
+    print("\n=== numpy.cbrt vs mpmath correctly-rounded cbrt (root R) ===")
+    div, ex = cbrt_root_divergence(samples)
+    print("root divergent samples =", div, "/", len(samples))
+    for e in ex:
+        print("   f", e[0], "np", e[1], "mp", e[2], "gap_ulps_R", e[3])
+
+    print("\n=== ADVERSARIAL: does cbrt mis-rounding CONFOUND the lattice verdict? ===")
+    c = cbrt_confound(samples)
+    print("np all-integer (lattice holds):", c["np_all_integer"])
+    print("mp all-integer (lattice holds):", c["mp_all_integer"])
+    print("np multiples:", c["np_mults"], " spread", c["np_spread"])
+    print("mp multiples:", c["mp_mults"], " spread", c["mp_spread"])
+    print("residual DIFFERS (np-R vs mp-R):", c["n_residual_differs"], "/",
+          len(samples))
+    for e in c["examples"]:
+        print("   f", e[0], "res_np", e[1], "res_mp", e[2])
+
+    # gate iii boundary hex
+    sn = math.ldexp(1.0, -1022)
+    ls = math.nextafter(sn, 0.0)
+    ss = math.nextafter(0.0, 1.0)
+    nnu = math.nextafter(sn, math.inf)
+    print("\n=== gate iii boundary hex ===")
+    print("smallest_normal   ", hexd(sn), dec(sn), "==2^-1022:", Fraction(sn) == Fraction(1, 2 ** 1022))
+    print("largest_subnormal ", hexd(ls), dec(ls), "is_sub:", dec(ls)[1] == 0,
+          "==(2^52-1)*2^-1074:", Fraction(ls) == Fraction(2 ** 52 - 1, 2 ** 1074))
+    print("smallest_subnormal", hexd(ss), dec(ss), "==2^-1074:", Fraction(ss) == Fraction(1, 2 ** 1074))
+    print("next_normal_up    ", hexd(nnu), dec(nnu))
+    R = float(np.cbrt(np.float64(ls)))
+    V = round_to_f64(Fraction(R) ** 3)
+    print("cbrt(largest_sub)^3 V =", hexd(V),
+          " residual/ulp =", str((Fraction(V) - Fraction(ls)) / ULP))
+
+    # boundary: f = 1 - x_term floor
+    fb = math.nextafter(1.0, 0.0)
+    print("\n=== boundary chain floor ===")
+    print("nearest float below 1.0 =", hexd(fb),
+          " 1.0 - it =", hexd(1.0 - fb), " == 2^-53:",
+          Fraction(1.0 - fb) == Fraction(1, 2 ** 53))
+
+    # float128 instrument sanity
+    f128 = np.finfo(np.float128)
+    print("\n=== float128 instrument sanity ===")
+    print("eps =", float(f128.eps), " nmant_bits =", int(f128.nmant),
+          " IEEE-binary128?:", int(f128.nmant) == 112)
+
+
+if __name__ == "__main__":
+    main()

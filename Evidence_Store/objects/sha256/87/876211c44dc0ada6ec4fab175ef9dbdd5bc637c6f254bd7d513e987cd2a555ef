@@ -1,0 +1,99 @@
+"""INDEPENDENT oracle check of CLAIM 2 (Phase 2B "Theorem 4.1.1").
+
+Claim: for ALL subnormal float64 f in (0, 2^-1022),
+    V = round(round(sqrt(f))^2) == f  EXACTLY  (residual 0, j=0).
+
+We build subnormal floats directly from their integer mantissa m via struct
+(f = m * 2^-1074, 1 <= m < 2^52), compute R = sqrt(f) in float64, V = R*R in
+float64, and check V == f bit-exactly. We do NOT trust the scratch script.
+
+Sampling strategy:
+  - EXHAUSTIVE over the smallest subnormals (m = 1 .. N_small).
+  - EXHAUSTIVE over the largest subnormals near the 2^-1022 seam.
+  - Dense deterministic stride sweep across the whole subnormal range.
+  - Random sample (seeded) across the whole range.
+Report exact counts and ANY counterexample (with hex).
+"""
+from __future__ import annotations
+
+import struct
+import numpy as np
+
+SMALLEST_SUBNORMAL_M = 1
+LARGEST_SUBNORMAL_M = (1 << 52) - 1  # 2^52 - 1; f = (2^52-1)*2^-1074, just below 2^-1022
+
+
+def f_from_m(m: int) -> float:
+    """Positive subnormal float64 with integer mantissa m: f = m * 2^-1074.
+    Bit pattern is exponent=0, mantissa=m (since subnormals have implied 0 leading bit)."""
+    assert 1 <= m < (1 << 52)
+    return struct.unpack("<d", struct.pack("<Q", m))[0]
+
+
+def m_from_f(f: float) -> int:
+    return struct.unpack("<Q", struct.pack("<d", f))[0]
+
+
+def check_range(ms):
+    """For each m, build f, compute R=sqrt(f), V=R*R (float64), check V==f.
+    Returns (count, list_of_counterexamples)."""
+    counter = []
+    n = 0
+    for m in ms:
+        f = f_from_m(m)
+        R = float(np.sqrt(np.float64(f)))          # float64 sqrt
+        V = float(np.float64(R) * np.float64(R))    # float64 squaring
+        n += 1
+        if V != f:
+            j = (V - f) / (2.0 ** -1074)
+            counter.append((m, f.hex(), R.hex(), V.hex(), j))
+            if len(counter) <= 50:
+                pass  # collect
+    return n, counter
+
+
+def main():
+    total = 0
+    all_counter = []
+
+    # 1. Exhaustive smallest subnormals m = 1 .. 200000
+    n1, c1 = check_range(range(1, 200001))
+    total += n1
+    all_counter += c1
+    print(f"[smallest exhaustive m=1..200000] checked={n1} counterexamples={len(c1)}")
+
+    # 2. Exhaustive largest subnormals near seam: top 200000 mantissas
+    top_lo = LARGEST_SUBNORMAL_M - 200000 + 1
+    n2, c2 = check_range(range(top_lo, LARGEST_SUBNORMAL_M + 1))
+    total += n2
+    all_counter += c2
+    print(f"[largest exhaustive m={top_lo}..{LARGEST_SUBNORMAL_M}] checked={n2} counterexamples={len(c2)}")
+
+    # 3. Dense deterministic stride sweep across whole range
+    stride = (1 << 52) // 3_000_000  # ~3M samples spread across full subnormal range
+    ms_stride = range(1, 1 << 52, stride)
+    n3, c3 = check_range(ms_stride)
+    total += n3
+    all_counter += c3
+    print(f"[stride sweep stride={stride}] checked={n3} counterexamples={len(c3)}")
+
+    # 4. Random seeded sample across whole range
+    rng = np.random.default_rng(20260531)
+    ms_rand = rng.integers(1, 1 << 52, size=2_000_000, dtype=np.uint64)
+    n4, c4 = check_range(int(m) for m in ms_rand)
+    total += n4
+    all_counter += c4
+    print(f"[random 2M seeded] checked={n4} counterexamples={len(c4)}")
+
+    print(f"\nTOTAL CHECKED = {total}")
+    print(f"TOTAL COUNTEREXAMPLES (V != f) = {len(all_counter)}")
+    if all_counter:
+        print("FIRST 20 COUNTEREXAMPLES (m, f.hex, R.hex, V.hex, j=(V-f)/2^-1074):")
+        for ce in all_counter[:20]:
+            print("   ", ce)
+    else:
+        print("VERDICT (this sample): V == f EXACTLY for every subnormal checked.")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,35 @@
+{
+ "PE.1": {
+  "n_invariance": 6,
+  "n_referee_walks": 14,
+  "pass": true,
+  "units": "starts x steps"
+ },
+ "PE.2": {
+  "n_newton_max_iter_trap_rows": 2,
+  "organ_side": true,
+  "pass": true,
+  "units": "pinned cycle rows + derived record counts"
+ },
+ "PE.3": {
+  "n_determined": 11,
+  "n_expected_ok": 15,
+  "n_rows": 15,
+  "n_tinted": 3,
+  "pass": true,
+  "units": "(fixture, start, channel) labels"
+ },
+ "PE.4": {
+  "n_divergence_points": 6,
+  "n_fully_attributed": 6,
+  "pass": true,
+  "units": "divergence points"
+ },
+ "PE.5": "graded across two runs (sha compare by the caller)",
+ "prereg_pin": "b367ce845812f85886042d7442cc47e3522f4894c19075d29459468963408965",
+ "records_sha256": "843aecb3524587fed919dcc23f810df43ff9a48292afe6d2d3fe918a646e11c0",
+ "status_moves_proposed": {
+  "CL-5": "DEMONSTRATED",
+  "CL-7": "PARTIAL (evidence appended: annex-route exact-geometry refusal; route-split derivative-zero refusal at the basin boundary)"
+ }
+}

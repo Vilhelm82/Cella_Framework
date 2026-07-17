@@ -1,0 +1,478 @@
+"""
+BACL_subnormal — Subnormal Extension Audit.
+
+Tests whether BACL extends to subnormal IEEE 754 binary64 floats
+when the hypothesis is restated from `floor_binade(a) >= floor_binade(b)`
+(parochial to normal range) to `ulp(a) >= ulp(b)` (range-agnostic).
+
+Uses fractions.Fraction for exact rational arithmetic, since
+(a - b) / ulp(b) can overflow float64 when a is normal and b is subnormal.
+
+Preregistry: Build_Docs/Reports/bacl_subnormal_audit/preregistry.md
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import math
+import struct
+import sys
+from fractions import Fraction
+from pathlib import Path
+
+import numpy as np
+from lloyd_v4.primitives import typed_ulp
+
+
+ROOT = Path(__file__).resolve().parents[1]
+REPORT_DIR = ROOT / "Build_Docs" / "Reports" / "bacl_subnormal_audit"
+ARTIFACT = REPORT_DIR / "artifact.json"
+
+
+# Subnormal boundary
+SMALLEST_NORMAL = 2.0 ** -1022       # 2^(-1022)
+SMALLEST_SUBNORMAL = 2.0 ** -1074    # 2^(-1074), smallest positive float
+SUBNORMAL_ULP = SMALLEST_SUBNORMAL   # uniform ulp in subnormal range
+
+
+# ---------------------------------------------------------------------------
+# Float helpers
+# ---------------------------------------------------------------------------
+
+
+def is_subnormal(x: float) -> bool:
+    """True iff x is a positive subnormal in float64."""
+    return 0.0 < abs(x) < SMALLEST_NORMAL
+
+
+def is_normal_positive(x: float) -> bool:
+    return SMALLEST_NORMAL <= x < float("inf")
+
+
+def unified_ulp(x: float) -> float:
+    """ULP via the ``typed_ulp`` substrate primitive (GAP-003, precision='float64').
+
+    Migrated from inline IEEE 754 ULP helper as part of the DRY-003 substrate
+    consolidation. Byte-compatible with the original on finite normal inputs.
+    """
+    return float(typed_ulp(x, precision="float64").value.ulp)
+
+
+def float_to_bits(x: float) -> int:
+    """Return float64 as 64-bit integer (for bit-level inspection)."""
+    return struct.unpack(">Q", struct.pack(">d", x))[0]
+
+
+def bits_to_float(bits: int) -> float:
+    return struct.unpack(">d", struct.pack(">Q", bits))[0]
+
+
+def random_subnormal(rng) -> float:
+    """Generate a random positive subnormal float64."""
+    # Subnormal: m * 2^(-1074), m in [1, 2^52 - 1]
+    m = rng.integers(1, 2 ** 52)
+    return float(m) * SUBNORMAL_ULP
+
+
+def random_normal_in_binade(rng, k: int) -> float:
+    """Generate a random positive normal float in binade [2^k, 2^(k+1))."""
+    # Float in binade k: (1 + m/2^52) * 2^k, m in [0, 2^52 - 1]
+    m = rng.integers(0, 2 ** 52)
+    return float(1.0 + float(m) / (2 ** 52)) * (2.0 ** k)
+
+
+# ---------------------------------------------------------------------------
+# Proof check: walk through proof for sample pairs (assertion-based)
+# ---------------------------------------------------------------------------
+
+
+def is_integer_multiple_exact(a: float, b: float, ulp_b: float) -> tuple[bool, int | None]:
+    """Check exactly whether (a - b) is an integer multiple of ulp_b, using
+    arbitrary-precision rational arithmetic. Returns (is_int, quotient_int).
+    """
+    # Convert to exact rationals
+    qa = Fraction(a)
+    qb = Fraction(b)
+    qu = Fraction(ulp_b)
+    if qu == 0:
+        return False, None
+    quotient = (qa - qb) / qu
+    is_int = quotient.denominator == 1
+    if is_int:
+        return True, int(quotient.numerator)
+    return False, None
+
+
+def proof_check_one(a: float, b: float) -> dict:
+    """Walk through the unified BACL proof for one pair (a, b).
+    Verify each line of the proof matches expected values, using exact
+    rational arithmetic to avoid float overflow.
+    """
+    assert a > 0 and b > 0, "Unified BACL: positive operands"
+    u_a = unified_ulp(a)
+    u_b = unified_ulp(b)
+    # Line 2 check: hypothesis
+    hypothesis_holds = u_a >= u_b
+    # Line 1 check: each is integer multiple of its own ulp (exact)
+    qa = Fraction(a)
+    qb = Fraction(b)
+    qua = Fraction(u_a)
+    qub = Fraction(u_b)
+    N_a_q = qa / qua
+    N_b_q = qb / qub
+    N_a_is_int = N_a_q.denominator == 1
+    N_b_is_int = N_b_q.denominator == 1
+    # Line 3: ulp ratio is integer power of 2 (if hypothesis holds)
+    if hypothesis_holds:
+        ratio_q = qua / qub
+        ratio_is_pow2_int = (
+            ratio_q.denominator == 1
+            and ratio_q.numerator > 0
+            and (ratio_q.numerator & (ratio_q.numerator - 1)) == 0
+        )
+    else:
+        ratio_q = None
+        ratio_is_pow2_int = None
+    # Line 4-6: difference
+    diff_q = qa - qb
+    diff = a - b
+    diff_is_int, diff_int_value = is_integer_multiple_exact(a, b, u_b)
+    return {
+        "a": a,
+        "b": b,
+        "a_subnormal": is_subnormal(a),
+        "b_subnormal": is_subnormal(b),
+        "ulp_a": u_a,
+        "ulp_b": u_b,
+        "hypothesis_ulp_a_geq_ulp_b": hypothesis_holds,
+        "N_a_is_int": N_a_is_int,
+        "N_b_is_int": N_b_is_int,
+        "ulp_ratio_is_pow2_int": ratio_is_pow2_int,
+        "diff_real": diff,
+        "diff_is_integer_multiple_of_ulp_b": diff_is_int,
+        "diff_int_value_in_ulp_b_units": diff_int_value if diff_is_int else None,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Hardware FTZ (flush-to-zero) detection
+# ---------------------------------------------------------------------------
+
+
+def detect_FTZ() -> dict:
+    """Detect if subnormal arithmetic is flush-to-zero (FTZ) on this hardware.
+    IEEE 754 conforming behavior is gradual underflow."""
+    # Generate the smallest subnormal and check it persists
+    smallest_sub = SUBNORMAL_ULP
+    nonzero = smallest_sub > 0.0
+    # Multiply by 0.5 — should round to 0 if FTZ, or stay at smallest_sub if conforming
+    # Actually: smallest_sub / 2 might be 0 even in non-FTZ (it underflows below representable)
+    # Better test: addition of subnormals should give subnormal result
+    sub_sum = SUBNORMAL_ULP + SUBNORMAL_ULP
+    sub_sum_is_subnormal = is_subnormal(sub_sum)
+    sub_sum_correct = sub_sum == 2.0 * SUBNORMAL_ULP
+    # Check that operations on subnormals don't flush
+    normal_a = 2.0 ** -1020
+    sub_b = 3.0 * SUBNORMAL_ULP
+    diff = normal_a - sub_b
+    # If FTZ: diff would equal normal_a (sub_b flushed to 0)
+    # If conforming: diff = normal_a - sub_b (slightly smaller)
+    ftz_indicator = (diff == normal_a)
+    return {
+        "smallest_subnormal_nonzero": nonzero,
+        "subnormal_sum_is_subnormal": sub_sum_is_subnormal,
+        "subnormal_sum_correct": sub_sum_correct,
+        "ftz_indicator_diff_equals_normal": ftz_indicator,
+        "FTZ_detected": ftz_indicator and not sub_sum_correct,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Pair-class generators
+# ---------------------------------------------------------------------------
+
+
+def generate_SubSub(n: int, seed: int = 42) -> list[tuple[float, float]]:
+    """Both subnormal."""
+    rng = np.random.default_rng(seed)
+    return [(random_subnormal(rng), random_subnormal(rng)) for _ in range(n)]
+
+
+def generate_NormSub(n: int, seed: int = 43) -> list[tuple[float, float]]:
+    """a normal (random binade), b subnormal."""
+    rng = np.random.default_rng(seed)
+    pairs = []
+    for _ in range(n):
+        k = int(rng.integers(-1021, 1020))  # avoid extreme overflow / smallest normal
+        a = random_normal_in_binade(rng, k)
+        b = random_subnormal(rng)
+        pairs.append((a, b))
+    return pairs
+
+
+def generate_SubNormSameUlp(n: int, seed: int = 44) -> list[tuple[float, float]]:
+    """a subnormal, b normal in smallest normal binade (k=-1022) — equality case."""
+    rng = np.random.default_rng(seed)
+    pairs = []
+    for _ in range(n):
+        a = random_subnormal(rng)
+        b = random_normal_in_binade(rng, -1022)
+        pairs.append((a, b))
+    return pairs
+
+
+def generate_SubNormHigherBinade(n: int, seed: int = 45) -> list[tuple[float, float]]:
+    """a subnormal, b normal in binade ABOVE smallest (k >= -1021) — sharpness case."""
+    rng = np.random.default_rng(seed)
+    pairs = []
+    for _ in range(n):
+        a = random_subnormal(rng)
+        k = int(rng.integers(-1020, -1000))  # well into normal range
+        b = random_normal_in_binade(rng, k)
+        pairs.append((a, b))
+    return pairs
+
+
+# ---------------------------------------------------------------------------
+# Per-class audit
+# ---------------------------------------------------------------------------
+
+
+def audit_pair_class(class_name: str, pairs: list[tuple[float, float]]) -> dict:
+    total = 0
+    hypothesis_holds_count = 0
+    bacl_S_violations = 0  # hypothesis holds, but diff not integer multiple
+    sharpness_count = 0  # hypothesis fails, and diff not integer multiple
+    proviso_violated_integer = 0  # hypothesis fails, but diff happens to be integer
+    violations = []
+    sharpness_examples = []
+    for a, b in pairs:
+        if a <= 0 or b <= 0:
+            continue
+        total += 1
+        u_a = unified_ulp(a)
+        u_b = unified_ulp(b)
+        hypothesis = u_a >= u_b
+        if hypothesis:
+            hypothesis_holds_count += 1
+        # Use exact rational check
+        is_int, int_value = is_integer_multiple_exact(a, b, u_b)
+        if hypothesis and not is_int:
+            bacl_S_violations += 1
+            if len(violations) < 10:
+                violations.append({
+                    "a": a, "b": b, "ulp_a": u_a, "ulp_b": u_b,
+                    "a_subnormal": is_subnormal(a),
+                    "b_subnormal": is_subnormal(b),
+                })
+        elif not hypothesis and not is_int:
+            sharpness_count += 1
+            if len(sharpness_examples) < 5:
+                sharpness_examples.append({
+                    "a": a, "b": b, "ulp_a": u_a, "ulp_b": u_b,
+                    "a_subnormal": is_subnormal(a),
+                    "b_subnormal": is_subnormal(b),
+                })
+        elif not hypothesis and is_int:
+            proviso_violated_integer += 1
+    return {
+        "class": class_name,
+        "n_pairs": total,
+        "hypothesis_holds_count": hypothesis_holds_count,
+        "BACL_S_violations": bacl_S_violations,
+        "sharpness_count": sharpness_count,
+        "proviso_violated_integer_count": proviso_violated_integer,
+        "BACL_S_holds": bacl_S_violations == 0,
+        "first_violations": violations,
+        "first_sharpness_examples": sharpness_examples,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Proof samples (specific instances)
+# ---------------------------------------------------------------------------
+
+
+def run_proof_samples() -> list[dict]:
+    samples = []
+    test_pairs = [
+        # Both subnormal
+        (5.0 * SUBNORMAL_ULP, 3.0 * SUBNORMAL_ULP),
+        (2.0 ** -1023, 2.0 ** -1024),
+        # Normal + subnormal
+        (2.0 ** -1020, 3.0 * SUBNORMAL_ULP),
+        (1.0, 2.0 ** -1073),
+        # Subnormal + smallest normal binade (same ulp)
+        (3.0 * SUBNORMAL_ULP, 2.0 ** -1022),
+        (2.0 ** -1023, math.nextafter(2.0 ** -1022, math.inf)),
+    ]
+    for a, b in test_pairs:
+        try:
+            r = proof_check_one(a, b)
+            samples.append(r)
+        except AssertionError as e:
+            samples.append({"a": a, "b": b, "proof_failed": str(e)})
+    return samples
+
+
+# ---------------------------------------------------------------------------
+# Comparison: unified BACL specializes to original normal-range BACL
+# ---------------------------------------------------------------------------
+
+
+def verify_specialization_to_original() -> dict:
+    """Verify that unified BACL with ulp(a) >= ulp(b) hypothesis
+    specializes to original BACL with floor_binade(a) >= floor_binade(b)
+    when both are normal.
+    """
+    # In normal range: floor_binade(x) = math.frexp(x)[1] - 1, ulp(x) = 2^(floor_binade(x) - 52)
+    # So ulp(a) >= ulp(b) iff floor_binade(a) >= floor_binade(b). Trivially.
+    # Verify with samples.
+    samples = []
+    rng = np.random.default_rng(seed=46)
+    for _ in range(100):
+        k_a = int(rng.integers(-100, 100))
+        k_b = int(rng.integers(-100, 100))
+        a = random_normal_in_binade(rng, k_a)
+        b = random_normal_in_binade(rng, k_b)
+        floor_binade_a = math.frexp(a)[1] - 1
+        floor_binade_b = math.frexp(b)[1] - 1
+        u_a = unified_ulp(a)
+        u_b = unified_ulp(b)
+        floor_binade_cond = floor_binade_a >= floor_binade_b
+        ulp_cond = u_a >= u_b
+        samples.append({
+            "match": floor_binade_cond == ulp_cond,
+            "floor_binade_cond": floor_binade_cond,
+            "ulp_cond": ulp_cond,
+        })
+    mismatches = sum(1 for s in samples if not s["match"])
+    return {
+        "n_samples": len(samples),
+        "mismatches": mismatches,
+        "specialization_holds": mismatches == 0,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Run audit
+# ---------------------------------------------------------------------------
+
+
+def run_audit() -> dict:
+    ftz = detect_FTZ()
+    proof_samples = run_proof_samples()
+    specialization = verify_specialization_to_original()
+
+    pair_classes = {}
+    pair_classes["SubSub"] = audit_pair_class("SubSub", generate_SubSub(2000))
+    pair_classes["NormSub"] = audit_pair_class("NormSub", generate_NormSub(2000))
+    pair_classes["SubNormSameUlp"] = audit_pair_class(
+        "SubNormSameUlp", generate_SubNormSameUlp(2000)
+    )
+    pair_classes["SubNormHigherBinade"] = audit_pair_class(
+        "SubNormHigherBinade", generate_SubNormHigherBinade(2000)
+    )
+
+    # Predictions
+    p_bs_1 = pair_classes["SubSub"]["BACL_S_violations"] == 0
+    p_bs_2 = pair_classes["NormSub"]["BACL_S_violations"] == 0
+    # P_BS_3: sharpness — for SubNormHigherBinade, fraction of pairs where hypothesis fails AND non-integer
+    higher_binade_total = pair_classes["SubNormHigherBinade"]["n_pairs"]
+    higher_binade_sharpness = pair_classes["SubNormHigherBinade"]["sharpness_count"]
+    sharpness_fraction = (
+        higher_binade_sharpness / higher_binade_total if higher_binade_total else 0
+    )
+    p_bs_3 = sharpness_fraction >= 0.5
+    # P_BS_4: specialization
+    p_bs_4 = specialization["specialization_holds"]
+    # P_BS_5: proof extension — checked by proof_samples
+    p_bs_5 = all("proof_failed" not in s for s in proof_samples)
+    # P_BS_6: no FTZ-related issues
+    p_bs_6 = not ftz["FTZ_detected"] and all(
+        pair_classes[c]["BACL_S_violations"] == 0
+        for c in pair_classes
+    )
+
+    predictions = {
+        "P_BS_1_SubSub_BACL_holds": bool(p_bs_1),
+        "P_BS_2_NormSub_BACL_holds": bool(p_bs_2),
+        "P_BS_3_sharpness_geq_50pct": bool(p_bs_3),
+        "P_BS_4_specialization_to_original_BACL": bool(p_bs_4),
+        "P_BS_5_proof_extends_via_ulp_directly": bool(p_bs_5),
+        "P_BS_6_no_FTZ_or_arithmetic_interference": bool(p_bs_6),
+        "diag_sharpness_fraction": sharpness_fraction,
+    }
+
+    failures = []
+    if not p_bs_1:
+        failures.append("F_BS_1")
+    if not p_bs_2:
+        failures.append("F_BS_2")
+    if not p_bs_3:
+        failures.append("F_BS_3")
+    if ftz["FTZ_detected"]:
+        failures.append("F_BS_4")
+    if not p_bs_5:
+        failures.append("F_BS_5")
+
+    # Verdict
+    if not failures and all(
+        predictions[k] for k in predictions if k.startswith("P_BS_") and isinstance(predictions[k], bool)
+    ):
+        verdict = "BACL_extends_to_subnormal_natively"
+    elif p_bs_1 and p_bs_2 and not p_bs_3:
+        verdict = "BACL_partial_subnormal_extension_no_sharpness_demo"
+    else:
+        verdict = "BACL_subnormal_requires_separate_theorem"
+
+    return {
+        "audit_name": "bacl_subnormal_audit",
+        "preregistry_path": "Build_Docs/Reports/bacl_subnormal_audit/preregistry.md",
+        "unified_BACL_statement": (
+            "For a, b > 0 in any IEEE 754 binary format (including subnormals), "
+            "if ulp(a) >= ulp(b), then a - b is integer multiple of ulp(b)."
+        ),
+        "FTZ_detection": ftz,
+        "proof_samples": proof_samples,
+        "specialization_check": specialization,
+        "pair_classes": pair_classes,
+        "predictions": predictions,
+        "failure_modes_observed": failures,
+        "verdict": verdict,
+    }
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", default=str(ARTIFACT))
+    args = parser.parse_args()
+    REPORT_DIR.mkdir(parents=True, exist_ok=True)
+    data = run_audit()
+    Path(args.output).write_text(json.dumps(data, indent=2, sort_keys=True))
+    print(f"bacl-subnormal-audit artifact written to {args.output}")
+    print(f"  verdict: {data['verdict']}")
+    print(f"  failure_modes_observed: {data['failure_modes_observed']}")
+    print(f"  predictions:")
+    for k, v in data["predictions"].items():
+        if isinstance(v, bool):
+            marker = "✓" if v else "✗"
+            print(f"    {marker} {k}")
+    print()
+    print(f"  FTZ check: {data['FTZ_detection']}")
+    print()
+    print(f"  Per pair-class:")
+    for cname, r in data["pair_classes"].items():
+        marker = "✓" if r["BACL_S_violations"] == 0 else "✗"
+        print(
+            f"    {marker} {cname:25} hypothesis_holds={r['hypothesis_holds_count']}/{r['n_pairs']}, "
+            f"BACL_S_violations={r['BACL_S_violations']}, "
+            f"sharpness={r['sharpness_count']}"
+        )
+    print()
+    print(f"  Specialization to original BACL: {data['specialization_check']}")
+    print(f"  Sharpness fraction (SubNormHigherBinade): {data['predictions']['diag_sharpness_fraction']:.3f}")
+
+
+if __name__ == "__main__":
+    main()

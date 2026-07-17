@@ -1,0 +1,38 @@
+{
+  "rank": 1,
+  "lift": 184.5,
+  "count": 2,
+  "families": 1,
+  "a": {
+    "id": "OBJ:compatibility-point",
+    "label": "Compatibility point",
+    "standard_term": "common zero locus of a finite system of constraint functions",
+    "nomenclature": "identical-to",
+    "symbols": []
+  },
+  "b": {
+    "id": "OBJ:regular-compatibility-point",
+    "label": "Regular compatibility point",
+    "standard_term": "transverse intersection point (regular value, full-rank Jacobian)",
+    "nomenclature": "identical-to",
+    "symbols": []
+  },
+  "evidence": [
+    {
+      "uid": "U-1180",
+      "type": "theorem",
+      "claim_status": "demonstrated",
+      "label": "Proposition (Universal Singularity Structure)",
+      "summary": "Let p be a regular compatibility point and q = (p, 0) ∈ Rⁿ⁺¹.\n\n**(i)** q is a singular point of M: ∇F_joint(q) = 0.\n\n**(ii)** The Hessian H = ∇²F_joint(q) has block structure:\n```\nH = [ 2 JᵀJ    0  ]\n    [   0      -2  ]",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/04_drafts_and_incomplete_papers/general_relativity_and_gravity/GR_PAPER_BRIEF.md"
+    },
+    {
+      "uid": "U-1195",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Regular compatibility point",
+      "summary": "The point is **regular** if the k × n Jacobian J = [∂Fᵢ/∂xⱼ] has full row rank k at p (transverse intersection).",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/04_drafts_and_incomplete_papers/general_relativity_and_gravity/GR_PAPER_BRIEF.md"
+    }
+  ]
+}

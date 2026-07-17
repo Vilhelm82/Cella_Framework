@@ -1,0 +1,1 @@
+../../../../../Papers_Library/04_drafts_and_incomplete_papers/local_curvature_and_black_hole_metrics/BRIEF__502c516c.md

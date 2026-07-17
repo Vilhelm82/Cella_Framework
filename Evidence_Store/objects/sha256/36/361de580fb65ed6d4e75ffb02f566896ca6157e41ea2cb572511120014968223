@@ -1,0 +1,286 @@
+"""retestB — typed-primitive reproduction of the cross-fixture log-log slope
+convergence (substrate-invariant-search Phase A candidate).
+
+Raw-math baseline: scratch/local_slope_field.py computes, per probe,
+E = log2(|base_operand|) and log2(singular_distance), then takes the LOCAL
+log-log slope of E vs log2(sd) over the nearest-N probes closest to the branch.
+It reports, at N=5: Schwarzschild ~0.9962, pure_algebraic 1.0000, |delta|=0.0038.
+
+This script re-derives the same local slope THROUGH the V4 typed primitive
+`typed_log_log_slope` instead of raw math.log2 + hand-rolled central-difference
++ regression.
+
+Mapping to the typed primitive (see src/lloyd_v4/primitives/typed_log_log_slope.py):
+  - typed_log_log_slope reads, per collection item, f_value = provenance.inputs[0]
+    and transfer = value.transfer, then runs OLS of log(|transfer|) vs log(f_value).
+  - We therefore build, per probe, a TransferObservationResult carrying
+        value.transfer = |base_operand|   (y-quantity)
+        provenance.inputs[0] = singular_distance   (x-coordinate)
+    so the typed OLS slope of (log sd, log|base|) IS the log-log slope alpha.
+  - Base of the log cancels in the slope (a ratio of log-differences), so the
+    typed primitive's natural-log OLS is directly comparable to the raw script's
+    log2-based central-difference slope.
+
+This is the V4-native analogue of schwarzschild_four_form_campaign._f_axis_view:
+re-stamp the x-coordinate into provenance.inputs while the y-quantity rides in
+value.transfer. We construct the TransferObservation directly (carrying the real
+base/sd from the phase-1 table) rather than re-running a finite difference,
+because the quantity under study (E = log2|base|) is a per-probe observable, not
+a difference quotient.
+
+NO existing files are modified. Eval-layer, research-grade.
+"""
+from __future__ import annotations
+
+import json
+import math
+from pathlib import Path
+
+from lloyd_v4.core.provenance import Provenance
+from lloyd_v4.core.result import TypedResult
+from lloyd_v4.core.serialization import to_json_safe
+from lloyd_v4.core.status import ConditioningStatus, ProtocolStatus, TransferStatus
+from lloyd_v4.core.conditioning import Conditioning
+from lloyd_v4.core.validity import Validity
+from lloyd_v4.primitives.typed_finite_difference import TransferObservation, TRANSFER_SPACE
+from lloyd_v4.primitives import typed_collection, typed_log_log_slope
+
+
+ROOT = Path("/home/william_lloydlt/projects/V4/Lloyd_Engine_V4")
+OUT_DIR = ROOT / "scratch" / "_revalidation" / "retestB"
+
+
+# ---------------------------------------------------------------------------
+# Build the per-probe image (identical construction to scratch/local_slope_field.py)
+# ---------------------------------------------------------------------------
+def build_image(rows, fixture, base_fn, sd_fn):
+    fx = [r for r in rows if r.get("fixture") == fixture
+          and r.get("principal_curvature") is not None]
+    fx.sort(key=lambda r: r["coordinate_value"])
+    image = []
+    for row in fx:
+        c = row["coordinate_value"]
+        b = base_fn(c)
+        sd = sd_fn(c)
+        if b > 0 and sd > 0:
+            image.append({"coord": c, "base": b, "sd": sd})
+    # sort closest-to-branch first (smallest singular distance first)
+    image.sort(key=lambda p: p["sd"])
+    return image
+
+
+# ---------------------------------------------------------------------------
+# Typed-primitive path
+# ---------------------------------------------------------------------------
+def make_transfer_observation_result(base: float, sd: float, label: str) -> TypedResult:
+    """Carry |base| as the transfer (y) and sd as inputs[0] (x), so that
+    typed_log_log_slope fits log(|base|) vs log(sd)."""
+    value = TransferObservation(
+        transfer=float(base),       # y-quantity: |base_operand|
+        g_at_f=None,
+        g_at_f_plus_delta=None,
+        delta_g=None,
+        cancellation_ratio=None,
+    )
+    return TypedResult(
+        value=value,
+        space=TRANSFER_SPACE,
+        status=TransferStatus.TRANSFER_OBSERVED,
+        validity=Validity(defined=True, finite=True, selectable=True, advanceable=True, observable=True),
+        conditioning=Conditioning(status=ConditioningStatus.WELL_CONDITIONED, notes=()),
+        provenance=Provenance(
+            operation_id="retestB_E_vs_sd_view",
+            expression_path="retestB_E_log2base_vs_singular_distance",
+            precision="raw_python",
+            backend="python",
+            device="cpu",
+            measurement_resolution=None,
+            inputs=(float(sd), float(base), label),  # inputs[0] = singular distance (x)
+            parents=(),
+        ),
+        protocol=ProtocolStatus.OK,
+    )
+
+
+def typed_local_slope(image, n: int, label: str):
+    """Typed OLS slope of log(|base|) vs log(sd) over the nearest-n probes."""
+    window = image[:n]
+    items = tuple(
+        make_transfer_observation_result(p["base"], p["sd"], label)
+        for p in window
+    )
+    collection = typed_collection(items)
+    slope_result = typed_log_log_slope(
+        collection,
+        expression_path=f"retestB_{label}_nearest_{n}",
+    )
+    return slope_result
+
+
+# ---------------------------------------------------------------------------
+# Raw-math baseline reproduction (central difference, log2), embedded so the
+# retrodiction gate is computed in-script and reported in the JSON.
+# ---------------------------------------------------------------------------
+def raw_central_diff_slopes(image):
+    """Reproduce scratch/local_slope_field.py local_slopes(): central diff of
+    E = log2(base) vs log2(sd), image already sorted closest-first."""
+    pts = [{"E": math.log2(p["base"]), "log2_sd": math.log2(p["sd"])} for p in image]
+    slopes = []
+    for i in range(len(pts)):
+        if 0 < i < len(pts) - 1:
+            dE = pts[i + 1]["E"] - pts[i - 1]["E"]
+            dSD = pts[i + 1]["log2_sd"] - pts[i - 1]["log2_sd"]
+        elif i == 0:
+            dE = pts[1]["E"] - pts[0]["E"]
+            dSD = pts[1]["log2_sd"] - pts[0]["log2_sd"]
+        else:
+            dE = pts[-1]["E"] - pts[-2]["E"]
+            dSD = pts[-1]["log2_sd"] - pts[-2]["log2_sd"]
+        slopes.append(dE / dSD if dSD != 0 else None)
+    return slopes
+
+
+def raw_mean_slope(slopes, n):
+    """Mean of slopes[1:n+1] (interior probes), as in local_slope_field.py."""
+    sl = [s for s in slopes[1:n + 1] if s is not None]
+    return sum(sl) / len(sl) if sl else None
+
+
+def main():
+    phase_1 = json.loads(
+        (ROOT / "Build_Docs/Reports/mcg_geometry_first/phase_1_geometry_table.json").read_text()
+    )
+    rows = phase_1["rows"]
+
+    schw = build_image(rows, "schwarzschild_four_form",
+                       base_fn=lambda r: 1.0 - 2.0 / r, sd_fn=lambda r: r - 2.0)
+    pa = build_image(rows, "pure_algebraic_four_form",
+                     base_fn=lambda x: 1.0 - x, sd_fn=lambda x: 1.0 - x)
+
+    # ----- Raw-math baseline (retrodiction gate) -----
+    schw_raw_slopes = raw_central_diff_slopes(schw)
+    pa_raw_slopes = raw_central_diff_slopes(pa)
+    raw_table = {}
+    for N in (5, 10, 20, 50, 100):
+        ms = raw_mean_slope(schw_raw_slopes, N)
+        mp = raw_mean_slope(pa_raw_slopes, N)
+        raw_table[str(N)] = {
+            "schw": round(ms, 6),
+            "pa": round(mp, 6),
+            "abs_delta": round(abs(ms - mp), 6),
+        }
+
+    # ----- Typed-primitive path -----
+    typed_table = {}
+    for N in (5, 10, 20):
+        s_res = typed_local_slope(schw, N, "schwarzschild")
+        p_res = typed_local_slope(pa, N, "pure_algebraic")
+        s_slope = s_res.value.slope
+        p_slope = p_res.value.slope
+        typed_table[str(N)] = {
+            "schw": {
+                "status": s_res.status.value,
+                "slope": s_slope,
+                "r_squared": s_res.value.r_squared,
+                "standard_error": s_res.value.standard_error,
+                "n_used": s_res.value.n_used,
+            },
+            "pa": {
+                "status": p_res.status.value,
+                "slope": p_slope,
+                "r_squared": p_res.value.r_squared,
+                "standard_error": p_res.value.standard_error,
+                "n_used": p_res.value.n_used,
+            },
+            "abs_delta": (abs(s_slope - p_slope) if (s_slope is not None and p_slope is not None) else None),
+        }
+
+    # ----- Cross-check: typed-OLS applied to the SAME window the raw script
+    #       central-differences over, so the comparison is method-vs-method on
+    #       identical data, not data-vs-data. -----
+    # Tolerance for "typed agrees with raw": the two instruments differ in
+    # estimator (typed = OLS over the window; raw = mean of central differences
+    # over the same window). They will not be byte-identical; we state the gap.
+    tol = 0.05
+
+    agreement = {}
+    for N in ("5", "10", "20"):
+        rs = raw_table[N]["schw"]
+        rp = raw_table[N]["pa"]
+        ts = typed_table[N]["schw"]["slope"]
+        tp = typed_table[N]["pa"]["slope"]
+        agreement[N] = {
+            "schw_raw": round(rs, 6),
+            "schw_typed": round(ts, 6),
+            "schw_method_gap": round(abs(rs - ts), 6),
+            "pa_raw": round(rp, 6),
+            "pa_typed": round(tp, 6),
+            "pa_method_gap": round(abs(rp - tp), 6),
+            "raw_abs_delta": round(abs(rs - rp), 6),
+            "typed_abs_delta": round(abs(ts - tp), 6),
+            "within_tol": bool(abs(rs - ts) < tol and abs(rp - tp) < tol),
+        }
+
+    # ----- Retrodiction gate -----
+    gate_schw = raw_table["5"]["schw"]
+    gate_pa = raw_table["5"]["pa"]
+    gate_delta = raw_table["5"]["abs_delta"]
+    gate_pass = (abs(gate_schw - 0.9962) < 5e-4 and abs(gate_pa - 1.0000) < 5e-4
+                 and abs(gate_delta - 0.0038) < 5e-4)
+
+    payload = {
+        "retest": "retestB_typed_slope",
+        "input_table": "Build_Docs/Reports/mcg_geometry_first/phase_1_geometry_table.json",
+        "n_probes": {"schwarzschild": len(schw), "pure_algebraic": len(pa)},
+        "retrodiction_gate": {
+            "expected_schw_N5": 0.9962,
+            "expected_pa_N5": 1.0000,
+            "expected_abs_delta_N5": 0.0038,
+            "observed_schw_N5": gate_schw,
+            "observed_pa_N5": gate_pa,
+            "observed_abs_delta_N5": gate_delta,
+            "PASS": bool(gate_pass),
+        },
+        "raw_math_baseline": raw_table,
+        "typed_primitive": typed_table,
+        "method_agreement": agreement,
+        "tolerance": tol,
+        "notes": [
+            "Typed instrument: typed_log_log_slope (OLS of log|base| vs log(sd)) over nearest-N probes.",
+            "Raw instrument: mean of central-difference local slopes of log2(base) vs log2(sd) over the same nearest-N probes.",
+            "Log base cancels in the slope (ratio of log-differences); natural-log OLS is directly comparable to log2 central-difference.",
+            "Difference between instruments is estimator-level (OLS-over-window vs mean-of-central-differences), not data-level.",
+        ],
+    }
+
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    out_json = OUT_DIR / "typed_slope_retest.json"
+    out_json.write_text(json.dumps(to_json_safe(payload), sort_keys=True, indent=2, allow_nan=False) + "\n")
+
+    # console summary
+    print("=== RETRODICTION GATE ===")
+    print(f"  raw N=5: Schw={gate_schw:.4f}  PA={gate_pa:.4f}  |delta|={gate_delta:.4f}  -> PASS={gate_pass}")
+    print()
+    print("=== RAW-MATH BASELINE (mean central-difference slope) ===")
+    for N in ("5", "10", "20", "50", "100"):
+        r = raw_table[N]
+        print(f"  N={N:>3}: Schw={r['schw']:+.4f}  PA={r['pa']:+.4f}  |delta|={r['abs_delta']:.4f}")
+    print()
+    print("=== TYPED PRIMITIVE (typed_log_log_slope OLS over nearest-N) ===")
+    for N in ("5", "10", "20"):
+        t = typed_table[N]
+        ts, tp, d = t["schw"]["slope"], t["pa"]["slope"], t["abs_delta"]
+        print(f"  N={N:>3}: Schw={ts:+.6f} (R2={t['schw']['r_squared']:.6f})  "
+              f"PA={tp:+.6f} (R2={t['pa']['r_squared']:.6f})  |delta|={d:.6f}")
+    print()
+    print("=== TYPED vs RAW (method agreement) ===")
+    for N in ("5", "10", "20"):
+        a = agreement[N]
+        print(f"  N={N:>3}: Schw raw={a['schw_raw']:+.4f} typed={a['schw_typed']:+.4f} gap={a['schw_method_gap']:.4f} | "
+              f"PA raw={a['pa_raw']:+.4f} typed={a['pa_typed']:+.4f} gap={a['pa_method_gap']:.4f} | within_tol={a['within_tol']}")
+    print()
+    print(f"wrote {out_json}")
+
+
+if __name__ == "__main__":
+    main()

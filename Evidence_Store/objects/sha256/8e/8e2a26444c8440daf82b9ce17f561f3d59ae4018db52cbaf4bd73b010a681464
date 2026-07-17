@@ -1,0 +1,386 @@
+{
+  "authority": "Frozen objects under results/three_channel_kg/ (manifest_v1.json, SCHEMA.md, FIXTURES.md, CLAIM_LEDGER.md) verified vs freeze_pins_sha256.json (three pinned objects); built+frozen bench under src/lloyd_v4/evals/three_channel_kg/ imported read-only by exact file path from the stable main checkout and pinned in depends_on. Covenant loop; R2 disposition (supplied frame); K4 armed kill. ORCHESTRATOR OVERRIDE: no v4-campaign-discipline skill loaded this session -- frozen objects + embedded covenant are the sole binding authority.",
+  "campaign_id": "three_channel_kg",
+  "cycle_id": "c001",
+  "depends_on": {
+    "results/three_channel_kg/manifest_v1.json": "a28042d96a3588407a610f649388d93364c9be2b9294810cd666f3a7369b318b",
+    "src/lloyd_v4/evals/three_channel_kg/fixtures.py": "3d415011b7f4c81c38d70d94847cbdbacb9d02b7543cfe7e0d2f9e48b11f8b8c",
+    "src/lloyd_v4/evals/three_channel_kg/oracle.py": "b8af9397710490a8d548b653aa301cf0eb2bd37ca50579fc26c1b58a5c1c7798",
+    "src/lloyd_v4/evals/three_channel_kg/probe.py": "1f99965824afd3548841ca5360c56dc44250c858018f18349bf2a2c3b9e098d8",
+    "src/lloyd_v4/evals/three_channel_kg/referee_channel.py": "28eff76c9eceef94d9927845a9fca33ce01f4cd3f452635607cf42a806921175",
+    "src/lloyd_v4/evals/three_channel_kg/referee_total.py": "993ffd21f9eac6c13eb015eacc5f3ed9bfb00cded0648fc963a83cead51feb29",
+    "src/lloyd_v4/evals/three_channel_kg/schema.py": "40335dc1501e3d737fedbf236c4e66a7c7641c1b1b6e4d840499fe23260ca085"
+  },
+  "expectations": {
+    "e3_delta_kappa_c_at_witness_t": {
+      "-4/1": "-24/49",
+      "1/1": "6/49",
+      "1/2": "3/49",
+      "2/1": "12/49",
+      "3/1": "18/49"
+    },
+    "gauge_invariants_keystone": {
+      "K_G_invariant": "-3/49",
+      "delta_K_G_must_be": "0/1",
+      "q_invariant": "14/1",
+      "tr_PHP_invariant": "12/7"
+    },
+    "keystone_F8_base_jet": {
+      "H": [
+        [
+          "2/1",
+          "1/1",
+          "0/1"
+        ],
+        [
+          "1/1",
+          "0/1",
+          "0/1"
+        ],
+        [
+          "0/1",
+          "0/1",
+          "2/1"
+        ]
+      ],
+      "K_G": "-3/49",
+      "g": [
+        "3/1",
+        "1/1",
+        "2/1"
+      ],
+      "kappa_c": "-1/49",
+      "kappa_int": "-3/49",
+      "kappa_s": "1/49",
+      "prod_g": "6/1",
+      "q": "14/1",
+      "q_squared": "196/1",
+      "sigma_1_field": "Q(sqrt14)",
+      "sigma_2_eq_K_G": "-3/49",
+      "tr_PHP": "12/7"
+    },
+    "single_edge_law_per_unit_t": {
+      "e1": {
+        "H_jk": "0/1",
+        "H_jk_name": "H_23",
+        "complement_pair": [
+          2,
+          3
+        ],
+        "delta_kappa_c_per_unit_t": "0/1",
+        "disposition": "PINS"
+      },
+      "e2": {
+        "H_jk": "0/1",
+        "H_jk_name": "H_13",
+        "complement_pair": [
+          1,
+          3
+        ],
+        "delta_kappa_c_per_unit_t": "0/1",
+        "disposition": "PINS"
+      },
+      "e3": {
+        "H_jk": "1/1",
+        "H_jk_name": "H_12",
+        "complement_pair": [
+          1,
+          2
+        ],
+        "delta_kappa_c_per_unit_t": "6/49",
+        "disposition": "MOVES"
+      }
+    },
+    "symbolic_identity_over_Q": {
+      "claim_KG_invariant": "det(H_b(g, H + t(g e_i^T + e_i g^T))) - det(H_b(g,H)) == 0 as a polynomial in Q[g,H,t] for each i in {1,2,3}",
+      "claim_PHP_invariant": "(g e_i^T + e_i g^T) contracted by the projector vanishes: P(g e_i^T + e_i g^T)P == 0, hence q^2 * (P H' P - P H P) == 0 as a polynomial identity for each i (q-cleared to stay polynomial)",
+      "claim_single_edge_law": "delta Delta_c(t e_i) - (-4 t (prod g) H_jk) == 0 as a polynomial in Q[g1,g2,g3,h11,h12,h13,h22,h23,h33,t] for each i in {1,2,3}",
+      "expected_residual_entries_PHP_invariant": 0,
+      "expected_residual_monomials_KG_invariant": 0,
+      "expected_residual_monomials_single_edge_law": 0,
+      "indeterminates": [
+        "g1",
+        "g2",
+        "g3",
+        "h11",
+        "h12",
+        "h13",
+        "h22",
+        "h23",
+        "h33",
+        "t"
+      ]
+    },
+    "witness_t_values": [
+      "1/1",
+      "2/1",
+      "3/1",
+      "-4/1",
+      "1/2"
+    ]
+  },
+  "frozen": true,
+  "frozen_authority_pins": {
+    "results/three_channel_kg/CLAIM_LEDGER.md": "d6e395fe82a09e743edc85658ab887445f299f793524b198d67f2bb336554958",
+    "results/three_channel_kg/FIXTURES.md": "3d933e39fd03ef968ef943ff24df5292318fdac47a3ec1774b81deaea4f902f2",
+    "results/three_channel_kg/SCHEMA.md": "fe0eb353ea6147c9d290fdfa2bf4ee2fb8d612a45a31b5d62bfce986a2d37b98",
+    "results/three_channel_kg/freeze_pins_sha256.json": "c893a1e9758954c2ebeef9cd022cda170fa51d61a850c238ef0f76800d18ee16"
+  },
+  "grader_clauses": {
+    "CL_c4_ledger": "gauge preserves every `\u03c3_r`; `\u03b4C\u2208ker \u03a3`; single-edge `\u03b4\u03ba_c(t\u00b7e_i)=4t\u00b7\u220fg\u00b7H_{jk}/q\u00b2`",
+    "K4_gauge_single_edge": "K4 gauge / single-edge (refute) \u2014 `\u03c3_r` changes under gauge, or `\u03b4C\u2209ker \u03a3`, or single-edge law fails (e\u2081/e\u2082 fail to pin, e\u2083 fails to move).",
+    "R2_supplied_frame": "Channels are frame-relative in the supplied DBP frame; only the sum K_G is intrinsic (merged spec stance; connection-not-metric reading concurs). CL-c7 graded accordingly.",
+    "deltaC_in_ker_Sigma": "delta C = (delta kappa_c, delta kappa_s, delta kappa_int) in ker Sigma, Sigma: Q^3 -> Q, Sigma(a,b,c) = a+b+c; i.e. delta K_G = 0 (the sum is unchanged under the gauge).",
+    "gauge_KG_invariant_all_paths": "K_G under the gauged jet equals the base K_G on Path A, Path B (total referee), and Path B' (channel referee); exact Q.",
+    "gauge_definition_single_edge": "single-edge gauge: g unchanged; H -> H + t*(g e_i^T + e_i g^T) (border shear along basis direction e_i, i in {1,2,3}, t in Q).",
+    "keystone_F8_single_edge": "keystone F8 (g=(3,1,2), H=[[2,1,0],[1,0,0],[0,0,2]], q=14, prod g=6, q^2=196): e1 pins (complement {2,3}, H_23=0 => delta kappa_c=0); e2 pins (complement {1,3}, H_13=0 => delta kappa_c=0); e3 moves (complement {1,2}, H_12=1 => delta kappa_c = 4*6*1/196 = 6/49 per unit t).",
+    "precondition_P_frame": "every channel fixture must carry its frame annotation, or it is rejected.",
+    "precondition_P_self_cert": "the oracle (Path C) must be external to A/B/B', or the run is void.",
+    "semantics_K_G": "kappa_c + kappa_s + kappa_int (exact in Q)",
+    "semantics_channel_referee": "channels == split-shape-operator det2 channels (Path B', disjoint source)",
+    "semantics_kappa_X": "-Delta_X / q^2, with det(H_b) = Delta_c + Delta_s + Delta_m (off-diagonal -> Delta_c, diagonal -> Delta_s, mixed -> Delta_m)",
+    "semantics_total_referee": "K_G == -det(H_b)/q^2 (Path B, sqrt-q-free)",
+    "sigma_r_preserved_under_gauge": "the gauge fixes the tangent shape operator P H P exactly (P g = 0 => P(g e_i^T + e_i g^T)P = 0), so every shape invariant sigma_r is preserved: sigma_2 = det = K_G (in Q) and sigma_1 = tr(PHP)/|g| (in Q(sqrt q), tracked sqrt-q-free via the rational handle tr(PHP)).",
+    "single_edge_law_symbolic": "delta kappa_c(t e_i) = 4 t (prod g) H_jk / q^2 as a symbolic identity over Q in (t, g, H), {j,k} the index pair complementary to i; equivalently delta Delta_c(t e_i) = -4 t (prod g) H_jk.",
+    "two_derivation_under_gauge": "Path-A channels == Path-B' channels under the gauged jet (the split shape-operator agreement persists for the moved channel decomposition).",
+    "type_gate_singular_lie": "q=0 / cone-apex / g_i=0 returning 0/NaN/placeholder instead of typed REFUSED -> fail (refuse-not-lie, K11).",
+    "type_gate_sqrt_q_leak": "a total/channel referee returning a radical/float instead of Fraction -> hard fail (K8).",
+    "type_gate_tolerance_leak": "any injected mismatch that passes/warns instead of hard-failing -> fail (K9)."
+  },
+  "no_tolerance_note": "Exact Q only; no tolerance band anywhere; a near-miss is a FAIL. No substrate promotion (eval-tier only; geometry spine fence stays CLOSED). Nothing canonical until Will signs off.",
+  "organ": {
+    "gauge_law_verbatim": "SINGLE-EDGE GAUGE (Stage C, declared DBP frame). The gauge is the border shear acting on the jet (g, H): g is UNCHANGED; H -> H + t*(g e_i^T + e_i g^T), i.e. H[a][c] += t*(g[a]*[c==i] + [a==i]*g[c]) for the basis direction e_i (i in {1,2,3}), t in Q. Because the tangent-plane projector P = I - g g^T/q annihilates the gradient (P g = 0, g^T P = 0), the gauge generator satisfies P (g e_i^T + e_i g^T) P = 0, so the tangent shape operator P H P is EXACTLY unchanged: every shape invariant sigma_r is preserved (here, n=3 -> 2-dim tangent plane -> sigma_1 = tr(PHP)/|g| and sigma_2 = det = K_G). q = g^T g is invariant (g is unchanged). The channel decomposition C = (kappa_c, kappa_s, kappa_int) MOVES within the fiber but its sum is fixed: delta C in ker Sigma (Sigma: Q^3 -> Q, Sigma(a,b,c)=a+b+c), i.e. delta K_G = 0. The single-edge law (a symbolic identity over Q in (t, g, H)) is delta kappa_c(t e_i) = 4 t (prod g) H_jk / q^2, where {j,k} is the index pair complementary to i (equivalently delta Delta_c = -4 t (prod g) H_jk; Delta_c uses q^2). At the keystone F8 (g=(3,1,2), H=[[2,1,0],[1,0,0],[0,0,2]], q=14, prod g = 6, q^2 = 196): e1 PINS (complement {2,3}, H_23=0 => delta kappa_c = 0), e2 PINS (complement {1,3}, H_13=0 => delta kappa_c = 0), e3 MOVES (complement {1,2}, H_12=1 => delta kappa_c = 4*6*1/196 = 24/196 = 6/49 per unit t).",
+    "module": "lloyd_v4.evals.three_channel_kg.probe",
+    "path": "A",
+    "probe_id": "three_channel_kg_probe_A_v1",
+    "probe_source_verbatim": "\"\"\"c001 `three_channel_kg` \u2014 the PROBE (Path A, `role=probe`).\n\nThe monomial channel read-off. From the bordered Hessian\n\n        H_b = [[ 0 , g\u1d40 ],\n               [ g ,  H ]]      (4\u00d74, H symmetric 3\u00d73, q = g\u1d40g \u2260 0)\n\nwe form det(H_b) as an exact polynomial in (g, H) and partition it into the\nexhaustive, disjoint monomial classes pinned in `manifest_v1.json` \u2192\n`semantics_pinned` and `results/three_channel_kg/SCHEMA.md`:\n\n  * \u0394_c \u2014 monomials carrying an OFF-DIAGONAL H-entry only (coupling),\n  * \u0394_s \u2014 monomials carrying a DIAGONAL H-entry only (self),\n  * \u0394_m \u2014 MIXED monomials (one diagonal \u00d7 one off-diagonal),\n\nwith  det(H_b) == \u0394_c + \u0394_s + \u0394_m  (closure identity #5). Then\n\n        \u03ba_X = \u2212\u0394_X / q\u00b2        and        K_G = \u03ba_c + \u03ba_s + \u03ba_int.\n\n(\u03ba_int is the channel read off from the mixed partition \u0394_m.)\n\nTHE LINE (covenant): this is the HYPOTHESIS path. The probe NEVER imports the\nreferee \u2014 truth (Path B total, Path B\u2032 channels, Path C oracle) is computed on\nan independent code path this module never sees. Exact \u211a ONLY: every operand\nand result is a `fractions.Fraction`; there is no float, no radical, and no\ntolerance anywhere below. The singular stratum (a VANISHING gradient: q=0,\nthe cone-apex / critical point, equivalently every g\u1d62=0) is REFUSED with a\ntyped exception, never returned as 0 / NaN / a placeholder (refuse-not-lie).\nA regular jet that merely has one zero gradient component (q\u22600) is NOT\nsingular and computes normally \u2014 see the frozen fixture F6.\n\nThe det(H_b) used here is the read-off's OWN exact-\u211a expansion of the\nbordered determinant (cofactor expansion along the border, in `Fraction`); it\nis hypothesis input on Path A, independently re-derived by the referee on\nPath B before any row is graded \u2014 the probe does not consult that path.\n\"\"\"\n\nfrom __future__ import annotations\n\nfrom fractions import Fraction\nfrom typing import Dict, List, Sequence, Tuple\n\nPROBE_ID = \"three_channel_kg_probe_A_v1\"\nROLE = \"probe\"\n\n\nclass ThreeChannelRefusal(Exception):\n    \"\"\"Typed refusal on a singular stratum (refuse-not-lie). `kind` is one of\n    the `schema.SINGULAR_STRATA` labels.\"\"\"\n\n    def __init__(self, kind: str) -> None:\n        super().__init__(kind)\n        self.kind = kind\n\n\nVec3 = Sequence[Fraction]\nMat3 = Sequence[Sequence[Fraction]]\n\n\n# --------------------------------------------------------------------------\n# exact-Q guards\n# --------------------------------------------------------------------------\n\ndef _as_fraction(x: object, where: str) -> Fraction:\n    \"\"\"Admit only exact rationals onto the probe path. A float or any\n    non-exact type is a \u221aq-leak at the door and is refused as a type error \u2014\n    never silently coerced.\"\"\"\n    if isinstance(x, Fraction):\n        return x\n    if isinstance(x, int) and not isinstance(x, bool):\n        return Fraction(x)\n    raise TypeError(\n        f\"{where}: probe path is exact \u211a only; got \"\n        f\"{type(x).__name__} ({x!r}) \u2014 no float/radical admitted\")\n\n\ndef _coerce_jet(g: Vec3, H: Mat3) -> Tuple[List[Fraction], List[List[Fraction]]]:\n    if len(g) != 3:\n        raise ValueError(f\"g must have length 3, got {len(g)}\")\n    if len(H) != 3 or any(len(row) != 3 for row in H):\n        raise ValueError(\"H must be 3x3\")\n    gg = [_as_fraction(g[i], f\"g[{i}]\") for i in range(3)]\n    HH = [[_as_fraction(H[i][j], f\"H[{i}][{j}]\") for j in range(3)]\n          for i in range(3)]\n    # H is the Hessian: symmetric. Enforce it (an asymmetric H would make the\n    # off/diagonal monomial classes ill-defined).\n    for i in range(3):\n        for j in range(i + 1, 3):\n            if HH[i][j] != HH[j][i]:\n                raise ValueError(\n                    f\"H not symmetric at ({i},{j}): \"\n                    f\"{HH[i][j]} != {HH[j][i]}\")\n    return gg, HH\n\n\n# --------------------------------------------------------------------------\n# q = g^T g, with the singular-stratum refusals (refuse-not-lie)\n# --------------------------------------------------------------------------\n\ndef q_of(g: Vec3) -> Fraction:\n    \"\"\"q = g\u1d40g in exact \u211a. Refuses the singular stratum (refuse-not-lie):\n    when the gradient VANISHES (q=0) there is no regular level surface \u2014 the\n    cone-apex / critical point \u2014 and the read-off is a TYPED `q_zero` refusal,\n    never 0 / NaN / a placeholder.\n\n    A single zero gradient COMPONENT (some g\u1d62=0 with q\u22600) is NOT singular: it\n    is a regular rational jet in the supplied frame (e.g. the frozen fixture\n    F6, sphere at (3/5,4/5,0) with g=(6/5,8/5,0), q=4, K_G=1). The spec's\n    `g\u1d62=0` singular stratum is the genuine degeneracy where the gradient drops\n    rank to zero (q=0 \u27fa every g\u1d62=0 over \u211d), reported as `g_i_zero`; it does\n    NOT include regular points that merely lie on a coordinate hyperplane.\n    Over-refusing F6 would contradict the freeze, so the gate is strictly q=0.\n    \"\"\"\n    gg = [_as_fraction(g[i], f\"g[{i}]\") for i in range(3)]\n    q = gg[0] * gg[0] + gg[1] * gg[1] + gg[2] * gg[2]\n    if q == 0:\n        # gradient vanishes: cone apex / critical point. Over \u211d this is\n        # exactly \"every g\u1d62=0\", so name both the apex and the g\u1d62=0 stratum.\n        kind = \"g_i_zero\" if all(gi == 0 for gi in gg) else \"q_zero\"\n        raise ThreeChannelRefusal(kind)\n    return q\n\n\n# --------------------------------------------------------------------------\n# the bordered-Hessian determinant, partitioned by monomial class (Path A)\n# --------------------------------------------------------------------------\n\ndef partition(g: Vec3, H: Mat3\n              ) -> Dict[str, Fraction]:\n    \"\"\"Return {'Delta_c','Delta_s','Delta_m','det_hb'} \u2014 the exact-\u211a\n    monomial partition of det(H_b).\n\n    det(H_b) for H_b = [[0, g\u1d40],[g, H]] expands (exactly, in \u211a) to the twelve\n    additive terms\n\n        det = g1\u00b2(h23\u00b2 \u2212 h22\u00b7h33)            \u2190 s: \u2212g1\u00b2h22h33, c: +g1\u00b2h23\u00b2\n            + g2\u00b2(h13\u00b2 \u2212 h11\u00b7h33)            \u2190 s: \u2212g2\u00b2h11h33, c: +g2\u00b2h13\u00b2\n            + g3\u00b2(h12\u00b2 \u2212 h11\u00b7h22)            \u2190 s: \u2212g3\u00b2h11h22, c: +g3\u00b2h12\u00b2\n            + 2g1g2(h12\u00b7h33 \u2212 h13\u00b7h23)       \u2190 m: +2g1g2h12h33, c: \u22122g1g2h13h23\n            + 2g1g3(h13\u00b7h22 \u2212 h12\u00b7h23)       \u2190 m: +2g1g3h13h22, c: \u22122g1g3h12h23\n            + 2g2g3(h11\u00b7h23 \u2212 h12\u00b7h13)       \u2190 m: +2g2g3h11h23, c: \u22122g2g3h12h13\n\n    classified by the H-entries each monomial carries:\n      diagonal-only  (h11,h22,h33)               -> \u0394_s,\n      off-diagonal-only (h12,h13,h23)            -> \u0394_c,\n      one diagonal \u00d7 one off-diagonal            -> \u0394_m.\n    The bordered determinant has no H-free term, so the three classes are\n    exhaustive and disjoint and \u0394_c+\u0394_s+\u0394_m == det(H_b) identically.\n    \"\"\"\n    gg, HH = _coerce_jet(g, H)\n    g1, g2, g3 = gg\n    h11, h12, h13 = HH[0][0], HH[0][1], HH[0][2]\n    h22, h23, h33 = HH[1][1], HH[1][2], HH[2][2]\n\n    # \u0394_c \u2014 off-diagonal-H monomials only\n    delta_c = (g1 * g1 * h23 * h23\n               - 2 * g1 * g2 * h13 * h23\n               - 2 * g1 * g3 * h12 * h23\n               + g2 * g2 * h13 * h13\n               - 2 * g2 * g3 * h12 * h13\n               + g3 * g3 * h12 * h12)\n\n    # \u0394_s \u2014 diagonal-H monomials only\n    delta_s = (- g1 * g1 * h22 * h33\n               - g2 * g2 * h11 * h33\n               - g3 * g3 * h11 * h22)\n\n    # \u0394_m \u2014 mixed monomials (one diagonal \u00d7 one off-diagonal)\n    delta_m = (2 * g1 * g2 * h12 * h33\n               + 2 * g1 * g3 * h13 * h22\n               + 2 * g2 * g3 * h11 * h23)\n\n    det_hb = _det_bordered(gg, HH)\n\n    # closure identity #5, asserted on the probe's own arithmetic: the\n    # partition must reconstruct the cofactor-expanded determinant exactly.\n    # (This is an internal self-consistency guard on Path A only \u2014 NOT the\n    # referee's Path-B determinant, which the probe never imports.)\n    if delta_c + delta_s + delta_m != det_hb:\n        raise AssertionError(\n            \"Path-A partition broke det(H_b)=\u0394_c+\u0394_s+\u0394_m: \"\n            f\"{delta_c}+{delta_s}+{delta_m} != {det_hb}\")\n\n    return {\"Delta_c\": delta_c, \"Delta_s\": delta_s,\n            \"Delta_m\": delta_m, \"det_hb\": det_hb}\n\n\ndef _det_bordered(g: List[Fraction], H: List[List[Fraction]]) -> Fraction:\n    \"\"\"det of the 4\u00d74 bordered Hessian [[0, g\u1d40],[g, H]], by cofactor\n    expansion along the first (border) row, in exact \u211a. Independent of the\n    monomial split above \u2014 it is the read-off's own determinant so the\n    closure-#5 guard is meaningful.\"\"\"\n    hb = [[Fraction(0), g[0], g[1], g[2]],\n          [g[0], H[0][0], H[0][1], H[0][2]],\n          [g[1], H[1][0], H[1][1], H[1][2]],\n          [g[2], H[2][0], H[2][1], H[2][2]]]\n    return _det4(hb)\n\n\ndef _det4(m: List[List[Fraction]]) -> Fraction:\n    \"\"\"Exact 4\u00d74 determinant via Laplace expansion along row 0 (3\u00d73 minors by\n    the rule of Sarrus). Pure Fraction; no pivoting/division, so nothing can\n    go non-exact.\"\"\"\n    acc = Fraction(0)\n    sign = Fraction(1)\n    for c in range(4):\n        if m[0][c] != 0:\n            minor = [[m[r][cc] for cc in range(4) if cc != c]\n                     for r in range(1, 4)]\n            acc += sign * m[0][c] * _det3(minor)\n        sign = -sign\n    return acc\n\n\ndef _det3(m: List[List[Fraction]]) -> Fraction:\n    return (m[0][0] * (m[1][1] * m[2][2] - m[1][2] * m[2][1])\n            - m[0][1] * (m[1][0] * m[2][2] - m[1][2] * m[2][0])\n            + m[0][2] * (m[1][0] * m[2][1] - m[1][1] * m[2][0]))\n\n\n# --------------------------------------------------------------------------\n# the channel read-off: kappa_X = -Delta_X / q^2, K_G = kappa_c+kappa_s+kappa_int\n# --------------------------------------------------------------------------\n\ndef read_off(g: Vec3, H: Mat3) -> Dict[str, Fraction]:\n    \"\"\"Path A. Returns the exact-\u211a dict\n\n        {'K_G','kappa_c','kappa_s','kappa_int',\n         'q','Delta_c','Delta_s','Delta_m','det_hb'}\n\n    Raises `ThreeChannelRefusal` on a singular stratum (q=0 / g\u1d62=0). No\n    float, radical, or tolerance is used; the bordered determinant is \u221aq-free\n    (q enters only as q\u00b2, never \u221aq).\"\"\"\n    q = q_of(g)                      # refuses g\u1d62=0 / q=0\n    q2 = q * q\n    part = partition(g, H)\n    kappa_c = -part[\"Delta_c\"] / q2\n    kappa_s = -part[\"Delta_s\"] / q2\n    kappa_int = -part[\"Delta_m\"] / q2\n    K_G = kappa_c + kappa_s + kappa_int\n    return {\"K_G\": K_G, \"kappa_c\": kappa_c, \"kappa_s\": kappa_s,\n            \"kappa_int\": kappa_int, \"q\": q,\n            \"Delta_c\": part[\"Delta_c\"], \"Delta_s\": part[\"Delta_s\"],\n            \"Delta_m\": part[\"Delta_m\"], \"det_hb\": part[\"det_hb\"]}\n\n\ndef channels(g: Vec3, H: Mat3\n             ) -> Tuple[Fraction, Fraction, Fraction, Fraction]:\n    \"\"\"Convenience: the graded tuple (K_G, \u03ba_c, \u03ba_s, \u03ba_int) in exact \u211a.\"\"\"\n    r = read_off(g, H)\n    return r[\"K_G\"], r[\"kappa_c\"], r[\"kappa_s\"], r[\"kappa_int\"]\n\n\n__all__ = [\n    \"PROBE_ID\", \"ROLE\", \"ThreeChannelRefusal\",\n    \"q_of\", \"partition\", \"read_off\", \"channels\",\n]\n",
+    "reconstruction_law": "Bordered Hessian H_b = [[0, g^T],[g, H]] (4x4, H symmetric 3x3, q = g^T g != 0). det(H_b) is expanded EXACTLY in Q and partitioned into the exhaustive disjoint monomial classes Delta_c (off-diagonal-H only), Delta_s (diagonal-H only), Delta_m (one diagonal x one off-diagonal), with det(H_b) == Delta_c + Delta_s + Delta_m. Then kappa_X = -Delta_X / q^2 and K_G = kappa_c + kappa_s + kappa_int (kappa_int read off Delta_m). Exact Q only; sqrt-q-free (q enters only as q^2). The singular stratum q = g^T g = 0 (vanishing gradient / cone apex; over R equivalently every g_i = 0) is a TYPED refusal, never 0/NaN/placeholder. A regular jet with a single zero gradient component (some g_i = 0 with q != 0) is NOT singular and computes normally (frozen fixture F6).",
+    "role": "probe",
+    "sha256": "1f99965824afd3548841ca5360c56dc44250c858018f18349bf2a2c3b9e098d8"
+  },
+  "predictions": [
+    {
+      "claims": [
+        "CL-c4"
+      ],
+      "expected": "q=14; prod_g=6; q^2=196; (K_G,kappa_c,kappa_s,kappa_int)=(-3/49,-1/49,1/49,-3/49) on A/B/B'/C; tr(PHP)=12/7",
+      "id": "PC1_keystone_base_jet",
+      "kills_relevant": [
+        "K4"
+      ],
+      "statement": "The keystone F8 base jet in the declared DBP frame is g=(3,1,2), H=[[2,1,0],[1,0,0],[0,0,2]], q=g^Tg=14, prod g = g1 g2 g3 = 6, q^2=196; the Path-A read-off is (K_G,kappa_c,kappa_s,kappa_int)=(-3/49,-1/49,1/49,-3/49) and agrees with Path B (K_G), Path B' (tuple), Path C (oracle) -- exact Q. tr(PHP)=12/7 (sigma_1 = this/sqrt14 in Q(sqrt14); sigma_2 = K_G = -3/49).",
+      "units": "exact Q (Fraction) per component"
+    },
+    {
+      "claims": [
+        "CL-c4"
+      ],
+      "expected": "per unit t: e1->0, e2->0, e3->6/49; e3 at t in {1,2,3,-4,1/2} -> {6/49,12/49,18/49,-24/49,3/49}; e1/e2 -> 0 at every t",
+      "id": "PC2_single_edge_law_keystone",
+      "kills_relevant": [
+        "K4"
+      ],
+      "statement": "Single-edge law at the keystone F8 per unit t: e1 PINS (complement {2,3}, H_23=0 => delta kappa_c = 4*1*6*0/196 = 0); e2 PINS (complement {1,3}, H_13=0 => delta kappa_c = 0); e3 MOVES (complement {1,2}, H_12=1 => delta kappa_c = 4*1*6*1/196 = 24/196 = 6/49). The gauged read-off's kappa_c minus the base kappa_c equals 4 t (prod g) H_jk / q^2 for each edge and each witness t in {1,2,3,-4,1/2}; on e3, delta kappa_c = 6t/49.",
+      "units": "exact Q (Fraction); delta kappa_c per edge per t"
+    },
+    {
+      "claims": [
+        "CL-c4"
+      ],
+      "expected": "K_G=-3/49, tr(PHP)=12/7, q=14 invariant under e1/e2/e3 at every witness t, on A/B/B' where applicable",
+      "id": "PC3_sigma_r_preserved_keystone",
+      "kills_relevant": [
+        "K4"
+      ],
+      "statement": "Under the single-edge gauge along each of e1, e2, e3 (at every witness t) the tangent shape operator P H P is unchanged, so every shape invariant sigma_r is preserved: sigma_2 = K_G = -3/49 (invariant on Path A, Path B, Path B') and sigma_1's rational handle tr(PHP) = 12/7 (invariant), and q = 14 (invariant). The gauge changes no sigma_r.",
+      "units": "exact Q (Fraction); per-edge per-t invariance booleans"
+    },
+    {
+      "claims": [
+        "CL-c4"
+      ],
+      "expected": "Sigma(delta C)=0 for e1/e2/e3 at every witness t; e3 has a nonzero delta C vector (genuine move) summing to 0; A==B' channels under the gauge",
+      "id": "PC4_deltaC_in_ker_Sigma_keystone",
+      "kills_relevant": [
+        "K4"
+      ],
+      "statement": "delta C in ker Sigma at the keystone: under the gauge along each edge at every witness t, the channel decomposition C = (kappa_c,kappa_s,kappa_int) moves but delta C = C_gauged - C_base satisfies Sigma(delta C) = delta kappa_c + delta kappa_s + delta kappa_int = 0 (i.e. delta K_G = 0). On the moving edge e3 the components individually move (delta C != 0 vector) yet sum to 0; Path-A channels under the gauge equal Path-B' channels.",
+      "units": "exact Q (Fraction); Sigma(delta C) must be exactly 0/1"
+    },
+    {
+      "claims": [
+        "CL-c4"
+      ],
+      "expected": "residual == 0 monomials for each of e1, e2, e3 (single-edge law holds symbolically over Q)",
+      "id": "PC5_single_edge_law_symbolic_over_Q",
+      "kills_relevant": [
+        "K4"
+      ],
+      "statement": "R2 universal warrant: the single-edge law is a SYMBOLIC IDENTITY over Q, not finite-keystone agreement. In Q[g1,g2,g3,h11,h12,h13,h22,h23,h33,t] the residual delta Delta_c(t e_i) - (-4 t (prod g) H_jk) is the ZERO polynomial for each i in {1,2,3} (0 residual monomials), where delta Delta_c is the probe's Delta_c formula (transcribed VERBATIM from the frozen probe) evaluated at the gauged H minus at the base H. With kappa_c = -Delta_c/q^2 this yields delta kappa_c = 4 t (prod g) H_jk / q^2 for EVERY regular jet (q != 0) and every t.",
+      "units": "count of residual monomials (must be 0) for each edge"
+    },
+    {
+      "claims": [
+        "CL-c4"
+      ],
+      "expected": "residual == 0 monomials for det(H_b) invariance per edge; P H P unchanged symbolically (q^2-cleared PHP residual is the zero matrix per edge)",
+      "id": "PC6_KG_invariant_symbolic_over_Q",
+      "kills_relevant": [
+        "K4"
+      ],
+      "statement": "R2 universal warrant: K_G (sigma_2) invariance under the gauge is a SYMBOLIC IDENTITY over Q. In Q[g,H,t] the residual det(H_b at the gauged jet) - det(H_b at the base jet) is the ZERO polynomial for each i in {1,2,3} (0 residual monomials), using the cofactor-expanded bordered determinant. With K_G = -det(H_b)/q^2 and q unchanged, K_G is gauge-invariant for EVERY regular jet. Separately, the gauge generator is annihilated by the projector: q^2*(P H' P - P H P) is the ZERO matrix symbolically (P g = 0), so EVERY shape invariant sigma_r (not only sigma_2) is preserved.",
+      "units": "count of residual monomials (must be 0) for det invariance; count of nonzero entries in q^2*(PH'P-PHP) (must be 0)"
+    },
+    {
+      "claims": [
+        "CL-c4"
+      ],
+      "expected": "Path-A channels == Path-B' channels on the gauged jet, all edges, all t",
+      "id": "PC7_two_derivation_under_gauge",
+      "kills_relevant": [
+        "K4"
+      ],
+      "statement": "The two disjoint channel derivations agree on the GAUGED jet: for each edge e1/e2/e3 at every witness t, the Path-A monomial read-off channels (kappa_c,kappa_s,kappa_int) equal the Path-B' split-shape-operator channels, exact Q. (The gauge moves C but the two independent routes track the move identically.)",
+      "units": "exact Q (Fraction); per-edge per-t boolean A==B'"
+    },
+    {
+      "claims": [
+        "CL-c4"
+      ],
+      "expected": "sigma-breaking mutant changes K_G (K4 would fire); wrong-law mutant != true law; e1-moves mutant claim is False; true gauge invariant + law-matching + e1/e2 pin",
+      "id": "PC8_K4_mutant_guards",
+      "kills_relevant": [
+        "K4"
+      ],
+      "statement": "K4 is armed and bites a lying gauge engine (mutation guards, exact Q): (a) a SIGMA-BREAKING mutant gauge H -> H + t*(e_i e_i^T) (a raw diagonal bump, NOT the border shear) CHANGES K_G on the keystone for some edge (so sigma_r would change -> K4 fires); (b) a WRONG-LAW mutant prediction delta kappa_c = 4 t (prod g) H_ii / q^2 (diagonal entry instead of the complementary off-diagonal H_jk) DIFFERS from the true single-edge law at the keystone (so a mis-stated law would be caught); (c) an e1-MOVES mutant claim (asserting e1 moves rather than pins) is FALSE against the true delta kappa_c = 0 on e1. The TRUE gauge passes all three checks (K_G invariant, true law matches, e1/e2 pin).",
+      "units": "booleans (mutant detected) + exact-Q sign/value comparisons"
+    },
+    {
+      "claims": [
+        "CL-c4"
+      ],
+      "expected": "oracle imports none of A/B/B'/fixtures and vice-versa; every channel row carries a frame string",
+      "id": "PC9_preconditions",
+      "kills_relevant": [],
+      "preconditions": [
+        "P-self-cert",
+        "P-frame"
+      ],
+      "statement": "Preconditions hold (run not void): P-self-cert -- the Path C oracle module does NOT import probe / referee_total / referee_channel / fixtures, and they do not import oracle; P-frame -- the keystone F8 fixture and the gauged-jet rows carry a non-empty frame annotation (the single-edge-gauge frame).",
+      "units": "boolean (import-graph disjointness; frame-present on every channel row)"
+    }
+  ],
+  "referee": {
+    "Path_A": "monomial channel read-off (the probe; role=probe).",
+    "Path_B": "independent TOTAL referee referee_total.referee_total: K_G = -det(H_b)/q^2 via fraction-free Bareiss (generic determinant; no DBP channel formulas; sqrt-q-free); refuses q==0 with RefereeRefusal.",
+    "Path_Bprime": "independent CHANNEL referee referee_channel.referee_channel: channels from the split shape operator P H_X P (P = I - g g^T/q) + trace identities (genuine non-mirror kappa_s); disjoint source; refuses q==0 with RefereeRefusal.",
+    "Path_C": "frozen external fixture oracle oracle.oracle: exact-Q expectations transcribed from FIXTURES.md. P-self-cert: the oracle does NOT import A/B/B' and they do not import it.",
+    "gauge_invariance_referee": "Stage C grades the gauge against TWO disjoint truth paths in addition to Path A: (i) Path B total referee K_G under the gauged jet must equal the base K_G (sigma_2 invariant); (ii) Path B' channel referee channels under the gauged jet must equal the Path A channels and must sum to the base K_G (delta C in ker Sigma). The single-edge law is established as a SYMBOLIC IDENTITY over Q (multivariate exact-Q engine in indeterminates g1..g3, h11..h33, t) and witnessed exactly at the keystone F8 (e1/e2 pin, e3 moves 6/49). sigma_1 is tracked via the rational handle tr(PHP) (sigma_1 = tr(PHP)/|g| in Q(sqrt q)); the gauge fixes tr(PHP) exactly, so sigma_1 is invariant without ever forming |g| (sqrt-q-free).",
+    "separation_note": "The probe never imports the referee. Path B, Path B', Path C are code-disjoint sources. All grading is mechanical exact-Q equality (no tolerance)."
+  },
+  "scope": {
+    "anchors": {
+      "prod_g": "6/1",
+      "q": "14/1",
+      "q_squared": "196/1"
+    },
+    "armed_kills": [
+      "K4"
+    ],
+    "claims": [
+      "CL-c4"
+    ],
+    "fixture_set": "GAUGE_SINGLE_EDGE",
+    "fixtures": [
+      "F8"
+    ],
+    "gauge": "single-edge border shear H -> H + t(g e_i^T + e_i g^T) along e1, e2, e3",
+    "out_of_scope": {
+      "fixtures": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5",
+        "F6",
+        "F7",
+        "F9",
+        "F10",
+        "F11",
+        "F12",
+        "F12a",
+        "F12b",
+        "F13"
+      ],
+      "kills": [
+        "K1",
+        "K2",
+        "K3",
+        "K5",
+        "K6",
+        "K7",
+        "K8",
+        "K9",
+        "K10",
+        "K11"
+      ],
+      "note": "Stage C is the gauge/single-edge stage. Other kills and fixtures belong to sibling stages (B/D/E) and Stage A."
+    },
+    "preconditions": [
+      "P-self-cert",
+      "P-frame"
+    ]
+  },
+  "semantics_pinned_anchor": {
+    "K_G": "K_G = -det(H_b)/q^2",
+    "det_Hb": "det(H_b) = Delta_c + Delta_s + Delta_m",
+    "kappa_X": "kappa_X = -Delta_X/q^2",
+    "keystone_F8": "g=(3,1,2), H=[[2,1,0],[1,0,0],[0,0,2]], q=14, prod g=6, q^2=196, (K_G,kappa_c,kappa_s,kappa_int)=(-3/49,-1/49,1/49,-3/49)",
+    "sigma_1": "sigma_1 = tr(PHP)/|g| in Q(sqrt q); rational handle tr(PHP) invariant",
+    "sigma_2": "sigma_2 = K_G (intrinsic; invariant under gauge)",
+    "single_edge_gauge": "g unchanged; H -> H + t(g e_i^T + e_i g^T)",
+    "single_edge_law": "delta kappa_c(t e_i) = 4 t (prod g) H_jk / q^2, {j,k} complement of i"
+  },
+  "stage": "stage_c",
+  "stage_title": "gauge / single-edge (CL-c4; K4 armed)",
+  "status_move_rules": {
+    "CL-c4": {
+      "R2_disposition": "R2 (supplied-frame): the channels are frame-relative in the supplied DBP frame; only the sum K_G (= sigma_2) is intrinsic. The single-edge law is established as a SYMBOLIC IDENTITY over Q in (t, g, H) (PC5/PC6), NOT finite-keystone agreement alone, and witnessed exactly at the keystone (PC1/PC2: e1/e2 pin, e3 moves 6/49). Gauge-invariance of every sigma_r (PC3/PC6) and delta C in ker Sigma (PC4) hold.",
+      "ledger_statement": "gauge preserves every sigma_r; delta C in ker Sigma; single-edge delta kappa_c(t e_i) = 4 t prod g H_jk / q^2",
+      "on_fail": {
+        "default": "any FAIL -> HALT, preserve chain, route to Will; no move.",
+        "if_KG_not_invariant_symbolic": "PC6 FAIL (K_G/sigma_r invariance not a symbolic identity over Q) -> HALT (do NOT downgrade to a finite-only warrant); route to Will.",
+        "if_deltaC_not_in_ker_Sigma": "PC4 FAIL (Sigma(delta C) != 0, the sum moves) -> K4 fires -> REFUTED candidate; HALT, route to Will.",
+        "if_sigma_r_changes": "PC3 FAIL (some sigma_r changes under gauge) -> K4 fires -> REFUTED candidate; HALT, route to Will.",
+        "if_single_edge_law_fails": "PC1/PC2/PC5 FAIL (e1 or e2 fail to pin, or e3 fails to move, or the law is not a symbolic identity over Q) -> K4 fires -> REFUTED candidate; HALT, route to Will."
+      },
+      "on_pass": {
+        "condition": "PC1 AND PC2 AND PC3 AND PC4 AND PC5 AND PC6 AND PC7 AND PC8 AND PC9 all PASS -- crucially PC3 (every sigma_r preserved) AND PC4 (delta C in ker Sigma) AND PC5+PC6 (the single-edge law AND K_G/sigma_r invariance as symbolic identities over Q), with PC1/PC2 the keystone witness and PC7 the two-derivation persistence.",
+        "move_to": "DEMONSTRATED",
+        "warrant_scope": "Gauge-invariance of every sigma_r (the tangent shape operator P H P is fixed by the border shear: symbolic over Q via PC6) + delta C in ker Sigma (PC4) + the single-edge law as a symbolic identity over Q (PC5), witnessed exactly at the keystone F8 (PC1/PC2: e1/e2 pin, e3 moves 6/49), corroborated across Paths A/B/B'. R2: channels frame-relative, sum K_G intrinsic. Eval-tier; no substrate promotion; canonical only on Will's sign-off."
+      },
+      "universal_claim": true
+    },
+    "halt_rule": "On ANY prediction FAIL: HALT. Preserve the chain verbatim. Do NOT fix, redesign, soften, or widen. Write what is held and route to Will. No status move is proposed for CL-c4 unless ALL of its gating predictions PASS.",
+    "kills": {
+      "K4": {
+        "claim": "CL-c4",
+        "condition_verbatim": "K4 gauge / single-edge (refute) -- sigma_r changes under gauge, or delta C not in ker Sigma, or single-edge law fails (e1/e2 fail to pin, e3 fails to move).",
+        "fires_on": "PC3 FAIL (sigma_r changes) OR PC4 FAIL (delta C not in ker Sigma) OR PC1/PC2/PC5 FAIL (single-edge law fails: e1/e2 fail to pin or e3 fails to move) OR PC6 FAIL (K_G/sigma_r invariance not symbolic over Q)."
+      }
+    },
+    "preconditions": {
+      "P-frame": {
+        "checked_by": "PC9",
+        "on_fail": "channel row rejected; run VOID"
+      },
+      "P-self-cert": {
+        "checked_by": "PC9",
+        "on_fail": "run VOID"
+      }
+    },
+    "scope_note": "Stage C grades CL-c4 only and arms K4 (gauge / single-edge) with P-self-cert / P-frame over the GAUGE_SINGLE_EDGE fixture set (keystone F8 perturbed along t e1, t e2, t e3). K1/K2/K3/K5/K6/K7/K8/K9/K10/K11 and the other fixtures belong to other stages. No substrate promotion: eval-tier only; nothing canonical until Will signs off."
+  },
+  "two_run_byte_stability_note": "The battery is run TWICE; the records jsonl from both runs MUST be byte-identical (sorted-keys serialisation, exact-Q frac:n/d strings, no float/time/random).",
+  "version": "stage_c_prereg_v1"
+}

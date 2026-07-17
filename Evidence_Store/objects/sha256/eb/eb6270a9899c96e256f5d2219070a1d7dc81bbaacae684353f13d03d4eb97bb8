@@ -1,0 +1,167 @@
+"""
+Stage D -- Characteristic-2 RoleChSpec faithfulness, generalized from n=3 to all n.
+
+P-D1  char != 2 (p=3,5,7; n=3..7):  ker(carrier map mod p) = gauge,  rank = C(n,2).
+P-D2  char 2 (n=3..9):  the gauge map a -> G_g(a) over GF(2) has rank n-1, kernel <g>,
+      and  g g^T  is NOT in the gauge image.
+P-D3  char 2 (n=3..7):  ker(carrier map mod 2) = gauge_mod2 (+) <g g^T>  (rank C(n,2)) --
+      the all-n analog of Campaign H's CL-H10; cross-checked at n=3 against the Campaign H
+      raw-RoleChSpec engine (blind spot exactly <g g^T>).
+
+The "channel map" used here is the LINEAR carrier L (the r=1 channel core whose linear
+recovery is the heart of RoleChSpec injectivity, Campaign H Lemma H4).  The full
+NONLINEAR all-n RoleChSpec mod 2 is reproduced only at n=3 (CL-H10); for n>3 it stays
+OPEN (CALC-16) and is flagged as such.  Exact mod-p arithmetic; no float.
+
+Run: cd evals/dbp_involution && PYTHONPATH=../../src python3 stageD_char2_rolechspec.py
+"""
+
+from __future__ import annotations
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(
+    os.path.abspath(__file__)))), "src"))
+from math import comb
+
+import sympy as sp
+import rep_utils as RU
+import dbp_carrier as E
+from harness import Recorder, COMPUTER_VERIFIED, PROVEN, REFUTED, BRANCHED, OPEN
+
+
+def gauge_cols(n):
+    """The n gauge columns G_1(e_a) in Sym^2 coords (integer)."""
+    MG = E.gauge_matrix(n)
+    return [[int(MG[r, a]) for r in range(MG.rows)] for a in range(n)]
+
+
+def run(rec: Recorder):
+    summary = {"P-D1": [], "P-D2": [], "P-D3": []}
+
+    # ---------------- P-D1  char != 2 : ker(carrier) = gauge ----------------
+    for p in (3, 5, 7):
+        for n in range(3, 8):
+            Lf = E.L_flag(n)
+            rows = E.mat_mod(Lf, p)
+            rank = E.gf_rank(rows, p)
+            null = E.gf_nullspace(rows, p)
+            nulldim = len(null)
+            gcols = [[c % p for c in col] for col in gauge_cols(n)]
+            gauge_rank = E.gf_rank(gcols, p)
+            # every gauge column is in ker (L*gauge = 0), and they span the kernel
+            gauge_in_ker = all(E.in_span_mod([v for v in null], gc, p) for gc in gcols) if null else (gauge_rank == 0)
+            ker_is_gauge = (nulldim == n and gauge_rank == n and gauge_in_ker)
+            ok = (rank == comb(n, 2) and ker_is_gauge)
+            rec.record(
+                f"P-D1 p={p} n={n}: ker(carrier mod p) = gauge (dim n), rank = C(n,2)",
+                COMPUTER_VERIFIED if ok else REFUTED,
+                {"p": p, "n": n, "rank_mod_p": rank, "C(n,2)": comb(n, 2),
+                 "nullity": nulldim, "gauge_dim": gauge_rank, "ker==gauge": ker_is_gauge},
+                gate=True,
+            )
+            summary["P-D1"].append({"p": p, "n": n, "rank": rank, "ok": ok})
+
+    # ---------------- P-D2  char 2 : gauge collapses to rank n-1 ----------------
+    for n in range(3, 10):
+        # full gauge map  a -> G_1(a) in Sym^2(F_2^n);  over GF(2) regular g == 1 (all odd)
+        MG = E.gauge_matrix(n)
+        rows_full = E.mat_mod(MG, 2)            # Sym^2 rows x n cols
+        rank2 = E.gf_rank(rows_full, 2)
+        null2 = E.gf_nullspace(rows_full, 2)    # kernel in a-space
+        # kernel should be <g=1>
+        ones = [1] * n
+        ker_is_g = (len(null2) == 1 and E.in_span_mod(null2, ones, 2) and E.in_span_mod([ones], null2[0], 2))
+        # g g^T not in gauge image (column span) over GF(2)
+        gcols2 = [[c % 2 for c in col] for col in gauge_cols(n)]
+        ggT = [int(x) % 2 for x in E.ggT_vector(n)]
+        ggT_in_image = E.in_span_mod(gcols2, ggT, 2)
+        ok = (rank2 == n - 1 and ker_is_g and not ggT_in_image)
+        rec.record(
+            f"P-D2 n={n}: GF(2) gauge rank = n-1, kernel = <g>, g g^T not in gauge image",
+            COMPUTER_VERIFIED if ok else REFUTED,
+            {"n": n, "gauge_rank_char2": rank2, "n-1": n - 1,
+             "kernel_dim": len(null2), "kernel==<g=1>": ker_is_g,
+             "ggT_in_gauge_image_mod2": ggT_in_image},
+            gate=True,
+        )
+        summary["P-D2"].append({"n": n, "gauge_rank": rank2, "ok": ok})
+
+    # ---------------- P-D3  char 2 : ker(carrier) = gauge_mod2 (+) <ggT> ----------------
+    for n in range(3, 8):
+        Lf = E.L_flag(n)
+        rows = E.mat_mod(Lf, 2)
+        rank2 = E.gf_rank(rows, 2)
+        null2 = E.gf_nullspace(rows, 2)
+        nulldim = len(null2)
+        gcols2 = [[c % 2 for c in col] for col in gauge_cols(n)]
+        gauge_rank2 = E.gf_rank(gcols2, 2)      # = n-1
+        ggT = [int(x) % 2 for x in E.ggT_vector(n)]
+        enlarged = gcols2 + [ggT]
+        enlarged_rank = E.gf_rank(enlarged, 2)  # = n  (gauge_mod2 (+) <ggT>)
+        # ker == span(gauge_mod2, ggT) ?
+        ker_contains_enlarged = all(E.in_span_mod(null2, v, 2) for v in enlarged)
+        enlarged_contains_ker = all(E.in_span_mod(enlarged, v, 2) for v in null2)
+        equal = ker_contains_enlarged and enlarged_contains_ker
+        ok = (rank2 == comb(n, 2) and nulldim == n and gauge_rank2 == n - 1
+              and enlarged_rank == n and equal)
+        rec.record(
+            f"P-D3 n={n}: ker(carrier mod 2) = gauge_mod2 (+) <g g^T>, rank C(n,2) "
+            f"(all-n analog of CL-H10)",
+            COMPUTER_VERIFIED if ok else (BRANCHED if nulldim != n else REFUTED),
+            {"n": n, "rank_mod2": rank2, "C(n,2)": comb(n, 2),
+             "kernel_dim": nulldim, "gauge_mod2_dim": gauge_rank2,
+             "gauge_mod2_+_ggT_dim": enlarged_rank,
+             "kernel == gauge_mod2 (+) <ggT>": equal,
+             "phantom_restores_lost_dim": (gauge_rank2 == n - 1 and enlarged_rank == n)},
+            gate=True,
+        )
+        summary["P-D3"].append({"n": n, "kernel_dim": nulldim, "equal": equal, "ok": ok})
+
+    # n=3 full-nonlinear cross-check against Campaign H raw RoleChSpec engine (CL-H10)
+    try:
+        from lloyd_v4.evals.rolechspec_symbolic_proof_extraction import raw_chart_rolechspec as RAW
+        bs = RAW.char2_blind_spot([1, 3, 5])
+        blind_is_ggT = (tuple(bs.get("grad_outer_rep")) in [tuple(x) for x in bs.get("nonzero_blind", [])])
+        rec.record(
+            "P-D3 n=3 cross-check (Campaign H raw RoleChSpec): char-2 blind spot is exactly <g g^T>",
+            COMPUTER_VERIFIED if blind_is_ggT else REFUTED,
+            {"engine": "rolechspec_symbolic_proof_extraction.raw_chart_rolechspec",
+             "char2_blind_spot([1,3,5])": {k: [list(t) for t in v] if isinstance(v, list) else list(v)
+                                            for k, v in bs.items()},
+             "blind_spot==grad_outer(ggT)": blind_is_ggT},
+            tier="[computer-verified; reproduces CL-H10 at n=3]",
+        )
+    except Exception as e:
+        rec.record("P-D3 n=3 cross-check (Campaign H engine)", OPEN,
+                   {"error": repr(e)}, tier="[not reproduced]")
+
+    # ---------------- D_VERDICT ----------------
+    d1_ok = all(r["ok"] for r in summary["P-D1"])
+    d2_ok = all(r["ok"] for r in summary["P-D2"])
+    d3_ok = all(r["ok"] for r in summary["P-D3"])
+    if d1_ok and d2_ok and d3_ok:
+        dverdict = "char2_phantom_generalizes"
+    elif summary["P-D3"][0]["ok"] and not all(r["ok"] for r in summary["P-D3"][1:]):
+        dverdict = "char2_phantom_is_low_rank_accident"
+    else:
+        dverdict = "new_mod2_kernel"
+    rec.record(
+        "D_VERDICT",
+        COMPUTER_VERIFIED,
+        {"verdict": dverdict,
+         "scope": "linear carrier (r=1 channel core) for all n=3..7; full NONLINEAR RoleChSpec "
+                  "reproduced only at n=3 (CL-H10). All-n nonlinear RoleChSpec mod 2 remains OPEN "
+                  "(CALC-16).",
+         "P-D1_all_ok": d1_ok, "P-D2_all_ok": d2_ok, "P-D3_all_ok": d3_ok},
+        tier="[computer-verified for the linear channel core]",
+    )
+    summary["D_VERDICT"] = dverdict
+    return summary
+
+
+if __name__ == "__main__":
+    rec = Recorder("StageD")
+    summary = run(rec)
+    for r in rec.records:
+        flag = "" if r["verdict"] not in (REFUTED, BRANCHED) else f"  <<< {r['verdict']}"
+        print(f"[{r['verdict']:17}] {r['claim']}{flag}")
+    print(f"\nD_VERDICT = {summary['D_VERDICT']}")

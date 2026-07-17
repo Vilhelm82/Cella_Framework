@@ -1,0 +1,137 @@
+# Substrate Invariant Search — Phase B — Invariant Vector Table
+
+**Status:** Phase B complete. 18 probe points across 4 fixtures. P1-satisfied candidates computed; F-evaluation candidates recorded as protocol placeholders.
+**Date:** 2026-05-23
+**Authority:** [`Build_Docs/Agent_tasks/substrate_invariant_search_2026_05_23.md`](../../Agent_tasks/substrate_invariant_search_2026_05_23.md)
+**Pre-registry:** [`Build_Docs/Agent_tasks/substrate_invariant_search_phase_b_probe_set.md`](../../Agent_tasks/substrate_invariant_search_phase_b_probe_set.md)
+**Source chain:** Phase A catalogue sha256 prefix `18bd80e6fc395df0...`
+
+**Deliverables landed:**
+- [`phase_b_invariant_vector_table.json`](phase_b_invariant_vector_table.json) — primary table artefact, byte-stable.
+- [`src/lloyd_v4/evals/substrate_invariant_search_phase_b.py`](../../../src/lloyd_v4/evals/substrate_invariant_search_phase_b.py) — generator.
+- [`tests/test_substrate_invariant_search_phase_b.py`](../../../tests/test_substrate_invariant_search_phase_b.py) — 8 focused tests.
+- This characterisation markdown.
+
+---
+
+## 1. Probe set
+
+**18 probe points across 4 fixtures.**
+
+| Fixture | n_points | Coordinates span | Regime span |
+|---|---|---|---|
+| sr_four_form | 5 | β ∈ {0.1, 0.5, 0.671, 0.9, 0.999} | non-relativistic → lightspeed approach |
+| schwarzschild_four_form | 5 | r ∈ {2.1, 3.0, 4.4, 5.0, 100.0} | horizon → far-field |
+| pure_algebraic_four_form | 5 | x ∈ {0.1, 0.45, 0.5, 0.9, 0.99} | far → near-singular |
+| sphere_multi_d | 3 | (x,y,z) at axis / equator-45 / diagonal | umbilic everywhere |
+
+Each fixture's middle point is the Sterbenz-cluster sentinel (where applicable).
+
+---
+
+## 2. P1-satisfied candidates — vector summary
+
+### BACL_grain
+
+**Range across 18 probe points: 2.220e-16 (constant).**
+
+This is the audit's first surprise. BACL_grain computed as `max(ulp(v) for v in dominant_intermediates)` is *identical* across every probe point because the dominant intermediate at every point is `O(1)` (specifically the constant `1.0` in 1-x_term fixtures, or coordinates near `1/√3` for sphere). ulp(1.0) = 2.22e-16 for float64.
+
+**What this tells us**: BACL_grain *at the highest-ulp intermediate* is a coarse invariant. The fine structure that actually discriminates regimes lives in the **other** intermediates — specifically `2/r` (whose binade tracks r), `beta*beta` (tracks β), and the resultant `base_operand`. Phase C needs to characterise this properly: BACL_grain has substructure not captured by "max ulp."
+
+**Implication for the substrate invariant**: BACL_grain as currently formulated is a constant at O(1) probe points and therefore non-discriminating. The richer BACL observable is **the binade-spaced ulp ratio across the operand chain** — that's what the c2 lattice theorem encodes. Phase C should consider promoting "BACL grain spectrum" over single-value BACL grain.
+
+### E_log2_base_operand
+
+**Range across 15 1-x_term probes: [−8.967, −0.014]. Null for 3 sphere probes.**
+
+Meaningful variation across the regime. Specifically:
+- Near-singular endpoint: E ≈ −8.97 (SR β=0.999), E ≈ −6.64 (PA x=0.99), E ≈ −4.39 (Schw r=2.1)
+- Sterbenz cluster: E ≈ −0.87 (all three fixtures, by construction)
+- Far-from-singular: E ≈ −0.01 (SR β=0.1)
+
+E is the **dominant discriminating candidate** at this probe set.
+
+### in_sterbenz_cluster
+
+3 probes flagged true (all three Sterbenz-center sentinels). All others false or null. Boolean function of E.
+
+### conjecture_c_in_normal_range
+
+**Constant True for all 15 1-x_term probes.** All probe points have `1 − x_term ≥ 2^−1021` by a wide margin. Sphere probes record null.
+
+This is informative: Conjecture C provides no discrimination across this probe set. It's a scope-validity boolean, not an invariant in the discriminating sense. Phase C should treat it as a precondition rather than a basis vector.
+
+### c2_lattice_chain_applies
+
+Same as Conjecture C — constant True for in-scope 1-x_term fixtures, null for sphere. Non-discriminating.
+
+### two_form_partition
+
+Per-fixture algebraic-form property; constant across probes within a fixture (silent vs residual_carrying classification per F1/F2/F3/F4). Sphere has no four-form framework — null.
+
+---
+
+## 3. Closeout questions
+
+### Q1 — Table size
+**18 probe points × 6 P1-satisfied candidates = 108 cells (some nulled for inapplicability), plus 7 protocol placeholders for F-evaluation candidates.**
+
+### Q2 — Meaningful variation
+- **E_log2_base_operand**: strong variation (range ~9 log2 units). Primary discriminating candidate.
+- **BACL_grain (as currently formulated)**: zero variation. Needs reformulation as "BACL spectrum" or "BACL grain at chain-specific intermediate."
+- **in_sterbenz_cluster**: meaningful boolean (3 true / 15 false-or-null).
+- **conjecture_c_in_normal_range / c2_lattice_chain_applies**: constant True for in-scope; non-discriminating in this probe set.
+
+### Q3 — Constants across the probe set
+- BACL_grain at dominant intermediate (all O(1)-dominated)
+- Conjecture C in_normal_range (all probes above 2^−1021)
+- c2 lattice chain applicability (same)
+- two_form_partition (fixture-level constant by construction)
+
+### Q4 — Obvious correlations
+- **E and in_sterbenz_cluster** are perfectly correlated by definition (interval test on E).
+- **Conjecture C and c2_lattice** are constant-True together (same precondition).
+- **BACL_grain at O(1) intermediate** is constant — degenerate at this probe set.
+- **base_operand and E** are deterministically related (E = log2|base_operand|) — same degree of freedom.
+
+Phase C will quantify. Pre-Phase-C estimated irreducible basis cardinality: **2** (BACL spectrum + E) for the 1-x_term family, possibly **3** if two_form_partition is genuinely orthogonal.
+
+### Q5 — Surprises
+1. **BACL_grain is constant at this probe set.** The single-value BACL formulation doesn't discriminate. The richer observable is the BACL *spectrum* across operand-chain intermediates, not the maximum.
+2. **Conjecture C and c2_lattice contribute no discrimination in normal range.** They are scope-validity preconditions, not invariants. To discriminate, the probe set would need subnormal points — out of current scope.
+3. **Sphere probes confirm what Phase A predicted**: only BACL_grain extends to non-1-x_term surfaces. E / sterbenz / Conjecture C / c2 / two_form_partition all null for sphere. The substrate-invariant search at multi-D surfaces needs new substrate observables that don't depend on the `1-x_term` form — likely the V4-native K_G primitive from Phase E.
+
+### Q6 — Supports Phase C?
+Yes. The table contains enough variation to test correlation structure formally. Two pre-flagged Phase C considerations:
+1. **Reformulate BACL** as a multi-component observable (per-operand-chain-step ulp spectrum), not single max-ulp scalar.
+2. **Move Conjecture C and c2_lattice from "candidates" to "preconditions"** for the in-scope synthesis; they don't carry discriminating information in the current scope.
+
+---
+
+## 4. What Phase B does *not* claim
+
+- Phase B did **not** run measurement protocols for F-evaluation-dependent candidates. Those land in later phases under their own pre-registries.
+- Phase B did **not** perform correlation analysis. That is Phase C.
+- Phase B did **not** propose elimination of any candidate. The "BACL needs reformulation" and "Conjecture C/c2 are preconditions" observations are flagged for Phase C consideration, not pre-decided.
+- Phase B did **not** modify any substrate, architecture, or fixture file.
+
+---
+
+## 5. Source artefact chain
+
+| Artefact | sha256 prefix |
+|---|---|
+| `phase_a_candidate_catalogue.json` | `18bd80e6fc395df0` |
+| `phase_b_invariant_vector_table.json` | (recorded live in artefact + post-build verification) |
+
+---
+
+## 6. References
+
+- Campaign authority: [`Build_Docs/Agent_tasks/substrate_invariant_search_2026_05_23.md`](../../Agent_tasks/substrate_invariant_search_2026_05_23.md)
+- Phase B pre-registry: [`Build_Docs/Agent_tasks/substrate_invariant_search_phase_b_probe_set.md`](../../Agent_tasks/substrate_invariant_search_phase_b_probe_set.md)
+- Phase A catalogue: [`phase_a_candidate_catalogue.json`](phase_a_candidate_catalogue.json), [`phase_a_candidate_catalogue.md`](phase_a_candidate_catalogue.md)
+- Sterbenz cluster source: `Build_Docs/Reports/mcg_geometry_first/phase_2g_cdef1_calibration.json`
+- Four-form battery: `Build_Docs/Reports/mcg_geometry_first/phase_2_joined_readback_table.json`, `Build_Docs/where_i_got_stuck.md`
+- BACL invariant: `Build_Docs/Reports/bacl_invariant_audit/closeout.md`

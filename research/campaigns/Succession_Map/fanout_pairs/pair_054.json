@@ -1,0 +1,53 @@
+{
+  "rank": 54,
+  "lift": 18.06,
+  "count": 7,
+  "families": 1,
+  "a": {
+    "id": "OBJ:f-epsilon-x",
+    "label": "F_epsilon(x)",
+    "standard_term": "rational partial-fraction kernel reducing the third-kind integral to elementary terms plus K",
+    "nomenclature": "novel",
+    "symbols": [
+      "f_epsilon"
+    ]
+  },
+  "b": {
+    "id": "OBJ:m-epsilon-n-epsilon-a-epsilon-b-epsilon",
+    "label": "m_epsilon, n_epsilon, A_epsilon, B_epsilon",
+    "standard_term": "epsilon-parametrized family unifying the primary (k^2, n) and dual (k_dual^2, n_dual) moduli/characteristics with their third-kind-integral coefficients",
+    "nomenclature": "generalization-of",
+    "symbols": [
+      "a_epsilon",
+      "b_epsilon",
+      "m_epsilon",
+      "n_epsilon"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-0881",
+      "type": "formula",
+      "claim_status": null,
+      "label": "Alternate closed form of the anti-invariant coefficient",
+      "summary": "F_\\epsilon(u)-F_\\epsilon(b/u) = -\\frac{A_\\epsilon m_\\epsilon}{d_\\epsilon} \\frac{u^2-b} {(u-u_{0,\\epsilon})(u-u_{1,\\epsilon})}. \\tag{5.9}",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md"
+    },
+    {
+      "uid": "U-0924",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Constant d_epsilon and F_epsilon in u-coordinate",
+      "summary": "d_\\epsilon=m_\\epsilon(1-n_\\epsilon) = \\frac{1+\\epsilon s}{16}. In the u-coordinate, F_\\epsilon(u) = A_\\epsilon \\frac{m_\\epsilon}{d_\\epsilon-n_\\epsilon u} -B_\\epsilon. \\tag{3.6}",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md"
+    },
+    {
+      "uid": "U-0971",
+      "type": "formula",
+      "claim_status": null,
+      "label": "Endpoint values of f_epsilon on the upper path",
+      "summary": "f_\\epsilon(-m_\\epsilon,0)=-1, \\qquad \\lim_{u\\to0^-}f_\\epsilon(u,y)=1. \\tag{6.1}",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md"
+    }
+  ]
+}

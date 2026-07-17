@@ -1,0 +1,53 @@
+{
+  "rank": 31,
+  "lift": 33.55,
+  "count": 13,
+  "families": 2,
+  "a": {
+    "id": "OBJ:m-epsilon-n-epsilon-a-epsilon-b-epsilon",
+    "label": "m_epsilon, n_epsilon, A_epsilon, B_epsilon",
+    "standard_term": "epsilon-parametrized family unifying the primary (k^2, n) and dual (k_dual^2, n_dual) moduli/characteristics with their third-kind-integral coefficients",
+    "nomenclature": "generalization-of",
+    "symbols": [
+      "a_epsilon",
+      "b_epsilon",
+      "m_epsilon",
+      "n_epsilon"
+    ]
+  },
+  "b": {
+    "id": "OBJ:u-a-epsilon-b-weierstrass-model-coordinates",
+    "label": "u, a_epsilon, b (Weierstrass-model coordinates)",
+    "standard_term": "depressed-cubic (Tschirnhaus) substitution coordinates putting the curve in short Weierstrass form",
+    "nomenclature": "identical-to",
+    "symbols": [
+      "a_epsilon"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-0147",
+      "type": "definition",
+      "claim_status": null,
+      "label": "DBP parameters m_epsilon, n_epsilon, A_epsilon, B_epsilon",
+      "summary": "m_\\epsilon=\\frac{2-\\epsilon s}{4}, \\qquad n_\\epsilon=\\frac{4-3\\epsilon s}{8}, \\tag{1.1} ... A_\\epsilon=3+2\\epsilon s, \\qquad B_\\epsilon=2+2\\epsilon s. \\tag{1.2}",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md"
+    },
+    {
+      "uid": "U-0724",
+      "type": "definition",
+      "claim_status": null,
+      "label": "DBP complete-integral values I_epsilon",
+      "summary": "I_\\epsilon = -t^7 \\left[ A_\\epsilon\\Pi(n_\\epsilon;m_\\epsilon) -B_\\epsilon K(m_\\epsilon) \\right], \\tag{1.6} with I_- interpreted as a Cauchy principal value on the real path.",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md"
+    },
+    {
+      "uid": "U-0818",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Explicit composite degree-two isogeny phi_epsilon",
+      "summary": "\\phi_\\epsilon(u,y) = \\left( 1+\\epsilon s \\left(u+a_\\epsilon+\\frac bu\\right), \\ \\iota_\\epsilon t^3y \\left(1-\\frac b{u^2}\\right) \\right). \\tag{2.9}",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md"
+    }
+  ]
+}

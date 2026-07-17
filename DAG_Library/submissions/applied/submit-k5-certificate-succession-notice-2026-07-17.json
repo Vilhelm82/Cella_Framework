@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "submission_id": "submit-k5-certificate-succession-notice-2026-07-17",
+  "idempotency_key": "k5-certificate-succession-notice:f695fa97",
+  "submitted_by": "codex.claire",
+  "summary": "Register the non-destructive succession notice on the k=5 S16 certificate, preserving its exact specialization authority while routing its historical R11 forecast to the completed all-k weighted theorem.",
+  "base_revision": "sha256:00ef143b0e00f29f8a8f97ee4583907262db1c829ff6ba8c236cb71a3719fec1",
+  "artifacts": [
+    {
+      "schema_version": 1,
+      "artifact_id": "PAP-0083",
+      "artifact_type": "certificate",
+      "title": "k=5 Axial Norm Galois Group — Certificate Report",
+      "summary": "Exact specialization certificate proving the generic k=5 base group S_16, now carrying a succession notice that the all-k weighted theorem supersedes its historical R11 forecast while the k=5 decorated Kummer closure remains open.",
+      "subject_families": [
+        "galois_horizon_and_kummer_covers"
+      ],
+      "claim_status": "machine-verified",
+      "lifecycle_status": "released",
+      "provenance": {
+        "authors": [
+          "Will Lloyd"
+        ],
+        "created_utc": null,
+        "origin_repository": "Cella Framework",
+        "source_pointer": "cella:Papers_Library/07_certificates_data_and_reproducibility/galois_horizon_and_kummer_covers/K5_GALOIS_GROUP_CERTIFICATE_REPORT_2026-07-10.md"
+      },
+      "files": [
+        {
+          "role": "certificate_report",
+          "path": "Papers_Library/07_certificates_data_and_reproducibility/galois_horizon_and_kummer_covers/K5_GALOIS_GROUP_CERTIFICATE_REPORT_2026-07-10.md",
+          "sha256": "f695fa97caaabb944421266e1bb1935f107dd0f1b1227122b7ac4ec0dc69835f",
+          "media_type": "text/markdown"
+        }
+      ],
+      "claims": [
+        {
+          "claim_id": "STATUS-CLEANUP-07",
+          "statement": "The generic five-charge axial mass norm has Galois group S_16; the report's former R11 forecast is superseded by the all-k weighted theorem, while its k=5 decorated-closure guardrail remains current.",
+          "hypotheses": [
+            "Use the source document's stated genericity hypotheses and exact specialization certificate."
+          ],
+          "scope": "Five-charge base monodromy and its succession status.",
+          "claim_status": "machine-verified",
+          "proof_ids": [],
+          "evidence_ids": []
+        }
+      ],
+      "relations": [],
+      "external_ids": {
+        "paper_artifacts": [
+          "PAP-0083"
+        ]
+      },
+      "declared_impacts": [
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:IV5",
+          "note": "The dated k=5 certificate now routes current R11 authority to the weighted all-k successor."
+        }
+      ],
+      "llm": {
+        "one_sentence_purpose": "Preserve the exact k=5 S16 certificate while distinguishing its historical R11 forecast from current all-k proof authority.",
+        "key_terms": [
+          "k=5",
+          "S_16",
+          "specialization certificate",
+          "R11",
+          "succession"
+        ],
+        "retrieval_questions": [
+          "What proves the k=5 base Galois group, and which later theorem generalizes it?"
+        ],
+        "context_priority": "normal",
+        "context_role": "supporting"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "status_cleanup_date": "2026-07-17",
+        "source_sha256": "f695fa97caaabb944421266e1bb1935f107dd0f1b1227122b7ac4ec0dc69835f"
+      }
+    }
+  ],
+  "declared_impacts": [
+    {
+      "kind": "reevaluate",
+      "target_id": "DBP:gap:IV5",
+      "note": "No graph claim changes: IV5 is already resolved; this artifact-only cleanup aligns a dated supporting certificate."
+    }
+  ],
+  "graph_delta": {
+    "upsert_nodes": [],
+    "upsert_edges": [],
+    "retire_nodes": [],
+    "remove_edges": []
+  },
+  "extensions": {
+    "requested_by": "William Lloyd",
+    "protocol": "validate-impact-preview-stage-apply",
+    "source_files": [
+      "Papers_Library/07_certificates_data_and_reproducibility/galois_horizon_and_kummer_covers/K5_GALOIS_GROUP_CERTIFICATE_REPORT_2026-07-10.md"
+    ],
+    "graph_effect": "none; artifact-only succession cleanup"
+  }
+}

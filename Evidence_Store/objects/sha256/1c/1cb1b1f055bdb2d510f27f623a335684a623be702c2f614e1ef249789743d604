@@ -1,0 +1,54 @@
+{
+  "bk_comparison_matched_nondyadic_grid": {
+    "f2_regular_bk": 0.4000000000101737,
+    "f2_regular_per_cell_abs_res_over_up_max": 1.0,
+    "f2_regular_r2": 1.0,
+    "f2_sterbenz_bk": 0.7195876572623522,
+    "f2_sterbenz_per_cell_abs_res_over_up_max": 1.5,
+    "f2_sterbenz_r2": 1.0,
+    "sterbenz_over_regular_ratio": 1.798969143110125
+  },
+  "byte_stable": true,
+  "degeneracy_escape": {
+    "condition": ">=2 distinct nonzero residuals per cell across ladder",
+    "escaped_degeneracy": true,
+    "f1_control_frac_engineered_dyadic": 0.83,
+    "f2_sterbenz_frac_canonical_nondyadic": 0.9705882352941176,
+    "f2_sterbenz_frac_engineered_dyadic": 0.83
+  },
+  "eval_layer_only": true,
+  "fixture": "pure_algebraic",
+  "ladder": [
+    "float32",
+    "float64",
+    "float128",
+    "decimal_30",
+    "decimal_50",
+    "decimal_80",
+    "decimal_120"
+  ],
+  "method": "exact-rational (Fraction) residuals; exact-rational OLS of C=a+u_p*b_k",
+  "path_under_test": "F2",
+  "research_grade": true,
+  "residual_floor_diagnosis": {
+    "all_tiers_within_8_ulp": true,
+    "binary_residual_over_up_set": "{0,+1,-1} exactly (max|res/u_p|=1.0)",
+    "decimal_residual_over_up_set": "{0,+0.2,-0.2} exactly (max|res/u_p|=0.2)",
+    "interpretation": "residual_p ~ c_p*u_p, c_p small parity-random integer SAME magnitude across tiers => b_k is a rounding-floor coefficient, not a substrate amplitude"
+  },
+  "retrodiction_gate": {
+    "G1_sterbenz_boundary_x_half": true,
+    "G2_f2_dyadic_grain": true,
+    "pass": true
+  },
+  "substrate_promotion": false,
+  "task": "retestA_consolidated",
+  "verdict_candidate": {
+    "classification_candidate": "apparatus_bound: b_k real+stable but is the ULP rounding-floor coefficient of correctly-rounded sqrt round-trip, not a distinct conditioning mechanism",
+    "closes_open_subclaim": "cleaner statement, not a substrate boundary; orchestrator decides verdict",
+    "identifiable": true,
+    "nonzero": true,
+    "phase2a_degeneracy_status": "stands but applies to F1 near singularity (f->0), a DIFFERENT region; does not transfer to F2 Sterbenz",
+    "prereg_vanishing_prediction": "REFUTED (b_k=0.72, ~1.8x regular, excludes 0)"
+  }
+}

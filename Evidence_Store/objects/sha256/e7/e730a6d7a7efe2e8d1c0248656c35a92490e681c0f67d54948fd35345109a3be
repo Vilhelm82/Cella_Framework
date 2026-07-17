@@ -1,0 +1,518 @@
+{
+  "schwarzschild_redshift": [
+    {
+      "test_id": "schwarzschild_r2.1",
+      "equation": "1 - 2/r - z*z",
+      "variables": [
+        "r",
+        "z"
+      ],
+      "values": [
+        2.1,
+        0.2182178902359925
+      ],
+      "v4_substrate_flags": {
+        "base_operand_expr": "1 - 2/r",
+        "base_operand_value": 0.04761904761904767,
+        "E_at_point": -4.392317422778759,
+        "in_sterbenz_cluster": false,
+        "bacl_grain_predicted": 2.220446049250313e-16,
+        "primitives_applicable": [
+          "E",
+          "BACL"
+        ],
+        "regime_note": "horizon_approach"
+      }
+    },
+    {
+      "test_id": "schwarzschild_r2.5",
+      "equation": "1 - 2/r - z*z",
+      "variables": [
+        "r",
+        "z"
+      ],
+      "values": [
+        2.5,
+        0.44721359549995787
+      ],
+      "v4_substrate_flags": {
+        "base_operand_expr": "1 - 2/r",
+        "base_operand_value": 0.19999999999999996,
+        "E_at_point": -2.3219280948873626,
+        "in_sterbenz_cluster": false,
+        "bacl_grain_predicted": 2.220446049250313e-16,
+        "primitives_applicable": [
+          "E",
+          "BACL"
+        ],
+        "regime_note": "near_horizon"
+      }
+    },
+    {
+      "test_id": "schwarzschild_r3.0",
+      "equation": "1 - 2/r - z*z",
+      "variables": [
+        "r",
+        "z"
+      ],
+      "values": [
+        3.0,
+        0.5773502691896258
+      ],
+      "v4_substrate_flags": {
+        "base_operand_expr": "1 - 2/r",
+        "base_operand_value": 0.33333333333333337,
+        "E_at_point": -1.584962500721156,
+        "in_sterbenz_cluster": false,
+        "bacl_grain_predicted": 2.220446049250313e-16,
+        "primitives_applicable": [
+          "E",
+          "BACL"
+        ],
+        "regime_note": "near_horizon"
+      }
+    },
+    {
+      "test_id": "schwarzschild_r4.0",
+      "equation": "1 - 2/r - z*z",
+      "variables": [
+        "r",
+        "z"
+      ],
+      "values": [
+        4.0,
+        0.7071067811865476
+      ],
+      "v4_substrate_flags": {
+        "base_operand_expr": "1 - 2/r",
+        "base_operand_value": 0.5,
+        "E_at_point": -1.0,
+        "in_sterbenz_cluster": false,
+        "bacl_grain_predicted": 2.220446049250313e-16,
+        "primitives_applicable": [
+          "E",
+          "BACL"
+        ],
+        "regime_note": "sterbenz_grazing"
+      }
+    },
+    {
+      "test_id": "schwarzschild_r4.4",
+      "equation": "1 - 2/r - z*z",
+      "variables": [
+        "r",
+        "z"
+      ],
+      "values": [
+        4.4,
+        0.7385489458759964
+      ],
+      "v4_substrate_flags": {
+        "base_operand_expr": "1 - 2/r",
+        "base_operand_value": 0.5454545454545454,
+        "E_at_point": -0.8744691179161412,
+        "in_sterbenz_cluster": true,
+        "bacl_grain_predicted": 2.220446049250313e-16,
+        "primitives_applicable": [
+          "E",
+          "BACL"
+        ],
+        "regime_note": "sterbenz_grazing"
+      }
+    },
+    {
+      "test_id": "schwarzschild_r4.9",
+      "equation": "1 - 2/r - z*z",
+      "variables": [
+        "r",
+        "z"
+      ],
+      "values": [
+        4.9,
+        0.769309258162072
+      ],
+      "v4_substrate_flags": {
+        "base_operand_expr": "1 - 2/r",
+        "base_operand_value": 0.5918367346938775,
+        "E_at_point": -0.7567288489876361,
+        "in_sterbenz_cluster": true,
+        "bacl_grain_predicted": 2.220446049250313e-16,
+        "primitives_applicable": [
+          "E",
+          "BACL"
+        ],
+        "regime_note": "sterbenz_grazing"
+      }
+    },
+    {
+      "test_id": "schwarzschild_r5.0",
+      "equation": "1 - 2/r - z*z",
+      "variables": [
+        "r",
+        "z"
+      ],
+      "values": [
+        5.0,
+        0.7745966692414834
+      ],
+      "v4_substrate_flags": {
+        "base_operand_expr": "1 - 2/r",
+        "base_operand_value": 0.6,
+        "E_at_point": -0.7369655941662062,
+        "in_sterbenz_cluster": false,
+        "bacl_grain_predicted": 2.220446049250313e-16,
+        "primitives_applicable": [
+          "E",
+          "BACL"
+        ],
+        "regime_note": "far_field"
+      }
+    },
+    {
+      "test_id": "schwarzschild_r10.0",
+      "equation": "1 - 2/r - z*z",
+      "variables": [
+        "r",
+        "z"
+      ],
+      "values": [
+        10.0,
+        0.8944271909999159
+      ],
+      "v4_substrate_flags": {
+        "base_operand_expr": "1 - 2/r",
+        "base_operand_value": 0.8,
+        "E_at_point": -0.3219280948873623,
+        "in_sterbenz_cluster": false,
+        "bacl_grain_predicted": 2.220446049250313e-16,
+        "primitives_applicable": [
+          "E",
+          "BACL"
+        ],
+        "regime_note": "far_field"
+      }
+    },
+    {
+      "test_id": "schwarzschild_r100.0",
+      "equation": "1 - 2/r - z*z",
+      "variables": [
+        "r",
+        "z"
+      ],
+      "values": [
+        100.0,
+        0.9899494936611666
+      ],
+      "v4_substrate_flags": {
+        "base_operand_expr": "1 - 2/r",
+        "base_operand_value": 0.98,
+        "E_at_point": -0.029146345659516508,
+        "in_sterbenz_cluster": false,
+        "bacl_grain_predicted": 2.220446049250313e-16,
+        "primitives_applicable": [
+          "E",
+          "BACL"
+        ],
+        "regime_note": "far_field"
+      }
+    }
+  ],
+  "sr_time_dilation": [
+    {
+      "test_id": "sr_beta0.1",
+      "equation": "1 - beta**2 - inv_gamma**2",
+      "variables": [
+        "beta",
+        "inv_gamma"
+      ],
+      "values": [
+        0.1,
+        0.99498743710662
+      ],
+      "v4_substrate_flags": {
+        "base_operand_expr": "1 - beta**2",
+        "base_operand_value": 0.99,
+        "E_at_point": -0.014499569695115089,
+        "in_sterbenz_cluster": false,
+        "bacl_grain_predicted": 2.220446049250313e-16,
+        "primitives_applicable": [
+          "E",
+          "BACL"
+        ],
+        "regime_note": "non_relativistic"
+      }
+    },
+    {
+      "test_id": "sr_beta0.5",
+      "equation": "1 - beta**2 - inv_gamma**2",
+      "variables": [
+        "beta",
+        "inv_gamma"
+      ],
+      "values": [
+        0.5,
+        0.8660254037844386
+      ],
+      "v4_substrate_flags": {
+        "base_operand_expr": "1 - beta**2",
+        "base_operand_value": 0.75,
+        "E_at_point": -0.4150374992788438,
+        "in_sterbenz_cluster": false,
+        "bacl_grain_predicted": 2.220446049250313e-16,
+        "primitives_applicable": [
+          "E",
+          "BACL"
+        ],
+        "regime_note": "non_relativistic"
+      }
+    },
+    {
+      "test_id": "sr_beta0.62",
+      "equation": "1 - beta**2 - inv_gamma**2",
+      "variables": [
+        "beta",
+        "inv_gamma"
+      ],
+      "values": [
+        0.62,
+        0.7846018098373212
+      ],
+      "v4_substrate_flags": {
+        "base_operand_expr": "1 - beta**2",
+        "base_operand_value": 0.6155999999999999,
+        "E_at_point": -0.6999348632212393,
+        "in_sterbenz_cluster": false,
+        "bacl_grain_predicted": 2.220446049250313e-16,
+        "primitives_applicable": [
+          "E",
+          "BACL"
+        ],
+        "regime_note": "sterbenz_grazing"
+      }
+    },
+    {
+      "test_id": "sr_beta0.671",
+      "equation": "1 - beta**2 - inv_gamma**2",
+      "variables": [
+        "beta",
+        "inv_gamma"
+      ],
+      "values": [
+        0.671,
+        0.7414573487396291
+      ],
+      "v4_substrate_flags": {
+        "base_operand_expr": "1 - beta**2",
+        "base_operand_value": 0.5497589999999999,
+        "E_at_point": -0.863128777527745,
+        "in_sterbenz_cluster": true,
+        "bacl_grain_predicted": 2.220446049250313e-16,
+        "primitives_applicable": [
+          "E",
+          "BACL"
+        ],
+        "regime_note": "sterbenz_grazing"
+      }
+    },
+    {
+      "test_id": "sr_beta0.71",
+      "equation": "1 - beta**2 - inv_gamma**2",
+      "variables": [
+        "beta",
+        "inv_gamma"
+      ],
+      "values": [
+        0.71,
+        0.7042016756583301
+      ],
+      "v4_substrate_flags": {
+        "base_operand_expr": "1 - beta**2",
+        "base_operand_value": 0.4959,
+        "E_at_point": -1.0118788695359795,
+        "in_sterbenz_cluster": false,
+        "bacl_grain_predicted": 2.220446049250313e-16,
+        "primitives_applicable": [
+          "E",
+          "BACL"
+        ],
+        "regime_note": "sterbenz_grazing"
+      }
+    },
+    {
+      "test_id": "sr_beta0.9",
+      "equation": "1 - beta**2 - inv_gamma**2",
+      "variables": [
+        "beta",
+        "inv_gamma"
+      ],
+      "values": [
+        0.9,
+        0.4358898943540673
+      ],
+      "v4_substrate_flags": {
+        "base_operand_expr": "1 - beta**2",
+        "base_operand_value": 0.18999999999999995,
+        "E_at_point": -2.3959286763311396,
+        "in_sterbenz_cluster": false,
+        "bacl_grain_predicted": 2.220446049250313e-16,
+        "primitives_applicable": [
+          "E",
+          "BACL"
+        ],
+        "regime_note": "near_lightspeed"
+      }
+    },
+    {
+      "test_id": "sr_beta0.99",
+      "equation": "1 - beta**2 - inv_gamma**2",
+      "variables": [
+        "beta",
+        "inv_gamma"
+      ],
+      "values": [
+        0.99,
+        0.14106735979665894
+      ],
+      "v4_substrate_flags": {
+        "base_operand_expr": "1 - beta**2",
+        "base_operand_value": 0.01990000000000003,
+        "E_at_point": -5.651087759005798,
+        "in_sterbenz_cluster": false,
+        "bacl_grain_predicted": 2.220446049250313e-16,
+        "primitives_applicable": [
+          "E",
+          "BACL"
+        ],
+        "regime_note": "lightspeed_approach"
+      }
+    },
+    {
+      "test_id": "sr_beta0.999",
+      "equation": "1 - beta**2 - inv_gamma**2",
+      "variables": [
+        "beta",
+        "inv_gamma"
+      ],
+      "values": [
+        0.999,
+        0.04471017781221601
+      ],
+      "v4_substrate_flags": {
+        "base_operand_expr": "1 - beta**2",
+        "base_operand_value": 0.001998999999999973,
+        "E_at_point": -8.966505812579566,
+        "in_sterbenz_cluster": false,
+        "bacl_grain_predicted": 2.220446049250313e-16,
+        "primitives_applicable": [
+          "E",
+          "BACL"
+        ],
+        "regime_note": "lightspeed_approach"
+      }
+    }
+  ],
+  "sphere_umbilic": [
+    {
+      "test_id": "sphere_axis",
+      "equation": "x**2 + y**2 + z**2 - 1",
+      "variables": [
+        "x",
+        "y",
+        "z"
+      ],
+      "values": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "v4_substrate_flags": {
+        "base_operand_expr": "N/A (no 1-x_term form)",
+        "base_operand_value": null,
+        "E_at_point": null,
+        "in_sterbenz_cluster": null,
+        "bacl_grain_predicted": 2.220446049250313e-16,
+        "primitives_applicable": [
+          "BACL"
+        ],
+        "regime_note": "umbilic_expected"
+      }
+    },
+    {
+      "test_id": "sphere_equator_45",
+      "equation": "x**2 + y**2 + z**2 - 1",
+      "variables": [
+        "x",
+        "y",
+        "z"
+      ],
+      "values": [
+        0.7071067811865476,
+        0.7071067811865476,
+        0.0
+      ],
+      "v4_substrate_flags": {
+        "base_operand_expr": "N/A (no 1-x_term form)",
+        "base_operand_value": null,
+        "E_at_point": null,
+        "in_sterbenz_cluster": null,
+        "bacl_grain_predicted": 2.220446049250313e-16,
+        "primitives_applicable": [
+          "BACL"
+        ],
+        "regime_note": "umbilic_expected"
+      }
+    },
+    {
+      "test_id": "sphere_diagonal",
+      "equation": "x**2 + y**2 + z**2 - 1",
+      "variables": [
+        "x",
+        "y",
+        "z"
+      ],
+      "values": [
+        0.5773502691896258,
+        0.5773502691896258,
+        0.5773502691896258
+      ],
+      "v4_substrate_flags": {
+        "base_operand_expr": "N/A (no 1-x_term form)",
+        "base_operand_value": null,
+        "E_at_point": null,
+        "in_sterbenz_cluster": null,
+        "bacl_grain_predicted": 2.220446049250313e-16,
+        "primitives_applicable": [
+          "BACL"
+        ],
+        "regime_note": "umbilic_expected"
+      }
+    }
+  ],
+  "ohm_baseline": [
+    {
+      "test_id": "ohm_clean",
+      "equation": "V - I*Z",
+      "variables": [
+        "V",
+        "I",
+        "Z"
+      ],
+      "values": [
+        12.0,
+        2.0,
+        6.0
+      ],
+      "v4_substrate_flags": {
+        "base_operand_expr": "N/A (no 1-x_term form, linear)",
+        "base_operand_value": null,
+        "E_at_point": null,
+        "in_sterbenz_cluster": null,
+        "bacl_grain_predicted": 1.7763568394002505e-15,
+        "primitives_applicable": [
+          "BACL"
+        ],
+        "regime_note": "clean_baseline_no_boundary"
+      }
+    }
+  ]
+}

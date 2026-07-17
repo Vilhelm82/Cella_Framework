@@ -1,0 +1,133 @@
+"""The rounding-amount dial v2 (Will's idea, harness fixed).
+
+Fix over v1: dedup chains by their value-VECTOR across many operands (so F1, F2, c2... stay
+distinct instead of collapsing at one clean cell), keep the genuine forms (zero on surface,
+nonzero off it), and read total rounding at an operand where they differ.
+
+Dial coordinate = total rounding a chain incurs to reach the answer (constraint = 0):
+  events    = # operations whose float result != exact result
+  magnitude = sum |exact_op - float_op| in ulp(f)
+Notch 0 = minimal/zero rounding. Dial up -> chains spending more rounding, every variation in order.
+Eval-layer, exact (Fraction). One fixture, one operand; NOT cross-fixture.
+"""
+import math, struct
+from fractions import Fraction as Fr
+
+ATOMS = [('R',), ('one',), ('c',)]
+OPS = ('+', '-', '*')
+def cof(r): return 2.0 / r
+DEDUP_RS = [2.1 + i * (9.9 - 2.1) / 11 for i in range(12)]   # operands for the value-vector
+READ_R = 3.3                                                  # operand to read the rounding spectrum at
+
+
+def ev(node, r):
+    c = cof(r); R = math.sqrt(1.0 - c)
+    def go(m):
+        k = m[0]
+        if k == 'R': return R
+        if k == 'one': return 1.0
+        if k == 'c': return c
+        a, b = go(m[1]), go(m[2])
+        return a + b if k == '+' else a - b if k == '-' else a * b
+    return go(node)
+
+
+def evfree(node, Rv, cv):
+    def go(m):
+        k = m[0]
+        if k == 'R': return Rv
+        if k == 'one': return 1.0
+        if k == 'c': return cv
+        a, b = go(m[1]), go(m[2])
+        return a + b if k == '+' else a - b if k == '-' else a * b
+    return go(node)
+
+
+def vvec(node):
+    return tuple(struct.pack('>d', ev(node, r)).hex() for r in DEDUP_RS)
+
+
+def s(node):
+    if len(node) == 1: return {'R': 'R', 'one': '1', 'c': 'c'}[node[0]]
+    return f"({s(node[1])} {node[0]} {s(node[2])})"
+
+
+def on_surface(node):                # ~0 when R=sqrt(1-c) (genuine identity), float-fast
+    for cv in (0.2, 0.4, 0.49, 0.7):
+        if abs(evfree(node, math.sqrt(1 - cv), cv)) > 1e-9:
+            return False
+    return True
+
+
+def structural_zero(node):           # identically 0 for free R,c (trivial, e.g. R-R)
+    for Rv, cv in ((0.31, 0.27), (0.83, 0.11), (1.4, 0.55)):
+        if abs(evfree(node, Rv, cv)) > 1e-12:
+            return False
+    return True
+
+
+def total_rounding(node, r):
+    c = cof(r); R = math.sqrt(1.0 - c); u = math.ulp(1.0 - c)
+    events = 0; mag = Fr(0)
+    def go(m):
+        nonlocal events, mag
+        k = m[0]
+        if k == 'R': return R
+        if k == 'one': return 1.0
+        if k == 'c': return c
+        a, b = go(m[1]), go(m[2])
+        fl = a + b if k == '+' else a - b if k == '-' else a * b
+        ex = (Fr(a) + Fr(b)) if k == '+' else (Fr(a) - Fr(b)) if k == '-' else (Fr(a) * Fr(b))
+        ro = ex - Fr(fl)
+        if ro != 0:
+            events += 1; mag += abs(ro) / Fr(u)
+        return fl
+    go(node)
+    return events, float(mag)
+
+
+def main():
+    seen = {}; bd = {0: []}
+    for a in ATOMS: seen[vvec(a)] = a; bd[0].append(a)
+    CAP = 40000
+    for d in range(1, 4):
+        bd[d] = []; shallow = [x for dd in range(0, d) for x in bd[dd]]
+        for a in bd[d - 1]:
+            for b in shallow:
+                for (x, y) in ((a, b), (b, a)):
+                    for op in OPS:
+                        if len(seen) >= CAP: break
+                        nd = (op, x, y); k = vvec(nd)
+                        if k not in seen: seen[k] = nd; bd[d].append(nd)
+        if len(seen) >= CAP: break
+
+    genuine = [n for n in seen.values() if len(n) > 1 and on_surface(n) and not structural_zero(n)]
+    rows = []
+    for n in genuine:
+        ev_, mag = total_rounding(n, READ_R)
+        rows.append((ev_, round(mag, 4), n))
+    rows.sort(key=lambda t: (t[0], t[1], len(s(t[2]))))
+
+    from collections import defaultdict
+    notch = defaultdict(list)
+    for ev_, mag, n in rows:
+        notch[ev_].append((mag, n))
+
+    print("=" * 90)
+    print(f"THE ROUNDING-AMOUNT DIAL — genuine operand-chains reaching the constraint(=0), by total rounding")
+    print(f"  Schwarzschild, read at r={READ_R} (f={1-cof(READ_R):.4f}); {len(genuine)} genuine forms (excl. trivial R-R class)")
+    print("-" * 90)
+    for k in sorted(notch):
+        forms = sorted(notch[k], key=lambda t: (t[0], len(s(t[1]))))
+        mags = sorted(set(m for m, _ in forms))
+        print(f"  NOTCH {k:>2} ({len(forms):3} forms)  mag(ulp)∈{mags[:5]}{'...' if len(mags)>5 else ''}")
+        for mag, n in forms[:3]:
+            print(f"        {mag:7.4f}  {s(n)}")
+    print("-" * 90)
+    lo = sorted(notch)[0]
+    print(f"DIAL ORIGIN: lowest notch = {lo} rounding-event(s) — the minimal-rounding form(s) that reach the answer.")
+    print(f"Dialing up admits forms spending more rounding; the spectrum above IS the enumeration ordered by rounding.")
+
+
+if __name__ == "__main__":
+    main()

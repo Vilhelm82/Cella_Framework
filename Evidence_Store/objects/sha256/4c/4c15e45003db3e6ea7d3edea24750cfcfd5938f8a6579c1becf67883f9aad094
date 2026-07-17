@@ -1,0 +1,104 @@
+{
+  "campaign_id": "shared_residual_geometry_arm",
+  "claims": {
+    "CL-G1": "holonomy law exact in Q vs independent referee",
+    "CL-G2": "cross-encoding closure (dyadic x CF)"
+  },
+  "depends_on": {
+    "manifest_v1_sha256": "648975d082407aebdb3b0ead340639a59820f11e98231f10a0fd412fb171a7ee"
+  },
+  "expectations_pinned_at_dry_run": {
+    "1/(x+y)": {
+      "cells": [
+        {
+          "d": 3,
+          "holonomy": "frac:-12624330752/581512437990225",
+          "q": 10,
+          "referee_ok": true,
+          "verdict": "coupled"
+        },
+        {
+          "d": 4,
+          "holonomy": "frac:129464532992/16128800102357225",
+          "q": 10,
+          "referee_ok": true,
+          "verdict": "coupled"
+        },
+        {
+          "d": 5,
+          "holonomy": "frac:-5338431488/1719731622300513",
+          "q": 10,
+          "referee_ok": true,
+          "verdict": "coupled"
+        }
+      ],
+      "kind": "coupled_nonlinear"
+    },
+    "x*y": {
+      "cells": [
+        {
+          "d": 3,
+          "holonomy": "frac:-1/12288",
+          "q": 10,
+          "referee_ok": true,
+          "verdict": "coupled"
+        },
+        {
+          "d": 4,
+          "holonomy": "frac:1/30720",
+          "q": 10,
+          "referee_ok": true,
+          "verdict": "coupled"
+        },
+        {
+          "d": 5,
+          "holonomy": "frac:-1/81920",
+          "q": 10,
+          "referee_ok": true,
+          "verdict": "coupled"
+        }
+      ],
+      "kind": "coupled_bilinear"
+    },
+    "x+y": {
+      "cells": [
+        {
+          "d": 3,
+          "holonomy": "frac:0/1",
+          "q": 10,
+          "referee_ok": true,
+          "verdict": "separable"
+        },
+        {
+          "d": 4,
+          "holonomy": "frac:0/1",
+          "q": 10,
+          "referee_ok": true,
+          "verdict": "separable"
+        },
+        {
+          "d": 5,
+          "holonomy": "frac:0/1",
+          "q": 10,
+          "referee_ok": true,
+          "verdict": "separable"
+        }
+      ],
+      "kind": "separable"
+    }
+  },
+  "frozen": true,
+  "grader_clauses": {
+    "PMG.1": "holonomy law, exact in Q: on every (combine, live (q,d)) cell, the loop-holonomy (mixed 2nd difference of the exact residue) is read exactly in Q and equals: 0 for an additively-separable combine; -(dx*dy) for the bilinear product; and for a nonlinear combine the value reproduced by the INDEPENDENT referee (commuted/re-expressed combine, corners evaluated by a different exact operation sequence) - a lane bug cannot certify itself. reading gap == account gap. Units: (combine, q, d).",
+    "PMG.2": "cross-encoding closure: PMG.1 holds across the TWO genuinely-different encodings of one real (dyadic analytic axis x continued-fraction algebraic axis), exact in Q. The law indexes by the two refinement budgets, not by variables. Units: (combine, q, d) over the two-encoding grid.",
+    "PMG.3": "typed refusals: any cell where a refinement increment vanished (dead axis) is REFUSED (refusal=dead_axis, verdict null), never certified separable or coupled. Units: cell.",
+    "PMG.4": "determinism: the Stage-A record set is byte-identical across two runs (sha256 over records)."
+  },
+  "stage": "A",
+  "status_move_rules": "CL-G1 -> DEMONSTRATED iff PMG.1 holds on every live cell with zero false verdicts AND the independent referee matches exactly in Q on every cell. CL-G2 -> DEMONSTRATED iff PMG.2 holds across both encodings on every live cell. K-G1 (separable holonomy != 0) HALTS THE CAMPAIGN; K-G2 (coupled holonomy != derived cross-term) HALTS THE ARM. Refusals (PMG.3) are typed, not kills. PARTIAL until both runs match (PMG.4).",
+  "true_independent": {
+    "1/(x+y)": "frac:19987870/39871479",
+    "x*y": "frac:348129/571082",
+    "x+y": "frac:39871479/19987870"
+  }
+}

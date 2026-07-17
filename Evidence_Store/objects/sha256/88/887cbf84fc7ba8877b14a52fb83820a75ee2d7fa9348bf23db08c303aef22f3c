@@ -1,0 +1,57 @@
+# Zero-Offset Transcendental Q-Source Search
+
+Accepted outcome: `rounded_base_route_resolves_zero_offset_cell`
+Headline classification: `rounded_base_transcendental_route_closes_index130`
+
+## Test Design
+
+This campaign targets the zero-offset index `130` cells left by the route-bank offset guard audit. The prior route bank is kept intact, then one rounded-base transcendental route is added:
+
+```text
+q = math.pow(math.e, math.log(q_direct))
+```
+
+This is not treated as the same evidence class as the algebraic q routes. The route depends on the rounded `math.e` constant and is compared against `math.exp(math.log(q_direct))` and `nextafter` diagnostics.
+
+## Findings
+
+1. Prior zero-offset cells: `[{'variant_id': 'nextafter_up', 'index': 130}, {'variant_id': 'alternating_nextafter', 'index': 130}]`.
+2. Rounded-base route resolves prior hard cells: `True`.
+3. Prior bank success fraction: `0.96875`.
+4. Expanded bank success fraction: `1.0`.
+5. `pow_e_log_q` selected count: `2`.
+6. Controls promoted: `False` with fractions `{'sr': 0.7714285714285715, 'pure_affine_control': 0.8372093023255814}`.
+7. Candidate is algebraic route: `False`.
+8. Double-precision language justified: `False`.
+
+## Schwarzschild Variant Summary
+
+- `native_grid`: prior `20` / `20` hard `[]`; expanded `20` / `20` hard `[]`; `pow_e_log_q` selected `0`.
+- `nextafter_up`: prior `13` / `14` hard `[130]`; expanded `14` / `14` hard `[]`; `pow_e_log_q` selected `1`.
+- `nextafter_down`: prior `13` / `13` hard `[]`; expanded `13` / `13` hard `[]`; `pow_e_log_q` selected `0`.
+- `alternating_nextafter`: prior `16` / `17` hard `[130]`; expanded `17` / `17` hard `[]`; `pow_e_log_q` selected `1`.
+
+## Hard-Cell Candidate Records
+
+- `nextafter_up` index `130`: `exp_log` `integer`, `pow_e_log_q` `half` offset `0.25`, equals nextafter-up `True`; diagnostic nextafter-up `half`.
+- `alternating_nextafter` index `130`: `exp_log` `integer`, `pow_e_log_q` `half` offset `0.25`, equals nextafter-up `True`; diagnostic nextafter-up `half`.
+
+## Interpretation
+
+`pow_e_log_q` closes the remaining index `130` cells, but it does so by introducing a rounded-base transcendental perturbation. At both hard cells it equals `nextafter(q_direct, +inf)` and moves q by `0.25` of the local `ulp(f)` lattice unit, producing a half read.
+
+That makes the route useful diagnostic evidence for the operand-offset model, not a clean algebraic form candidate. The result says the zero-offset hard cell can be moved by a nonzero q-source, while also showing why this should not yet be promoted as a precision-doubling mechanism.
+
+## Verification
+
+- `PYTHONPATH=src python -m lloyd_v4.evals.zero_offset_transcendental_q_source_search`
+  Result: passed; generated artifact_zero_offset_transcendental_q_source_search.json and zero_offset_transcendental_q_source_search_report.md.
+- `PYTHONPATH=src python -m pytest tests/test_zero_offset_transcendental_q_source_search.py -q`
+  Result: passed; focused zero-offset transcendental q-source tests.
+- `PYTHONPATH=src python -m pytest tests/test_zero_offset_transcendental_q_source_search.py tests/test_route_bank_offset_guard_audit.py tests/test_route_pair_selection_stability_audit.py -q`
+  Result: passed; focused compatibility subset.
+
+## Artifacts
+
+- `Build_Docs/Reports/zero_offset_transcendental_q_source_search/artifact_zero_offset_transcendental_q_source_search.json`
+- `Build_Docs/Reports/zero_offset_transcendental_q_source_search/zero_offset_transcendental_q_source_search_report.md`

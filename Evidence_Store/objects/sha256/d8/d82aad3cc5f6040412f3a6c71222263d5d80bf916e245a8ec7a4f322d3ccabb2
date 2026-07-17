@@ -1,0 +1,25 @@
+<!DOCTYPE html><html><head><meta charset=utf-8>
+<title>Rounding Dial — two roots</title>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js></script>
+<style>body{background:#0a0e1a;color:#c8d6e5;font-family:system-ui;padding:24px}
+h1{font-size:18px;color:#e8f0fe}.sub{color:#6b7fa3;font-size:13px;margin-bottom:18px}
+.wrap{max-width:980px;height:470px;background:#111827;border:1px solid #1e2a3a;border-radius:12px;padding:18px}
+.lg{margin-top:10px;font-size:12px;color:#8aa0c0}</style>
+</head><body>
+<h1>The Rounding Dial &mdash; SUBNORMAL cancellation regime, two roots</h1>
+<div class=sub>Chains compute a subnormal target (SC=2&#8315;&#185;&#8304;&#8309;&#8304;); rounding scored per-op in its own ulp. Note BACL = 100% on every form — subnormals ARE the integer-2&#8315;&#185;&#8304;&#8311;&#8308; lattice, so cleanliness is automatic; subnormal +/&minus; is exact, so only multiplications round and the dial collapses to a few notches.</div>
+<div class=wrap><canvas id=c></canvas></div>
+<div class=lg>● cyan = sqrt (n=2) &nbsp;&nbsp; ● magenta = cbrt (n=3)</div>
+<script>
+const R = {"sqrt (n=2)": [{"ast": "(((x + x) * x) - ((1 - c) - c))", "rounding": 0.24318, "bacl": 1.0}, {"ast": "((x * x) + c)", "rounding": 0.24938, "bacl": 1.0}, {"ast": "(((x + x) * x) - ((x * x) - c))", "rounding": 0.49256, "bacl": 1.0}, {"ast": "(((x * x) + (c + c)) + ((x * x) - 1))", "rounding": 0.49875, "bacl": 1.0}], "cbrt (n=3)": [{"ast": "(((1 + c) * \u00bd) + ((x * x) * (x * \u00bd)))", "rounding": 0.22082, "bacl": 1.0}, {"ast": "(((x + x) * (x * x)) - ((1 - c) - c))", "rounding": 0.46401, "bacl": 1.0}, {"ast": "(((x * x) * x) + c)", "rounding": 0.4702, "bacl": 1.0}, {"ast": "(((x * x) * (x - 1)) + ((x * x) + c))", "rounding": 0.69102, "bacl": 1.0}]};
+const series = [['sqrt (n=2)','#22d3ee'],['cbrt (n=3)','#f472b6']];
+const ds = series.filter(([k])=>R[k]&&R[k].length).map(([k,col])=>({
+  label:k, borderColor:col, backgroundColor:col, borderWidth:1.5, tension:0.15,
+  pointRadius:5, data:R[k].map((d,i)=>({x:i,y:d.rounding})), _meta:R[k]}));
+new Chart(document.getElementById('c'),{type:'line',data:{datasets:ds},
+ options:{plugins:{legend:{display:false},tooltip:{callbacks:{
+   title:i=>i[0].dataset.label+' · notch '+i[0].dataIndex,
+   label:ctx=>{const m=ctx.dataset._meta[ctx.dataIndex];return ['rounding '+m.rounding.toFixed(4)+' ulp','BACL-int '+(m.bacl*100).toFixed(0)+'%',m.ast];}}}},
+  scales:{x:{title:{display:true,text:'dial notch (forms ordered by rounding)'},grid:{color:'#1e2a3a'}},
+          y:{title:{display:true,text:'mean total rounding (ulp)'},grid:{color:'#1e2a3a'}}}}});
+</script></body></html>

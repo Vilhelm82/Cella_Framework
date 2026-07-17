@@ -1,0 +1,1896 @@
+{
+  "audit_name": "lifted_singularity_v4_audit",
+  "cross_fixture_invariance": {
+    "details_per_fixture_float64": {
+      "kerr_isco_prograde_a0p900": {
+        "H_XX": -2.0,
+        "H_XX_match": true,
+        "null_alignment": 0.9999999999997858,
+        "pair_jacobian_regular": true,
+        "rank": 4,
+        "rank_match": true,
+        "signature": [
+          3,
+          1,
+          1
+        ],
+        "signature_match": true,
+        "stratum": "structural_invariants_confirmed"
+      },
+      "kerr_isco_retrograde_a0p900": {
+        "H_XX": -2.0,
+        "H_XX_match": true,
+        "null_alignment": 0.9999999995532562,
+        "pair_jacobian_regular": true,
+        "rank": 4,
+        "rank_match": true,
+        "signature": [
+          3,
+          1,
+          1
+        ],
+        "signature_match": true,
+        "stratum": "structural_invariants_confirmed"
+      },
+      "morris_thorne_throat": {
+        "H_XX": -2.0,
+        "H_XX_match": true,
+        "null_alignment": 0.9999999999999977,
+        "pair_jacobian_regular": true,
+        "rank": 3,
+        "rank_match": true,
+        "signature": [
+          2,
+          1,
+          1
+        ],
+        "signature_match": true,
+        "stratum": "structural_invariants_confirmed"
+      },
+      "rayleigh_benard_onset": {
+        "H_XX": -2.0,
+        "H_XX_match": true,
+        "null_alignment": 1.0000000000000002,
+        "pair_jacobian_regular": true,
+        "rank": 3,
+        "rank_match": true,
+        "signature": [
+          2,
+          1,
+          1
+        ],
+        "signature_match": true,
+        "stratum": "structural_invariants_confirmed"
+      },
+      "schwarzschild_isco": {
+        "H_XX": -2.0,
+        "H_XX_match": true,
+        "null_alignment": 1.0,
+        "pair_jacobian_regular": true,
+        "rank": 3,
+        "rank_match": true,
+        "signature": [
+          2,
+          1,
+          1
+        ],
+        "signature_match": true,
+        "stratum": "structural_invariants_confirmed"
+      },
+      "schwarzschild_photon": {
+        "H_XX": -2.0,
+        "H_XX_match": true,
+        "null_alignment": 1.0,
+        "pair_jacobian_regular": true,
+        "rank": 3,
+        "rank_match": true,
+        "signature": [
+          2,
+          1,
+          1
+        ],
+        "signature_match": true,
+        "stratum": "structural_invariants_confirmed"
+      }
+    },
+    "structural_invariants_all_fixtures": true
+  },
+  "frozen_predictions_summary": "S1-S5 structural (predicted by construction); E1-E3 empirical (predicted to hold across all fixtures). H_XX = -2 is structural not a discovery; null alignment with family tangent is the real empirical claim.",
+  "kerr_spin_continuity": {
+    "prograde": {
+      "a_0.10": {
+        "H_XX": -2.0,
+        "a": 0.1,
+        "null_alignment": 0.9999999999963095,
+        "pair_jacobian_rank": 3,
+        "pair_jacobian_regular": true,
+        "r_isco": 5.669302571208653,
+        "rank": 4,
+        "signature": [
+          3,
+          1,
+          1
+        ],
+        "stratum": "structural_invariants_confirmed"
+      },
+      "a_0.30": {
+        "H_XX": -2.0,
+        "a": 0.3,
+        "null_alignment": 0.9999999999993716,
+        "pair_jacobian_rank": 3,
+        "pair_jacobian_regular": true,
+        "r_isco": 4.97861683057595,
+        "rank": 4,
+        "signature": [
+          3,
+          1,
+          1
+        ],
+        "stratum": "structural_invariants_confirmed"
+      },
+      "a_0.50": {
+        "H_XX": -2.0,
+        "a": 0.5,
+        "null_alignment": 0.999999999999964,
+        "pair_jacobian_rank": 3,
+        "pair_jacobian_regular": true,
+        "r_isco": 4.233002529530826,
+        "rank": 4,
+        "signature": [
+          3,
+          1,
+          1
+        ],
+        "stratum": "structural_invariants_confirmed"
+      },
+      "a_0.70": {
+        "H_XX": -2.0,
+        "a": 0.7,
+        "null_alignment": 0.9999999999999258,
+        "pair_jacobian_rank": 3,
+        "pair_jacobian_regular": true,
+        "r_isco": 3.3931284701816304,
+        "rank": 4,
+        "signature": [
+          3,
+          1,
+          1
+        ],
+        "stratum": "structural_invariants_confirmed"
+      },
+      "a_0.90": {
+        "H_XX": -2.0,
+        "a": 0.9,
+        "null_alignment": 0.9999999999997858,
+        "pair_jacobian_rank": 3,
+        "pair_jacobian_regular": true,
+        "r_isco": 2.320883041761887,
+        "rank": 4,
+        "signature": [
+          3,
+          1,
+          1
+        ],
+        "stratum": "structural_invariants_confirmed"
+      },
+      "a_0.99": {
+        "H_XX": -2.0,
+        "a": 0.99,
+        "null_alignment": 0.999999999997008,
+        "pair_jacobian_rank": 3,
+        "pair_jacobian_regular": true,
+        "r_isco": 1.4544979380596716,
+        "rank": 4,
+        "signature": [
+          3,
+          1,
+          1
+        ],
+        "stratum": "structural_invariants_confirmed"
+      }
+    },
+    "retrograde": {
+      "a_0.10": {
+        "H_XX": -2.0,
+        "a": 0.1,
+        "null_alignment": 0.9999999999864151,
+        "pair_jacobian_rank": 3,
+        "pair_jacobian_regular": true,
+        "r_isco": 6.322894723789447,
+        "rank": 4,
+        "signature": [
+          3,
+          1,
+          1
+        ],
+        "stratum": "structural_invariants_confirmed"
+      },
+      "a_0.30": {
+        "H_XX": -2.0,
+        "a": 0.3,
+        "null_alignment": 0.9999999999605731,
+        "pair_jacobian_rank": 3,
+        "pair_jacobian_regular": true,
+        "r_isco": 6.949272527004718,
+        "rank": 4,
+        "signature": [
+          3,
+          1,
+          1
+        ],
+        "stratum": "structural_invariants_confirmed"
+      },
+      "a_0.50": {
+        "H_XX": -2.0,
+        "a": 0.5,
+        "null_alignment": 0.9999999999017228,
+        "pair_jacobian_rank": 3,
+        "pair_jacobian_regular": true,
+        "r_isco": 7.554584714512358,
+        "rank": 4,
+        "signature": [
+          3,
+          1,
+          1
+        ],
+        "stratum": "structural_invariants_confirmed"
+      },
+      "a_0.70": {
+        "H_XX": -2.0,
+        "a": 0.7,
+        "null_alignment": 0.9999999997799915,
+        "pair_jacobian_rank": 3,
+        "pair_jacobian_regular": true,
+        "r_isco": 8.142965464834315,
+        "rank": 4,
+        "signature": [
+          3,
+          1,
+          1
+        ],
+        "stratum": "structural_invariants_confirmed"
+      },
+      "a_0.90": {
+        "H_XX": -2.0,
+        "a": 0.9,
+        "null_alignment": 0.9999999995532562,
+        "pair_jacobian_rank": 3,
+        "pair_jacobian_regular": true,
+        "r_isco": 8.717352279606489,
+        "rank": 4,
+        "signature": [
+          3,
+          1,
+          1
+        ],
+        "stratum": "structural_invariants_confirmed"
+      },
+      "a_0.99": {
+        "H_XX": -2.0,
+        "a": 0.99,
+        "null_alignment": 0.9999999993951555,
+        "pair_jacobian_rank": 3,
+        "pair_jacobian_regular": true,
+        "r_isco": 8.971861342546969,
+        "rank": 4,
+        "signature": [
+          3,
+          1,
+          1
+        ],
+        "stratum": "structural_invariants_confirmed"
+      }
+    }
+  },
+  "preregistry": "/home/william_lloydlt/projects/V4/Lloyd_Engine_V4/Build_Docs/Reports/lifted_singularity_v4_audit/preregistry.md",
+  "results_per_fixture": {
+    "kerr_isco_prograde_a0p900": {
+      "float32": {
+        "F_joint": 7.332801033044234e-12,
+        "H_XX": -2.0,
+        "K_constraints": 3,
+        "constraint_jacobian": [
+          [
+            0.0,
+            35.97736358642578,
+            -10.170936584472656,
+            -21.877288818359375
+          ],
+          [
+            -0.002384185791015625,
+            73.21357727050781,
+            -14.133453369140625,
+            -18.851757049560547
+          ],
+          [
+            -3.9768218994140625,
+            104.2938232421875,
+            -8.393526077270508,
+            -8.119940757751465
+          ]
+        ],
+        "constraint_jacobian_det": NaN,
+        "constraint_jacobian_rank": 3,
+        "constraint_jacobian_svals": [
+          135.55244035532544,
+          20.97254705653764,
+          2.625859590347706
+        ],
+        "critical_point": [
+          2.320883041761887,
+          0.844247008005536,
+          1.3399624489188628,
+          0.9
+        ],
+        "family_tangent": [
+          -6.754915307616294,
+          -0.49513395743328026,
+          -3.899952171205756,
+          1.0,
+          0.0
+        ],
+        "fixture": "kerr_isco_prograde_a0p900_float32",
+        "gradient_magnitude": 0.0005422735905450484,
+        "hessian_eigenvalues_ascending": [
+          -2.0,
+          0.02177281575476566,
+          13.889715069988137,
+          880.0567910115994,
+          36773.66561868673
+        ],
+        "hessian_singular_values_descending": [
+          36773.66561868675,
+          880.0567910115999,
+          13.889715069988151,
+          2.0,
+          0.02177281575487701
+        ],
+        "n_phys": 4,
+        "null_alignment_cos_theta": 0.9999889824725754,
+        "null_eigenvector": [
+          -0.8596378015943282,
+          -0.06275532240830187,
+          -0.4913978291093491,
+          0.12495116296425499,
+          0.0
+        ],
+        "precision": "float32",
+        "rank": 4,
+        "signature_pos_neg_zero": [
+          3,
+          1,
+          1
+        ],
+        "structural_predictions": {
+          "H_XX_match": true,
+          "expected_H_XX": -2.0,
+          "expected_rank": 4,
+          "expected_signature": [
+            3,
+            1,
+            1
+          ],
+          "pair_jacobian_regular": true,
+          "rank_match": true,
+          "signature_match": true
+        },
+        "v4_stratum": "structural_invariants_confirmed",
+        "v4_validity": {
+          "advanceable": true,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": true
+        }
+      },
+      "float64": {
+        "F_joint": 7.967495142732219e-29,
+        "H_XX": -2.0,
+        "K_constraints": 3,
+        "constraint_jacobian": [
+          [
+            -8.881784197001252e-10,
+            35.99870681192385,
+            -10.181388672592107,
+            -21.88274856873562
+          ],
+          [
+            3.1086244689504383e-09,
+            73.23874698883515,
+            -14.133569528951284,
+            -18.85726094208451
+          ],
+          [
+            -3.9999999934536845,
+            104.31697276302998,
+            -8.399139020731639,
+            -8.125037155748416
+          ]
+        ],
+        "constraint_jacobian_det": NaN,
+        "constraint_jacobian_rank": 3,
+        "constraint_jacobian_svals": [
+          135.59273559677274,
+          20.976243708928983,
+          2.62492198502009
+        ],
+        "critical_point": [
+          2.320883041761887,
+          0.844247008005536,
+          1.3399624489188628,
+          0.9
+        ],
+        "family_tangent": [
+          -6.754915307616294,
+          -0.49513395743328026,
+          -3.899952171205756,
+          1.0,
+          0.0
+        ],
+        "fixture": "kerr_isco_prograde_a0p900",
+        "gradient_magnitude": 2.290359447716099e-08,
+        "hessian_eigenvalues_ascending": [
+          -2.0,
+          5.4557493601042316e-05,
+          13.78041999157774,
+          880.0055745410021,
+          36770.78002626097
+        ],
+        "hessian_singular_values_descending": [
+          36770.780026260916,
+          880.0055745410012,
+          13.780419991577679,
+          2.0,
+          5.455749397290428e-05
+        ],
+        "n_phys": 4,
+        "null_alignment_cos_theta": 0.9999999999997858,
+        "null_eigenvector": [
+          -0.8572965496864354,
+          -0.06283965656121043,
+          -0.4949610259138758,
+          0.12691487810846042,
+          0.0
+        ],
+        "precision": "float64",
+        "rank": 4,
+        "signature_pos_neg_zero": [
+          3,
+          1,
+          1
+        ],
+        "structural_predictions": {
+          "H_XX_match": true,
+          "expected_H_XX": -2.0,
+          "expected_rank": 4,
+          "expected_signature": [
+            3,
+            1,
+            1
+          ],
+          "pair_jacobian_regular": true,
+          "rank_match": true,
+          "signature_match": true
+        },
+        "v4_stratum": "structural_invariants_confirmed",
+        "v4_validity": {
+          "advanceable": true,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": true
+        }
+      },
+      "float64_high_resolution_fd": {
+        "F_joint": 7.967495142732219e-29,
+        "H_XX": -2.0,
+        "K_constraints": 3,
+        "constraint_jacobian": [
+          [
+            -1.7763568394002505e-07,
+            35.99870703752117,
+            -10.181388621077758,
+            -21.882748679757924
+          ],
+          [
+            -8.881784197001252e-08,
+            73.23874733344837,
+            -14.133569337104746,
+            -18.857261085969412
+          ],
+          [
+            -3.9999996204187482,
+            104.3169735481797,
+            -8.399138762271718,
+            -8.12503743174986
+          ]
+        ],
+        "constraint_jacobian_det": NaN,
+        "constraint_jacobian_rank": 3,
+        "constraint_jacobian_svals": [
+          135.59273645305763,
+          20.976243697949222,
+          2.6249219375244204
+        ],
+        "critical_point": [
+          2.320883041761887,
+          0.844247008005536,
+          1.3399624489188628,
+          0.9
+        ],
+        "family_tangent": [
+          -6.754915307616294,
+          -0.49513395743328026,
+          -3.899952171205756,
+          1.0,
+          0.0
+        ],
+        "fixture": "kerr_isco_prograde_a0p900",
+        "gradient_magnitude": 1.2434678556523882e-12,
+        "hessian_eigenvalues_ascending": [
+          -2.0,
+          5.275143438563799e-07,
+          13.780430748008678,
+          880.00560012627,
+          36770.7798928906
+        ],
+        "hessian_singular_values_descending": [
+          36770.77989289057,
+          880.0056001262686,
+          13.780430748008508,
+          2.0,
+          5.275143286245022e-07
+        ],
+        "n_phys": 4,
+        "null_alignment_cos_theta": 0.9999999999999996,
+        "null_eigenvector": [
+          -0.8572968571062302,
+          -0.06283967590846672,
+          -0.4949605776478253,
+          0.1269145401521449,
+          0.0
+        ],
+        "precision": "float64_high_resolution_fd",
+        "rank": 4,
+        "signature_pos_neg_zero": [
+          3,
+          1,
+          1
+        ],
+        "structural_predictions": {
+          "H_XX_match": true,
+          "expected_H_XX": -2.0,
+          "expected_rank": 4,
+          "expected_signature": [
+            3,
+            1,
+            1
+          ],
+          "pair_jacobian_regular": true,
+          "rank_match": true,
+          "signature_match": true
+        },
+        "v4_stratum": "structural_invariants_confirmed",
+        "v4_validity": {
+          "advanceable": true,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": true
+        }
+      }
+    },
+    "kerr_isco_retrograde_a0p900": {
+      "float32": {
+        "F_joint": 2.5352437660330907e-07,
+        "H_XX": -2.0,
+        "K_constraints": 3,
+        "constraint_jacobian": [
+          [
+            -4.8828125,
+            11787.109375,
+            456.54296875,
+            595.703125
+          ],
+          [
+            -2.44140625,
+            5250.244140625,
+            124.51171875,
+            136.71875
+          ],
+          [
+            -3.92913818359375,
+            1770.6298828125,
+            16.803741455078125,
+            15.62654972076416
+          ]
+        ],
+        "constraint_jacobian_det": NaN,
+        "constraint_jacobian_rank": 3,
+        "constraint_jacobian_svals": [
+          13046.406354597224,
+          159.54271614586563,
+          5.400382234758925
+        ],
+        "critical_point": [
+          8.717352279606489,
+          0.961001654354718,
+          -5.032965685251605,
+          0.9
+        ],
+        "family_tangent": [
+          2.8408201527874155,
+          0.012966690871585307,
+          -1.6401482799377476,
+          1.0,
+          0.0
+        ],
+        "fixture": "kerr_isco_retrograde_a0p900_float32",
+        "gradient_magnitude": 14.141428943299802,
+        "hessian_eigenvalues_ascending": [
+          -108.83297709029675,
+          -2.0,
+          267.34607109551087,
+          49136.20253734517,
+          340492994.72753054
+        ],
+        "hessian_singular_values_descending": [
+          340492994.7275304,
+          49136.20253735084,
+          267.34607109453015,
+          108.83297709026836,
+          2.0
+        ],
+        "n_phys": 4,
+        "null_alignment_cos_theta": 0.0,
+        "null_eigenvector": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "precision": "float32",
+        "rank": 5,
+        "signature_pos_neg_zero": [
+          3,
+          2,
+          0
+        ],
+        "structural_predictions": {
+          "H_XX_match": true,
+          "expected_H_XX": -2.0,
+          "expected_rank": 4,
+          "expected_signature": [
+            3,
+            1,
+            1
+          ],
+          "pair_jacobian_regular": true,
+          "rank_match": false,
+          "signature_match": false
+        },
+        "v4_stratum": "h_xx_match_rank_off",
+        "v4_validity": {
+          "advanceable": false,
+          "defined": true,
+          "finite": true,
+          "observable": false,
+          "selectable": false
+        }
+      },
+      "float64": {
+        "F_joint": 8.739147047305835e-24,
+        "H_XX": -2.0,
+        "K_constraints": 3,
+        "constraint_jacobian": [
+          [
+            4.547473508864641e-07,
+            11787.660809659428,
+            457.98445307809743,
+            598.3154587738682
+          ],
+          [
+            2.2737367544323206e-07,
+            5250.879295090272,
+            125.20607299393305,
+            137.26999645768956
+          ],
+          [
+            -4.000000025428108,
+            1770.806504111988,
+            16.672256823113685,
+            15.746753390333268
+          ]
+        ],
+        "constraint_jacobian_det": NaN,
+        "constraint_jacobian_rank": 3,
+        "constraint_jacobian_svals": [
+          13047.357833109827,
+          160.14205116235297,
+          6.098600836645579
+        ],
+        "critical_point": [
+          8.717352279606489,
+          0.961001654354718,
+          -5.032965685251605,
+          0.9
+        ],
+        "family_tangent": [
+          2.8408201527874155,
+          0.012966690871585307,
+          -1.6401482799377476,
+          1.0,
+          0.0
+        ],
+        "fixture": "kerr_isco_retrograde_a0p900",
+        "gradient_magnitude": 0.0001671290473473594,
+        "hessian_eigenvalues_ascending": [
+          -2.0,
+          0.009217191949202268,
+          74.37934227185411,
+          51290.94587215077,
+          340467093.70349574
+        ],
+        "hessian_singular_values_descending": [
+          340467093.7034959,
+          51290.94587215068,
+          74.37934227151182,
+          2.0,
+          0.009217192226242194
+        ],
+        "n_phys": 4,
+        "null_alignment_cos_theta": 0.9999999995532562,
+        "null_eigenvector": [
+          0.8283986270249791,
+          0.0037808709916877415,
+          -0.47824499567786427,
+          0.2915872834448603,
+          0.0
+        ],
+        "precision": "float64",
+        "rank": 4,
+        "signature_pos_neg_zero": [
+          3,
+          1,
+          1
+        ],
+        "structural_predictions": {
+          "H_XX_match": true,
+          "expected_H_XX": -2.0,
+          "expected_rank": 4,
+          "expected_signature": [
+            3,
+            1,
+            1
+          ],
+          "pair_jacobian_regular": true,
+          "rank_match": true,
+          "signature_match": true
+        },
+        "v4_stratum": "structural_invariants_confirmed",
+        "v4_validity": {
+          "advanceable": true,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": true
+        }
+      },
+      "float64_high_resolution_fd": {
+        "F_joint": 8.739147047305835e-24,
+        "H_XX": -2.0,
+        "K_constraints": 3,
+        "constraint_jacobian": [
+          [
+            -4.547473508864641e-05,
+            11787.660696427338,
+            457.9844699037494,
+            598.3154096611543
+          ],
+          [
+            -1.1368683772161603e-05,
+            5250.879280538356,
+            125.20607697297237,
+            137.27000123253674
+          ],
+          [
+            -4.000000330961484,
+            1770.8065172428178,
+            16.672252556304556,
+            15.746754222778492
+          ]
+        ],
+        "constraint_jacobian_det": NaN,
+        "constraint_jacobian_rank": 3,
+        "constraint_jacobian_svals": [
+          13047.357725341906,
+          160.14203623479105,
+          6.098600061051826
+        ],
+        "critical_point": [
+          8.717352279606489,
+          0.961001654354718,
+          -5.032965685251605,
+          0.9
+        ],
+        "family_tangent": [
+          2.8408201527874155,
+          0.012966690871585307,
+          -1.6401482799377476,
+          1.0,
+          0.0
+        ],
+        "fixture": "kerr_isco_retrograde_a0p900",
+        "gradient_magnitude": 4.76738418093011e-08,
+        "hessian_eigenvalues_ascending": [
+          -2.0,
+          1.449216779883522e-05,
+          74.38573445043401,
+          51290.95315971549,
+          340467092.88046104
+        ],
+        "hessian_singular_values_descending": [
+          340467092.88046104,
+          51290.95315971481,
+          74.38573445088907,
+          2.0,
+          1.4491818523328632e-05
+        ],
+        "n_phys": 4,
+        "null_alignment_cos_theta": 0.999999999999764,
+        "null_eigenvector": [
+          0.8283815035490831,
+          0.003781083469622945,
+          -0.4782669780596652,
+          0.2915998725706708,
+          0.0
+        ],
+        "precision": "float64_high_resolution_fd",
+        "rank": 4,
+        "signature_pos_neg_zero": [
+          3,
+          1,
+          1
+        ],
+        "structural_predictions": {
+          "H_XX_match": true,
+          "expected_H_XX": -2.0,
+          "expected_rank": 4,
+          "expected_signature": [
+            3,
+            1,
+            1
+          ],
+          "pair_jacobian_regular": true,
+          "rank_match": true,
+          "signature_match": true
+        },
+        "v4_stratum": "structural_invariants_confirmed",
+        "v4_validity": {
+          "advanceable": true,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": true
+        }
+      }
+    },
+    "morris_thorne_throat": {
+      "float32": {
+        "F_joint": 0.0,
+        "H_XX": -2.0,
+        "K_constraints": 2,
+        "constraint_jacobian": [
+          [
+            -2.0003318786621094,
+            2.0003318786621094,
+            0.0
+          ],
+          [
+            1.0001659393310547,
+            -2.0000338554382324,
+            -1.0001659393310547
+          ]
+        ],
+        "constraint_jacobian_det": NaN,
+        "constraint_jacobian_rank": 2,
+        "constraint_jacobian_svals": [
+          3.6174602530270517,
+          0.9578286917023796
+        ],
+        "critical_point": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "family_tangent": [
+          1.0,
+          1.0,
+          -1.0,
+          0.0
+        ],
+        "fixture": "morris_thorne_throat_float32",
+        "gradient_magnitude": 1.192113074921508e-07,
+        "hessian_eigenvalues_ascending": [
+          -2.0,
+          -8.567011601473718e-05,
+          1.8344980142653844,
+          26.16608018311984
+        ],
+        "hessian_singular_values_descending": [
+          26.166080183119846,
+          2.0,
+          1.8344980142653855,
+          8.567011601576535e-05
+        ],
+        "n_phys": 3,
+        "null_alignment_cos_theta": 0.9999999993570909,
+        "null_eigenvector": [
+          0.5773655586313658,
+          0.5773642474045249,
+          -0.5773210004194345,
+          0.0
+        ],
+        "precision": "float32",
+        "rank": 3,
+        "signature_pos_neg_zero": [
+          2,
+          1,
+          1
+        ],
+        "structural_predictions": {
+          "H_XX_match": true,
+          "expected_H_XX": -2.0,
+          "expected_rank": 3,
+          "expected_signature": [
+            2,
+            1,
+            1
+          ],
+          "pair_jacobian_regular": true,
+          "rank_match": true,
+          "signature_match": true
+        },
+        "v4_stratum": "structural_invariants_confirmed",
+        "v4_validity": {
+          "advanceable": true,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": true
+        }
+      },
+      "float64": {
+        "F_joint": 0.0,
+        "H_XX": -2.0,
+        "K_constraints": 2,
+        "constraint_jacobian": [
+          [
+            -1.999999999946489,
+            2.000000000002,
+            0.0
+          ],
+          [
+            0.9999999999732445,
+            -2.000000000002,
+            -0.9999999999732445
+          ]
+        ],
+        "constraint_jacobian_det": NaN,
+        "constraint_jacobian_rank": 2,
+        "constraint_jacobian_svals": [
+          3.6170101644921067,
+          0.9577251535047617
+        ],
+        "critical_point": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "family_tangent": [
+          1.0,
+          1.0,
+          -1.0,
+          0.0
+        ],
+        "fixture": "morris_thorne_throat",
+        "gradient_magnitude": 8.945116712915e-12,
+        "hessian_eigenvalues_ascending": [
+          -2.0,
+          -2.2000091724462553e-07,
+          1.8344748810011455,
+          26.165525958980314
+        ],
+        "hessian_singular_values_descending": [
+          26.165525958980314,
+          1.9999999999999998,
+          1.8344748810011475,
+          2.200009136931649e-07
+        ],
+        "n_phys": 3,
+        "null_alignment_cos_theta": 0.9999999999999977,
+        "null_eigenvector": [
+          0.5773503100855245,
+          0.5773502826613869,
+          -0.5773502148219611,
+          0.0
+        ],
+        "precision": "float64",
+        "rank": 3,
+        "signature_pos_neg_zero": [
+          2,
+          1,
+          1
+        ],
+        "structural_predictions": {
+          "H_XX_match": true,
+          "expected_H_XX": -2.0,
+          "expected_rank": 3,
+          "expected_signature": [
+            2,
+            1,
+            1
+          ],
+          "pair_jacobian_regular": true,
+          "rank_match": true,
+          "signature_match": true
+        },
+        "v4_stratum": "structural_invariants_confirmed",
+        "v4_validity": {
+          "advanceable": true,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": true
+        }
+      },
+      "float64_high_resolution_fd": {
+        "F_joint": 0.0,
+        "H_XX": -2.0,
+        "K_constraints": 2,
+        "constraint_jacobian": [
+          [
+            -1.9999999989472883,
+            1.9999999933961732,
+            0.0
+          ],
+          [
+            0.9999999994736442,
+            -1.999999987845058,
+            -0.9999999994736442
+          ]
+        ],
+        "constraint_jacobian_det": NaN,
+        "constraint_jacobian_rank": 2,
+        "constraint_jacobian_svals": [
+          3.617010153730679,
+          0.9577251518352355
+        ],
+        "critical_point": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "family_tangent": [
+          1.0,
+          1.0,
+          -1.0,
+          0.0
+        ],
+        "fixture": "morris_thorne_throat",
+        "gradient_magnitude": 2.2370373972417406e-15,
+        "hessian_eigenvalues_ascending": [
+          -2.0,
+          -2.172812538752704e-09,
+          1.8344749388338715,
+          26.165525069591745
+        ],
+        "hessian_singular_values_descending": [
+          26.16552506959175,
+          2.0,
+          1.8344749388338695,
+          2.172816828644028e-09
+        ],
+        "n_phys": 3,
+        "null_alignment_cos_theta": 1.0,
+        "null_eigenvector": [
+          0.5773502695931069,
+          0.5773502693217858,
+          -0.5773502686539843,
+          0.0
+        ],
+        "precision": "float64_high_resolution_fd",
+        "rank": 3,
+        "signature_pos_neg_zero": [
+          2,
+          1,
+          1
+        ],
+        "structural_predictions": {
+          "H_XX_match": true,
+          "expected_H_XX": -2.0,
+          "expected_rank": 3,
+          "expected_signature": [
+            2,
+            1,
+            1
+          ],
+          "pair_jacobian_regular": true,
+          "rank_match": true,
+          "signature_match": true
+        },
+        "v4_stratum": "structural_invariants_confirmed",
+        "v4_validity": {
+          "advanceable": true,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": true
+        }
+      }
+    },
+    "rayleigh_benard_onset": {
+      "float32": {
+        "F_joint": 1.0329285527610685e-07,
+        "H_XX": -2.0,
+        "K_constraints": 2,
+        "constraint_jacobian": [
+          [
+            3.662109375,
+            3.662109375,
+            -9.869603672996163
+          ],
+          [
+            0.0,
+            1946.9952583312988,
+            -9.869603964034468
+          ]
+        ],
+        "constraint_jacobian_det": NaN,
+        "constraint_jacobian_rank": 2,
+        "constraint_jacobian_svals": [
+          1947.0238121493467,
+          10.509573597641978
+        ],
+        "critical_point": [
+          657.5113644795163,
+          2.221441469079183,
+          0.0
+        ],
+        "family_tangent": [
+          2.0,
+          0.005067839711419289,
+          1.0,
+          0.0
+        ],
+        "fixture": "rayleigh_benard_onset_float32",
+        "gradient_magnitude": 0.35881520242943515,
+        "hessian_eigenvalues_ascending": [
+          -2.0,
+          -0.0708554184350878,
+          244.84477185306025,
+          7584230.904079147
+        ],
+        "hessian_singular_values_descending": [
+          7584230.904079147,
+          244.8447718528686,
+          2.0,
+          0.07085541848458578
+        ],
+        "n_phys": 3,
+        "null_alignment_cos_theta": 0.9999845120947402,
+        "null_eigenvector": [
+          0.8919220168958277,
+          0.0022918054017718736,
+          0.45218343999363714,
+          0.0
+        ],
+        "precision": "float32",
+        "rank": 3,
+        "signature_pos_neg_zero": [
+          2,
+          1,
+          1
+        ],
+        "structural_predictions": {
+          "H_XX_match": true,
+          "expected_H_XX": -2.0,
+          "expected_rank": 3,
+          "expected_signature": [
+            2,
+            1,
+            1
+          ],
+          "pair_jacobian_regular": true,
+          "rank_match": true,
+          "signature_match": true
+        },
+        "v4_stratum": "structural_invariants_confirmed",
+        "v4_validity": {
+          "advanceable": false,
+          "defined": true,
+          "finite": true,
+          "observable": false,
+          "selectable": false
+        }
+      },
+      "float64": {
+        "F_joint": 8.271806125530277e-25,
+        "H_XX": -2.0,
+        "K_constraints": 2,
+        "constraint_jacobian": [
+          [
+            4.934802063871757,
+            -4.547473508864641e-07,
+            -9.869604401089358
+          ],
+          [
+            0.0,
+            1947.4973489121085,
+            -9.869604401089358
+          ]
+        ],
+        "constraint_jacobian_det": NaN,
+        "constraint_jacobian_rank": 2,
+        "constraint_jacobian_svals": [
+          1947.522358180376,
+          11.034439755393329
+        ],
+        "critical_point": [
+          657.5113644795163,
+          2.221441469079183,
+          0.0
+        ],
+        "family_tangent": [
+          2.0,
+          0.005067839711419289,
+          1.0,
+          0.0
+        ],
+        "fixture": "rayleigh_benard_onset",
+        "gradient_magnitude": 6.260382022314705e-06,
+        "hessian_eigenvalues_ascending": [
+          -2.0,
+          2.841309509893364e-08,
+          243.5177266462803,
+          7585686.790480981
+        ],
+        "hessian_singular_values_descending": [
+          7585686.790480978,
+          243.51772664612915,
+          2.0,
+          2.8375253966194014e-08
+        ],
+        "n_phys": 3,
+        "null_alignment_cos_theta": 1.0000000000000002,
+        "null_eigenvector": [
+          0.8944248952156139,
+          0.002266400965134252,
+          0.4472124441976135,
+          0.0
+        ],
+        "precision": "float64",
+        "rank": 3,
+        "signature_pos_neg_zero": [
+          2,
+          1,
+          1
+        ],
+        "structural_predictions": {
+          "H_XX_match": true,
+          "expected_H_XX": -2.0,
+          "expected_rank": 3,
+          "expected_signature": [
+            2,
+            1,
+            1
+          ],
+          "pair_jacobian_regular": true,
+          "rank_match": true,
+          "signature_match": true
+        },
+        "v4_stratum": "structural_invariants_confirmed",
+        "v4_validity": {
+          "advanceable": true,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": true
+        }
+      },
+      "float64_high_resolution_fd": {
+        "F_joint": 8.271806125530277e-25,
+        "H_XX": -2.0,
+        "K_constraints": 2,
+        "constraint_jacobian": [
+          [
+            4.934804564982187,
+            2.2737367544323206e-05,
+            -9.869604401089358
+          ],
+          [
+            0.0,
+            1947.497334506384,
+            -9.869604401089358
+          ]
+        ],
+        "constraint_jacobian_det": NaN,
+        "constraint_jacobian_rank": 2,
+        "constraint_jacobian_svals": [
+          1947.522343775432,
+          11.03444076880665
+        ],
+        "critical_point": [
+          657.5113644795163,
+          2.221441469079183,
+          0.0
+        ],
+        "family_tangent": [
+          2.0,
+          0.005067839711419289,
+          1.0,
+          0.0
+        ],
+        "fixture": "rayleigh_benard_onset",
+        "gradient_magnitude": 1.2136501594156096e-09,
+        "hessian_eigenvalues_ascending": [
+          -2.0,
+          -7.123323042534948e-10,
+          243.51772405477374,
+          7585686.670010144
+        ],
+        "hessian_singular_values_descending": [
+          7585686.670010142,
+          243.5177240551224,
+          1.9999999999999998,
+          6.251380838967719e-10
+        ],
+        "n_phys": 3,
+        "null_alignment_cos_theta": 1.0000000000000002,
+        "null_eigenvector": [
+          0.8944248938692975,
+          0.0022664009976202104,
+          0.4472124468900815,
+          0.0
+        ],
+        "precision": "float64_high_resolution_fd",
+        "rank": 3,
+        "signature_pos_neg_zero": [
+          2,
+          1,
+          1
+        ],
+        "structural_predictions": {
+          "H_XX_match": true,
+          "expected_H_XX": -2.0,
+          "expected_rank": 3,
+          "expected_signature": [
+            2,
+            1,
+            1
+          ],
+          "pair_jacobian_regular": true,
+          "rank_match": true,
+          "signature_match": true
+        },
+        "v4_stratum": "structural_invariants_confirmed",
+        "v4_validity": {
+          "advanceable": true,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": true
+        }
+      }
+    },
+    "schwarzschild_isco": {
+      "float32": {
+        "F_joint": 0.0,
+        "H_XX": -2.0,
+        "K_constraints": 2,
+        "constraint_jacobian": [
+          [
+            -0.03814697265625,
+            -3.01361083984375,
+            72.021484375
+          ],
+          [
+            11.90185546875,
+            5.950927734375,
+            -216.064453125
+          ]
+        ],
+        "constraint_jacobian_det": NaN,
+        "constraint_jacobian_rank": 2,
+        "constraint_jacobian_svals": [
+          228.12774609079247,
+          3.8502713284818304
+        ],
+        "critical_point": [
+          6.0,
+          12.0,
+          1.0
+        ],
+        "family_tangent": [
+          6.0,
+          24.0,
+          1.0,
+          0.0
+        ],
+        "fixture": "schwarzschild_isco_float32",
+        "gradient_magnitude": 0.0,
+        "hessian_eigenvalues_ascending": [
+          -2.0,
+          0.016128338090350386,
+          30.156328964601986,
+          104031.10615912471
+        ],
+        "hessian_singular_values_descending": [
+          104031.10615912471,
+          30.15632896460455,
+          2.0,
+          0.01612833811331258
+        ],
+        "n_phys": 3,
+        "null_alignment_cos_theta": 0.9999990593306645,
+        "null_eigenvector": [
+          0.2436668979961744,
+          0.9690156346492594,
+          0.04043689684205076,
+          0.0
+        ],
+        "precision": "float32",
+        "rank": 3,
+        "signature_pos_neg_zero": [
+          2,
+          1,
+          1
+        ],
+        "structural_predictions": {
+          "H_XX_match": true,
+          "expected_H_XX": -2.0,
+          "expected_rank": 3,
+          "expected_signature": [
+            2,
+            1,
+            1
+          ],
+          "pair_jacobian_regular": true,
+          "rank_match": true,
+          "signature_match": true
+        },
+        "v4_stratum": "structural_invariants_confirmed",
+        "v4_validity": {
+          "advanceable": true,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": true
+        }
+      },
+      "float64": {
+        "F_joint": 0.0,
+        "H_XX": -2.0,
+        "K_constraints": 2,
+        "constraint_jacobian": [
+          [
+            3.552713678800501e-09,
+            -2.9999999995311555,
+            71.99999999585316
+          ],
+          [
+            11.999999983913767,
+            6.000000013273166,
+            -215.99999998045405
+          ]
+        ],
+        "constraint_jacobian_det": NaN,
+        "constraint_jacobian_rank": 2,
+        "constraint_jacobian_svals": [
+          228.06517966658274,
+          3.9081727672607136
+        ],
+        "critical_point": [
+          6.0,
+          12.0,
+          1.0
+        ],
+        "family_tangent": [
+          6.0,
+          24.0,
+          1.0,
+          0.0
+        ],
+        "fixture": "schwarzschild_isco",
+        "gradient_magnitude": 4.861996723260887e-11,
+        "hessian_eigenvalues_ascending": [
+          -2.0,
+          -3.959378063702263e-08,
+          30.54762901581716,
+          104027.45237146197
+        ],
+        "hessian_singular_values_descending": [
+          104027.45237146199,
+          30.547629015817378,
+          2.0,
+          3.959913349369343e-08
+        ],
+        "n_phys": 3,
+        "null_alignment_cos_theta": 1.0,
+        "null_eigenvector": [
+          0.2423377194352214,
+          0.9693508695834715,
+          0.04038961966525101,
+          0.0
+        ],
+        "precision": "float64",
+        "rank": 3,
+        "signature_pos_neg_zero": [
+          2,
+          1,
+          1
+        ],
+        "structural_predictions": {
+          "H_XX_match": true,
+          "expected_H_XX": -2.0,
+          "expected_rank": 3,
+          "expected_signature": [
+            2,
+            1,
+            1
+          ],
+          "pair_jacobian_regular": true,
+          "rank_match": true,
+          "signature_match": true
+        },
+        "v4_stratum": "structural_invariants_confirmed",
+        "v4_validity": {
+          "advanceable": true,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": true
+        }
+      },
+      "float64_high_resolution_fd": {
+        "F_joint": 0.0,
+        "H_XX": -2.0,
+        "K_constraints": 2,
+        "constraint_jacobian": [
+          [
+            3.552713678800501e-07,
+            -3.000000248221113,
+            72.00000027296483
+          ],
+          [
+            11.99999957179898,
+            6.0000019175276975,
+            -216.00000081889448
+          ]
+        ],
+        "constraint_jacobian_det": NaN,
+        "constraint_jacobian_rank": 2,
+        "constraint_jacobian_svals": [
+          228.065180577981,
+          3.9081728755436087
+        ],
+        "critical_point": [
+          6.0,
+          12.0,
+          1.0
+        ],
+        "family_tangent": [
+          6.0,
+          24.0,
+          1.0,
+          0.0
+        ],
+        "fixture": "schwarzschild_isco",
+        "gradient_magnitude": 3.4106049847028824e-13,
+        "hessian_eigenvalues_ascending": [
+          -2.0,
+          4.3692007827409514e-08,
+          30.54762880082699,
+          104027.45237151002
+        ],
+        "hessian_singular_values_descending": [
+          104027.45237151001,
+          30.547628800827237,
+          2.0,
+          4.37013213848425e-08
+        ],
+        "n_phys": 3,
+        "null_alignment_cos_theta": 1.0,
+        "null_eigenvector": [
+          0.24233771731456505,
+          0.9693508701176979,
+          0.04038961956775777,
+          0.0
+        ],
+        "precision": "float64_high_resolution_fd",
+        "rank": 3,
+        "signature_pos_neg_zero": [
+          2,
+          1,
+          1
+        ],
+        "structural_predictions": {
+          "H_XX_match": true,
+          "expected_H_XX": -2.0,
+          "expected_rank": 3,
+          "expected_signature": [
+            2,
+            1,
+            1
+          ],
+          "pair_jacobian_regular": true,
+          "rank_match": true,
+          "signature_match": true
+        },
+        "v4_stratum": "structural_invariants_confirmed",
+        "v4_validity": {
+          "advanceable": true,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": true
+        }
+      }
+    },
+    "schwarzschild_photon": {
+      "float32": {
+        "F_joint": 0.0,
+        "H_XX": -2.0,
+        "K_constraints": 2,
+        "constraint_jacobian": [
+          [
+            0.0,
+            0.9918212890625,
+            -54.01611328125
+          ],
+          [
+            -53.863525390625,
+            2.9754638671875,
+            0.0
+          ]
+        ],
+        "constraint_jacobian_det": NaN,
+        "constraint_jacobian_rank": 2,
+        "constraint_jacobian_svals": [
+          54.03369537172879,
+          53.93715528917824
+        ],
+        "critical_point": [
+          3.0,
+          27.0,
+          1.0
+        ],
+        "family_tangent": [
+          3.0,
+          54.0,
+          1.0,
+          0.0
+        ],
+        "fixture": "schwarzschild_photon_float32",
+        "gradient_magnitude": 0.0,
+        "hessian_eigenvalues_ascending": [
+          -2.0,
+          -0.00020771882705415934,
+          5831.975123094043,
+          5849.902143060714
+        ],
+        "hessian_singular_values_descending": [
+          5849.902143060713,
+          5831.975123094041,
+          2.0,
+          0.00020771882654723148
+        ],
+        "n_phys": 3,
+        "null_alignment_cos_theta": 0.9999999997700537,
+        "null_eigenvector": [
+          -0.05544132806991204,
+          -0.9982909620222643,
+          -0.018477399343701184,
+          0.0
+        ],
+        "precision": "float32",
+        "rank": 3,
+        "signature_pos_neg_zero": [
+          2,
+          1,
+          1
+        ],
+        "structural_predictions": {
+          "H_XX_match": true,
+          "expected_H_XX": -2.0,
+          "expected_rank": 3,
+          "expected_signature": [
+            2,
+            1,
+            1
+          ],
+          "pair_jacobian_regular": true,
+          "rank_match": true,
+          "signature_match": true
+        },
+        "v4_stratum": "structural_invariants_confirmed",
+        "v4_validity": {
+          "advanceable": true,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": true
+        }
+      },
+      "float64": {
+        "F_joint": 0.0,
+        "H_XX": -2.0,
+        "K_constraints": 2,
+        "constraint_jacobian": [
+          [
+            -1.7763568394002505e-09,
+            1.0000000010279564,
+            -53.999999998666226
+          ],
+          [
+            -54.00000001287708,
+            3.000000006636583,
+            0.0
+          ]
+        ],
+        "constraint_jacobian_det": NaN,
+        "constraint_jacobian_rank": 2,
+        "constraint_jacobian_svals": [
+          54.09251335754956,
+          53.9999999995544
+        ],
+        "critical_point": [
+          3.0,
+          27.0,
+          1.0
+        ],
+        "family_tangent": [
+          3.0,
+          54.0,
+          1.0,
+          0.0
+        ],
+        "fixture": "schwarzschild_photon",
+        "gradient_magnitude": 2.9168347997835893e-09,
+        "hessian_eigenvalues_ascending": [
+          -2.0,
+          -3.074918952089237e-08,
+          5832.000001617754,
+          5852.000021103911
+        ],
+        "hessian_singular_values_descending": [
+          5852.0000211039105,
+          5832.000001617756,
+          2.0,
+          3.074857158482222e-08
+        ],
+        "n_phys": 3,
+        "null_alignment_cos_theta": 1.0,
+        "null_eigenvector": [
+          -0.05546053993722801,
+          -0.9982897199764178,
+          -0.0184868466558307,
+          -0.0
+        ],
+        "precision": "float64",
+        "rank": 3,
+        "signature_pos_neg_zero": [
+          2,
+          1,
+          1
+        ],
+        "structural_predictions": {
+          "H_XX_match": true,
+          "expected_H_XX": -2.0,
+          "expected_rank": 3,
+          "expected_signature": [
+            2,
+            1,
+            1
+          ],
+          "pair_jacobian_regular": true,
+          "rank_match": true,
+          "signature_match": true
+        },
+        "v4_stratum": "structural_invariants_confirmed",
+        "v4_validity": {
+          "advanceable": true,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": true
+        }
+      },
+      "float64_high_resolution_fd": {
+        "F_joint": 0.0,
+        "H_XX": -2.0,
+        "K_constraints": 2,
+        "constraint_jacobian": [
+          [
+            -1.7763568394002505e-07,
+            1.000000082740371,
+            -53.99999984945225
+          ],
+          [
+            -53.999999494180884,
+            2.9999995376783772,
+            0.0
+          ]
+        ],
+        "constraint_jacobian_det": NaN,
+        "constraint_jacobian_rank": 2,
+        "constraint_jacobian_svals": [
+          54.09251290479536,
+          53.99999976063405
+        ],
+        "critical_point": [
+          3.0,
+          27.0,
+          1.0
+        ],
+        "family_tangent": [
+          3.0,
+          54.0,
+          1.0,
+          0.0
+        ],
+        "fixture": "schwarzschild_photon",
+        "gradient_magnitude": 8.579637964546188e-13,
+        "hessian_eigenvalues_ascending": [
+          -2.0,
+          -2.7928352484062564e-10,
+          5832.000000044651,
+          5852.000000303044
+        ],
+        "hessian_singular_values_descending": [
+          5852.000000303045,
+          5832.00000004465,
+          2.0,
+          2.7922057787845894e-10
+        ],
+        "n_phys": 3,
+        "null_alignment_cos_theta": 1.0,
+        "null_eigenvector": [
+          -0.05546053998869315,
+          -0.9982897199733825,
+          -0.018486846665351872,
+          -0.0
+        ],
+        "precision": "float64_high_resolution_fd",
+        "rank": 3,
+        "signature_pos_neg_zero": [
+          2,
+          1,
+          1
+        ],
+        "structural_predictions": {
+          "H_XX_match": true,
+          "expected_H_XX": -2.0,
+          "expected_rank": 3,
+          "expected_signature": [
+            2,
+            1,
+            1
+          ],
+          "pair_jacobian_regular": true,
+          "rank_match": true,
+          "signature_match": true
+        },
+        "v4_stratum": "structural_invariants_confirmed",
+        "v4_validity": {
+          "advanceable": true,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": true
+        }
+      }
+    }
+  }
+}

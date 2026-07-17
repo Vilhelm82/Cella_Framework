@@ -1,0 +1,79 @@
+{
+ "B-P1": "STANDS at v1: PASS 73/73 identity cells (Amendment 3; prediction_verdicts_v1.json)",
+ "B-P2": "STANDS at v1: PASS 166/166 reconstructions (Amendment 3; prediction_verdicts_v1.json)",
+ "B-P3": {
+  "failures": [],
+  "n_fits": 16,
+  "n_ok": 16,
+  "pass": true,
+  "units": "(fixture, point, scheme) slope fits"
+ },
+ "B-P4": {
+  "band_failures": [],
+  "fit_failures": [
+   {
+    "alpha_measured": 2.0207160502955093,
+    "alpha_predicted": 2,
+    "fixture": "T1",
+    "leg_i_correctness": true,
+    "leg_ii_trust": false,
+    "ok": false,
+    "point": "0x1.4000000000000p+0",
+    "propagated_window_error": 0.10433170953602876,
+    "scheme": "centered",
+    "stability": "stable",
+    "status": "alpha_regular_integer"
+   },
+   {
+    "alpha_measured": 2.0137899722273795,
+    "alpha_predicted": 2,
+    "fixture": "T2",
+    "leg_i_correctness": false,
+    "leg_ii_trust": false,
+    "ok": false,
+    "point": "0x1.0000000000000p-1",
+    "propagated_window_error": 0.03842503378853595,
+    "scheme": "centered",
+    "stability": "unstable",
+    "status": "alpha_unstable_window"
+   },
+   {
+    "alpha_measured": 0.9175379925640774,
+    "alpha_predicted": 1,
+    "fixture": "T3",
+    "leg_i_correctness": false,
+    "leg_ii_trust": false,
+    "ok": false,
+    "point": "0x1.0000000000000p-1",
+    "propagated_window_error": 0.019737388766666638,
+    "scheme": "forward",
+    "stability": "unstable",
+    "status": "alpha_unstable_window"
+   },
+   {
+    "alpha_measured": 1.9655193525129504,
+    "alpha_predicted": 2,
+    "fixture": "T3",
+    "leg_i_correctness": true,
+    "leg_ii_trust": false,
+    "ok": false,
+    "point": "0x1.4000000000000p+1",
+    "propagated_window_error": 0.1534920695820421,
+    "scheme": "centered",
+    "stability": "stable",
+    "status": "alpha_regular_integer"
+   }
+  ],
+  "n_band_cells": 54,
+  "n_band_ok": 54,
+  "n_fits": 12,
+  "n_fits_ok": 8,
+  "pass": false,
+  "units": "fits: (fixture, point, scheme); band: (fixture, point, j) cells"
+ },
+ "anomalies": [],
+ "dp2_firings_cells": 0,
+ "prereg_sha256": "3571f210a381264ae877923e1df41fa602c1cf2f9bf4cce0b7a988a07634a9ce",
+ "records_sha256": "52163b4993e241fac5fc0954fa6363fa9942aa57eb10a1e2cd7f622c6e632d75",
+ "v1_pin_preserved": "dca8eb406211b51485f2eb53bb15abe5193fe494de86fb174144668ddbf56b07"
+}

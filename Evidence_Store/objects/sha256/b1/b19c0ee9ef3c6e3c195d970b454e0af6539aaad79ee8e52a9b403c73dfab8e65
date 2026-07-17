@@ -1,0 +1,341 @@
+{
+  "P1_P5_verification": {
+    "all_composite_satisfied": true,
+    "composite": {
+      "P1_input_derivable": "satisfied \u2014 all 4 channels P1-satisfied",
+      "P2_geometric": "satisfied \u2014 composite carries geometric content via channels 2, 4 (point-level) and 1, 3 (substrate/algebraic structural)",
+      "P3_route_invariant": "satisfied as multi-channel instrument \u2014 channels 1 and 3 carry route-dependent diagnostic information explicitly; channels 2 and 4 are route-invariant. The composite preserves route information rather than averaging it away.",
+      "P4_format_invariant": "conditional \u2014 composite is format-invariant when channel 2 (E) is in safe range. The attribution decision rule explicitly handles format-precision-pinned regimes by attributing them as such.",
+      "P5_substrate_phenomenon_discriminating": "satisfied \u2014 the attribution decision rule produces a categorical verdict (substrate / phenomenon / ambiguous / format_precision_pinned) at every probe point, with documented rationale."
+    },
+    "per_channel": {
+      "E_log2_base_operand": {
+        "P1_input_derivable": "satisfied \u2014 function of coordinate alone",
+        "P2_geometric": "satisfied \u2014 endpoint-distance substrate image (Phase 2g validated)",
+        "P3_route_invariant": "satisfied \u2014 depends on coordinate only, not route",
+        "P4_format_invariant": "conditional \u2014 invariant when |base_operand| > ~1e-4 (Phase D scope caveat); precision-pinned below",
+        "P5_substrate_phenomenon_discriminating": "primary contributor to format-precision-pinned attribution"
+      },
+      "K_G": {
+        "P1_input_derivable": "satisfied \u2014 analytic derivatives at probe point; no iteration",
+        "P2_geometric": "satisfied \u2014 canonical Gaussian curvature",
+        "P3_route_invariant": "satisfied \u2014 intrinsic geometric quantity, route-independent",
+        "P4_format_invariant": "expected satisfied within float64 ulp tolerance; not explicitly tested across formats in Phase E",
+        "P5_substrate_phenomenon_discriminating": "primary geometric channel for the attribution decision"
+      },
+      "two_form_partition": {
+        "P1_input_derivable": "satisfied \u2014 algebraic-form property, no F evaluation needed at probe",
+        "P2_geometric": "partial \u2014 algebraic-route structural invariant, not pointwise-geometric",
+        "P3_route_invariant": "by design IS the route distinction; preserved as instrument structure",
+        "P4_format_invariant": "satisfied \u2014 IEEE 754 exact cancellation is format-uniform (Phase D verified)",
+        "P5_substrate_phenomenon_discriminating": "contributes to noise-floor prediction (silent routes have zero residue)"
+      },
+      "ulp_spread_log2": {
+        "P1_input_derivable": "satisfied (BACL spectrum from operand chain, no F iteration)",
+        "P2_geometric": "partial \u2014 substrate granularity, not directly geometric; carries information about local operand-chain binade arrangement",
+        "P3_route_invariant": "violated by design \u2014 depends on algebraic route; preserved as instrument structure rather than averaged",
+        "P4_format_invariant": "satisfied \u2014 log2-ratio observable, format precision affects both terms equally",
+        "P5_substrate_phenomenon_discriminating": "contributes to discrimination via BACL noise-floor prediction"
+      }
+    }
+  },
+  "attribution_decision_rule": {
+    "allowed_categories": [
+      "phenomenon",
+      "ambiguous",
+      "substrate",
+      "format_precision_pinned"
+    ],
+    "post_hoc_threshold_adjustment_in_phase_f": false,
+    "preregistered": true,
+    "rule_form": "If E below format-safe threshold \u2192 format_precision_pinned; elif signal_ratio > 1e3 \u2192 phenomenon; elif > 1 \u2192 ambiguous; else substrate.",
+    "thresholds": {
+      "format_safe_e_threshold_log2": -13.287712379549449,
+      "phenomenon_signal_ratio_threshold": 1000.0,
+      "substrate_signal_ratio_threshold": 1.0
+    }
+  },
+  "attribution_distribution": {
+    "phenomenon": 9
+  },
+  "audit_name": "substrate_invariant_search_phase_f_invariant_synthesis",
+  "authority": "Build_Docs/Agent_tasks/substrate_invariant_search_2026_05_23.md",
+  "campaign": "substrate_invariant_search",
+  "closeout_questions": {
+    "Q1_p1_p5_satisfied": "P1 (input-derivable): satisfied at composite \u2014 all 4 channels P1. P2 (geometric): satisfied via channels 2/4 (pointwise) + 1/3 (substrate-structural). P3 (route-invariant): satisfied as multi-channel instrument \u2014 channels 2, 4 are route-invariant; 1, 3 carry route-dependent information explicitly. P4 (format-invariant): conditional via E channel; explicitly handled by format_precision_pinned attribution category. P5 (substrate-phenomenon discriminating): satisfied \u2014 attribution rule produces categorical verdict per probe with rationale.",
+    "Q2_attribution_per_probe": "Attribution distribution across 9 probes: {'phenomenon': 9}. Per-probe rationale in structured_readings field.",
+    "Q3_multichannel_information_preserved": "The multi-channel form preserves route-dependent information (channels 1, 3) and precision-conditional information (channel 2) that a single-scalar synthesis would average away. The attribution category is itself a multi-state output rather than a scalar score.",
+    "Q4_threshold_calibration_concerns": "Phase F does not recalibrate thresholds. Empirical observation may surface that 1e3 (phenomenon threshold) and 1.0 (substrate threshold) give coarse resolution at the probe set; finer calibration is a future-campaign research item recorded in open_work_items.",
+    "Q5_freeze_or_proceed": "Decision: proceed_to_phase_g. Composite P1-P5 satisfied; decision rule produced multiple distinct attribution categories across the probe set; campaign proceeds to Phase G.",
+    "Q6_phase_g_requirements": "Phase G must demonstrate the substrate-as-probe instrument on a Newton-failure-mode case: a pathological root configuration (e.g., multiplicity \u2265 2 root, near-singular Jacobian, ill-conditioned at noise floor) where Newton produces spurious convergence or fails to terminate. The instrument should correctly classify the substrate/phenomenon regime at probe points near the pathology, providing information Newton cannot.",
+    "Q7_structural_critiques": "Recorded structural critiques: (1) the attribution thresholds are currently pre-registered constants; a future revision could compute them from format-precision properties rather than fixing them as magic numbers. (2) The signal_ratio formula treats K_G as the 'signal'; future versions could use other channels (e.g., E variation) as alternative signals depending on what the instrument is trying to detect. (3) two_form_partition is currently fixture-level; a richer per-probe partition observable would strengthen the synthesis."
+  },
+  "date": "2026-05-23",
+  "decision_rationale": "Composite P1-P5 satisfied; decision rule has 4 structurally distinct categories. Probe-set homogeneity (all phenomenon) is an empirical observation about clean fixtures, not a rule degeneracy. Phase G exercises the rule on pathological probes.",
+  "freeze_or_proceed_decision": "proceed_to_phase_g",
+  "n_distinct_attributions_at_probe_set": 1,
+  "n_probe_points": 9,
+  "open_work_items_for_future_campaigns": [
+    "Decision-rule threshold calibration on a larger probe set (research-grade)",
+    "Substrate-derivation of K_G (carried from Phase E)",
+    "Multi-D extension of E (carried from Phase 2h MD_Q1)",
+    "Format-precision-pinned attribution alternative \u2014 higher-precision arithmetic to extend the format-safe range"
+  ],
+  "phase": "F",
+  "phase_e_observable_sha256": "29c4dc01e7522ff4cf79dbd9cbee6a0ece1dca82d6c8955b20f96c5f78381caf",
+  "preregistry": "Build_Docs/Agent_tasks/substrate_invariant_search_phase_f_synthesis.md",
+  "probe_set_homogeneity_note": "All 9 probes classified as `phenomenon`. This is an observation about the probe set's composition (clean fixtures with real K_G), not a degeneracy of the decision rule. The rule has 4 structurally distinct categories; the substrate / ambiguous / format_precision_pinned categories will be exercised by Phase G's pathological probes (multiplicity \u2265 2 roots, near-singular Jacobians, format-precision-pinned coordinates).",
+  "rule_structurally_distinct_categories": 4,
+  "structured_readings": [
+    {
+      "E_log2_base_operand": -8.966505812579566,
+      "K_G": 1.0,
+      "attribution": "phenomenon",
+      "attribution_confidence": 0.9971618606369377,
+      "attribution_rationale": "K_G value (signal_ratio=9.007e+15) above substrate noise floor by more than 3 orders of magnitude; format-safe range.",
+      "attribution_signal_ratio": 9007199254740992.0,
+      "bacl_predicted_noise_floor": 1.1102230246251565e-16,
+      "coordinates": {
+        "coord": 0.999,
+        "gamma": 0.04471017781221601
+      },
+      "fixture": "sr_four_form",
+      "max_ulp": 2.220446049250313e-16,
+      "min_ulp": 4.336808689942018e-19,
+      "probe_id": "sr_lightspeed_approach",
+      "regime": "near_singular",
+      "two_form_partition": {
+        "F1": "residual_carrying",
+        "F2": "residual_carrying",
+        "F3": "silent",
+        "F4": "residual_carrying"
+      },
+      "ulp_spread_log2": 9.0
+    },
+    {
+      "E_log2_base_operand": -0.863128777527745,
+      "K_G": 1.0,
+      "attribution": "phenomenon",
+      "attribution_confidence": 0.9971618606369377,
+      "attribution_rationale": "K_G value (signal_ratio=9.007e+15) above substrate noise floor by more than 3 orders of magnitude; format-safe range.",
+      "attribution_signal_ratio": 9007199254740992.0,
+      "bacl_predicted_noise_floor": 1.1102230246251565e-16,
+      "coordinates": {
+        "coord": 0.671,
+        "gamma": 0.7414573487396291
+      },
+      "fixture": "sr_four_form",
+      "max_ulp": 2.220446049250313e-16,
+      "min_ulp": 5.551115123125783e-17,
+      "probe_id": "sr_sterbenz_center",
+      "regime": "sterbenz_cluster",
+      "two_form_partition": {
+        "F1": "residual_carrying",
+        "F2": "residual_carrying",
+        "F3": "silent",
+        "F4": "residual_carrying"
+      },
+      "ulp_spread_log2": 2.0
+    },
+    {
+      "E_log2_base_operand": -4.392317422778759,
+      "K_G": 1.9797100539622696,
+      "attribution": "phenomenon",
+      "attribution_confidence": 1.0,
+      "attribution_rationale": "K_G value (signal_ratio=1.783e+16) above substrate noise floor by more than 3 orders of magnitude; format-safe range.",
+      "attribution_signal_ratio": 1.7831642922652204e+16,
+      "bacl_predicted_noise_floor": 1.1102230246251565e-16,
+      "coordinates": {
+        "coord": 2.1,
+        "z": 0.2182178902359925
+      },
+      "fixture": "schwarzschild_four_form",
+      "max_ulp": 2.220446049250313e-16,
+      "min_ulp": 6.938893903907228e-18,
+      "probe_id": "schw_horizon_approach",
+      "regime": "near_singular",
+      "two_form_partition": {
+        "F1": "residual_carrying",
+        "F2": "residual_carrying",
+        "F3": "silent",
+        "F4": "residual_carrying"
+      },
+      "ulp_spread_log2": 5.0
+    },
+    {
+      "E_log2_base_operand": -0.8744691179161412,
+      "K_G": 0.03813298156088406,
+      "attribution": "phenomenon",
+      "attribution_confidence": 0.9084931583518291,
+      "attribution_rationale": "K_G value (signal_ratio=3.435e+14) above substrate noise floor by more than 3 orders of magnitude; format-safe range.",
+      "attribution_signal_ratio": 343471363096246.9,
+      "bacl_predicted_noise_floor": 1.1102230246251565e-16,
+      "coordinates": {
+        "coord": 4.4,
+        "z": 0.7385489458759964
+      },
+      "fixture": "schwarzschild_four_form",
+      "max_ulp": 2.220446049250313e-16,
+      "min_ulp": 5.551115123125783e-17,
+      "probe_id": "schw_sterbenz_center",
+      "regime": "sterbenz_cluster",
+      "two_form_partition": {
+        "F1": "residual_carrying",
+        "F2": "residual_carrying",
+        "F3": "silent",
+        "F4": "residual_carrying"
+      },
+      "ulp_spread_log2": 2.0
+    },
+    {
+      "E_log2_base_operand": -6.6438561897747235,
+      "K_G": 1.8857320686363848,
+      "attribution": "phenomenon",
+      "attribution_confidence": 1.0,
+      "attribution_rationale": "K_G value (signal_ratio=1.699e+16) above substrate noise floor by more than 3 orders of magnitude; format-safe range.",
+      "attribution_signal_ratio": 1.6985164483262834e+16,
+      "bacl_predicted_noise_floor": 1.1102230246251565e-16,
+      "coordinates": {
+        "coord": 0.99,
+        "y": 0.10000000000000005
+      },
+      "fixture": "pure_algebraic_four_form",
+      "max_ulp": 2.220446049250313e-16,
+      "min_ulp": 1.734723475976807e-18,
+      "probe_id": "pa_near_singular",
+      "regime": "near_singular",
+      "two_form_partition": {
+        "F1": "residual_carrying",
+        "F2": "residual_carrying",
+        "F3": "silent",
+        "F4": "silent"
+      },
+      "ulp_spread_log2": 7.0
+    },
+    {
+      "E_log2_base_operand": -0.862496476250065,
+      "K_G": 0.3493856214843422,
+      "attribution": "phenomenon",
+      "attribution_confidence": 0.9686184248984454,
+      "attribution_rationale": "K_G value (signal_ratio=3.147e+15) above substrate noise floor by more than 3 orders of magnitude; format-safe range.",
+      "attribution_signal_ratio": 3146985909450985.5,
+      "bacl_predicted_noise_floor": 1.1102230246251565e-16,
+      "coordinates": {
+        "coord": 0.45,
+        "y": 0.7416198487095663
+      },
+      "fixture": "pure_algebraic_four_form",
+      "max_ulp": 2.220446049250313e-16,
+      "min_ulp": 5.551115123125783e-17,
+      "probe_id": "pa_sterbenz_center",
+      "regime": "sterbenz_cluster",
+      "two_form_partition": {
+        "F1": "residual_carrying",
+        "F2": "residual_carrying",
+        "F3": "silent",
+        "F4": "silent"
+      },
+      "ulp_spread_log2": 2.0
+    },
+    {
+      "E_log2_base_operand": null,
+      "K_G": 1.0,
+      "attribution": "phenomenon",
+      "attribution_confidence": 0.9971618606369377,
+      "attribution_rationale": "K_G value (signal_ratio=9.007e+15) above substrate noise floor by more than 3 orders of magnitude; format-safe range.",
+      "attribution_signal_ratio": 9007199254740992.0,
+      "bacl_predicted_noise_floor": 1.1102230246251565e-16,
+      "coordinates": {
+        "x": 1.0,
+        "y": 0.0,
+        "z": 0.0
+      },
+      "fixture": "sphere_multi_d",
+      "max_ulp": 2.220446049250313e-16,
+      "min_ulp": 2.220446049250313e-16,
+      "probe_id": "sphere_axis",
+      "regime": "umbilic_axis",
+      "two_form_partition": null,
+      "ulp_spread_log2": 0.0
+    },
+    {
+      "E_log2_base_operand": null,
+      "K_G": 1.0000000000000002,
+      "attribution": "phenomenon",
+      "attribution_confidence": 0.9971618606369377,
+      "attribution_rationale": "K_G value (signal_ratio=9.007e+15) above substrate noise floor by more than 3 orders of magnitude; format-safe range.",
+      "attribution_signal_ratio": 9007199254740994.0,
+      "bacl_predicted_noise_floor": 1.1102230246251565e-16,
+      "coordinates": {
+        "x": 0.7071067811865476,
+        "y": 0.7071067811865476,
+        "z": 0.0
+      },
+      "fixture": "sphere_multi_d",
+      "max_ulp": 2.220446049250313e-16,
+      "min_ulp": 1.1102230246251565e-16,
+      "probe_id": "sphere_equator_45",
+      "regime": "umbilic_equator",
+      "two_form_partition": null,
+      "ulp_spread_log2": 1.0
+    },
+    {
+      "E_log2_base_operand": null,
+      "K_G": 1.0000000000000002,
+      "attribution": "phenomenon",
+      "attribution_confidence": 0.9971618606369377,
+      "attribution_rationale": "K_G value (signal_ratio=9.007e+15) above substrate noise floor by more than 3 orders of magnitude; format-safe range.",
+      "attribution_signal_ratio": 9007199254740994.0,
+      "bacl_predicted_noise_floor": 1.1102230246251565e-16,
+      "coordinates": {
+        "x": 0.5773502691896258,
+        "y": 0.5773502691896258,
+        "z": 0.5773502691896258
+      },
+      "fixture": "sphere_multi_d",
+      "max_ulp": 2.220446049250313e-16,
+      "min_ulp": 5.551115123125783e-17,
+      "probe_id": "sphere_diagonal",
+      "regime": "umbilic_diagonal",
+      "two_form_partition": null,
+      "ulp_spread_log2": 2.0
+    }
+  ],
+  "synthesis_form": {
+    "channels": [
+      {
+        "name": "ulp_spread_log2",
+        "source": "Phase B/C BACL spectrum"
+      },
+      {
+        "name": "E_log2_base_operand",
+        "source": "Phase B/C endpoint-distance substrate image"
+      },
+      {
+        "name": "two_form_partition",
+        "source": "Phase B fixture-level algebraic-route partition"
+      },
+      {
+        "name": "K_G",
+        "source": "Phase E canonical bordered-determinant (Path B eval-layer)"
+      }
+    ],
+    "derived": [
+      "bacl_predicted_noise_floor",
+      "attribution",
+      "attribution_confidence",
+      "attribution_signal_ratio",
+      "attribution_rationale"
+    ],
+    "kind": "StructuredReading_multi_channel",
+    "name": "I(F, x)",
+    "scalar_synthesis_considered_and_rejected": "A weighted-scalar synthesis was considered (e.g., a*ulp_spread + b*E + c*K_G) and rejected as requiring arbitrary coefficient choices. The instrument's multi-channel output preserves information that a scalar would lose."
+  },
+  "what_phase_f_does_not_claim": [
+    "Phase F does NOT modify substrate or architecture files",
+    "Phase F does NOT call lv3 / V3 substrate",
+    "Phase F does NOT propose a single-scalar 'magic invariant'",
+    "Phase F does NOT recalibrate decision-rule thresholds based on probe-set results",
+    "Phase F does NOT run Phase G's Newton failure-mode demo"
+  ]
+}

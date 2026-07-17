@@ -1,0 +1,42 @@
+# Reports/ — era index (the V4 audit trail)
+
+**What this is.** The task-numbered + probe-era audit trail (May–early-June 2026). It is **consult-on-demand**, reached by following a link from `HISTORICAL_RECORD.md` — not a browse-this-folder dir and not a session pre-read (CLAUDE.md §2a Tier 3). The 2026-06 campaigns write their canonical artifacts to the top-level **`results/`** tree, not here.
+
+> **These are a frozen audit trail — do not delete (≈150 `HISTORICAL_RECORD` links point in here).** They are no longer *code*-coupled: the OLD exploratory eval **instruments** that used to read some of these dirs as live fixtures (`schwarzschild_four_form.py`/`mcg_geometry_first_*`/`sterbenz_audit/` → `task024b`, `task031`, `mcg_geometry_first`) were **pruned from `src/lloyd_v4/evals/` on 2026-06-13** (102 modules / 640 tests removed — superseded by the Cella line; the reports are the kept record, the instruments were the junk). So these dirs are now pure record. Relocating them still means rewriting the HR links, so the split is kept as this in-place index rather than a physical move.
+
+---
+
+## 1. Foundational buildout — `task000`–`task034` (CLOSED / PROVEN; the proven foundation)
+
+The L0–L2 typed-substrate construction + the four-form / lattice / discovery era. PROJECT_INDEX §3 and the ledger's Recently-closed row treat "Tasks 000–034" as the proven foundation — *done, build on it, don't redo it.*
+
+- **L0–L2 substrate (000–022):** `task000` (bootstrap) → `task001–009A` (L1/L2 buildout) → `task010*` (design docs, projection rebuild, typed_collection/value) → `task015/016/018/019/021` (finite-difference, log-log-slope, alpha-probes, jet bundles) → `task020/022` (precision-floor reconciliation/audit). HR rows 1–13.
+- **Four-form / lattice / discovery (023–034):** `task023*` (iterated-log, alpha-probe reliability), `task024b` (Schwarzschild four-form — **live fixture**), `task025` (path-law), `task026*` (lattice-anomaly, prime-polarity), `task027` (SR four-form), `task028` (conditional masks), `task029*` (path-basis, methodology, cbrt four-form), `task030` (refinery MVP), `task031` (Sterbenz audit — **live fixture**), `task032` (cross-fixture refinery / quartic grain), `task033/034` (Schwarzschild transformed n3/n4). HR rows 14–29-ish. (`task030/031/032` are the `layer-3-promotion` evidence — parked, TASKS_TO_REVISIT R13.)
+
+## 2. Probe / K_G-hunt exploratory era (mostly CLOSED / SUPERSEDED — the era the Cella line overtook)
+
+- **MCG cascade (SUPERSEDED):** `mcg_discovery` (SUPERSEDED same-day), `mcg_gate_3_killswitch`, `mcg_geometry_first` (**live fixture** for the mcg modules). TASKS_TO_REVISIT R2/R9.
+- **substrate-invariant-search:** `substrate_invariant_search` (Phase A closed analytically, HR129; TASKS_TO_REVISIT R1 CLOSED).
+- **fingerprint atlas:** `substrate_fingerprint_atlas` + `_phase_beta/gamma/delta`.
+- **dual-arm / fold-readback / phase phenomenology (the ledger-retired cluster):** `dual_arm_behavior_verification`, `dual_arm_probe_offset_comb_findings`, `dual_q_source_companion_gap_search`, `early_operand_phase_lock_search`, `early_rounding_comb_utilization`, `f1_f2_natural_phase`, `f2_operand_route_search`, `f2_phase_drift_diagnostics`, `f4_route_comb_search`, `foldreadback_probe0_v10_active_dualarm`, `foldreadback_probe0_v11_genuine_separation`, `hard_cell_q_source_exhaustion_search`, `inverse_half_grid_design_audit`, `route_bank_offset_guard_audit`, `route_pair_selection_stability_audit`, `split_constant_half_grid_form_search`, `split_constant_integer_cell_diagnostic`, `controlled_offset_dither_readback`, `zero_offset_transcendental_q_source_search`. (Many are referenced by their own `src/lloyd_v4/evals/` module — in-place.)
+- **G decomposition:** `g_forward_decomposition`, `g_multid_coupling` (TASKS_TO_REVISIT R9).
+- **hardened dual-arm probe:** `hardened_dual_arm_probe` (V1 PROVEN, HR78; TASKS_TO_REVISIT R7), `phase3B_negative_space`.
+
+## 3. Foundation-result audits (PROVEN; regression-guard targets — TASKS_TO_REVISIT R7)
+
+`bacl_invariant_audit`, `bacl_multi_format_audit`, `bacl_subnormal_audit`, `c2_lattice_sharpness_audit`, `c2_lattice_substrate_derivation`, `c2_theorem_scope_gate`, `conjecture_c_proof_audit`, `conjecture_c_subnormal_cbrt`, `blowup_exponent_v4_audit`, `lifted_singularity_v4_audit`, `observability_rule_audit_F4`, `information_loss_function_wk`, `obs2_self_similarity_characterisation`.
+
+## 4. Recent / active-relevant (2026-06)
+
+- `beyond_the_cradle_stage_minus1_audit.md` (Cella charter prior-wins audit, 2026-06-12)
+- `cella_operation_inventory_2026_06_13.md` (operation inventory companion to the capability spec)
+- `precision_flow/covariance_derivation_2026_06_10.md` (the Refinement Law — research-grade; the paper-publication artifacts that were here moved to `Build_Docs/paper/`)
+- `levers_audit/` (HR134 doors, 2026-06-11)
+- `transfer_function_paper_v5_revalidation/` (paper-revalidation audit ledger — HR-referenced; paper-adjacent)
+- `task035_sweep_signature_probe*`, `task036_alpha_probe_sweep_signature_companion*` (retired campaigns; TASKS_TO_REVISIT R5)
+- `task050/` (substrate-layer audit; transplant-arc — TASKS_TO_REVISIT R11)
+- `_audit/` (drift-synthesis + foundational-buildout summary), `S2_closed_form_and_two_fixture_divergence.md`, `v3_calibration_fixtures/`, `v3_native_rebuild_survey_2026_06_08.md`, `codex_targeted_report_jetbundle_solver.md`, `targeted_audit_jetbundle_solver/`.
+
+---
+
+*Index only — no report was moved or modified. The 2026-06-13 cleanup considered physically archiving the foundational buildout but found it code-coupled (see the warning above); the split is therefore an in-place index, not a relocation.*

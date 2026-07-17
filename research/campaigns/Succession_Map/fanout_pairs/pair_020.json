@@ -1,0 +1,50 @@
+{
+  "rank": 20,
+  "lift": 46.12,
+  "count": 3,
+  "families": 1,
+  "a": {
+    "id": "OBJ:k-dual-2",
+    "label": "k_dual^2",
+    "standard_term": "Galois-conjugate elliptic modulus squared",
+    "nomenclature": "variant-of",
+    "symbols": [
+      "k_dual"
+    ]
+  },
+  "b": {
+    "id": "OBJ:n-dual",
+    "label": "n_dual",
+    "standard_term": "Galois-conjugate characteristic parameter",
+    "nomenclature": "variant-of",
+    "symbols": [
+      "n_dual"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-0726",
+      "type": "formula",
+      "claim_status": null,
+      "label": "Dual formal expression I_dual",
+      "summary": "I_dual =\n-2^(7/4) * [\n    (3 - 2*sqrt(2))*Pi(n_dual ; k_dual^2)\n    - (2 - 2*sqrt(2))*K(k_dual^2)\n]",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/16-DBP_Curvature_Constants_Corrected_Formulation.md"
+    },
+    {
+      "uid": "U-0825",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Galois automorphism sqrt(2) -> -sqrt(2)",
+      "summary": "Apply the Galois automorphism:\n\nsqrt(2) -> -sqrt(2)\n\nThis sends:\n\nk^2 -> k_dual^2\n\nn -> n_dual",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/16-DBP_Curvature_Constants_Corrected_Formulation.md"
+    },
+    {
+      "uid": "U-1203",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Residue-theorem setup: s, n, m, P, x0",
+      "summary": "s = sqrt(2)\n\nn = n_dual = (4 + 3*s)/8\n\nm = k_dual^2 = (2 + s)/4\n\nP = -2^(7/4) * (3 - 2*s)\n\nx0 = 1 / sqrt(n)",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/16-DBP_Curvature_Constants_Corrected_Formulation.md"
+    }
+  ]
+}

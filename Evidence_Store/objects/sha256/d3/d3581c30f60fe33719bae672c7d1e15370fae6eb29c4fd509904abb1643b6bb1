@@ -1,0 +1,143 @@
+# Predicting the n ≥ 4 Lattice Behavior: Error Propagation in Higher Roots
+
+**Target**: Analytically predict the growth (or shattering) of the c₂ integer-lattice rank |j| for 4th and 5th roots (and higher), based on error propagation under the constraints of Conjecture C and IEEE 754 rounding.
+
+---
+
+## 1. General Setup for the c₂ Round-Trip with nth Roots
+
+Consider the generalized c₂-style construction for root degree n:
+
+1. Let `f` be in the Sterbenz-applicable region for the relevant form.
+2. Compute the real nth root `r = f^{1/n}`.
+3. Let `R = round_to_nearest_even(r)` (in float64).
+4. Compute `V_n = fl(R^n)` (in float64, via repeated multiplication or powering).
+5. Form the residual `c₂ = round(V_n - f)` (or `V_n + (x_term - 1)` in the reassociated form).
+6. Analyze `c₂ / ulp(f)` — this is the integer multiple `j`.
+
+By Conjecture C (proven for n=2 in normal range), we have the key guarantee:
+> `floor_binade(V_n) ≥ floor_binade(f)` (or very close, within one binade).
+
+This binade preservation is what forces `V_n - f` to be representable with small ulp relative to f, leading to the integer lattice.
+
+---
+
+## 2. Error Model
+
+Let `r = f^{1/n}` (exact real).
+Let `e = R - r`, with `|e| ≤ \frac12 \cdot ulp(r)`.
+
+Then the mathematical value is:
+\[
+R^n = (r + e)^n = r^n + n r^{n-1} e + \binom{n}{2} r^{n-2} e^2 + \cdots + e^n
+\]
+\[
+= f + n r^{n-1} e + \text{higher-order terms in } e
+\]
+
+The leading error term is:
+\[
+\Delta \approx n r^{n-1} e
+\]
+
+When this is evaluated in floating point as `V_n = fl(R^n)`, we accumulate additional rounding errors from the (n-1) multiplications.
+
+The final residual `V_n - f` is dominated by the propagated rounding error from the initial root step, amplified by the factor `n r^{n-1}`.
+
+---
+
+## 3. Scaling of the Leading Error Term
+
+Since `r = f^{1/n}`, we have:
+\[
+r^{n-1} = f^{(n-1)/n} = f^{1 - 1/n}
+\]
+
+Thus the leading error scales as:
+\[
+|\Delta| \sim n \cdot f^{1 - 1/n} \cdot |e|
+\]
+
+And since `|e| \leq \frac12 \cdot ulp(r) \approx \frac12 \cdot 2^{\text{exponent}(r) - 52}`, the absolute error grows with the derivative of the nth-root function.
+
+**Key observation**:
+- As n increases, the exponent `1 - 1/n` approaches 1.
+- This means the amplification factor `r^{n-1}` becomes closer to linear in f, but the number of multiplications (n-1) also increases, injecting more rounding error at each step.
+
+For small relative error ε in the root:
+\[
+R = r (1 + \delta), \quad |\delta| \lesssim \frac{1}{2} \cdot 2^{-52} / r \quad \text{(relative)}
+\]
+
+Then:
+\[
+R^n \approx f \cdot (1 + n \delta)
+\]
+\[
+V_n - f \approx n f \delta
+\]
+
+Normalized by ulp(f):
+\[
+j \approx \frac{n f \delta}{\text{ulp}(f)}
+\]
+
+This gives a first-order prediction that |j| grows roughly linearly with n, modulated by how large the relative root error δ can be and how many extra rounding events occur in the powering.
+
+---
+
+## 4. Why n=2 is Extremely Tight (|j| ≤ 1)
+
+For n=2:
+- Only **one** multiplication after the root: `R * R`.
+- The error amplification factor is `2r` (derivative of x²).
+- Conjecture C is very strong for square roots (correctly-rounded by IEEE 754).
+- Only one rounding event in the powering.
+
+Result: The total error after the round-trip is at most ~1 ulp(f) in the Sterbenz region.
+
+---
+
+## 5. n=3 Behavior (|j| ≤ 7, route-dependent)
+
+For n=3:
+- Two multiplications: `R*R`, then `·R`.
+- Amplification ~3r².
+- np.cbrt is **not** required to be correctly rounded (unlike sqrt).
+- This allows larger initial |e| in the root step, and two opportunities for rounding error in the powering.
+
+Empirically this yields max |j| ≈ 7 with libm cbrt, but only 2 with the exp(log/3) route (which has different error characteristics).
+
+---
+
+## 6. Prediction for n ≥ 4
+
+**Linear growth regime (most likely for moderate n)**:
+
+Using the first-order model above, and assuming:
+- The relative root error |δ| stays on the order of a few units in the last place (ulp(r)),
+- Each additional multiplication adds roughly another ½ ulp error (in the scale of the current intermediate),
+
+**Empirical Reality Check at n=4**:
+
+Existing V4 data for n=4 (task032_quartic_lattice_grain_discrimination and task034_schwarzschild_quartic_transformed_n4) shows a clean F2 grain of exactly 0.25 in both the pure-algebraic quartic and the transformed Schwarzschild quartic cases. There is **no evidence** of lattice shattering or significant rank explosion at n=4.
+
+**Important caveat**: Both campaigns used *composed* roots (`sqrt(sqrt(...))`), not a native quartic root primitive. The dependence of lattice rank on root implementation quality (`ε_root`) for a true n=4 root therefore remains untested.
+
+We should therefore not expect shattering to begin at n=4. Any transition to significantly higher rank or loss of clean lattice structure is likely to occur at higher n, and will be sensitive to the quality of the actual nth-root implementation used.
+
+---
+
+## 7. Recommendations for V5
+
+- State clearly that the c₂ integer-lattice rank is **not universal**; it is a function of both n and the quality of the root implementation.
+- The first-order scaling law |j|_max ≈ O(n · ε_root) remains a useful heuristic, but must be treated as provisional until tested with native (non-composed) roots at n ≥ 4.
+- Existing n=4 data (using composed roots) still shows clean lattice behavior (grain 0.25). Any claim of "lattice structure" or rank bounds for n ≥ 4 should be accompanied by an explicit statement of the root implementation used and the tested range of n.
+- The transition to significantly higher rank or loss of clean lattice structure is expected to be sensitive to root quality and should not be assumed to occur as early as n=4.
+
+This framework turns the empirical observations for n=2 and n=3 into a predictive model for higher roots, while remaining grounded in the available n=4 evidence.
+
+---
+
+**Status (updated)**: The n=4 empirical data from task032 and task034 has been incorporated. These campaigns show clean lattice behavior (F2 grain exactly 0.25) but used composed roots. The analytical scaffolding remains useful, but predictions for n≥4 should be caveated with the current lack of data from native higher-order root primitives.
+

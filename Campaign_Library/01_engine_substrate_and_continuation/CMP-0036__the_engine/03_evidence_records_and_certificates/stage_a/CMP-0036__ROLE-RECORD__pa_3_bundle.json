@@ -1,0 +1,36 @@
+{
+ "battery": "PA.3",
+ "byte_stable_x2": true,
+ "env": {
+  "numpy": "2.4.4",
+  "python": "3.12.3",
+  "sympy": "1.14.0"
+ },
+ "expected_records_sha": "cdee40ff26fb262c",
+ "predecl_pin": "44a2c8019b2929b2",
+ "runs": [
+  {
+   "last_line": "ALL_PASS",
+   "rc": 0,
+   "records_sha": "cdee40ff26fb262c",
+   "run": 1,
+   "stderr_tail": "",
+   "stdout_sha16": "ef3ef86f336af457",
+   "terminal_ok": true,
+   "wall_s": 0.9
+  },
+  {
+   "last_line": "ALL_PASS",
+   "rc": 0,
+   "records_sha": "cdee40ff26fb262c",
+   "run": 2,
+   "stderr_tail": "",
+   "stdout_sha16": "ef3ef86f336af457",
+   "terminal_ok": true,
+   "wall_s": 0.93
+  }
+ ],
+ "script": "portfolio/campaigns/deficit_engine/rowb_mech_battery.py",
+ "terminal_required": "ALL_PASS",
+ "verdict": "PASS"
+}

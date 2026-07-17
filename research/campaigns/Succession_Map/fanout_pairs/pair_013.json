@@ -1,0 +1,50 @@
+{
+  "rank": 13,
+  "lift": 67.09,
+  "count": 10,
+  "families": 1,
+  "a": {
+    "id": "OBJ:augmented-axial-horizon-field-l-j-k-j-sqrt-u-sqrt-gamma-sqrt",
+    "label": "Augmented axial-horizon field L_J = K_J(sqrt(u),sqrt(gamma),sqrt(delta_J))",
+    "standard_term": "rank-3 multiquadratic Kummer extension combining static and rotating horizon data",
+    "nomenclature": "variant-of",
+    "symbols": [
+      "delta_j"
+    ]
+  },
+  "b": {
+    "id": "OBJ:delta-j-third-kummer-channel-radicand",
+    "label": "delta_J (third Kummer channel radicand)",
+    "standard_term": "third square-class radicand for the rotating tower, delta_J = gamma - 4P - 16J^2",
+    "nomenclature": "variant-of",
+    "symbols": [
+      "delta_j"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-1394",
+      "type": "theorem",
+      "claim_status": "proved",
+      "label": "Rotating three-channel template",
+      "summary": "For the augmented rotating cover, the anticipated three families are\n\n```text\nr_1=u,\nr_2=gamma,\nr_3=delta_J=gamma-4P-16J^2.\n```\n\nThe valuation types are expected to have the matrix\n\n```text\nB_rot = [1 0 0]     even signe",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/KUMMER_MODULE_WREATH_LIFT_THEOREM_2026-07-10.md"
+    },
+    {
+      "uid": "U-1396",
+      "type": "theorem",
+      "claim_status": "proved",
+      "label": "Rotation preserves abstract closure group while changing Kum",
+      "summary": "Thus rotation preserves the abstract closure group of the ordered-horizon field while changing its two Kummer channels from `{u,gamma}` to `{gamma,delta_J}`. The independently adjoined axial channel produces the genuine ",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/ROTATING_THREE_CHANNEL_WREATH_CLOSURE_2026-07-10.md"
+    },
+    {
+      "uid": "U-1431",
+      "type": "theorem",
+      "claim_status": "proved",
+      "label": "Vanishing of Gauss valuations on delta_j (3.3)",
+      "summary": "Because the coefficient of `J^2` in every `delta_j` is the unit `-16`,\n\nv_hat_i^+(delta_j)=0,\nv_hat_i^-(delta_j)=0                         (3.3)\n\nfor all `i,j`.",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/ROTATING_THREE_CHANNEL_WREATH_CLOSURE_2026-07-10.md"
+    }
+  ]
+}

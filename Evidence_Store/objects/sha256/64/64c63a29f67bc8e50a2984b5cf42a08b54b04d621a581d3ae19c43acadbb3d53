@@ -1,0 +1,308 @@
+"""Choptuik critical-scaling Step 2: synthetic AMR-like noise on top of DSS.
+
+Adversarial test for the DSS-residual-extraction approach: layer realistic
+AMR-style interpolation noise onto the modulated power law and check
+whether V4's gamma recovery and the residual spectral fit still survive.
+
+AMR noise model:
+    g_noisy(eps) = g_signal(eps) * (1 + noise(eps))
+
+    noise(eps) = baseline * white(eps) + jump * refinement_jump(eps)
+
+where:
+  - white(eps): per-eps Gaussian noise (uncorrelated)
+  - refinement_jump(eps): piecewise-constant noise that holds for an
+    entire refinement window then jumps. Window boundaries are at
+    eps = ratio^(-k) for integer k. Captures the spirit of AMR: features
+    sharpen as eps -> 0, mesh is refined, interpolation introduces a
+    coherent offset per refinement level.
+
+We sweep across multiple total-noise levels and find the breakdown
+threshold where DSS extraction fails.
+
+True parameters (corrected per Will's note):
+    gamma = 0.374
+    Delta = 3.445
+    P_ln  = Delta/(2*gamma) ~= 4.606
+    omega = 4*pi*gamma/Delta ~= 1.364
+    A     = 0.10 (DSS amplitude on g)
+"""
+
+from __future__ import annotations
+
+import json
+import math
+import random
+from pathlib import Path
+
+from lloyd_v4.primitives.directional_alpha_probe import (
+    DeclaredAlphaModel,
+    directional_alpha_probe,
+)
+
+
+# Choptuik parameters (textbook)
+GAMMA = 0.374
+DELTA = 3.445
+P_LN = DELTA / (2.0 * GAMMA)
+ANGULAR_FREQ = 4.0 * math.pi * GAMMA / DELTA
+DSS_AMPLITUDE = 0.10
+
+# AMR noise model parameters
+REFINEMENT_RATIO = 2.0   # standard AMR halves mesh per refinement
+NOISE_SEED = 42
+
+
+def choptuik_signal_clean(eps: float) -> float:
+    """g(eps) = eps^gamma * [1 + A*cos(omega*ln(eps))], no noise."""
+    return eps ** GAMMA * (1.0 + DSS_AMPLITUDE * math.cos(ANGULAR_FREQ * math.log(eps)))
+
+
+import struct as _struct
+
+
+def _stable_int_seed(*parts) -> int:
+    """Compose a stable int seed from heterogeneous parts.
+
+    Python 3.14 tightened random.Random() to reject tuple seeds; we hash
+    a string representation to a 63-bit int.
+    """
+    s = "|".join(str(p) for p in parts)
+    h = 0
+    for ch in s.encode("utf-8"):
+        h = (h * 1000003 + ch) & 0x7FFFFFFFFFFFFFFF
+    return h
+
+
+def amr_noise_factor(eps: float, baseline_level: float, jump_level: float,
+                     refinement_ratio: float = REFINEMENT_RATIO,
+                     seed: int = NOISE_SEED) -> float:
+    """Multiplicative noise factor (returns noise; signal is multiplied by 1 + noise).
+
+    Two components:
+      - per-sample white noise (small, uncorrelated)
+      - refinement-window-coherent jump (piecewise constant)
+    """
+    refinement_level = int(-math.log(eps) / math.log(refinement_ratio))
+    rng_jump = random.Random(_stable_int_seed(seed, "jump", refinement_level))
+    jump_contribution = jump_level * rng_jump.gauss(0.0, 1.0)
+    # Per-sample white noise: stable on the IEEE 754 bit pattern of eps
+    eps_bits = _struct.unpack("<Q", _struct.pack("<d", eps))[0]
+    rng_white = random.Random(_stable_int_seed(seed, "white", eps_bits))
+    white_contribution = baseline_level * rng_white.gauss(0.0, 1.0)
+    return jump_contribution + white_contribution
+
+
+def choptuik_signal_noisy(eps: float, baseline_level: float, jump_level: float) -> float:
+    """Choptuik signal corrupted by multiplicative AMR-like noise."""
+    clean = choptuik_signal_clean(eps)
+    noise = amr_noise_factor(eps, baseline_level, jump_level)
+    return clean * (1.0 + noise)
+
+
+# Sweep configuration
+N_POINTS = 100
+EPS_START = 1e-2
+EPS_END = 1e-12
+ETA = 1e-4
+
+log_start = math.log10(EPS_START)
+log_end = math.log10(EPS_END)
+EPS_GRID = tuple(
+    10.0 ** (log_start + (log_end - log_start) * i / (N_POINTS - 1))
+    for i in range(N_POINTS)
+)
+
+DECLARED_MODELS = (
+    DeclaredAlphaModel(name="choptuik_gamma", alpha=GAMMA, band=0.03),
+    DeclaredAlphaModel(name="one_third",     alpha=1.0/3.0, band=0.03),
+    DeclaredAlphaModel(name="two_fifths",    alpha=0.4,    band=0.03),
+    DeclaredAlphaModel(name="half_exponent", alpha=0.5,    band=0.03),
+)
+
+
+def probe_with_noise(baseline_level: float, jump_level: float) -> dict:
+    obs = lambda eps: choptuik_signal_noisy(eps, baseline_level, jump_level)
+    label = f"choptuik_b{baseline_level:.4f}_j{jump_level:.4f}"
+    result = directional_alpha_probe(
+        obs, EPS_GRID,
+        probe_id=label, function_label=label,
+        eta=ETA, declared_alpha_models=DECLARED_MODELS,
+        expression_path=label,
+        companion_sweep_signature=True,
+    )
+    a = result.value
+    c = a.companion_sweep_signature_observation
+    cs = a.companion_sweep_signature_status
+    return {
+        "baseline_level": baseline_level,
+        "jump_level": jump_level,
+        "alpha_status": result.status.value,
+        "observed_alpha": a.observed_alpha,
+        "alpha_se": a.standard_error,
+        "r_squared": a.r_squared,
+        "stability": a.alpha_stability_status.value,
+        "window_span": a.alpha_window_span,
+        "selected_model": a.selected_alpha_model,
+        "sweep_status": cs.value if cs else None,
+        "sweep_cancel_grade": c.cancellation_grade if c else None,
+        "sweep_drop_rate": c.drop_rate if c else None,
+    }
+
+
+def residual_spectral_fit(baseline_level: float, jump_level: float,
+                          gamma_recovered: float) -> dict:
+    """Three spectral analyses on the log-log residuals:
+
+    1. brute-force unconstrained search across omega in [0.3, 3.5]
+    2. physics-informed constrained search in [1.0, 2.0] (around true value)
+    3. matched-filter projection at the EXACT predicted omega = 4*pi*gamma/Delta
+
+    The matched-filter result is the proper Choptuik diagnostic: physics
+    gives us P_ln a priori from gamma and Delta, so the question is not
+    'find the period' but 'is there significant power at the predicted
+    period?'.
+    """
+    log_g_values = [math.log(abs(choptuik_signal_noisy(eps, baseline_level, jump_level)))
+                    for eps in EPS_GRID]
+    log_eps_values = [math.log(eps) for eps in EPS_GRID]
+    mean_log_g = sum(log_g_values) / len(log_g_values)
+    mean_log_eps = sum(log_eps_values) / len(log_eps_values)
+    intercept = mean_log_g - gamma_recovered * mean_log_eps
+    residuals = [log_g - gamma_recovered * log_eps - intercept
+                 for log_g, log_eps in zip(log_g_values, log_eps_values)]
+    n = len(residuals)
+
+    def _project(omega: float) -> tuple[float, float, float]:
+        """Return (B_cos, B_sin, power) at this omega."""
+        Bc = (2.0 / n) * sum(residuals[i] * math.cos(omega * log_eps_values[i]) for i in range(n))
+        Bs = (2.0 / n) * sum(residuals[i] * math.sin(omega * log_eps_values[i]) for i in range(n))
+        return Bc, Bs, Bc * Bc + Bs * Bs
+
+    # 1. Unconstrained brute-force search
+    wide_omega_grid = [0.3 + 0.0025 * i for i in range(int((3.5 - 0.3) / 0.0025) + 1)]
+    wide_powers = [(om, *_project(om)) for om in wide_omega_grid]
+    wide_best = max(wide_powers, key=lambda x: x[3])
+    wide_omega = wide_best[0]
+    wide_period = 2.0 * math.pi / wide_omega
+
+    # 2. Physics-informed constrained search (omega within +/- 50% of predicted)
+    omega_lo = ANGULAR_FREQ * 0.5
+    omega_hi = ANGULAR_FREQ * 1.5
+    constrained_grid = [omega_lo + 0.001 * i
+                        for i in range(int((omega_hi - omega_lo) / 0.001) + 1)]
+    constrained_powers = [(om, *_project(om)) for om in constrained_grid]
+    constrained_best = max(constrained_powers, key=lambda x: x[3])
+    constrained_omega = constrained_best[0]
+    constrained_period = 2.0 * math.pi / constrained_omega
+
+    # 3. Matched filter at the EXACT predicted omega
+    Bc_match, Bs_match, power_match = _project(ANGULAR_FREQ)
+    matched_amplitude = math.sqrt(power_match)
+    matched_phase = math.atan2(Bs_match, Bc_match)
+
+    # SNR: matched-filter power vs median background power across the wide grid
+    all_powers = [p[3] for p in wide_powers]
+    median_bg = sorted(all_powers)[len(all_powers) // 2]
+    matched_snr_db = 10.0 * math.log10(power_match / median_bg) if median_bg > 0 else float("inf")
+
+    # Detection verdict: matched filter detects DSS iff its amplitude exceeds
+    # 3x the median background amplitude (rough significance threshold)
+    detection = ("detected" if matched_amplitude > 3.0 * math.sqrt(median_bg)
+                 else "marginal" if matched_amplitude > math.sqrt(median_bg)
+                 else "not_detected")
+
+    return {
+        # Unconstrained (naive) search
+        "wide_search_omega": wide_omega,
+        "wide_search_period": wide_period,
+        # Constrained (physics-informed) search
+        "constrained_search_omega": constrained_omega,
+        "constrained_search_period": constrained_period,
+        # Matched filter at predicted omega
+        "matched_omega": ANGULAR_FREQ,
+        "matched_amplitude": matched_amplitude,
+        "matched_phase": matched_phase,
+        "matched_snr_db": matched_snr_db,
+        "median_background_power": median_bg,
+        "detection_verdict": detection,
+    }
+
+
+def main() -> None:
+    print("=" * 100)
+    print("Choptuik Step 2: AMR-like noise stress test")
+    print("=" * 100)
+    print(f"True gamma : {GAMMA}")
+    print(f"True P_ln  : {P_LN:.6f}")
+    print(f"True omega : {ANGULAR_FREQ:.6f}")
+    print(f"DSS A      : {DSS_AMPLITUDE}")
+    print(f"Refinement : ratio = {REFINEMENT_RATIO} (jumps at every factor-of-{REFINEMENT_RATIO} of eps)")
+    print()
+
+    # Noise level sweep. Each entry is (baseline_white, jump_coherent).
+    noise_cases = [
+        (0.000, 0.000, "no noise (Step 1 reference)"),
+        (0.001, 0.000, "white only, 0.1%"),
+        (0.000, 0.001, "jump only, 0.1%"),
+        (0.001, 0.001, "both at 0.1%"),
+        (0.005, 0.005, "both at 0.5%"),
+        (0.010, 0.010, "both at 1%"),
+        (0.020, 0.020, "both at 2%"),
+        (0.050, 0.050, "both at 5%"),
+        (0.100, 0.100, "both at 10% (DSS-amplitude level)"),
+    ]
+
+    print(f"{'baseline':>10} {'jump':>10} {'desc':28s} {'gamma':>10} {'wide_P':>10} {'constr_P':>10} {'match_SNR':>10} {'verdict':>14}")
+    print("-" * 130)
+
+    results = []
+    for baseline, jump, desc in noise_cases:
+        v4 = probe_with_noise(baseline, jump)
+        gamma_hat = v4["observed_alpha"]
+        if gamma_hat is None:
+            print(f"{baseline:>10.4f} {jump:>10.4f} {desc:28s}  alpha probe refused (status={v4['alpha_status']})")
+            continue
+        spec = residual_spectral_fit(baseline, jump, gamma_hat)
+        gamma_err = abs(gamma_hat - GAMMA)
+        results.append({**v4, **spec, "description": desc, "gamma_err": gamma_err})
+        print(f"{baseline:>10.4f} {jump:>10.4f} {desc:28s} {gamma_hat:>10.6f} "
+              f"{spec['wide_search_period']:>10.3f} {spec['constrained_search_period']:>10.3f} "
+              f"{spec['matched_snr_db']:>9.2f}dB {spec['detection_verdict']:>14s}")
+
+    print()
+    print("=" * 100)
+    print("BREAKDOWN ANALYSIS")
+    print("=" * 100)
+    print("  matched-filter verdict by noise level:")
+    for r in results:
+        print(f"    {r['description']:30s}  matched_SNR={r['matched_snr_db']:6.2f}dB  -> {r['detection_verdict']}")
+
+    print()
+    print("=" * 100)
+    print("INTERPRETATION")
+    print("=" * 100)
+    print("  wide_P:  unconstrained spectral search -- shows naive failure (spurious low-freq peaks)")
+    print("  constr_P: search restricted to omega in [omega_true * 0.5, omega_true * 1.5]")
+    print("  match_SNR: matched-filter projection at the predicted omega = 4*pi*gamma/Delta")
+    print("  verdict:  'detected' if matched amplitude > 3x sqrt(background) (proper test)")
+
+    out_path = Path(__file__).parent / "choptuik_step2_results.json"
+    with out_path.open("w") as fh:
+        json.dump({
+            "parameters": {
+                "gamma": GAMMA, "delta": DELTA, "P_ln": P_LN,
+                "angular_freq": ANGULAR_FREQ, "dss_amplitude": DSS_AMPLITUDE,
+                "refinement_ratio": REFINEMENT_RATIO,
+            },
+            "sweep": {
+                "n_points": N_POINTS, "eps_start": EPS_START, "eps_end": EPS_END,
+                "eta": ETA,
+            },
+            "results": results,
+        }, fh, indent=2)
+    print(f"\nResults: {out_path}")
+
+
+if __name__ == "__main__":
+    main()

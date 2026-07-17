@@ -1,0 +1,50 @@
+{
+  "rank": 5,
+  "lift": 82.0,
+  "count": 9,
+  "families": 3,
+  "a": {
+    "id": "OBJ:axial-k-ellipse-polynomial-phi-k-m-m-and-resultant-identity",
+    "label": "Axial k-ellipse polynomial Phi_k(m,M) and resultant identity",
+    "standard_term": "resultant-defined discriminant-type polynomial (product over sign choices of a linear form in mass parameters), equal up to unit to Res_u(N_k(u), m^2-u)",
+    "nomenclature": "novel",
+    "symbols": [
+      "phi_k"
+    ]
+  },
+  "b": {
+    "id": "OBJ:phi-k-m-m-n-k-norm-form",
+    "label": "Phi_k(m,M) / N_k norm form",
+    "standard_term": "sign-pattern product / resolvent (norm) polynomial over a multiquadratic extension",
+    "nomenclature": "variant-of",
+    "symbols": [
+      "phi_k"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-1040",
+      "type": "theorem",
+      "claim_status": null,
+      "label": "Generic irreducibility of the axial specialization (Thm 4b)",
+      "summary": "Generic irreducibility of the axial specialization is ESTABLISHED for every k with distinct nonzero N_i^2 (entry v2, Thm 4b: Phi_k irreducible over F via the field isomorphism, hence N_k irreducible over F; audited, prom",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/GALOIS_K_ELLIPSE_RESEARCH_MAP_v1_4.md"
+    },
+    {
+      "uid": "U-1309",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Convention: axial k-ellipse polynomial Phi_k(m,M) and result",
+      "summary": "**Convention.** Display polynomial `Phi_k(m, M)` denotes the axial `k`-ellipse\npolynomial with the radius `4M` promoted to a coordinate:\n\n```text\nPhi_k(m, M) = product_{eps in {+1,-1}^k} ( 4M - sum_i eps_i w_i ).\n```\n\nEq",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/LOG_ENTRY_R6_R7_generic_descent_v2.md"
+    },
+    {
+      "uid": "U-1420",
+      "type": "theorem",
+      "claim_status": null,
+      "label": "Theorem 2(i–iv) — primitivity and irreducibility",
+      "summary": "The proof that\n\n```text\ns = sum_i w_i\n```\n\nis primitive is correct. Its `2^k` signed sums are pairwise distinct, so\n\n```text\n[L(s):L] = 2^k,\nL(s) = W.\n```\n\nThe norm\n\n```text\nPhi_k(m,M)\n = product_{eps in {+1,-1}^k}\n   (4",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md"
+    }
+  ]
+}

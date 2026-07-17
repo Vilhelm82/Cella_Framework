@@ -1,0 +1,133 @@
+"""retestC anatomy: pinpoint EXACTLY what cancels and what does not.
+
+The headline claim has two distinct sub-claims that must be separated:
+
+  (A) F1 and F2 reuse the SAME R**p value (same bits). -> testable: the
+      R**p operand fed into F1 and into F2 is bit-identical.
+
+  (B) F1 - F2 cancels R**p so that F1 - F2 == (1 - x_term) - f_direct,
+      and is independent of R. -> this is FALSE in general float64 because
+      the SUBTRACTION F1 - F2 reintroduces rounding: F1 = fl(Rp - f_direct),
+      F2 = fl(Rp - 1 + x_term); F1 - F2 = fl(F1 - F2). The exact real value
+      (Rp - f_direct) - (Rp - 1 + x_term) = (1 - x_term) - f_direct does have
+      Rp cancel ALGEBRAICALLY, but F1 and F2 are each already rounded, so
+      Rp's *round-off* does NOT fully cancel through the float subtraction.
+
+  The PRECISE invariant that DOES hold exactly: R**p is the SAME bits in
+  F1 and F2, so any error in computing R**p is COMMON-MODE; F1 - F2 removes
+  the *operand-assembly* dependence on R**p's value to first order but the
+  residual is bounded by ~1 ULP of the F-magnitudes (here ~1e-16).
+
+This script measures (A) exactly and characterizes (B)'s residual.
+"""
+from __future__ import annotations
+
+import json
+import math
+from pathlib import Path
+
+import mpmath as mp
+
+mp.mp.dps = 60
+OUT = Path(__file__).resolve().parent
+
+
+def anatomy_point(R: float, f_direct: float, x_term: float, p: int):
+    if p == 2:
+        Rp = R * R
+    else:
+        Rp = R * R * R
+    F1 = Rp - f_direct
+    F2 = Rp - 1.0 + x_term
+    # The Rp operand fed to F1 and F2 -- bit-identical by construction:
+    Rp_in_F1 = Rp
+    Rp_in_F2 = Rp
+    same_Rp_bits = (Rp_in_F1 == Rp_in_F2) and (
+        Rp_in_F1.hex() == Rp_in_F2.hex())
+
+    observed_diff = F1 - F2
+    closed = (1.0 - x_term) - f_direct
+
+    # exact-arithmetic check: with EXACT reals, does Rp cancel?
+    Rp_e = mp.mpf(Rp)
+    f_e = mp.mpf(f_direct)
+    x_e = mp.mpf(x_term)
+    F1_real = Rp_e - f_e
+    F2_real = Rp_e - mp.mpf(1) + x_e
+    diff_real = F1_real - F2_real           # Rp cancels EXACTLY here
+    closed_real = (mp.mpf(1) - x_e) - f_e
+    rp_cancels_in_reals = (diff_real == closed_real)
+
+    return dict(
+        same_Rp_bits=same_Rp_bits,
+        Rp_hex=Rp.hex(),
+        F1=F1, F2=F2,
+        observed_float_diff=observed_diff,
+        closed_form_float=closed,
+        float_resid=abs(observed_diff - closed),
+        rp_cancels_in_exact_reals=rp_cancels_in_reals,
+        exact_diff_minus_closed=float(diff_real - closed_real),
+    )
+
+
+def main():
+    # representative probe points from each fixture
+    cases = {
+        "schwarzschild_r5": dict(
+            R=(1.0 - 2.0 / 5.0) ** 0.5, f_direct=1.0 - 2.0 / 5.0,
+            x_term=2.0 / 5.0, p=2),
+        "sr_b0.6": dict(
+            R=(1.0 - 0.6 * 0.6) ** 0.5, f_direct=1.0 - 0.6 * 0.6,
+            x_term=0.6 * 0.6, p=2),
+        "pa_x0.3": dict(
+            R=(1.0 - 0.3) ** 0.5, f_direct=1.0 - 0.3, x_term=0.3, p=2),
+        "cbrt_x0.3": dict(
+            R=float(__import__("numpy").cbrt(1.0 - 0.3)),
+            f_direct=1.0 - 0.3, x_term=0.3, p=3),
+    }
+    out = {}
+    for name, c in cases.items():
+        out[name] = anatomy_point(**c)
+
+    # Aggregate the two sub-claims clearly
+    summary = {
+        "subclaim_A_same_Rp_bits_in_F1_and_F2": all(
+            v["same_Rp_bits"] for v in out.values()),
+        "subclaim_A_note": (
+            "F1 and F2 are evaluated from the SAME R**p float64 value "
+            "(bit-identical). Verified via .hex() equality."),
+        "subclaim_B_float_F1minusF2_equals_closed_exactly": all(
+            v["float_resid"] == 0.0 for v in out.values()),
+        "subclaim_B_max_float_resid": max(
+            v["float_resid"] for v in out.values()),
+        "subclaim_B_note": (
+            "In EXACT reals R**p cancels and F1-F2 == (1-x_term)-f_direct "
+            "exactly (rp_cancels_in_exact_reals=True). In float64 the "
+            "already-rounded F1,F2 leave a residual bounded by ~1 ULP of "
+            "the F magnitude (~1e-16). So R**p's *value* cancels "
+            "algebraically and is common-mode, but its round-off is not "
+            "bit-erased by the float subtraction."),
+        "rp_cancels_in_exact_reals_all": all(
+            v["rp_cancels_in_exact_reals"] for v in out.values()),
+    }
+    out["_summary"] = summary
+    (OUT / "retestC_cancellation_anatomy.json").write_text(
+        json.dumps(out, indent=2, default=str))
+
+    print("Sub-claim A (F1,F2 share R**p bits):",
+          summary["subclaim_A_same_Rp_bits_in_F1_and_F2"])
+    print("Sub-claim B (float F1-F2 == closed form exactly):",
+          summary["subclaim_B_float_F1minusF2_equals_closed_exactly"],
+          " max resid =", summary["subclaim_B_max_float_resid"])
+    print("R**p cancels in EXACT reals:",
+          summary["rp_cancels_in_exact_reals_all"])
+    for name, v in out.items():
+        if name == "_summary":
+            continue
+        print(f"  {name}: same_Rp_bits={v['same_Rp_bits']} "
+              f"float_resid={v['float_resid']:.3e} "
+              f"exact_cancel={v['rp_cancels_in_exact_reals']}")
+
+
+if __name__ == "__main__":
+    main()

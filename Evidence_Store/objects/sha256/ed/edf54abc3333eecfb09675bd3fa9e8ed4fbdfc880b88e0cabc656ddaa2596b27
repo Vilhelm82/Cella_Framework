@@ -1,0 +1,164 @@
+"""Experiment 1 — exact forward M⊕C decomposition (the definitive 1D G-presence test).
+
+Eval-layer, research-grade. Oracles only (fractions.Fraction exact; mpmath for sqrt(f)),
+per Axiom 11 — never substrate. No float128 anywhere → NO apparatus floor.
+
+For each four-form fixture, for each rounded sqrt residual:
+  M  = the BACL integer-ulp lattice the residual sits on (grain).
+  C  = the EXACTLY computed conditioning: e = R - sqrt(f) (oracle) drives the
+       between-grid value R^2 - f = 2*sqrt(f)*e + e^2; the squaring/subtraction
+       round-offs snap it to the lattice. All exact rationals, no floor.
+  G  := residual - (M ⊕ C), computed exactly.
+
+Retrodiction gate: the exact reconstruction must reproduce the known grains
+(F2 half-integer, F4 integer, F3 ≡ 0) before any G claim is read.
+
+Dark-field probe: F1 - F2 cancels the shared R^2 (+ 2R·e); the surviving ±1-ulp
+comb is the differential path conditioning. Confirm it is exactly reconstructed
+(pure C, G=0) — the high-contrast window.
+"""
+import json, math, struct
+from fractions import Fraction
+import mpmath as mp
+
+mp.mp.dps = 80
+Fr = Fraction
+
+
+def hx(x): return struct.pack(">d", float(x)).hex()
+
+
+FIXTURES = {
+    "schwarzschild": dict(
+        grid=[2.005 + i * (10.0 - 2.005) / 136 for i in range(137)],
+        f=lambda r: 1.0 - 2.0 / r, xterm=lambda r: 2.0 / r, alt=lambda r: (r - 2.0) / r, bnd=4.0),
+    "sr": dict(
+        grid=[0.01 + i * (0.9999 - 0.01) / 136 for i in range(137)],
+        f=lambda b: 1.0 - b * b, xterm=lambda b: b * b, alt=lambda b: (1.0 - b) * (1.0 + b), bnd=2 ** -0.5),
+    "pure_algebraic": dict(
+        grid=[0.01 + i * (0.99 - 0.01) / 136 for i in range(137)],
+        f=lambda x: 1.0 - x, xterm=lambda x: x, alt=lambda x: (1.0 - x / 2.0) - x / 2.0, bnd=0.5),
+}
+
+
+def grain_class(value, u):
+    """Fractional part of value/ulp(f) (mod 1), the lattice grain. 0=integer, .5=half, .25/.75=quarter."""
+    q = Fr(value) / Fr(u)
+    fp = q - (q.numerator // q.denominator)
+    return round(float(fp), 6)
+
+
+def analyze(name, s):
+    out = dict(n=0, grain_F2=set(), grain_F4=set(), F3_all_zero=True,
+               G_F1_max=Fr(0), G_F2_max=Fr(0), G_dark_max=Fr(0),
+               cond_model_max_relerr=mp.mpf(0), e_within_half_ulp=True,
+               dark_leak_values=set(), dark_nonzero=0, dark_near_bnd=0, dark_far=0,
+               F2_floorless=True)
+    dist = []
+    for t in s["grid"]:
+        f = s["f"](t)
+        if f <= 0:
+            continue
+        out["n"] += 1
+        R = math.sqrt(f)                       # IEEE correctly-rounded sqrt (dyadic)
+        RRf = R * R                            # fl(R*R), dyadic
+        xt = s["xterm"](t)
+        F1 = RRf - f
+        F2 = (RRf - 1.0) + xt
+        F3 = R - R
+        F4 = R - math.sqrt(s["alt"](t))
+        u = math.ulp(f)
+
+        # ---- retrodiction gate: grains ----
+        if F2 != 0.0:
+            out["grain_F2"].add(grain_class(F2, u))
+        if F4 != 0.0:
+            out["grain_F4"].add(grain_class(F4, u))
+        if F3 != 0.0:
+            out["F3_all_zero"] = False
+
+        # ---- C: exact conditioning model from the sqrt round-off e ----
+        e = mp.mpf(R) - mp.sqrt(mp.mpf(f))                 # oracle: R - sqrt(f), signed
+        if abs(e) > 0.5 * math.ulp(R) * (1 + 1e-9):
+            out["e_within_half_ulp"] = False
+        # between-grid pre-round value of F1 (R^2 - f, exact dyadic) vs the e-model
+        preround_exact = Fr(R) * Fr(R) - Fr(f)             # = 2*sqrt(f)*e + e^2, exact
+        model = 2 * mp.sqrt(mp.mpf(f)) * e + e * e
+        denom = abs(mp.mpf(preround_exact.numerator) / preround_exact.denominator)
+        if denom > 0:
+            relerr = abs(mp.mpf(preround_exact.numerator) / preround_exact.denominator - model) / denom
+            out["cond_model_max_relerr"] = max(out["cond_model_max_relerr"], relerr)
+
+        # ---- G := residual - (M ⊕ C), exact, floorless ----
+        # F1 = fl(RRf - f). Sterbenz makes RRf - f exact in the cancellation region,
+        # so the unexplained remainder G_F1 = F(F1) - (F(RRf) - F(f)) must be 0.
+        G_F1 = Fr(F1) - (Fr(RRf) - Fr(f))
+        out["G_F1_max"] = max(out["G_F1_max"], abs(G_F1))
+        # F2 = fl((RRf - 1) + xterm): two ops; reconstruct exactly through the rounded intermediate.
+        inter = RRf - 1.0
+        G_F2 = Fr(F2) - (Fr(inter) + Fr(xt))               # remainder of the final add (Sterbenz/exact?)
+        out["G_F2_max"] = max(out["G_F2_max"], abs(G_F2))
+
+        # ---- dark-field: F1 - F2 (shared R^2 + 2R·e rejected) ----
+        d = F1 - F2
+        ideal = Fr(1) - Fr(xt) - Fr(f)                      # operand-assembly diff, R^2-free (exact reals)
+        leak = Fr(d) - ideal                                # the surviving differential path conditioning
+        leak_ulp = leak / Fr(u)
+        if abs(leak) > 0:
+            out["dark_nonzero"] += 1
+            out["dark_leak_values"].add(round(float(leak_ulp), 4))
+            if abs(t - s["bnd"]) <= (max(s["grid"]) - min(s["grid"])) / 4:
+                out["dark_near_bnd"] += 1
+            else:
+                out["dark_far"] += 1
+        # G in the dark field: is d exactly reconstructed from the two rounded forms? (no floor)
+        G_dark = Fr(d) - (Fr(F1) - Fr(F2))                  # final-subtraction round-off only
+        out["G_dark_max"] = max(out["G_dark_max"], abs(G_dark))
+
+    return out
+
+
+def jsonable(o):
+    if isinstance(o, dict):
+        return {k: jsonable(v) for k, v in o.items()}
+    if isinstance(o, set):
+        return sorted(o)
+    if isinstance(o, Fraction):
+        return [o.numerator, o.denominator]
+    if isinstance(o, mp.mpf):
+        return mp.nstr(o, 6)
+    return o
+
+
+def main():
+    results = {}
+    print("=" * 78)
+    for name, s in FIXTURES.items():
+        r = analyze(name, s)
+        results[name] = jsonable(r)
+        print(f"\n[{name}]  n={r['n']}")
+        print(f"  RETRODICTION GATE")
+        print(f"    F2 grain (frac of ulp): {sorted(r['grain_F2'])}   (expect half-integer 0.5)")
+        print(f"    F4 grain (frac of ulp): {sorted(r['grain_F4'])}   (expect integer 0.0)")
+        print(f"    F3 identically zero   : {r['F3_all_zero']}")
+        print(f"    sqrt e within 1/2 ulp : {r['e_within_half_ulp']}   (IEEE correctly-rounded)")
+        print(f"    conditioning model max rel-err vs exact R^2-f: {mp.nstr(r['cond_model_max_relerr'],3)}")
+        print(f"  G TEST (exact, floorless)")
+        print(f"    max |G_F1| = {float(r['G_F1_max']):.3e}   max |G_F2| = {float(r['G_F2_max']):.3e}")
+        gz = (r['G_F1_max'] == 0 and r['G_F2_max'] == 0)
+        print(f"    G ≡ 0 exactly (residual = M⊕C, no floor): {gz}")
+        print(f"  DARK-FIELD (F1−F2 common-mode rejected)")
+        print(f"    leak comb (ulp units): {sorted(r['dark_leak_values'])}   "
+              f"nonzero {r['dark_nonzero']}/{r['n']}  near-bnd {r['dark_near_bnd']} far {r['dark_far']}")
+        print(f"    max |G_darkfield| = {float(r['G_dark_max']):.3e}  (0 ⇒ leak fully reconstructed = pure C)")
+    with open("scratch/g_forward_decomposition_exp1_results.json", "w") as fh:
+        json.dump(results, fh, indent=2, sort_keys=True)
+    # byte-stability hash
+    import hashlib
+    h = hashlib.sha256(open("scratch/g_forward_decomposition_exp1_results.json", "rb").read()).hexdigest()
+    print("\n" + "=" * 78)
+    print("artifact sha256:", h)
+
+
+if __name__ == "__main__":
+    main()

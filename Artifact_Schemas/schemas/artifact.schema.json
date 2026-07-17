@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cella.local/schemas/artifact-v1.json",
+  "title": "Cella artifact sidecar",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "artifact_id",
+    "artifact_type",
+    "title",
+    "summary",
+    "subject_families",
+    "claim_status",
+    "lifecycle_status",
+    "files",
+    "claims",
+    "relations",
+    "external_ids",
+    "declared_impacts",
+    "llm",
+    "extensions"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "artifact_id": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.:-]{1,127}$"},
+    "artifact_type": {
+      "enum": ["theorem", "proof", "draft", "paper", "campaign", "report", "evidence", "certificate", "gap", "erratum_or_supersession", "retirement_package"]
+    },
+    "title": {"type": "string", "minLength": 1},
+    "summary": {"type": "string", "minLength": 1},
+    "subject_families": {"type": "array", "items": {"type": "string"}, "minItems": 1, "uniqueItems": true},
+    "claim_status": {
+      "type": ["string", "null"],
+      "enum": ["machine-verified", "proved", "demonstrated", "conjectured", "refuted", "open", null]
+    },
+    "lifecycle_status": {
+      "enum": ["proposed", "draft", "active", "released", "superseded", "retired", "archived"]
+    },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "authors": {"type": "array", "items": {"type": "string"}},
+        "created_utc": {"type": ["string", "null"]},
+        "origin_repository": {"type": ["string", "null"]},
+        "source_pointer": {"type": ["string", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["role", "path", "sha256", "media_type"],
+        "properties": {
+          "role": {"type": "string"},
+          "path": {"type": "string", "minLength": 1},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "media_type": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["claim_id", "statement", "hypotheses", "scope", "claim_status", "proof_ids", "evidence_ids"],
+        "properties": {
+          "claim_id": {"type": "string"},
+          "statement": {"type": "string", "minLength": 1},
+          "hypotheses": {"type": "array", "items": {"type": "string"}},
+          "scope": {"type": "string"},
+          "claim_status": {"enum": ["machine-verified", "proved", "demonstrated", "conjectured", "refuted", "open"]},
+          "proof_ids": {"type": "array", "items": {"type": "string"}},
+          "evidence_ids": {"type": "array", "items": {"type": "string"}}
+        },
+        "additionalProperties": false
+      }
+    },
+    "relations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["target_id", "relation", "basis"],
+        "properties": {
+          "target_id": {"type": "string"},
+          "relation": {"type": "string"},
+          "basis": {"type": "string"},
+          "source_pointer": {"type": ["string", "null"]}
+        },
+        "additionalProperties": false
+      }
+    },
+    "external_ids": {"type": "object", "additionalProperties": {"type": "array", "items": {"type": "string"}}},
+    "declared_impacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["kind", "target_id", "note"],
+        "properties": {
+          "kind": {"enum": ["reevaluate", "supersede", "contradict", "rename", "evidence_only", "unknown"]},
+          "target_id": {"type": ["string", "null"]},
+          "note": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "llm": {
+      "type": "object",
+      "required": ["one_sentence_purpose", "key_terms", "retrieval_questions", "context_priority", "context_role"],
+      "properties": {
+        "one_sentence_purpose": {"type": "string", "minLength": 1},
+        "key_terms": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "retrieval_questions": {"type": "array", "items": {"type": "string"}},
+        "context_priority": {"enum": ["low", "normal", "high", "critical"]},
+        "context_role": {"enum": ["core", "supporting", "historical", "frontier"]}
+      },
+      "additionalProperties": false
+    },
+    "visual_hints": {"type": "object"},
+    "extensions": {"type": "object"}
+  },
+  "additionalProperties": false
+}

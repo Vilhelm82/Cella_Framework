@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+# V4 evidence gate (pre-commit).
+#
+# Blocks any commit that stages a `result.json` agent artifact which fails
+# validate_agent_artifact.py. Commits with no result.json staged pass straight
+# through, so ordinary work (docs, code, specs) is never slowed.
+#
+# Env knobs:
+#   V4_VALIDATE_PYTHON      interpreter to use (default: python3)
+#   V4_VALIDATE_SKIP_RERUN  set to 1 to skip the byte-stable re-run (schema-only;
+#                           prints a loud warning -- the re-run is the real gate,
+#                           use only when you have already verified it manually).
+set -euo pipefail
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+VALIDATOR="$REPO_ROOT/Build_Docs/Agent_tasks/validate_agent_artifact.py"
+PY="${V4_VALIDATE_PYTHON:-python3}"
+
+# Staged files (added/copied/modified), NUL-safe for odd paths.
+mapfile -d '' -t staged < <(git diff --cached --name-only --diff-filter=ACM -z)
+
+results=()
+for f in "${staged[@]}"; do
+  case "$f" in
+    */result.json|result.json) results+=("$f") ;;
+  esac
+done
+
+# Nothing to gate -> let the commit through.
+[ "${#results[@]}" -eq 0 ] && exit 0
+
+if [ ! -f "$VALIDATOR" ]; then
+  echo "pre-commit: validator not found at $VALIDATOR" >&2
+  exit 1
+fi
+
+flags=()
+if [ "${V4_VALIDATE_SKIP_RERUN:-0}" = "1" ]; then
+  flags+=(--skip-rerun)
+  echo "pre-commit: WARNING V4_VALIDATE_SKIP_RERUN=1 -- schema only, byte-stable NOT verified" >&2
+fi
+
+fail=0
+for r in "${results[@]}"; do
+  echo "pre-commit: validating $r"
+  if ! "$PY" "$VALIDATOR" "$REPO_ROOT/$r" "${flags[@]}"; then
+    fail=1
+  fi
+done
+
+if [ "$fail" -ne 0 ]; then
+  {
+    echo ""
+    echo "pre-commit: BLOCKED -- a staged result.json failed the evidence gate."
+    echo "Fix the artifact, or if the re-run is too heavy to run here, verify it"
+    echo "manually first:  $PY $VALIDATOR <path/to/result.json>"
+  } >&2
+  exit 1
+fi
+exit 0

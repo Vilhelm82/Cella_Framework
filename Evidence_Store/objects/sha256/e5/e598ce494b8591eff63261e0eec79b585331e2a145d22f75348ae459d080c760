@@ -1,0 +1,57 @@
+#!/usr/bin/env python3
+"""
+INDEPENDENT check of claim 1(c): window-count fragility of the drift gate on
+Fixture E. I re-import the harness's own generators + nested_window_evidence and
+sweep n_windows in {2,3,4}, reporting drift_ratio + STABLE/UNSTABLE each.
+
+I also re-derive the nested-window slope logic from scratch (my own numpy) and
+cross-check drift_ratio agreement, so I am not trusting their function blindly.
+"""
+import sys, os
+import numpy as np
+import mpmath as mp
+
+HARNESS_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HARNESS_DIR)
+import _their_harness as H  # the copied harness
+
+mp.mp.dps = 80
+K_DRIFT = 2.0
+
+
+def my_nested_window(f, s, n_windows):
+    """My own independent re-implementation of their nested-window slope/drift."""
+    logf = np.log(f)
+    ds = np.diff(s)
+    logf_mid = 0.5 * (logf[:-1] + logf[1:])
+    with np.errstate(divide="ignore", invalid="ignore"):
+        log_abs_ds = np.log(np.abs(ds))
+        local = np.diff(log_abs_ds) / np.diff(logf_mid)
+    local = local[np.isfinite(local)]
+    blocks = np.array_split(local, min(n_windows, local.size))
+    window_slopes = [float(np.median(b)) for b in blocks if b.size]
+    arr = np.array(window_slopes)
+    spread = float(arr.max() - arr.min())
+    median = float(np.median(arr))
+    guard = max(abs(median), 1e-12)
+    drift = spread / guard
+    status = "STABLE" if drift <= K_DRIFT else "UNSTABLE"
+    return drift, status, spread, window_slopes
+
+
+# Build the SAME observable grid the harness uses internally.
+scales = H.geometric_scales(f_max=0.25, ratio=0.5, n=28)
+
+for key in ("C", "D", "E"):
+    spec = H.FIXTURES[key]
+    f_arr, s_arr, _ = H.build_observable(spec, scales)
+    print(f"=== Fixture {key} ({spec.kind}) ===")
+    for nw in (2, 3, 4):
+        # their function
+        ev = H.nested_window_evidence(f_arr, s_arr, n_windows=nw)
+        # my function
+        d_mine, st_mine, spr_mine, ws_mine = my_nested_window(f_arr, s_arr, nw)
+        agree = abs(ev.drift_ratio - d_mine) < 1e-12 and ev.stability_status == st_mine
+        print(f"  n_windows={nw}: THEIR drift_ratio={ev.drift_ratio:.4f} status={ev.stability_status:9s}"
+              f" | MINE drift_ratio={d_mine:.4f} status={st_mine:9s} | agree={agree}")
+    print()

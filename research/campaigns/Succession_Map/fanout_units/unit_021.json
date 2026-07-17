@@ -1,0 +1,49 @@
+{
+  "seq": 21,
+  "uid": "U-0112",
+  "type": "theorem",
+  "claim_status": "machine-verified",
+  "label": "Coupling carrier / A_c retrodiction — THE GATE (CALC-02)",
+  "path": "/home/wlloyd/Cella Framework/Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/dbp_four_role_calc_log_v8.md",
+  "already_linked_objects": [
+    {
+      "id": "OBJ:certified-keystone-channel-labels-kappa-c-kappa-s-kappa-int",
+      "label": "certified keystone channel labels (kappa_c, kappa_s, kappa_int)"
+    },
+    {
+      "id": "OBJ:coupling-anisotropy-a-c",
+      "label": "coupling anisotropy A_c"
+    },
+    {
+      "id": "OBJ:curvature-order-signed-blow-up-order-kappa-d-a-f",
+      "label": "curvature order / signed blow-up order kappa_{D_a}(f)"
+    },
+    {
+      "id": "OBJ:kappa-c-pinning-condition-c-0",
+      "label": "Kappa_c-pinning condition Δκ_c = 0"
+    }
+  ],
+  "priority_candidate_pairs": [
+    {
+      "a": "OBJ:certified-keystone-channel-labels-kappa-c-kappa-s-kappa-int",
+      "b": "OBJ:kappa-c-pinning-condition-c-0",
+      "la": "certified keystone channel labels (kappa_c, kappa_s, kappa_int)",
+      "lb": "Kappa_c-pinning condition Δκ_c = 0",
+      "lift": 61.5
+    },
+    {
+      "a": "OBJ:coupling-anisotropy-a-c",
+      "b": "OBJ:kappa-c-pinning-condition-c-0",
+      "la": "coupling anisotropy A_c",
+      "lb": "Kappa_c-pinning condition Δκ_c = 0",
+      "lift": 7.77
+    },
+    {
+      "a": "OBJ:certified-keystone-channel-labels-kappa-c-kappa-s-kappa-int",
+      "b": "OBJ:coupling-anisotropy-a-c",
+      "la": "certified keystone channel labels (kappa_c, kappa_s, kappa_int)",
+      "lb": "coupling anisotropy A_c",
+      "lift": 6.47
+    }
+  ]
+}

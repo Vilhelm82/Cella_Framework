@@ -1,0 +1,50 @@
+{
+  "rank": 32,
+  "lift": 32.8,
+  "count": 4,
+  "families": 1,
+  "a": {
+    "id": "OBJ:bar-m-epsilon",
+    "label": "bar m_epsilon",
+    "standard_term": "complementary elliptic modulus m' = 1 - m",
+    "nomenclature": "identical-to",
+    "symbols": [
+      "m_epsilon"
+    ]
+  },
+  "b": {
+    "id": "OBJ:i-epsilon",
+    "label": "I_epsilon",
+    "standard_term": "epsilon-parametrized period value as a linear combination of K and Pi, Cauchy-principal-value regularized for epsilon = -1",
+    "nomenclature": "generalization-of",
+    "symbols": [
+      "i_epsilon"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-0720",
+      "type": "theorem",
+      "claim_status": null,
+      "label": "Complete-interval K/Pi reduction of the anti-period",
+      "summary": "I_\\epsilon-I_\\epsilon^T = -t^7A_\\epsilon \\Bigg[ \\Pi(n_\\epsilon;m_\\epsilon) -\\frac{c_\\epsilon}{\\bar m_\\epsilon}K(m_\\epsilon) + \\frac{c_\\epsilon m_\\epsilon}{\\bar m_\\epsilon} \\Pi(\\bar m_\\epsilon;m_\\epsilon) \\Bigg]. \\tag{4.8",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md"
+    },
+    {
+      "uid": "U-0724",
+      "type": "definition",
+      "claim_status": null,
+      "label": "DBP complete-integral values I_epsilon",
+      "summary": "I_\\epsilon = -t^7 \\left[ A_\\epsilon\\Pi(n_\\epsilon;m_\\epsilon) -B_\\epsilon K(m_\\epsilon) \\right], \\tag{1.6} with I_- interpreted as a Cauchy principal value on the real path.",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md"
+    },
+    {
+      "uid": "U-1154",
+      "type": "formula",
+      "claim_status": null,
+      "label": "Path integral of omega_epsilon equals I_epsilon",
+      "summary": "If \\gamma_\\epsilon is the upper real path x:0\\to m_\\epsilon, then \\int_{\\gamma_\\epsilon}\\omega_\\epsilon=I_\\epsilon. \\tag{1.11}",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md"
+    }
+  ]
+}

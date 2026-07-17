@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "authority": "historical V4 retirement reference; not current Cella authority",
+  "package_id": "V4PKG-0042",
+  "family": "verification",
+  "label": "legacy_evaluators",
+  "manifest_path": "manifests/verification/V4PKG-0042__legacy_evaluators.json",
+  "member_count": 5,
+  "logical_bytes": 42198,
+  "evidence_covered_count": 5,
+  "evidence_origin_bound_count": 5,
+  "path_bound_count": 0,
+  "certificate_related_count": 1,
+  "member_tree_sha256": "ab64b4b5183fa85ecb4505e72a7684312f0d5d3560b5171d5e41b5d76cd0c7b1",
+  "members": [
+    {
+      "path": "research/verification/legacy_evals/dbp_involution/run_all.py",
+      "file_type": "regular",
+      "sha256": "b3e7b473f4cf900eb081e1298ef78a883c2b25e57c9ca8506e5f556b74c2b638",
+      "bytes": 5139,
+      "mode": 420,
+      "evidence_id": "EVD-001211",
+      "evidence_origin_bound": true,
+      "path_bound": false,
+      "certificate_related": false,
+      "report_ids": []
+    },
+    {
+      "path": "research/verification/legacy_evals/dbp_involution/stageB_O_parity_vs_tau.py",
+      "file_type": "regular",
+      "sha256": "a1996819a812d36b4e9489db9eca8f855bd3152e1f8a0b8d4894bd56b6720b30",
+      "bytes": 7390,
+      "mode": 420,
+      "evidence_id": "EVD-001094",
+      "evidence_origin_bound": true,
+      "path_bound": false,
+      "certificate_related": false,
+      "report_ids": []
+    },
+    {
+      "path": "research/verification/legacy_evals/dbp_involution/stageC_integral_snf.py",
+      "file_type": "regular",
+      "sha256": "dcc2d4f3e9af69b48b2e70fb61122842b844a85a82ae1e33503d48be58e66740",
+      "bytes": 10075,
+      "mode": 420,
+      "evidence_id": "EVD-001497",
+      "evidence_origin_bound": true,
+      "path_bound": false,
+      "certificate_related": false,
+      "report_ids": []
+    },
+    {
+      "path": "research/verification/legacy_evals/dbp_involution/stageD_char2_rolechspec.py",
+      "file_type": "regular",
+      "sha256": "eb6270a9899c96e256f5d2219070a1d7dc81bbaacae684353f13d03d4eb97bb8",
+      "bytes": 8120,
+      "mode": 420,
+      "evidence_id": "EVD-001572",
+      "evidence_origin_bound": true,
+      "path_bound": false,
+      "certificate_related": false,
+      "report_ids": []
+    },
+    {
+      "path": "research/verification/legacy_evals/dbp_involution/stageE_monodromy_alt_probe.py",
+      "file_type": "regular",
+      "sha256": "9af4803d5e96f05f57318040d66cd70eb2d987fab7268aa75c15f97c656452de",
+      "bytes": 11474,
+      "mode": 420,
+      "evidence_id": "EVD-001050",
+      "evidence_origin_bound": true,
+      "path_bound": false,
+      "certificate_related": true,
+      "report_ids": []
+    }
+  ]
+}

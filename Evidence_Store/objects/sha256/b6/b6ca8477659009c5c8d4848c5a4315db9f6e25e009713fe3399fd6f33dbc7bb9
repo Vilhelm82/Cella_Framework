@@ -1,0 +1,59 @@
+# Route-Pair Selection Stability Audit
+
+Accepted outcome: `route_pair_native_grid_only_perturbation_unstable`
+Headline classification: `native_grid_pair_resolution_not_stable`
+
+## Test Design
+
+This audit takes the successful native-grid pair from the hard-cell search and tests whether it behaves like a route-selection law rather than a one-mask coincidence.
+
+Candidate pair:
+
+```text
+sqrt_ratio_squared = sqrt(2/r)^2
+cbrt_power         = pow(pow(2/r, 1/3), 3)
+```
+
+The direct route defines the support and gap cells. The pair only receives credit when one of its routes lands on half phase inside a direct-route gap cell.
+
+## Findings
+
+1. Native `f_binade_-1` resolved: `True` with union fraction `1.0`.
+2. Native gap partition: `{'sqrt_only': [113, 117, 135], 'cbrt_only': [121], 'both': [], 'hard': []}`.
+3. Perturbation variants resolved/stable: `0` / `1` of `3`.
+4. Adjacent masks resolved/stable: `0` / `0` of `3`.
+5. Route-selection law promotable: `False`.
+6. Double-precision language justified: `False`.
+
+## Variant Summary
+
+- `native_grid`: `f_binade_-1` union `20` / `20` with hard gaps `[]`.
+- `nextafter_up`: `f_binade_-1` union `10` / `14` with hard gaps `[129, 130, 133, 136]`.
+- `nextafter_down`: `f_binade_-1` union `12` / `13` with hard gaps `[125]`.
+- `alternating_nextafter`: `f_binade_-1` union `14` / `17` with hard gaps `[125, 130, 136]`.
+
+## Adjacent Native Masks
+
+- `full_support`: union `20` / `80`, hard gaps `[1, 6, 8, 10, 11, 12, 14, 21, 23, 24, 27, 30]`.
+- `f_binade_-2`: union `0` / `10`, hard gaps `[95, 96, 101, 102, 103, 104, 106, 107, 108, 110]`.
+- `f_binade_le_-3`: union `0` / `50`, hard gaps `[1, 6, 8, 10, 11, 12, 14, 21, 23, 24, 27, 30]`.
+
+## Interpretation
+
+The pair is real on the native Schwarzschild `f_binade_-1` support mask, but it is not yet a stable route-selection law. Neighboring native masks do not inherit the half-grid coverage, and one-ULP coordinate perturbations change the direct gap set and companion coverage enough to break full resolution.
+
+This narrows the next investigation: the useful object is not simply the route pair. The missing ingredient is a guard or predictor that identifies when the native `f_binade_-1` partition is in the route-pair basin and when coordinate-level perturbations move the read outside it.
+
+## Verification
+
+- `PYTHONPATH=src python -m lloyd_v4.evals.route_pair_selection_stability_audit`
+  Result: passed; generated artifact_route_pair_selection_stability_audit.json and route_pair_selection_stability_audit_report.md.
+- `PYTHONPATH=src python -m pytest tests/test_route_pair_selection_stability_audit.py -q`
+  Result: passed; focused route-pair stability tests.
+- `PYTHONPATH=src python -m pytest tests/test_route_pair_selection_stability_audit.py tests/test_hard_cell_q_source_exhaustion_search.py tests/test_dual_q_source_companion_gap_search.py -q`
+  Result: passed; focused compatibility subset.
+
+## Artifacts
+
+- `Build_Docs/Reports/route_pair_selection_stability_audit/artifact_route_pair_selection_stability_audit.json`
+- `Build_Docs/Reports/route_pair_selection_stability_audit/route_pair_selection_stability_audit_report.md`

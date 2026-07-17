@@ -1,0 +1,110 @@
+{
+  "campaign_id": "shared_residual_geometry_arm",
+  "claims": {
+    "CL-G7": "boundary-inhabitation + composed-gate (conical blind spot, event-based)"
+  },
+  "code_pins_sha256": {
+    "composed_gate.py": "0647134320483585e099e1956360962a350bcde741f29e96b762de78e80c1b80",
+    "fixtures_e.py": "3c7570fe99e458f06ed6a29f5d530d0369c208ce70c9c1a8035f89b63ab6d9cd",
+    "run_stage_e.py": "90027f9df84182fe89d2d61bcf13aa1f1235659511caa8a4f4cdfbaf275139cb"
+  },
+  "controls": {
+    "account_is_load_bearing_control_fails": {
+      "account_verdicts": {
+        "degenerate": "composed_gate_degenerate",
+        "exhausted": "composed_gate_exhausted"
+      },
+      "degenerate_float_only": "degenerate(float-only)",
+      "exhausted_float_only": "degenerate(float-only)",
+      "lesson": "the float reading is identical (0) for both; only the exact account attributes the conical blind spot"
+    },
+    "typing_neutral_event_based": {
+      "attributed_by": "exact_account",
+      "no_ttoken_label": true,
+      "verdict_inputs": [
+        "exhaustion_event",
+        "coupling_degenerate"
+      ]
+    }
+  },
+  "depends_on": {
+    "manifest_v1_sha256": "648975d082407aebdb3b0ead340639a59820f11e98231f10a0fd412fb171a7ee"
+  },
+  "expectations_pinned_at_dry_run": {
+    "blind_spot_pinned": true,
+    "cells": [
+      {
+        "coupling": "0",
+        "holonomy_float": "0",
+        "kind": "composed_float",
+        "label": "COMPOSED-DEGENERATE",
+        "verdict": "composed_gate_degenerate"
+      },
+      {
+        "coupling": "-1/20282409603651670423947251286016",
+        "holonomy_float": "0",
+        "kind": "composed_float",
+        "label": "COMPOSED-EXHAUSTED",
+        "verdict": "composed_gate_exhausted"
+      },
+      {
+        "coupling": "-1/1048576",
+        "holonomy_float": "-1/1048576",
+        "kind": "composed_float",
+        "label": "NOT-AT-GATE",
+        "verdict": "not_at_gate"
+      },
+      {
+        "kind": "composed_2adic",
+        "label": "COMPOSED-EXHAUSTED-2ADIC",
+        "verdict": "composed_gate_exhausted_2adic"
+      },
+      {
+        "death_budget": 3,
+        "kind": "inhabitation",
+        "label": "INHABIT-SHARP",
+        "verdict": "inhabited_sharp"
+      },
+      {
+        "death_budget": null,
+        "kind": "inhabitation",
+        "label": "INHABIT-CONSERVATIVE",
+        "verdict": "inhabited_conservative"
+      },
+      {
+        "death_budget": 60,
+        "kind": "inhabitation",
+        "label": "INHABIT-UNINHABITABLE",
+        "verdict": "un_inhabitable"
+      }
+    ],
+    "n_composed_float": 3,
+    "n_composed_padic": 1,
+    "n_inhabitation": 3
+  },
+  "fixture_index": {
+    "composed_float": [
+      "COMPOSED-DEGENERATE",
+      "COMPOSED-EXHAUSTED",
+      "NOT-AT-GATE"
+    ],
+    "composed_padic": [
+      "COMPOSED-EXHAUSTED-2ADIC"
+    ],
+    "fixture_class": "FX-G-F",
+    "inhabitation": [
+      "INHABIT-SHARP",
+      "INHABIT-CONSERVATIVE",
+      "INHABIT-UNINHABITABLE"
+    ]
+  },
+  "frozen": true,
+  "grader_clauses": {
+    "PMG-E.1": "the composed-gate fires on the EVENT (CL-G7): the gate fires on the representation-exhaustion EVENT `holonomy_float == 0` (resp. `\u03a6\u2082(v,k) == 0`) coinciding with the coupling-degeneracy question, and ATTRIBUTES via the exact account/value \u2014 NOT via a residue-branch label. The event is typing-neutral (a fact of \u03a6 regardless of T_token vs R_exact-by-composition; R15), so CL-G7 does not freeze the `below_detection` typing. Units: cell.",
+    "PMG-E.2": "the conical blind spot is real and attributed (the first measured composed-gate failure): COMPOSED-DEGENERATE (coupling == 0) and COMPOSED-EXHAUSTED (coupling = -2^-104 != 0 \u2014 a NORMAL representable float, working-precision cancellation recovered EXACTLY by the account, NOT underflow) give BYTE-IDENTICAL float holonomy (0); the FLOAT OBSERVATION ALONE is blind, and only the exact account distinguishes them (account 0 vs != 0). Units: cell.",
+    "PMG-E.3": "boundary-inhabitation classified by tier (CL-G7): the coupling-degeneracy boundary is `inhabited_sharp` (dyadic, death budget \u2264 lattice precision), `inhabited_conservative` (non-dyadic \u2014 a limit, never landed), or `un_inhabitable` (dyadic, death budget > lattice precision). The lattice precision is DERIVED from the format (sys.float_info), not a constant. Units: cell.",
+    "PMG-E.4": "determinism: the Stage-E record set is byte-identical across two runs (sha256 over records)."
+  },
+  "stage": "E",
+  "status_move_rules": "CL-G7 -> DEMONSTRATED iff (a) the composed-gate fires on the EVENT and attributes via the exact account (degenerate/exhausted/not_at_gate as pinned), (b) the conical blind spot is real \u2014 COMPOSED-DEGENERATE and COMPOSED-EXHAUSTED give byte-identical float holonomy (0) with opposite exact couplings, the account the sole attributor, AND (c) the three inhabitation tiers classify as pinned. REFUTE-ROW (continue): any composed cell whose account does NOT close (CL-G3 broken -> attribution impossible) or where the blind spot does not hold (the two cells' float readings differ) -> CL-G7 REFUTED, scope reduced, chain preserved. PARTIAL until both runs match (PMG-E.4)."
+}

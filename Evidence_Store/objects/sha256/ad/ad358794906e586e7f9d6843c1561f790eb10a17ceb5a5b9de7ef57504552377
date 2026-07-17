@@ -1,0 +1,72 @@
+{
+ "branch": "campaign/difference-tower",
+ "campaign": "difference_tower",
+ "classifier_tally_cells": {
+  "C_coincidentally_identical": 10,
+  "C_fingerprinted": 50,
+  "R1_fingerprinted_witness": 1,
+  "R1_lawfully_identical": 60,
+  "R2_coincidentally_identical": 23,
+  "R2_fingerprinted": 37
+ },
+ "closed": "2026-06-12",
+ "commits": {
+  "amendment5": "b5d565b",
+  "amendment6": "d8c8b17",
+  "h5_raw_leg_v2": "2972a14",
+  "ledger_open_paste": "1bb9ff1",
+  "open": "37d0a4f",
+  "stage0_bench": "3a16d7b",
+  "stage0_close": "40a745f",
+  "stageA_prereg": "0e6c6a6",
+  "stageA_v1": "417d791",
+  "stageA_v2_close": "0fd9f68",
+  "stageB_close": "19b5224",
+  "stageB_prereg_v1": "607f98f",
+  "stageB_prereg_v2": "baacbd9",
+  "stageB_v1": "32e0daf",
+  "stageB_v2": "cfa096b",
+  "stageC": "ea3c31a",
+  "stageC_prereg": "8c28304",
+  "stageD": "bc27583",
+  "stageD_prereg": "e9be998",
+  "stageE": "005b57b"
+ },
+ "kills": {
+  "K1": "never triggered",
+  "K2": "never triggered",
+  "K3": "never triggered"
+ },
+ "pins": {
+  "h5_raw_leg_prereg": "80a9e924c03ad4524bb1fd6f15b5496e925f486670413a15935d31367683581a",
+  "stage0_manifest": "85ae1400c2ac1d8e36bd6a70b2b2ce23651b309314282c08f497fe225033a029",
+  "stageA_prereg_v1": "216bc623dbcbd1825e83d4725d4af87f4a692cd62b10f58dc5e9326b6f0ac21a",
+  "stageA_prereg_v2": "50dfce689a7ca3a8d8ec42f0542d1641d36fc5d693c0c120fe6928792de0af3a",
+  "stageB_prereg_v1": "dca8eb406211b51485f2eb53bb15abe5193fe494de86fb174144668ddbf56b07",
+  "stageB_prereg_v2": "3571f210a381264ae877923e1df41fa602c1cf2f9bf4cce0b7a988a07634a9ce",
+  "stageC_prereg": "3557b16af1a1c7b9ecc65831f473cf9a2ab10c90588411b769f84366a7d7b868",
+  "stageD_prereg": "5d9d04c1d87d94f79f6d039383bfc7c14bfa780b0face75cef91e6d845086e0a",
+  "stageE_prereg": "85ec8e27857852f27364fd8f058ecf65c99a9d0c7c70490f6fb70dbb3f849c2b"
+ },
+ "record_shas": {
+  "h5_raw_leg_v2_records": "c924cb164a4c8cdc7d7ba04d1195fb82501c0e72abb1bb8ed6ee0c1a03aa7fce",
+  "stage0_h1_gate": "caee20dcfc3d750d353bf777f4f62f11b13f239449dc60f8e3ddde320a2e49ac",
+  "stageA_h1_grid_v1": "b23294c9911c27f38735164c1731609aed2c277621907c6ea6c9b2929acbc816",
+  "stageA_h1_grid_v2": "b23294c9911c27f38735164c1731609aed2c277621907c6ea6c9b2929acbc816",
+  "stageB_records_v1": "2c4db8612caaeeafaed32f2458ea539dd1aee5113545047c88219f550199c057",
+  "stageB_records_v2": "52163b4993e241fac5fc0954fa6363fa9942aa57eb10a1e2cd7f622c6e632d75",
+  "stageC_overlay_figure": "2a57e3ac3ad498b05d159dc61c7cf500bf0a89a513bb560a86a19aba53c44d17",
+  "stageC_records": "38c58b8d3ccfcdbaf4005fe94aeaa77397f71d08ca9a640ca9c98e6c16eda16b",
+  "stageD_records": "9b03cb5bbc5d87fe36324dd5ebd9a531d8bf0b00230133e7294aec4d8883c175",
+  "stageE_records": "2e671390c9d47c2a2cbf51a1a82dcccf61b2c56c2fd97726ce8da7417061abbe"
+ },
+ "verdicts": {
+  "H1": "PASS v2 9872/9872 cells exact in Q (v1: zero inequalities + 1 lawful domain refusal, finding #1)",
+  "H2": "CLOSED SCOPED (Amendment 4): exact legs 73/73 + 166/166; lane slopes 16/16 two-leg; annex 8/12 certified-where-certifiable, walls = finding #2; band 54/54",
+  "H3": "PASS two-sided: positive 8/8 fixtures, negative 24/24 probe rows, certificates exact, zero false positives",
+  "H4": "PASS zero wrong clean emits (22/0/0/0)",
+  "H5": "exact legs 120/120 + 360/360; raw leg PASS two-sided at v2 under the Amendment-6 conditional law (witness fingerprinted + protected side 60/60 at zero); v1 refutation = finding #3",
+  "H6": "PASS: V-window 20/20, lane monotone 404/404 (K3 never fired), R-C1 retrodiction PASS, R-C2 108/108",
+  "H7": "exploratory positive: duality 7/7, exposure 216/216 nodes, enclosures 12/12"
+ }
+}

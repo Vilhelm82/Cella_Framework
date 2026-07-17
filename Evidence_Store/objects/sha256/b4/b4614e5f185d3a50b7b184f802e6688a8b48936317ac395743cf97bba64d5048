@@ -1,0 +1,257 @@
+"""ISCO α-recovery probe.
+
+Tests whether V4 recovers the predicted α = 1/2 at the Schwarzschild ISCO
+saddle-node bifurcation.
+
+Schwarzschild geodesic effective potential gives circular-orbit radii
+    r_+- = (L^2 +- L * sqrt(L^2 - 12)) / 2     (M = 1)
+
+with ISCO at (L^2 = 12, r = 6). Setting eps = L^2 - 12, the outer stable
+orbit deviates from ISCO as
+
+    r_+ - 6 = (eps + sqrt(12 + eps) * sqrt(eps)) / 2 ~ sqrt(3) * sqrt(eps).
+
+So the bifurcation predicts alpha = 1/2 exactly. We probe this with both
+stable and naive formulations.
+
+Stable form: algebraic simplification (no cancellation).
+    g_stable(eps) = (eps + sqrt(12 + eps) * sqrt(eps)) / 2
+
+Naive form: compute r_+ first, then subtract 6 (cancellation at small eps).
+    g_naive(eps)  = (L_sq + L * sqrt(eps)) / 2 - 6   with L_sq = 12 + eps
+
+Both observables are run through directional_alpha_probe and through
+sweep_signature_probe. Joint evidence is printed side by side.
+"""
+
+from __future__ import annotations
+
+import json
+import math
+from pathlib import Path
+from typing import Callable
+
+from lloyd_v4.primitives.directional_alpha_probe import (
+    DeclaredAlphaModel,
+    directional_alpha_probe,
+)
+from lloyd_v4.primitives.sweep_signature_probe import sweep_signature_probe
+
+
+# ---------------------------------------------------------------------------
+# Observables
+# ---------------------------------------------------------------------------
+
+def g_stable(eps: float) -> float:
+    """Outer-orbit deviation from ISCO, algebraically stable form.
+
+    g_stable(eps) = (eps + L * sqrt(eps)) / 2,  L = sqrt(12 + eps).
+    """
+    if eps <= 0:
+        raise ValueError("eps must be positive (L^2 > 12)")
+    L = math.sqrt(12.0 + eps)
+    return (eps + L * math.sqrt(eps)) / 2.0
+
+
+def g_naive(eps: float) -> float:
+    """Outer-orbit deviation from ISCO, naive form with cancellation.
+
+    Computes r_+ via (L^2 + L*sqrt(eps))/2, then subtracts 6.
+    For small eps, r_+ ~= 6 and the subtraction loses precision.
+    """
+    if eps <= 0:
+        raise ValueError("eps must be positive (L^2 > 12)")
+    L_sq = 12.0 + eps
+    L = math.sqrt(L_sq)
+    r_plus = (L_sq + L * math.sqrt(eps)) / 2.0
+    return r_plus - 6.0
+
+
+# ---------------------------------------------------------------------------
+# Probe configuration
+# ---------------------------------------------------------------------------
+
+# Sweep grid: log-spaced eps from 1e-2 down to 1e-12, 16 points.
+# Wide enough to expose cancellation in the naive form at small eps,
+# narrow enough to stay in a clean leading-order regime in the stable form.
+N_POINTS = 16
+EPS_START = 1e-2
+EPS_END = 1e-12
+
+log_start = math.log10(EPS_START)
+log_end = math.log10(EPS_END)
+EPS_GRID = tuple(
+    10.0 ** (log_start + (log_end - log_start) * i / (N_POINTS - 1))
+    for i in range(N_POINTS)
+)
+
+# Eta: relative perturbation for the finite-difference transfer.
+# 1e-4 is a good middle ground -- large enough to avoid pure-substrate
+# noise in the transfer numerator, small enough to approximate dg/df.
+ETA = 1e-4
+
+# Declared alpha models.
+DECLARED_MODELS = (
+    DeclaredAlphaModel(name="isco_half_exponent", alpha=0.5, band=0.03),
+    DeclaredAlphaModel(name="regular_linear", alpha=1.0, band=0.03),
+    DeclaredAlphaModel(name="constant", alpha=0.0, band=0.03),
+)
+
+
+# ---------------------------------------------------------------------------
+# Run probes on one observable
+# ---------------------------------------------------------------------------
+
+def probe_one(label: str, observable: Callable[[float], float]) -> dict:
+    """Run alpha_probe + sweep_signature_probe on one observable; return summary."""
+    alpha_result = directional_alpha_probe(
+        observable,
+        EPS_GRID,
+        probe_id=f"isco_{label}_alpha",
+        function_label=f"isco_{label}",
+        eta=ETA,
+        declared_alpha_models=DECLARED_MODELS,
+        expression_path=f"isco_{label}_chain",
+    )
+
+    sweep_result = sweep_signature_probe(
+        observable,
+        EPS_GRID,
+        probe_id=f"isco_{label}_sweep",
+        function_label=f"isco_{label}",
+        eta=ETA,
+    )
+
+    alpha_obs = alpha_result.value
+    sweep_obs = sweep_result.value if sweep_result.value is not None else None
+
+    summary = {
+        "label": label,
+        "alpha_status": str(alpha_result.status.value),
+        "observed_alpha": alpha_obs.observed_alpha,
+        "alpha_standard_error": alpha_obs.standard_error,
+        "alpha_r_squared": alpha_obs.r_squared,
+        "alpha_stability_status": alpha_obs.alpha_stability_status.value,
+        "alpha_window_span": alpha_obs.alpha_window_span,
+        "selected_alpha_model": alpha_obs.selected_alpha_model,
+        "matching_models": list(alpha_obs.matching_alpha_model_names),
+        "n_alpha_observed": alpha_obs.n_observed,
+        "n_alpha_input": alpha_obs.n_input_observations,
+        "n_alpha_cancellation_dominated": alpha_obs.n_cancellation_dominated,
+        "sweep_status": str(sweep_result.status.value),
+        "sweep_cancellation_grade": sweep_obs.cancellation_grade if sweep_obs else None,
+        "sweep_drop_rate": sweep_obs.drop_rate if sweep_obs else None,
+        "sweep_r_squared": sweep_obs.slope_observation.r_squared if sweep_obs else None,
+        "sweep_n_input": sweep_obs.n_input if sweep_obs else None,
+        "sweep_n_observed": sweep_obs.n_observed if sweep_obs else None,
+        "sweep_n_dropped": sweep_obs.n_dropped if sweep_obs else None,
+    }
+    return summary
+
+
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
+
+def main() -> None:
+    print("=" * 72)
+    print("ISCO alpha-recovery probe (Schwarzschild saddle-node bifurcation)")
+    print("=" * 72)
+    print(f"Sweep grid: {N_POINTS} log-spaced points in eps = L^2 - 12")
+    print(f"  eps from {EPS_START:.0e} to {EPS_END:.0e}")
+    print(f"Eta (relative perturbation): {ETA:.0e}")
+    print(f"Predicted alpha: 1/2 (saddle-node bifurcation)")
+    print()
+
+    # Sanity check observable values
+    print("Sanity check: g_stable vs g_naive at a few epsilons")
+    print(f"{'eps':>14} {'g_stable':>22} {'g_naive':>22} {'rel_diff':>14}")
+    for eps in [1e-2, 1e-6, 1e-10, 1e-12]:
+        gs = g_stable(eps)
+        gn = g_naive(eps)
+        rel = abs(gs - gn) / max(abs(gs), 1e-300)
+        print(f"{eps:>14.2e} {gs:>22.15e} {gn:>22.15e} {rel:>14.3e}")
+    print()
+
+    results = []
+    for label, observable in [("stable", g_stable), ("naive", g_naive)]:
+        print("-" * 72)
+        print(f"FORM: {label}")
+        print("-" * 72)
+        summary = probe_one(label, observable)
+        results.append(summary)
+
+        print(f"  Alpha probe:")
+        print(f"    status                : {summary['alpha_status']}")
+        oa = summary['observed_alpha']
+        oa_str = f"{oa:.6f}" if oa is not None else "None"
+        print(f"    observed_alpha        : {oa_str}")
+        se = summary['alpha_standard_error']
+        se_str = f"{se:.3e}" if se is not None else "None"
+        print(f"    standard_error        : {se_str}")
+        r2 = summary['alpha_r_squared']
+        r2_str = f"{r2:.6f}" if r2 is not None else "None"
+        print(f"    r_squared             : {r2_str}")
+        print(f"    stability_status      : {summary['alpha_stability_status']}")
+        aws = summary['alpha_window_span']
+        aws_str = f"{aws:.3e}" if aws is not None else "None"
+        print(f"    alpha_window_span     : {aws_str}")
+        print(f"    selected_alpha_model  : {summary['selected_alpha_model']}")
+        print(f"    matching_models       : {summary['matching_models']}")
+        print(f"    n_observed / n_input  : {summary['n_alpha_observed']} / {summary['n_alpha_input']}")
+        print(f"    n_cancellation_dom    : {summary['n_alpha_cancellation_dominated']}")
+        print(f"  Sweep signature:")
+        print(f"    status                : {summary['sweep_status']}")
+        scg = summary['sweep_cancellation_grade']
+        scg_str = f"{scg:.6f}" if scg is not None else "None"
+        print(f"    cancellation_grade    : {scg_str}")
+        sdr = summary['sweep_drop_rate']
+        sdr_str = f"{sdr:.6f}" if sdr is not None else "None"
+        print(f"    drop_rate             : {sdr_str}")
+        srs = summary['sweep_r_squared']
+        srs_str = f"{srs:.6f}" if srs is not None else "None"
+        print(f"    fit r_squared         : {srs_str}")
+        print(f"    n_input/observed/drop : {summary['sweep_n_input']} / {summary['sweep_n_observed']} / {summary['sweep_n_dropped']}")
+        print()
+
+    # Joint interpretation
+    print("=" * 72)
+    print("JOINT INTERPRETATION")
+    print("=" * 72)
+    stable, naive = results
+    print(f"  STABLE form:")
+    print(f"    alpha = {stable['observed_alpha']:.6f}  ({stable['alpha_status']})")
+    print(f"    sweep = {stable['sweep_status']}")
+    print(f"    -> {'alpha matches isco_half_exponent' if stable['selected_alpha_model'] == 'isco_half_exponent' else 'alpha does NOT match isco prediction'}")
+    print()
+    oa_n = naive['observed_alpha']
+    oa_n_str = f"{oa_n:.6f}" if oa_n is not None else "None"
+    print(f"  NAIVE form:")
+    print(f"    alpha = {oa_n_str}  ({naive['alpha_status']})")
+    print(f"    sweep = {naive['sweep_status']}")
+
+    # Output JSON for downstream consumption
+    out_path = Path(__file__).parent / "isco_alpha_recovery_results.json"
+    with out_path.open("w") as fh:
+        json.dump(
+            {
+                "config": {
+                    "n_points": N_POINTS,
+                    "eps_start": EPS_START,
+                    "eps_end": EPS_END,
+                    "eta": ETA,
+                    "predicted_alpha": 0.5,
+                    "predicted_coefficient": math.sqrt(3.0),
+                    "grid": list(EPS_GRID),
+                },
+                "results": results,
+            },
+            fh,
+            indent=2,
+        )
+    print()
+    print(f"Results JSON written to: {out_path}")
+
+
+if __name__ == "__main__":
+    main()

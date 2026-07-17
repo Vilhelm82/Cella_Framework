@@ -1,0 +1,83 @@
+# Lloyd Framework → Cella — Promotion-Candidate Register (metric-free strip)
+
+> **STATUS: ANALYSIS / CROSS-WALK — not canonical, no warrant, no substrate touched.**
+> A pass over `Lloyd_Framework_Reference.md` (17 Apr 2026) asking, of each geometric
+> invariant/method: *can it be stripped to a metric-free connection/coupling form Cella
+> can carry as an exact account (holonomy of the shared residual), and is the mechanism
+> already proven?* D⊕S=P is patented V3-era prior work → anything adopted runs the
+> SUBSTRATE_CONSTRUCTION §3–§4 transplant gate and must be pinned in-repo first.
+
+## The one mechanical strip (applied throughout)
+
+The framework computes through the **shape operator** `Ŝ = −(1/|g|) P H_F P` — the
+Hessian, metric-normalised (`1/|g|`) and tangent-projected (`P`). That normalisation +
+projection **is** the metric. The metric-free replacement:
+
+| Framework (metric) | Cella (connection / coupling, exact ℚ) |
+|---|---|
+| shape operator `Ŝ` | the exact **second-difference tensor** of the residue account across representation axes (difference tower) |
+| principal curvatures (eigenvalues of `Ŝ`) | the difference-tensor's **elementary symmetric functions** (char-poly coefficients) |
+| metric normalisation `1/|g|`, projector `P` | **balance / closure** (the books reconcile) |
+| extrinsic curvature `K_G` | **intrinsic loop-holonomy** of the residue connection |
+| "curvature of the surface" | "obstruction to transporting the account around a loop" |
+
+What survives the strip: the framework's **invariant** content (decompositions, symmetries,
+invariances) — because those are connection content. What does *not*: the coordinate-dependent
+metric parts (the individual `κ` magnitudes, the `|g|` normalisation). The PROVEN framework
+results are mostly the former, which is why so much promotes.
+
+---
+
+## Tier 1 — Strong: metric-free core, mechanism already proven in Cella
+
+| # | Framework item | Metric-free Cella form | Proven anchor |
+|---|---|---|---|
+| 1 | **K_G decomposition** `K_G = κ_c + κ_s + κ_int` (§2.3, PROVEN; sum invariant, terms coordinate-dependent, ratios scale-invariant) | the second-difference tensor's **self (diagonal) ⊕ coupling (mixed/off-diagonal) ⊕ interaction (cross-term)**; sum = the account (invariant), terms = route-dependent | CL-M2 (lattice Clairaut), CL-M3 (tensor inversion, HR137); geometry-arm holonomy (HR138) |
+| 2 | **D↔S symmetry** (§2.4, PROVEN to 8.66×10⁻¹⁵ — "roles not arguments") | holonomy **invariant under axis-relabel**, the centrifuge's S₃ symmetry — and **exact in ℚ**, a Cella upgrade from silicon-close to provably-identity-or-typed-refusal | geometry arm (holonomy invariance); upgrade target |
+| 3 | **Essential-dimension Conjecture 1** `K_G = 0 ⟺ reducible/separable` (§3.1, CONJECTURED 21/21) | **holonomy = 0 ⟺ additively separable** — Cella's *proven* (in-scope) version of the framework's empirical conjecture; the exact-zero null | **CL-G1 / K1 (HR138)** — proven exactly in ℚ |
+| 4 | **Gradient Focusing** — apparent K_G amplification with *no* underlying coupling change (§2.9, PROVEN, 5th fault class) | the **separator**: the account distinguishes genuine coupling from a `|g|`-manufactured artifact — the `route_artifact` classification, exactly | **CL-G3 (HR138)**, the separator keystone |
+| 5 | **Monge Prohibition (OE-5)** — refuse where `Ŝ` degenerates (`|∇f|<ε`) (§2.10, PROVEN) | typed refusal at the **function vertex** of the refusal triangle, where the connection can't transport — **exact** (refuse where the gradient/connection identically vanishes, not within ε) | refusal triangle (HR135); upgrade target |
+| 6 | **Parameterisation Independence** — `K_G` invariant under `F→φ(F)`; decomposition rearranges, sum preserved (§6.5, PROVEN) | holonomy invariant under reparam; the per-term split is route-dependent — **exactly the account-invariant / route-redistributes structure** | geometry arm; CL-M9 (curvature exact, HR137) |
+
+## Tier 2 — Promotable: needs a metric-free re-expression, core is connection/coupling
+
+| # | Framework item | Metric-free Cella form | Note |
+|---|---|---|---|
+| 7 | **Theorem 8.1 — Invariant Preservation under Role Transposition** (the *dichotomy* form; the older "maximality of K / K separates orbits" framing is **SUPERSEDED** by the authors). Every S₃-role-invariant `φ` splits **uniquely** as `φ_K + φ_sym`: a coupling-structural part factoring through `K = (K_spec, K_hol, κ)` + a value-symmetric part factoring through the elementary symmetric polynomials `e₁,e₂,e₃` of `{D,S,P}`. **No third category.** `K` is complete only for **κ>0**; at **κ=0** there is no coupling-structural content. (§2.7 / the 8.1 proof, PROVEN; verified — worked example reproduced) | the **decomposition** is the promotable: any Cella invariant over a (D,S,P) coupling splits cleanly into **the account/holonomy part** (`φ_K`, which Cella natively computes — `K_hol` IS the loop-holonomy of the role cycle) and **the elementary-symmetric part** (`φ_sym`). And the theorem's **"not a privileged projection"** scope note *justifies the K_G demotion* — no scalar (K_G included) is privileged; all factor through `K` equally. | The result is a clean split, **not** a count of irreducible invariants. Cella adds: exact-ℚ holonomy (vs float), exact S₃ symmetry (vs 8.66e-15), and a candidate **hardening** of the proof's one soft spot — the asserted exhaustiveness of (coupling-data, role-labels) — via the exact account. |
+| 8 | **Hierarchy Theorem** — elementary-symmetric-polynomial Floors (Floor 1 = H, Floor n−1 = K_G) (§2.6, PROVEN) | the **symmetric-function hierarchy of the exact second-difference tensor** (its char-poly coefficients) — metric-free, and Cella's tensor (CL-M3) already builds it | Intermediate Floors (n≥4) are new diagnostic surface; aligns with Arm M n≤3 → n>3 frontier. |
+| 9 | **The Lloyd Exponent** — divergence rate of K_G near a degeneracy classifies the boundary (algebraic / log / essential); `a,γ` (§5, PLAUSIBLE) | the **rate the holonomy/residue diverges approaching F** classifies the boundary type — the RFE boundary-classification, in length-space terms | Promote the **mechanism** (rate ⇒ boundary type). **Flag:** the zeta `γ≈7/6` is RH-adjacent, unproven — do NOT promote that value, only the classifier. |
+
+## Tier 3 — Resolution-layer gates (well-posedness, promotable as typed verdicts)
+
+| # | Framework item | Metric-free Cella form |
+|---|---|---|
+| 10 | **Dual Confinement** — unique-decomposition precondition (§2.8, PROVEN) | the condition under which the coupling attribution is unique (**the books close uniquely**) — a certify-vs-refuse gate |
+| 11 | **Three-Regime Structure** — smooth / degenerate / informationally-lossy (§3.2) | Cella's **Resolution** classification: certify / refuse-at-the-function-vertex / refuse-or-auxiliary |
+
+## Out of scope (do NOT promote)
+
+- The **raw shape operator** `Ŝ = −(1/|g|)PH_FP` itself — it *is* the metric; it's what the
+  strip *replaces*, not a candidate. Its metric-free shadow (the difference tensor) is the promotion.
+- **Tiered ML amplification** (§6.7–6.9) — statistical layer, not a geometric primitive, not Cella's lane (Covenant 3 / the perceptual-seam honesty).
+- The **validated industrial results** (§9) — applications/evidence, not primitives (though they are the *consumer* that justifies the whole geometry — the I3-NON-ASSEMBLY "named consumer" gate is already satisfied here: bearing/turbofan/photonic diagnostics).
+
+## Net + the discipline line
+
+The framework's **proven** results promote cleanly because they are about invariant/connection
+content — decomposition, symmetry, parameterisation-independence — exactly the part the metric
+strip preserves. Two of them (Conjecture 1, the separator behind Gradient Focusing) Cella has
+**already proven** as the metric-free holonomy null and the route-artifact separator. And the
+framework's own maximality theorem already carries **holonomy** as an irreducible invariant — so
+the strip extracts the object the framework's theorems pointed at.
+
+Promotion is **adopt-via-transplant** (SUBSTRATE_CONSTRUCTION §3–§4), not import: D⊕S=P is
+patented V3-era prior work; each adopted item decomposes → layer-assigns → generalises →
+reconstructs, with the metric-free derivation closing in Cella, and lands **eval-tier first**
+(the geometry arm is the precedent). And — same drift-line as the rest of the geometry — the
+framework currently lives in an uploaded reference; it must be **pinned in-repo** before L0
+stands on it.
+
+*Recommendation: Tier 1 items 1–6 are the foundation of the length-space geometry (they are the
+K_G machinery, metric-free, mostly already proven). Tier 2 #7 (Theorem 8.1) is the highest-value
+**new** result to chase — a completeness bound telling the re-founding exactly how many coupling
+invariants exist and that holonomy is one. Will rules scope + the transplant.*

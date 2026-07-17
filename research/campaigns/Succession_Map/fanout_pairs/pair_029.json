@@ -1,0 +1,53 @@
+{
+  "rank": 29,
+  "lift": 33.55,
+  "count": 18,
+  "families": 2,
+  "a": {
+    "id": "OBJ:bar-m-epsilon",
+    "label": "bar m_epsilon",
+    "standard_term": "complementary elliptic modulus m' = 1 - m",
+    "nomenclature": "identical-to",
+    "symbols": [
+      "m_epsilon"
+    ]
+  },
+  "b": {
+    "id": "OBJ:m-epsilon-n-epsilon-a-epsilon-b-epsilon",
+    "label": "m_epsilon, n_epsilon, A_epsilon, B_epsilon",
+    "standard_term": "epsilon-parametrized family unifying the primary (k^2, n) and dual (k_dual^2, n_dual) moduli/characteristics with their third-kind-integral coefficients",
+    "nomenclature": "generalization-of",
+    "symbols": [
+      "a_epsilon",
+      "b_epsilon",
+      "m_epsilon",
+      "n_epsilon"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-0090",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Complementary-interval quantities bar m_epsilon, c_epsilon a",
+      "summary": "\\bar m_\\epsilon=1-m_\\epsilon, \\qquad c_\\epsilon=\\frac{m_\\epsilon}{m_\\epsilon-n_\\epsilon}. \\tag{4.5} For the DBP parameters, \\frac{d_\\epsilon}{m_\\epsilon-n_\\epsilon} = \\bar m_\\epsilon. \\tag{4.6}",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md"
+    },
+    {
+      "uid": "U-0147",
+      "type": "definition",
+      "claim_status": null,
+      "label": "DBP parameters m_epsilon, n_epsilon, A_epsilon, B_epsilon",
+      "summary": "m_\\epsilon=\\frac{2-\\epsilon s}{4}, \\qquad n_\\epsilon=\\frac{4-3\\epsilon s}{8}, \\tag{1.1} ... A_\\epsilon=3+2\\epsilon s, \\qquad B_\\epsilon=2+2\\epsilon s. \\tag{1.2}",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md"
+    },
+    {
+      "uid": "U-0720",
+      "type": "theorem",
+      "claim_status": null,
+      "label": "Complete-interval K/Pi reduction of the anti-period",
+      "summary": "I_\\epsilon-I_\\epsilon^T = -t^7A_\\epsilon \\Bigg[ \\Pi(n_\\epsilon;m_\\epsilon) -\\frac{c_\\epsilon}{\\bar m_\\epsilon}K(m_\\epsilon) + \\frac{c_\\epsilon m_\\epsilon}{\\bar m_\\epsilon} \\Pi(\\bar m_\\epsilon;m_\\epsilon) \\Bigg]. \\tag{4.8",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md"
+    }
+  ]
+}

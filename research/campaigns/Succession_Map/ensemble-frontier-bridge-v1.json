@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "graph_id": "cella-ensemble-frontier-bridge",
+  "revision": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "direction": "from is the grammatical subject: from -relation-> to",
+  "authority_policy": "Cross-source bridge: non-DBP pipeline nodes to DBP frontier anchors. Edge-only; compiled with its endpoint sources.",
+  "nodes": [],
+  "edges": [
+    {
+      "id": "e::DBP:paper:II-KN::supersedes::XPR:plan:curv_valuation",
+      "from": "DBP:paper:II-KN",
+      "to": "XPR:plan:curv_valuation",
+      "relation": "supersedes",
+      "label": "DBP:paper:II-KN supersedes XPR:plan:curv_valuation",
+      "basis": "Paper 2 of the plan = KN application. [ensemble<->frontier cross-source edge]",
+      "source_refs": [],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:thm:local_curvature_complete::supersedes::XPR:plan:curv_valuation",
+      "from": "DBP:thm:local_curvature_complete",
+      "to": "XPR:plan:curv_valuation",
+      "relation": "supersedes",
+      "label": "DBP:thm:local_curvature_complete supersedes XPR:plan:curv_valuation",
+      "basis": "Plan fully realized by the completed curvature spine + KN paper. [ensemble<->frontier cross-source edge]",
+      "source_refs": [],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::GFL:thm:role_invariance::depends_on::DBP:thm:theorem_8_1",
+      "from": "GFL:thm:role_invariance",
+      "to": "DBP:thm:theorem_8_1",
+      "relation": "depends_on",
+      "label": "GFL:thm:role_invariance depends_on DBP:thm:theorem_8_1",
+      "basis": "Same Theorem-8.1 lineage: applied form of the abstract Invariant-Preservation theorem. [ensemble<->frontier cross-source edge]",
+      "source_refs": [],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::XPR:cert:cce_gates::derived_from_campaign::DBP:campaign:cce",
+      "from": "XPR:cert:cce_gates",
+      "to": "DBP:campaign:cce",
+      "relation": "derived_from_campaign",
+      "label": "XPR:cert:cce_gates derived_from_campaign DBP:campaign:cce",
+      "basis": "CCE-7/8 + R3 gates parked in cross_program. [ensemble<->frontier cross-source edge]",
+      "source_refs": [],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::XPR:proof:e_atom::cites::DBP:paper:III",
+      "from": "XPR:proof:e_atom",
+      "to": "DBP:paper:III",
+      "relation": "cites",
+      "label": "XPR:proof:e_atom cites DBP:paper:III",
+      "basis": "Legendre bilinear pinning feeds the periods program. [ensemble<->frontier cross-source edge]",
+      "source_refs": [],
+      "facets": {},
+      "extensions": {}
+    }
+  ],
+  "extensions": {
+    "role": "cross_source_bridge"
+  }
+}

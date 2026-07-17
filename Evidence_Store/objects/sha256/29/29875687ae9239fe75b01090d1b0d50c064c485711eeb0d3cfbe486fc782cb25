@@ -1,0 +1,444 @@
+"""Phase 2 Task A - Precision-Scaling Separation Manifold Boundary Test.
+
+EVAL-LAYER ONLY. Instruments (numpy, decimal, fractions.Fraction) are used as
+MEASUREMENT APPARATUS, never as substrate. No mathematical constants are
+hardcoded as substrate truth. Every numerical claim is backed by either an
+IEEE 754 raw value (.hex()) or an EXACT (fractions.Fraction) reduction.
+
+Run from repo root:
+    PYTHONPATH=src python3 scratch/phase2A_precision_scaling_boundary.py
+
+Objective
+---------
+Theorem 3 / Task 017c: the linear precision-scaling model
+
+        C_{p,k} = a_k + u_p * b_k
+
+holds with R^2 = 1.0 in the *regular* region (operand far from the
+singularity / Sterbenz boundary). This harness marches each of the four
+fixtures' operands toward the singularity (direct value f -> 0) at fine
+resolution, computes a per-f R^2 of the C_{p,k}-vs-u_p fit, and locates the
+EXACT f cell where R^2 first departs from 1.0. It then performs an exact
+Fraction decomposition of C_{p,k} at the collapse cell to NAME the dominating
+sub-leading term, and rules out the instrument-tier-floor explanation by
+re-anchoring against two widely separated decimal tiers.
+
+What C_{p,k} is, here
+---------------------
+We reuse the Task 017c definition: C_{p,k} is the magnitude of the four-form
+residual at precision p for path k. For an exactly-representable mathematical
+identity (e.g. F1 = power - direct = sqrt(1-2/r)^2 - (1-2/r), ideally 0), the
+residual is pure round-off and, in the regular region, scales as ~ C * u_p.
+
+The four fixtures (mirrored from precision_bound_fixtures._binary_values):
+    schwarzschild : direct = 1 - 2/r            (Sterbenz boundary r = 4)
+    sr            : direct = 1 - beta^2          (Sterbenz boundary beta = 1/sqrt(2))
+    pure_algebraic: direct = 1 - x              (Sterbenz boundary x = 0.5)
+    cbrt_chain    : direct = 1 - x, n=3 root    (Sterbenz boundary x = 0.5)
+
+"Marching toward the singularity" means driving `direct` (= f) toward 0:
+    schwarzschild f -> 0 as r -> 2
+    sr            f -> 0 as beta -> 1
+    pure_algebraic/cbrt f -> 0 as x -> 1
+
+Precision ladder
+----------------
+float32, float64, float128 (CAVEAT: 80-bit x86 extended on this host, NOT IEEE
+binary128) plus a Decimal high-precision anchor. For the instrument rule-out we
+use TWO Decimal tiers (decimal_50, decimal_120) that sit far above the float128
+floor; if the "boundary" were merely the anchor hitting its own floor, moving
+the anchor tier would move the boundary. If the boundary cell is invariant to
+the anchor tier, the boundary is intrinsic to the binary-float arithmetic.
+
+Burden-of-proof gates (reported in the JSON trace):
+    (i)   exact f threshold where R^2 first departs from 1.0 (bracketed)
+    (ii)  dominating term, shown dominant by exact Fraction decomposition
+    (iii) confirmed NOT merely an instrument-tier artifact
+"""
+
+from __future__ import annotations
+
+import json
+import math
+from decimal import Decimal, localcontext
+from fractions import Fraction
+from pathlib import Path
+from typing import Any
+
+import numpy as np
+
+from lloyd_v4.evals.precision.linear_fit import fit_linear
+
+FIXTURES = ("schwarzschild", "sr", "pure_algebraic", "cbrt_chain")
+
+STERBENZ_BOUNDARY = {
+    "schwarzschild": 4.0,
+    "sr": 2.0 ** -0.5,
+    "pure_algebraic": 0.5,
+    "cbrt_chain": 0.5,
+}
+
+BINARY_PRECISIONS = ("float32", "float64", "float128")
+DECIMAL_ANCHORS = ("decimal_50", "decimal_120")
+
+
+def _dtype(label: str):
+    return {"float32": np.float32, "float64": np.float64, "float128": np.float128}[label]
+
+
+def u_p_float(label: str) -> float:
+    """Unit round-off as a float: binary eps/2 from numpy introspection, or the
+    decimal half-ulp convention 5*10^-prec (mirrors unit_roundoff.u_p)."""
+    if label in ("float32", "float64", "float128"):
+        return float(np.finfo(_dtype(label)).eps) / 2.0
+    if label.startswith("decimal_"):
+        prec = int(label.split("_", 1)[1])
+        return float(Decimal(5) * (Decimal(10) ** Decimal(-prec)))
+    raise ValueError(label)
+
+
+def operand_for_f(fixture: str, f: float) -> float:
+    """Invert direct(operand) = f to get the operand (exact algebra in float)."""
+    if fixture == "schwarzschild":
+        return 2.0 / (1.0 - f)            # f = 1 - 2/r
+    if fixture == "sr":
+        return float(np.sqrt(1.0 - f))    # f = 1 - beta^2
+    if fixture in ("pure_algebraic", "cbrt_chain"):
+        return 1.0 - f                    # f = 1 - x
+    raise ValueError(fixture)
+
+
+def f_grid(n_per_decade: int = 24, f_max: float = 0.9, f_min_exp: int = 12) -> tuple[float, ...]:
+    """Deterministic log-spaced f grid from f_max down to ~10^-f_min_exp,
+    marching toward the singularity. f=0.5 (common Sterbenz boundary) forced in.
+    No RNG."""
+    lo = -float(f_min_exp)
+    hi = math.log10(f_max)
+    n = int(round((hi - lo) * n_per_decade)) + 1
+    out = []
+    for i in range(n):
+        t = hi + (lo - hi) * (i / (n - 1))
+        out.append(10.0 ** t)
+    out.append(0.5)
+    return tuple(sorted(set(out), reverse=True))
+
+
+def binary_residual(fixture: str, operand: float, label: str, path: str = "F1") -> float:
+    """IEEE 754 residual magnitude for the given path at binary precision."""
+    s = _dtype(label)
+    one = s(1.0)
+    two = s(2.0)
+    value = s(operand)
+    if fixture == "schwarzschild":
+        direct = one - two / value
+        x_term = two / value
+        root = np.sqrt(direct)
+        power = root * root
+    elif fixture == "sr":
+        squared = value * value
+        direct = one - squared
+        x_term = squared
+        root = np.sqrt(direct)
+        power = root * root
+    elif fixture == "pure_algebraic":
+        direct = one - value
+        x_term = value
+        root = np.sqrt(direct)
+        power = root * root
+    elif fixture == "cbrt_chain":
+        direct = one - value
+        x_term = value
+        root = np.cbrt(direct)
+        power = root * root * root
+    else:
+        raise ValueError(fixture)
+    if path == "F1":
+        return abs(float(power - direct))
+    if path == "F2":
+        return abs(float(power - one + x_term))
+    raise ValueError(path)
+
+
+def decimal_residual(fixture: str, operand: float, prec: int, path: str = "F1") -> float:
+    """Decimal-tier residual magnitude (true high-precision anchor)."""
+    with localcontext() as ctx:
+        ctx.prec = prec
+        one = Decimal(1)
+        two = Decimal(2)
+        value = Decimal.from_float(float(operand))
+        if fixture == "schwarzschild":
+            direct = one - two / value
+            x_term = two / value
+        elif fixture == "sr":
+            squared = value * value
+            direct = one - squared
+            x_term = squared
+        elif fixture == "pure_algebraic":
+            direct = one - value
+            x_term = value
+        else:
+            raise ValueError("decimal tier not defined for fixture: " + fixture)
+        root = direct.sqrt()
+        power = root * root
+        if path == "F1":
+            return abs(float(power - direct))
+        if path == "F2":
+            return abs(float(power - one + x_term))
+        raise ValueError(path)
+
+
+def per_f_point(fixture: str, f: float, anchor_label: str | None, path: str = "F1") -> dict[str, Any]:
+    """Fit C_{p,k} (= |residual|) vs u_p across the precision ladder at a single
+    f. The fit is across precisions (Theorem 3): C scaling with u_p."""
+    operand = operand_for_f(fixture, f)
+    xs: list[float] = []
+    ys: list[float] = []
+    per_prec: dict[str, float] = {}
+    for label in BINARY_PRECISIONS:
+        res = binary_residual(fixture, operand, label, path)
+        xs.append(u_p_float(label))
+        ys.append(res)
+        per_prec[label] = res
+    if anchor_label is not None and fixture != "cbrt_chain":
+        prec = int(anchor_label.split("_", 1)[1])
+        res = decimal_residual(fixture, operand, prec, path)
+        xs.append(u_p_float(anchor_label))
+        ys.append(res)
+        per_prec[anchor_label] = res
+    fit = fit_linear(xs, ys)
+    nonzero_ys = [y for y in ys if y != 0.0]
+    n_distinct_nonzero = len(set(nonzero_ys))
+    return {
+        "f": f,
+        "operand": operand,
+        "anchor": anchor_label if fixture != "cbrt_chain" else None,
+        "r_squared": fit.r_squared,
+        "slope_b_k": fit.slope,
+        "intercept_a_k": fit.intercept,
+        "per_precision_residual": per_prec,
+        # Degenerate-fit diagnosis: a C-vs-u_p fit only carries SUBSTRATE
+        # information if at least two tiers produce DISTINCT nonzero residuals.
+        # If only one tier is nonzero (or all distinct nonzero values collapse
+        # to a single magnitude), any R^2 != 1.0 is a least-squares rounding
+        # artifact, NOT a substrate boundary.
+        "n_tiers_total": len(ys),
+        "n_tiers_nonzero": len(nonzero_ys),
+        "n_distinct_nonzero_residuals": n_distinct_nonzero,
+        "fit_carries_substrate_signal": bool(n_distinct_nonzero >= 2),
+    }
+
+
+def find_boundary(fixture: str, anchor_label: str | None, r2_tol: float = 1.0 - 1e-9) -> dict[str, Any]:
+    """March f from regular (high) toward singular (low). Bracket the first f
+    where R^2 drops below r2_tol between last_clean and first_dirty."""
+    grid = f_grid()
+    curve = [per_f_point(fixture, f, anchor_label) for f in grid]
+    last_clean = None
+    first_dirty = None
+    for pt in curve:
+        if pt["r_squared"] >= r2_tol:
+            last_clean = pt
+        else:
+            first_dirty = pt
+            break
+    # Does ANY cell on the whole march carry genuine multi-tier substrate
+    # signal? If not, the entire R^2 curve is degenerate and no substrate
+    # boundary can exist on this path/fixture regardless of where R^2 wobbles.
+    any_substrate_signal = any(pt["fit_carries_substrate_signal"] for pt in curve)
+    dirty_has_signal = bool(first_dirty["fit_carries_substrate_signal"]) if first_dirty else None
+    return {
+        "fixture": fixture,
+        "anchor_label": anchor_label if fixture != "cbrt_chain" else None,
+        "r2_tol": r2_tol,
+        "curve": curve,
+        "last_clean_f": (last_clean["f"] if last_clean else None),
+        "first_dirty_f": (first_dirty["f"] if first_dirty else None),
+        "last_clean": last_clean,
+        "first_dirty": first_dirty,
+        "sterbenz_boundary_f": 0.5,
+        "any_cell_carries_substrate_signal": any_substrate_signal,
+        "first_dirty_cell_carries_substrate_signal": dirty_has_signal,
+    }
+
+
+def _frac(x: float) -> Fraction:
+    return Fraction(x)
+
+
+def exact_decomposition(fixture: str, operand: float, label: str) -> dict[str, Any]:
+    """Exactly decompose the F1 residual at the given binary precision into:
+        eps_root_sqrt_roundtrip = root_stored^n - direct_stored   (exact)
+        eps_pow_squaring_round  = power_stored - root_stored^n     (exact)
+    so F1_exact = eps_pow + eps_root, EXACTLY (additive_check must reduce to 0).
+    The dominating term is the larger-|.| of the two; report the ratio."""
+    s = _dtype(label)
+    one = s(1.0)
+    two = s(2.0)
+    value = s(operand)
+    if fixture == "schwarzschild":
+        direct = one - two / value
+        root = np.sqrt(direct)
+        n = 2
+    elif fixture == "sr":
+        squared = value * value
+        direct = one - squared
+        root = np.sqrt(direct)
+        n = 2
+    elif fixture == "pure_algebraic":
+        direct = one - value
+        root = np.sqrt(direct)
+        n = 2
+    elif fixture == "cbrt_chain":
+        direct = one - value
+        root = np.cbrt(direct)
+        n = 3
+    else:
+        raise ValueError(fixture)
+    power = root * root if n == 2 else root * root * root
+
+    direct_q = _frac(float(direct))
+    root_q = _frac(float(root))
+    power_q = _frac(float(power))
+
+    root_pow_exact = root_q ** n
+    eps_root = root_pow_exact - direct_q
+    eps_pow = power_q - root_pow_exact
+    f1_exact = power_q - direct_q
+
+    rel = (abs(f1_exact) / abs(direct_q)) if direct_q != 0 else None
+    terms = {"eps_pow_squaring_round": eps_pow, "eps_root_sqrt_roundtrip": eps_root}
+    dominating = max(terms, key=lambda k: abs(terms[k]))
+    other = "eps_root_sqrt_roundtrip" if dominating == "eps_pow_squaring_round" else "eps_pow_squaring_round"
+    ratio = (abs(terms[dominating]) / abs(terms[other])) if terms[other] != 0 else None
+
+    return {
+        "precision_label": label,
+        "operand": float(operand),
+        "operand_hex": float(operand).hex(),
+        "direct_stored": float(direct),
+        "direct_stored_hex": float(direct).hex(),
+        "root_stored": float(root),
+        "root_stored_hex": float(root).hex(),
+        "power_stored": float(power),
+        "power_stored_hex": float(power).hex(),
+        "f1_exact_num": str(f1_exact.numerator),
+        "f1_exact_den": str(f1_exact.denominator),
+        "f1_exact_float": float(f1_exact),
+        "eps_pow_squaring_round_float": float(eps_pow),
+        "eps_root_sqrt_roundtrip_float": float(eps_root),
+        "additive_check_exact": str(eps_pow + eps_root - f1_exact),  # must be "0"
+        "relative_residual_float": (float(rel) if rel is not None else None),
+        "dominating_term": dominating,
+        "dominating_over_other_ratio": (float(ratio) if ratio is not None else None),
+    }
+
+
+def build_trace() -> dict[str, Any]:
+    info128 = np.finfo(np.float128)
+    info64 = np.finfo(np.float64)
+    platform = {
+        "float128_bits": int(info128.bits),
+        "float128_precision_decimal_digits": int(info128.precision),
+        "float128_eps": str(info128.eps),
+        "float64_bits": int(info64.bits),
+        "float64_eps": str(info64.eps),
+        "float128_is_ieee_binary128": bool(int(info128.bits) == 128 and int(info128.precision) >= 33),
+        "caveat": (
+            "numpy.float128 is 80-bit x86 extended on this host (storage 128 bits, "
+            "~64-bit mantissa, ~18-19 decimal digits); treated as caveated. Decimal "
+            "anchors are the true high-precision reference."
+        ),
+    }
+
+    fixtures_out: dict[str, Any] = {}
+    for fixture in FIXTURES:
+        anchors = (None,) if fixture == "cbrt_chain" else DECIMAL_ANCHORS
+        by_anchor: dict[str, Any] = {}
+        for anchor in anchors:
+            key = anchor if anchor is not None else "binary_only"
+            by_anchor[key] = find_boundary(fixture, anchor)
+
+        dirty_fs = [v["first_dirty_f"] for v in by_anchor.values() if v["first_dirty_f"] is not None]
+        anchor_invariant = (len(set(round(x, 12) for x in dirty_fs)) <= 1) if len(dirty_fs) >= 2 else None
+
+        primary = next(iter(by_anchor.values()))
+        collapse = primary["first_dirty"]
+
+        # Boundary classification (the honest verdict).
+        # A found R^2 departure is a SUBSTRATE boundary only if:
+        #   (a) the first-dirty cell carries genuine multi-tier signal
+        #       (>=2 distinct nonzero residuals), AND
+        #   (b) the boundary is invariant to the decimal anchor tier.
+        # Otherwise it is a degenerate-fit / instrument artifact.
+        any_signal_any_anchor = any(v.get("any_cell_carries_substrate_signal") for v in by_anchor.values())
+        dirty_signal = primary.get("first_dirty_cell_carries_substrate_signal")
+        if not any_signal_any_anchor:
+            classification = "no_substrate_boundary_exists_path_residual_is_exact_zero_in_float64_and_above"
+        elif dirty_signal and (anchor_invariant or anchor_invariant is None):
+            classification = "candidate_substrate_boundary"
+        else:
+            classification = "degenerate_fit_artifact_not_a_substrate_boundary"
+        decomposition = None
+        if collapse is not None:
+            decomposition = {
+                "float64": exact_decomposition(fixture, collapse["operand"], "float64"),
+                "float32": exact_decomposition(fixture, collapse["operand"], "float32"),
+            }
+
+        fixtures_out[fixture] = {
+            "sterbenz_boundary_operand": STERBENZ_BOUNDARY[fixture],
+            "boundary_classification": classification,
+            "boundary_by_anchor": by_anchor,
+            "instrument_ruleout": {
+                "first_dirty_f_per_anchor": {k: v["first_dirty_f"] for k, v in by_anchor.items()},
+                "anchor_invariant_boundary": anchor_invariant,
+                "interpretation": (
+                    "boundary invariant across decimal anchors => intrinsic to binary arithmetic, NOT an anchor-floor artifact"
+                    if anchor_invariant
+                    else "boundary moves with anchor tier => suspect instrument-floor artifact"
+                    if anchor_invariant is False
+                    else "single (binary-only) ladder for cbrt; instrument rule-out via per-tier residual self-consistency"
+                ),
+            },
+            "exact_decomposition_at_collapse": decomposition,
+        }
+
+    return {
+        "task": "phase2A_precision_scaling_boundary",
+        "model": "C_{p,k} = a_k + u_p * b_k  (Theorem 3 / Task 017c)",
+        "path_under_test": "F1",
+        "binary_precisions": list(BINARY_PRECISIONS),
+        "decimal_anchors": list(DECIMAL_ANCHORS),
+        "f_grid_spec": {"n_per_decade": 24, "f_max": 0.9, "f_min_exp": 12, "forced_points": [0.5]},
+        "platform": platform,
+        "fixtures": fixtures_out,
+    }
+
+
+def main() -> None:
+    trace = build_trace()
+    out_path = Path(__file__).resolve().parent / "phase2A_boundary_trace.json"
+    text = json.dumps(trace, sort_keys=True, indent=2, allow_nan=False) + "\n"
+    out_path.write_text(text, encoding="utf-8")
+    for fixture, data in trace["fixtures"].items():
+        ro = data["instrument_ruleout"]
+        primary_anchor = next(iter(data["boundary_by_anchor"].values()))
+        print(
+            f"{fixture}: last_clean_f={primary_anchor['last_clean_f']} "
+            f"first_dirty_f={primary_anchor['first_dirty_f']} "
+            f"anchor_invariant={ro['anchor_invariant_boundary']} "
+            f"any_substrate_signal={primary_anchor.get('any_cell_carries_substrate_signal')}"
+        )
+        print(f"    CLASSIFICATION: {data['boundary_classification']}")
+        dec = data["exact_decomposition_at_collapse"]
+        if dec:
+            d64 = dec["float64"]
+            print(
+                f"    float64 dominating={d64['dominating_term']} "
+                f"ratio={d64['dominating_over_other_ratio']} "
+                f"additive_check={d64['additive_check_exact']}"
+            )
+
+
+if __name__ == "__main__":
+    main()

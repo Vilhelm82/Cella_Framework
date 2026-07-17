@@ -1,0 +1,196 @@
+# S2 closed form + the two-fixture divergence (verification note)
+
+**Purpose.** Give the executor a checkable, closed-form account of the Phase-A candidate channel
+`S2 = d^2/dt^2 ( log2 |base_operand| )`, prove it is an exact function of the operand jet (the
+*positive* result the prereg files as "metrology"), and prove it is **not** a univariate function of
+`kappa` or `y''` (so prereg cells `S2-vs-kappa` and `S2-vs-y''` are analytically pre-destined to FAIL,
+and the D.5 mapping `all-FAIL => H_zero_jet_only` is invalid).
+
+**ASCII-clean** for the wkhtmltopdf path: `^` = power, `sqrt()` = root, `w'` = `dw/dt`, etc.
+Every numeric below is reproducible against `phase_1_geometry_table.json` + an FD ladder on
+`F(t) = log2|base_operand(t)|`. Verify, do not trust.
+
+---
+
+## 1. Objects
+
+- `base_operand(t) = w(t) = 1 - x_term(t)`. Per fixture:
+  - pure_algebraic: `t = x`, `x_term = x`  => `w = 1 - t`,    `w' = -1`,           `w'' = 0`.
+  - Schwarzschild:  `t = r`, `x_term = 2/r` => `w = 1 - 2/t`,  `w' = 2/t^2`,        `w'' = -4/t^3`.
+  - SR:             `t = beta`, `x_term = b^2` => `w = 1 - t^2`, `w' = -2t`,         `w'' = -2`.
+- natural function `y = sqrt(w)` (the curve the geometry table reads).
+- fingerprint `F(t) = log2|w| = (1/ln2) ln w`  (w > 0 on all relevant domains).
+
+---
+
+## 2. S2 in closed form (the positive result)
+
+```
+F   = (1/ln2) ln w
+F'  = (1/ln2) (w'/w)
+S2  := F'' = (1/ln2) ( w''/w - (w'/w)^2 ) = (1/ln2) ( w*w'' - (w')^2 ) / w^2.      [EXACT]
+```
+
+In y-variables (using `w = y^2`, `w' = 2 y y'`, `w'' = 2 y'^2 + 2 y y''`):
+
+```
+w''/w - (w'/w)^2 = 2( y''/y - (y'/y)^2 )
+=>  S2 = (2/ln2) ( y''/y - (y'/y)^2 )  ==  G2.        [EXACT — identical to the prereg's G2]
+```
+
+**This is the genuine cross-fixture invariant.** `G2` is the *same closed-form differential operator*
+of the operand jet in every fixture. The prereg's §B metrology check (`FD S2 == G2` to 1e-3) is
+therefore not bookkeeping — it *is* the multivariate-jet verdict, and it passes by construction. The
+substrate carries the full local 2-jet, universally, as `G2`.
+
+What differs across fixtures is only the **path** `(w, w', w'')(t)` each one traces — because each has
+a different `x_term(t)`. Same operator; different trajectory through its domain.
+
+### Arc-length form (the channel the prereg verdicts on)
+
+`s` = arc length of the graph `(t, y)`, `ds/dt = sigma = sqrt(1 + y'^2)`.
+
+```
+S2_s := d^2F/ds^2 = F''/sigma^2 - F' * (y' y'') / sigma^4
+      = S2/(1+y'^2) - F' * y' y'' / (1+y'^2)^2,     F' = (2/ln2)(y'/y).      [EXACT]
+```
+
+Reparametrization is a smooth positive rescaling; it does not rescue the univariate collapse (§4).
+
+---
+
+## 3. Per-fixture closed forms
+
+Using the general results `S2 = (1/ln2)(w*w'' - (w')^2)/w^2` and
+`kappa = 2|2w*w'' - (w')^2| / (4w + (w')^2)^(3/2)`:
+
+| fixture | w(t) | S2(w) | kappa(w) |
+|---|---|---|---|
+| pure_algebraic | `1 - t` | `-(1/ln2) / w^2` | `2 / (4w+1)^(3/2)` |
+| Schwarzschild | `1 - 2/t` | `-(1/(4 ln2)) (1-w)^3 (1+w) / w^2` | `4 (1-w)^3 (3w+1) / (16w + (1-w)^4)^(3/2)` |
+| SR | `1 - t^2` | `(2/ln2) (w - 2) / w^2` | `1`  (identically) |
+
+Schwarzschild substitutions used: `2/t = 1-w`, `w' = (1-w)^2/2`, `w'' = -(1-w)^3/2`.
+
+**Check 1 (cheap, decisive instrument sanity):** `kappa_SR == 1` for every SR row to FD tolerance.
+SR's natural function traces the unit semicircle `beta^2 + y^2 = 1`, radius 1, curvature exactly 1.
+If the geometry table's `principal_curvature` on SR is not ~1, the FD ladder or the table is wrong.
+
+---
+
+## 4. S2 is NOT a univariate function of kappa (the negative)
+
+### 4.1 Internal proof on SR — no cross-fixture run required
+
+On SR, `kappa == 1` everywhere, yet:
+
+```
+S2_SR   = (2/ln2)(w - 2)/w^2          (raw)
+S2_s,SR = -(2/ln2)/w                  (arc length; on the unit circle s = angle, F = 2 log2 sin(s))
+```
+
+both vary strongly with `w` (i.e. with beta) while `kappa` is pinned. Numerics (ln2 = 0.693147,
+2/ln2 = 2.885390), over stable rows:
+
+```
+w = 0.9:  S2_SR = 2.885390 * (-1.1)/0.81   = -3.92      S2_s,SR = -2.885390/0.9 = -3.21
+w = 0.5:  S2_SR = 2.885390 * (-1.5)/0.25   = -17.31     S2_s,SR = -2.885390/0.5 = -5.77
+w = 0.1:  S2_SR = 2.885390 * (-1.9)/0.01   = -548.2     S2_s,SR = -2.885390/0.1 = -28.85
+```
+
+`kappa` is constant; `S2` (and `S2_s`) sweep by >4x across the stable range and diverge without bound
+toward small `w`. **A function of kappa alone would be constant here. S2 is not. QED — S2 is not a
+univariate function of kappa.** The SR slice the prereg uses for the "noise floor" is in fact a direct
+disproof of the univariate hypothesis; its large residual is not instrument noise, it is the operand
+magnitude `w` that `S2` carries and `kappa` discards.
+
+### 4.2 Cross-fixture quantification (the actual verdict fixtures, at matched kappa)
+
+Pick `kappa = 1` (inside the overlap [0.18, 1.89]) and solve each fixture's `kappa(w) = 1`:
+
+```
+pure_algebraic:  (4w+1)^(3/2) = 2  =>  4w+1 = 2^(2/3) = 1.587401  =>  w_PA = 0.146850
+                 S2_PA = -(1/ln2)/w^2 = -1.442695 / 0.0215650 = -66.90
+
+Schwarzschild:   4(1-w)^3(3w+1)/(16w+(1-w)^4)^(3/2) = 1  =>  w_Schw ~= 0.11178  (numeric root)
+                 S2_Schw = -(1/(4 ln2)) (1-w)^3(1+w)/w^2 ~= -22.5
+```
+
+At the *same* geometric curvature, the substrate channel differs by a factor ~**3.0x** (-66.90 vs
+-22.5). That is far outside any plausible `2 x noise_floor` band. The `S2-vs-kappa` cells FAIL, and
+fail large. (`S2-vs-y''` fails by the same mechanism: matching `y''` instead and comparing `S2` gives
+~-16.9 vs ~-22.5, a ~35% gap — also outside the band. The driver is identical: `S2` carries the
+operand magnitude `w`, which neither `kappa` nor `y''` determines.)
+
+### 4.3 Why this is forced, not coincidental
+
+`kappa = |y''|/(1+y'^2)^(3/2)` is built from `(y', y'')` only — it is blind to the operand height `y`
+(equivalently `w`). `S2 = (2/ln2)(y''/y - (y'/y)^2)` carries `y` explicitly. So at any fixed `kappa`,
+`S2` still moves with `w`, and `w` at matched `kappa` differs across fixtures (it differs even within
+SR at fixed kappa, §4.1). The univariate collapse cannot happen. No tuning of bins, floor, or
+arc-length changes this; it is structural.
+
+---
+
+## 5. Consequence for the prereg verdict logic
+
+The analytically expected outcome of the prereg as written:
+
+```
+MULTIVARIATE (S2 == G2, the §B "metrology" check):  PASS   (by construction)
+S2-vs-kappa  :  FAIL  (factor ~3x at matched kappa; SR disproof)
+S2-vs-y''    :  FAIL  (~35% at matched y''; same mechanism)
+S2_s cells   :  FAIL  (arc length does not rescue univariate collapse)
+S0-vs-kappa  :  FAIL  (the pre-registered negative control)
+```
+
+The run therefore lands in D.5's branch "all candidate cells FAIL => H_zero_jet_only holds => clean
+negative." **That conclusion is false.** `S2` is provably (a) not noise and (b) not fixture-bound as a
+function — it is the *same exact* jet operator `G2` in every fixture (the MULTIVARIATE cell PASSES).
+Univariate failure against a single intrinsic scalar does not establish "only the 0-jet is shared." It
+establishes only that `S2` is genuinely multivariate / carries the operand height that `kappa`
+discards.
+
+**Required amendment before freeze (restated):**
+
+1. Promote the `S2 == G2` check to a verdict cell `MULTIVARIATE_JET`. PASS => substrate carries the
+   full 2-jet universally.
+2. `H_zero_jet_only` is supported only if the MULTIVARIATE cell *also* fails. It will not fail here, so
+   the honest verdict is **positive-but-multivariate**, not a clean negative.
+3. Re-map D.5:
+   - MULTIVARIATE PASS + `S2_s-vs-kappa` PASS  => substrate tracks Euclidean curvature directly. (Ruled
+     out analytically above; include for completeness.)
+   - MULTIVARIATE PASS + univariate all FAIL   => **substrate carries the full operand 2-jet; the
+     universal observable is the operand log-acceleration `G2`; it does not reduce to `kappa` because
+     `kappa` is blind to the operand height the substrate keeps.** This is the expected, correct result.
+   - MULTIVARIATE FAIL => only then the clean negative.
+
+---
+
+## 6. The honest headline (reachable now)
+
+For these 1D-curve fixtures there is no nontrivial cross-embedding *intrinsic* invariant to discover: a
+1D curve has zero intrinsic curvature, `kappa` is the extrinsic invariant, and the substrate already
+carries the full extrinsic 2-jet exactly via `G2`. "Find a substrate observable that is a geometric
+invariant across fixtures" is answered — the observable is `G2 = (2/ln2)(y''/y - (y'/y)^2)`, the operand
+log-acceleration — but it does not collapse onto `kappa`, because `kappa` throws away the height `G2`
+retains. That mismatch is the precise, measurable location where "the algebraic handle is lost": not in
+transcendence, but at the projection that drops the operand magnitude.
+
+For the V3 rebuild this is usable as-is: `G2` is substrate-native (an exact differential of the operand
+chain), reproducible in any fixture, and `kappa` is recoverable from it only with the extra height term
+the bits do not carry. The rebuild should express V3's curvature diagnostics in `G2` and treat `kappa`
+as its (lossy) continuum projection — the Axiom-11/12-clean direction.
+
+---
+
+## 7. Reproduce-before-trust checklist (in-code)
+
+- [ ] `kappa_SR ~= 1` for all stable SR rows (FD tolerance). [Check 1]
+- [ ] FD `S2` matches the per-fixture closed forms in §3 (relative 1e-3 on stable rows).
+- [ ] On SR, `S2` and `S2_s` vary > 4x across stable rows while `kappa` is pinned. [§4.1]
+- [ ] At `kappa = 1`: `w_PA = 0.146850`, `S2_PA = -66.90`; `w_Schw ~= 0.1118`, `S2_Schw ~= -22.5`;
+      ratio ~3.0x. [§4.2]
+- [ ] FD `S2` matches `G2` (the y-form) to 1e-3 in *both* varying-kappa fixtures => MULTIVARIATE PASS.
+- [ ] Any disagreement with the above => the closed form here is wrong; do not amend the prereg until
+      the discrepancy is resolved (this note is graded against the FD ladder, not the reverse).

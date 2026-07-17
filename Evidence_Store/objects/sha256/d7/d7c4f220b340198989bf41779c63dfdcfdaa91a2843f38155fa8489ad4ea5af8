@@ -1,0 +1,48 @@
+# Rounding-Dial — SUBNORMAL regime — Closeout
+
+**Date:** 2026-06-05 · research-grade, eval-layer, exact rounding (Fraction).
+Code: `scratch/rounding_dial_curve.py 3 sub` · Curve: `scratch/rounding_dial_curve_sub.html`.
+
+## What was tested
+The same form family (chains computing the integer target, two roots √/∛), but with every operand
+**scaled into the subnormal range** (target SC = 2⁻¹⁰⁵⁰; terms land ~2⁻¹⁰⁵³, ~21 mantissa bits) so the
+arithmetic rounds on the **absolute 2⁻¹⁰⁷⁴ grid** instead of a relative ulp. Form *selection* stays
+algebraic (normal range, scale-invariant); only the rounding *regime* changes. Rounding is scored
+per-operation in that operation's own ulp (scale-free); BACL is the deviation on the integer-ulp lattice.
+
+## Result — the subnormal dial is the OPPOSITE of ragged
+| root | genuine forms | rounding span (ulp) | BACL |
+|---|---|---|---|
+| sqrt (n=2) | 4 | 0.243 → 0.499 | **100%** |
+| cbrt (n=3) | 4 | 0.221 → 0.691 | **100%** |
+
+Three findings, all structural:
+
+1. **BACL is trivially 100% — cleanliness becomes automatic.** Subnormals *are* exactly the integer
+   multiples of 2⁻¹⁰⁷⁴; any subnormal deviation is an integer number of ulps by definition. The whole
+   "off-lattice" axis that carried information in normal range goes flat here. There is no BACL story to
+   tell in subnormal cancellation — the lattice *is* the representable set.
+
+2. **The dial collapses (225/12 → 4/4 forms).** Subnormal `+`/`−` is **exact** (sum of two integer
+   multiples of 2⁻¹⁰⁷⁴ is representable), so re-association and detour padding cost nothing — dozens of
+   normal-range-distinct chains become rounding-identical. Only the multiplications that build xⁿ round,
+   so the dial has just a handful of distinguishable notches.
+
+3. **Cbrt still sits higher (0.69 vs 0.50 ulp).** The one surviving differentiator — multiplications —
+   is exactly where cbrt pays more (two multiplies for the cube vs one for the square). The root-cost
+   ordering from the normal dial survives into the subnormal regime, now as the *only* signal.
+
+## Honest correction to the earlier prediction
+I had teased that cbrt would go **ragged** here (the subnormal-C `j∈{−4..+1}` binade-drop). That was
+wrong for *this* test. The `j` raggedness lives in subnormal **root extraction** — `cbrt(subnormal
+radicand)` and whether `round(cbrt(s))³` reconstructs `s`. This dial computes the root in **normal**
+range and only the **cancellation** is subnormal — and subnormal cancellation is maximally clean
+(findings 1–2). The two are different regimes:
+- **Subnormal cancellation** (built here): clean, BACL-trivial, dial collapses.
+- **Subnormal root extraction** (subnormal-C territory, NOT built here): where `j∈{−4..+1}` and the
+  raggedness lives.
+
+## Scope / next
+One fixture per root, one sweep, SC=2⁻¹⁰⁵⁰, depth-3 term set {x,1,c,½}. The ragged picture requires a
+**subnormal-radicand** dial (the root itself taken of a subnormal) — that is the next build, and it
+should connect directly to the existing subnormal-C `j∈{−4..+1}` cbrt result.

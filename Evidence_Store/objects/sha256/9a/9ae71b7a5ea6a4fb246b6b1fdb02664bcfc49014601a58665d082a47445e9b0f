@@ -1,0 +1,316 @@
+"""Phase 4A: Operand-range frontier mapping for physics fixtures.
+
+Self-contained. Pure Python stdlib (decimal, math, json, sys, time,
+itertools). No numpy, no engine imports — deliberately standalone so it
+reproduces the exact substrate discipline used in Phases 2B/3T/4B.
+
+RUN:
+    cd /home/william_lloydlt/projects/V4/Lloyd_Engine_V4
+    .venv/bin/python scratch/run_phase4A.py
+  (or: python3 scratch/run_phase4A.py  — only stdlib is needed)
+
+OUTPUT:
+    Writes artifact to:
+    /home/william_lloydlt/projects/Vera/campaign/phase4A/phase4A_artifact.json
+    Prints frontier table + hunt totals to stdout.
+
+Status precedence: v3 (CAMPAIGN_DEFAULTS.md), tolerance tol_020.
+Pre-registration frozen at: phase4A/preregistry.md
+Expected runtime: ~2-4 minutes (552 window cells + 24 full-sweep controls).
+"""
+from decimal import Decimal, getcontext
+getcontext().prec = 150
+import math, json, sys, time
+from itertools import combinations
+
+ARTIFACT_OUT = "/home/william_lloydlt/projects/V4/Lloyd_Engine_V4/scratch/phase4A_artifact.json"
+
+# === substrate primitives ===
+
+def reseat(v, mant_bits):
+    if v == 0: return Decimal(0)
+    sign = 1 if v > 0 else -1
+    v = abs(v); two = Decimal(2); e = 0
+    if v >= 1:
+        while two**(e+1) <= v: e += 1
+    else:
+        while two**e > v: e -= 1
+    ulp = two**(e - mant_bits + 1)
+    q = (v / ulp).quantize(Decimal(1))
+    return sign * q * ulp
+
+def dsqrt(v, mb):
+    if v <= 0: return None
+    return reseat(v.sqrt(), mb)
+
+def dcuberoot(f, mb):
+    if f <= 0: return None
+    return reseat((f.ln() / Decimal(3)).exp(), mb)
+
+# === fixture surfaces ===
+
+def D_g_sqrt(f, mb):     return dsqrt(f, mb)
+def D_g_cuberoot(f, mb): return dcuberoot(f, mb)
+
+def D_f_schwarzschild(r, mb): return reseat(Decimal(1) - Decimal(2)/r, mb) if r != 0 else None
+def D_f_sr(beta, mb):         return reseat(Decimal(1) - beta*beta, mb)
+def D_f_pure(x, mb):          return reseat(Decimal(1) - x, mb)
+
+def D_r_from_f(f):    return Decimal(2) / (Decimal(1) - f) if f < 1 else None
+def D_beta_from_f(f): return (Decimal(1) - f).sqrt() if 0 < f < 1 else None
+def D_x_from_f(f):    return Decimal(1) - f
+
+PHYSICS = {
+    "S_schwarzschild_sqrt": {"f_from_op": D_f_schwarzschild, "g": D_g_sqrt,     "op_from_f": D_r_from_f,    "expected_alpha_minus_1": -0.5,     "op_label": "r"},
+    "R_sr_sqrt":            {"f_from_op": D_f_sr,             "g": D_g_sqrt,     "op_from_f": D_beta_from_f, "expected_alpha_minus_1": -0.5,     "op_label": "beta"},
+    "P_pure_sqrt":          {"f_from_op": D_f_pure,           "g": D_g_sqrt,     "op_from_f": D_x_from_f,    "expected_alpha_minus_1": -0.5,     "op_label": "x"},
+    "C_cuberoot":           {"f_from_op": D_f_pure,           "g": D_g_cuberoot, "op_from_f": D_x_from_f,    "expected_alpha_minus_1": -2.0/3.0, "op_label": "x"},
+}
+
+FAMILY = [-2.0, -1.5, -2/3, -0.5, 0.0, 0.5, 1.0]
+LADDER = [24, 32, 40, 53, 80, 200]
+ETA = Decimal("1e-6")
+TOL_020 = 0.020
+
+# === sweep ===
+
+def f_targets():
+    """75-point sweep, sorted descending (f=0.7 first, f=1e-15 last).
+    Window index 0 = far from f=0 boundary; high index = near f=0."""
+    return sorted({(Decimal(10)**(-k)) * Decimal(m) for k in range(1,16) for m in [1,2,3,5,7]}, reverse=True)
+
+# === fit and stability checks ===
+
+def fit_decimal_ols(pts, ap):
+    if len(pts) < 5: return None
+    old = getcontext().prec; getcontext().prec = max(ap, 50)
+    try:
+        lp = [(f.ln(), T.ln()) for (f,T) in pts if f>0 and T>0]
+        n = len(lp)
+        if n < 5: return None
+        sx = sum((x for x,y in lp), Decimal(0)); sy = sum((y for x,y in lp), Decimal(0))
+        sxx = sum((x*x for x,y in lp), Decimal(0)); sxy = sum((x*y for x,y in lp), Decimal(0))
+        nD = Decimal(n)
+        denom = nD*sxx - sx*sx
+        if denom == 0: return None
+        return float((nD*sxy - sx*sy)/denom)
+    finally:
+        getcontext().prec = old
+
+def unstable_check(pts, ap, K=3, threshold=TOL_020):
+    """K=3 sub-slope std check (v3 precedence step 3, n_obs>=9)."""
+    if len(pts) < 3*K: return False, None, None
+    sorted_pts = sorted(pts, key=lambda p: p[0])
+    sub_size = len(sorted_pts) // K
+    sub_slopes = []
+    for k in range(K):
+        start = k * sub_size
+        end = (k+1) * sub_size if k < K-1 else len(sorted_pts)
+        sub = sorted_pts[start:end]
+        s = fit_decimal_ols(sub, ap)
+        if s is None: return False, sub_slopes, None
+        sub_slopes.append(s)
+    mean = sum(sub_slopes) / K
+    var = sum((s - mean)**2 for s in sub_slopes) / K
+    std = math.sqrt(var)
+    return (std > threshold), sub_slopes, std
+
+def pairwise_iqr(pts):
+    """Pairwise slope IQR (v3 precedence step 4, n_obs<9 small windows)."""
+    if len(pts) < 4: return None, None
+    lp = [(p[0].ln(), p[1].ln()) for p in pts if p[0] > 0 and p[1] > 0]
+    if len(lp) < 4: return None, None
+    slopes = []
+    for (xi, yi), (xj, yj) in combinations(lp, 2):
+        if xi == xj: continue
+        slopes.append(float((yj - yi) / (xj - xi)))
+    if len(slopes) < 4: return None, None
+    slopes.sort()
+    n = len(slopes)
+    q1_idx = (n-1) * 0.25
+    q3_idx = (n-1) * 0.75
+    q1 = slopes[int(q1_idx)] + (q1_idx - int(q1_idx)) * (slopes[min(int(q1_idx)+1, n-1)] - slopes[int(q1_idx)])
+    q3 = slopes[int(q3_idx)] + (q3_idx - int(q3_idx)) * (slopes[min(int(q3_idx)+1, n-1)] - slopes[int(q3_idx)])
+    median = slopes[n//2] if n % 2 == 1 else (slopes[n//2 - 1] + slopes[n//2]) / 2
+    return median, q3 - q1
+
+def classify_v3(slope_f, nobs, nnonobs, sub_std=None, pw_iqr=None, tol=TOL_020):
+    """v3 precedence: refusal -> boundary -> unstable(n>=9) -> mixed(n<9) -> stable_fit."""
+    if nobs < 5: return "refusal_insufficient"
+    total = nobs + nnonobs
+    if total > 0 and nnonobs/total > 0.5: return "boundary_or_underflow"
+    if nobs >= 9 and sub_std is not None and sub_std > tol:
+        return "unstable_window"
+    if nobs < 9 and pw_iqr is not None and pw_iqr > tol:
+        return "mixed_transition_window"
+    if slope_f is None: return "refusal_insufficient"
+    nearest = min(FAMILY, key=lambda t: abs(slope_f - t))
+    if abs(slope_f - nearest) < tol: return "registered_family_match"
+    return "stable_power_law_off_family"
+
+# === measurement (M1, f-direct) ===
+
+def measure_M1(fixture, fs_subset, mb):
+    f_from_op = fixture["f_from_op"]; g = fixture["g"]; op_from_f = fixture["op_from_f"]
+    pts = []; nobs = nnon = 0
+    for ft in fs_subset:
+        try: operand = op_from_f(ft)
+        except Exception: nnon += 1; continue
+        if operand is None: nnon += 1; continue
+        op_r = reseat(operand, mb)
+        f0 = f_from_op(op_r, mb)
+        if f0 is None or f0 <= 0: nnon += 1; continue
+        df = f0 * ETA
+        f1 = reseat(f0 + df, mb)
+        if f1 == f0: nnon += 1; continue
+        g0 = g(f0, mb); g1 = g(f1, mb)
+        if g0 is None or g1 is None: nnon += 1; continue
+        T = abs(g1 - g0) / df
+        if T <= 0: nnon += 1; continue
+        nobs += 1; pts.append((f0, T))
+    return pts, nobs, nnon
+
+# === main ===
+
+WINDOW_SIZE = 9
+STRIDE = 3
+
+def main():
+    print("=== Phase 4A: Operand-range frontier mapping ===")
+    print(f"Fixtures: {list(PHYSICS.keys())}")
+    print(f"Ladder: {LADDER}")
+    print(f"Window size: {WINDOW_SIZE}, stride: {STRIDE}")
+    fs_all = f_targets()
+    n_windows = (len(fs_all) - WINDOW_SIZE) // STRIDE + 1
+    print(f"Sweep length: {len(fs_all)}; windows per fixture-precision: {n_windows}")
+    print(f"Artifact will be written to:\n  {ARTIFACT_OUT}\n")
+
+    t0 = time.time()
+    all_rows = []
+    fullsweep_rows = []
+    hunt = {"mid_range_instability": [], "off_family_in_clean_region": [], "frontier_locations": {}}
+
+    total = len(PHYSICS) * len(LADDER) * (n_windows + 1)
+    processed = 0
+
+    for fix_name, fix in PHYSICS.items():
+        expected = fix["expected_alpha_minus_1"]
+        for mb in LADDER:
+            ap = max(2*mb//3 + 30, 80)
+
+            pts_full, n_full, nnon_full = measure_M1(fix, fs_all, mb)
+            slope_full = fit_decimal_ols(pts_full, ap)
+            _, _, sub_std_full = unstable_check(pts_full, ap)
+            stat_full = classify_v3(slope_full, n_full, nnon_full, sub_std_full)
+            fullsweep_rows.append({
+                "fixture": fix_name, "mb": mb, "n_obs": n_full, "n_nonobs": nnon_full,
+                "slope": slope_full, "sub_std": sub_std_full, "status": stat_full,
+            })
+            processed += 1
+
+            window_results = []
+            frontier_found = None
+            for win_idx in range(n_windows):
+                start = win_idx * STRIDE
+                fs_win = fs_all[start : start + WINDOW_SIZE]
+                pts, nobs, nnon = measure_M1(fix, fs_win, mb)
+                slope = fit_decimal_ols(pts, ap)
+                _, _, sub_std = unstable_check(pts, ap)
+                _, pw_iqr = pairwise_iqr(pts)
+                stat = classify_v3(slope, nobs, nnon, sub_std, pw_iqr)
+                slope_err = abs(slope - expected) if slope is not None else None
+                row = {
+                    "fixture": fix_name, "mb": mb, "window_index": win_idx,
+                    "f_max_window": str(fs_win[0])[:20], "f_min_window": str(fs_win[-1])[:20],
+                    "n_obs": nobs, "n_nonobs": nnon, "slope": slope,
+                    "slope_err": slope_err, "sub_std": sub_std, "status": stat,
+                }
+                all_rows.append(row); window_results.append(row)
+                if frontier_found is None and stat != "registered_family_match":
+                    frontier_found = win_idx
+                processed += 1
+                if processed % 30 == 0:
+                    print(f"  {processed}/{total} ({100*processed/total:.0f}%) elapsed {time.time()-t0:.0f}s")
+                    sys.stdout.flush()
+
+            hunt["frontier_locations"][f"{fix_name}_mb{mb}"] = frontier_found
+
+            for i in range(1, len(window_results) - 1):
+                if (window_results[i-1]["status"] == "registered_family_match" and
+                    window_results[i+1]["status"] == "registered_family_match" and
+                    window_results[i]["status"] != "registered_family_match"):
+                    hunt["mid_range_instability"].append({
+                        "fixture": fix_name, "mb": mb, "window_index": i,
+                        "status": window_results[i]["status"],
+                    })
+            for i in range(min(5, len(window_results))):
+                w = window_results[i]
+                if w["status"] == "stable_power_law_off_family":
+                    hunt["off_family_in_clean_region"].append({
+                        "fixture": fix_name, "mb": mb, "window_index": i,
+                        "slope": w["slope"], "expected": expected,
+                    })
+
+    elapsed = time.time() - t0
+    print(f"\nDone in {elapsed:.1f}s\n")
+
+    print("=== Frontier locations (first non-family window per fixture x precision) ===")
+    print(f"{'fixture':<24} {'mb':>5} {'frontier':>12} {'f range at frontier window':>32}")
+    for fix_name in PHYSICS:
+        for mb in LADDER:
+            front = hunt["frontier_locations"][f"{fix_name}_mb{mb}"]
+            if front is None:
+                front_str, f_str = "none(clean)", "n/a"
+            else:
+                start = front * STRIDE
+                f_str = f"{fs_all[start]}..{fs_all[start+WINDOW_SIZE-1]}"
+                front_str = str(front)
+            print(f"{fix_name:<24} {mb:>5} {front_str:>12} {f_str:>32}")
+
+    print(f"\n=== Hunt totals ===")
+    print(f"  mid_range_instability: {len(hunt['mid_range_instability'])}")
+    print(f"  off_family_in_clean_region: {len(hunt['off_family_in_clean_region'])}")
+    if hunt["mid_range_instability"]:
+        print("  mid-range instability cases:")
+        for h in hunt["mid_range_instability"][:20]: print(f"    {h}")
+    if hunt["off_family_in_clean_region"]:
+        print("  off-family-in-clean-region cases:")
+        for h in hunt["off_family_in_clean_region"][:20]: print(f"    {h}")
+
+    from collections import Counter
+    print(f"\n=== Status distribution per fixture (all mb x windows) ===")
+    for fix_name in PHYSICS:
+        c = Counter(r["status"] for r in all_rows if r["fixture"] == fix_name)
+        print(f"  {fix_name}: {dict(c)}")
+
+    print(f"\n=== Full-sweep control (re-confirms Phase 2B M1 baseline) ===")
+    for r in fullsweep_rows:
+        s = f"{r['slope']:+.6f}" if r['slope'] is not None else "—"
+        print(f"  {r['fixture']:<24} mb={r['mb']:>4} slope={s} status={r['status']}")
+
+    artifact = {
+        "phase": "4A",
+        "scope": "Per-fixture operand-range frontier mapping (M1 mode)",
+        "fixtures": list(PHYSICS.keys()),
+        "ladder": LADDER, "window_size": WINDOW_SIZE, "stride": STRIDE,
+        "n_windows_per_fixture_precision": n_windows,
+        "tolerance": "tol_020", "precedence": "v3 (CAMPAIGN_DEFAULTS.md)",
+        "total_window_cells": len(all_rows),
+        "total_fullsweep_controls": len(fullsweep_rows),
+        "runtime_seconds": round(elapsed, 1),
+        "hunt_totals": {
+            "mid_range_instability": len(hunt["mid_range_instability"]),
+            "off_family_in_clean_region": len(hunt["off_family_in_clean_region"]),
+        },
+        "frontier_locations": hunt["frontier_locations"],
+        "hunt": hunt,
+        "fullsweep_controls": fullsweep_rows,
+        "rows": all_rows,
+    }
+    with open(ARTIFACT_OUT, "w") as f:
+        json.dump(artifact, f, indent=2, default=str)
+    print(f"\nsaved {ARTIFACT_OUT}")
+    print(f"({len(all_rows)} window cells, {len(fullsweep_rows)} full-sweep controls)")
+
+if __name__ == "__main__":
+    main()

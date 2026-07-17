@@ -1,0 +1,345 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\hypersetup{colorlinks=true,urlcolor=blue,linkcolor=black}
+
+% --- Independent counters: Theorem 1/2 render as 1/2; other environments
+%     carry their own sequences. (Self-contained numbering, V6 convention.)
+\newtheorem{theorem}{Theorem}
+\newtheorem{substratethm}{Substrate Theorem}
+\newtheorem{corollary}{Corollary}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{definition}{Definition}
+\newtheorem{diagnostic}{Diagnostic Rule}
+\newtheorem{observation}{Observation}
+
+% Status tag macro: every empirical claim is stamped at its true status.
+\newcommand{\status}[1]{\textcolor{gray}{\small\textsf{[#1]}}}
+
+\title{The Transfer-Function Exponent Family at Algebraic Branch Points\\
+\large A Revalidated Structural Law, the IEEE~754 Substrate Derivation of its\\
+Lattice Behaviour, and an Identified Mechanism for Arithmetic-Path Conditioning}
+\author{William Lloyd\\\small Lloyd Geometric Diagnostics Pty Ltd}
+\date{May 2026 --- V6, claim-revalidated build\\
+\small Every empirical claim re-derived by running code against the current V4 artifacts (2026-05-31);\\
+\small see the provenance appendix and \texttt{Build\_Docs/Reports/transfer\_function\_paper\_v5\_revalidation/VALIDATION\_LEDGER.md}.}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+This note states the transfer-function exponent law used near one-sided algebraic branch points, and reports its validation in the V4 typed-substrate engine across four fixtures spanning two radical degrees. Every empirical claim below was re-derived by running code against the current artifacts before being written here; each is stamped at its true epistemic status. The mathematical core (Theorem~\ref{thm:robust-transfer}) is the chain rule with controlled asymptotics: if a principal observable has controlled branch form $g(f)=g_0+c f^{\alpha}L(f)(1+r(f))$ with $c\ne0$, $\alpha\ne0$, $L$ slowly varying and $r$ controlled, then the finite-difference transfer satisfies $\delta g/\delta f\sim\alpha c f^{\alpha-1}L(f)$ as $f\to0^+$ when $\delta f/f\to0$, so the limiting log--log slope is $\alpha-1$. V4 typed primitives (\texttt{typed\_finite\_difference}, \texttt{typed\_log\_log\_slope}) measure this directly, reproducing the predicted slope to $\sim10^{-11}$.
+
+Three results carry the label \emph{proven}, and only these: the Binade-Aligned Cancellation Lattice (BACL) invariant, Conjecture~C (no-binade-drop for correctly-rounded \texttt{sqrt} in the float64 normal range), and the $c_2$ integer-lattice theorem ($n{=}2$). Together they \emph{derive} the lattice structure (half-integer vs.\ integer grain) that earlier drafts reported only as a cross-fixture empirical regularity --- closing what was previously a forward task. The cross-fixture four-form behaviour is restated honestly as an \emph{observation}, not a theorem.
+
+The precision-scaling separation $C_{p,k}=a+u_p b_k$ (Theorem~\ref{thm:precision-separation}) has a validated regular-region core ($R^2=1.0$, all four fixtures) but three sub-claims remain partial or refuted; in particular an exact-rational re-measurement refutes the prediction that $b_k$ vanishes inside the Sterbenz-exact region (there $b_k\approx0.72$, $\approx1.8\times$ the regular-region value), while showing that this $b_k$ measures the unit-roundoff floor coefficient rather than an emergent substrate boundary. The Sterbenz exact-subtraction condition is confirmed as one derivable mechanism contributing to $b_k$, and a refinery audit identifies sub-lattice alignment as a separate optimisation criterion from operation-level exactness. Subnormal-regime, information-loss, parity, and route-optimality results are reported as eval-layer verified observations with their scopes and one corrected functional form.
+\end{abstract}
+
+\tableofcontents
+
+\section{Setup and notation}\label{sec:setup}
+
+Let $f\in(0,\varepsilon)$ be a one-sided boundary coordinate with $f\to0^+$, and $g(f)$ a principal observable induced by a constraint surface or a one-dimensional branch parameterisation. The ambient surface may be smooth on $0<f<\varepsilon$ while becoming singular at the boundary. Write $D:=f\,d/df$ for the logarithmic derivative; for a finite perturbation $\delta f$,
+\[
+    \Delta_{\delta f}g(f):=g(f+\delta f)-g(f),
+    \qquad
+    T_{\delta f}(f):=\left|\frac{\Delta_{\delta f}g(f)}{\delta f}\right|,
+    \qquad f+\delta f>0.
+\]
+
+\begin{definition}[Controlled branch expansion]\label{def:controlled-branch}
+A branch observable has controlled exponent $\alpha$ if
+\begin{equation}\label{eq:controlled-branch}
+    g(f)=g_0+c f^{\alpha}L(f)(1+r(f)),
+    \qquad c\ne0,\quad \alpha\ne0,
+\end{equation}
+where $L(f)>0$ is $C^2$ on $(0,\varepsilon)$ and slowly varying in logarithmic scale, $DL/L\to0$ and $D(DL/L)\to0$ as $f\to0^+$, and the remainder is controlled by $r\to0,\ Dr\to0,\ D^2r\to0$. The pure algebraic case is $L\equiv1$.
+\end{definition}
+
+A recurring status vocabulary is used throughout, displayed in grey brackets after each empirical claim: \status{proven} (derived and reproduced with zero counterexamples on the stated scope), \status{verified, eval-layer} (reproduced by running code, but a measurement/observation rather than a substrate derivation), \status{partial} (core holds, a sub-claim open), \status{open}, and \status{refuted}. The full per-claim audit is in the provenance appendix (\S\ref{sec:provenance}).
+
+\section{The transfer law (Theorem 1)}\label{sec:transfer}
+
+\begin{theorem}[Robust branch transfer law]\label{thm:robust-transfer}
+Assume $g$ has the controlled branch expansion \eqref{eq:controlled-branch}. Let $\eta(f):=\delta f/f$ and assume $\eta(f)\to0$ as $f\to0^+$. Then
+\begin{equation}\label{eq:finite-difference-transfer}
+    \frac{\Delta_{\delta f}g(f)}{\delta f}
+    =c f^{\alpha-1}L(f)\left(\alpha+\frac{DL}{L}+o(1)+O(\eta(f))\right),
+\end{equation}
+and, since $\alpha\ne0$, $T_{\delta f}(f)\sim|\alpha c| f^{\alpha-1}L(f)$ as $f\to0^+$, with limiting log--log transfer slope $\lim_{f\to0^+}D\log T_{\delta f}(f)=\alpha-1$.
+\end{theorem}
+
+\noindent\emph{Proof.}
+Set $u(f)=L(f)(1+r(f))$. The hypotheses give $Du/u=DL/L+o(1)$ and $D(Du/u)=o(1)$. Differentiating $g=g_0+c f^{\alpha}u$ gives $g'=c f^{\alpha-1}L(\alpha+DL/L+o(1))$ and $g''=O(f^{\alpha-2}L)$. Taylor's theorem then yields \eqref{eq:finite-difference-transfer}; taking $D\log$ of the asymptotic form gives the slope. \hfill$\square$
+
+\noindent The controlled expansion blocks the differentiability gap in the older $g(f)=cf^\alpha+O(f^{\alpha+1})$ statement, whose remainder need not have derivative control.
+
+\begin{corollary}[Pure algebraic branch]\label{cor:pure-algebraic}
+If $g(f)=g_0+c f^\alpha+O_2(f^{\alpha+\rho})$ with $c\ne0,\alpha\ne0,\rho>0$ (where $h=O_2(f^\mu)$ means $h^{(k)}=O(f^{\mu-k})$, $k=0,1,2$) and $\delta f/f\to0$, then $D\log T_{\delta f}(f)=\alpha-1+O(f^\rho)+O(\delta f/f)+o(1)$.
+\end{corollary}
+
+\subsection{Direct measurement in the V4 typed substrate}\label{sec:v4-direct}
+
+The V3 engine validated the law through a projected-Hessian eigenvalue proxy $|\lambda_{\max}|$, asymptotically equivalent to $T_{\delta f}$ only under a slowly-varying calibration factor. The V4 substrate removes that dependency: \texttt{typed\_finite\_difference} (Task~015) produces $T_{\delta f}$ as a typed observation with five strata, and \texttt{typed\_log\_log\_slope} (Task~016) fits the log--log slope as a typed observable with provenance lineage. The observable being fitted \emph{is} $T_{\delta f}$; no proxy enters.
+
+\paragraph{Synthetic validation \status{verified, eval-layer}.} On the synthetic family $g(f)=c f^\alpha$, calling the V4 primitives reproduces the predicted slope $\alpha-1$ to $\sim10^{-11}$. The four headline digit strings below were reproduced bit-for-bit by running the current primitives on the canonical grid $f\in\{10^{-6},\dots,10^{-1}\}$, $\delta f/f=10^{-6}$ (revalidation cluster~B).
+
+\begin{center}
+\begin{tabular}{rrrrl}
+\toprule
+$\alpha$ & predicted slope & measured slope & $R^2$ & typed status\\
+\midrule
+$0.5$ & $-0.5$ & $-0.500000000021128$ & $1.0$ & \texttt{slope\_observed}\\
+$1.5$ & $+0.5$ & $+0.499999999988428$ & $1.0$ & \texttt{slope\_observed}\\
+$2.0$ & $+1.0$ & $+1.000000000001573$ & $1.0$ & \texttt{slope\_observed}\\
+$3.0$ & $+2.0$ & $+1.999999999992809$ & $1.0$ & \texttt{slope\_observed}\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent The \texttt{directional\_alpha\_probe} primitive (Task~018) composes the slope fit with a typed-stratum classifier, recovering $\alpha$ to $\sim10^{-10}$ on clean cases and refusing cleanly when transfer evidence is cancellation-dominated.
+
+\subsection{A cross-fixture slope-space lead (open Gate-2 candidate)}\label{sec:crossfixture-slope}
+
+The C-extractor $E:=\log_2|\text{base\_operand}|$ has a local log--log slope at the branch that converges across fixtures toward $\alpha=1$. \status{verified, eval-layer; open lead.} Re-running the measurement through the typed primitive \texttt{typed\_log\_log\_slope} (revalidation retest~B) gives, on the nearest $N$ probes:
+
+\begin{center}
+\begin{tabular}{rrrr}
+\toprule
+$N$ & Schwarzschild (typed) & pure algebraic (typed) & $|\Delta|$\\
+\midrule
+$5$  & $0.99669$ & $1.00000$ & $0.00331$\\
+$10$ & $0.99577$ & $1.00000$ & $0.00423$\\
+$20$ & $0.99411$ & $1.00000$ & $0.00589$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent The convergence survives the typed instrument (the method gap against a raw \texttt{math.log2} central-difference baseline is $\le0.0014$, estimator-level, not data-level). This is the single cross-fixture-invariant candidate in the current toolset and is therefore carried as an \emph{open lead}: a measurement-robustness result across two fixtures, not yet an assertion that $\alpha=1$ is a substrate invariant. Its disciplined extension (typed, pre-registered, audit-framework, with the SR fixture and a wider sweep) is the open frontier; within-fixture redundancies break across fixtures, so cross-fixture is where genuine independence would have to live.
+
+\section{The foundational substrate: BACL, Conjecture C, and the $c_2$ lattice (proven)}\label{sec:substrate}
+
+This section states the three results that carry the label \emph{proven}. All three were re-derived in revalidation cluster~A both by re-running their audit scripts (every committed artifact byte-identical) and by an independent zero-import exact-rational oracle on fresh samples; all reproduced with \textbf{zero violations}.
+
+\begin{substratethm}[BACL invariant]\label{thm:bacl}
+For positive floats $a,b$ with $\mathrm{ulp}(a)\ge\mathrm{ulp}(b)$, the exact real difference satisfies $a-b=j\cdot\mathrm{ulp}(b)$ for some integer $j$.
+\end{substratethm}
+\status{proven.} Scope: \texttt{float16}/\texttt{float32}/\texttt{float64}, normal and subnormal; \texttt{float128} deferred (the platform offers x86 80-bit extended, not IEEE binary128). Evidence: $31{,}000$ audited records plus $50{,}145$ independent exact-rational pairs, $0$ violations. This answers the doubling-ladder question (binade-to-binade ulp doubling, from IEEE~754 binade spacing).
+
+\begin{substratethm}[Conjecture C, no-binade-drop]\label{thm:conjecture-c}
+For $f\in[2^k,2^{k+1})$ in the float64 normal range and $R=\mathrm{round}(\sqrt f)$, $\mathrm{round}(R\cdot R)\ge 2^k$.
+\end{substratethm}
+\status{proven.} Scope: float64 normal range, $n{=}2$ \texttt{sqrt}, round-to-nearest-even; $C_{\text{subnormal}}$ and $C_n$ for $n\ge3$ remain frozen open. Evidence: $220{,}444$ audited checks plus $383{,}045$ independent checks, $0$ counterexamples; a definition-grounded case analysis on mantissa parity with exhaustive boundaries.
+
+\begin{substratethm}[$c_2$ integer-lattice, $n{=}2$]\label{thm:c2}
+In the float64 normal range, the reassociated routing $c_2=\mathrm{round}(V_2+(x_{\mathrm{term}}-1))$ lands on an integer multiple of $\mathrm{ulp}(f)$, with $|j|\le1$ for $n{=}2$.
+\end{substratethm}
+\status{proven} (conditional on Conjecture~C). Scope: $n{=}2$, $f_{\mathrm{float}}\ge2^{-1021}$ (a scope gate satisfied by every V4 campaign grid). Evidence: $90{,}000$ records, $0$ violations; $|j|\le1$ robust under independent re-derivation.
+
+\paragraph{Higher radical degrees are grid-conditioned, not bounded \status{verified, eval-layer}.} The integer-lattice property itself (zero non-integer residuals) is grid-independent and holds for $n\ge3$. The \emph{rank} (the spread of $|j|$) is route- and grid-dependent: on a fixed grid, \texttt{numpy.cbrt}\,+\,float64 cubing produces a markedly wider $|j|$ spread than \texttt{pow}$(\cdot,1/3)$ (a robust qualitative route signature), but the specific maximum is an artifact of the grid --- on the audit's hybrid grid $\max|j|=7$ for \texttt{numpy.cbrt} vs.\ $2$ for \texttt{pow}, whereas a plain dense \texttt{linspace} gives $8$ and a denser grid $11$. The paper therefore states the \emph{route ordering} (\texttt{numpy.cbrt} rank $\gg$ \texttt{pow} rank) as the finding, and does \textbf{not} treat any particular $\max|j|$ as a bound. A correctly-rounded $n$-th root would be required to convert this into a sharp $n$-dependent statement.
+
+\paragraph{Consequence: the lattice grain is derived, not merely observed.} Substrate Theorems~\ref{thm:bacl}--\ref{thm:c2} together with the Sterbenz exact-subtraction condition (\S\ref{sec:sterbenz}) derive why the four-form residuals populate the lattices reported in \S\ref{sec:crossfixture}: the half-integer grain of $F_2$ and the integer grain of $F_4$ are consequences of binade-aligned cancellation plus the $c_2$ routing, with explicit scope gates. Earlier drafts listed this as a forward task; it is now closed for $n{=}2$.
+
+\section{Cross-fixture four-form classification invariants (observation)}\label{sec:crossfixture}
+
+Each fixture is evaluated through four algebraically-equivalent routings of the identity $R^n-f=0$ ($R=\sqrt[n]{f}$); all four are algebraically zero, so non-zero values are arithmetic-path residuals:
+\[
+F_1:=R^2-f_{\mathrm{direct}},\quad
+F_2:=R^2-1+x_{\mathrm{term}},\quad
+F_3:=R-\sqrt{f_{\mathrm{direct}}},\quad
+F_4:=R-\sqrt{f_{\mathrm{alt}}}.
+\]
+Fixtures: Schwarzschild $f=1-2/r$ ($r\in[2.005,10]$); SR $f=1-\beta^2$ ($\beta\in[0.01,0.9999]$); pure algebraic $f=1-x$ ($x\in[0.01,0.99]$); cube-root $f=1-x$, $n{=}3$ --- each on a $137$-point grid.
+
+\begin{observation}[Cross-fixture classification invariants]\label{obs:cross-fixture}
+Across the four fixtures, the following classification-level features are jointly observed at float64 on the reference grid:
+\begin{enumerate}
+    \item \textbf{$F_3$ silence:} $F_3=0$ at every cell, every precision. \status{verified, eval-layer} ($0$ nonzero, all four fixtures; independent recompute confirms).
+    \item \textbf{$F_2$ non-integer (half-integer) lattice in every fixture.} \status{verified, eval-layer.} The nonzero $F_2$ residuals lie on a half-integer lattice in all four fixtures. The ``$0.5$ (Schwarzschild/SR) vs.\ $0.25$ (pure algebraic/cube-root)'' figure that appeared in earlier drafts is a \emph{measurement-convention artifact} (integer-snap vs.\ half-snap residual reporting in two classifier implementations), not a substrate distinction; under a uniform convention the four fixtures are identical.
+    \item \textbf{$F_4$ integer lattice character} (residual $0$) at float64. \status{verified, eval-layer} (\texttt{float32} $F_4$ is silent on this grid; the claim is a float64 statement).
+    \item \textbf{$F_1\parallel F_2$ polarity coupling:} where both fire on a cell, their signs agree with $100\%$ frequency across the perturbation grids. \status{verified, eval-layer} (exact $100\%$ agreement reproduced; the reference-grid binomial significance is $p=3.1\times10^{-5}$ from Task~026c-prime --- a specific $p$ should be recomputed if cited, as no stored artifact records a smaller value).
+    \item \textbf{Sterbenz boundary directional density bias} (\S\ref{sec:sterbenz}): the predicted boundary shift produces a directional density bias in $F_2$ firings in every fixture. \status{verified, eval-layer} (direction robust in all four; \emph{strength} varies and is uneven, so this is an empirical regularity, not a sharp law).
+\end{enumerate}
+\end{observation}
+
+\noindent\emph{Status.} Observation~\ref{obs:cross-fixture} is an empirical classification-level regularity read off campaign runs, \textbf{not a derived theorem} (earlier drafts that named it ``Theorem'' were imprecise; the lattice \emph{structure} is derived in \S\ref{sec:substrate}, but the joint classification pattern is observed). Full operation-graph derivation of all five features from per-operation rounding propagation remains a forward task.
+
+\paragraph{$F_1$/$F_2$ common-mode structure \status{verified, eval-layer}.} $F_1$ and $F_2$ are computed from the bit-identical $R^2$ operand (confirmed in fixture source and by \texttt{.hex()} equality, all four fixtures). Hence $F_1-F_2=(1-x_{\mathrm{term}})-f_{\mathrm{direct}}$, in which $R^2$ cancels: exactly in real arithmetic (so the difference is $R$-independent), and in float64 \emph{to within one unit in the last place} (exact at $\sim40$--$45\%$ of cells, sub-ULP $\le1.11\times10^{-16}$ elsewhere). $F_4$ uses a distinct operand $f_{\mathrm{alt}}\ne f_{\mathrm{direct}}$, so its round-off is form-specific. This isolates the operand-assembly path difference from the shared \texttt{sqrt} round-off and is consistent with the prior finding that $F_1$ and $F_4$ coincide at the substrate-signature level.
+
+\section{The Sterbenz boundary and sub-lattice alignment (observations)}\label{sec:sterbenz}
+
+\begin{lemma}[Sterbenz, restated]\label{lem:sterbenz}
+For IEEE~754 floats $a,b$ of the same precision with $a/2\le b\le 2a$, the difference $a-b$ is computed exactly.
+\end{lemma}
+
+The $F_2$ chain begins with $R^n-1$, which is Sterbenz-exact when $R^n\ge1/2$. \status{verified, eval-layer} (boundary arithmetic exact in all four fixtures):
+Schwarzschild $r\ge4$; SR $\beta\le1/\sqrt2$; pure algebraic $x\le1/2$; cube-root $x\le1/2$ (the last two coincide because the half-space depends on $R^n=1-x$, not on $n$). The directional density of $F_2$ firings is biased toward the Sterbenz-exact half-space; the reproduced per-side counts/densities are:
+
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+Fixture & Boundary & Below (count/density) & Above (count/density) & Bias direction\\
+\midrule
+Schwarzschild & $r=4.0$ & $6\ /\ 0.054$ & $22\ /\ 0.880$ & above (Sterbenz side)\\
+SR & $\beta=1/\sqrt2$ & $86\ /\ 0.896$ & $9\ /\ 0.220$ & below\\
+Pure algebraic & $x=0.5$ & $55\ /\ 0.797$ & $9\ /\ 0.132$ & below\\
+Cube-root & $x=0.5$ & $65\ /\ 0.942$ & $33\ /\ 0.485$ & below\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{observation}[Sterbenz boundary as a $b_k$ component]\label{obs:sterbenz}
+The Sterbenz exact-subtraction condition is a derivable, operand-dependent, path-specific mechanism contributing to the arithmetic-path conditioning amplitude $b_k$ of Theorem~\ref{thm:precision-separation}; it predicts a fixture-shifted directional density bias, confirmed in every fixture. It is one identifiable component of $b_k$, not the whole.
+\end{observation}
+
+\subsection{Sub-lattice alignment: a separate optimisation criterion}\label{sec:refinery}
+
+A six-candidate Pareto refinery audit (Task~031, pure algebraic, Sterbenz region $x\le1/2$) compares the Sterbenz-blessed reference $c_1=(R\cdot R)-1+x$ against reassociations including $c_2=(R\cdot R)+(x-1)$, under a componentwise burden vector (no scalar score).
+
+\begin{observation}[Sub-lattice alignment]\label{obs:sublattice}
+$c_2$ is the sole Pareto-frontier member; $c_1$ is strictly dominated by $c_2$ on \texttt{lattice\_class} (integer vs.\ non-integer) and \texttt{max\_integer\_residual} ($0$ vs.\ $0.25$), while tying on $b_k$ (overlapping confidence intervals) and operation-chain depth (both $2$). The cancellation control $c_3$ stays off-frontier.
+\end{observation}
+\status{verified, eval-layer} ($42/42$ tests; the $b_k$ ``tie'' is a CI overlap, point estimates $0.732$ vs.\ $0.640$). The reassociated form trades operation-level exact subtraction for sub-lattice alignment of the intermediate with the final-addition sub-lattice; a localised early rounding error does structural alignment work, healing the macroscopic residual lattice. This is a policy distinction: under a burden policy that treats lattice grain as cost, $c_2$ dominates; under one that treats the grain as carrying boundary information, $c_1$ is preferred. Both are honest substrate readings.
+
+\paragraph{Cross-fixture extension, with a corrected prediction \status{verified, eval-layer; one sub-prediction refuted}.} $c_2$ dominates $c_1$ on lattice class in all four fixtures (byte-stable artifact). The campaign's \emph{stronger} pre-registered prediction --- that $c_1$ be specifically half/quarter-integer in all four --- is \textbf{false}: $c_1$ is quarter-integer only in Schwarzschild and is ``irregular'' in SR, pure algebraic, and cube-root. Only the weaker statement (``$c_2$ dominates $c_1$ on lattice class in all four'') is carried.
+
+\section{Precision-scaling separation (Theorem 2)}\label{sec:precision}
+
+If genuine signal and conditioning artefact share an exponent, exponent data alone cannot separate them.
+
+\begin{lemma}[Exponent-only non-identifiability]\label{lem:nonident}
+If $R(f)=C f^{\alpha-1}L(f)(1+o(1))$, then from the exponent and total amplitude $C$ alone one cannot uniquely split $R$ into geometric and arithmetic-conditioning components of the same exponent: any $C=A+B$ fits.
+\end{lemma}
+
+The resolution introduces an independent axis: the unit roundoff $u_p$. IEEE~754 error scales with $u_p$; a geometric residual does not.
+
+\begin{theorem}[Precision-scaling separation test]\label{thm:precision-separation}
+Suppose measurements at precision $p$ and path $k$ have $R_{p,k}(f)=(a+u_p b_k)f^{\alpha-1}L(f)(1+o(1))+o(u_p f^{\alpha-1}L(f))$, with $a$ the path-invariant geometric amplitude and $b_k$ the path-dependent conditioning amplitude. Then the measured branch amplitude $C_{p,k}:=\lim_{f\to0^+}R_{p,k}(f)/(f^{\alpha-1}L(f))$ satisfies $C_{p,k}=a+u_p b_k$, and with $\ge2$ distinct precisions $a,b_k$ are identifiable per path by a linear fit in $u_p$.
+\end{theorem}
+
+\paragraph{Validated core \status{verified, eval-layer}.} Task~017c executed the multi-precision battery (\texttt{float32}, \texttt{float64}, \texttt{float128} where applicable, Decimal oracle) on all four fixtures. The linear-in-$u_p$ model fits the regular-region $C_{p,k}$ at $R^2=1.0$ across all four fixtures and load-bearing paths; an independent OLS reproduces $R^2=1.0$ to eight decimals on the twelve load-bearing $F_1/F_2/F_4$ rows. ($F_3$'s $R^2=1.0$ is a degenerate calibration-zero sentinel and carries no evidence.)
+
+\paragraph{Three sub-claims, stated at their true status.}
+\begin{enumerate}
+    \item \textbf{cbrt $F_1$ intercept} \status{partial}: its $95\%$ CI is $[5.1\times10^{-21},\,5.8\times10^{-17}]$ --- excludes zero, but entirely below the oracle precision floor ($u_p\approx1.1\times10^{-16}$); the geometric component is identifiable only as bounded-above.
+    \item \textbf{$F_1/F_2/F_4$ slope distinguishability} \status{open/refuted}: with only $3$--$6$ distinct $u_p$ values the $b_k$ confidence intervals overlap (their lower bounds run down to $\sim0$) in all four fixtures; the slopes do \emph{not} statistically separate. Point slopes differ (e.g.\ Schwarzschild $F_1{=}0.173$, $F_2{=}0.231$, $F_4{=}1.088$) but this is not significant at the available precision count.
+    \item \textbf{Sterbenz-region $b_k$} \status{refuted, reframed}: the over-strong prediction that $b_k$ vanishes inside the Sterbenz-exact half-space is not supported in any fixture. The verified observation is the opposite --- the $F_2$ Sterbenz-region $b_k$ CI upper bound is \emph{larger} than the regular-region bound in every fixture:
+\end{enumerate}
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Fixture & $F_2$ regular-region $b_k$ CI upper & $F_2$ Sterbenz-region $b_k$ CI upper \\
+\midrule
+Schwarzschild & $0.231$ & $0.665$ \\
+Special relativity & $0.383$ & $0.738$ \\
+Pure algebraic & $0.364$ & $0.738$ \\
+Cube-root algebraic & $0.437$ & $0.990$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+\status{verified, eval-layer} (all eight values reproduced to three decimals from the committed aggregate).
+
+\paragraph{Exact-rational re-measurement of the Sterbenz-region $b_k$.} A prior probe on path $F_1$ near the singularity was fit-degenerate (the residual collapses to exactly $0$ at all precision tiers except \texttt{float128}, which merely shows its own 80-bit floor). Re-running the $F_2$ Sterbenz-region probe with residuals carried as exact rationals (\texttt{Fraction}) escapes that floor: $97\%$ of Sterbenz cells then yield $\ge2$ distinct nonzero residuals, and the fit gives \status{verified, eval-layer}
+\[
+b_k^{\text{Sterbenz}}=0.720\ (R^2{=}1.0),\qquad b_k^{\text{regular}}=0.400\ (R^2{=}1.0),\qquad \text{ratio }1.80.
+\]
+This \textbf{refutes} the vanishing prediction by exact measurement. \emph{However}, at every tier the F2 Sterbenz residual sits at that tier's own rounding floor ($\text{residual}/u_p\in\{0,\pm1\}$, $\sim59\%$ exactly zero, parity-random sign), so $\text{RMS}\propto u_p$ by construction and $b_k$ here measures the \textbf{unit-roundoff floor coefficient}, not an emergent substrate boundary. The honest statement: on $F_2$ in the Sterbenz region, $C=a+u_p b_k$ holds with $R^2=1.0$ and identifiable nonzero $b_k\approx0.72$ ($\approx1.8\times$ regular), the vanishing prediction is refuted, and no substrate boundary beyond the floor is established. This gives the previously dangling sub-claim a clean, bounded statement.
+
+\section{Finite-window bias and non-algebraic discrimination}\label{sec:finite-window}
+
+\begin{proposition}[Two-term finite-window bias]\label{prop:bias}
+If $g(f)=g_0+c f^\alpha(1+a f^\rho+O_2(f^{\rho+\epsilon}))$ with $\alpha\ne0,\rho>0,\epsilon>0$, then for $\delta f/f=o(f^\rho)$,
+$D\log|g'(f)|=\alpha-1+\frac{a\rho(\alpha+\rho)}{\alpha}f^\rho+O(f^{2\rho})+O(f^{\rho+\epsilon})$.
+\end{proposition}
+Subleading terms do not change the limiting exponent but shift measured slopes on finite sweeps. A typed nested-window harness fitting $s(f)=s_\infty+Bf^\rho$ now exists at the eval layer (\S\ref{sec:nested}); a substrate-promoted version remains forward.
+
+\subsection{Automatic threshold and the nested-window diagnostic}\label{sec:nested}
+
+Replace a fixed stability threshold with model comparison on local slopes $s_j$ over nested windows: compare a constant-slope model against $M_A$ (algebraic subleading powers), $M_L$ (logarithmic/slow variation), and $M_E$ (essential/super-power drift) by AIC/BIC. Classify as a pure algebraic branch only when $M_A$ or the constant model wins and $s_\infty$ is stable under window deletion.
+
+\paragraph{V4 eval-layer retest \status{partial}.} An eval-layer harness (Phase~2C, three-model AIC/BIC over nested sub-windows) was run and independently checked:
+\begin{itemize}
+    \item It correctly rejects iterated-logarithm Fixture~E as non-algebraic ($M_E$ wins; $\Delta\mathrm{AIC}=1749$) and recovers Fixture~C's $s_\infty=1.25$ exactly. \status{verified, eval-layer.}
+    \item The drift gate is \textbf{window-count fragile}: Fixture~E reads STABLE at $n_{\text{windows}}=2$ and UNSTABLE for $n_{\text{windows}}\ge3$ (drift ratio $\{2{:}1.05,\,3{:}2.45,\,4{:}3.08\}$; a $\{3{:}2.14\}$ figure in an earlier sandbox summary is stale). Pin $n_{\text{windows}}\ge3$. \status{verified, eval-layer.}
+    \item The headline ``$0/9$ false-accepts'' holds only for the C/D/E fixture set; an adversarial probe finds $2/9$ (log-type structures, below). \status{partial.}
+    \item The claim that off-grid algebraic exponents are \emph{mis-rejected} is \textbf{refuted}: they are still classified algebraic; only $s_\infty$ recovery accuracy degrades. \status{refuted.}
+\end{itemize}
+
+\paragraph{A bounded blind spot \status{verified, eval-layer}.} For $f(x)=\log^2(1/f)$ and $f(x)=\sqrt f\,\log(1/f)$ the instantaneous local exponent decays as $O(1/t)$, $t=\log(1/f)$ (independently reproduced: local slopes $-2/t$ and $1/2-1/t$). Within binary64's finite dynamic range these are model-selection-indistinguishable from an algebraic branch plus a slow power-law correction $M_A$; the AIC/BIC harness false-accepts both (one is gate-marginal, drift $1.99$ vs.\ gate $2.0$). This is an eval-layer limitation of \emph{this} harness, recorded as a known blind spot --- not a ``proven topological degeneracy.''
+
+\section{Subnormal regime (eval-layer)}\label{sec:subnormal}
+
+Below the normal range the proportional binade scaling collapses, but the residual structure maps onto the uniform subnormal grid ($\mathrm{ulp}=2^{-1074}$).
+
+\paragraph{Subnormal square-root identity \status{verified, eval-layer}.} For subnormal inputs $f<2^{-1022}$, the canonical round-trip $V_2=\mathrm{round}(\mathrm{round}(\sqrt f)^2)$ equals $f$ exactly ($j=0$): the intermediate root $R<2^{-511}$ is in the normal range with absolute rounding error $\le2^{-565}$, the continuous squaring error $2r\delta<2^{-1075}$ is below the subnormal round-to-nearest threshold $\tfrac12\cdot2^{-1074}$, and truncation annihilates it. This was verified on $95.4$ million subnormals (block-exhaustive at both seams plus dense sampling), $0$ counterexamples; it is \emph{not} a full enumeration of all $\sim4.5\times10^{15}$ subnormals, so the universal statement rests on the (sound) analytic half-ULP argument, not on exhaustion.
+
+\paragraph{Subnormal cube-root combinatorics \status{verified, eval-layer}.} The cube-root round-trip residual $(V_3-f)/2^{-1074}$ is an exact integer, mapping predominantly to $\{-4,\dots,+1\}$ ($\approx99\%$ in an independent $5$M-sample run; the figure is sample-dependent) with localised excursions over the exact set $\{-7,\dots,+3\}$. \texttt{numpy.cbrt} is \emph{not} correctly rounded ($27/64$ diverge from an \texttt{mpmath} oracle on the original grid); the residual nevertheless lands on the integer lattice, and under a correctly-rounded cube root the spread tightens to $\{-1,0,1\}$.
+
+\section{The information-loss function (eval-layer)}\label{sec:wk}
+
+Independent of the forward evaluation boundaries, inverting the exact-subtraction (Sterbenz) node is a backward-only statement: at input binade index $k$, the preimage interval has relative uncertainty scaling by $2^{W(k)}$. The correct single functional form is \status{verified, eval-layer}
+\[
+    W(k)=\min\!\left(53,\ -\left\lfloor \alpha k+\log_2|c|\right\rfloor\right),
+\]
+the graded floor form. (Two competing forms that appeared in working notes --- $\min(53,53+\alpha k+C)$ and $\min(53,53-k)$ --- are incorrect: the first has the wrong sign on $k$, the second is flat-pinned at $53$. The three are genuinely unequal for $k<0$.) Derivation: $V_n-1\approx c f^\alpha\approx2^{\alpha k+\log_2|c|}$, whose binary exponent is $\lfloor\alpha k+\log_2|c|\rfloor$; the number of cancelled leading bits relative to the $\sim1$ scale is its negation, capped at $53$. This is a statement about trace invertibility (backward navigation), and asserts nothing about forward precision-scaling continuity.
+
+\section{Parity and route-optimality observations (eval-layer)}\label{sec:parity}
+
+\paragraph{Parity trap \status{verified, eval-layer}.} On the $V_n<1$ side of the constraint, the late-reassociation residual takes only $\{-\tfrac12,0,+\tfrac12\}\,\mathrm{ulp}(1)$ with a large fraction exactly at $\pm\tfrac12\,\mathrm{ulp}(1)$ ($5075/10000$ in one run), whereas the $V_n>1$ side takes $\{-1,0,+1\}\,\mathrm{ulp}(1)$ with none at half-ulp --- a strictly one-sided half-ulp clustering driven by parity, reproduced across all four fixtures.
+
+\paragraph{Route-optimality inversion \status{verified, eval-layer}.} The Late-vs-Early reassociation optimum crosses over at the Sterbenz boundary --- Late reassociation wins on lattice burden inside the Sterbenz region, Early outside --- in all four fixtures, stable across grid density (hence a fixed lattice property, not resampling noise). This is a binary64-only lattice-burden phenomenon (cf.\ Observation~\ref{obs:sublattice}), \textbf{not} a precision-scaling boundary; earlier conflation of the two is corrected here. It motivates --- but does not require --- a runtime route policy.
+
+\section{Open challenges}\label{sec:open}
+
+\begin{enumerate}
+    \item \textbf{Precision-scaling slope separation.} The regular-region $R^2=1.0$ core is validated; $F_1/F_2/F_4$ slope distinguishability and the cbrt $F_1$ geometric intercept remain open, requiring higher-precision oracles or additional precision strata.
+    \item \textbf{Cross-fixture $\alpha\to1$ slope (Gate-2 candidate).} An open lead, now reproduced through typed primitives (\S\ref{sec:crossfixture-slope}); its disciplined, pre-registered extension across more fixtures is the most direct route to a cross-fixture-invariant object.
+    \item \textbf{Operation-level derivation of Observation~\ref{obs:cross-fixture}.} The lattice grain is derived (\S\ref{sec:substrate}); deriving the full five-feature classification from per-operation rounding propagation is forward.
+    \item \textbf{Multi-fixture refinery audits.} Sub-lattice alignment is established on pure algebraic and extended cross-fixture on lattice class; whether the full Pareto structure generalises is open.
+    \item \textbf{Substrate-promoted nested-window harness.} The eval-layer diagnostic of \S\ref{sec:nested} (with its window-count and log-type caveats) is not yet a typed substrate primitive.
+    \item \textbf{Subnormal $C_n$ and correctly-rounded higher roots.} $C_{\text{subnormal}}$ and $C_n$ ($n\ge3$) are frozen open; a correctly-rounded cube root would sharpen \S\ref{sec:substrate} and \S\ref{sec:subnormal}.
+\end{enumerate}
+
+\section{Provenance and status appendix}\label{sec:provenance}
+
+\paragraph{Build provenance.} This V6 build treats the prior \texttt{transfer\_function\_exponent\_family\_v4.tex} (2026-05-14) and the V5 prose draft as reference only. Every empirical claim was re-derived by running code against the current artifacts on 2026-05-31; the per-claim audit (reproduced values, methods, citations) is \texttt{Build\_Docs/Reports/transfer\_function\_paper\_v5\_revalidation/VALIDATION\_LEDGER.md}. Theorem numbering here is self-contained and sequential; no cross-document counter is assumed.
+
+\paragraph{Numbering correspondence.} Theorem~\ref{thm:robust-transfer} (transfer law) $=$ v4.tex \texttt{thm:robust-transfer} $=$ glossary ``Theorem~1.'' Theorem~\ref{thm:precision-separation} (precision-scaling separation) $=$ v4.tex \texttt{thm:precision-separation} $=$ glossary ``Theorem~3.'' Observation~\ref{obs:cross-fixture} (cross-fixture) $=$ v4.tex \texttt{thm:cross-fixture} (there labelled a theorem) $=$ glossary ``Theorem~4''; it is relabelled an \emph{observation} here on the evidence that it is an empirical regularity. Substrate Theorems~\ref{thm:bacl}--\ref{thm:c2} (BACL, Conjecture~C, $c_2$) are the project's locked trio.
+
+\paragraph{Status summary.}
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Result & Status & Primary evidence \\
+\midrule
+Transfer law (Thm~\ref{thm:robust-transfer}) & proven (chain rule); verified eval-layer & V4 typed primitives, slope err $\sim10^{-11}$ \\
+BACL / Conjecture~C / $c_2$ $n{=}2$ (Subst.~Thms~\ref{thm:bacl}--\ref{thm:c2}) & \textbf{proven} (scoped) & $0$ violations, re-run + independent oracle \\
+$c_2$ $n\ge3$ route rank & verified, eval-layer & grid-conditioned; route ordering robust \\
+Cross-fixture classification (Obs~\ref{obs:cross-fixture}) & verified, eval-layer (observation) & four-form campaigns, independent recompute \\
+$F_2$ half-integer lattice (all four) & verified, eval-layer & $0.5/0.25$ shown to be a convention artifact \\
+$F_1/F_2$ common-mode ($\le1$ ULP) & verified, eval-layer & retest~C \\
+Sterbenz boundary $b_k$ component (Obs~\ref{obs:sterbenz}) & verified, eval-layer & boundary exact; bias direction robust \\
+Sub-lattice alignment (Obs~\ref{obs:sublattice}) & verified, eval-layer & Task~031 $42/42$; task032 strong pred.\ refuted \\
+Precision separation core (Thm~\ref{thm:precision-separation}) & verified, eval-layer ($R^2{=}1.0$) & Task~017c + independent OLS \\
+\ \ slope separation / cbrt $F_1$ intercept & open / partial & CIs overlap; below oracle floor \\
+\ \ Sterbenz-region $b_k$ vanishing & \textbf{refuted} & exact-rational retest~A ($b_k{\approx}0.72$) \\
+Nested-window diagnostic & partial & rejects iterated-log; window-count fragile \\
+\ \ ``off-grid mis-rejected'' & \textbf{refuted} & still classified algebraic \\
+Subnormal sqrt identity & verified, eval-layer & $95.4$M sampled + analytic argument \\
+Subnormal cbrt combinatorics & verified, eval-layer & set $\{-7..{+}3\}$; numpy.cbrt not CR \\
+$W(k)$ information loss & verified, eval-layer & graded-floor form corrected \\
+Parity trap / route inversion & verified, eval-layer & lattice-burden, not precision-scaling \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\paragraph{Scope discipline.} ``Proven'' is used only for the locked trio, each on the explicit scope above. All other empirical statements are eval-layer verified observations, partial, open, or refuted, as stamped. No claim in this paper stands without a reproducible run behind it; the corresponding scripts are under \texttt{scratch/\_revalidation/} and the cited \texttt{Build\_Docs/Reports/} directories.
+
+\end{document}

@@ -1,0 +1,273 @@
+"""Spectral image reconstruction — single fixture, raw values, no averaging.
+
+Will's spec:
+  - Pick ONE fixture at a time (Schwarzschild here)
+  - At every probe coordinate, extract the multi-channel substrate signature
+    as the literal "hex RGB value" at that pixel
+  - Coordinate = lattice position
+  - Don't compare against the whole image, don't subtract means, don't
+    normalise — just take the raw values
+  - Reconstruct: can the multi-channel signature pattern, taken as the
+    image, recover K_G as a property of the image?
+
+This is a within-fixture absolute-measurement test, not a cross-fixture
+comparison.
+"""
+from __future__ import annotations
+
+import json
+import math
+import random
+from pathlib import Path
+from typing import Dict, List, Tuple, Optional, Any
+
+
+CHANNELS = ("ulp_spread_log2", "log2_min_ulp", "log2_base_operand_ulp",
+            "log2_x_term_ulp", "signed_asymmetry", "E_log2_base_operand")
+ROUTES_AVAILABLE = {
+    "schwarzschild_four_form": ("F1", "F2", "F4"),
+    "pure_algebraic_four_form": ("F1", "F2"),
+}
+
+
+def _route_chain(fixture, coord, route):
+    if fixture == "schwarzschild_four_form":
+        r = coord
+        x_term = 2.0 / r
+        base = 1.0 - x_term
+        R = base ** 0.5
+        R_sq = R * R
+        if route == "F1":
+            residual = R_sq - base
+            return (R, R_sq, base, residual), base, x_term
+        elif route == "F2":
+            r_sq_m1 = R_sq - 1.0
+            residual = r_sq_m1 + x_term
+            return (R, R_sq, 1.0, r_sq_m1, x_term, residual), r_sq_m1, x_term
+        elif route == "F4":
+            r_m2 = r - 2.0
+            factored = r_m2 / r
+            factored_R = factored ** 0.5
+            residual = R - factored_R
+            return (R, factored, factored_R, residual), factored, x_term
+    return None
+
+
+def _signature(intermediates, base_operand, x_term):
+    nonzero = [abs(v) for v in intermediates if v != 0.0]
+    ulps = [math.ulp(v) for v in nonzero] if nonzero else []
+    if not ulps:
+        return {k: None for k in CHANNELS}
+    min_ulp = min(ulps); max_ulp = max(ulps)
+    base_ulp = math.ulp(abs(base_operand)) if base_operand != 0 else None
+    x_ulp = math.ulp(abs(x_term)) if x_term != 0 else None
+    return {
+        "ulp_spread_log2": math.log2(max_ulp / min_ulp) if min_ulp > 0 else None,
+        "log2_min_ulp": math.log2(min_ulp) if min_ulp > 0 else None,
+        "log2_base_operand_ulp": math.log2(base_ulp) if base_ulp and base_ulp > 0 else None,
+        "log2_x_term_ulp": math.log2(x_ulp) if x_ulp and x_ulp > 0 else None,
+        "signed_asymmetry": (math.log2(base_ulp / x_ulp)
+                              if base_ulp and x_ulp and base_ulp > 0 and x_ulp > 0
+                              else None),
+        "E_log2_base_operand": math.log2(abs(base_operand)) if base_operand and abs(base_operand) > 0 else None,
+    }
+
+
+def extract_pixel(fixture: str, coord: float, kg: float) -> Dict[str, Any]:
+    """Extract the multi-channel 'hex RGB' value at this lattice position.
+
+    Returns: {coordinate, K_G, R_channels, G_channels, B_channels}
+    where R/G/B are the F1/F2/F4 signatures respectively.
+    """
+    pixel = {
+        "lattice_coordinate": coord,
+        "K_G": kg,
+        "F1_signature": None,
+        "F2_signature": None,
+        "F4_signature": None,
+    }
+    for route in ROUTES_AVAILABLE.get(fixture, ()):
+        chain = _route_chain(fixture, coord, route)
+        if chain is not None:
+            pixel[f"{route}_signature"] = _signature(*chain)
+    return pixel
+
+
+def build_spectral_image(fixture: str, rows: List[Dict]) -> List[Dict]:
+    """Build the full spectral image for one fixture as ordered pixels."""
+    fixture_rows = [r for r in rows if r.get("fixture") == fixture
+                    and r.get("principal_curvature") is not None]
+    fixture_rows.sort(key=lambda r: r["coordinate_value"])
+    image = []
+    for row in fixture_rows:
+        image.append(extract_pixel(
+            fixture, row["coordinate_value"], row["principal_curvature"]))
+    return image
+
+
+def flatten_pixel(pixel: Dict) -> Optional[List[float]]:
+    """Convert one pixel's multi-channel signature into a flat feature vector.
+
+    Returns None if any required channel is None.
+    """
+    forms = ("F1", "F2", "F4") if pixel.get("F4_signature") else ("F1", "F2")
+    features = []
+    for form in forms:
+        sig = pixel[f"{form}_signature"]
+        if sig is None:
+            return None
+        for ch in CHANNELS:
+            v = sig.get(ch)
+            if v is None:
+                return None
+            features.append(v)
+    return features
+
+
+def solve_least_squares(X: List[List[float]], y: List[float]) -> List[float]:
+    """Solve y = X @ beta via normal equations (small problem, no numpy)."""
+    n = len(X)
+    d = len(X[0])
+    # Compute X^T X
+    XtX = [[0.0] * d for _ in range(d)]
+    for i in range(d):
+        for j in range(d):
+            XtX[i][j] = sum(X[k][i] * X[k][j] for k in range(n))
+    # Compute X^T y
+    Xty = [sum(X[k][i] * y[k] for k in range(n)) for i in range(d)]
+    # Solve via Gaussian elimination
+    aug = [row[:] + [Xty[i]] for i, row in enumerate(XtX)]
+    for col in range(d):
+        # Pivot
+        max_row = col
+        for r in range(col + 1, d):
+            if abs(aug[r][col]) > abs(aug[max_row][col]):
+                max_row = r
+        aug[col], aug[max_row] = aug[max_row], aug[col]
+        if abs(aug[col][col]) < 1e-15:
+            aug[col][col] = 1e-15  # regularise
+        # Eliminate
+        for r in range(d):
+            if r != col:
+                factor = aug[r][col] / aug[col][col]
+                for c in range(col, d + 1):
+                    aug[r][c] -= factor * aug[col][c]
+    # Read solution
+    return [aug[i][d] / aug[i][i] for i in range(d)]
+
+
+def run_test():
+    ROOT = Path("/home/william_lloydlt/projects/V4/Lloyd_Engine_V4")
+    phase_1 = json.loads(
+        (ROOT / "Build_Docs/Reports/mcg_geometry_first"
+                "/phase_1_geometry_table.json").read_text())
+    rows = phase_1["rows"]
+
+    fixture = "schwarzschild_four_form"
+    image = build_spectral_image(fixture, rows)
+    print(f"=== Spectral image of {fixture} ===")
+    print(f"Total pixels: {len(image)}")
+    print(f"K_G range: [{min(p['K_G'] for p in image):.4f}, "
+          f"{max(p['K_G'] for p in image):.4f}]")
+    print(f"Coord range: [{min(p['lattice_coordinate'] for p in image):.4f}, "
+          f"{max(p['lattice_coordinate'] for p in image):.4f}]")
+    print()
+    print("Sample pixel (first probe):")
+    print(f"  coord={image[0]['lattice_coordinate']:.4f}, K_G={image[0]['K_G']:.4f}")
+    for form in ("F1", "F2", "F4"):
+        sig = image[0][f"{form}_signature"]
+        if sig:
+            print(f"  {form}: {sig}")
+    print()
+
+    # Flatten pixels into feature matrix
+    valid_pixels = []
+    for pixel in image:
+        features = flatten_pixel(pixel)
+        if features is not None:
+            valid_pixels.append((pixel["lattice_coordinate"], features,
+                                  pixel["K_G"]))
+
+    print(f"Valid pixels (all forms fired): {len(valid_pixels)}")
+    print(f"Feature dimension per pixel: {len(valid_pixels[0][1])} "
+          f"(6 channels × 3 forms)")
+    print()
+
+    # 80/20 split — interleaved so train and test cover the full coord range
+    indices = list(range(len(valid_pixels)))
+    rng = random.Random(42)
+    rng.shuffle(indices)
+    split = int(len(indices) * 0.8)
+    train_idx = sorted(indices[:split])
+    test_idx = sorted(indices[split:])
+
+    train_pixels = [valid_pixels[i] for i in train_idx]
+    test_pixels = [valid_pixels[i] for i in test_idx]
+
+    print(f"Train: {len(train_pixels)} pixels, Test: {len(test_pixels)} pixels")
+    print()
+
+    # Linear regression: signature → K_G
+    # Add intercept column
+    X_train = [[1.0] + feat for _, feat, _ in train_pixels]
+    y_train = [kg for _, _, kg in train_pixels]
+    beta = solve_least_squares(X_train, y_train)
+
+    # Predict on test
+    X_test = [[1.0] + feat for _, feat, _ in test_pixels]
+    y_test = [kg for _, _, kg in test_pixels]
+    y_pred = [sum(beta[i] * x[i] for i in range(len(beta))) for x in X_test]
+
+    # Metrics
+    residuals = [y_test[i] - y_pred[i] for i in range(len(y_test))]
+    abs_errors = [abs(r) for r in residuals]
+    rel_errors = [abs(r) / abs(y_test[i]) if y_test[i] != 0 else 0
+                   for i, r in enumerate(residuals)]
+    mean_abs_err = sum(abs_errors) / len(abs_errors)
+    median_abs_err = sorted(abs_errors)[len(abs_errors) // 2]
+    max_abs_err = max(abs_errors)
+    mean_rel_err = sum(rel_errors) / len(rel_errors)
+
+    y_mean = sum(y_test) / len(y_test)
+    ss_tot = sum((y - y_mean) ** 2 for y in y_test)
+    ss_res = sum(r * r for r in residuals)
+    r_squared = 1.0 - ss_res / ss_tot if ss_tot > 0 else None
+
+    print("=== Within-fixture absolute K_G prediction ===")
+    print(f"  Mean abs error:    {mean_abs_err:.6e}")
+    print(f"  Median abs error:  {median_abs_err:.6e}")
+    print(f"  Max abs error:     {max_abs_err:.6e}")
+    print(f"  Mean rel error:    {mean_rel_err:.6e}")
+    print(f"  R²:                {r_squared:.6f}")
+    print()
+
+    # Show worst predictions
+    paired = sorted(zip(test_pixels, y_pred, residuals),
+                    key=lambda x: abs(x[2]), reverse=True)
+    print("=== Worst predictions (top 5) ===")
+    for (coord, feat, kg_true), kg_pred, res in paired[:5]:
+        print(f"  coord={coord:.4f}  K_G_true={kg_true:+.6e}  "
+              f"K_G_pred={kg_pred:+.6e}  err={res:+.4e}")
+    print()
+    print("=== Best predictions (top 5) ===")
+    for (coord, feat, kg_true), kg_pred, res in paired[-5:]:
+        print(f"  coord={coord:.4f}  K_G_true={kg_true:+.6e}  "
+              f"K_G_pred={kg_pred:+.6e}  err={res:+.4e}")
+    print()
+    print("=== Verdict ===")
+    if r_squared is not None and r_squared > 0.99:
+        print(f"  R² = {r_squared:.4f}: signature → K_G is essentially exact")
+        print("  The multi-channel substrate signature ENCODES absolute K_G")
+        print("  within this fixture, recoverable via linear projection alone.")
+    elif r_squared is not None and r_squared > 0.90:
+        print(f"  R² = {r_squared:.4f}: strong within-fixture K_G recovery")
+        print("  Substrate signature carries most of K_G's information")
+        print("  but a small fraction is not linearly extractable.")
+    else:
+        print(f"  R² = {r_squared}: limited within-fixture recovery")
+        print("  Multi-channel signature does not linearly determine K_G")
+        print("  in this fixture.")
+
+
+if __name__ == "__main__":
+    run_test()

@@ -1,0 +1,594 @@
+{
+  "campaign": "f2_phase_drift_diagnostics",
+  "cause_classification": "cancellation_operand_phase_inheritance",
+  "closeout_answers": {
+    "double_precision_language_justified": false,
+    "drift_cause": "cancellation_operand_phase_inheritance",
+    "f2_generates_independent_half_comb": false,
+    "f2_phase_matches_operand_phase_all_points": true,
+    "intermediate_integer_phase_all_points": true
+  },
+  "fixtures": [
+    {
+      "cancellation_operand": "beta^2",
+      "coordinate": "beta",
+      "coordinate_count": 137,
+      "counts": {
+        "F2_nonzero": 95,
+        "F2_zero_F1_nonzero": 0,
+        "total_points": 137,
+        "usable_F1_F2_pairs": 95
+      },
+      "diagnosis": "operand_phase_drift_on_beta_grid",
+      "fixture": "sr_four_form",
+      "invariant_checks": {
+        "F2_phase_matches_operand_phase_count": 137,
+        "F2_phase_matches_operand_phase_fraction": 1.0,
+        "all_F2_phase_matches_operand_phase": true,
+        "all_intermediate_integer_phase": true,
+        "intermediate_integer_phase_count": 137,
+        "intermediate_integer_phase_fraction": 1.0
+      },
+      "phase_class_counts": {
+        "F2_nonzero": {
+          "half": 26,
+          "integer": 14,
+          "other": 55
+        },
+        "F2_zero_F1_nonzero": {
+          "half": 0,
+          "integer": 0,
+          "other": 0
+        },
+        "all_points": {
+          "half": 26,
+          "integer": 56,
+          "other": 55
+        },
+        "usable_F1_F2_pairs": {
+          "half": 26,
+          "integer": 14,
+          "other": 55
+        }
+      },
+      "phase_class_counts_by_f_binade": {
+        "-1": {
+          "F2_nonzero": {
+            "half": 26,
+            "integer": 5,
+            "other": 55
+          },
+          "all_points": {
+            "half": 26,
+            "integer": 15,
+            "other": 55
+          }
+        },
+        "-13": {
+          "F2_nonzero": {
+            "half": 0,
+            "integer": 0,
+            "other": 0
+          },
+          "all_points": {
+            "half": 0,
+            "integer": 1,
+            "other": 0
+          }
+        },
+        "-2": {
+          "F2_nonzero": {
+            "half": 0,
+            "integer": 9,
+            "other": 0
+          },
+          "all_points": {
+            "half": 0,
+            "integer": 22,
+            "other": 0
+          }
+        },
+        "-3": {
+          "F2_nonzero": {
+            "half": 0,
+            "integer": 0,
+            "other": 0
+          },
+          "all_points": {
+            "half": 0,
+            "integer": 10,
+            "other": 0
+          }
+        },
+        "-4": {
+          "F2_nonzero": {
+            "half": 0,
+            "integer": 0,
+            "other": 0
+          },
+          "all_points": {
+            "half": 0,
+            "integer": 4,
+            "other": 0
+          }
+        },
+        "-5": {
+          "F2_nonzero": {
+            "half": 0,
+            "integer": 0,
+            "other": 0
+          },
+          "all_points": {
+            "half": 0,
+            "integer": 2,
+            "other": 0
+          }
+        },
+        "-6": {
+          "F2_nonzero": {
+            "half": 0,
+            "integer": 0,
+            "other": 0
+          },
+          "all_points": {
+            "half": 0,
+            "integer": 1,
+            "other": 0
+          }
+        },
+        "-7": {
+          "F2_nonzero": {
+            "half": 0,
+            "integer": 0,
+            "other": 0
+          },
+          "all_points": {
+            "half": 0,
+            "integer": 1,
+            "other": 0
+          }
+        }
+      },
+      "phase_class_counts_by_region": {
+        "mildly_relativistic": {
+          "F2_nonzero": {
+            "half": 16,
+            "integer": 12,
+            "other": 0
+          },
+          "all_points": {
+            "half": 16,
+            "integer": 39,
+            "other": 0
+          }
+        },
+        "non_relativistic": {
+          "F2_nonzero": {
+            "half": 10,
+            "integer": 2,
+            "other": 55
+          },
+          "all_points": {
+            "half": 10,
+            "integer": 3,
+            "other": 55
+          }
+        },
+        "ultra_relativistic": {
+          "F2_nonzero": {
+            "half": 0,
+            "integer": 0,
+            "other": 0
+          },
+          "all_points": {
+            "half": 0,
+            "integer": 14,
+            "other": 0
+          }
+        }
+      },
+      "representative_records": [
+        {
+          "F2_level": 1.0,
+          "F2_nonzero": true,
+          "F2_phase": 0.0,
+          "F2_phase_class": "integer",
+          "beta": 0.41032720588235294,
+          "cancellation_intermediate_phase": 0.0,
+          "cancellation_operand_level": 1516527870101279.0,
+          "cancellation_operand_phase": 0.0,
+          "f": 0.8316315841127812,
+          "f_binade": -1,
+          "region": "non_relativistic"
+        },
+        {
+          "F2_level": -0.5,
+          "F2_nonzero": true,
+          "F2_phase": 0.5,
+          "F2_phase_class": "half",
+          "beta": 0.26475367647058823,
+          "cancellation_intermediate_phase": 0.0,
+          "cancellation_operand_level": 631355211069945.5,
+          "cancellation_operand_phase": 0.5,
+          "f": 0.929905490795307,
+          "f_binade": -1,
+          "region": "non_relativistic"
+        },
+        {
+          "F2_level": 0.0992431640625,
+          "F2_nonzero": true,
+          "F2_phase": 0.0992431640625,
+          "F2_phase_class": "other",
+          "beta": 0.01,
+          "cancellation_intermediate_phase": 0.0,
+          "cancellation_operand_level": 900719925474.0992,
+          "cancellation_operand_phase": 0.0992431640625,
+          "f": 0.9999,
+          "f_binade": -1,
+          "region": "non_relativistic"
+        },
+        {
+          "F2_level": 0.41748046875,
+          "F2_nonzero": true,
+          "F2_phase": 0.41748046875,
+          "F2_phase_class": "other",
+          "beta": 0.017278676470588235,
+          "cancellation_intermediate_phase": 0.0,
+          "cancellation_operand_level": 2689123301834.4175,
+          "cancellation_operand_phase": 0.41748046875,
+          "f": 0.9997014473394248,
+          "f_binade": -1,
+          "region": "non_relativistic"
+        },
+        {
+          "F2_level": -0.5,
+          "F2_nonzero": true,
+          "F2_phase": 0.5,
+          "F2_phase_class": "half",
+          "beta": 0.50495,
+          "cancellation_intermediate_phase": 0.0,
+          "cancellation_operand_level": 2296606148895955.5,
+          "cancellation_operand_phase": 0.5,
+          "f": 0.7450254974999999,
+          "f_binade": -1,
+          "region": "mildly_relativistic"
+        },
+        {
+          "F2_level": 0.0,
+          "F2_nonzero": false,
+          "F2_phase": 0.0,
+          "F2_phase_class": "integer",
+          "beta": 0.9926213235294118,
+          "cancellation_intermediate_phase": 0.0,
+          "cancellation_operand_level": 5.67985102853623e+17,
+          "cancellation_operand_phase": 0.0,
+          "f": 0.014702908074718857,
+          "f_binade": -7,
+          "region": "ultra_relativistic"
+        },
+        {
+          "F2_level": 0.0,
+          "F2_nonzero": false,
+          "F2_phase": 0.0,
+          "F2_phase_class": "integer",
+          "beta": 0.9999,
+          "cancellation_intermediate_phase": 0.0,
+          "cancellation_operand_level": 3.6886109818724504e+19,
+          "cancellation_operand_phase": 0.0,
+          "f": 0.00019998999999992773,
+          "f_binade": -13,
+          "region": "ultra_relativistic"
+        }
+      ]
+    },
+    {
+      "cancellation_operand": "2/r",
+      "coordinate": "r",
+      "coordinate_count": 137,
+      "counts": {
+        "F2_nonzero": 28,
+        "F2_zero_F1_nonzero": 53,
+        "total_points": 137,
+        "usable_F1_F2_pairs": 81
+      },
+      "diagnosis": "operand_phase_sparse_far_binade",
+      "fixture": "schwarzschild_four_form",
+      "invariant_checks": {
+        "F2_phase_matches_operand_phase_count": 137,
+        "F2_phase_matches_operand_phase_fraction": 1.0,
+        "all_F2_phase_matches_operand_phase": true,
+        "all_intermediate_integer_phase": true,
+        "intermediate_integer_phase_count": 137,
+        "intermediate_integer_phase_fraction": 1.0
+      },
+      "phase_class_counts": {
+        "F2_nonzero": {
+          "half": 16,
+          "integer": 9,
+          "other": 3
+        },
+        "F2_zero_F1_nonzero": {
+          "half": 0,
+          "integer": 53,
+          "other": 0
+        },
+        "all_points": {
+          "half": 16,
+          "integer": 118,
+          "other": 3
+        },
+        "usable_F1_F2_pairs": {
+          "half": 16,
+          "integer": 62,
+          "other": 3
+        }
+      },
+      "phase_class_counts_by_f_binade": {
+        "-1": {
+          "F2_nonzero": {
+            "half": 16,
+            "integer": 3,
+            "other": 3
+          },
+          "all_points": {
+            "half": 16,
+            "integer": 6,
+            "other": 3
+          }
+        },
+        "-2": {
+          "F2_nonzero": {
+            "half": 0,
+            "integer": 6,
+            "other": 0
+          },
+          "all_points": {
+            "half": 0,
+            "integer": 17,
+            "other": 0
+          }
+        },
+        "-3": {
+          "F2_nonzero": {
+            "half": 0,
+            "integer": 0,
+            "other": 0
+          },
+          "all_points": {
+            "half": 0,
+            "integer": 13,
+            "other": 0
+          }
+        },
+        "-4": {
+          "F2_nonzero": {
+            "half": 0,
+            "integer": 0,
+            "other": 0
+          },
+          "all_points": {
+            "half": 0,
+            "integer": 16,
+            "other": 0
+          }
+        },
+        "-5": {
+          "F2_nonzero": {
+            "half": 0,
+            "integer": 0,
+            "other": 0
+          },
+          "all_points": {
+            "half": 0,
+            "integer": 14,
+            "other": 0
+          }
+        },
+        "-6": {
+          "F2_nonzero": {
+            "half": 0,
+            "integer": 0,
+            "other": 0
+          },
+          "all_points": {
+            "half": 0,
+            "integer": 22,
+            "other": 0
+          }
+        },
+        "-7": {
+          "F2_nonzero": {
+            "half": 0,
+            "integer": 0,
+            "other": 0
+          },
+          "all_points": {
+            "half": 0,
+            "integer": 18,
+            "other": 0
+          }
+        },
+        "-8": {
+          "F2_nonzero": {
+            "half": 0,
+            "integer": 0,
+            "other": 0
+          },
+          "all_points": {
+            "half": 0,
+            "integer": 8,
+            "other": 0
+          }
+        },
+        "-9": {
+          "F2_nonzero": {
+            "half": 0,
+            "integer": 0,
+            "other": 0
+          },
+          "all_points": {
+            "half": 0,
+            "integer": 4,
+            "other": 0
+          }
+        }
+      },
+      "phase_class_counts_by_region": {
+        "far_field": {
+          "F2_nonzero": {
+            "half": 16,
+            "integer": 6,
+            "other": 3
+          },
+          "all_points": {
+            "half": 16,
+            "integer": 11,
+            "other": 3
+          }
+        },
+        "near_horizon": {
+          "F2_nonzero": {
+            "half": 0,
+            "integer": 0,
+            "other": 0
+          },
+          "all_points": {
+            "half": 0,
+            "integer": 59,
+            "other": 0
+          }
+        },
+        "transition": {
+          "F2_nonzero": {
+            "half": 0,
+            "integer": 3,
+            "other": 0
+          },
+          "all_points": {
+            "half": 0,
+            "integer": 48,
+            "other": 0
+          }
+        }
+      },
+      "representative_records": [
+        {
+          "F2_level": -2.0,
+          "F2_nonzero": true,
+          "F2_phase": 0.0,
+          "F2_phase_class": "integer",
+          "cancellation_intermediate_phase": 0.0,
+          "cancellation_operand_level": 1.2468199445703522e+16,
+          "cancellation_operand_phase": 0.0,
+          "f": 0.3078758949880668,
+          "f_binade": -2,
+          "r": 2.889655172413793,
+          "region": "transition"
+        },
+        {
+          "F2_level": 0.5,
+          "F2_nonzero": true,
+          "F2_phase": 0.5,
+          "F2_phase_class": "half",
+          "cancellation_intermediate_phase": 0.0,
+          "cancellation_operand_level": 4282111121106373.5,
+          "cancellation_operand_phase": 0.5,
+          "f": 0.5245901639344261,
+          "f_binade": -1,
+          "r": 4.206896551724138,
+          "region": "far_field"
+        },
+        {
+          "F2_level": -0.25,
+          "F2_nonzero": true,
+          "F2_phase": 0.75,
+          "F2_phase_class": "other",
+          "cancellation_intermediate_phase": 0.0,
+          "cancellation_operand_level": 2167707704460487.8,
+          "cancellation_operand_phase": 0.75,
+          "f": 0.7593360995850622,
+          "f_binade": -1,
+          "r": 8.310344827586206,
+          "region": "far_field"
+        },
+        {
+          "F2_level": 0.0,
+          "F2_nonzero": false,
+          "F2_phase": 0.0,
+          "F2_phase_class": "integer",
+          "cancellation_intermediate_phase": 0.0,
+          "cancellation_operand_level": 2.3000927772705178e+18,
+          "cancellation_operand_phase": 0.0,
+          "f": 0.0024937655860348684,
+          "f_binade": -9,
+          "r": 2.005,
+          "region": "near_horizon"
+        },
+        {
+          "F2_level": 0.0,
+          "F2_nonzero": false,
+          "F2_phase": 0.0,
+          "F2_phase_class": "integer",
+          "cancellation_intermediate_phase": 0.0,
+          "cancellation_operand_level": 2.2990397283848005e+18,
+          "cancellation_operand_phase": 0.0,
+          "f": 0.0029504527418861004,
+          "f_binade": -9,
+          "r": 2.0059183673469385,
+          "region": "near_horizon"
+        },
+        {
+          "F2_level": 0.0,
+          "F2_nonzero": false,
+          "F2_phase": 0.0,
+          "F2_phase_class": "integer",
+          "cancellation_intermediate_phase": 0.0,
+          "cancellation_operand_level": 6.7084116439804504e+16,
+          "cancellation_operand_phase": 0.0,
+          "f": 0.0690208667736757,
+          "f_binade": -4,
+          "r": 2.1482758620689655,
+          "region": "transition"
+        },
+        {
+          "F2_level": -1.25,
+          "F2_nonzero": true,
+          "F2_phase": 0.75,
+          "F2_phase_class": "other",
+          "cancellation_intermediate_phase": 0.0,
+          "cancellation_operand_level": 1845998433833842.8,
+          "cancellation_operand_phase": 0.75,
+          "f": 0.7950530035335689,
+          "f_binade": -1,
+          "r": 9.758620689655173,
+          "region": "far_field"
+        },
+        {
+          "F2_level": -0.5,
+          "F2_nonzero": true,
+          "F2_phase": 0.5,
+          "F2_phase_class": "half",
+          "cancellation_intermediate_phase": 0.0,
+          "cancellation_operand_level": 1801439850948198.5,
+          "cancellation_operand_phase": 0.5,
+          "f": 0.8,
+          "f_binade": -1,
+          "r": 10.0,
+          "region": "far_field"
+        }
+      ]
+    }
+  ],
+  "headline": "F2 phase drift is inherited from the cancellation operand phase relative to ulp(f), not generated as a stable F2 half-comb.",
+  "invariant_tested": "phase(F2 / ulp(f)) == phase(cancellation_operand / ulp(f))",
+  "verification": [
+    {
+      "command": "PYTHONPATH=src python -m lloyd_v4.evals.f2_phase_drift_diagnostics",
+      "result": "passed; generated artifact_f2_phase_drift_diagnostics.json and closeout_f2_phase_drift_diagnostics.md"
+    },
+    {
+      "command": "PYTHONPATH=src python -m pytest tests/test_f2_phase_drift_diagnostics.py -q",
+      "result": "passed; 6 tests"
+    }
+  ]
+}

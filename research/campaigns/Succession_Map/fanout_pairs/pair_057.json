@@ -1,0 +1,50 @@
+{
+  "rank": 57,
+  "lift": 15.38,
+  "count": 3,
+  "families": 1,
+  "a": {
+    "id": "OBJ:laurent-valuation-v-t-f",
+    "label": "Laurent valuation v_t(f)",
+    "standard_term": "order of vanishing (valuation) of a Laurent series",
+    "nomenclature": "identical-to",
+    "symbols": [
+      "v_t"
+    ]
+  },
+  "b": {
+    "id": "OBJ:poleorder-r-g-dbp-at-role-boundaries",
+    "label": "PoleOrder(R[g_DBP]) at role boundaries",
+    "standard_term": "pole order of scalar curvature of the DBP metric family at role-singular boundaries",
+    "nomenclature": "novel",
+    "symbols": [
+      "g_dbp"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-1562",
+      "type": "theorem",
+      "claim_status": "proved",
+      "label": "Theorem 2 — Channel divergence produces inverse-metric bound",
+      "summary": "Claim. If `v_t(κ_{c,i})=-2m`, then the corresponding inverse-channel metric component has `v_t(g_DBP,ii) = 2m` unless cancelled by the surface restriction / coordinate projection. Proof method. Exact inversion of diagona",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/04_drafts_and_incomplete_papers/dbp_role_channel_and_orbit_geometry/Lead_C_Role_Singularity_Valuation_Theorem_Brief.md"
+    },
+    {
+      "uid": "U-1439",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Candidate theorem statement, v0",
+      "summary": "Let `γ(t)` be a one-parameter exact-ℚ or exact-symbolic family crossing a role stratum at `t = 0`. Let `y(t)` be the unsolvable output derivative for that role... Assume `v_t(y) = m > 0`... Let `Λ_i(t)` be the transporte",
+      "path": "/home/wlloyd/Cella Framework/Evidence_Store/objects/sha256/3b/3b5e4ac6ff207c3e207691171263482f873ea8126486de58a65e03dfda565f64"
+    },
+    {
+      "uid": "U-1540",
+      "type": "theorem",
+      "claim_status": null,
+      "label": "Role-Singularity Valuation Law — candidate statement v0",
+      "summary": "Let `γ(t)` be a one-parameter exact-ℚ or exact-symbolic family crossing a role stratum at `t = 0`. Let `y(t)` be the unsolvable output derivative for that role, e.g. `y(t) = a(t) = f_D(γ(t))` or `y(t) = b(t) = f_S(γ(t))`",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/04_drafts_and_incomplete_papers/dbp_role_channel_and_orbit_geometry/Lead_C_Role_Singularity_Valuation_Theorem_Brief.md"
+    }
+  ]
+}

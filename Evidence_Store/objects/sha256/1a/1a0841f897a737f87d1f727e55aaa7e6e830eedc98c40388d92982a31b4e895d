@@ -1,0 +1,93 @@
+"""One-off: prove the consolidated FORBIDDEN_RULES covers every historical scan.
+
+For each old (scope_root, token) pair from task001..task009a, assert the new
+union forbids that token over a scope that is the same as, or an ancestor of, the
+old scope. eps/epsilon are covered by the word-boundary src scan (deliberate
+refinement from substring; task009's form).
+"""
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "tests"))
+
+from test_source_purity import FORBIDDEN_RULES, SRC, PKG  # noqa: E402
+
+CORE, PRIM, PROJ, BRANCH, SOLVER, LV4 = (
+    PKG / "core", PKG / "primitives", PKG / "projection", PKG / "branch", PKG / "solver", PKG,
+)
+
+# token fragments resolved to the real strings the old audits used
+def T(*parts: str) -> str:
+    return "".join(parts)
+
+BASE7 = (T("lloyd", "_v3"), T("safe", "_mask"), 'projection_mode="' + "legacy" + '"',
+         T("legacy", "_compat"), T("clamp", "_min"), "epsilon", "eps")
+CORR6 = (T("safe", "_divide"), T("safe", "_denominator"), T("denominator", "_floor"),
+         T("small", "_denominator"), T("res", "cue"), T("gu", "ard"))
+DISC = (T("disc", "_floor"), T("discriminant", "_floor"), T("clamp", "_discriminant"),
+        T("safe", "_sqrt"), T("sqrt", "_gu", "ard"), T("small", "_discriminant"),
+        T("toler", "ance"), T("thresh", "old"))
+POLICY = (T("principal", "_root"), T("nearest", "_root"), T("default", "_branch"),
+          T("auto", "_branch"), T("root", "_policy"), T("advance", "_policy"),
+          T("projection", "_fallback"), T("fallback", "_branch"))
+METRO = (T("b", "_k"), T("K", "_q"), T("branch", "_fingerprint"), T("finger", "print"),
+         T("noise", "_floor"), T("calib", "ration"))
+FLOAT_FULL = CORR6 + ("clamp", T("stabilized", "_log"), T("log", "_offset"), "log1p",
+                      "isclose", "allclose", T("thresh", "old"), T("toler", "ance"),
+                      T("confidence", "_score"), T("weighted", "_score"), "smoothing",
+                      "hysteresis", "interpolate", "extrapolate")
+ADAPTER = ("adapter", "bridge", T("compatibility", "_shim"), "downgrade",
+           T("legacy", "_mode"), T("cross", "_engine"))
+SOLVER_TOK = ("JetBundle", T("shape", "_operator"), "singularity", "symmetry",
+              "centrifuge", T("surface", "_mesh"), T("implicit", "_chart"),
+              T("finite", "_eta"), T("domain", "_consumer"), T("domain", "_classifier"),
+              "bearing", "aerospace", "betting", "scanner", "parser", "cas",
+              T("symbolic", "_simplifier"))
+DOMAIN = (T("finite", "_eta"), T("equation", "_refinery"), T("history", "_trace"),
+          T("domain", "_consumer"), T("domain", "_classifier"), "bearing", "aerospace",
+          "betting", "scanner", T("flow", "_integrator"), T("symbolic", "_simplifier"),
+          "cas", "parser")
+CORE_NAMES = (T("lloyd", "_core"), T("lloyd", "_core_nvar"), T("lloyd", "_decomposition"),
+              "hyperdual", "halley", T("multi", "_start"), T("route", "_score"))
+
+OLD_RULES = [
+    ((SRC,), BASE7),                                   # task001-008 base
+    ((CORE, PRIM), CORR6),                             # task001/002
+    ((CORE, PRIM), DISC),                              # task002
+    ((LV4,), POLICY),                                  # task003
+    ((PROJ, PRIM), DISC + METRO),                      # task003
+    ((LV4,), CORR6),                                   # task005
+    ((LV4,), (T("finite", "_eta"), T("domain", "_consumer"), T("equation", "_refinery"))),
+    ((LV4,), ADAPTER),                                 # task005-009
+    ((BRANCH,), FLOAT_FULL),                           # task006 (branch-scoped)
+    ((LV4,), DOMAIN),                                  # task006/007
+    ((LV4,), FLOAT_FULL),                              # task007/008
+    ((LV4,), CORE_NAMES),                              # task009
+    ((SOLVER,), SOLVER_TOK),                           # task009
+]
+
+
+def covered(old_root: Path, token: str) -> bool:
+    if token in ("epsilon", "eps"):
+        # covered by the word-boundary src scan iff old scope within src
+        return old_root == SRC or SRC in old_root.parents or old_root == SRC
+    for roots, tokens in FORBIDDEN_RULES:
+        if token in tokens and any(old_root == r or r in old_root.parents or r == old_root for r in roots):
+            return True
+    return False
+
+
+missing = []
+for roots, tokens in OLD_RULES:
+    for r in roots:
+        for tok in tokens:
+            if not covered(r, tok):
+                missing.append((str(r.relative_to(ROOT)), tok))
+
+if missing:
+    print(f"UNCOVERED ({len(missing)}):")
+    for rel, tok in sorted(set(missing)):
+        print(f"  {rel}: {tok}")
+    sys.exit(1)
+print("OK: consolidated union covers every historical (scope, token) pair.")

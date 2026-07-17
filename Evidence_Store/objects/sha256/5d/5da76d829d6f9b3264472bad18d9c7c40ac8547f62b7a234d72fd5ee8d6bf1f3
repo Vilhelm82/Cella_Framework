@@ -1,0 +1,42 @@
+# Rounding Dial via BACL + Early-Rounding Cleanliness — Closeout
+
+**Date:** 2026-06-05 · research-grade, eval-layer, exact (Fraction). Code: `scratch/rounding_dial_bacl.py`.
+**Built to spec (Will's):** forms must EMERGE (not precomputed), and the chains must use **BACL** + the **early-rounding-absorption** global-cleanliness process.
+
+## How the forms emerge (not a catalogue)
+The constraint `R² − 1 + c = 0` (on surface) has three contributions {R², −1, +c}. The only real
+generative choice is **which pair to combine first** — and that choice *is* the early-rounding-
+absorption decision (Task-031 / §2.3 Corollary-1). The forms fall out of that choice:
+- combine the constant-scale terms `(c−1)` first → absorb rounding in the high binade → BACL-clean
+- combine the cancellation `(R²−1)` first → Sterbenz-exact at that op
+- combine the sum `(R²+c)` first → a third order
+
+## The dial = BACL GLOBAL cleanliness (not total rounding)
+Schwarzschild sweep r∈[2.2,9.8], 241 pts. Dial coordinate = off-integer-lattice burden, then spread.
+
+| notch | form (absorption order) | off-lattice | lattice spread | mean rounding |
+|---|---|---|---|---|
+| **0 (origin)** | `(c−1)` first — **early-absorb** | **0%** | **{−1,0,1}** | 0.185 ulp |
+| 1 | `(R²+c)` first — sum-first | 0% | {−2,0,2} | 0.398 ulp |
+| 2 | `(R²−1)` first — cancellation-first | **42.7%** | half/quarter cells | **0.145 ulp** |
+
+## The key result
+**Global cleanliness ≠ minimal rounding.** The cancellation-first form has the *least total
+rounding* (0.145 ulp, the Sterbenz-exact local optimum) yet is globally the **least BACL-clean**
+(42.7% off the integer lattice). The early-absorbed form costs slightly more rounding but lands
+**100% on the integer lattice** — it is the dial origin. So:
+- the dial must be anchored on **BACL global cleanliness**, exactly as specified;
+- the origin form is **constructed by the cleanliness process** (absorb constants early), not selected;
+- dialing up = absorbing later → off the integer lattice. This is **Task-031 in the dial's coordinates**
+  (operation-exactness ≠ global lattice optimality).
+
+## Scope (honest — nothing wider)
+- The **3-term core constraint** (R²−1+c) → 3 absorption orders → 3 forms (the c2/F1, c3, F2 family).
+  Demonstrates the mechanism; it is NOT the full F5+ derivation.
+- One fixture (Schwarzschild), one sweep. The mechanism **generalizes** to richer forms by extending
+  the constraint's term-structure (sub-grouping terms, the split-routing operand, higher roots) →
+  more absorption orders → more forms, each ranked by the same BACL-cleanliness dial. Not yet built.
+- "Emerge" here = the forms are the constraint's own combination choices, ranked by the cleanliness
+  process — not a hand-picked catalogue. A fully best-first *generation* over arbitrary chains drowns
+  (identities are rare in chain-space — see `rounding_dial_emergent.py`); the constraint's absorption
+  structure is what makes the emergence tractable.

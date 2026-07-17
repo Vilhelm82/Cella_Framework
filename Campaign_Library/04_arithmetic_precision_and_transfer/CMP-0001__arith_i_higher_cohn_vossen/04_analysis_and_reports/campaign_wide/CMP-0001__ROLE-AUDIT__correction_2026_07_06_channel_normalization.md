@@ -1,0 +1,1 @@
+../../../../../Papers_Library/05_expository_companions_and_research_maps/cella_residue_and_coupling_theory/CORRECTION_2026-07-06_channel_normalization.md

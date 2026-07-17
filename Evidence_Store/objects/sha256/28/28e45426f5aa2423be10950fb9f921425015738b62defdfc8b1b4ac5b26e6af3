@@ -1,0 +1,29 @@
+# Form-Family Dial Sweep — Closeout (the user's dial idea, tested)
+
+**Date:** 2026-06-05 · research-grade, eval-layer, exact (Fraction). Code: `scratch/form_family_dial_sweep.py`.
+**Idea tested (user's):** the forms producing the constraint residual F are algebraically identical on the surface → differencing/sweeping them is a SHARED-STRUCTURE (first-order, O(ulp)) coupling — the OPEN door (not the closed bilinear-of-independent class). Does the dial-swept form-family's differential structure carry a **cross-fixture geometric invariant**, or is it path-local conditioning?
+
+## What was tested (exact scope — nothing wider)
+- Hold the **operand `f` fixed** (matched); change only the **path** that reaches it: direct (`x_term = 1−f`) vs division (`x_term = 2/r, r = 2/(1−f)`) — the geometry's fingerprint.
+- Forms: `F1 = R²−f` (uses `f` only), `F2 = (R²−1)+x_term`, `c2 = R²+(x_term−1)`. Per-point, 401-pt operand grid.
+- **Matched at the operand, NOT at curvature K_G** (a different alignment — the Phase-H coordinate where E breaks). Individual forms, not combinations. Per-point, not higher-order curvature.
+
+## Result
+| component | behaviour |
+|---|---|
+| **F1** (uses `f` only) | **path-INVARIANT 401/401** — blind to the path; = the operand (E) |
+| **F2, c2** (use `x_term`) | **path-LOCAL** (differ at the 67/401 points where `x_term` differs; jumps of ±16/±32 ulp) |
+| **F1−F2 differential** (dark-field) | **path-LOCAL** 67/401 — tracks `x_term` (HR40, cancellation-operand-phase) |
+| burden ranking | same 334/401 (task032's cross-fixture-universal ranking — cited, not re-derived) |
+
+## Reading (scoped)
+The dial **separates** the form-family cleanly: a **path-blind** part (F1 = operand) and a **path-aware** part (F2/c2 + the differential). **The geometry is carried by the path-aware part** — as *memory of how the operand was reached* (`x_term`) — and it is **conditioning (C), fixture-local**, not a universal invariant. So the dial-swept "constraint-curvature curve" is **not** a cross-fixture geometric invariant *in the form it was tested*; its variation IS the `x_term` phase.
+
+## What this does NOT establish (no overclaim)
+- Does NOT test matched-**curvature** alignment (only matched operand).
+- Does NOT test **combinations/normalizations** of the family — a normalized observable could be invariant where individuals are path-local. Unsearched.
+- Does NOT test other paths/fixtures or higher-order family curvature.
+So this is **not** "no form-family invariant exists." It shows the *naive* form-family observables are path-local except the operand, and **localizes where the geometry enters** (the `x_term`-sensitive forms).
+
+## Useful outcome / open continuation
+The dial's real yield: it **corners the geometric content** of the form-family to one component — the `x_term`-dependent (path-aware) forms — separated from the path-blind operand. The open question sharpens from "is there a substrate geometric primitive" to: **can the path-aware component be normalized into a cross-fixture invariant?** — the same E-cross-fixture problem, now localized to F2/c2's `x_term` dependence. That is a concrete next probe; this run did not attempt it.

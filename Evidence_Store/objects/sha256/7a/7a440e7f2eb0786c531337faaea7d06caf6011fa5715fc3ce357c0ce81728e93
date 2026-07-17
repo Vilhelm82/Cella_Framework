@@ -1,0 +1,77 @@
+# R&D Extraction — `conversation_v4.md` (mined 2026-06-05)
+
+**What this is:** the durable, R&D-worthy ideas mined from a long Socratic exchange (Will ↔ a prior claude.ai model) on form-derivation, dual-channel residuals, and a "master invariant." Tagged so nothing here becomes a silent drop. Tags: **NEW** (genuinely new lever) · **KNOWN** (re-derives existing substrate — validating but watch for loop) · **DEAD-END** (record it so it isn't re-chased) · **VERIFY** (load-bearing, checkable) · **DISCIPLINE** (a guardrail to carry into any spec).
+
+> Caveat: the conversation repeatedly leaned on "G empirically absent in 1D" as settled. **That status was corrected 2026-06-05** (now OPEN/untested — see HISTORICAL_RECORD HR89/121, glossary G-entry, TASKS_TO_REVISIT R9). This *strengthens* the two crown jewels below — they are exactly the instrument needed to settle G honestly.
+
+---
+
+## Crown jewels (NEW, actionable, synergistic)
+
+### J1 — Exact-rational carry beats the float128 floor → settles the F2 boundary real-vs-apparatus  **NEW**
+Task A left the F2/SR Sterbenz-region `b_k` boundary **ambiguous because float128 hit its own floor** (pull float128 and the SR "boundary" moved 0.743→0.345 — it *was* the 80-bit floor). Every float64 intermediate is a dyadic rational, so the **exact residual of the rounded chain is computable in exact rationals with no apparatus floor at all.** Phase 2B already used an exact-`Fraction` lattice, so the tool is in hand.
+- **Payoff:** definitively settle whether the Sterbenz-region `b_k` structure is real substrate or was always the apparatus floor — the open Q5/F2 question the whole record keeps converging on.
+- **Honest limit:** it does *not* recover sub-ulp signal; the exact residual of the *rounded* chain still sits on the c2 lattice (the loss is upstream at `R = round(√f)`, irreversible *backward*). It removes the instrument as a confound; it doesn't add bits.
+
+### J2 — `e = √f − R` is exactly computable *forward* → exact M⊕C subtraction → a definitive G test  **NEW**
+The key correction of the whole conversation: **W(k)'s "irreversible loss" is a *backward/inversion* statement** (given the residual, the preimage is an interval). It says nothing forward. **With `f` in hand, the sqrt round-off `e = √f − R` is exactly computable** (oracle, any precision). So you can carry three exact quantities forward: `√f`, `R` (dyadic), and `e`.
+- **Payoff:** the conditioning term **C becomes computed, not floor-estimated**, which makes the `M ⊕ C` subtraction **exact in the forward direction**. Subtract the BACL lattice (M) and the now-computable round-offs (C) exactly; whatever survives is **G, caught with no apparatus floor to blame.** This converts "G empirically absent in 1D" from a (now-retracted) empirical claim into a **definitive forward test** — and it is precisely the named-mechanism, positive-construction approach the killswitch closeout (§7.A.2) demanded before any G test is legitimate.
+- **Honest limits:** `e` is deterministic but *erratic* (a ½-ulp sawtooth = fractional part of √f vs the grid), so pointwise-exact, not a smooth extrapolable curve. Computing `e` adds **no independent information** — it's derived from `f` — it is *attribution*, making C explicit. Forward only; inversion still hits W(k).
+
+**J1 + J2 combine:** exact carry (no floor) + computable `e` (exact C) = an **exact forward M⊕C decomposition of the 1D residual with no apparatus floor.** That is the cleanest possible instrument for the *reopened* G question and for the F2 boundary at once. **This is the thing to build first.**
+
+---
+
+## Strong conceptual keepers
+
+### K1 — Form-derivation as a typed constraint, not catalogue selection  **NEW (framing) / DISCIPLINE**
+Recast "select a form" as "solve `(F + rounding residue) ⊕ (substrate lattice chain) = 0`," native to D⊕S=P. The typed resolution that makes it substrate-legal:
+- **Membership `= 0` is `identity_zero`** — by-construction algebraic identity, **symbolic check, never a numerical tolerance.** This is the single most important typed decision: a below-LoD "near-identity" admitted as membership is a false type-sticker (Axiom 9) and would **manufacture phantom forms.**
+- Membership is **non-discriminating** (every valid rewrite satisfies it); **all discriminating signal lives in `F`** (the residual lattice cell). So the dial belongs on `F`, with `=0` as pure membership filter.
+- **F3 is the origin** (F=0 cell — algebraic-zero and arithmetic-zero coincide); F1/F2/F4/F5+ are the F≠0 cells you walk outward to.
+
+### K2 — Offset-dial → discrete lattice walk (the form spectrum)  **NEW (reshaped) / KNOWN mechanism**
+Naive "continuous sweep morphs forms" **dies on discreteness** (BACL: residual = `j·ulp`, forms sit at fixed grains 0.5/0.25/integer). The version that survives: a **continuous intermediate offset** (nextafter-style nudge before the final cancellation) walks the residual through discrete cells — a staircase where **each step is a form.** Instrumented precedent: the operand-offset guard predicts which cell resolves at precision=recall=1.0.
+- **Retrodiction gate (hard precondition):** before minting any F5+, the sweep must reproduce F1/F2/F4 at their known grains in burden-order (the gate the curvature pivot mandated and never built).
+
+### K3 — The two nested staircases (pure pre-round vs lossy rounded)  **NEW (corrects a prior error)**
+Correction to log: **c2 is about the *rounded* residual** (`round(...)` is baked into the theorem). The **pre-round value** (exact `R²`, exact combine, no final snap) is a ~106-bit dyadic that **does land between the grid** — the "between-grid curve" is real. But the two are **nested, not independent**: `lossy = round(pure)`. So they can't do redundant reconstruction; what they give you is **the gap `pure − lossy` = the final round-off = a clean per-cell conditioning measurement.** Division of labour: **grain (lossy) identifies the form; pure curve is the conditioning.**
+
+### K4 — The √f fractional part as a form-invariant common-mode carrier  **NEW / VERIFY**
+`e` (the sqrt round-off / fractional part) is fixed by the **operand-under-root and precision — not the form.** So forms rooting the same operand **share it (common-mode)**; F4 (roots `√f_alt`) carries a different one. If F1 & F2 share `R²`, then **F1 − F2 cancels `R²` and the whole `2R·e` term, leaving the pure operand-path difference** — textbook common-mode rejection isolating the discriminator. Across precision: not identical, but **nested tails of one fixed irrational expansion** of √f (a precision sweep is a window onto a fixed object, not independent draws).
+- **VERIFY (load-bearing):** do the fixtures actually build F1 and F2 from the *same* `R²`? Fixture-code fact, not to be taken on faith. (Prior art: `scratch/common_mode_rejection_test.py`, and the F1−F2 lattice-geometry runs already triaged.)
+- **Two uses:** difference out the carrier to expose the form; OR use the carrier as a cross-form registration anchor.
+
+### K5 — The "master invariant / sufficient statistic" question  **framing / KNOWN collapse + open frontier**
+Trivial answer: `(f, operation)` reconstructs everything by forward determinism — tautology. **Deep answer (the prize):** a **lower-dimensional, cross-fixture, *sufficient* invariant** = exactly **L3 Gate 2** ("a derivable joint-state law"), open. What the record already collapsed (so don't re-derive): F1≡F4 (HR95); `a` path-invariant; `b_k` slopes don't separate forms; E↔K_G ρ=−1.0 *within* fixture (breaks across); atlas 12→6→~1 slot; Phase C/D irreducible basis = **{ulp_spread_log2, two_form_partition}**. Critical distinction: **identification ≠ sufficiency** — the atlas distinguishes fixtures (15/15) but never showed it *reconstructs all observables.* Real independence lives **cross-fixture.** Concrete closure deliverable: an **observable-dependency map** (every observable → independent? → reconstructs-from-what), built with the J1+J2 exact-forward decomposition + the Phase-D transformation-invariance filter.
+
+---
+
+## Honest dead-ends (record so they're not re-chased)
+
+- **DEAD-END — same-form (rounded, de-rounded) pair cannot reconstruct below the floor.** One measurement at two resolutions; the finer always dominates; the coarse is derivable from it and never the reverse. Redundancy needs *independent* channels = real path/operand separation (dual-arm condition 4), i.e. different forms. The project's HDR answer is F1/F2 (HR95). *Useful only for cleaning/decomposition of one form, not reconstruction.*
+- **DEAD-END (but RE-RUN) — additive offset / dithering to beat the quantizer = zero-selector, not precision-doubling.** Deterministic FP has no noise to average; a sub-ulp δ can't be built without borrowing higher precision (the dial shares the lattice it's resolving). Structural, IEEE-754, tooling-independent. **BUT** the May-16 evidence is stale *and partly ran on the pre-`typed_ulp` subnormal bug* — so re-run once on the current stack as a **falsification test of the structural claim**, not a re-trust. Prediction: still zero-selector. The only thing that would break the wall: a sub-ulp δ that survives the add without higher precision (no current tool seen to do this — name it if one does).
+- **CAUTION — the "resonant peak" (`b_k` larger in Sterbenz region, bump-before-rolloff).** Real shape (task017c) but possibly the float128 floor (Task A). **Settle it with J1 (exact carry), not by christening it a resonance** (a pole/transfer-function claim is §9 territory).
+
+---
+
+## Discipline flags to carry into any spec
+
+- **DISCIPLINE — type `⊕` and `=0`** (Axioms 6/8/9): membership = symbolic `identity_zero`; never numerical tolerance. Phantom-form guard.
+- **DISCIPLINE — "constraint curvature" in 1D is M+C, NOT K_G.** One dial = 1-D; G is 1-D-open and most likely lives multi-D. Don't write the form-sweep curvature up as Gaussian curvature (§9 four-layer separation breach).
+- **DISCIPLINE — anti-restart:** "derive F5+ / derive the form basis" **aliases into `substrate-invariant-search` + `layer-3-promotion` Gate 2.** Do not mint a new campaign; scope it as the intersection of those open frontiers, retrodiction-gated.
+- **OBSERVATION — loop-risk / validation:** the conversation independently re-derived precision-scaling separation (Thm 3), the F1/F2 HDR framing (HR95), and dual-arm independence. Validating that Will's intuitions keep rebuilding the real instruments — but a reminder the pre-reads short-circuit a lot of this.
+
+---
+
+## Orphaned-work pointers raised in the conversation (still need a home — anti-Obs-2)
+
+- **Parity-trap** (V_n=1 one-sided ~0.5-ulp comb) — a *one-sided* half-comb is interesting precisely because the whole May-16 cluster failed to find a *stable* one. Park-or-promote explicitly. (`scratch/investigation1_parity_trap*`.)
+- **Payload-paths route inversion** — computed, backs a paper §2.3 route-inversion claim, no report/HR row. (`scratch/validate_top_down_lattice_prealignment*`, `revalidate_payload_sterbenz_2026-05-31.py`.)
+- **Provenance sync** — sandbox A/B/C runs vs local machine copies (`agent_sandbox_results.json`, `_phase2_finish_results.json`, `_phase2_recovered_results.json`): byte-diff before anything cites them.
+- **§13 confusion-pair already added** to the glossary this campaign (Sterbenz route-optimality inversion vs precision-scaling `b_k` phase-transition) — confirm it covers the §2.3 braid the conversation flagged.
+
+---
+
+## Recommended first build
+Wire **J1 + J2** into the reopened **G R&D** spec as Experiment 1: *exact-rational forward M⊕C decomposition on a 1D fixture* — carry `√f, R, e` exactly, subtract M (BACL lattice) and C (computable round-offs) with no float128 anywhere, and read the residual. Retrodiction-gate it on reproducing F1/F2/F4 grains. Outcome is binary and valuable either way: residual ≡ 0 ⇒ G hard-absent in 1D *definitively* (settles what was only ever asserted); residual ≠ 0 ⇒ **G caught red-handed**, apparatus-floor excluded by construction.

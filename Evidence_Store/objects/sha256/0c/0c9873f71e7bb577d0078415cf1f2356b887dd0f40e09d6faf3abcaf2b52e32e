@@ -1,0 +1,46 @@
+# F4 Route Comb Search Closeout
+
+Accepted outcome: `same_phase_duplicate`
+Headline classification: `f4_route_same_phase_duplicate`
+
+## Answers
+
+1. Coherent F4-semantics interleaved comb found: `False`.
+2. Support-mask-only candidate found: `False`.
+3. Forward F4 plus reverse-back operation produced a different signed ULP-level pattern: `True`.
+4. Forward/reverse signed ULP mirror found: `False`.
+5. Affine controls stayed silent: `True`.
+6. Same-route controls stayed silent: `True`.
+7. Partition and guard invariance held for promoted claims: `True`.
+8. Double-precision language justified: `False`.
+9. Recommended next step: design a genuinely new exact-zero F4 route that changes the residual phase; simple factored/product/root-library variants are same-phase duplicates in this pass.
+
+## Fixture Summary
+
+- `schwarzschild_sqrt_f4` (primary): routes `9`, best pair `reverse_alt_to_direct_vs_reverse_direct_to_alt`; full relation `same_phase_stable`, best mask `both_nonzero` relation `same_phase_stable`, roundtrip `forward_reverse_same_phase_nonmirror_signed_pattern`, half candidates `0`.
+- `sr_sqrt_f4` (primary): routes `8`, best pair `math_product_roots_vs_reverse_direct_to_alt`; full relation `same_phase_stable`, best mask `wide_f_ge_0_25` relation `same_phase_stable`, roundtrip `forward_reverse_same_phase_nonmirror_signed_pattern`, half candidates `0`.
+- `pure_sqrt_affine_control` (affine_control): routes `8`, best pair `reverse_alt_to_direct_vs_reverse_direct_to_alt`; full relation `same_phase_stable`, best mask `both_nonzero` relation `same_phase_stable`, roundtrip `forward_reverse_same_phase_nonmirror_signed_pattern`, half candidates `0`.
+- `schwarzschild_cbrt_f4` (transformed_primary): routes `8`, best pair `reverse_alt_to_direct_vs_reverse_direct_to_alt`; full relation `same_phase_stable`, best mask `both_nonzero` relation `same_phase_stable`, roundtrip `forward_reverse_same_phase_nonmirror_signed_pattern`, half candidates `0`.
+- `schwarzschild_quartic_f4` (transformed_primary): routes `8`, best pair `reverse_alt_to_direct_vs_reverse_direct_to_alt`; full relation `same_phase_stable`, best mask `both_nonzero` relation `same_phase_stable`, roundtrip `forward_reverse_same_phase_nonmirror_signed_pattern`, half candidates `0`.
+- `pure_cbrt_affine_control` (affine_control): routes `7`, best pair `reverse_alt_to_direct_vs_reverse_direct_to_direct`; full relation `same_phase_stable`, best mask `both_nonzero` relation `same_phase_stable`, roundtrip `forward_reverse_same_phase_nonmirror_signed_pattern`, half candidates `0`.
+- `pure_quartic_affine_control` (affine_control): routes `7`, best pair `reverse_direct_to_alt_vs_reverse_alt_to_alt`; full relation `same_phase_stable`, best mask `both_nonzero` relation `same_phase_stable`, roundtrip `forward_reverse_same_phase_nonmirror_signed_pattern`, half candidates `0`.
+
+## Interpretation
+
+The tested F4-semantics routes are exact-zero residual routes, but their observable residual phases collapse to integer/same-phase behavior under `ulp(f)`. Product-root, factored, quotient, summed-split, cbrt, quartic, and forward/reverse-back variants did not produce a pointwise half-phase companion.
+
+This is evidence against the current simple F4 route family as a double-density comb. It does not rule out a new F4-style route whose arithmetic path changes the residual phase rather than merely restating the same factored route.
+
+## Verification
+
+- `PYTHONPATH=src python -m lloyd_v4.evals.f4_route_comb_search`
+  Result: passed; generated artifact_f4_route_comb_search.json and closeout_f4_route_comb_search.md.
+- `PYTHONPATH=src python -m pytest tests/test_f4_route_comb_search.py -q`
+  Result: passed; 8 tests.
+- `PYTHONPATH=src python -m pytest tests/test_f4_route_comb_search.py tests/test_task024b_schwarzschild_four_form.py::test_stratum_pattern_across_four_forms tests/test_task027_sr_four_form_cross_fixture.py::test_beta_grid_deterministic_and_bounded tests/test_task028_conditional_masks_joint_lattice_pure_algebraic.py::test_pure_algebraic_four_form_byte_stable -q`
+  Result: passed; 11 tests.
+
+## Artifacts
+
+- `Build_Docs/Reports/f4_route_comb_search/artifact_f4_route_comb_search.json`
+- `Build_Docs/Reports/f4_route_comb_search/closeout_f4_route_comb_search.md`

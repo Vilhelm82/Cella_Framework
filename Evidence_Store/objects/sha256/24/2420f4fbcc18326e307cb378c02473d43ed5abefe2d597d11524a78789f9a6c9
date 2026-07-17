@@ -1,0 +1,87 @@
+#!/usr/bin/env python3
+"""Audit the artifact's cbrt_divergent flag and reconcile divergence counts.
+
+Three different numbers are in play:
+  - build agent headline: 27/64 divergent
+  - artifact cbrt_divergent flag count
+  - artifact R_hex != R_mpmath_hex count
+  - my independent numpy.cbrt vs mpmath.root(_,3) count
+
+Reconcile them. The build harness uses mpmath.cbrt; I used mpmath.root(x,3).
+Also the build harness's cbrt_mpmath_rounded feeds Fraction(f) num/den into
+mpmath.mpf separately, which is exact; check whether that matters.
+"""
+import json
+import struct
+import math
+from fractions import Fraction
+
+import numpy as np
+import mpmath as mp
+
+
+def hexd(x):
+    return "0x" + struct.pack(">d", float(x)).hex()
+
+
+d = json.load(open("scratch/phase2B_subnormal_trace.json"))
+recs = d["sweep_records"]["n3_cbrt"]
+
+flag_count = sum(1 for r in recs if r.get("cbrt_divergent"))
+hex_diff_count = sum(
+    1 for r in recs if "R_mpmath_hex" in r and r["R_hex"] != r["R_mpmath_hex"]
+)
+print("artifact records:", len(recs))
+print("artifact cbrt_divergent flag count:", flag_count)
+print("artifact R_hex != R_mpmath_hex count:", hex_diff_count)
+
+# How many records have a NONZERO cbrt_np_vs_mpmath_ulp?
+nonzero_ulp = sum(
+    1 for r in recs if abs(r.get("cbrt_np_vs_mpmath_ulp", 0.0)) > 0.0
+)
+print("artifact nonzero cbrt_np_vs_mpmath_ulp count:", nonzero_ulp)
+
+# Reconcile: replicate the build harness's exact cbrt path
+def build_cbrt(f):
+    mp.mp.dps = 60
+    val = mp.cbrt(mp.mpf(Fraction(f).numerator) / mp.mpf(Fraction(f).denominator))
+    return float(val)
+
+
+# replicate sample set from artifact f_hex
+fs = [struct.unpack(">d", bytes.fromhex(r["f_hex"][2:]))[0] for r in recs]
+
+build_div = 0
+my_root_div = 0
+both_div = 0
+for f in fs:
+    R_np = float(np.cbrt(np.float64(f)))
+    R_build = build_cbrt(f)             # mpmath.cbrt path (build harness)
+    with mp.workdps(60):
+        R_mine = float(mp.root(mp.mpf(f), 3))  # my path
+    if R_np != R_build:
+        build_div += 1
+    if R_np != R_mine:
+        my_root_div += 1
+print("\nreplicated numpy vs mpmath.cbrt (build path) divergence:", build_div, "/", len(fs))
+print("replicated numpy vs mpmath.root(_,3) (my path) divergence:", my_root_div, "/", len(fs))
+
+# Are mpmath.cbrt and mpmath.root(_,3) identical when rounded to f64?
+disagree = 0
+for f in fs:
+    R_build = build_cbrt(f)
+    with mp.workdps(60):
+        R_mine = float(mp.root(mp.mpf(f), 3))
+    if R_build != R_mine:
+        disagree += 1
+print("mpmath.cbrt vs mpmath.root(_,3) (rounded f64) disagree:", disagree, "/", len(fs))
+
+# Now: is the build harness's cbrt_divergent flag actually computed correctly?
+# The flag is bool(R != R_mp) inside probe_one. Let's recompute that exact bool.
+recompute_flag = 0
+for f in fs:
+    R = float(np.cbrt(np.float64(f)))
+    R_mp = build_cbrt(f)
+    if R != R_mp:
+        recompute_flag += 1
+print("\nrecomputed bool(R != mpmath.cbrt) =", recompute_flag, "/", len(fs))

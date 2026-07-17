@@ -1,0 +1,172 @@
+# Substrate Fingerprint Atlas — Phase β — Preregistry
+
+> **Status: FROZEN 2026-05-18 pre-measurement.** Per `CAMPAIGN_DISCIPLINE.md` Rule 1.1, binding.
+>
+> **Pre-measurement amendment 2026-05-18:** A trial run at the Sterbenz-boundary β revealed that slots 13–15 collapse numerically there (all F_i are ULP-scale, max/min ratio undefined, route variation rounds to 0). The amendment moves the "critical β" used by slots 13–15 to an **interior probe point** inside the singularity-approach region:
+>
+> - SR: β = 0.85 (Sterbenz boundary 1/√2 ≈ 0.707; singularity β = 1)
+> - Schwarzschild: r = 5 (Sterbenz boundary r = 4; ISCO r = 6)
+> - pure_algebraic: x = 0.7 (Sterbenz boundary x = 0.5; singularity x = 1)
+> - cube_root: x = 0.7
+>
+> Lifted-singularity fixtures unchanged (their critical points are the audit's lifted critical point). The fix is mechanical (changes the variable at which slots 13–15 evaluate); it does not modify what is being measured. No data was admitted before this amendment; the trial run was a sanity check on the slot computer, not a measurement run. Recorded here for honest provenance.
+
+## 0. Context
+
+Phase α ([`Build_Docs/Reports/substrate_fingerprint_atlas/closeout.md`](../substrate_fingerprint_atlas/closeout.md)) returned verdict `barcode_hypothesis_not_supported_at_phase_alpha` with pre-registered failure mode **F2 (aliasing)**. The diagnosis:
+
+1. The Phase α slot set was **bimodal** — slots 1–7, 10–12 covered the four-form family; slots 8–9 covered the lifted-singularity family — and the two families shared no discriminating slots.
+2. Slots 8–9 (null-tangent alignment, Hessian rank+signature) are **structural invariants** per the lifted-singularity audit — they confirm class membership but cannot discriminate within the class.
+3. P5 (route invariance) was trivially satisfied because all Phase α slots were set-derived, so Variant B was tautologically invariant.
+
+Phase β addresses each issue with a concrete slot redesign, then re-tests the same hypothesis on the same 6 fixtures.
+
+## 1. Purpose
+
+Test the barcode hypothesis again with a revised slot set that includes:
+
+- **Empirical replacements** for slots 8 and 9 (drop structural invariants, use fixture-discriminating measurements).
+- **Cross-family universal slots** (13, 14) — single-valued scalars derivable from every fixture's critical-point local geometry.
+- **A genuine route-sensitive slot** (15) — exercises Variant B with order-sensitive computation.
+
+No new fixtures, no new substrate primitives, no new probe machinery. Phase β reuses Phase α's data sources where applicable, augmented with finite-difference Hessian and route-permuted residual computations at fixture critical points.
+
+## 2. Revised slot vector (FROZEN)
+
+Slots 1–7, 10–12 carry over from Phase α unchanged. The revised slots:
+
+| # | Slot name | Type | Source | Applicability |
+|---|---|---|---|---|
+| 8 | **`family_tangent_signature_norm`** (REPLACED) | float (L2 norm) | lifted_singularity_v4_audit `family_tangent` | lifted-singularity fixtures only |
+| 9 | **`pair_jacobian_log10_spread`** (REPLACED) | float (log10(max_sv/min_sv)) | lifted_singularity_v4_audit `constraint_jacobian_svals` | lifted-singularity fixtures only |
+| 13 | **`critical_point_curvature_magnitude_log10`** (NEW universal) | float | computed | every fixture |
+| 14 | **`critical_point_conditioning_index_log10`** (NEW universal) | float | computed | every fixture |
+| 15 | **`route_variation_signature`** (NEW route-sensitive) | float | computed | every fixture |
+
+### Slot 13: `critical_point_curvature_magnitude_log10`
+
+Single scalar: `log10(max |curvature|)` at the fixture's critical point.
+
+- **Four-form fixtures** (SR, Schwarzschild, pure_algebraic, cube_root): max over `|F_i(β_boundary)|` evaluated at the Sterbenz boundary β (the largest residual magnitude across the four channels).
+- **Lifted-singularity fixtures** (Schwarzschild_ISCO, Morris_Thorne, Kerr_ISCO_a09): max over `|Hessian eigenvalues|` at the lifted critical point.
+
+Universal because every fixture has a "critical β" (Sterbenz boundary for four-form; lifted critical point for singularity) and a curvature magnitude at it.
+
+### Slot 14: `critical_point_conditioning_index_log10`
+
+Single scalar: `log10(max_nonzero / min_nonzero)` at the fixture's critical point.
+
+- **Four-form fixtures**: max/min over nonzero `|F_i(β_boundary)|`. If all `F_i` are zero (algebraically), use the smallest nonzero magnitude reachable in float64; emit `unobservable` if every channel is exact zero.
+- **Lifted-singularity fixtures**: max/min over nonzero `|Hessian eigenvalues|`.
+
+Universal because both definitions emit a single dimensionless ratio.
+
+### Slot 15: `route_variation_signature`
+
+Single scalar: `|residual_A − residual_B| / ulp(residual_A)` where residual_A and residual_B are the same canonical residual computed via two different operation orderings.
+
+- **Four-form fixtures**: F2(β_boundary) computed as `((R²) − 1) + β²` (order A) vs `(R²) + (β² − 1)` (order B). These are c1 vs c2 from Test A; their difference is already a known fingerprint property, but reframed here as a route-variation slot.
+- **Lifted-singularity fixtures**: F_joint at the critical point computed as `((F₁² + F₂²) + F₃²) − X²` (order A: left-fold sum-of-squares first) vs `(F₁² + (F₂² + F₃²)) − X²` (order B: right-fold). Difference normalized by ulp.
+
+Universal because every fixture has a canonical residual at its critical point and an associated summation order.
+
+Route variation expected:
+- For four-form fixtures, this slot is the c1 vs c2 spread already known from Test A — **expected to be nonzero per Test A's results**.
+- For lifted-singularity fixtures at the critical point, F_joint = 0 mathematically; route order affects rounding at the ULP level — **expected to be small (1–10 ULP)** but nonzero on at least some fixtures.
+
+## 3. Pre-registered predictions
+
+### P_β1 — Cross-family aliasing breaks (the headline test)
+
+Predicted: ≥ 12 of 15 fixture pairs pairwise-distinguishable. Improvement target over Phase α's 8/15.
+
+Stronger sub-prediction: the 6 cross-family pairs (SR↔MT, SR↔Kerr, pure_algebraic↔MT, pure_algebraic↔Kerr, cube_root↔MT, cube_root↔Kerr) **all** become distinguishable via the new universal slots 13, 14, 15.
+
+### P_β2 — Lifted-singularity within-class aliasing breaks
+
+Predicted: Schwarzschild_ISCO ↔ Morris_Thorne disagreement on the new empirical slots 8' and 9' (family_tangent norm and pair Jacobian spread) is **non-zero**. The slot values themselves (from the lifted-singularity audit data) are:
+- Schwarzschild_ISCO: family_tangent_norm ≈ 24.77, pair_jac_log10_spread ≈ 1.77
+- Morris_Thorne: family_tangent_norm ≈ 1.73, pair_jac_log10_spread ≈ 0.58
+- Kerr_ISCO_a09: family_tangent_norm ≈ 7.92, pair_jac_log10_spread ≈ 1.71
+
+All 3 pairwise distances are nonzero. Phase β predicts each of the 3 lifted-singularity pairs disagrees on ≥ 1 slot.
+
+### P_β3 — Route invariance becomes a meaningful test, not a tautology
+
+Predicted: slot 15 produces nonzero `route_variation_signature` for at least 4 of 6 fixtures under Variant A → Variant B comparison **on the same fixture**, which formally breaks P5's trivial pass.
+
+Phase β reframes route invariance: it's now a *property of the slot*, not a property of the fingerprint. Some slots are route-invariant by structure (1–10, 13, 14); slot 15 is *intentionally* route-sensitive. Route-invariance is measured per slot.
+
+### P_β4 — Compactness budget held
+
+Predicted: 5 of 6 fixtures still in 256-bit budget. New slots 13–15 add 96 bits (32 each) but the structural-invariant slots 8–9 are replaced with same-size empirical alternatives.
+
+### P_β5 — Minimum distinguishing subset includes a universal slot
+
+Predicted: the greedy min-cover subset includes at least one of slots 13 or 14. If true, the cross-family universal slots earn their place; if false, Phase α's four-form-family slots remain the dominant discriminators and Phase β didn't add real cross-family value.
+
+### P_β6 — Slot taxonomy is now explicit
+
+Pre-registered taxonomy (binding for slot classification in this and future phases):
+
+- **Class-confirming (structural):** slot values universally hold within a fixture class; do not discriminate within class. *Phase α had these in slots 8–9; Phase β removes them.*
+- **Fixture-discriminating (empirical, within family):** slot values vary across fixtures in the same family. Slots 1–7, 10–12 are this kind for the four-form family; slots 8', 9' for the lifted-singularity family.
+- **Cross-family universal:** slot defined for any fixture; value varies across fixture families. Slots 13–14.
+- **Route-sensitive:** slot value depends on operation order. Slot 15.
+
+A successful Phase β verdict requires that the slot taxonomy is empirically verified — i.e., each slot's behavior matches its taxonomy.
+
+## 4. Pre-registered failure modes (refute the barcode hypothesis or downgrade verdict)
+
+Same set as Phase α, plus one Phase-β-specific:
+
+| ID | Condition | Meaning |
+|---|---|---|
+| F1 | All fingerprints identical | Slot set uninformative |
+| F2 | Two distinct fixtures still alias | Cross-family or within-family discrimination still failing |
+| F3 | Route invariance < 80% on a fixture, but slot 15 was the cause | Expected — slot 15 is route-sensitive by design. Recorded but does NOT trigger F3. |
+| F3' | Route invariance < 80% on a fixture, slot 15 NOT the cause | A structurally invariant slot turned out route-sensitive — slot redesign needed |
+| F4 | ≥ 50% slots unobservable on ≥ 3 fixtures | Apparatus too narrow |
+| F5 | Compactness exceeded on all 6 | Not yet compact |
+
+## 5. Variant B (FROZEN — properly specified this time)
+
+For Phase β, Variant B applies *only* to slot 15. Every other slot is set-derived or single-point-derived and is structurally invariant under route permutation — variant B and variant A produce the same value by construction. Route-invariance is now slot 15's responsibility alone.
+
+This is a Phase α correction: Phase α's pre-registry §4 implied variant B would run "the four-form battery in a different order" *for every slot*, but most slots aren't order-sensitive. Phase β scopes variant B precisely.
+
+## 6. Closeout criteria
+
+The audit closes when:
+
+1. Fingerprints computed on all 6 fixtures with the revised 12-slot vector (Phase β replaces slots 8–9 in place, adds 13–15; slot count = 15 not 12).
+
+Wait — let me clarify. The Phase β fingerprint has 15 named slot positions but with slots 8' and 9' replacing the Phase α slots 8 and 9. Net slot count: **15** positions, of which 12 emit defined values for at least some fixture.
+
+2. Distinguishability matrix emitted (6 × 6).
+3. Slot-level route invariance computed (per-slot, not per-fixture).
+4. Minimum distinguishing subset identified.
+5. Compactness audit completed.
+6. All 6 predictions (P_β1 – P_β6) have audited outcomes.
+7. Failure modes named.
+8. Verdict named:
+   - `barcode_hypothesis_supported_at_phase_beta` (all predictions hold)
+   - `barcode_hypothesis_supported_with_remaining_aliasing` (most predictions hold but some pairs still alias)
+   - `barcode_hypothesis_not_supported_at_phase_beta` (F1 or F2 still fires)
+9. Reproducibility check: byte-stable rerun.
+10. Phase γ follow-up list assembled (cheap-slot prediction modeling, additional fixtures, substrate derivation).
+
+## 7. Out of scope (logged)
+
+- Phase γ cheap-slot prediction.
+- Phase δ substrate-derivation of slots from primitives.
+- Adding fixtures beyond the 6 named.
+- V4's heavy `build_branch_fingerprint` substrate primitive (would require `ProjectionResultV4` plumbing per fixture; out of scope at Phase β).
+- New probe machinery.
+
+## 8. References
+
+- Phase α preregistry: [`../substrate_fingerprint_atlas/preregistry.md`](../substrate_fingerprint_atlas/preregistry.md)
+- Phase α closeout: [`../substrate_fingerprint_atlas/closeout.md`](../substrate_fingerprint_atlas/closeout.md)
+- Source data: lifted_singularity_v4_audit (slots 8', 9'), Test A (slots 1–5, 10), observability rule audit (slot 6), hardened dual-arm probe (slot 11), v11 dual-arm (slot 12).
+- Pre-registry binding: `CAMPAIGN_DISCIPLINE.md` Rule 1.1.

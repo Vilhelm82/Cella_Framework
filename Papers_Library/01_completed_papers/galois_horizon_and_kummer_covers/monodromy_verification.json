@@ -1,0 +1,481 @@
+[
+  {
+    "tag": "1.1",
+    "section": "1",
+    "kind": "definition",
+    "latex": "d(\\mathbf c)=\\#\\{[\\boldsymbol\\eta]\\in\\Sigma_k:A_{\\boldsymbol\\eta}(\\mathbf c)\\ne0\\}",
+    "depends_on": [],
+    "status": "PASS",
+    "claim_status": "machine-verified",
+    "detail": "d(c=(1, 2, 3))=3",
+    "figure": null
+  },
+  {
+    "tag": "1.2",
+    "section": "1.2",
+    "kind": "definition",
+    "latex": "a_i\\ne a_j\\quad(i\\ne j)",
+    "depends_on": [],
+    "status": "PASS",
+    "claim_status": "machine-verified",
+    "detail": "coordinates pairwise distinct",
+    "figure": null
+  },
+  {
+    "tag": "2.1",
+    "section": "2",
+    "kind": "structural",
+    "latex": "\\prod_i(u+a_i)^{e_i}=r(u)^2\\Rightarrow e_i=0",
+    "depends_on": [
+      "1.2"
+    ],
+    "status": "PASS",
+    "claim_status": "machine-verified",
+    "detail": "nontrivial exponent forces an odd valuation at some u=-a_j",
+    "figure": null
+  },
+  {
+    "tag": "2.2",
+    "section": "2",
+    "kind": "structural",
+    "latex": "H=\\operatorname{Gal}(E_{\\mathbf a}/\\overline K(u))\\cong(C_2)^k",
+    "depends_on": [
+      "2.1"
+    ],
+    "status": "PASS",
+    "claim_status": "machine-verified",
+    "detail": "|H|=2^4=16, C_2^4",
+    "figure": null
+  },
+  {
+    "tag": "1.4",
+    "section": "1.4",
+    "kind": "structural",
+    "latex": "E_{\\mathbf a}=\\overline K(u)(w_1,\\dots,w_k),\\; w_i^2=u+a_i",
+    "depends_on": [
+      "2.2"
+    ],
+    "status": "STRUCTURAL",
+    "claim_status": "demonstrated",
+    "detail": "[E_a : K(u)] = 2^k (from |H|)",
+    "figure": null
+  },
+  {
+    "tag": "1.5",
+    "section": "1.5",
+    "kind": "definition",
+    "latex": "f_{\\mathbf c}=\\sum_{i=1}^k c_i w_i",
+    "depends_on": [
+      "1.4"
+    ],
+    "status": "STRUCTURAL",
+    "claim_status": "demonstrated",
+    "detail": "the studied map to P^1",
+    "figure": null
+  },
+  {
+    "tag": "2.3",
+    "section": "2",
+    "kind": "structural",
+    "latex": "\\overline K(u,f_{\\mathbf c})=E_{\\mathbf a}",
+    "depends_on": [
+      "2.2"
+    ],
+    "status": "PASS",
+    "claim_status": "machine-verified",
+    "detail": "orbit size 16 = 2^4",
+    "figure": null
+  },
+  {
+    "tag": "2.5",
+    "section": "2",
+    "kind": "theorem",
+    "latex": "\\Phi=\\prod_{\\boldsymbol\\eta\\in\\{\\pm1\\}^k}(y-\\sum_i\\eta_ic_iw_i)",
+    "depends_on": [
+      "2.3"
+    ],
+    "status": "PASS",
+    "claim_status": "machine-verified",
+    "detail": "all odd radical powers cancel; coeffs in K(u)[y]",
+    "figure": null
+  },
+  {
+    "tag": "3.2",
+    "section": "3",
+    "kind": "theorem",
+    "latex": "2g-2=2^k(-2)+(k+1)2^{k-1}=2^{k-1}(k-3)",
+    "depends_on": [
+      "2.2"
+    ],
+    "status": "PASS",
+    "claim_status": "machine-verified",
+    "detail": "k=3:2g-2=0->g=1; k=4:2g-2=8->g=5; k=5:2g-2=32->g=17; k=6:2g-2=96->g=49",
+    "figure": null
+  },
+  {
+    "tag": "1.7",
+    "section": "1",
+    "kind": "formula",
+    "latex": "g(X_{\\mathbf a})=1+2^{k-2}(k-3)",
+    "depends_on": [
+      "3.2"
+    ],
+    "status": "PASS",
+    "claim_status": "machine-verified",
+    "detail": "genus (from Prop 3.3): {3: 1, 4: 5, 5: 17, 6: 49}",
+    "figure": null
+  },
+  {
+    "tag": "4.1",
+    "section": "4",
+    "kind": "formula",
+    "latex": "f_{\\mathbf c}=A_{\\boldsymbol\\eta}t^{-1}+\\tfrac12B_{\\boldsymbol\\eta}t-\\tfrac18C_{\\boldsymbol\\eta}t^3+O(t^5)",
+    "depends_on": [
+      "1.5"
+    ],
+    "status": "PASS",
+    "claim_status": "machine-verified",
+    "detail": "t^-1:A_eta, t^1:B_eta/2, t^3:-C_eta/8 confirmed",
+    "figure": null
+  },
+  {
+    "tag": "1.3",
+    "section": "1.2",
+    "kind": "definition",
+    "latex": "B_{\\boldsymbol\\eta}(\\mathbf a,\\mathbf c)\\ne0\\text{ whenever }A_{\\boldsymbol\\eta}(\\mathbf c)=0",
+    "depends_on": [
+      "1.1",
+      "4.1"
+    ],
+    "status": "PASS",
+    "claim_status": "machine-verified",
+    "detail": "no balanced class with vanishing first moment",
+    "figure": null
+  },
+  {
+    "tag": "4.2",
+    "section": "4",
+    "kind": "theorem",
+    "latex": "\\deg(f_{\\mathbf c})=d(\\mathbf c)",
+    "depends_on": [
+      "4.1",
+      "1.1"
+    ],
+    "status": "PASS",
+    "claim_status": "machine-verified",
+    "detail": "per-k degree {3: 4, 4: 5, 5: 16, 6: 22}; weighted d=3",
+    "figure": null
+  },
+  {
+    "tag": "4.3",
+    "section": "4",
+    "kind": "definition",
+    "latex": "C_1:=\\sum_{i=1}^k\\frac{c_i}{w_i}=0",
+    "depends_on": [
+      "4.2"
+    ],
+    "status": "STRUCTURAL",
+    "claim_status": "demonstrated",
+    "detail": "ramification locus of f_c",
+    "figure": null
+  },
+  {
+    "tag": "4.4",
+    "section": "4",
+    "kind": "formula",
+    "latex": "\\frac{df_{\\mathbf c}}{du}=\\frac12\\sum_i\\frac{c_i}{w_i}=\\frac12C_1",
+    "depends_on": [
+      "4.3"
+    ],
+    "status": "PASS",
+    "claim_status": "machine-verified",
+    "detail": "df/du = C1/2 verified",
+    "figure": null
+  },
+  {
+    "tag": "4.5",
+    "section": "4",
+    "kind": "theorem",
+    "latex": "\\deg R_{f_{\\mathbf c}}=2g-2+2d(\\mathbf c)",
+    "depends_on": [
+      "3.2",
+      "4.2",
+      "4.4"
+    ],
+    "status": "PASS",
+    "claim_status": "machine-verified",
+    "detail": "deg R = 2g-2+2d, using g[3.2] & d[4.2]: {3: 8, 4: 18, 5: 64, 6: 140}",
+    "figure": null
+  },
+  {
+    "tag": "1.9",
+    "section": "1",
+    "kind": "formula",
+    "latex": "\\deg R_{f_{\\mathbf c}}=2^{k-1}(k-3)+2d(\\mathbf c)",
+    "depends_on": [
+      "4.5"
+    ],
+    "status": "PASS",
+    "claim_status": "machine-verified",
+    "detail": "deg R claim (from Cor 4.4): {3: 8, 4: 18, 5: 64, 6: 140}",
+    "figure": null
+  },
+  {
+    "tag": "5.5",
+    "section": "5",
+    "kind": "structural",
+    "latex": "\\widetilde{\\mathcal C}=\\{(u,\\mathbf w):w_i\\ne0,\\ \\sum_i c_i/w_i=0\\}",
+    "depends_on": [
+      "4.3",
+      "4.4"
+    ],
+    "status": "STRUCTURAL",
+    "claim_status": "demonstrated",
+    "detail": "closed in the proper family -> finite over B_c",
+    "figure": null
+  },
+  {
+    "tag": "5.8",
+    "section": "5",
+    "kind": "theorem",
+    "latex": "\\widetilde{\\mathcal C}\\cong\\mathbb A^1_u\\times\\{x\\in(\\mathbb G_m)^k:\\sum x_i=0\\}",
+    "depends_on": [
+      "5.5"
+    ],
+    "status": "PASS",
+    "claim_status": "machine-verified",
+    "detail": "dim = 1 + (k-1) = 5 = k",
+    "figure": null
+  },
+  {
+    "tag": "6.1",
+    "section": "6",
+    "kind": "formula",
+    "latex": "\\frac{d^2f_{\\mathbf c}}{du^2}=-\\frac14\\sum_i\\frac{c_i}{w_i^3}",
+    "depends_on": [
+      "4.4"
+    ],
+    "status": "PASS",
+    "claim_status": "machine-verified",
+    "detail": "f'' = -C3/4 verified",
+    "figure": null
+  },
+  {
+    "tag": "6.4",
+    "section": "6",
+    "kind": "theorem",
+    "latex": "C_1=\\sum_i x_i,\\quad C_3=\\sum_i x_i^3/c_i^2;\\ L\\nmid Q",
+    "depends_on": [
+      "6.1",
+      "5.8"
+    ],
+    "status": "PASS",
+    "claim_status": "machine-verified",
+    "detail": "coeff of x_p^2 x_q is -3/c_r^2 != 0 => L does not divide Q",
+    "figure": null
+  },
+  {
+    "tag": "6.6",
+    "section": "6",
+    "kind": "theorem",
+    "latex": "d(f_{\\mathbf c}(P))=\\frac12\\sum_i\\frac{c_i}{w_i(P)}\\,da_i",
+    "depends_on": [
+      "6.4"
+    ],
+    "status": "STRUCTURAL",
+    "claim_status": "demonstrated",
+    "detail": "du-term vanishes (C1=0); da_i basis separates values (C3!=0)",
+    "figure": null
+  },
+  {
+    "tag": "7.1",
+    "section": "7",
+    "kind": "theorem",
+    "latex": "\\operatorname{Mon}_{\\mathrm{geom}}(f_{\\mathbf c})=S_{d(\\mathbf c)}",
+    "depends_on": [
+      "4.2",
+      "6.4",
+      "6.6"
+    ],
+    "status": "PASS",
+    "claim_status": "machine-verified",
+    "detail": "connected transposition graph generates full S_d",
+    "figure": null
+  },
+  {
+    "tag": "7.2b",
+    "section": "7",
+    "kind": "structural",
+    "latex": "\\operatorname{Gal}(u/K(\\mathbf a)(y))=S_{d(\\mathbf c)}",
+    "depends_on": [
+      "7.1"
+    ],
+    "status": "STRUCTURAL",
+    "claim_status": "demonstrated",
+    "detail": "geometric S_d normal in arithmetic <= S_d => arithmetic = S_d",
+    "figure": null
+  },
+  {
+    "tag": "8.1",
+    "section": "8",
+    "kind": "example",
+    "latex": "C_1=1+\\zeta+\\zeta^2=0,\\ C_3=3,\\ f(P)=f(-P)=0",
+    "depends_on": [
+      "6.1"
+    ],
+    "status": "PASS",
+    "claim_status": "machine-verified",
+    "detail": "C1=0, C3=3, f(P)=0 (simple crit pts, equal value)",
+    "figure": null
+  },
+  {
+    "tag": "8.2",
+    "section": "8",
+    "kind": "example",
+    "latex": "\\sum x_i=0,\\ \\sum x_i^3=0 \\Rightarrow C_1=C_3=0",
+    "depends_on": [
+      "6.1"
+    ],
+    "status": "PASS",
+    "claim_status": "machine-verified",
+    "detail": "sum=0, sum^3=0, |x_i| distinct=True",
+    "figure": null
+  },
+  {
+    "tag": "8.3",
+    "section": "8",
+    "kind": "example",
+    "latex": "A_{\\boldsymbol\\eta}=0,\\ B_{\\boldsymbol\\eta}=0,\\ C_{\\boldsymbol\\eta}=4",
+    "depends_on": [
+      "4.1"
+    ],
+    "status": "PASS",
+    "claim_status": "machine-verified",
+    "detail": "A=0, B=0, C=4 => local degree 3 at infinity",
+    "figure": null
+  },
+  {
+    "tag": "9.1",
+    "section": "9",
+    "kind": "formula",
+    "latex": "\\delta_k=\\begin{cases}2^{k-1}&k\\text{ odd}\\\\2^{k-1}-\\tfrac12\\binom{k}{k/2}&k\\text{ even}\\end{cases}",
+    "depends_on": [
+      "1.1"
+    ],
+    "status": "PASS",
+    "claim_status": "machine-verified",
+    "detail": "delta_k == direct pole count: {3: 4, 4: 5, 5: 16, 6: 22}",
+    "figure": null
+  },
+  {
+    "tag": "9.3",
+    "section": "9",
+    "kind": "structural",
+    "latex": "\\operatorname{Gal}_u(N_k/\\mathbb Q(N_i)(M))\\cong S_{\\delta_k}",
+    "depends_on": [
+      "7.1",
+      "4.2",
+      "9.1"
+    ],
+    "status": "STRUCTURAL",
+    "claim_status": "demonstrated",
+    "detail": "Thm 7.1 group + irreducibility (Prop 4.3) under a_i = N_i^2",
+    "figure": null
+  },
+  {
+    "tag": "9.table",
+    "section": "9",
+    "kind": "formula",
+    "latex": "(k,\\delta_k,g,\\deg R_f,\\text{group})",
+    "depends_on": [
+      "1.7",
+      "1.9",
+      "9.1",
+      "7.1"
+    ],
+    "status": "PASS",
+    "claim_status": "machine-verified",
+    "detail": "k=3:(4, 1, 8, 'S_4') | k=4:(5, 5, 18, 'S_5') | k=5:(16, 17, 64, 'S_16') | k=6:(22, 49, 140, 'S_22')",
+    "figure": "/home/williaml/Cella Framework/Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/figures/invariants_table_k3-6.png"
+  },
+  {
+    "tag": "10.3",
+    "section": "10",
+    "kind": "structural",
+    "latex": "[L:E]=2^{\\rho},\\ |\\operatorname{Gal}(L/F)|=2^{\\rho}|G|,\\ \\rho=sd-\\dim R",
+    "depends_on": [],
+    "status": "PASS",
+    "claim_status": "machine-verified",
+    "detail": "rho=8, [L:E]=2^8=256",
+    "figure": null
+  },
+  {
+    "tag": "10.5",
+    "section": "10",
+    "kind": "theorem",
+    "latex": "\\operatorname{rank}_{\\mathbb F_2}\\mathcal A=sd\\Rightarrow R=0,\\ W=V",
+    "depends_on": [
+      "10.3"
+    ],
+    "status": "PASS",
+    "claim_status": "machine-verified",
+    "detail": "full-rank 6=sd => R=0; deficient 5<sd => R!=0",
+    "figure": null
+  },
+  {
+    "tag": "10.7",
+    "section": "10",
+    "kind": "theorem",
+    "latex": "\\text{parity matrix}=\\mathcal B\\otimes I_d,\\ \\operatorname{rank}=sd",
+    "depends_on": [
+      "10.5"
+    ],
+    "status": "PASS",
+    "claim_status": "machine-verified",
+    "detail": "rank(B (x) I_d) = 12 = s*d = 12",
+    "figure": null
+  },
+  {
+    "tag": "10.8",
+    "section": "10",
+    "kind": "theorem",
+    "latex": "\\operatorname{Gal}(L/F)\\cong C_2^s\\wr_I G,\\ |{\\cdot}|=2^{sd}|G|",
+    "depends_on": [
+      "10.3",
+      "10.5"
+    ],
+    "status": "PASS",
+    "claim_status": "machine-verified",
+    "detail": "|Gal(L/F)| = 2^(sd)*d! = 6144",
+    "figure": null
+  },
+  {
+    "tag": "10.10",
+    "section": "10",
+    "kind": "structural",
+    "latex": "\\operatorname{Gal}(L/F)\\cong C_2^s\\wr S_{d(\\mathbf c)}",
+    "depends_on": [
+      "7.1",
+      "10.5",
+      "10.8"
+    ],
+    "status": "STRUCTURAL",
+    "claim_status": "demonstrated",
+    "detail": "G = S_d (Thm 7.1) + R=0 (Thm 10.2) + wreath (Thm 10.4)",
+    "figure": null
+  },
+  {
+    "tag": "13",
+    "section": "13",
+    "kind": "structural",
+    "latex": "\\operatorname{Mon}(f_{\\mathbf c})=S_{d(\\mathbf c)}",
+    "depends_on": [
+      "7.1",
+      "10.10"
+    ],
+    "status": "PASS",
+    "claim_status": "machine-verified",
+    "detail": "multiquadratic source -> finite incidence -> simple folds -> S_d",
+    "figure": null
+  }
+]

@@ -1,0 +1,1 @@
+../../../../../Papers_Library/02_theorems_and_lemmas/cella_residue_and_coupling_theory/R3_AC_FOLD_INDEPENDENT_REALIZATION_THEOREM_v1.0.md

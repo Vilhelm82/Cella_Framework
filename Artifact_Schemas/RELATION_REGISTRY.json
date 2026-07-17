@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "direction_rule": "from is the grammatical subject: from -relation-> to",
+  "relations": {
+    "depends_on": {
+      "meaning": "The source requires the target.",
+      "acyclic": true,
+      "impact": {
+        "from_to": false,
+        "to_from": true
+      }
+    },
+    "supersedes": {
+      "meaning": "The source replaces the target while preserving its provenance.",
+      "acyclic": true,
+      "impact": {
+        "from_to": true,
+        "to_from": true
+      }
+    },
+    "supplements": {
+      "meaning": "The source adds non-replacing material to the target.",
+      "acyclic": true,
+      "impact": {
+        "from_to": true,
+        "to_from": true
+      }
+    },
+    "proves": {
+      "meaning": "The source proof establishes the target claim.",
+      "acyclic": true,
+      "impact": {
+        "from_to": true,
+        "to_from": false
+      }
+    },
+    "derived_from_campaign": {
+      "meaning": "The source result or artifact arose from the target campaign.",
+      "acyclic": true,
+      "impact": {
+        "from_to": false,
+        "to_from": true
+      }
+    },
+    "evidenced_by": {
+      "meaning": "The source claim is supported by the target evidence object.",
+      "acyclic": true,
+      "impact": {
+        "from_to": false,
+        "to_from": true
+      }
+    },
+    "same_content_as": {
+      "meaning": "The endpoints are content-identical views or aliases.",
+      "acyclic": false,
+      "symmetric": true,
+      "impact": {
+        "from_to": true,
+        "to_from": true
+      }
+    },
+    "blocked_by": {
+      "meaning": "The source frontier item cannot close until the target closes.",
+      "acyclic": true,
+      "impact": {
+        "from_to": false,
+        "to_from": true
+      }
+    },
+    "opens_gap": {
+      "meaning": "The source exposes or creates the target gap.",
+      "acyclic": true,
+      "impact": {
+        "from_to": true,
+        "to_from": false
+      }
+    },
+    "contradicts": {
+      "meaning": "The source makes a claim incompatible with the target.",
+      "acyclic": false,
+      "symmetric": true,
+      "impact": {
+        "from_to": true,
+        "to_from": true
+      }
+    },
+    "cites": {
+      "meaning": "The source cites the target without claiming logical dependence.",
+      "acyclic": false,
+      "impact": {
+        "from_to": false,
+        "to_from": true
+      }
+    },
+    "about": {
+      "meaning": "The source unit is about / concerns the target mathematical object.",
+      "acyclic": true,
+      "impact": {
+        "from_to": false,
+        "to_from": false
+      }
+    },
+    "co_occurs_with": {
+      "meaning": "The endpoints (mathematical objects) co-appear in the same artifacts; a statistical heatmap signal, not a mathematical relation.",
+      "acyclic": false,
+      "symmetric": true,
+      "impact": {
+        "from_to": false,
+        "to_from": false
+      }
+    },
+    "specializes_to": {
+      "meaning": "The source object is a special case / restriction of the target object.",
+      "acyclic": true,
+      "impact": {
+        "from_to": false,
+        "to_from": false
+      }
+    },
+    "isomorphic_to": {
+      "meaning": "The source and target objects are isomorphic (same structure up to isomorphism).",
+      "acyclic": false,
+      "symmetric": true,
+      "impact": {
+        "from_to": false,
+        "to_from": false
+      }
+    },
+    "acts_on": {
+      "meaning": "The source object (a group, operator, or map) acts on the target object (a space or set).",
+      "acyclic": false,
+      "impact": {
+        "from_to": false,
+        "to_from": false
+      }
+    },
+    "has_base": {
+      "meaning": "The source (total/bundle/fibered object) has the target as its base object.",
+      "acyclic": true,
+      "impact": {
+        "from_to": false,
+        "to_from": false
+      }
+    },
+    "quotient_of": {
+      "meaning": "The source object is a quotient / image of the target object.",
+      "acyclic": true,
+      "impact": {
+        "from_to": false,
+        "to_from": false
+      }
+    },
+    "parameterizes": {
+      "meaning": "The source (parameter/index/family object) parameterizes the target object.",
+      "acyclic": true,
+      "impact": {
+        "from_to": false,
+        "to_from": false
+      }
+    }
+  }
+}

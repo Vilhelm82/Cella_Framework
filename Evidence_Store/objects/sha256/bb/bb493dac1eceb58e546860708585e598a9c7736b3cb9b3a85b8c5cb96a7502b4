@@ -1,0 +1,144 @@
+#!/usr/bin/env python3
+"""
+Head-to-head comparison: Conjecture C behavior for Square Root (n=2) vs Cube Root (n=3)
+in the subnormal regime.
+
+Applies the exact same methodology to both:
+- Systematic generation of the first 10,000 subnormals after 2^{-1022}
+- Information loss quantification (residual size vs original ~2^{-52} precision)
+- Residual structure vs fixed subnormal ulp (2^{-1074})
+- Binade floor preservation check
+
+This allows a clean, apples-to-apples comparison between sqrt and cbrt in subnormals.
+"""
+
+import json
+import math
+import struct
+from fractions import Fraction
+from pathlib import Path
+
+import numpy as np
+
+try:
+    import mpmath as mp
+    HAVE_MPMATH = True
+except ImportError:
+    HAVE_MPMATH = False
+
+# === Constants ===
+EMIN = -1022
+SUB_EXP = -1074
+SUB_ulp = Fraction(1, 2**1074)
+SMALLEST_NORMAL = math.ldexp(1.0, EMIN)
+ORIGINAL_PRECISION = 2.0 ** -52
+
+def f64_hex(x): 
+    return "0x" + struct.pack(">d", float(x)).hex()
+
+def binade_floor(x): 
+    return math.ldexp(1.0, math.frexp(x)[1] - 1) if x > 0 else 0.0
+
+def analyze_roundtrip(f_values, root_func, n):
+    """Run the same analysis for a given root function (sqrt or cbrt)."""
+    records = []
+    
+    for f in f_values:
+        if f <= 0 or f >= SMALLEST_NORMAL:
+            continue
+            
+        f64 = np.float64(f)
+        
+        # Root + canonical powering in float64
+        R = root_func(f64)
+        if n == 2:
+            V = R * R
+        elif n == 3:
+            V = R * R * R
+        else:
+            V = R ** n
+            
+        # Exact residual
+        try:
+            res = Fraction(V) - Fraction(f)
+            res_over_ulp = float(res / SUB_ulp)
+            is_int = (res.denominator == 1)
+        except Exception:
+            res_over_ulp = (V - f) / float(SUB_ulp)
+            is_int = False
+            
+        abs_res = abs(V - f)
+        
+        # Information loss metrics
+        res_in_orig_units = abs_res / ORIGINAL_PRECISION
+        rel_to_f = abs_res / f if f > 0 else 0
+        
+        # Binade check
+        orig_floor = binade_floor(f)
+        v_floor = binade_floor(V)
+        drops = v_floor < orig_floor
+        
+        records.append({
+            "f_hex": f64_hex(f64),
+            "V_hex": f64_hex(V),
+            "drops_binade": drops,
+            "res_over_subnormal_ulp": res_over_ulp,
+            "is_integer_multiple": is_int,
+            "residual_in_original_precision_units": res_in_orig_units,
+            "relative_to_f": rel_to_f,
+        })
+        
+    return records
+
+def main():
+    print("=== Conjecture C: Square Root vs Cube Root in Subnormals ===\n")
+    
+    # Generate first 10,000 subnormals systematically
+    print("Generating first 10,000 subnormals after 2^{-1022}...")
+    first_10k = [float(Fraction(m) / (1 << 1074)) for m in range(1, 10001)]
+    
+    # Run for sqrt (n=2)
+    print("Analyzing square root (n=2)...")
+    sqrt_results = analyze_roundtrip(first_10k, math.sqrt, 2)
+    
+    # Run for cbrt (n=3)
+    print("Analyzing cube root (n=3)...")
+    cbrt_results = analyze_roundtrip(first_10k, np.cbrt, 3)
+    
+    # Summaries
+    def summarize(records, name):
+        if not records:
+            return {name: "no data"}
+        res_units = [r["residual_in_original_precision_units"] for r in records]
+        return {
+            f"{name}_count": len(records),
+            f"{name}_max_res_in_orig_units": max(res_units),
+            f"{name}_median_res_in_orig_units": float(np.median(res_units)),
+            f"{name}_cases_dropping_binade": sum(1 for r in records if r["drops_binade"]),
+            f"{name}_frac_on_subnormal_lattice": sum(1 for r in records if r["is_integer_multiple"]) / len(records),
+        }
+    
+    summary = {}
+    summary.update(summarize(sqrt_results, "sqrt"))
+    summary.update(summarize(cbrt_results, "cbrt"))
+    
+    output = {
+        "metadata": {
+            "first_10000_subnormals": True,
+            "original_precision": ORIGINAL_PRECISION,
+            "subnormal_ulp": str(SUB_ulp),
+        },
+        "summary": summary,
+        "sqrt_results": sqrt_results,
+        "cbrt_results": cbrt_results,
+    }
+    
+    out_path = Path("scratch/conjecture_c_subnormal_sqrt_vs_cbrt_results.json")
+    out_path.write_text(json.dumps(output, indent=2))
+    
+    print(f"\nResults written to {out_path}")
+    print("\nSummary Comparison:")
+    print(json.dumps(summary, indent=2))
+
+if __name__ == "__main__":
+    main()

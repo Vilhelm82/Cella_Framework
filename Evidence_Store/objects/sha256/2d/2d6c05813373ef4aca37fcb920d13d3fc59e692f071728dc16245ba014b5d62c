@@ -1,0 +1,52 @@
+#!/usr/bin/env python3
+"""Pin down the cbrt_divergent=63/63 anomaly in the artifact.
+
+The build harness computes, inside probe_one (n=3):
+    R   = float(np.cbrt(np.float64(f)))
+    V   = float(np.power(np.float64(R), 3))
+    ... then ...
+    R_mp = cbrt_mpmath_rounded(f)     # sets mpmath.mp.dps=60 globally
+    record["cbrt_divergent"] = bool(R != R_mp)
+
+Test whether the stored flag (63 True) is internally consistent with the
+stored R_hex / R_mpmath_hex (37 differ). If flag != (R_hex != R_mp_hex),
+the flag is buggy.
+"""
+import json
+import struct
+
+import numpy as np
+import mpmath as mp
+from fractions import Fraction
+
+
+def f_from_hex(h):
+    return struct.unpack(">d", bytes.fromhex(h[2:]))[0]
+
+
+d = json.load(open("scratch/phase2B_subnormal_trace.json"))
+recs = d["sweep_records"]["n3_cbrt"]
+
+mismatch = 0
+flag_true_but_hex_equal = 0
+for r in recs:
+    flag = r.get("cbrt_divergent")
+    hex_differ = r["R_hex"] != r.get("R_mpmath_hex")
+    if flag != hex_differ:
+        mismatch += 1
+    if flag and not hex_differ:
+        flag_true_but_hex_equal += 1
+
+print("total records:", len(recs))
+print("records where flag != (R_hex != R_mpmath_hex):", mismatch)
+print("records where flag=True but R_hex == R_mpmath_hex (impossible if flag honest):",
+      flag_true_but_hex_equal)
+
+# Show a record where flag=True but hexes are equal
+for r in recs:
+    if r.get("cbrt_divergent") and r["R_hex"] == r.get("R_mpmath_hex"):
+        print("EXAMPLE buggy-flag record: f", r["f_hex"],
+              "R", r["R_hex"], "R_mp", r["R_mpmath_hex"],
+              "flag", r["cbrt_divergent"],
+              "cbrt_np_vs_mpmath_ulp", r.get("cbrt_np_vs_mpmath_ulp"))
+        break

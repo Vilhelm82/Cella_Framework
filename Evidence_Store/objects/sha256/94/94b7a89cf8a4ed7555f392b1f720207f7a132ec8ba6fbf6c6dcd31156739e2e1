@@ -1,0 +1,705 @@
+{
+  "cases": [
+    {
+      "engines": {
+        "cella": {
+          "elapsed_ms": 48.708,
+          "native_method": "pathfinder_route_plan",
+          "route": {
+            "blocking_inputs": {
+              "missing_constants": []
+            },
+            "decision": "rewrite_candidate_needed",
+            "dominant_pattern": "sterbenz_safe_catastrophic",
+            "exact_account_available": true,
+            "expression": "(1 + eps) - 1",
+            "next_tools": [
+              "cella_rewrite_candidates",
+              "cella_pathfinder_compare"
+            ],
+            "operation_shape": "catastrophic_cancellation",
+            "profile_summary": {
+              "catastrophic_site_count": 1,
+              "danger_sites": [
+                {
+                  "account_probe_status": "exact_q_account",
+                  "path": "root",
+                  "pattern": "sterbenz_safe_catastrophic",
+                  "severity": "catastrophic",
+                  "signal_exponent": "1",
+                  "unknown_parameters": []
+                }
+              ],
+              "exact_account_coverage": "all",
+              "predicted_burden_vector": {
+                "benign_sites": 0,
+                "catastrophic_sites": 1,
+                "dominant_pattern": "sterbenz_safe_catastrophic",
+                "largest_leading_constant": 1.0,
+                "micro_probe_sites": 1,
+                "min_predicted_crossing_epsilon": 2.220446049250313e-16,
+                "ordinary_sites": 0,
+                "self_cancellation_sites": 0,
+                "subtraction_sites": 1,
+                "unrecognised_sites": 0
+              },
+              "rewriteable_catastrophic_site_count": 1,
+              "site_count": 1,
+              "unresolved_catastrophic_site_count": 0
+            },
+            "route_confidence": "high",
+            "why": "Every catastrophic same-leading-constant cancellation site has a conservative rewrite family."
+          },
+          "status": "pass",
+          "timeout_s": 30.0
+        },
+        "flint_arb": {
+          "difference": "[+/- 3.46e-81]",
+          "elapsed_ms": 54.411,
+          "native_method": "python_flint_arb_ball_eval",
+          "radius": "[2.1084395965006541893460772952072389295200333052340463300146719092001074456933203e-81 +/- 2.61e-161]",
+          "stable_value": "[1.0000000000000000000000000000000000000000000000000000000000000000000000000000000e-20 +/- 1.24e-101]",
+          "status": "pass",
+          "timeout_s": 30.0,
+          "value": "[1.00000000000000000000000000000000000000000000000000000000000e-20 +/- 3.46e-81]"
+        },
+        "mpmath": {
+          "elapsed_ms": 54.164,
+          "error": "7.5700545936217615410677647451693051471565518552181086990720391077863830723145698e-82",
+          "native_method": "mpmath_high_precision_sample",
+          "stable_value": "0.00000000000000000001",
+          "status": "pass",
+          "timeout_s": 30.0,
+          "value": "0.000000000000000000010000000000000000000000000000000000000000000000000000000000000757005459362176154"
+        },
+        "sympy": {
+          "difference": "0",
+          "elapsed_ms": 223.757,
+          "native_method": "sympy_simplify_equivalence",
+          "simplified": "eps",
+          "status": "pass",
+          "timeout_s": 30.0
+        }
+      },
+      "family": "arithmetic_cancellation",
+      "id": "cancel_constant_offset",
+      "kind": "arithmetic_rewrite"
+    },
+    {
+      "engines": {
+        "cella": {
+          "elapsed_ms": 43.791,
+          "native_method": "pathfinder_route_plan",
+          "route": {
+            "blocking_inputs": {
+              "missing_constants": []
+            },
+            "decision": "rewrite_candidate_needed",
+            "dominant_pattern": "sterbenz_safe_catastrophic",
+            "exact_account_available": false,
+            "expression": "sqrt(1 + eps) - 1",
+            "next_tools": [
+              "cella_rewrite_candidates",
+              "cella_pathfinder_compare"
+            ],
+            "operation_shape": "catastrophic_cancellation",
+            "profile_summary": {
+              "catastrophic_site_count": 1,
+              "danger_sites": [
+                {
+                  "account_probe_status": "float_telemetry_only",
+                  "path": "root",
+                  "pattern": "sterbenz_safe_catastrophic",
+                  "severity": "catastrophic",
+                  "signal_exponent": "1",
+                  "unknown_parameters": []
+                }
+              ],
+              "exact_account_coverage": "none",
+              "predicted_burden_vector": {
+                "benign_sites": 0,
+                "catastrophic_sites": 1,
+                "dominant_pattern": "sterbenz_safe_catastrophic",
+                "largest_leading_constant": 1.0,
+                "micro_probe_sites": 1,
+                "min_predicted_crossing_epsilon": 4.440892666845888e-16,
+                "ordinary_sites": 0,
+                "self_cancellation_sites": 0,
+                "subtraction_sites": 1,
+                "unrecognised_sites": 0
+              },
+              "rewriteable_catastrophic_site_count": 1,
+              "site_count": 1,
+              "unresolved_catastrophic_site_count": 0
+            },
+            "route_confidence": "medium",
+            "why": "Every catastrophic same-leading-constant cancellation site has a conservative rewrite family."
+          },
+          "status": "pass",
+          "timeout_s": 30.0
+        },
+        "flint_arb": {
+          "difference": "[+/- 5.58e-81]",
+          "elapsed_ms": 56.917,
+          "native_method": "python_flint_arb_ball_eval",
+          "radius": "[3.1626754847957231438476663695130180572970973734174332632179024734135476609961634e-81 +/- 3.51e-161]",
+          "stable_value": "[4.9999999999999999999875000000000000000000624999999999999999996093750000000000000e-21 +/- 3.36e-101]",
+          "status": "pass",
+          "timeout_s": 30.0,
+          "value": "[4.99999999999999999998750000000000000000006250000000000000000e-21 +/- 5.97e-81]"
+        },
+        "mpmath": {
+          "elapsed_ms": 56.191,
+          "error": "3.0819483058706337121053169184764034896664829561730751991035044732897686453306113e-82",
+          "native_method": "mpmath_high_precision_sample",
+          "stable_value": "0.000000000000000000004999999999999999999987500000000000000000062499999999999999999609375",
+          "status": "pass",
+          "timeout_s": 30.0,
+          "value": "0.0000000000000000000049999999999999999999875000000000000000000624999999999999999993011801694129366288"
+        },
+        "sympy": {
+          "difference": "0",
+          "elapsed_ms": 261.048,
+          "native_method": "sympy_simplify_equivalence",
+          "simplified": "sqrt(eps + 1) - 1",
+          "status": "pass",
+          "timeout_s": 30.0
+        }
+      },
+      "family": "arithmetic_cancellation",
+      "id": "cancel_sqrt_conjugate",
+      "kind": "arithmetic_rewrite"
+    },
+    {
+      "engines": {
+        "cella": {
+          "elapsed_ms": 208.194,
+          "native_method": "sparse_Q_cross_multiplication",
+          "proof": "zero_normal_form",
+          "status": "pass",
+          "symbolic": {
+            "cross_difference": {
+              "is_zero": true,
+              "term_count": "0",
+              "terms": [],
+              "text": "0",
+              "variables": [
+                "S",
+                "Q"
+              ]
+            },
+            "equal": true,
+            "left": {
+              "denominator": [
+                [
+                  "1",
+                  [
+                    "0",
+                    "2"
+                  ]
+                ],
+                [
+                  "2",
+                  [
+                    "1",
+                    "1"
+                  ]
+                ]
+              ],
+              "denominator_terms": "2",
+              "is_zero": false,
+              "numerator": [
+                [
+                  "1",
+                  [
+                    "0",
+                    "2"
+                  ]
+                ],
+                [
+                  "2",
+                  [
+                    "1",
+                    "1"
+                  ]
+                ]
+              ],
+              "numerator_terms": "2",
+              "text": "(Q^2 + 2*S*Q)/(Q^2 + 2*S*Q)",
+              "variables": [
+                "S",
+                "Q"
+              ]
+            },
+            "method": "exact_cross_multiplication_in_Q_variables",
+            "right": {
+              "denominator": [
+                [
+                  "1",
+                  [
+                    "0",
+                    "0"
+                  ]
+                ]
+              ],
+              "denominator_terms": "1",
+              "is_zero": false,
+              "numerator": [
+                [
+                  "1",
+                  [
+                    "0",
+                    "0"
+                  ]
+                ]
+              ],
+              "numerator_terms": "1",
+              "text": "1",
+              "variables": [
+                "S",
+                "Q"
+              ]
+            },
+            "variables": [
+              "S",
+              "Q"
+            ]
+          },
+          "timeout_s": 30.0
+        },
+        "flint_arb": {
+          "elapsed_ms": 55.464,
+          "reason": "Flint/Arb adapter does not cover kind 'symbolic_equal'",
+          "status": "limit",
+          "timeout_s": 30.0
+        },
+        "mpmath": {
+          "elapsed_ms": 56.309,
+          "native_method": "mpmath_numeric_sample_only",
+          "reason": "mpmath can sample the identity but cannot prove the symbolic equality",
+          "sample_difference": "0.0",
+          "status": "limit",
+          "timeout_s": 30.0
+        },
+        "sympy": {
+          "difference": "0",
+          "elapsed_ms": 205.223,
+          "native_method": "sympy_cancel_together",
+          "node_count": 9,
+          "proof": "zero_normal_form",
+          "status": "pass",
+          "timeout_s": 30.0
+        }
+      },
+      "family": "symbolic_rational",
+      "id": "rational_binomial_collapse",
+      "kind": "symbolic_equal"
+    },
+    {
+      "engines": {
+        "cella": {
+          "elapsed_ms": 210.453,
+          "native_method": "sparse_Q_cross_multiplication",
+          "proof": "zero_normal_form",
+          "status": "pass",
+          "symbolic": {
+            "cross_difference": {
+              "is_zero": true,
+              "term_count": "0",
+              "terms": [],
+              "text": "0",
+              "variables": [
+                "x",
+                "y"
+              ]
+            },
+            "equal": true,
+            "left": {
+              "denominator": [
+                [
+                  "1",
+                  [
+                    "0",
+                    "0"
+                  ]
+                ]
+              ],
+              "denominator_terms": "1",
+              "is_zero": false,
+              "numerator": [
+                [
+                  "4",
+                  [
+                    "0",
+                    "4"
+                  ]
+                ],
+                [
+                  "1",
+                  [
+                    "4",
+                    "0"
+                  ]
+                ]
+              ],
+              "numerator_terms": "2",
+              "text": "4*y^4 + x^4",
+              "variables": [
+                "x",
+                "y"
+              ]
+            },
+            "method": "exact_cross_multiplication_in_Q_variables",
+            "right": {
+              "denominator": [
+                [
+                  "1",
+                  [
+                    "0",
+                    "0"
+                  ]
+                ]
+              ],
+              "denominator_terms": "1",
+              "is_zero": false,
+              "numerator": [
+                [
+                  "4",
+                  [
+                    "0",
+                    "4"
+                  ]
+                ],
+                [
+                  "1",
+                  [
+                    "4",
+                    "0"
+                  ]
+                ]
+              ],
+              "numerator_terms": "2",
+              "text": "4*y^4 + x^4",
+              "variables": [
+                "x",
+                "y"
+              ]
+            },
+            "variables": [
+              "x",
+              "y"
+            ]
+          },
+          "timeout_s": 30.0
+        },
+        "flint_arb": {
+          "elapsed_ms": 56.11,
+          "reason": "Flint/Arb adapter does not cover kind 'symbolic_equal'",
+          "status": "limit",
+          "timeout_s": 30.0
+        },
+        "mpmath": {
+          "elapsed_ms": 56.687,
+          "native_method": "mpmath_numeric_sample_only",
+          "reason": "mpmath can sample the identity but cannot prove the symbolic equality",
+          "sample_difference": "0.0",
+          "status": "limit",
+          "timeout_s": 30.0
+        },
+        "sympy": {
+          "difference": "0",
+          "elapsed_ms": 207.292,
+          "native_method": "sympy_cancel_together",
+          "node_count": 20,
+          "proof": "zero_normal_form",
+          "status": "pass",
+          "timeout_s": 30.0
+        }
+      },
+      "family": "polynomial_identity",
+      "id": "poly_sophie_germain",
+      "kind": "symbolic_equal"
+    },
+    {
+      "engines": {
+        "cella": {
+          "elapsed_ms": 42.187,
+          "local_germ": {
+            "coefficient": null,
+            "coefficient_text": "-14/(B)",
+            "coordinate": "x",
+            "kind": "parity_fixed",
+            "law": "R = -m(m+5)/B * x^-4 + O(x^-2)",
+            "m": "2",
+            "order": "4",
+            "proof_obligations": [
+              "native component has even quadratic collapse",
+              "all transverse channels have x^-2 leading poles",
+              "all components are even in the boundary coordinate",
+              "B and transverse leading units are nonzero on the stratum"
+            ],
+            "sympy_killer": "read coefficient from local germ; do not expand global curvature"
+          },
+          "native_method": "local_normal_form",
+          "status": "pass",
+          "timeout_s": 30.0
+        },
+        "flint_arb": {
+          "elapsed_ms": 55.036,
+          "reason": "Flint/Arb adapter does not cover kind 'local_germ'",
+          "status": "limit",
+          "timeout_s": 30.0
+        },
+        "mpmath": {
+          "elapsed_ms": 56.231,
+          "reason": "mpmath adapter does not cover kind 'local_germ'",
+          "status": "limit",
+          "timeout_s": 30.0
+        },
+        "sympy": {
+          "elapsed_ms": 193.004,
+          "reason": "SymPy adapter does not cover kind 'local_germ'",
+          "status": "limit",
+          "timeout_s": 30.0
+        }
+      },
+      "family": "local_geometry",
+      "id": "local_parity_fixed_pole",
+      "kind": "local_germ"
+    },
+    {
+      "engines": {
+        "cella": {
+          "corner": {
+            "active_frontface": [
+              "Vx",
+              "Vy"
+            ],
+            "active_vertices": [
+              "Vx",
+              "Vy"
+            ],
+            "balanced_direction": {
+              "ax_over_ay": "1"
+            },
+            "cancellation": {},
+            "face_data": {
+              "p_x": "4",
+              "p_y": "4",
+              "r_x": "2",
+              "r_y": "2"
+            },
+            "input_kind": "face_data",
+            "method": "corner_support_function_frontface_certificate",
+            "path": {
+              "ax": "1",
+              "ay": "1"
+            },
+            "support_order": "2",
+            "support_terms": {
+              "Vx": "2",
+              "Vy": "2"
+            },
+            "vertices": {
+              "Vx": {
+                "active": true,
+                "coefficient": null,
+                "exponent": [
+                  "-4",
+                  "2"
+                ],
+                "polar": true
+              },
+              "Vy": {
+                "active": true,
+                "coefficient": null,
+                "exponent": [
+                  "2",
+                  "-4"
+                ],
+                "polar": true
+              }
+            }
+          },
+          "elapsed_ms": 42.317,
+          "native_method": "corner_support_function",
+          "status": "pass",
+          "timeout_s": 30.0
+        },
+        "flint_arb": {
+          "elapsed_ms": 54.497,
+          "reason": "Flint/Arb adapter does not cover kind 'corner_frontface'",
+          "status": "limit",
+          "timeout_s": 30.0
+        },
+        "mpmath": {
+          "elapsed_ms": 55.138,
+          "reason": "mpmath adapter does not cover kind 'corner_frontface'",
+          "status": "limit",
+          "timeout_s": 30.0
+        },
+        "sympy": {
+          "elapsed_ms": 190.745,
+          "reason": "SymPy adapter does not cover kind 'corner_frontface'",
+          "status": "limit",
+          "timeout_s": 30.0
+        }
+      },
+      "family": "local_geometry",
+      "id": "corner_balanced_wedge",
+      "kind": "corner_frontface"
+    },
+    {
+      "engines": {
+        "cella": {
+          "determinant": "1/2067909047925770649600000",
+          "elapsed_ms": 41.737,
+          "native_method": "fraction_gaussian_elimination",
+          "status": "pass",
+          "timeout_s": 30.0
+        },
+        "flint_arb": {
+          "determinant": "1/2067909047925770649600000",
+          "elapsed_ms": 58.265,
+          "native_method": "flint_fmpq_mat_det",
+          "status": "pass",
+          "timeout_s": 30.0
+        },
+        "mpmath": {
+          "determinant": "0.000000000000000000000000483580262392611693211985557184219920973993773958591864111129277563707530953254625267372002716529750430684821258515109433",
+          "elapsed_ms": 59.462,
+          "expected": "0.000000000000000000000000483580262392611693211985557184219920973993773958591864111129277563707530953254625267372002716529750430684821258514003324",
+          "native_method": "mpmath_high_precision_det",
+          "status": "pass",
+          "timeout_s": 30.0
+        },
+        "sympy": {
+          "determinant": "1/2067909047925770649600000",
+          "elapsed_ms": 186.933,
+          "native_method": "sympy_exact_matrix_det",
+          "status": "pass",
+          "timeout_s": 30.0
+        }
+      },
+      "family": "linear_algebra",
+      "id": "hilbert_det_n7",
+      "kind": "matrix_determinant"
+    },
+    {
+      "engines": {
+        "cella": {
+          "elapsed_ms": 44.355,
+          "native_method": "principal_branch_recognition",
+          "status": "pass",
+          "timeout_s": 30.0,
+          "value": {
+            "imag": 3.141592653589793,
+            "real": 0.0
+          }
+        },
+        "flint_arb": {
+          "elapsed_ms": 54.686,
+          "native_method": "python_flint_acb_branch_enclosure",
+          "reason": "principal branch is enclosed but the Arb ball remains too wide for this branch-cut case",
+          "status": "limit",
+          "timeout_s": 30.0,
+          "value": "[+/- 2.13e-81] + [+/- 3.15]j"
+        },
+        "mpmath": {
+          "elapsed_ms": 54.352,
+          "native_method": "mpmath_principal_complex_eval",
+          "status": "pass",
+          "timeout_s": 30.0,
+          "value": "(5.3757314700932736485135837067080112831233189433665257718506018638402713769853158e-162 + 3.141592653589793238462643383279502884197169399375105820974944592307816406286209j)"
+        },
+        "sympy": {
+          "elapsed_ms": 248.906,
+          "native_method": "sympy_principal_branch_simplify",
+          "status": "pass",
+          "timeout_s": 30.0,
+          "value": "I*pi"
+        }
+      },
+      "family": "complex_branch",
+      "id": "branch_log_exp_ipi",
+      "kind": "complex_eval"
+    },
+    {
+      "engines": {
+        "cella": {
+          "elapsed_ms": 41.98,
+          "native_method": "timeout_probe_no_delay",
+          "status": "pass",
+          "timeout_s": 30.0
+        },
+        "flint_arb": {
+          "elapsed_ms": 57.251,
+          "native_method": "timeout_probe_no_delay",
+          "status": "pass",
+          "timeout_s": 30.0
+        },
+        "mpmath": {
+          "elapsed_ms": 58.242,
+          "native_method": "timeout_probe_no_delay",
+          "status": "pass",
+          "timeout_s": 30.0
+        },
+        "sympy": {
+          "elapsed_ms": 30034.461,
+          "partial": {
+            "case_id": "timeout_progress_probe",
+            "delay_seconds": 60,
+            "engine": "sympy",
+            "phase": "intentional_delay",
+            "timestamp": 1783502866.330497
+          },
+          "reason": "engine exceeded 30s case budget",
+          "status": "timeout",
+          "stderr_tail": "",
+          "stdout_tail": "",
+          "timeout_s": 30.0
+        }
+      },
+      "family": "harness_safety",
+      "id": "timeout_progress_probe",
+      "kind": "timeout_probe"
+    }
+  ],
+  "manifest_path": "benchmarks/neutral_sweep/manifest.json",
+  "per_case_timeout_s": 30.0,
+  "suite": "cella_engine_neutral_sweep",
+  "summary": {
+    "case_count": 9,
+    "engines": {
+      "cella": {
+        "fail": 0,
+        "limit": 0,
+        "pass": 9,
+        "timeout": 0,
+        "unavailable": 0
+      },
+      "flint_arb": {
+        "fail": 0,
+        "limit": 5,
+        "pass": 4,
+        "timeout": 0,
+        "unavailable": 0
+      },
+      "mpmath": {
+        "fail": 0,
+        "limit": 4,
+        "pass": 5,
+        "timeout": 0,
+        "unavailable": 0
+      },
+      "sympy": {
+        "fail": 0,
+        "limit": 2,
+        "pass": 6,
+        "timeout": 1,
+        "unavailable": 0
+      }
+    }
+  },
+  "version": "2026-07-08"
+}

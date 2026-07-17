@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "source_id": "dbp-frontier-v1",
+      "pointer": "cella:research/campaigns/Succession_Map/DBP_FRONTIER_DAG_v1.0.json",
+      "sha256": "b54897fdffc51afcc9590fa72ae42516c7ec93d74ef75992e5dacac88f601d55",
+      "role": "curated_frontier_overlay"
+    },
+    {
+      "source_id": "encyclopedia-units-v1",
+      "pointer": "cella:research/campaigns/Succession_Map/encyclopedia-units-v1.json",
+      "sha256": "db45abcea6e82a26ee83d4e8b8a4034d21fd1a7266432697ffbc0771d9584af6",
+      "role": "registered_source"
+    },
+    {
+      "source_id": "frontier-encyclopedia-bridge-v1",
+      "pointer": "cella:research/campaigns/Succession_Map/frontier-encyclopedia-bridge-v1.json",
+      "sha256": "722e31c142476b79712ee1e73f6fccb164bfc92f0ecdb16e8af413cb3715e9e0",
+      "role": "cross_source_bridge"
+    },
+    {
+      "source_id": "ensemble-pipeline-v1",
+      "pointer": "cella:research/campaigns/Succession_Map/ensemble-pipeline-v1.json",
+      "sha256": "e4b914ffe786d773a1a3f8d3073aed0d235cd8bdacdd01b1ba74c8cf100d3fb8",
+      "role": "registered_source"
+    },
+    {
+      "source_id": "ensemble-frontier-bridge-v1",
+      "pointer": "cella:research/campaigns/Succession_Map/ensemble-frontier-bridge-v1.json",
+      "sha256": "38e101665781ef7fbfb6ca61dc8657c633d8fce9cc85f85f02c2274a5a35e85d",
+      "role": "cross_source_bridge"
+    },
+    {
+      "source_id": "pipeline-encyclopedia-bridge-v1",
+      "pointer": "cella:research/campaigns/Succession_Map/pipeline-encyclopedia-bridge-v1.json",
+      "sha256": "e5b316d75c913d9194c44a92856e27b6cb0f5660aed837620e91cc53db4cba83",
+      "role": "cross_source_bridge"
+    },
+    {
+      "source_id": "object-layer-v1",
+      "pointer": "cella:research/campaigns/Succession_Map/object-layer-v1.json",
+      "sha256": "b86f57c136f46c09760300d8cfe7f5d12ec8985804d9c95cf007226111826495",
+      "role": "registered_source"
+    },
+    {
+      "source_id": "object-membership-bridge-v1",
+      "pointer": "cella:research/campaigns/Succession_Map/object-membership-bridge-v1.json",
+      "sha256": "450c825d741ee9c98801b354b2734e762bc1d623db45502a5434ff98877a8cce",
+      "role": "cross_source_bridge"
+    },
+    {
+      "source_id": "object-membership-increment-v1",
+      "pointer": "cella:research/campaigns/Succession_Map/object-membership-increment-v1.json",
+      "sha256": "2c6f435d0451928e0f56a076feb599669a1f401351dfc2d10c3df3212bb420bd",
+      "role": "cross_source_bridge"
+    },
+    {
+      "source_id": "object-cooccurrence-v1",
+      "pointer": "cella:research/campaigns/Succession_Map/object-cooccurrence-v1.json",
+      "sha256": "ed9e56a2e3cb314866012367134c0431f4548edc3da684b5f65548394c6d3d06",
+      "role": "cross_source_bridge"
+    },
+    {
+      "source_id": "object-relations-v1",
+      "pointer": "cella:research/campaigns/Succession_Map/object-relations-v1.json",
+      "sha256": "bcc86a151dd5d1f1033bbdbc40cbe132eddf1997b3f0ab6c4fbe3f7fb04eb505",
+      "role": "cross_source_bridge"
+    },
+    {
+      "source_id": "campaign-openings-v1",
+      "pointer": "cella:research/campaigns/Succession_Map/campaign-openings-v1.json",
+      "sha256": "1cb6eba47418c1e92637b8eed50fe9583b8c567002579ba65f675e0a71cf9aa0",
+      "role": "campaign_opening_overlay"
+    },
+    {
+      "source_id": "encyclopedia-crosswalk-v1",
+      "pointer": "encyclopedia:audit/DAG_CROSSWALK.csv",
+      "sha256": "d719f400107f48b92d96f95b82ae3ecf7ca147914fe8cfc30c51aa2bef394a65",
+      "role": "external_id_crosswalk"
+    }
+  ],
+  "canonical_graph": "DAG_Library/canonical/theorem-dag.json",
+  "canonical_revision": "sha256:acd9d4c392fb9e65353db0d4a35d82dcb69f5e1ef913dc99435cd1254fe39ca3"
+}

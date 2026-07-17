@@ -1,0 +1,31 @@
+{
+  "schema_id": "cella.continuation.pathfinder_behavior_confirmation_report",
+  "schema_version": "1.0",
+  "date": "2026-07-14",
+  "verdict": "CONFIRMED_WITH_SCOPE",
+  "primary_pathfinder_root": "engine/src/cella/pathfinder",
+  "confirmed_provider": "dbp_native_released_evaluation",
+  "confirmed_admitted_domain": "cella.cce.dbp_native.schema_1_1.released_six.v1",
+  "confirmed_request_count": 6,
+  "constructor": "cella.pathfinder.plan_request",
+  "combined_pathfinder_source_sha256": "0fd5afbb455fc5b142165a0f30692b54786f2f391fbc973cb1ec2cab3139bee5",
+  "provider_source_sha256": "2899b471bca4b1cd056e0b3bc61875511b671c29ff6bdebae2df8c4a0a617683",
+  "static_schedule_sha256": "02241f86d41253a5af4f126aafbd1e1ab618de6faf924a38dd96326903857d41",
+  "contract": "AdmittedRequest -> ValidPlan | UnsupportedRequest",
+  "validity_adequacy_separated": true,
+  "clean_process_replays": 2,
+  "gate_assertions_passed": 58,
+  "external_numerical_dependencies": [],
+  "campaign_local_pathfinder_used_as_primary": false,
+  "excluded_from_imported_scope": [
+    "all other live Cella Pathfinder providers",
+    "unreleased target or precision requests",
+    "arbitrary continuation paths"
+  ],
+  "deliverables": [
+    "PATHFINDER_ADMITTED_DOMAIN_SCHEMA_v1.0.json",
+    "PATHFINDER_STATE_TRANSITION_INVENTORY_v1.0.json",
+    "PATHFINDER_VALIDITY_ADEQUACY_MATRIX_v1.0.json",
+    "engine/tests/gate_continuation_pf0.py"
+  ]
+}

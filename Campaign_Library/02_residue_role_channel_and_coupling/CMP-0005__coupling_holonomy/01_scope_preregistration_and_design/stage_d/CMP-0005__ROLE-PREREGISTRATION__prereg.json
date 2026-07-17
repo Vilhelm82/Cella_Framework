@@ -1,0 +1,84 @@
+{
+  "campaign_id": "shared_residual_geometry_arm",
+  "claims": {
+    "CL-G6": "three-account balance (registered measurement)",
+    "CL-G8": "non-archimedean closure + warrant refusals (PARTIAL)"
+  },
+  "code_pins_sha256": {
+    "fixtures_d.py": "a47b28986a05b58968ff28ac2f89f6679f32f45f100c3009ae61f2296035cbaf",
+    "padic.py": "f71e43bc73ded0e96da5b5daa1a54b744d75a25ca7a7af243dd3877b431dfc0e",
+    "run_stage_d.py": "8dbbde965a5a7e957614c79789f07b29d889bfa8329cae30b37c0a077628ebec"
+  },
+  "controls": {
+    "dry_run_refuses": {
+      "floor_2adic": "below_detection_2adic",
+      "warrant_extrap": "warrant_refused"
+    },
+    "nonarch_load_bearing_control_fails": {
+      "archimedean_only": "4",
+      "cell": "BAL-1",
+      "full_product_formula": "1",
+      "lesson": "two archimedean encodings agreeing is not encoding-agnostic; the balance needs the non-archimedean place (drop it and the product formula != 1)"
+    }
+  },
+  "depends_on": {
+    "manifest_v1_sha256": "648975d082407aebdb3b0ead340639a59820f11e98231f10a0fd412fb171a7ee"
+  },
+  "expectations_pinned_at_dry_run": {
+    "cells": [
+      {
+        "kind": "balance",
+        "label": "BAL-1",
+        "v": "frac:12/5",
+        "v2": 2,
+        "verdict": "balanced"
+      },
+      {
+        "kind": "balance",
+        "label": "BAL-2",
+        "v": "frac:40/9",
+        "v2": 3,
+        "verdict": "balanced"
+      },
+      {
+        "kind": "balance",
+        "label": "BAL-3",
+        "v": "frac:56/15",
+        "v2": 3,
+        "verdict": "balanced"
+      },
+      {
+        "kind": "nonarch_closure",
+        "label": "NARCH-CLOSE",
+        "residue_v2": 5,
+        "v": "frac:3/5",
+        "verdict": "nonarch_closed"
+      },
+      {
+        "kind": "floor_2adic",
+        "label": "FLOOR-2ADIC",
+        "residue_v2": 13,
+        "v": "frac:3/5",
+        "verdict": "below_detection_2adic"
+      },
+      {
+        "kind": "warrant_extrap",
+        "label": "WARRANT-EXTRAP",
+        "v": "frac:3/5",
+        "verdict": "warrant_refused"
+      }
+    ],
+    "floor_k": 8,
+    "n_cells": 6
+  },
+  "frozen": true,
+  "grader_clauses": {
+    "PMG-D.1": "the three-account balance closes (CL-G6): on every BALANCE cell the three accounts close (value == observed + residue, exact in \u211a, for the archimedean dyadic, archimedean CF, and non-archimedean 2-adic axes) AND the product formula |v|_\u221e\u00b7|v|_2\u00b7\u220f_{p odd}|v|_p == 1 exactly in \u211a. Registered as a MEASUREMENT (F9 discipline, \u00a76.5): the adelic product-formula shape is OBSERVED to close, not asserted as a discovery. Units: cell.",
+    "PMG-D.2": "the non-archimedean place is LOAD-BEARING (CL-G6 content): on a v_2 != 0 cell, dropping the 2-adic account (archimedean-only product) breaks the balance (!= 1) \u2014 so 'encoding-agnostic' requires the genuinely-different non-archimedean place, NOT two agreeing archimedean encodings. Units: cell.",
+    "PMG-D.3": "non-archimedean closure + the lattice-floor box (CL-G8, PARTIAL): the 2-adic account closes its own residue (v == \u03a6_2(v,k) + R, v_2(R) >= k) on >=1 fixture; a 2-adic residue below the pinned floor 2^{-K} (v_2(R) > K) is REFUSED (`below_detection_2adic`), the non-archimedean analog of CL-G4. Full coverage NOT claimed. Units: cell.",
+    "PMG-D.4": "warrant refusal on holonomy extrapolation (CL-G8): a holonomy query at a budget OUTSIDE the pinned grid is REFUSED (`warrant_refused`), never silently extrapolated. Units: cell.",
+    "PMG-D.5": "determinism: the Stage-D record set is byte-identical across two runs (sha256 over records)."
+  },
+  "stage": "D",
+  "status_move_rules": "CL-G6 -> DEMONSTRATED iff every balance cell closes (three accounts + product formula exact in \u211a) AND the non-archimedean place is shown load-bearing (archimedean-only breaks the balance on a v_2 != 0 cell); the product-formula shape is a REGISTERED measurement, not asserted (F9). CL-G8 -> PARTIAL (by design) demonstrated iff >=1 non-archimedean closure holds AND the floor box refuses below 2^{-K} AND the warrant refusal fires on an out-of-grid holonomy query; full refusal/encoding coverage is NOT claimed. REFUTE-ROW (continue): FAIL_balance (the product formula does not close in \u211a, or an account fails to close) -> CL-G6 REFUTED, scope reduced, chain preserved. PARTIAL until both runs match (PMG-D.5)."
+}

@@ -1,0 +1,329 @@
+{
+ "arbiter_ground_truth": "Tier 1: branch-resolved one-sided Q jets (one_sided_nth_derivative_at) \u2014 smooth-true iff L_arb = R_arb exactly; Tier 2: mp one-sided derivatives under the pinned escalation ladder; arbiter refusal => no ground truth => excluded-from-emit-grading, count recorded.",
+ "authority": "brief section 7 H4/H5 + 7A Amendments 1, 5; Will's Stage-D GO 2026-06-12; CAMPAIGN_DISCIPLINE 1.3 (wrong_clean_emit four-way \u2014 Stage D is its primary stage)",
+ "campaign": "difference_tower",
+ "date": "2026-06-12",
+ "depends_on": {
+  "stage0_manifest_sha256_pin": "85ae1400c2ac1d8e36bd6a70b2b2ce23651b309314282c08f497fe225033a029",
+  "stage_c_prereg_sha256_pin": "3557b16af1a1c7b9ecc65831f473cf9a2ab10c90588411b769f84366a7d7b868"
+ },
+ "determinism": "byte-stable x2 (sha256 over records); records sha-pinned in verdicts; zero RNG; full suite green at stage close.",
+ "frozen": true,
+ "h4_rules_verbatim_amendment_5": {
+  "per_order": "verdict(m) per difference order m, by rule, never special-cased",
+  "tier_1": "piecewise-rational, band-free: both one-sided towers law-convergent with one-sided limits L, R exact in Q. smooth(m) <=> L = R (exact Q equality). kink(m) <=> L != R with both sides individually law-convergent. No floor exists on this class.",
+  "tier_2": "annex/raw, two-leg calculus: smooth(m) <=> agreement within combined declared uncertainty AND both stability strata STABLE; kink(m) <=> certified separation beyond combined uncertainty with both sides certified.",
+  "worse": "worse(m) <=> either one-sided tower fails its own convergence law or destabilizes \u2014 honest non-verdict, never a guess.",
+  "wrong_clean_emit": "high-confidence emit = verdict in {smooth, kink}; wrong = arbiter disagrees; four-way 1.3 decomposition; ANY wrong clean emit => H4 leg FAIL, chain preserved verbatim, route to Will. Honest worse(m) and typed refusals are NOT failures."
+ },
+ "h4_tier1_battery": [
+  {
+   "d_branch": 1,
+   "expected": {
+    "1": "kink",
+    "2": "smooth"
+   },
+   "fixture_id": "K1",
+   "note": "per-order rule: order-2 one-sided limits agree (0 = 0) although order-1 do not \u2014 Amendment 5 semantics",
+   "orders": [
+    1,
+    2
+   ],
+   "point": "0x1.0000000000000p+0",
+   "subgradient_convention": {
+    "1": "subdifferential [-1, 1]; common convention emits 0",
+    "2": "branchwise second derivative 0 both sides"
+   }
+  },
+  {
+   "d_branch": 1,
+   "expected": {
+    "1": "smooth",
+    "2": "smooth"
+   },
+   "fixture_id": "K1",
+   "orders": [
+    1,
+    2
+   ],
+   "point": "0x1.8000000000000p-1",
+   "subgradient_convention": {
+    "1": "singleton {-1}",
+    "2": "singleton {0}"
+   }
+  },
+  {
+   "d_branch": 2,
+   "expected": {
+    "1": "smooth",
+    "2": "kink"
+   },
+   "fixture_id": "K2",
+   "note": "Amendment 5's own example: smooth(1), kink(2) by rule",
+   "orders": [
+    1,
+    2
+   ],
+   "point": "0x0.0p+0",
+   "subgradient_convention": {
+    "1": "C1 function: singleton {0}",
+    "2": "second derivative jumps -2|+2; no classical value"
+   }
+  },
+  {
+   "d_branch": 2,
+   "expected": {
+    "1": "smooth",
+    "2": "smooth"
+   },
+   "fixture_id": "K2",
+   "orders": [
+    1,
+    2
+   ],
+   "point": "-0x1.8000000000000p+0",
+   "subgradient_convention": {
+    "1": "singleton {3}",
+    "2": "singleton {-2}"
+   }
+  },
+  {
+   "d_branch": 3,
+   "expected": {
+    "1": "smooth",
+    "2": "smooth",
+    "3": "smooth"
+   },
+   "fixture_id": "K3",
+   "note": "tangency-at-the-kink: abs argument has a double root \u2014 same polynomial branch both sides, smooth through order 3",
+   "orders": [
+    1,
+    2,
+    3
+   ],
+   "point": "0x0.0p+0",
+   "subgradient_convention": {
+    "1": "singleton {0}",
+    "2": "singleton {2}",
+    "3": "singleton {-6}"
+   }
+  },
+  {
+   "d_branch": 3,
+   "expected": {
+    "1": "kink",
+    "2": "kink",
+    "3": "kink"
+   },
+   "fixture_id": "K3",
+   "orders": [
+    1,
+    2,
+    3
+   ],
+   "point": "0x1.0000000000000p+0",
+   "subgradient_convention": {
+    "1": "[-1, 1]; convention 0",
+    "2": "jump -4|+4",
+    "3": "jump -6|+6"
+   }
+  },
+  {
+   "d_branch": 3,
+   "expected": {
+    "1": "smooth",
+    "2": "smooth",
+    "3": "smooth"
+   },
+   "fixture_id": "P3",
+   "orders": [
+    1,
+    2,
+    3
+   ],
+   "point": "0x1.0000000000000p-1",
+   "subgradient_convention": {
+    "1": "singleton (smooth control)",
+    "2": "singleton",
+    "3": "singleton"
+   }
+  },
+  {
+   "d_branch": 4,
+   "expected": {
+    "1": "smooth",
+    "2": "smooth",
+    "3": "smooth"
+   },
+   "fixture_id": "P4",
+   "orders": [
+    1,
+    2,
+    3
+   ],
+   "point": "-0x1.8000000000000p+0",
+   "subgradient_convention": {
+    "1": "singleton (smooth control)",
+    "2": "singleton",
+    "3": "singleton"
+   }
+  }
+ ],
+ "h4_tier2_battery": [
+  {
+   "expected": {
+    "1": "kink"
+   },
+   "fixture_id": "KT_abs_sin",
+   "orders": [
+    1
+   ],
+   "point": "0x0.0p+0",
+   "sexpr": "(abs (sin x))",
+   "subgradient_convention": {
+    "1": "[-1, 1]; convention 0"
+   }
+  },
+  {
+   "expected": {
+    "1": "smooth"
+   },
+   "fixture_id": "T1",
+   "orders": [
+    1
+   ],
+   "point": "0x1.0000000000000p-1",
+   "sexpr": "(sin x)",
+   "subgradient_convention": {
+    "1": "singleton {cos(1/2)}"
+   }
+  }
+ ],
+ "h5_grid": {
+  "j": [
+   2,
+   5,
+   9,
+   14,
+   20
+  ],
+  "m": [
+   1,
+   2,
+   3
+  ],
+  "schemes": [
+   "forward",
+   "centered"
+  ]
+ },
+ "h5_pairs": [
+  {
+   "legs": [
+    "lane_set_equality",
+    "raw_differs",
+    "account_identity"
+   ],
+   "members": [
+    "R1a",
+    "R1b"
+   ],
+   "pair_id": "R1",
+   "points": [
+    "0x1.8000000000000p-1",
+    "0x1.4000000000000p+1"
+   ]
+  },
+  {
+   "legs": [
+    "lane_set_equality",
+    "raw_differs",
+    "account_identity"
+   ],
+   "members": [
+    "R2a",
+    "R2b"
+   ],
+   "pair_id": "R2",
+   "points": [
+    "0x1.0000000000000p-1",
+    "0x1.4000000000000p+0"
+   ]
+  },
+  {
+   "legs": [
+    "raw_differs",
+    "account_identity_raw_only"
+   ],
+   "members": [
+    "C1",
+    "C2"
+   ],
+   "note": "true_class annex (Amendment 1): raw + account legs only",
+   "pair_id": "C",
+   "points": [
+    "0x1.8000000000000p-1",
+    "0x1.4000000000000p+1"
+   ]
+  }
+ ],
+ "h5_rules": {
+  "account_identity": "per member per cell: Q(raw_cell) - lane_cell == -dev_chain + iterdiff(node_deviations)/h^m, ALL exact in Q, where dev_chain = the TwoSum-replay account of the float differencing chain (additive EFT residues; ldexp scaling exact) and node_deviation_k = Q(raw f_k) - TRUE(node_k). Units: cells.",
+  "account_identity_raw_only": "C1/C2 (annex TRUE): Q(raw_cell) - exact-Q-iterdiff(Q(raw f_k))/h^m == -dev_chain, exact. The differencing account closes without any TRUE claim. Units: cells.",
+  "lane_set_equality": "lane_cell(member_a) == lane_cell(member_b) bit-for-bit in Q at EVERY (point, scheme, j, m) cell \u2014 the lift's deviation replay through DIFFERENT residue sets must reconstruct the same TRUE (falsifiable at the instrument level; HR132 Stage C pattern one floor up). Units: cells.",
+  "raw_differs": "per pair per scheme: >= 1 grid cell with raw_cell(member_a) != raw_cell(member_b) (bit-for-bit float compare). Registered prediction; counts recorded. Units: cells."
+ },
+ "head_to_head": "recorded, never graded: tower verdict / HR131 jet dead-mode (exact_jet status + kink event at the point) / subgradient convention (pinned strings above).",
+ "informativeness_dry_run": "Amendment 3/5 standing law, executed at freeze: per graded criterion one synthetic smooth, one synthetic kink, one wrong-law control (a criterion that cannot fail its control does not freeze).",
+ "scope": "H4 (verdict layer; rules FROZEN per Amendment 5 \u2014 transcribed verbatim, zero session authority over them) + H5 (route attribution per Amendment 1 scope).",
+ "stage": "D",
+ "tier1_j_pair": [
+  6,
+  10
+ ],
+ "tier1_mechanics": "see module docstring (recorded at freeze): one-sided stencils; exact limit extractor = Stage-B-certified Newton inversion over levels m..d_branch (empty sum + exact-zero level-m cells when m > d_branch); law-convergent = j-invariance over the pinned pair; verdict by the frozen rule.",
+ "tier2_ladder": [
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15,
+  16,
+  17,
+  18,
+  19,
+  20,
+  21,
+  22,
+  23,
+  24,
+  25,
+  26,
+  27,
+  28,
+  29,
+  30,
+  31,
+  32,
+  33,
+  34,
+  35,
+  36,
+  37,
+  38,
+  39,
+  40
+ ],
+ "tier2_mechanics": "see module docstring: U_side(j) = (h/2)B2 + (h^2/6)B3 + 2uM/h (derived constants; B2, B3 mp one-sided 240dps; M = max measured node |f|); L_hat = T_side(j*), j* = argmin U; STABLE = envelope containment over [j*-4, j*+4]; verdict by the frozen two-leg rule.",
+ "version": 1,
+ "wrong_clean_emit_decomposition": "four-way per discipline 1.3 over all H4 emissions: emitted_right / emitted_WRONG (any => H4 FAIL) / withheld_arbiter_clean (miss, recorded) / withheld_arbiter_unclear (justified). Written to wrong_clean_emit_summary.json."
+}

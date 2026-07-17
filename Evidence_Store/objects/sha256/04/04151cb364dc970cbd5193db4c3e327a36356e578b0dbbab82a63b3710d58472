@@ -1,0 +1,48 @@
+{
+  "layer1": {
+    "schwarzschild": {
+      "max_cancel_residual": 5.551115123125783e-17,
+      "f4_diff": 108,
+      "f4_eq": 29
+    },
+    "sr": {
+      "max_cancel_residual": 1.1102230246251565e-16,
+      "f4_diff": 55,
+      "f4_eq": 82
+    },
+    "pure_algebraic": {
+      "max_cancel_residual": 5.551115123125783e-17,
+      "f4_diff": 57,
+      "f4_eq": 80
+    },
+    "cbrt": {
+      "max_cancel_residual": 5.551115123125783e-17,
+      "f4_diff": 57,
+      "f4_eq": 80
+    }
+  },
+  "layer2": {
+    "schwarzschild": {
+      "j_variance": 0.5010003660855938,
+      "fraction_discrete": 1.0
+    },
+    "sr": {
+      "j_variance": 0.13551549712104535,
+      "fraction_discrete": 0.44551848271724276
+    },
+    "pure_algebraic": {
+      "j_variance": 0.08384525086591609,
+      "fraction_discrete": 0.40008666377787405
+    },
+    "cbrt": {
+      "j_variance": 0.08384525086591609,
+      "fraction_discrete": 0.40008666377787405
+    }
+  },
+  "layer3": {
+    "audit_artifact_exists": true,
+    "claimed_structural": "S1-S5 construction-guaranteed (18 cases)",
+    "claimed_empirical": "|cos theta| == 1.0000 for E1/E2"
+  },
+  "overall_pass": true
+}

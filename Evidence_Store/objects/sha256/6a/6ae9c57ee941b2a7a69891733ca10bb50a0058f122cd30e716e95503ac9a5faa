@@ -1,0 +1,61 @@
+"""Reproduce the ORIGINAL phase2B 64-sample grid and check numpy.cbrt vs
+correctly-rounded(mpmath) divergence count independently.
+
+Grid = 52 exact powers of two 2^-1074..2^-1023 + 12 top-subnormals walking down
+from the smallest normal. We build it ourselves and use an independent CR oracle.
+"""
+from __future__ import annotations
+import math, struct
+from fractions import Fraction
+import numpy as np
+import mpmath as mp
+
+SMALLEST_NORMAL = 2.0 ** -1022
+
+
+def pow2(exp):
+    return math.ldexp(1.0, exp)
+
+
+def build_grid():
+    s = []
+    for k in range(0, 52):
+        s.append(pow2(-1074 + k))
+    x = SMALLEST_NORMAL
+    for _ in range(12):
+        x = math.nextafter(x, 0.0)
+        if 0.0 < x < SMALLEST_NORMAL:
+            s.append(x)
+    return sorted(set(s), reverse=True)
+
+
+def cr_cbrt(f, dps=80):
+    """Correctly-rounded cube root via mpmath, choosing nearest float64 among neighbors."""
+    mp.mp.dps = dps
+    r = mp.cbrt(mp.mpf(Fraction(f).numerator) / mp.mpf(Fraction(f).denominator))
+    approx = float(r)
+    cands = {approx, np.nextafter(approx, np.inf), np.nextafter(approx, -np.inf)}
+    return min(cands, key=lambda c: abs(mp.mpf(c) - r))
+
+
+def main():
+    grid = build_grid()
+    print(f"grid size = {len(grid)}")
+    # Method 1: emulate the ORIGINAL check  float(mpmath.cbrt(...)) single-cast
+    div_orig = 0
+    div_cr = 0
+    for f in grid:
+        np_r = float(np.cbrt(np.float64(f)))
+        mp.mp.dps = 60
+        orig_ref = float(mp.cbrt(mp.mpf(Fraction(f).numerator) / mp.mpf(Fraction(f).denominator)))
+        cr_ref = cr_cbrt(f)
+        if np_r != orig_ref:
+            div_orig += 1
+        if np_r != cr_ref:
+            div_cr += 1
+    print(f"numpy.cbrt vs original float(mpmath.cbrt) single-cast: {div_orig}/{len(grid)} diverge")
+    print(f"numpy.cbrt vs robust correctly-rounded oracle:        {div_cr}/{len(grid)} diverge")
+
+
+if __name__ == "__main__":
+    main()

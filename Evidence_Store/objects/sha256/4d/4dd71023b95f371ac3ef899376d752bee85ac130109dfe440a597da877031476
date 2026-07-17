@@ -1,0 +1,152 @@
+from __future__ import annotations
+
+import json
+import sys
+from pathlib import Path
+from typing import Callable
+
+
+ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(ROOT / "src"))
+
+from lloyd_v4.core.serialization import to_json_safe
+from lloyd_v4.core.status import SweepSignatureStatus
+from lloyd_v4.primitives import (
+    CANCELLATION_GRADE_THRESHOLD,
+    DROP_RATE_THRESHOLD,
+    MIN_OBSERVATIONS_FOR_FIT,
+    sweep_signature_probe,
+)
+
+
+OUT_DIR = Path(__file__).resolve().parent
+F_VALUES = tuple(10.0 ** (-1.0 + (-8.0 / 7.0) * index) for index in range(8))
+ETA = 3e-7
+
+
+def f1(r: float, b: float, m: float) -> float:
+    return b * (r - 2.0 * m) - r**3
+
+
+def f2(r: float, b: float, m: float) -> float:
+    return b * r - 3.0 * r**3
+
+
+def naive_observable(form: Callable[[float, float, float], float], direction: tuple[float, float, float]):
+    point = (3.0, 27.0, 1.0)
+
+    def observable(f: float) -> float:
+        return form(
+            point[0] + f * direction[0],
+            point[1] + f * direction[1],
+            point[2] + f * direction[2],
+        )
+
+    return observable
+
+
+CASES = (
+    ("stable", "F1_along_r", lambda f: -9.0 * f**2 - f**3, SweepSignatureStatus.SWEEP_SIGNATURE_CLEAN),
+    ("stable", "F1_along_B", lambda f: f, SweepSignatureStatus.SWEEP_SIGNATURE_CLEAN),
+    ("stable", "F1_along_M", lambda f: -54.0 * f, SweepSignatureStatus.SWEEP_SIGNATURE_CLEAN),
+    ("stable", "F2_along_r", lambda f: -54.0 * f - 27.0 * f**2 - 3.0 * f**3, SweepSignatureStatus.SWEEP_SIGNATURE_CLEAN),
+    ("stable", "F2_along_B", lambda f: 3.0 * f, SweepSignatureStatus.SWEEP_SIGNATURE_CLEAN),
+    ("stable", "F2_along_M", lambda f: 0.0, SweepSignatureStatus.SWEEP_SIGNATURE_DEGENERATE_INPUT),
+    ("stable", "F1_along_tangent", lambda f: -27.0 * f**2 - 27.0 * f**3, SweepSignatureStatus.SWEEP_SIGNATURE_CLEAN),
+    ("stable", "F2_along_tangent", lambda f: -81.0 * f**2 - 81.0 * f**3, SweepSignatureStatus.SWEEP_SIGNATURE_CLEAN),
+    ("naive", "F1_along_r", naive_observable(f1, (1.0, 0.0, 0.0)), SweepSignatureStatus.SWEEP_SIGNATURE_CANCELLATION_DOMINATED),
+    ("naive", "F1_along_B", naive_observable(f1, (0.0, 1.0, 0.0)), SweepSignatureStatus.SWEEP_SIGNATURE_CLEAN),
+    ("naive", "F1_along_M", naive_observable(f1, (0.0, 0.0, 1.0)), SweepSignatureStatus.SWEEP_SIGNATURE_CLEAN),
+    ("naive", "F2_along_r", naive_observable(f2, (1.0, 0.0, 0.0)), SweepSignatureStatus.SWEEP_SIGNATURE_CLEAN),
+    ("naive", "F2_along_B", naive_observable(f2, (0.0, 1.0, 0.0)), SweepSignatureStatus.SWEEP_SIGNATURE_CLEAN),
+    ("naive", "F2_along_M", naive_observable(f2, (0.0, 0.0, 1.0)), SweepSignatureStatus.SWEEP_SIGNATURE_DEGENERATE_INPUT),
+    ("naive", "F1_along_tangent", naive_observable(f1, (3.0, 54.0, 1.0)), SweepSignatureStatus.SWEEP_SIGNATURE_CANCELLATION_DOMINATED),
+    ("naive", "F2_along_tangent", naive_observable(f2, (3.0, 54.0, 1.0)), SweepSignatureStatus.SWEEP_SIGNATURE_CANCELLATION_DOMINATED),
+)
+
+
+def main() -> None:
+    records = []
+    for form_kind, label, observable, expected in CASES:
+        probe_id = f"{form_kind}_{label}"
+        result = sweep_signature_probe(
+            observable,
+            F_VALUES,
+            eta=ETA,
+            function_label=probe_id,
+            probe_id=probe_id,
+        )
+        records.append(
+            {
+                "case": probe_id,
+                "form_kind": form_kind,
+                "label": label,
+                "expected_status": expected.value,
+                "observed_status": result.status.value,
+                "match": result.status is expected,
+                "value": result.value.to_json_safe(),
+                "result": to_json_safe(result),
+            }
+        )
+
+    payload = {
+        "calibration": "task035_sweep_signature_probe",
+        "f_values": list(F_VALUES),
+        "eta": ETA,
+        "thresholds": {
+            "CANCELLATION_GRADE_THRESHOLD": CANCELLATION_GRADE_THRESHOLD,
+            "DROP_RATE_THRESHOLD": DROP_RATE_THRESHOLD,
+            "MIN_OBSERVATIONS_FOR_FIT": MIN_OBSERVATIONS_FOR_FIT,
+        },
+        "records": records,
+    }
+    (OUT_DIR / "calibration_observations.json").write_text(
+        json.dumps(payload, indent=2, sort_keys=True, allow_nan=False) + "\n",
+        encoding="utf-8",
+    )
+    (OUT_DIR / "calibration_observations.md").write_text(_markdown(records), encoding="utf-8")
+    print(f"wrote {len(records)} records to {OUT_DIR}")
+
+
+def _markdown(records: list[dict[str, object]]) -> str:
+    lines = [
+        "# Task 035 Sweep Signature Calibration Observations",
+        "",
+        f"Sweep: {len(F_VALUES)} log-spaced f-values from {F_VALUES[0]:.1e} to {F_VALUES[-1]:.1e}; eta = {ETA:.1e}.",
+        f"Declared limits: cancellation grade {CANCELLATION_GRADE_THRESHOLD}, drop rate {DROP_RATE_THRESHOLD}, minimum fit observations {MIN_OBSERVATIONS_FOR_FIT}.",
+        "",
+        "| Case | Expected | Observed | Match | cancellation_grade | drop_rate | n_observed |",
+        "|---|---|---|---|---:|---:|---:|",
+    ]
+    for record in records:
+        value = record["value"]
+        assert isinstance(value, dict)
+        lines.append(
+            "| {case} | {expected_status} | {observed_status} | {match} | {grade:.12g} | {drop:.12g} | {n_observed}/{n_input} |".format(
+                case=record["case"],
+                expected_status=record["expected_status"],
+                observed_status=record["observed_status"],
+                match="yes" if record["match"] else "no",
+                grade=value["cancellation_grade"],
+                drop=value["drop_rate"],
+                n_observed=value["n_observed"],
+                n_input=value["n_input"],
+            )
+        )
+    lines.extend(
+        [
+            "",
+            "## Per-case Discussion",
+            "",
+            "- Stable non-zero cases are accepted as clean because their transfer chains are either high-quality power-law fits or stable near-zero-slope transfer chains.",
+            "- `stable_F2_along_M` and `naive_F2_along_M` are degenerate-input cases: the observable is constant zero along the M direction.",
+            "- `naive_F1_along_r`, `naive_F1_along_tangent`, and `naive_F2_along_tangent` exceed the cancellation-grade limit and are the catastrophic-cancellation cases.",
+            "- `naive_F1_along_B` is accepted as clean: its cancellation grade is below the declared limit and the drop rate is below the declared limit, matching the low-sensitivity screening policy.",
+            "",
+        ]
+    )
+    return "\n".join(lines)
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,227 @@
+# Task 050 — Transplantation Readiness Assessment
+
+**Audit date:** 2026-05-26
+
+This report rates the scratch prototypes against the dissection gate (`Build_Docs/Architecture/SUBSTRATE_CONSTRUCTION.md §4`) and recommends an ordered list of the first three transplantation tasks. Capability-spread reasoning per `SUBSTRATE_CONSTRUCTION.md §6`.
+
+---
+
+## Status since this audit (2026-05-27)
+
+This is a frozen audit dated 2026-05-26; the recommendations below are preserved as-written. Progress against the recommended order (live tracker: `LIVE_CAMPAIGNS_LEDGER.md` -> `substrate-construction-transplant-arc`):
+
+- **Transplant 1 (GAP-003 conditioning/ULP primitive): COMPLETE 2026-05-27.** Landed as `src/lloyd_v4/primitives/typed_ulp.py` (float64+float32). DRY-003 consolidated across all 10 ULP-helper sites; 12 consumers migrated; 45 tests green. GAP-012 naming closed alongside.
+- **Transplant 2 (GAP-011 hardened dual-arm probe): IN PROGRESS** — discovery done, starting brief at `Build_Docs/Agent_tasks/transplant_2_gap011_starting_brief.md`.
+- **Transplant 3 (GAP-001 typed_sqrt + GAP-002 typed_log): NOT STARTED** — blocked on GAP-009 (L1 atomicity policy).
+
+
+## §4 Dissection Gate
+
+The four conformance criteria, restated:
+
+- **(a)** Every constant has a substrate-measured equivalent with declared provenance.
+- **(b)** Every named theorem invoked is expressible as a composition of registered transitions from substrate primitives.
+- **(c)** The substrate-native implementation either bit-matches the original implementation, or documented divergences exist with the substrate-native version treated as authoritative.
+- **(d)** The modelling commitments the original locks in — choices alternative articulations would have made differently — are declared in the layer manifest.
+
+A module is **dissected** iff all four hold. Anything less is **not yet dissected** (binary verdict per §4).
+
+---
+
+## Per-prototype assessment
+
+For each scratch prototype family, the table lists which dissection-gate criteria currently hold, which fail, and what gaps block transplantation. Single-fixture scripts (kerr_*, isco_*, choptuik_*) are grouped because they all fail (a)/(b)/(d) for the same reasons — their substrate role is as domain probes rather than substrate primitives.
+
+### scratch/hardened_dual_arm_probe.py
+
+| criterion | status | evidence |
+|---|---|---|
+| (a) constants | partial — `DEFAULT_GUARD` etc. are declared as named parameters in `DualArmConfig`; constants in the 6-condition rule are bit-flag thresholds, not numeric tolerances. **Needs:** explicit `Final` typing + dossier reference in the lifted module. |
+| (b) named theorems | passes — the 6-condition rule is documented in `Build_Docs/Architecture/DUAL_ARM_PROBE_PRINCIPLES.md`, which is a normative artefact, not a named-math import. |
+| (c) bit-match | **passes operationally** — V1 is *the* production probe. There is no "original implementation" to bit-match against because the substrate-native form IS the V1. |
+| (d) modelling commitments | partial — `DUAL_ARM_PROBE_PRINCIPLES.md` declares the principles. Needs explicit layer-manifest entry (LAYER_MANIFEST.md does not yet have a `probes` or `dual_arm_probe` slot). |
+| **distance from gate** | **closest of all candidates.** Fails only (a) typing tightness and (d) layer-manifest entry. Both are documentation work, not substrate construction. |
+| **blocking gaps** | GAP-011 (lifting). Independent of GAP-001/002/003. |
+
+### scratch/symbolic_analyzer/* (analyzer.py, classifier.py, dsl.py, probe.py)
+
+| criterion | status | evidence |
+|---|---|---|
+| (a) constants | partial — `constant_match_tolerance: float = 1e-3` is a declared default; precision-floor constants are imported from a hardcoded value. **Needs:** integration with the GAP-006 four_form / GAP-008 measured-constant primitives. |
+| (b) named theorems | partial — uses `Fraction` (Python `fractions` stdlib, not named-math content) and `math.cos`/`math.sqrt`/`math.atan2` (named-math). **Needs:** the symbolic-evaluation path must compose against GAP-001 typed_sqrt + GAP-002 typed_log primitives. |
+| (c) bit-match | passes — no V3 original to compare. |
+| (d) modelling commitments | partial — calibration scripts (`scratch/symbolic_analyzer_calibration.py`, `_extended_calibration.py`) document fixture choices, but the choices aren't declared in any layer manifest. |
+| **distance from gate** | **medium-far.** Fails (a) and (b) substantively; needs the GAP-001 / GAP-002 / GAP-008 substrate slots before it can pass. |
+| **blocking gaps** | GAP-010 (decomposition into atomic + aggregator), GAP-001 (sqrt), GAP-002 (log), GAP-008 (measured constant). |
+
+### scratch/bacl_*.py (BACL audit prototypes)
+
+| criterion | status | evidence |
+|---|---|---|
+| (a) constants | **fails** — `unified_ulp`, `ulp_f64`, `ulp_f32` use `struct.unpack` bit-level + magic constants; no declared provenance. |
+| (b) named theorems | passes — BACL is theorem-proven per `V4_GLOSSARY.md §2`, derived from IEEE 754 binade spacing. |
+| (c) bit-match | partial — bit-exact match against each other is unverified (DRY-002, DRY-003). |
+| (d) modelling commitments | partial — each scratch file documents its own scope (e.g., `bacl_subnormal_audit.py` declares "subnormal" as its scope). |
+| **distance from gate** | **medium.** Once GAP-003 (ulp primitive) lands, BACL grain becomes a pure composition + the theorem invocation already passes. |
+| **blocking gaps** | GAP-003 (ulp), GAP-004 (BACL grain). |
+
+### scratch/c2_*.py (c2 lattice prototypes)
+
+| criterion | status | evidence |
+|---|---|---|
+| (a) constants | fails (same as BACL — relies on local `_ulp` helpers). |
+| (b) named theorems | passes — c2 lattice theorem is proven conditional on Conjecture C, per `V4_GLOSSARY.md §2`. |
+| (c) bit-match | partial. |
+| (d) modelling commitments | partial — `c2_theorem_scope_gate.py` explicitly declares scope ("968 binades above subnormal"). |
+| **distance from gate** | medium — needs GAP-003 + GAP-004; then the c2 prototypes become composition. |
+| **blocking gaps** | GAP-003, GAP-004. |
+
+### scratch/conjecture_c_*.py
+
+| criterion | status | evidence |
+|---|---|---|
+| (a) constants | partial — uses `mpmath.mpf` for exact comparison (AX11-003). |
+| (b) named theorems | passes — Conjecture C is V4's own theorem, proven empirically. |
+| (c) bit-match | partial. |
+| (d) modelling commitments | passes — explicit preregistry. |
+| **distance from gate** | **far** — `mpmath` removal is required before any substrate integration. |
+| **blocking gaps** | AX11-003 (mpmath removal), GAP-003 (ulp). |
+
+### scratch/foldreadback_probe0_v*.py
+
+| criterion | status | evidence |
+|---|---|---|
+| (a-d) | superseded — these are the v5–v11 precursors to `hardened_dual_arm_probe.py`. `LIVE_CAMPAIGNS_LEDGER` `hardened-dual-arm-probe` confirms V1 supersedes them. |
+| **distance from gate** | n/a — recommended for retention as history, not transplant. |
+| **action** | leave in scratch/ as historical lineage; transplant of hardened V1 inherits the learnings. |
+
+### scratch/cbrt_alpha_probe.py, scratch/sqrt_alpha_probe.py, etc.
+
+| criterion | status | evidence |
+|---|---|---|
+| (a-d) | superseded by `src/lloyd_v4/primitives/directional_alpha_probe.py`. These are calibration-class artifacts validating the production primitive. |
+| **distance from gate** | n/a — production primitive exists; no transplant needed. |
+| **action** | retain as calibration record. |
+
+### scratch/kerr_*.py, isco_*.py, choptuik_*.py, gr_photon_sphere_*.py
+
+| criterion | status | evidence |
+|---|---|---|
+| (a-d) | fails (d) at minimum — these are domain probes parameterised by physical scenarios. Not substrate candidates. |
+| **distance from gate** | n/a — wrong category. |
+| **action** | retain in scratch/. They are L4+ application-side validation, not substrate. |
+
+### scratch/substrate_fingerprint_atlas*.py, spectral_*.py, channel_dial_analysis.py, dial_behaviour_matrix.py
+
+| criterion | status | evidence |
+|---|---|---|
+| (a-d) | fails — closed campaigns (`LIVE_CAMPAIGNS_LEDGER` "substrate fingerprint atlas (Phase α + β) Closed; partial absorption into substrate-invariant-search"); these are eval artefacts. |
+| **distance from gate** | n/a — closed; partial absorption already done. |
+| **action** | retain as report-grade artefacts. |
+
+### scratch/lifted_singularity_v4_audit.py, blowup_exponent_v4_audit.py, observability_rule_audit_F4.py, conjecture_c_proof_audit.py, c2_lattice_substrate_derivation.py, bacl_*_audit.py
+
+These are *closed audits* per `LIVE_CAMPAIGNS_LEDGER` "Recently closed campaigns." They produced report-grade evidence; their substrate value is in the proven theorems they characterised (BACL, Conjecture C, c2 lattice), not in their script form. Transplantation would be redundant — the theorem is already in the substrate's vocabulary.
+
+### scratch/run_foldreadback_probe0_v10_active_dualarm.py, _v11_genuine_separation.py
+
+Runner harnesses around the supeseded probe versions. Retain as historical run scripts.
+
+### scratch/run_phase4A.py, scratch/phase4A_artifact.json
+
+Per `CLAUDE.md §10`, partially byte-identical Vera duplicates. Out of audit scope.
+
+### scratch/local_slope_field.py, transfer_function_slope_test.py, common_mode_rejection_test.py
+
+Analytical re-readbacks of existing report JSON. They consume `Build_Docs/Reports/.../phase_*.json` rather than producing substrate evidence. Not transplant candidates; they are ad-hoc analysis scripts. Retain in scratch/ as needed; absorb into eval/ if any becomes a recurring pattern.
+
+### scratch/symbolic_analyzer_mvp.py, _v2.py, _calibration.py, _extended_calibration.py
+
+MVP and calibration drivers for the symbolic_analyzer package. Transplant the analyzer first (GAP-010); these are then redundant as standalone scripts (the analyzer would be invoked from eval scripts).
+
+---
+
+## Capability-spread analysis
+
+Per §6: "The queue should be ordered by *capability spread* (consumer count × downstream leverage), not by dissection cost."
+
+| candidate | direct consumers | downstream leverage | spread score |
+|---|---|---|---|
+| GAP-001 typed_sqrt | 3 substrate primitives (`stratified_quadratic_roots`, `typed_log_log_slope`, `directional_alpha_probe`) + ~14 eval scripts (four-form battery) | Axiom 11′ refinement criterion 1; substrate-wide. | **VERY HIGH** |
+| GAP-002 typed_log | 3 substrate primitives + ~10 eval scripts using log-log slope | Same Axiom 11′ path; substrate-wide. | **VERY HIGH** |
+| GAP-003 typed_ulp / conditioning primitive | ~8 scratch + 2 eval ULP helpers; pre-requisite per SUBSTRATE_CONSTRUCTION §9 for V3 transplants | All BACL-aware downstream code; gateway to BACL/c2/Conjecture-C transplant chain. | **VERY HIGH** |
+| GAP-011 hardened dual-arm probe lift | direct production use by foldreadback/SR-F2/F4 audits; Phase 3B-of-alpha-minus-one-exhaustion executor | Closes architectural debt; no follow-on consumer capability unlock beyond the lift itself. | **HIGH but localised** |
+| GAP-004 BACL grain primitive | depends on GAP-003; consumers are ~5 eval phases + ~3 scratch families | Strong, but downstream of GAP-003. | **MEDIUM after GAP-003** |
+| GAP-006 four_form primitive | ~10 campaign scripts + ~6 fingerprint atlas / phase scripts | DRY-resolution; downstream of GAP-001 (sqrt) | **HIGH after GAP-001** |
+| GAP-010 symbolic cancellation analyzer | currently zero production consumers; eval `refinery_mvp/burden_vector.py` is its implicit competitor | Connects prediction↔observation in the refinery — high potential, low current usage | **MEDIUM-HIGH** |
+| GAP-007 sterbenz_boundary primitive | 3 campaign scripts + sterbenz_audit chain | Modest. | **MEDIUM** |
+| GAP-005 K_G primitive | 4 eval helpers; downstream of substrate-invariant-search Gate 2 | Tied to an open research campaign; not actionable in first three transplants. | **DEFERRED** |
+| GAP-008 measured-constant primitive | currently zero substrate consumers; Axiom 11′ enabler | High-future, low-current. | **DEFERRED** |
+| GAP-009 L1 atomicity policy | not a primitive; methodology clarification | — | **DEFERRED to ARCHITECTURE PASS** |
+| GAP-012 conditioning naming collision | not a primitive; methodology clarification | — | **DEFERRED to V4_GLOSSARY §13** |
+
+---
+
+## Recommended ordering: first three transplantation tasks
+
+The transplantation queue is ordered by **capability spread × architectural prerequisite chain**, not by dissection cost. Three candidates dominate, in this order:
+
+### Transplant 1 — Conditioning / ULP primitive (GAP-003)
+
+**Rationale.** `SUBSTRATE_CONSTRUCTION.md §9 step 1` explicitly names this as the prerequisite for V3 transplants: *"The conditioning primitive (instrument geometry on the IEEE 754 float lattice) is implemented and stabilised. This is prerequisite to most subsequent transplants because many V3 methods compose against conditioning structures."* This is direct guidance from the methodology.
+
+Capability spread: VERY HIGH. Closes DRY-003 (8+ duplicated ULP helpers); unlocks GAP-004 (BACL grain), GAP-005 (K_G), and the entire BACL/c2/Conjecture-C dependency chain.
+
+Dissection-gate distance: medium. Eight scratch ULP implementations exist; differences are subnormal handling. A canonical typed primitive will resolve drift.
+
+**Why first:** the methodology document explicitly names it. Its absence makes every downstream substrate transplant depend on ad-hoc ULP helpers.
+
+### Transplant 2 — Hardened dual-arm probe lift (GAP-011)
+
+**Rationale.** This is a *lifecycle* transplant (not a substrate-construction transplant in the §3 sense), but it has three properties that make it the natural second:
+
+1. **Independent of GAP-001/002/003 chains.** It is not blocked by any of the Axiom 11′ work.
+2. **Production-active.** Per `LIVE_CAMPAIGNS_LEDGER` `hardened-dual-arm-probe`, V1 is operative; the architectural debt is the only reason it sits in scratch/.
+3. **Self-contained.** No substrate primitives need to be invented; the probe composes only against existing L1 primitives + L2 metrology.
+
+Capability spread: HIGH-LOCALISED. Closes one specific architectural debt with no chain-of-dependencies.
+
+Dissection-gate distance: nearest of all candidates (passes b/c operationally; needs (a) typing tightness + (d) LAYER_MANIFEST entry).
+
+**Why second:** can be done in parallel with Transplant 1; provides a fast architectural win and a worked example of the §3 transplantation methodology at the L3 instrument level. Operationally, the substrate gains nothing new — but the *layering* becomes honest.
+
+### Transplant 3 — Typed sqrt + typed log primitive bundle (GAP-001 + GAP-002)
+
+**Rationale.** These two are tightly coupled (both required for `typed_log_log_slope` and `directional_alpha_probe` to be Axiom-11′-compliant) and naturally land together. The pair closes the Axiom 11 → Axiom 11′ refinement criterion 1 for the most-used named-math substrate calls (`math.sqrt`, `math.log`).
+
+Capability spread: VERY HIGH. Together they touch every substrate primitive currently violating Axiom 11 strict form (4 primitives + 1 L2 module). Sets up Axiom 11′ activation per `SUBSTRATE_CONSTRUCTION.md §7.1`.
+
+Dissection-gate distance: medium. The substrate-native implementation can call `math.sqrt` / `math.log` internally during construction (the IEEE-754-correct rounding behaviour is itself substrate-traceable through BACL + Conjecture C); the gating work is wrapping these in typed envelopes with declared status families and provenance.
+
+**Why third:** done after Transplant 1 because the typed_sqrt / typed_log primitives may want to compose against the new conditioning primitive (the precision_floor concept and the unit-roundoff lookup are conditioning information).
+
+---
+
+## Notes on what is NOT recommended for the first three
+
+- **GAP-005 (K_G primitive):** open research question. `substrate-invariant-search` Gate 2 closure is the prerequisite. Transplanting K_G as substrate before the gate would mint a derivation-incomplete primitive. Defer.
+
+- **GAP-004 (BACL grain primitive):** downstream of GAP-003 (ulp). After Transplant 1 lands, BACL grain is a pure composition; it becomes a small follow-on transplant rather than a first-tier one.
+
+- **GAP-006 (four_form primitive), GAP-007 (sterbenz_boundary primitive):** downstream of GAP-001 (sqrt). After Transplant 3 lands, both become pure compositions.
+
+- **GAP-008 (measured-constant primitive), GAP-010 (symbolic cancellation analyzer):** medium-term work; no current substrate consumers; transplant value depends on Axiom 11′ activation and on `layer-3-promotion` campaign progress.
+
+- **GAP-009 (L1 atomicity policy), GAP-012 (conditioning naming collision):** architecture-document tasks; should be addressed in a separate methodology review.
+
+---
+
+## Risks and uncertainty
+
+- **Risk 1: Transplant 1 (GAP-003) may surface Mode 2 conflation between "ulp" and "binade exponent."** `bacl_invariant_audit.py` has both `floor_binade` and `ulp_f64`; they are not the same operation. The transplant must distinguish them explicitly — otherwise it inherits the conflation.
+
+- **Risk 2: Transplant 3 (GAP-001 + GAP-002) bit-match (criterion c)**. Substrate-native typed_sqrt that internally calls `math.sqrt` will bit-match by construction. If a future substrate-derived sqrt (e.g., Newton iteration with declared termination criterion) replaces the inner call, criterion (c) requires explicit divergence documentation.
+
+- **Risk 3: Transplant 2 (GAP-011) may reveal LAYER_MANIFEST omissions.** The hardened dual-arm probe doesn't fit cleanly into `branch/` or `metrology/`. A new `probes/` sub-package may be the natural home; if so, LAYER_MANIFEST needs an entry for it.
+
+- **Uncertainty:** the task spec's "L1 = atomic" framing (GAP-009) is in genuine tension with LAYER_MANIFEST's sibling-composition allowance for the alpha-probe / sweep-signature family. If GAP-009 is resolved in favour of strict atomicity, then `directional_alpha_probe` etc. would need to relocate to L2 — which would in turn affect how Transplant 3 is staged. **Recommend resolving GAP-009 before Transplant 3 begins.**

@@ -1,0 +1,770 @@
+{
+  "all_pass": true,
+  "campaign_id": "three_channel_kg",
+  "cycle_id": "c001",
+  "defect_chain_count": 0,
+  "eval_tier_only": true,
+  "failing_predictions": [],
+  "halt": false,
+  "halt_reason": null,
+  "kills_fired": [],
+  "n_pass": 9,
+  "n_predictions": 9,
+  "no_tolerance": true,
+  "preconditions": {
+    "P-frame": true,
+    "P-self-cert": true,
+    "run_void": false
+  },
+  "predictions": {
+    "PC1_keystone_base_jet": {
+      "detail": {
+        "base_tuple": [
+          "frac:-3/49",
+          "frac:-1/49",
+          "frac:1/49",
+          "frac:-3/49"
+        ],
+        "detail": {
+          "K_G_eq_m3_49": true,
+          "kappa_c_eq_m1_49": true,
+          "kappa_int_eq_m3_49": true,
+          "kappa_s_eq_1_49": true,
+          "pathB_total_agrees": true,
+          "pathBprime_tuple_agrees": true,
+          "pathC_oracle_agrees": true,
+          "prod_g_eq_6": true,
+          "q_eq_14": true,
+          "q_squared_eq_196": true,
+          "sigma_2_eq_K_G": true,
+          "tr_PHP_eq_12_7": true
+        },
+        "pass": true,
+        "prod_g": "frac:6/1",
+        "q": "frac:14/1",
+        "q_squared": "frac:196/1",
+        "tr_PHP": "frac:12/7"
+      },
+      "pass": true,
+      "units": "exact Q (Fraction) per component"
+    },
+    "PC2_single_edge_law_keystone": {
+      "detail": {
+        "detail": {
+          "e1": {
+            "H_jk": "frac:0/1",
+            "complement_pair_1indexed": [
+              2,
+              3
+            ],
+            "delta_kappa_c_per_unit_t": "frac:0/1",
+            "disposition": "PINS",
+            "per_t": {
+              "frac:-4/1": {
+                "delta_kappa_c": "frac:0/1",
+                "law": "frac:0/1",
+                "match": true
+              },
+              "frac:1/1": {
+                "delta_kappa_c": "frac:0/1",
+                "law": "frac:0/1",
+                "match": true
+              },
+              "frac:1/2": {
+                "delta_kappa_c": "frac:0/1",
+                "law": "frac:0/1",
+                "match": true
+              },
+              "frac:2/1": {
+                "delta_kappa_c": "frac:0/1",
+                "law": "frac:0/1",
+                "match": true
+              },
+              "frac:3/1": {
+                "delta_kappa_c": "frac:0/1",
+                "law": "frac:0/1",
+                "match": true
+              }
+            }
+          },
+          "e2": {
+            "H_jk": "frac:0/1",
+            "complement_pair_1indexed": [
+              1,
+              3
+            ],
+            "delta_kappa_c_per_unit_t": "frac:0/1",
+            "disposition": "PINS",
+            "per_t": {
+              "frac:-4/1": {
+                "delta_kappa_c": "frac:0/1",
+                "law": "frac:0/1",
+                "match": true
+              },
+              "frac:1/1": {
+                "delta_kappa_c": "frac:0/1",
+                "law": "frac:0/1",
+                "match": true
+              },
+              "frac:1/2": {
+                "delta_kappa_c": "frac:0/1",
+                "law": "frac:0/1",
+                "match": true
+              },
+              "frac:2/1": {
+                "delta_kappa_c": "frac:0/1",
+                "law": "frac:0/1",
+                "match": true
+              },
+              "frac:3/1": {
+                "delta_kappa_c": "frac:0/1",
+                "law": "frac:0/1",
+                "match": true
+              }
+            }
+          },
+          "e3": {
+            "H_jk": "frac:1/1",
+            "complement_pair_1indexed": [
+              1,
+              2
+            ],
+            "delta_kappa_c_per_unit_t": "frac:6/49",
+            "disposition": "MOVES",
+            "per_t": {
+              "frac:-4/1": {
+                "delta_kappa_c": "frac:-24/49",
+                "law": "frac:-24/49",
+                "match": true
+              },
+              "frac:1/1": {
+                "delta_kappa_c": "frac:6/49",
+                "law": "frac:6/49",
+                "match": true
+              },
+              "frac:1/2": {
+                "delta_kappa_c": "frac:3/49",
+                "law": "frac:3/49",
+                "match": true
+              },
+              "frac:2/1": {
+                "delta_kappa_c": "frac:12/49",
+                "law": "frac:12/49",
+                "match": true
+              },
+              "frac:3/1": {
+                "delta_kappa_c": "frac:18/49",
+                "law": "frac:18/49",
+                "match": true
+              }
+            }
+          }
+        },
+        "pass": true
+      },
+      "pass": true,
+      "units": "exact Q (Fraction); delta kappa_c per edge per t"
+    },
+    "PC3_sigma_r_preserved_keystone": {
+      "detail": {
+        "base_sigma2": "frac:-3/49",
+        "base_tr_PHP": "frac:12/7",
+        "detail": {
+          "e1": {
+            "frac:-4/1": {
+              "K_G_invariant_A": true,
+              "K_G_invariant_B": true,
+              "K_G_invariant_Bprime": true,
+              "all_sigma_r_preserved": true,
+              "q_invariant": true,
+              "sigma2_invariant": true,
+              "tr_PHP_invariant": true
+            },
+            "frac:1/1": {
+              "K_G_invariant_A": true,
+              "K_G_invariant_B": true,
+              "K_G_invariant_Bprime": true,
+              "all_sigma_r_preserved": true,
+              "q_invariant": true,
+              "sigma2_invariant": true,
+              "tr_PHP_invariant": true
+            },
+            "frac:1/2": {
+              "K_G_invariant_A": true,
+              "K_G_invariant_B": true,
+              "K_G_invariant_Bprime": true,
+              "all_sigma_r_preserved": true,
+              "q_invariant": true,
+              "sigma2_invariant": true,
+              "tr_PHP_invariant": true
+            },
+            "frac:2/1": {
+              "K_G_invariant_A": true,
+              "K_G_invariant_B": true,
+              "K_G_invariant_Bprime": true,
+              "all_sigma_r_preserved": true,
+              "q_invariant": true,
+              "sigma2_invariant": true,
+              "tr_PHP_invariant": true
+            },
+            "frac:3/1": {
+              "K_G_invariant_A": true,
+              "K_G_invariant_B": true,
+              "K_G_invariant_Bprime": true,
+              "all_sigma_r_preserved": true,
+              "q_invariant": true,
+              "sigma2_invariant": true,
+              "tr_PHP_invariant": true
+            }
+          },
+          "e2": {
+            "frac:-4/1": {
+              "K_G_invariant_A": true,
+              "K_G_invariant_B": true,
+              "K_G_invariant_Bprime": true,
+              "all_sigma_r_preserved": true,
+              "q_invariant": true,
+              "sigma2_invariant": true,
+              "tr_PHP_invariant": true
+            },
+            "frac:1/1": {
+              "K_G_invariant_A": true,
+              "K_G_invariant_B": true,
+              "K_G_invariant_Bprime": true,
+              "all_sigma_r_preserved": true,
+              "q_invariant": true,
+              "sigma2_invariant": true,
+              "tr_PHP_invariant": true
+            },
+            "frac:1/2": {
+              "K_G_invariant_A": true,
+              "K_G_invariant_B": true,
+              "K_G_invariant_Bprime": true,
+              "all_sigma_r_preserved": true,
+              "q_invariant": true,
+              "sigma2_invariant": true,
+              "tr_PHP_invariant": true
+            },
+            "frac:2/1": {
+              "K_G_invariant_A": true,
+              "K_G_invariant_B": true,
+              "K_G_invariant_Bprime": true,
+              "all_sigma_r_preserved": true,
+              "q_invariant": true,
+              "sigma2_invariant": true,
+              "tr_PHP_invariant": true
+            },
+            "frac:3/1": {
+              "K_G_invariant_A": true,
+              "K_G_invariant_B": true,
+              "K_G_invariant_Bprime": true,
+              "all_sigma_r_preserved": true,
+              "q_invariant": true,
+              "sigma2_invariant": true,
+              "tr_PHP_invariant": true
+            }
+          },
+          "e3": {
+            "frac:-4/1": {
+              "K_G_invariant_A": true,
+              "K_G_invariant_B": true,
+              "K_G_invariant_Bprime": true,
+              "all_sigma_r_preserved": true,
+              "q_invariant": true,
+              "sigma2_invariant": true,
+              "tr_PHP_invariant": true
+            },
+            "frac:1/1": {
+              "K_G_invariant_A": true,
+              "K_G_invariant_B": true,
+              "K_G_invariant_Bprime": true,
+              "all_sigma_r_preserved": true,
+              "q_invariant": true,
+              "sigma2_invariant": true,
+              "tr_PHP_invariant": true
+            },
+            "frac:1/2": {
+              "K_G_invariant_A": true,
+              "K_G_invariant_B": true,
+              "K_G_invariant_Bprime": true,
+              "all_sigma_r_preserved": true,
+              "q_invariant": true,
+              "sigma2_invariant": true,
+              "tr_PHP_invariant": true
+            },
+            "frac:2/1": {
+              "K_G_invariant_A": true,
+              "K_G_invariant_B": true,
+              "K_G_invariant_Bprime": true,
+              "all_sigma_r_preserved": true,
+              "q_invariant": true,
+              "sigma2_invariant": true,
+              "tr_PHP_invariant": true
+            },
+            "frac:3/1": {
+              "K_G_invariant_A": true,
+              "K_G_invariant_B": true,
+              "K_G_invariant_Bprime": true,
+              "all_sigma_r_preserved": true,
+              "q_invariant": true,
+              "sigma2_invariant": true,
+              "tr_PHP_invariant": true
+            }
+          }
+        },
+        "pass": true
+      },
+      "pass": true,
+      "units": "exact Q (Fraction); per-edge per-t invariance booleans"
+    },
+    "PC4_deltaC_in_ker_Sigma_keystone": {
+      "detail": {
+        "detail": {
+          "e1": {
+            "frac:-4/1": {
+              "A_eq_Bprime": true,
+              "Sigma_deltaC": "frac:0/1",
+              "deltaC": [
+                "frac:0/1",
+                "frac:-12/49",
+                "frac:12/49"
+              ],
+              "deltaC_nonzero": true,
+              "in_ker_Sigma": true
+            },
+            "frac:1/1": {
+              "A_eq_Bprime": true,
+              "Sigma_deltaC": "frac:0/1",
+              "deltaC": [
+                "frac:0/1",
+                "frac:3/49",
+                "frac:-3/49"
+              ],
+              "deltaC_nonzero": true,
+              "in_ker_Sigma": true
+            },
+            "frac:1/2": {
+              "A_eq_Bprime": true,
+              "Sigma_deltaC": "frac:0/1",
+              "deltaC": [
+                "frac:0/1",
+                "frac:3/98",
+                "frac:-3/98"
+              ],
+              "deltaC_nonzero": true,
+              "in_ker_Sigma": true
+            },
+            "frac:2/1": {
+              "A_eq_Bprime": true,
+              "Sigma_deltaC": "frac:0/1",
+              "deltaC": [
+                "frac:0/1",
+                "frac:6/49",
+                "frac:-6/49"
+              ],
+              "deltaC_nonzero": true,
+              "in_ker_Sigma": true
+            },
+            "frac:3/1": {
+              "A_eq_Bprime": true,
+              "Sigma_deltaC": "frac:0/1",
+              "deltaC": [
+                "frac:0/1",
+                "frac:9/49",
+                "frac:-9/49"
+              ],
+              "deltaC_nonzero": true,
+              "in_ker_Sigma": true
+            }
+          },
+          "e2": {
+            "frac:-4/1": {
+              "A_eq_Bprime": true,
+              "Sigma_deltaC": "frac:0/1",
+              "deltaC": [
+                "frac:0/1",
+                "frac:-52/49",
+                "frac:52/49"
+              ],
+              "deltaC_nonzero": true,
+              "in_ker_Sigma": true
+            },
+            "frac:1/1": {
+              "A_eq_Bprime": true,
+              "Sigma_deltaC": "frac:0/1",
+              "deltaC": [
+                "frac:0/1",
+                "frac:13/49",
+                "frac:-13/49"
+              ],
+              "deltaC_nonzero": true,
+              "in_ker_Sigma": true
+            },
+            "frac:1/2": {
+              "A_eq_Bprime": true,
+              "Sigma_deltaC": "frac:0/1",
+              "deltaC": [
+                "frac:0/1",
+                "frac:13/98",
+                "frac:-13/98"
+              ],
+              "deltaC_nonzero": true,
+              "in_ker_Sigma": true
+            },
+            "frac:2/1": {
+              "A_eq_Bprime": true,
+              "Sigma_deltaC": "frac:0/1",
+              "deltaC": [
+                "frac:0/1",
+                "frac:26/49",
+                "frac:-26/49"
+              ],
+              "deltaC_nonzero": true,
+              "in_ker_Sigma": true
+            },
+            "frac:3/1": {
+              "A_eq_Bprime": true,
+              "Sigma_deltaC": "frac:0/1",
+              "deltaC": [
+                "frac:0/1",
+                "frac:39/49",
+                "frac:-39/49"
+              ],
+              "deltaC_nonzero": true,
+              "in_ker_Sigma": true
+            }
+          },
+          "e3": {
+            "frac:-4/1": {
+              "A_eq_Bprime": true,
+              "Sigma_deltaC": "frac:0/1",
+              "deltaC": [
+                "frac:-24/49",
+                "frac:-8/49",
+                "frac:32/49"
+              ],
+              "deltaC_nonzero": true,
+              "in_ker_Sigma": true
+            },
+            "frac:1/1": {
+              "A_eq_Bprime": true,
+              "Sigma_deltaC": "frac:0/1",
+              "deltaC": [
+                "frac:6/49",
+                "frac:2/49",
+                "frac:-8/49"
+              ],
+              "deltaC_nonzero": true,
+              "in_ker_Sigma": true
+            },
+            "frac:1/2": {
+              "A_eq_Bprime": true,
+              "Sigma_deltaC": "frac:0/1",
+              "deltaC": [
+                "frac:3/49",
+                "frac:1/49",
+                "frac:-4/49"
+              ],
+              "deltaC_nonzero": true,
+              "in_ker_Sigma": true
+            },
+            "frac:2/1": {
+              "A_eq_Bprime": true,
+              "Sigma_deltaC": "frac:0/1",
+              "deltaC": [
+                "frac:12/49",
+                "frac:4/49",
+                "frac:-16/49"
+              ],
+              "deltaC_nonzero": true,
+              "in_ker_Sigma": true
+            },
+            "frac:3/1": {
+              "A_eq_Bprime": true,
+              "Sigma_deltaC": "frac:0/1",
+              "deltaC": [
+                "frac:18/49",
+                "frac:6/49",
+                "frac:-24/49"
+              ],
+              "deltaC_nonzero": true,
+              "in_ker_Sigma": true
+            }
+          }
+        },
+        "e1_pins": true,
+        "e2_pins": true,
+        "e3_genuine_move": true,
+        "pass": true
+      },
+      "pass": true,
+      "units": "exact Q (Fraction); Sigma(delta C) must be exactly 0/1"
+    },
+    "PC5_single_edge_law_symbolic_over_Q": {
+      "detail": {
+        "pass": true,
+        "proof": {
+          "all_edges_identity_holds": true,
+          "e1": {
+            "complement_pair_1indexed": [
+              2,
+              3
+            ],
+            "delta_Delta_c_monomials": 1,
+            "identity_holds": true,
+            "law_monomials": 1,
+            "residual_monomials": 0
+          },
+          "e2": {
+            "complement_pair_1indexed": [
+              1,
+              3
+            ],
+            "delta_Delta_c_monomials": 1,
+            "identity_holds": true,
+            "law_monomials": 1,
+            "residual_monomials": 0
+          },
+          "e3": {
+            "complement_pair_1indexed": [
+              1,
+              2
+            ],
+            "delta_Delta_c_monomials": 1,
+            "identity_holds": true,
+            "law_monomials": 1,
+            "residual_monomials": 0
+          },
+          "indeterminates": [
+            "g1",
+            "g2",
+            "g3",
+            "h11",
+            "h12",
+            "h13",
+            "h22",
+            "h23",
+            "h33",
+            "t"
+          ]
+        }
+      },
+      "pass": true,
+      "units": "count of residual monomials (must be 0) for each edge"
+    },
+    "PC6_KG_invariant_symbolic_over_Q": {
+      "detail": {
+        "pass": true,
+        "proof": {
+          "all_edges_PHP_unchanged": true,
+          "all_edges_det_invariance_holds": true,
+          "e1": {
+            "PHP_qcleared_nonzero_entries": 0,
+            "PHP_unchanged_symbolically": true,
+            "det_invariance_holds": true,
+            "det_residual_monomials": 0
+          },
+          "e2": {
+            "PHP_qcleared_nonzero_entries": 0,
+            "PHP_unchanged_symbolically": true,
+            "det_invariance_holds": true,
+            "det_residual_monomials": 0
+          },
+          "e3": {
+            "PHP_qcleared_nonzero_entries": 0,
+            "PHP_unchanged_symbolically": true,
+            "det_invariance_holds": true,
+            "det_residual_monomials": 0
+          },
+          "indeterminates": [
+            "g1",
+            "g2",
+            "g3",
+            "h11",
+            "h12",
+            "h13",
+            "h22",
+            "h23",
+            "h33",
+            "t"
+          ]
+        }
+      },
+      "pass": true,
+      "units": "count of residual monomials (must be 0) for det invariance; count of nonzero entries in q^2*(PH'P-PHP) (must be 0)"
+    },
+    "PC7_two_derivation_under_gauge": {
+      "detail": {
+        "detail": {
+          "e1": {
+            "frac:-4/1": {
+              "A_eq_Bprime": true
+            },
+            "frac:1/1": {
+              "A_eq_Bprime": true
+            },
+            "frac:1/2": {
+              "A_eq_Bprime": true
+            },
+            "frac:2/1": {
+              "A_eq_Bprime": true
+            },
+            "frac:3/1": {
+              "A_eq_Bprime": true
+            }
+          },
+          "e2": {
+            "frac:-4/1": {
+              "A_eq_Bprime": true
+            },
+            "frac:1/1": {
+              "A_eq_Bprime": true
+            },
+            "frac:1/2": {
+              "A_eq_Bprime": true
+            },
+            "frac:2/1": {
+              "A_eq_Bprime": true
+            },
+            "frac:3/1": {
+              "A_eq_Bprime": true
+            }
+          },
+          "e3": {
+            "frac:-4/1": {
+              "A_eq_Bprime": true
+            },
+            "frac:1/1": {
+              "A_eq_Bprime": true
+            },
+            "frac:1/2": {
+              "A_eq_Bprime": true
+            },
+            "frac:2/1": {
+              "A_eq_Bprime": true
+            },
+            "frac:3/1": {
+              "A_eq_Bprime": true
+            }
+          }
+        },
+        "pass": true
+      },
+      "pass": true,
+      "units": "exact Q (Fraction); per-edge per-t boolean A==B'"
+    },
+    "PC8_K4_mutant_guards": {
+      "detail": {
+        "detail": {
+          "e1_moves_claim_is_False": true,
+          "sigma_breaking_mutant_changes_KG": true,
+          "true_gauge_KG_invariant": true,
+          "true_gauge_e1_pins": true,
+          "true_gauge_e2_pins": true,
+          "true_gauge_e3_moves": true,
+          "wrong_law_mutant_differs_from_true": true
+        },
+        "pass": true,
+        "sigma_breaking_mutant": {
+          "e1": {
+            "K_G_changed": true,
+            "K_G_mut": "frac:-5/98"
+          },
+          "e2": {
+            "K_G_changed": true,
+            "K_G_mut": "frac:1/14"
+          },
+          "e3": {
+            "K_G_changed": true,
+            "K_G_mut": "frac:-4/49"
+          }
+        },
+        "wrong_law_mutant": {
+          "e1": {
+            "differs": true,
+            "true_law": "frac:0/1",
+            "wrong_law": "frac:12/49"
+          },
+          "e2": {
+            "differs": false,
+            "true_law": "frac:0/1",
+            "wrong_law": "frac:0/1"
+          },
+          "e3": {
+            "differs": true,
+            "true_law": "frac:6/49",
+            "wrong_law": "frac:12/49"
+          }
+        }
+      },
+      "pass": true,
+      "units": "booleans (mutant detected) + exact-Q sign/value comparisons"
+    },
+    "PC9_preconditions": {
+      "detail": {
+        "P_frame": {
+          "missing_frame": [],
+          "ok": true
+        },
+        "P_self_cert": {
+          "ABBprime_imports_of_oracle": {
+            "probe": [],
+            "referee_channel": [],
+            "referee_total": []
+          },
+          "ok": true,
+          "oracle_imports_of_ABBprime_fixtures": []
+        },
+        "pass": true
+      },
+      "pass": true,
+      "units": "boolean (import-graph disjointness; frame-present on every channel row)"
+    }
+  },
+  "prereg_pin": "8e2a26444c8440daf82b9ce17f561f3d59ae4018db52cbaf4bd73b010a681464",
+  "records_byte_stable": true,
+  "records_sha256": "65d601637a428655c6a8e5140895b5b2a78a64a7f2961b5a9d60bb1d72a2ea5a",
+  "records_sha256_on_disk": "65d601637a428655c6a8e5140895b5b2a78a64a7f2961b5a9d60bb1d72a2ea5a",
+  "scope": {
+    "armed_kills": [
+      "K4"
+    ],
+    "claims": [
+      "CL-c4"
+    ],
+    "fixture_set": "GAUGE_SINGLE_EDGE",
+    "fixtures": [
+      "F8"
+    ],
+    "preconditions": [
+      "P-self-cert",
+      "P-frame"
+    ]
+  },
+  "stage": "stage_c",
+  "status_moves_proposed": [
+    {
+      "R2_disposition": "R2 (supplied-frame): the channels are frame-relative in the supplied DBP frame; only the sum K_G (= sigma_2) is intrinsic. The single-edge law is established as a SYMBOLIC IDENTITY over Q in (t, g, H) (PC5/PC6), NOT finite-keystone agreement alone, and witnessed exactly at the keystone (PC1/PC2: e1/e2 pin, e3 moves 6/49). Gauge-invariance of every sigma_r (PC3/PC6) and delta C in ker Sigma (PC4) hold.",
+      "R2_note": "R2: channels frame-relative in the supplied DBP frame; only the sum K_G = sigma_2 is intrinsic. The single-edge law AND K_G/sigma_r invariance are established as SYMBOLIC IDENTITIES over Q (PC5/PC6), NOT finite-keystone agreement alone; witnessed exactly at the keystone (PC1/PC2: e1/e2 pin delta kappa_c, e3 moves 6/49).",
+      "R2_universal_symbolic": true,
+      "all_gates_pass": true,
+      "claim": "CL-c4",
+      "from": "NOT_YET_PROBED",
+      "gating_predictions": [
+        "PC1_keystone_base_jet",
+        "PC2_single_edge_law_keystone",
+        "PC3_sigma_r_preserved_keystone",
+        "PC4_deltaC_in_ker_Sigma_keystone",
+        "PC5_single_edge_law_symbolic_over_Q",
+        "PC6_KG_invariant_symbolic_over_Q",
+        "PC7_two_derivation_under_gauge",
+        "PC8_K4_mutant_guards",
+        "PC9_preconditions"
+      ],
+      "to": "DEMONSTRATED",
+      "warrant_scope": "Gauge-invariance of every sigma_r (the tangent shape operator P H P is fixed by the border shear: symbolic over Q via PC6) + delta C in ker Sigma (PC4) + the single-edge law as a symbolic identity over Q (PC5), witnessed exactly at the keystone F8 (PC1/PC2: e1/e2 pin, e3 moves 6/49), corroborated across Paths A/B/B'. R2: channels frame-relative, sum K_G intrinsic. Eval-tier; no substrate promotion; canonical only on Will's sign-off."
+    }
+  ],
+  "substrate_promotion": false,
+  "version": "stage_c_prediction_verdicts_v1"
+}

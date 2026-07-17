@@ -1,0 +1,69 @@
+#!/usr/bin/env python3
+"""
+Claim 3 math-consistency audit of the W(k) Information-Loss function.
+
+The .md states (collecting every closed form it writes for W):
+  (A) eq (3) line 121-127:  W_raw(k) ~ 53 + exponent(V_n - 1) ~ 53 + alpha*k + C
+  (B) eq line 138-142:      W(k) = min(53, 53 + alpha*k + C)
+  (C) eq line 144 ("equivalently, leading-order form"):
+                            W(k) = min(53, -floor(alpha*k + log2|c|))
+  (D) eq line 176 ("Thus"): W(k) ~ min(53, 53 - k)   [for alpha=1,c=1,C=0]
+
+The handoff flags an INTERNAL INCONSISTENCY: (B) and (C) are presented as
+"equivalent" but are NOT equal. We check numerically across k with the .md's own
+stated leading case alpha=1, |c|=1 (so C=0).
+
+Definitions under test (alpha=1, c=1):
+  B(k) = min(53, 53 + 1*k + 0)        = min(53, 53 + k)
+  C(k) = min(53, -floor(1*k + log2(1))) = min(53, -floor(k)) = min(53, -k)
+  D(k) = min(53, 53 - k)
+"""
+import math
+
+def form_B(k, alpha=1.0, c=1.0, C=0.0):
+    return min(53.0, 53.0 + alpha*k + C)
+
+def form_C(k, alpha=1.0, c=1.0):
+    return min(53.0, -math.floor(alpha*k + math.log2(abs(c))))
+
+def form_D(k):
+    return min(53.0, 53.0 - k)
+
+print(f"{'k':>4} | {'B=min(53,53+k)':>16} | {'C=min(53,-floor(k))':>20} | {'D=min(53,53-k)':>16}")
+print("-"*66)
+# Sterbenz region: f small => k = floor(log2 f) is NEGATIVE. Sweep negative k.
+for k in range(0, -12, -1):
+    b = form_B(k); c = form_C(k); d = form_D(k)
+    flag = "" if (b==d) else "  <-- B != D"
+    print(f"{k:>4} | {b:>16.1f} | {c:>20.1f} | {d:>16.1f}{flag}")
+
+print("\nAnalysis:")
+print(" - For NEGATIVE k (the Sterbenz small-f regime), bit-loss should GROW as f->0,")
+print("   i.e. as k -> -inf.")
+print(" - B(k)=53+k  DECREASES as k->-inf  => B gives 53,52,51,... LESS loss for smaller f.")
+print("   That is BACKWARDS (loss should increase). B has the wrong sign on k.")
+print(" - C(k)=-floor(k)=-k  INCREASES as k->-inf  => 0,1,2,3,... but UNCAPPED-low at k=0")
+print("   and only reaches 53 near k=-53. C grows the right direction but starts at 0.")
+print(" - D(k)=53-k  INCREASES as k->-inf  => 53,54,...>53 capped at 53. D is flat-capped at 53")
+print("   for all k<=0, i.e. it says 'always max loss' in the cancellation regime.")
+print()
+print("None of B, C, D coincide for k<0. They are three DIFFERENT functions.")
+print()
+
+# Which is the dimensionally/physically correct one?
+# Bit-loss W = number of leading bits cancelled in V_n - 1.
+# V_n - 1 ~ c * f^alpha ~ 2^(alpha*k + log2|c|).  Its binary exponent is
+# E = floor(alpha*k + log2|c|).  For f in (0,1), k<0, alpha=1 => E<0.
+# The subtraction V_n - 1 cancels |E| leading bits relative to the ~1 scale.
+# So cancelled bits = -E = -floor(alpha*k + log2|c|), capped at 53.
+# => the GRADED FLOOR form  W(k) = min(53, -floor(alpha*k + log2|c|))  is correct (= C).
+print("CORRECT FORM (derived from binary exponent of V_n-1 = c*f^alpha):")
+print("   W(k) = min(53, -floor(alpha*k + log2|c|))     [= form C, the graded floor]")
+print()
+print("   cancelled leading bits = -exponent(V_n-1) = -floor(alpha*k+log2|c|), capped at 53.")
+print("   This grows from 0 (no cancellation, f~1) up to 53 (total loss, f->2^-53).")
+print()
+# sanity check: at alpha=1,c=1, f=2^-1 (k=-1): V_n-1 ~ 2^-1, exponent -1, loss 1 bit. C(-1)=1. OK.
+print("Spot checks (alpha=1, c=1):")
+for k in (-1, -10, -53, -60):
+    print(f"  k={k:>4}: C(k)=-floor(k)={form_C(k):.0f} bits   (B={form_B(k):.0f}, D={form_D(k):.0f})")

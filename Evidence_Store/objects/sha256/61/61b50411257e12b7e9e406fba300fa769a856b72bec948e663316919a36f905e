@@ -1,0 +1,203 @@
+# Phase 2 Mathematical Foundations — Sandbox Summary Report
+
+> **RESEARCH-GRADE, pending user review. NO substrate promotion (eval-layer only).**
+> All code and artifacts live in `scratch/`. No `src/lloyd_v4/` module was edited. Instruments
+> (`numpy`, `decimal`, `mpmath`, `fractions.Fraction`) are used as measurement apparatus only.
+> This report was **reconstructed from the workflow journal** (`wf_1897dcbd-f9f`) after the run was
+> interrupted at a credit limit; provenance and completion status are stated per task below.
+
+## Completion status (read this first)
+
+| Task | Harness + artifact | Build summary | Adversarial verification |
+|---|---|---|---|
+| **A** precision-scaling boundary | ✅ `phase2A_*` (1.39 MB artifact) | ⚠️ interrupted — reconstructed from artifact | ✅ ×2 — instrument-artifact **confirmed**; exact-dominance **REFUTED** |
+| **B** subnormal topology | ✅ `phase2B_*` | ✅ | ✅ ×2 — both **confirmed** |
+| **C** nested-window bias | ✅ `phase2C_*` | ✅ | ✅ ×2 — overfitting **confirmed**; false-accept **partially_confirmed** (resolved 0/9 in follow-up) |
+
+**Deliverables:** `scratch/agent_sandbox_results.json` (byte-stable) and this file. Verification completed in
+follow-up workflow `wf_8e25af4d-a4d` (Task A two lenses + Task C false-accept re-run; no build re-runs).
+
+**Closed-results cross-check** (per `Build_Docs/Architecture/HISTORICAL_RECORD.md`): none of the three tasks
+re-derives closed work — A targets the **open** R4/HR31 boundary regime, B **extends** PROVEN HR73 (and must
+cite it, not re-prove it), C **fills** the deferred HR15/task023b gap.
+
+---
+
+## Task A — Precision-Scaling Separation Manifold Boundary Test
+
+**Status: BUILT + VERIFIED** (follow-up `wf_8e25af4d-a4d`). instrument-artifact → **confirmed**;
+exact-dominance → **REFUTED**. Two verification outcomes change the build's story: (a) the SR "candidate-real"
+caveat is **downgraded — all four fixtures are instrument artifacts**; (b) the named "dominating term" is
+**refuted** — at the SR/Schw/PA collapse cells the F1 residual is *exactly zero*, so there is nothing to
+dominate. Details below.
+
+**Setup.** Model `C_{p,k} = a_k + u_p·b_k` (Theorem 3 / Task 017c), **path F1**, precision ladder
+float32 / float64 / float128 + decimal_50 / decimal_120 anchors; grid `f_max=0.9`, 24 pts/decade down to
+`f_min≈1e-12`, forced point at the Sterbenz operand.
+
+**Headline mechanics discovered.** All four fixtures classify the apparent "R²-leaves-1.0" event as
+**`degenerate_fit_artifact_not_a_substrate_boundary`** — i.e. the collapse is the linear fit going degenerate
+(too few distinct nonzero per-precision residuals to identify a 2-parameter line), not a geometric boundary.
+The instrument rule-out splits the fixtures:
+
+| Fixture | Sterbenz | first-dirty-f behaviour | Verdict |
+|---|---|---|---|
+| pure_algebraic | 0.5 | moves with anchor: decimal_50 `0.7429…` → decimal_120 `0.5572…` | instrument-floor artifact |
+| schwarzschild | 4.0 | moves with anchor (same as PA) | instrument-floor artifact |
+| cbrt_chain | 0.5 | binary-only ladder | fit-degeneracy artifact |
+| **sr** | 1/√2 | anchor-invariant at f≈0.74291… **but** moves 0.74291→0.34492 when **float128** is removed | **instrument artifact** — boundary is the 80-bit float128 noise floor (verified, downgraded) |
+
+**SR downgrade (key verification finding).** SR's decimal-anchor invariance was the wrong test: at the SR
+boundary cell only the **float128** tier is nonzero (float32 = float64 = decimal = 0; float128 = 5.42e-20), so
+raising the *decimal* anchor cannot move it. Varying the *binary* tier — removing float128 — relocates the
+boundary `0.74291…→0.34492…` (stable across decimal_50/120/200/300). SR's "boundary" **is** the 80-bit-extended
+float128 tier's noise floor; remove it and it drops to float64's floor. No fixture carries multi-tier substrate
+signal at the R²-departure cell.
+
+**Dominating term — REFUTED.** The build reported `dominating_term = eps_pow_squaring_round` (ratio 1.0). The
+exact-dominance lens (fractions.Fraction, cross-checked by mpmath at ≥2000-bit) refuted this: at the SR/Schw/PA
+collapse cells the **F1 residual is `f1_exact = 0.0` exactly** — the two error terms `eps_pow_squaring_round` and
+`eps_root_sqrt_roundtrip` are **equal and opposite**, so `ratio = 1.0` is *parity*, not dominance. The
+`dominating_term` label is a `max()`-tie artifact (the dict lists `eps_pow` first). Two further corrections it
+surfaced: the build's `−3.105e-17` / operand `7.7794…` belong to **Schwarzschild, not SR** (SR operand is
+`0.5070…`); and the Schw and PA collapse records are **byte-identical** (one cell duplicated), so "generality
+across fixtures" was not demonstrated. Only cbrt has a genuinely nonzero F1 residual — and there the dominant
+term is the **other** one (`eps_root_sqrt_roundtrip`, ratio 6.66). `additive_check_exact = 0` holds but is
+trivial (the equal-and-opposite terms cancel). **Caveat for future use:** default-precision mpmath rendered
+`−0.0` at 600-bit for these sub-ULP checks — Fraction is the authoritative anchor; mpmath needs ≥2000-bit.
+
+**Burden gates:** (i) exact threshold — **partial** (no single clean threshold); (ii) dominating term —
+**REFUTED** (no single term; equal-and-opposite split, F1 residual exactly 0 at the cited cells; per-cell, not
+fixture-wide); (iii) not an instrument artifact — **met & verified** (all 4 fixtures are artifacts; SR
+downgraded). The top-level classification (degenerate_fit_artifact_not_a_substrate_boundary) **survives** — the
+refutation removes a mislabelled mechanism, not the conclusion.
+
+**Caveats.** Ran **F1 only** — not F2, where the open Theorem-3 sub-claim (*"F2 Sterbenz-region b_k excludes 0"*,
+HR31/R4) lives, so **Task A does not close that sub-claim**; it contributes the methodological finding that the
+F1 R²-collapse is fit-degeneracy + apparatus-floor with an exactly-zero residual, carrying no substrate signal.
+float128 is 80-bit extended, not IEEE binary128 — and is now shown to be the very thing manufacturing SR's
+apparent boundary.
+
+---
+
+## Task B — Subnormal Topology Audit (`f < 2⁻¹⁰²²`)
+
+**Status: BUILT + VERIFIED.** Both lenses returned **confirmed** (construction-validity+hex; exact-Fraction lattice).
+Method = the decoupled bare-radical test you chose: pick subnormal `f` directly, `R=f^(1/n)`, `V=R^n`, residual
+`V−f` vs `ulp=2⁻¹⁰⁷⁴` with an exact `fractions.Fraction` reference (64 samples; n=2 sqrt, n=3 cbrt).
+
+**Mechanics discovered.**
+- **A NEW subnormal-specific lattice, not noise.** For all 64 subnormal `f`, residual `V−f` is an **exact**
+  integer multiple of the fixed `ulp=2⁻¹⁰⁷⁴` (`integer_multiple_fraction = 1.0000`, `max_abs_frac_part = 0.0`,
+  exact). It collapses to a tight small-integer lattice: sqrt residual `∈ {0}` (and `{0,−1}` near the seam);
+  cbrt residual **predominantly** `∈ {−4,−3,−2,−1,0,1}` under the numpy cbrt + float64 cubing used in the campaigns (~98.7 % in large subnormal samples), with documented rare excursions to {−7 … +3}. This is the degenerate residue of the binade-proportional Conjecture-C
+  lattice once spacing stops being magnitude-proportional.
+- **(α−1) degrades/decouples as f→0⁺.** Because subnormal ulp is fixed, the residual is frozen and decoupled
+  from f: for sqrt it is identically 0 (log-log slope undefined — maximal degradation); for cbrt slope ≈0.92
+  but r²≈0.10 (no clean power law).
+- **Conjecture-C breakdown captured at the seam (hex).** At the largest subnormal, `cbrt(f)^3` rounds **up
+  across the boundary** into the smallest normal (residual +1 ulp); at next-normal-up both roots give −1 ulp —
+  the residual structure flips exactly where the spacing law changes.
+- **Boundary degeneracy (the construction note).** The literal chain `f = 1 − x_term` floors at exactly
+  **2⁻⁵³** (hex `0x3ca0000000000000`), 969 binades above the smallest normal — it provably cannot reach
+  subnormals, which is why the decoupled bare-radical test was the right call.
+- **cbrt is not IEEE correctly-rounded:** `numpy.cbrt` vs `mpmath(dps=60)` diverge in 27/64 samples (≤1 ulp of
+  R), yet the round-trip residual still lands on the 2⁻¹⁰⁷⁴ lattice — residual-integrality ≠ correct-rounding of R.
+
+**Burden gates (i)/(ii)/(iii): all met** with exact-Fraction evidence and hex transition traces.
+Artifact `phase2B_subnormal_trace.json` byte-stable (md5 `d204e1bb…`, 123464 bytes).
+
+**Relation to closed work (cite, don't re-derive):** HR73 `bacl_subnormal_audit` already PROVED BACL extends
+to subnormals while the Conjecture-C scaling mechanism does not. **B extends that** to the radical *round-trip
+residual* lattice and the cbrt case; it should be recorded as an extension citing HR73, not a fresh proof.
+
+**Verifier caveat:** the construction+hex lens hit the same display-channel fault mid-run and could not
+independently re-page the deeper `{−4,−3,−2}` cbrt samples or re-run byte-stability live; it confirmed all
+construction/hex/seam claims from artifact internals + IEEE-754 facts. A clean re-run printing each
+`|residual|≥2` sample would fully close that one out-of-lens number.
+
+---
+
+## Task C — Nested-Window Bias Harness (Task 023b fulfillment)
+
+**Status: BUILT + VERIFIED.** Lenses: overfitting/IC → **confirmed**; false-accept → **partially_confirmed**
+(now *resolved* in follow-up `wf_8e25af4d-a4d` — 0/9 false-accepts; the residual reason is the window-count
+caveat, not a gate failure).
+
+**What was built.** The documented **gap** in `directional_alpha_probe`: the substrate observer only emits a
+STABLE/UNSTABLE nested-window verdict (K_DRIFT=2.0) with **no model comparison**. The new eval harness adds a
+3-model competition — `M_A` algebraic (two-term power series `s_inf + B·f^ρ + B2·f^ρ2`), `M_L` logarithmic
+slow-variation, `M_E` essential/iterated-log — ranked by **both AIC and BIC**, mirroring (not importing) the
+observer's drift gate. Three V4-native synthetic stress observables (NOT the four-form fixtures), generated
+exactly via `mpmath` dps=80 then realized in binary64 with per-sample hex.
+
+**Mechanics / results.**
+- **Gate i (must-pass) — MET.** Fixture E (iterated-log `2.0 − 0.15·log(f)·log(log(1/f))`, the α≈0.90 trap) is
+  classified **non_algebraic_drift**; `M_E` wins both AIC and BIC by a large margin (ΔAIC≈1749), nested-window
+  UNSTABLE, `algebraic_rejected_as_branch = True`. Explicitly **not** admitted as a stable fractional branch.
+- **Gate ii (must-pass) — MET.** Fixture C (`1.25 + 0.5·f^0.5 + 0.125·f^1.0`) classified algebraic_branch,
+  `M_A` wins, exact exponent pair `(0.5, 1.0)` selected, `A_rss≈4.4e-31`, **s_inf=1.25 recovered with abs
+  error 0.0 (exact)** — s_inf cleanly isolated from the `B·f^ρ` finite-window bias; per-window slopes
+  `0.530→0.503→0.500` converge, nested-window STABLE.
+- **Fixture D** (single-log) classified non_algebraic_drift with `M_L` winning — the intended control between
+  the algebraic (C) and essential (E) cases.
+- Two real bugs were found and fixed during the run (an `np.diff` length mismatch; a single-term M_A that only
+  reached s_inf abs-error 9.85e-4 → upgraded to the two-term series that recovers it exactly).
+
+**Burden gates i and ii: both met** (at the harness default `n_windows=4`). Artifact `phase2C_typed_result.json`
+byte-stable (sha256 `1400781319d3…`, 36500 bytes); the overfitting/IC verifier independently confirmed
+byte-stability across 4 fresh re-runs and that min-AIC = min-RSS for all three fixtures (the IC penalty does
+not flip any winner).
+
+**Why `partially_confirmed` (one resolved, two standing caveats) — the most important part of Task C:**
+1. **The false-accept lens is now RESOLVED — and it passed** (follow-up `wf_8e25af4d-a4d`). On the clean re-run
+   the harness reproduced its recorded sha256 exactly (integrity gate passed), **0 of 9** borderline
+   iterated-log probes were wrongly admitted as `algebraic_branch`, and the true-accept algebraic control was
+   correctly accepted. The no-false-accept property the lens existed to test **holds** (clears the earlier
+   "unverified due to display fault" status).
+2. **Confirmed latent fragility in must-pass gate i (observed, not a current failure).** Fixture E's
+   nested-window verdict **depends on `n_windows`**, quantified: `drift_ratio = {2: 1.05, 3: 2.14, 4: 3.08,
+   5: 3.91, 6: 4.62}`. E reads **STABLE only at `n_windows=2`** (1.05 < K_DRIFT=2.0) and **UNSTABLE for
+   `n_windows ≥ 3`** (default is 4). The gate is correct as configured but **not robust to window count** —
+   pin/justify `n_windows ≥ 3` or harden the drift gate. (Gate i is also robust across 5 h-grids; ΔAIC for E
+   936–2508. **The model comparison alone classifies E correctly at every `n_windows`** — only the
+   nested-window half wobbles.)
+3. **Off-grid false-REJECT + grid-conditional s_inf (confirmed by the IC lens).** A genuine algebraic power law
+   whose exponent is off the M_A scan grid (step 0.05) is conservatively mis-classified, and exact s_inf
+   recovery is grid-conditional: on-grid `s_inf_err=0.0`; off-grid (step 0.03, nearest pair 0.51/1.26)
+   `s_inf_err≈6.9e-5`. Conservative bias, not the guarded failure mode, but a candidate refinement
+   (finer/adaptive exponent grid).
+
+Do **not** treat the build agent's self-authored `VERDICT_PASS` / `_p2c_validator.json` as independent
+confirmation (same pipeline). The follow-up run is the independent corroboration: it covers byte-stability
+(sha256 reproduced), the no-false-accept property (0/9), and the gate-i window-count sensitivity.
+
+**Relation to closed work:** fills the HR15/task023b deferred item (`alpha_non_algebraic_drift` / Fixture-C
+gap) — the 3-model IC comparison that task023b explicitly did **not** build.
+
+---
+
+## Cross-cutting caveats
+
+- **Eval-layer only; research-grade.** Nothing here is substrate. Every structural claim is descriptive until
+  derived from IEEE-754 axioms (B's exact-Fraction lattice is the closest to a derivation but is still stated
+  as an observation).
+- **float128 = 80-bit x86 extended**, not IEEE binary128 — the decimal/mpmath anchors are the real
+  high-precision tiers throughout.
+- **A display-channel fault** intermittently blanked tool output during the run; it never affected execution
+  (files were written deterministically) but limited some live re-checks, as noted per task.
+
+## Open / not covered
+
+1. **Task A is verified — all four fixtures are instrument artifacts** (SR downgraded; its boundary is the
+   80-bit float128 noise floor). No candidate-real substrate boundary survived; the named "dominating term" was
+   **refuted** (F1 residual exactly 0 at the SR/Schw/PA cells). *Resolved.*
+2. **Task A ran F1 only** — the open Theorem-3 sub-claim (F2 Sterbenz-region `b_k`, HR31/R4) is untouched; a
+   **F2 pass with a grid yielding ≥2 distinct nonzero residuals per cell** is the natural follow-up that would
+   actually bear on Q5-boundary. *(Still open.)*
+3. **Task C false-accept resolved (0/9)**, but two caveats remain: gate-i is **window-count-fragile**
+   (E reads STABLE at `n_windows=2`, UNSTABLE for ≥3 — pin/justify `n_windows`), and off-grid algebraic
+   exponents are conservatively mis-rejected with grid-conditional `s_inf` (finer/adaptive M_A grid is the fix).
+4. **Task B's deeper cbrt residual multiset** (`|residual|≥2`) was asserted by exact Fraction but not visually
+   re-paged by the verifier; a one-line re-run would close it.
+5. **Living-docs updates** (ledger / HISTORICAL_RECORD / glossary) are pending your sign-off (see below).

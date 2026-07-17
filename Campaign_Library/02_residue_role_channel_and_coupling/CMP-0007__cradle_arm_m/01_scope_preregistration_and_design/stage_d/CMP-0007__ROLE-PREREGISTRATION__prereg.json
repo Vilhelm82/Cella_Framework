@@ -1,0 +1,291 @@
+{
+ "authority": "brief section 4 Arm M Stage D (directional smoothness; CL-M6) + Will's Stage-D GO (diagonal grid-blindness as pre-registered typed refusal class)",
+ "campaign_id": "beyond_the_cradle_arm_m",
+ "cases": [
+  [
+   "FXME1",
+   {
+    "x": "0x0.0p+0",
+    "y": "0x1.0p-1"
+   },
+   {
+    "x": "1"
+   },
+   "kink",
+   null
+  ],
+  [
+   "FXME1",
+   {
+    "x": "0x0.0p+0",
+    "y": "0x1.0p-1"
+   },
+   {
+    "y": "1"
+   },
+   "refusal",
+   "ray_in_locus"
+  ],
+  [
+   "FXME1",
+   {
+    "x": "0x1.0p-1",
+    "y": "0x1.0p-2"
+   },
+   {
+    "x": "1"
+   },
+   "smooth",
+   null
+  ],
+  [
+   "FXME2",
+   {
+    "x": "0x1.8p+0",
+    "y": "0x0.0p+0"
+   },
+   {
+    "y": "1"
+   },
+   "kink",
+   null
+  ],
+  [
+   "FXME2",
+   {
+    "x": "0x1.8p+0",
+    "y": "0x0.0p+0"
+   },
+   {
+    "x": "1"
+   },
+   "refusal",
+   "ray_in_locus"
+  ],
+  [
+   "FXME2",
+   {
+    "x": "0x1.8p+0",
+    "y": "-0x1.0p-3"
+   },
+   {
+    "x": "1",
+    "y": "1"
+   },
+   "smooth",
+   null
+  ],
+  [
+   "FXME3",
+   {
+    "x": "0x1.4p+0",
+    "y": "0x1.4p+0"
+   },
+   {
+    "x": "1"
+   },
+   "kink",
+   null
+  ],
+  [
+   "FXME3",
+   {
+    "x": "0x1.4p+0",
+    "y": "0x1.4p+0"
+   },
+   {
+    "x": "1",
+    "y": "1"
+   },
+   "refusal",
+   "ray_in_locus"
+  ],
+  [
+   "FXME3",
+   {
+    "x": "0x1.4p+0",
+    "y": "0x1.4p+0"
+   },
+   {
+    "x": "1",
+    "y": "63/64"
+   },
+   "kink",
+   null
+  ],
+  [
+   "FXME3",
+   {
+    "x": "0x1.4p+0",
+    "y": "0x1.4p+0"
+   },
+   {
+    "x": "1",
+    "y": "-1"
+   },
+   "kink",
+   null
+  ],
+  [
+   "FXME4",
+   {
+    "x": "0x1.4p+0",
+    "y": "0x1.4p+0",
+    "z": "0x1.0p-1"
+   },
+   {
+    "x": "1",
+    "y": "1"
+   },
+   "refusal",
+   "ray_in_locus"
+  ],
+  [
+   "FXME4",
+   {
+    "x": "0x1.4p+0",
+    "y": "0x1.4p+0",
+    "z": "0x1.0p-1"
+   },
+   {
+    "y": "1"
+   },
+   "kink",
+   null
+  ],
+  [
+   "FXME4",
+   {
+    "x": "0x1.4p+0",
+    "y": "0x1.4p+0",
+    "z": "0x1.0p-1"
+   },
+   {
+    "z": "1"
+   },
+   "refusal",
+   "ray_in_locus"
+  ]
+ ],
+ "control": [
+  "FXME1",
+  {
+   "x": "0x1.0p-4",
+   "y": "0x1.0p-1"
+  },
+  {
+   "x": "1"
+  },
+  "1/8"
+ ],
+ "date_stamped_from_machine": "2026-06-12",
+ "depends_on": {
+  "manifest_v1_sha256": "add67c301f0f592484d7023a657302296f3b74376167f6fff8911ce670e3719c",
+  "note": "bench code pinned in the frozen (post-M1) manifest (rule 1.9). DISCLOSED with this prereg: a latent eager-evaluation bug in the (unpinned) Stage-A organ lanes_m.py was found while building this stage (div-by-zero raised at non-div nodes) and fixed as a pure evaluation-strategy refactor; ALL THREE prior stage batteries re-ran BYTE-IDENTICAL post-fix (fd2224f7, e9c40ef4, bd2a5b2d) - committed records unaffected."
+ },
+ "expectations": {
+  "control_refusal": "ray_in_locus:kink_locus_abs_at_zero_true",
+  "rows": {
+   "0": {
+    "one_sided_1": [
+     "-1",
+     "1"
+    ],
+    "v2": "smooth",
+    "verdict": "kink"
+   },
+   "1": {
+    "refusal": "ray_in_locus:kink_locus_abs_at_zero_true",
+    "verdict": "refusal"
+   },
+   "10": {
+    "refusal": "ray_in_locus:kink_locus_max_at_tie",
+    "verdict": "refusal"
+   },
+   "11": {
+    "one_sided_1": [
+     "0",
+     "1"
+    ],
+    "v2": "smooth",
+    "verdict": "kink"
+   },
+   "12": {
+    "refusal": "ray_in_locus:kink_locus_max_at_tie",
+    "verdict": "refusal"
+   },
+   "2": {
+    "one_sided_1": [
+     "1",
+     "1"
+    ],
+    "v2": "smooth",
+    "verdict": "smooth"
+   },
+   "3": {
+    "one_sided_1": [
+     "-3/2",
+     "3/2"
+    ],
+    "v2": "smooth",
+    "verdict": "kink"
+   },
+   "4": {
+    "refusal": "ray_in_locus:kink_locus_abs_at_zero_true",
+    "verdict": "refusal"
+   },
+   "5": {
+    "one_sided_1": [
+     "-11/8",
+     "-11/8"
+    ],
+    "v2": "smooth",
+    "verdict": "smooth"
+   },
+   "6": {
+    "one_sided_1": [
+     "0",
+     "1"
+    ],
+    "v2": "smooth",
+    "verdict": "kink"
+   },
+   "7": {
+    "refusal": "ray_in_locus:kink_locus_max_at_tie",
+    "verdict": "refusal"
+   },
+   "8": {
+    "one_sided_1": [
+     "63/64",
+     "1"
+    ],
+    "v2": "smooth",
+    "verdict": "kink"
+   },
+   "9": {
+    "one_sided_1": [
+     "-1",
+     "1"
+    ],
+    "v2": "smooth",
+    "verdict": "kink"
+   }
+  }
+ },
+ "frozen": true,
+ "h": "1/64",
+ "organ": "IM_d_kink_probe_v1: one-sided piece recovery STRICTLY OFF the locus (the joint channels' typed refusals lawfully live ON it, frozen Stage-A semantics untouched); two-scale gate (h and h/2 must agree exactly); termination certificate per side; verdicts AT-POINT PER-DIRECTION - neighborhood and sub-ladder claims explicitly out of warrant.",
+ "predictions": {
+  "PMD.1": "directional verdicts vs arbiter: every (point, direction, order) verdict equals the pinned analytic expectation - ZERO confidently-wrong (the HR134 Stage-D standing law: one confidently-wrong fails outright); off-locus first-order verdicts cross-checked against the exact dual instrument. Units: verdicts.",
+  "PMD.2": "one-sided recovery exact at two scales: each certified side's piece derivatives are recovered IDENTICALLY at h and h/2 (the two-scale gate), the termination certificate gating one-piece validity; pinned one-sided slopes exact incl. the x*|y| pair (-3/2, +3/2) and the near-diagonal pair (63/64, 1). Units: sides.",
+  "PMD.3": "the refusal classes, pre-registered: ray_in_locus (5 pinned rows - locus-tangent rays where every sample sits ON the kink: the instrument refuses rather than inventing verdicts; the exact diagonal at the tie is one of them) and the cant_certify CONTROL (the crossing ladder that WOULD have certified confidently-wrong under a single-scale gate - caught at authoring, fixed by the two-scale gate, locked here: the control must refuse). Zero refusals on lawful rows. Units: refusal rows + control.",
+  "PMD.4": "direction-resolved exhibits: at the SAME tie point, axis directions read kink (sides 0/1) while the near-diagonal direction reads kink with gap EXACTLY 1/64 (sides 63/64, 1) - the directional vocabulary measures what a scalar verdict cannot; the max3 trivariate tie reproduces the texture. Units: exhibits.",
+  "PMD.5": "determinism: battery byte-stable x2 (sha256 over records)."
+ },
+ "referee": "pinned analytic expectations (hand-derived) + the exact dual instrument off-locus.",
+ "stage": "D",
+ "status_move_rules": "CL-M6 -> DEMONSTRATED iff PMD.1 AND PMD.2 AND PMD.3 AND PMD.4 PASS. A single confidently-wrong verdict fails outright (standing law); chain preserved, STOP, route to Will.",
+ "t2_fence_ack": "no G-claims, no cross-fixture-invariant claims (manifest fence).",
+ "telemetry": "permanently non-verdict-bearing (covenant 3).",
+ "version": 1
+}

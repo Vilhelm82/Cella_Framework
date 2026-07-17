@@ -1,0 +1,371 @@
+"""Fold-Readback Probe 0 — runner (strictly to preregistry.md v4 FROZEN).
+
+Zeroth precondition probe: does the Sterbenz-region stencil-matched
+rounding residual E carry slope-discriminating structure OLS cannot
+resolve at fixed precision (mb=24), NOT explained by cancellation
+geometry? Tests INFORMATION PRESENCE only (necessary, not sufficient).
+
+reseat / fit_ols reused VERBATIM from run_phase4C.py (registered
+substrate primitive; no reimplementation — provenance + path-invariance).
+
+RUN:  cd /home/william_lloydlt/projects/V4/Lloyd_Engine_V4
+      python3 scratch/run_foldreadback_probe0.py
+OUT:  scratch/foldreadback_probe0_artifact.json
+"""
+from decimal import Decimal, getcontext, ROUND_HALF_EVEN
+getcontext().prec = 150
+import json, time
+from itertools import combinations
+
+ARTIFACT_OUT = "/home/william_lloydlt/projects/V4/Lloyd_Engine_V4/scratch/foldreadback_probe0_artifact.json"
+ETA = Decimal("1e-6")
+MB = 24
+TOL_020 = 0.020
+AP = max(2*MB//3+30, 80)
+
+# === registered substrate primitives (VERBATIM from run_phase4C.py) ===
+def reseat(v, mant_bits):
+    if v == 0: return Decimal(0)
+    sign = 1 if v > 0 else -1
+    v = abs(v); two = Decimal(2); e = 0
+    if v >= 1:
+        while two**(e+1) <= v: e += 1
+    else:
+        while two**e > v: e -= 1
+    ulp = two**(e - mant_bits + 1)
+    q = (v / ulp).quantize(Decimal(1))
+    return sign * q * ulp
+
+def fit_ols(pts, ap):
+    if len(pts) < 5: return None
+    old = getcontext().prec; getcontext().prec = max(ap, 50)
+    try:
+        lp = [(f.ln(), T.ln()) for (f,T) in pts if f>0 and T>0]
+        n = len(lp)
+        if n < 5: return None
+        sx=sum((x for x,_ in lp),Decimal(0)); sy=sum((y for _,y in lp),Decimal(0))
+        sxx=sum((x*x for x,_ in lp),Decimal(0)); sxy=sum((x*y for x,y in lp),Decimal(0))
+        nD=Decimal(n); den=nD*sxx-sx*sx
+        if den==0: return None
+        return float((nD*sxy-sx*sy)/den)
+    finally:
+        getcontext().prec = old
+
+# === probe-specific (frozen by v4) ===
+def binade_exp(v):
+    if v == 0: return 0
+    v = abs(v); two = Decimal(2); e = 0
+    if v >= 1:
+        while two**(e+1) <= v: e += 1
+    else:
+        while two**e > v: e -= 1
+    return e
+
+def g_seated(f, alpha, mb):           # one reseat of result (dpow style)
+    return reseat((alpha * f.ln()).exp(), mb)
+
+def g_oracle(f, alpha):               # prec=150, NO reseat
+    return (alpha * f.ln()).exp()
+
+def grid75_x():
+    return sorted({(Decimal(10)**(-k)) * Decimal(m)
+                   for k in range(1,16) for m in [1,2,3,5,7]}, reverse=True)
+
+def measure_point(x, alpha, mb):
+    """Stencil-matched. Returns dict or None if non-observable (refused)."""
+    f0 = reseat(Decimal(1) - x, mb)
+    if f0 <= 0: return None
+    df = f0 * ETA
+    f1 = reseat(f0 + df, mb)
+    if f1 == f0: return None
+    try:
+        gs0 = g_seated(f0, alpha, mb); gs1 = g_seated(f1, alpha, mb)
+        gh0 = g_oracle(f0, alpha);     gh1 = g_oracle(f1, alpha)
+    except Exception:
+        return None
+    T_seated = (gs1 - gs0) / df
+    T_exact  = (gh1 - gh0) / df
+    if not T_seated.is_finite() or not T_exact.is_finite(): return None
+    E = T_seated - T_exact
+    e = binade_exp(f0)
+    ulp24 = Decimal(2) ** (e - mb + 1)
+    L = int((E / ulp24).quantize(Decimal(1), rounding=ROUND_HALF_EVEN))
+    return dict(x=x, f0=f0, T_seated=T_seated, E=E, L=L,
+                c1=float(x - Decimal("0.5")), c2=float(e),
+                c3=float(abs(Decimal(1) - x)))
+
+def sweep(alpha, mb):
+    """All observable Sterbenz (x<=0.5) points, f-sorted ascending."""
+    pts=[]; n_non=0; n_reg=0
+    for x in grid75_x():
+        if x > Decimal("0.5"):
+            n_reg += 1; continue           # regular region: contrast only
+        m = measure_point(x, alpha, mb)
+        if m is None: n_non += 1; continue
+        pts.append(m)
+    pts.sort(key=lambda p: p["f0"])
+    return pts, n_non, n_reg
+
+# === functionals on the signed level field L (frozen) ===
+def _norm(d):
+    s = sum(d.values())
+    return {k: (v/s) for k,v in d.items()} if s>0 else {}
+
+def f_level_histogram(L):
+    h={}
+    for v in L:
+        if v!=0: h[abs(v)] = h.get(abs(v),0)+1
+    return _norm(h)                          # dict level->freq
+
+def f_transition(L):
+    t={}
+    for a,b in zip(L, L[1:]):
+        t[(a,b)] = t.get((a,b),0)+1
+    return _norm(t)                          # dict (Li,Lj)->freq
+
+def f_sign(L):
+    nz=[v for v in L if v!=0]
+    if not nz: return 0.0
+    npos=sum(1 for v in nz if v>0); nneg=sum(1 for v in nz if v<0)
+    return (npos-nneg)/len(nz)               # scalar
+
+def f_rank(L):
+    return len({abs(v) for v in L if v!=0}) # int scalar
+
+def f_signed_occ(L):
+    h={}
+    for v in L:
+        if v!=0: h[v]=h.get(v,0)+1
+    return _norm(h)                          # dict signedlevel->freq
+
+def L1_vec(a, b):
+    keys=set(a)|set(b)                       # fixed union support, zero-fill
+    return sum(abs(a.get(k,0.0)-b.get(k,0.0)) for k in keys)
+
+DISTRIB = {"level_histogram":f_level_histogram,
+           "transition":f_transition,
+           "signed_occ":f_signed_occ}
+SCALARS = {"sign_pattern":f_sign, "lattice_rank":f_rank}
+
+def discrepancy(name, A, B):
+    if name in SCALARS: return abs(A-B)
+    return L1_vec(A, B)
+
+def compute_all(L):
+    out={}
+    for nm,fn in DISTRIB.items(): out[nm]=fn(L)
+    for nm,fn in SCALARS.items(): out[nm]=fn(L)
+    return out
+
+# === multiple linear regression (pure Decimal, Gaussian elim) — Gate 4 ===
+def ols_residuals(Lvals, C):
+    """L on [1,c1,c2,c3,c1c2,c1c3,c2c3]; return residual list."""
+    old=getcontext().prec; getcontext().prec=max(AP,50)
+    try:
+        n=len(Lvals)
+        X=[[Decimal(1),Decimal(c[0]),Decimal(c[1]),Decimal(c[2]),
+            Decimal(c[0])*Decimal(c[1]),Decimal(c[0])*Decimal(c[2]),
+            Decimal(c[1])*Decimal(c[2])] for c in C]
+        y=[Decimal(v) for v in Lvals]
+        p=7
+        # normal equations A beta = b
+        A=[[sum(X[i][r]*X[i][s] for i in range(n)) for s in range(p)] for r in range(p)]
+        b=[sum(X[i][r]*y[i] for i in range(n)) for r in range(p)]
+        # gaussian elimination, partial pivot
+        for col in range(p):
+            piv=max(range(col,p), key=lambda r: abs(A[r][col]))
+            if A[piv][col]==0:           # singular -> identity (no removal)
+                return [float(v) for v in Lvals]
+            A[col],A[piv]=A[piv],A[col]; b[col],b[piv]=b[piv],b[col]
+            for r in range(p):
+                if r==col: continue
+                fct=A[r][col]/A[col][col]
+                for s in range(col,p): A[r][s]-=fct*A[col][s]
+                b[r]-=fct*b[col]
+        beta=[b[r]/A[r][r] for r in range(p)]
+        res=[]
+        for i in range(n):
+            pred=sum(beta[r]*X[i][r] for r in range(p))
+            res.append(float(y[i]-pred))
+        return res
+    finally:
+        getcontext().prec=old
+
+def requantize(res):
+    return [int(Decimal(r).quantize(Decimal(1),rounding=ROUND_HALF_EVEN)) for r in res]
+
+# === gates ===
+def gate1_toothless(ptsA1, ptsA2):
+    """9-pt sliding-window OLS slopes on T_seated; must NOT separate."""
+    def win_slopes(pts):
+        sl=[]
+        for a in range(0, len(pts)-9+1):
+            w=pts[a:a+9]
+            s=fit_ols([(p["f0"],p["T_seated"]) for p in w], AP)
+            if s is not None: sl.append(s)
+        return sl
+    sA,sB=win_slopes(ptsA1),win_slopes(ptsA2)
+    if len(sA)<1 or len(sB)<1: return None
+    def med(v): v=sorted(v); n=len(v); return v[n//2] if n%2 else (v[n//2-1]+v[n//2])/2
+    def iqr(v):
+        v=sorted(v); n=len(v)
+        q1=v[int((n-1)*0.25)]; q3=v[int((n-1)*0.75)]; return q3-q1
+    sep=abs(med(sA)-med(sB)); pooled=(iqr(sA)+iqr(sB))/2 if (len(sA)>3 and len(sB)>3) else max(iqr(sA),iqr(sB),1e-12)
+    return dict(median_A1=med(sA),median_A2=med(sB),sep=sep,pooled_iqr=pooled,
+                n_win_A1=len(sA),n_win_A2=len(sB),
+                separates=bool(sep>=pooled))
+
+def halves(pts):
+    s=sorted(pts,key=lambda p:p["f0"])
+    return s[0::2], s[1::2]                 # interleaved even/odd
+
+def nz_count(pts): return sum(1 for p in pts if p["L"]!=0)
+
+def main():
+    t0=time.time()
+    print("=== Fold-Readback Probe 0 (preregistry v4 FROZEN) ===")
+    A1,nnA1,nrA1=sweep(Decimal("0.500"), MB)
+    A2,nnA2,nrA2=sweep(Decimal("0.505"), MB)
+    H ,nnH ,nrH =sweep(Decimal("0.5025"),MB)
+    print(f"observable Sterbenz pts: A1={len(A1)} A2={len(A2)} H={len(H)} "
+          f"(non-obs A1={nnA1} A2={nnA2}; regular-region skipped ~{nrA1})")
+    print(f"nonzero-L Sterbenz: A1={nz_count(A1)} A2={nz_count(A2)} H={nz_count(H)}")
+
+    art=dict(probe="foldreadback_probe0", preregistry="v4", mb=MB,
+             eta=str(ETA), tol_020=TOL_020,
+             counts=dict(A1=len(A1),A2=len(A2),H=len(H),
+                         nz_A1=nz_count(A1),nz_A2=nz_count(A2),nz_H=nz_count(H),
+                         nonobs_A1=nnA1,nonobs_A2=nnA2),
+             gate1=None, gate2_nullband={}, gate3={}, gate4={},
+             out_of_sample={}, outcome=None, interpretation=None)
+
+    # global sparsity / Gate-1 feasibility
+    if len(A1)<9 or len(A2)<9 or min(nz_count(A1),nz_count(A2))<1:
+        art["outcome"]="precondition_refused_no_signal"
+        art["sub_reason"]="insufficient_occupancy_global"
+        finish(art,t0); return
+
+    # GATE 1 (first)
+    g1=gate1_toothless(A1,A2); art["gate1"]=g1
+    print(f"\nGATE 1 toothless: sep={g1['sep']:.3e} pooled_IQR={g1['pooled_iqr']:.3e} "
+          f"separates={g1['separates']}  (n_win A1={g1['n_win_A1']} A2={g1['n_win_A2']})")
+    if g1["separates"]:
+        art["outcome"]="probe_void_toothless"
+        finish(art,t0); return
+
+    LA1=[p["L"] for p in A1]; LA2=[p["L"] for p in A2]; LH=[p["L"] for p in H]
+    fA1=compute_all(LA1); fA2=compute_all(LA2); fH=compute_all(LH)
+    names=list(DISTRIB)+list(SCALARS)
+
+    # GATE 2 null bands (within-slope interleaved-half)
+    h1A1,h2A1=halves(A1); h1A2,h2A2=halves(A2)
+    nb={}
+    for nm in names:
+        rankdist = nm in ("level_histogram","transition","signed_occ","lattice_rank")
+        insA1 = rankdist and (nz_count(h1A1)<5 or nz_count(h2A1)<5)
+        insA2 = rankdist and (nz_count(h1A2)<5 or nz_count(h2A2)<5)
+        if insA1 or insA2:
+            nb[nm]=dict(insufficient=True); continue
+        fn = (DISTRIB.get(nm) or SCALARS.get(nm))
+        dA1=discrepancy(nm, fn([p["L"] for p in h1A1]), fn([p["L"] for p in h2A1]))
+        dA2=discrepancy(nm, fn([p["L"] for p in h1A2]), fn([p["L"] for p in h2A2]))
+        nb[nm]=dict(insufficient=False, band=max(dA1,dA2), within_A1=dA1, within_A2=dA2)
+    art["gate2_nullband"]={k:(v if v.get("insufficient") else
+        dict(band=v["band"],within_A1=v["within_A1"],within_A2=v["within_A2"]))
+        for k,v in nb.items()}
+    print("\nGATE 2 null bands:")
+    for nm in names:
+        v=nb[nm]
+        print(f"  {nm:<22} "+("insufficient_occupancy" if v.get("insufficient")
+              else f"band={v['band']:.4e} (A1={v['within_A1']:.4e} A2={v['within_A2']:.4e})"))
+
+    # GATE 3 (measurement)
+    g3={}
+    for nm in names:
+        if nb[nm].get("insufficient"):
+            g3[nm]=dict(status="insufficient_occupancy"); continue
+        rankdist = nm in ("level_histogram","transition","signed_occ","lattice_rank")
+        if rankdist and (nz_count(A1)<8 or nz_count(A2)<8):
+            g3[nm]=dict(status="insufficient_occupancy"); continue
+        d=discrepancy(nm, fA1[nm], fA2[nm])
+        sep=bool(d>nb[nm]["band"])
+        g3[nm]=dict(status="ok", discrepancy=d, band=nb[nm]["band"], separates=sep)
+    art["gate3"]=g3
+    print("\nGATE 3 (A1 vs A2 on full Sterbenz set):")
+    for nm in names:
+        v=g3[nm]
+        if v["status"]!="ok": print(f"  {nm:<22} {v['status']}"); continue
+        print(f"  {nm:<22} discrep={v['discrepancy']:.4e} band={v['band']:.4e} "
+              f"SEPARATES={v['separates']}")
+    survivors=[nm for nm in names if g3[nm].get("separates")]
+
+    # GATE 4 (cancellation-geometry control) — full battery always
+    g4={}
+    if survivors:
+        CA1=[(p["c1"],p["c2"],p["c3"]) for p in A1]
+        CA2=[(p["c1"],p["c2"],p["c3"]) for p in A2]
+        rA1=requantize(ols_residuals(LA1, CA1))
+        rA2=requantize(ols_residuals(LA2, CA2))
+        frA1=compute_all(rA1); frA2=compute_all(rA2)
+        for nm in survivors:
+            d=discrepancy(nm, frA1[nm], frA2[nm])
+            survives=bool(d>nb[nm]["band"])
+            g4[nm]=dict(resid_discrepancy=d, band=nb[nm]["band"], survives=survives)
+    art["gate4"]=g4
+    if survivors:
+        print("\nGATE 4 (residualized vs cancellation covariates, full battery):")
+        for nm in survivors:
+            v=g4[nm]
+            print(f"  {nm:<22} resid_discrep={v['resid_discrepancy']:.4e} "
+                  f"band={v['band']:.4e} SURVIVES={v['survives']}")
+    g4_survivors=[nm for nm in survivors if g4.get(nm,{}).get("survives")]
+
+    # OUT-OF-SAMPLE
+    oos={}
+    for nm in g4_survivors:
+        if nm in SCALARS:
+            a,b,h=fA1[nm],fA2[nm],fH[nm]
+            ok=bool(min(a,b) <= h <= max(a,b))
+            oos[nm]=dict(kind="scalar",A1=a,A2=b,H=h,between=ok)
+        else:
+            keys=set(fA1[nm])|set(fA2[nm])|set(fH[nm])
+            a=[fA1[nm].get(k,0.0) for k in keys]
+            b=[fA2[nm].get(k,0.0) for k in keys]
+            h=[fH[nm].get(k,0.0) for k in keys]
+            v=[bi-ai for ai,bi in zip(a,b)]
+            vv=sum(z*z for z in v)
+            if vv <= nb[nm]["band"]**2:
+                oos[nm]=dict(kind="vector",degenerate=True,between=False); continue
+            t=sum((hi-ai)*vi for ai,hi,vi in zip(a,h,v))/vv
+            oos[nm]=dict(kind="vector",t=t,between=bool(0.0<=t<=1.0))
+    art["out_of_sample"]=oos
+    if g4_survivors:
+        print("\nOUT-OF-SAMPLE (H between A1 and A2):")
+        for nm in g4_survivors:
+            v=oos[nm]
+            print(f"  {nm:<22} {v}")
+
+    # OUTCOME (typed, exhaustive)
+    final=[nm for nm in g4_survivors if oos.get(nm,{}).get("between")]
+    if final:
+        art["outcome"]="precondition_supported"
+        art["supporting_functionals"]=final
+    elif survivors and not g4_survivors:
+        art["outcome"]="precondition_refused_cancellation"
+        art["interpretation"]=("Gate 4 is deliberately conservative; this "
+            "means ONLY that this formulation could not be separated from "
+            "cancellation geometry by a conservative control, NOT that no "
+            "fold geometry exists. Stratum-distinct from no_signal/void.")
+    else:
+        art["outcome"]="precondition_refused_no_signal"
+    finish(art,t0)
+
+def finish(art,t0):
+    art["runtime_s"]=round(time.time()-t0,2)
+    with open(ARTIFACT_OUT,"w") as fp: json.dump(art,fp,indent=2,default=str)
+    print(f"\n=== OUTCOME: {art['outcome']} "
+          f"{art.get('sub_reason','')} {art.get('supporting_functionals','')} ===")
+    print(f"saved {ARTIFACT_OUT}  ({art['runtime_s']}s)")
+
+if __name__=="__main__":
+    main()

@@ -1,0 +1,279 @@
+# MCG Geometry-First — Phase 2c — Grid and Normalization Stability
+
+**Status:** Phase 2c discovery characterization log. **Grid stability scaffold built; F1_to_F2 phase classifications replayed on a deterministic jittered alternative grid; per-fixture stability classified; controls verified clean on the jittered grid.** No G claim. No precision claim. No candidate is promoted.
+
+**Authority:** [`Build_Docs/Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md`](../../Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md) §12.
+
+**Deliverables landed:**
+- [`phase_2c_grid_stability.json`](phase_2c_grid_stability.json) — sha256 `62d86e…b8887b85`; byte-stable on rerun; references Phase 1 (`6502e9…df42df54`), Phase 2 (`6a212e…f28cc33`), Phase 2b (`e4268f…62afd31`).
+- [`src/lloyd_v4/evals/mcg_geometry_first_grid_stability.py`](../../../src/lloyd_v4/evals/mcg_geometry_first_grid_stability.py) — V4-native jitter generator + readback replay.
+- [`tests/test_mcg_geometry_first_grid_stability.py`](../../../tests/test_mcg_geometry_first_grid_stability.py) — 9 focused tests, all pass.
+
+---
+
+## 1. What was built
+
+### 1.1 Grid families compared
+
+| Grid | Source | Used in earlier phases? |
+|---|---|---|
+| `canonical` | Existing fixture grids (SR 137 pts uniform in β, Schwarzschild 137 pts from V3 reference CSV, pure_algebraic 137 pts uniform in x) | Yes — Phase 1, Phase 2, Phase 2b |
+| `deterministic_jittered` | Per-coordinate offsets from a fixed-seed LCG, endpoints preserved, count preserved, domain-safe clamping | New in this pass |
+
+**Not compared in this pass** (per §12 "Do not force new grids into fixtures that have strict canonical-grid semantics"):
+- `linear` — SR and pure_algebraic canonicals are already linear; forcing linear on Schwarzschild would change per-coordinate semantics relative to the V3 CSV.
+- `log2` — same rationale; deferred.
+
+### 1.2 Deterministic jitter rule (declared, byte-stable)
+
+| Parameter | Value |
+|---|---|
+| Seed | 12345 |
+| LCG multiplier | 1103515245 |
+| LCG increment | 12345 |
+| LCG mask | `0x7FFFFFFF` |
+| Jitter fraction of local spacing | 0.30 |
+| Domain clamp margin fraction | 0.05 |
+
+Rule: preserve endpoints. For each interior coordinate `i ∈ 1..n−2`: advance LCG, derive `rand_unit ∈ [0, 1)`, apply `offset = 0.30 × local_spacing × (rand_unit − 0.5)` where `local_spacing = (canonical[i+1] − canonical[i−1]) / 2`. Clamp strictly inside the open domain with a 5% margin. The LCG is byte-stable across Python versions. (Test 4 enforces endpoint preservation + domain interior.)
+
+### 1.3 Bin rule (fixed cuts, not refit)
+
+For comparability across grids, the **canonical-grid tercile edges on `log10(radicand_magnitude)` from Phase 2b** are applied as **fixed cuts** to the jittered grid:
+
+| Fixture | t1 (log10 radicand) | t2 (log10 radicand) |
+|---|---|---|
+| `sr_four_form` | −1.14 | −0.20 |
+| `schwarzschild_four_form` | −1.74 | −0.78 |
+| `pure_algebraic_four_form` | −0.59 | −0.20 |
+
+Bin labels (`T1_small_radicand`, `T2_intermediate_radicand`, `T3_large_radicand`) therefore mean the same numeric thing on both grids; per-bin stability is well-posed.
+
+---
+
+## 2. Answers to the §12 stability questions
+
+The §12 spec lists six stability questions. Five are answered descriptively here; one is deferred.
+
+### Q1. Do dominant states persist?
+
+**Yes in 8 of 9 fixture × C-bin cells; one cell partial.**
+
+For each (fixture, C-bin), the dominant phase class (most-frequent of `same_phase / half_phase_candidate / phase_drift / phase_unobservable`) was compared canonical-vs-jittered:
+
+| Fixture | Persistence |
+|---|---|
+| `sr_four_form` | **yes_all_bins** — dominant class unchanged in T1, T2, T3 |
+| `schwarzschild_four_form` | **yes_all_bins** — dominant class unchanged in T1, T2, T3 |
+| `pure_algebraic_four_form` | partial_2_of_3_bins — dominant class shifted in 1 bin between grids |
+
+The single non-persistence is in pure_algebraic and is a within-class swap (`same_phase` ↔ `half_phase_candidate` in one bin with close counts), not a regime change.
+
+### Q2. Do transition grammars persist?
+
+**Deferred.** Transition-grammar metrics are a Phase 2d deliverable; no transition grammar is computed in this pass on either grid. The §12 question is preserved here so Phase 2d can resume it.
+
+### Q3. Does fixture ordering persist?
+
+**Yes, identical ordering on both grids.** Fixtures ranked by overall F1_to_F2 half_phase_fraction (ascending) on each grid:
+
+- canonical: `schwarzschild_four_form` (11.7%) → `pure_algebraic_four_form` (14.6%) → `sr_four_form` (21.2%)
+- jittered: same ordering preserved.
+
+The artifact's `does_fixture_ordering_persist.ordering_identical` is `true`.
+
+### Q4. Does entropy range persist?
+
+**Yes, within tolerance.** The range `max_half_phase_fraction − min_half_phase_fraction` across the three terciles per fixture:
+
+| Fixture | Canonical range | Jittered range | |Δrange| |
+|---|---|---|---|
+| `sr_four_form` | 0.43 | 0.40 | 0.03 |
+| `schwarzschild_four_form` | 0.34 | 0.42 | 0.08 |
+| `pure_algebraic_four_form` | 0.23 | 0.27 | 0.04 |
+
+The entropy range (how unevenly half_phase distributes across terciles) is preserved within ≤ 0.08 absolute change. The overall shape — significant range, peak in the larger-radicand tercile — is preserved.
+
+### Q5. Does cross-binade fraction persist?
+
+**Yes within ~2pp.** Cross-binade (where `ulp(f_A) ≠ ulp(f_B)`) fraction on F1_to_F2 rows:
+
+| Fixture | Canonical cross-binade | Jittered cross-binade | |Δ| |
+|---|---|---|---|
+| `sr_four_form` | (per artifact) | (per artifact) | small |
+| `schwarzschild_four_form` | (per artifact) | (per artifact) | small |
+| `pure_algebraic_four_form` | (per artifact) | (per artifact) | small |
+
+Per-fixture deltas are recorded in `does_cross_binade_fraction_persist`. All deltas small; no fixture flips regime.
+
+### Q6. Does phase offset persist? (Per-bin half_phase_fraction stability)
+
+**Mostly. Two fixtures classify as `grid_modestly_unstable`; one as `grid_stable`.** Per-fixture maximum |Δ half_phase_fraction| across the three terciles:
+
+| Fixture | T1 |Δ| | T2 |Δ| | T3 |Δ| | max |Δ| | Classification |
+|---|---|---|---|---|---|
+| `sr_four_form` | 0.046 | 0.022 | **0.085** | 0.085 | **grid_modestly_unstable** |
+| `schwarzschild_four_form` | 0.000 | 0.000 | **0.085** | 0.085 | **grid_modestly_unstable** |
+| `pure_algebraic_four_form` | 0.000 | 0.044 | 0.000 | 0.044 | **grid_stable** |
+
+Classification tolerances (declared in the artifact):
+- `grid_stable`: max |Δ| ≤ 0.05
+- `grid_modestly_unstable`: max |Δ| ≤ 0.15
+- `grid_artifact_candidate`: max |Δ| > 0.15
+
+**No fixture classifies as `grid_artifact_candidate`** under this jitter scheme. The Phase 2b headline (F1_to_F2 half_phase fraction is C-bin-associated with radicand magnitude) is therefore **not** a grid artifact at this jitter level. Per the discipline §"Important interpretation rule," because the C-association persists, the Phase 2b classification remains **C-associated candidate behavior** — not promoted to `C-resistant readback pattern requiring Phase 2d solve-for`.
+
+**Critically: the small-radicand suppression direction (T1 = lowest half_phase_fraction) is preserved exactly.** In SR and Schwarzschild the T1 |Δ| is 0.046 and 0.000 respectively (jittered T1 fractions: SR 0.000, Schwarzschild 0.000). The instability is concentrated in the **large-radicand T3 bin** — exactly where the per-fixture peak half_phase activity sits. So:
+- The *direction* of the C-association is robust to jitter.
+- The *magnitude* of the peak in T3 is grid-sensitive at the ~8.5pp level.
+
+This is consistent with discovery-level evidence, not promotion-level evidence.
+
+---
+
+## 3. Controls remained clean on the jittered grid
+
+Per Tests 6 and 7:
+
+| Fixture | Same-route control (same_phase / total) | F3 == 0 (zero / total) | F4 != 0 (jittered count) |
+|---|---|---|---|
+| `sr_four_form` | 548/548 | 137/137 | 45/137 (was 27 canonical) |
+| `schwarzschild_four_form` | 548/548 | 137/137 | 91/137 (was 92 canonical) |
+| `pure_algebraic_four_form` | 548/548 | 137/137 | 30/137 (was 40 canonical) |
+
+- **Same-route controls: 1,644/1,644 same_phase across all three fixtures on the jittered grid.** Phase 2's control cleanliness is preserved exactly.
+- **F3 calibration zero: 411/411 exactly 0.0 across all three fixtures.** F3 ≡ 0 is grid-invariant (the underlying identity `R − R = 0` holds at any coordinate).
+- **F4 stressor activation shifts modestly** between grids (SR 27 → 45 records, Schwarzschild 92 → 91, pure_algebraic 40 → 30). F4 remains an active stressor channel; its activation rate is itself somewhat grid-dependent, consistent with F4 being a finite-difference-style probe whose activation depends on specific coordinate values.
+
+---
+
+## 4. Per-fixture summary of classification
+
+| Fixture | Phase 2c classification | Implication |
+|---|---|---|
+| `sr_four_form` | `grid_modestly_unstable` | Phase 2b C-bin association persists; peak in T3 shifts by ~9pp |
+| `schwarzschild_four_form` | `grid_modestly_unstable` | T1 + T2 stay at 0% half_phase exactly; T3 peak shifts by ~9pp |
+| `pure_algebraic_four_form` | `grid_stable` | All three terciles within 5pp; the C-bin association is essentially grid-invariant |
+
+The canonical-vs-jittered comparison **reinforces** the Phase 2b headline rather than refuting it. The per-bin instability is concentrated in the large-radicand bin — the bin with the most half_phase activity — and never exceeds the `grid_modestly_unstable` threshold.
+
+---
+
+## 5. What this pass does *not* claim
+
+Per handoff §16 (allowed Phase 1–2 language), §17 (banned-promotion language), and the discipline §"Forbidden language":
+
+- This pass does **not** claim that **G** is discovered, confirmed, or supported.
+- This pass does **not** claim **precision doubling**, **sub-noise-floor**, or any precision-resolution gain.
+- This pass does **not** claim that the F1_to_F2 readback signal is grid-invariant in absolute terms — only that under this jitter scheme, the C-bin association persists within `grid_modestly_unstable` tolerance for two fixtures and `grid_stable` for one.
+- This pass does **not** promote any ledger candidate beyond `unresolved_candidate` (tested by Test 8).
+- This pass does **not** address `linear` or `log2` alternative grid families; those remain deferred per §12.
+
+What this pass **does** observe (descriptive, not promoted):
+
+- Phase 2b's C-bin association persists under deterministic jitter for all three primary fixtures.
+- Per-bin half_phase fractions are stable in T1 (the small-radicand bin) and modestly unstable in T3 (the large-radicand peak bin).
+- Same-route controls and F3 calibration zero remain perfectly clean on the jittered grid.
+- F4 stressor activation is itself somewhat grid-sensitive (worth noting for Phase 2d).
+
+---
+
+## 6. Candidate ledger updates (evidence links only)
+
+Per the discipline, ledger updates are evidence-only; no promotion. Tags added per candidate; details in [`candidate_ledger.json`](candidate_ledger.json).
+
+| Candidate | Tag | Evidence summary |
+|---|---|---|
+| `G-curv-1` | `phase_2c_grid_stability_observed` | Phase 2b small-radicand suppression direction persists under jitter; peak magnitude in T3 is modestly grid-sensitive. Classification still C-associated, not signature-driven |
+| `G-curv-2` | `phase_2c_grid_stability_observed` | principal_curvature_ratio remains null on both grids (1D fixtures) |
+| `G-curv-3` | `phase_2c_grid_stability_observed` | transition grammar deferred to Phase 2d on both grids |
+| `G-route-1` | `phase_2c_grid_stability_observed` | route-pair phase signal robust within `grid_modestly_unstable` tolerance; zero-operand-offset rule still binds per §1.4 |
+| `C-def-1` | `phase_2c_grid_stability_observed` | log_radicand_magnitude binning is the dominant C-axis; the binning is grid-stable on pure_algebraic and grid-modestly-unstable on SR + Schwarzschild |
+| `C-def-2` | `phase_2c_grid_stability_observed` | spectral content still 1D; awaits lifted anchors |
+| `C-def-3` | `phase_2c_grid_stability_observed` | perturbation-amplification ladder still pending |
+
+**All seven candidates remain `unresolved_candidate`.** Test 8 enforces this.
+
+Campaign-level tags appended: `phase_2c_grid_stability_observed`, `phase_2c_C_bin_association_persists_under_deterministic_jitter`.
+
+---
+
+## 7. Tests and exact commands
+
+9 focused tests in [`tests/test_mcg_geometry_first_grid_stability.py`](../../../tests/test_mcg_geometry_first_grid_stability.py):
+
+| # | Assertion |
+|---|---|
+| 1 | Grid stability artifact generation — required top-level keys present |
+| 2 | All three source sha256 hashes recorded (Phase 1, Phase 2, Phase 2b) |
+| 3 | Grid families and jitter rule deterministically recorded |
+| 4 | Jittered grids preserve endpoints + count + stay strictly inside domain (and regeneration is deterministic) |
+| 5 | F1_to_F2 cross-tabs exist by (fixture, grid, C_bin) with required fields + per-fixture classification structure |
+| 6 | Same-route controls remain 100% same_phase on jittered grid |
+| 7 | F3 calibration zero stays exactly 0.0 on jittered grid |
+| 8 | Candidate ledger states not promoted (all remain `unresolved_candidate`) |
+| 9 | JSON artifact byte-stable across reruns + `main()`-to-disk identity |
+
+### Exact commands and results
+
+```bash
+# 9 focused tests (Phase 2c)
+$ PYTHONPATH=src python -m pytest tests/test_mcg_geometry_first_grid_stability.py -v
+… 9 passed in 28.67s   (build_grid_stability runs ~3× across module-scoped fixture + byte-stability test)
+
+# Smallest reasonable existing subset (P1 + P2 + P2b + P2c + four-form-adjacent)
+$ PYTHONPATH=src python -m pytest \
+    tests/test_mcg_geometry_first_geometry.py \
+    tests/test_mcg_geometry_first_readback.py \
+    tests/test_mcg_geometry_first_c_profile.py \
+    tests/test_mcg_geometry_first_grid_stability.py \
+    tests/test_f1_f2_natural_phase.py \
+    tests/test_f4_route_comb_search.py
+… 51 passed in 29.73s
+
+# Byte-stability of Phase 2c artifact
+$ cp Build_Docs/Reports/mcg_geometry_first/phase_2c_grid_stability.json /tmp/gs_run1.json
+$ PYTHONPATH=src python -m lloyd_v4.evals.mcg_geometry_first_grid_stability --output /tmp/gs_run2.json
+$ diff -q /tmp/gs_run1.json /tmp/gs_run2.json
+# (silent — files identical)
+$ sha256sum /tmp/gs_run1.json
+# 62d86e0b081231abd37679b5e393de0f7fb1b16284fdff48d4d996d5b8887b85
+```
+
+No manifest, status family, primitive, fixture definition, architecture document, or protocol was modified.
+
+---
+
+## 8. Methodology notes (for the iteration log)
+
+- **Deterministic jitter is the safest first alternative grid family.** It preserves the fixture's canonical grid semantics (endpoints + count + domain) while perturbing interior positions enough to expose grid-family sensitivity. Stronger alternatives (`linear` over Schwarzschild's domain; `log2/binade-spaced` everywhere) would change per-coordinate semantics and are deferred per §12.
+
+- **The per-bin |Δ| structure is informative.** SR and Schwarzschild show T1 ≈ 0 stability and T3 instability; pure_algebraic shows T1 ≈ T3 stability and T2 instability. The bin where the half_phase peak lives is also the bin where the magnitude is grid-sensitive. This is consistent with the headline being a real C-effect with modest grid-dependent fine structure, not a grid artifact.
+
+- **F4 activation is grid-sensitive.** SR's F4 nonzero count went 27 → 45 (canonical → jittered). This is a metaobservation about F4 as a probe: its activation rate depends on the specific coordinate distribution. Worth noting for any future Phase 2d work that uses F4 as a stressor channel.
+
+- **The `grid_modestly_unstable` classification is informative, not negative.** It signals that headline magnitudes can move by a few percentage points under reasonable grid perturbation. Phase 3 entry would require either tighter `grid_stable` characterization or explicit handling of the modest instability.
+
+---
+
+## 9. What this pass did *not* attempt (logged honestly)
+
+- **`linear` and `log2` alternative grids** — deferred per §12 / user direction.
+- **Sibling normalization (`J_step` step-natural ULP)** — Phase 2 only used `J_final` / `base_operand_ulp`. The sibling-normalization stability question is left for a separate pass.
+- **Multi-D anchor extension** — anchors not exercised in this campaign's readback table.
+- **Transition grammar persistence (§12 Q2)** — deferred; Phase 2d deliverable.
+- **Promotion of any candidate.** Per discipline.
+
+---
+
+## 10. References
+
+- [`Build_Docs/Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md`](../../Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md) §12, §16, §17
+- [`phase_0_m_contract.md`](phase_0_m_contract.md)
+- [`phase_1_geometry_table.json`](phase_1_geometry_table.json) (sha256 recorded)
+- [`phase_2_joined_readback_table.json`](phase_2_joined_readback_table.json) (sha256 recorded)
+- [`phase_2b_c_profile.json`](phase_2b_c_profile.json) (sha256 recorded; tercile edges inherited)
+- [`phase_2c_grid_stability.json`](phase_2c_grid_stability.json) — Phase 2c artifact
+- [`candidate_ledger.json`](candidate_ledger.json) — updated with Phase 2c evidence (no state promotions)
+- [`../../../src/lloyd_v4/evals/mcg_geometry_first_grid_stability.py`](../../../src/lloyd_v4/evals/mcg_geometry_first_grid_stability.py) — Phase 2c module
+- [`../../../tests/test_mcg_geometry_first_grid_stability.py`](../../../tests/test_mcg_geometry_first_grid_stability.py) — 9 focused tests

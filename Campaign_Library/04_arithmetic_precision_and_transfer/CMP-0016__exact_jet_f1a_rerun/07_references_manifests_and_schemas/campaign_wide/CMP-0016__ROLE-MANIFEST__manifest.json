@@ -1,0 +1,86 @@
+{
+  "campaign": "exact_jet_primitive",
+  "manifest_version": "v1",
+  "frozen": true,
+  "date_drafted": "2026-06-10",
+  "date_approved": "2026-06-10 (Will: composition law approved with one pre-freeze amendment - scale-free DIV_AMPLIFICATION trigger; observable=selectable approved with consumer obligation; pow restriction approved with B4 route-fingerprint note; thresholds approved as frozen calibration candidates)",
+  "authority": "Build_Docs/Agent_tasks/CAMPAIGN_EXACT_JET_PRIMITIVE.md",
+  "scoreboard": {"file": "Build_Docs/PROBE_READINESS.md", "rows_primary": ["A6"], "rows_indirect": ["A4"]},
+  "branch": "campaign/exact-jet-primitive (based on Quiet HEAD 24690f6; main does not contain the Quiet artefacts - merge-ordering implication flagged for the report)",
+
+  "rulings_2026_06_10": {
+    "option_b": "Jet-level composition law approved: dual algebra on internal floats with a per-operation event accumulator; one TypedResult per evaluation (the Membrane Rule). No typed-scalar parent built.",
+    "membrane_rule": "Internal floats are lawful iff every dual operation feeds the accumulator and the boundary emits exactly one TypedResult - nothing crosses the membrane untyped.",
+    "stable_schema": "ExactJetValue/ExactJetResult is the consumer contract; Option-A migration changes internals only. Re-open trigger recorded: a consumer demonstrating per-op granularity need (candidate: separator M2 per-route provenance).",
+    "placement": "src/lloyd_v4/evals/exact_jet.py now; observers (L1.5) at promotion. Brief deliverable path corrected (authoring error, Will's note).",
+    "composition_law": "results/exact_jet_f1a_rerun/RESULT_TYPES_AMENDMENT_PROPOSAL.md - binding for this campaign once this manifest is frozen; applied to RESULT_TYPES.md only on Will's approval."
+  },
+
+  "quiet_pin_reference": {
+    "pin": "9a1d7ec63e46d6418e4f8cd8992dd4b3bd7ba96df08cef760cfd7fe57772ef23",
+    "manifest": "results/shape_of_the_quiet/manifest.json",
+    "gate": "the F1a re-run refuses to run unless sha256(quiet manifest) == pin (require_quiet_pin; test_quiet_rerun_gate.py). Fixtures, ladder, tolerances, arbiter policy are inherited from the Quiet manifest verbatim - F1a rungs k=0..15, tol 1e-3 relative, mpmath arbiter with dps escalation, dual-grading conventions."
+  },
+
+  "predictions_verbatim_from_brief": {
+    "P1": "with the exact-jet route, I3 reads F1a kappa(delta) within 64 ulp-relative of I1's direct evaluation at every rung delta = 10^0 ... 10^-15.",
+    "P2": "I3 retains its attribution property: zero unflagged confidently-wrong rungs (the flags adapt - fd_unresolved must no longer fire; any new floor must be flagged by a route-appropriate channel).",
+    "P3": "the typed validity of each jet component is non-trivial (not vacuously valid): at least the conditioning channel must respond measurably across the ladder.",
+    "failure_handling_verbatim": "Failure of P1 is filed as a formula-conditioning gap, not patched in-campaign. Failure of P2 is a defect (stop, fix, re-run). Failure of P3 is a design gap (stop, file)."
+  },
+
+  "prediction_grading_mechanical": {
+    "P1": "per rung k=0..15 (excluding the k where r_k == 2.0 exactly, a domain refusal for all instruments): |kappa_I3_jet - kappa_I1_direct| <= 64 * ulp(|kappa_I1_direct|), with kappa_I1_direct the Quiet manifest's pinned I1 operation order at the same binary operating point. PASS iff every rung satisfies the bound or both routes refuse identically.",
+    "P2": "per rung: confidently-wrong = (validity selectable AND |I3 - arbiter| > 10*tol). UNFLAGGED iff additionally conditioning.status == WELL_CONDITIONED AND attribution channel == phenomenon AND no refusal. PASS iff zero unflagged confidently-wrong rungs AND fd_unresolved appears nowhere in the re-run records.",
+    "P3": "PASS iff (a) condition_diagnostics.max_cancellation_binades at the deepest non-refused rung exceeds the k=0 value by >= 10 binades, (b) the per-rung sequence is nondecreasing in k (ties allowed), and (c) at least two distinct ConditioningStatus strata appear across the ladder. Predicted stratification (recorded, not graded): WELL -> WARNING near k=8 -> ILL near k=12 from the 1-2/r cancellation growing ~3.32k+1 binades."
+  },
+
+  "i3_jet_route": {
+    "definition": "exact_jet of F(r) = log2|1 - 2/r| at the rung's binary r_k -> (S0, S1, S2) in one pass (S1 = gradient[0], S2 = hessian[0][0]); kappa via the HR129 multivariate reconstruction (identical formula to the Quiet I3, with exact jets replacing FD jets).",
+    "supersedes": "the FD differencing path of substrate_invariant_search_phase_a_fd_metrology on the READING side only; the Phase A module remains the HR129 receipt generator and is not modified."
+  },
+
+  "instrument_constants_declared": {
+    "MAX_RECORDED_EVENTS": 64,
+    "CANCEL_RECORD_THRESHOLD_BINADES": 2,
+    "CANCEL_WARNING_BINADES": 26,
+    "CANCEL_ILL_BINADES": 40,
+    "AMP_RECORD_THRESHOLD_BINADES": 2,
+    "AMP_WARNING_BINADES": 60,
+    "AMP_ILL_BINADES": 150,
+    "justification": "see RESULT_TYPES_AMENDMENT_PROPOSAL.md section 4 - thresholds tied to mantissa half-width and the Quiet tol 1e-3. PRE-FREEZE AMENDMENT (Will ruling 1): DIV_AMPLIFICATION triggers on the MEASURED scale-free lane amplification (output-vs-input binade growth), not an absolute denominator threshold (the HR130 E-rule failure pattern); trigger and grading share one currency. Thresholds 26/40 + 60/150 are frozen calibration candidates (Will ruling 4): the predicted F1a stratification WELL->WARNING~k=8->ILL~k=12 is their test; misprediction = filed gap + reasoned v2, never an in-campaign retune."
+  },
+
+  "identity_battery_frozen": {
+    "polynomial": "p(x) = 3x^3 - 2x + 1 at x in {-2, -0.5, 0, 1.25, 10}",
+    "rational": "(x^2 + 1)/(x - 2) at x in {-1, 0, 1.9, 2.1, 100}",
+    "transcendental": "sin(x)*exp(-x^2), log(1+x^2), sqrt(1+x^2) at x in {-3, -0.1, 0, 0.7, 5}",
+    "composite_f1a_chain": "log2|1 - 2/r| at r in {2.1, 3, 10, 2 + 1e-8}",
+    "multivariate": "F(r,z,M) = 1 - 2M/r - z*z at the Quiet F1b k=0 point - H[1][1] must be exactly -2.0",
+    "degenerate": "log at 0 and -1; sqrt at -4 and 0; abs at 0; x/(x-x); pow(-2, 0.5) - each must produce the proposal's exact typed refusal status, never an exception",
+    "tolerance": "<= 8 ulp per jet component vs the analytic closed form (exact equality where the closed form is exactly representable)"
+  },
+
+  "oracle_crosscheck": {
+    "tool": "lv3_diagnose / lv3_observe_full on V3-expressible fixtures (sqrt/sin/exp/log/arithmetic grammar)",
+    "fixtures": "the F1a surface 1 - 2/r - z*z (K_G + gradient comparison at shallow rungs k=0..2) and the F1b 3-var surface (principal curvature neighbour data)",
+    "tolerance": "gradient components within 1e-12 relative where both expose them; disagreement recorded verbatim, never reconciled silently",
+    "role": "oracle only (CLAUDE.md section 5) - V3 jets never shape the algebra"
+  },
+
+  "environment_pins": {
+    "python": "3.14.4", "mpmath": "1.3.0", "numpy": "2.4.4", "scipy": "1.17.1",
+    "lloyd_v3_mcp": "1.27.0 via .mcp.json project scope (binary sha256 prefix e09bd3d873a30e752969)"
+  },
+
+  "determinism_policy": "inherited from the Quiet manifest verbatim: zero RNG, canonical JSONL (sort_keys, repr floats), byte-stable re-runs diffed before commit, no wall-clock content in artefacts.",
+
+  "commands": {
+    "red_slice": "PYTHONPATH=src python -m pytest tests/test_jet_identities.py tests/test_jet_typed_composition.py -x",
+    "green_slice": "PYTHONPATH=src python -m pytest tests/test_jet_identities.py tests/test_jet_typed_composition.py tests/test_jet_oracle_crosscheck.py tests/test_jet_determinism.py tests/test_quiet_rerun_gate.py",
+    "full_suite": "PYTHONPATH=src python -m pytest",
+    "source_audit": "PYTHONPATH=src python -m pytest tests/test_source_purity.py && grep -rn 'lloyd_v3\\|lloyd_core\\|hyperdual\\|HyperDual\\|torch' src/lloyd_v4/evals/exact_jet.py (must hit nothing - zero V3/OG imports or vocabulary)"
+  },
+
+  "non_goals_inherited": "no eigensolve primitive; no separator work; no F3/wave-two; no substrate-tier promotion (eval-layer entry per DP4)."
+}

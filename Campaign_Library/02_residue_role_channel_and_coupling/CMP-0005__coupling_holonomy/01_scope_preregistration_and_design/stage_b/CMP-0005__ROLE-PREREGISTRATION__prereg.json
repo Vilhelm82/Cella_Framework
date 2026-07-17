@@ -1,0 +1,96 @@
+{
+  "campaign_id": "shared_residual_geometry_arm",
+  "claims": {
+    "CL-G3": "finite-precision separation (keystone)",
+    "CL-G4": "representation-exhaustion boundary"
+  },
+  "code_pins_sha256": {
+    "finite_precision.py": "e511adec5ca8ab3f0ccc6d96737a45551697e688272af7415c4a6ecf3667f9c1",
+    "fixtures_b.py": "99418db992da69ecceb3710d698ac9b13b3e1d099e0f792a7e69fd59b53929eb",
+    "run_stage_b.py": "97dd73e5f396d7c064416abb0c6bdf33dc43d5a6c97f448dbf09f246ea2d6134"
+  },
+  "controls": {
+    "dry_run_refuses_below_floor": {
+      "label": "BOUND-BELOW",
+      "verdict": "below_detection"
+    },
+    "informativeness_control_fails": {
+      "label": "ROUND-WITNESS-0.1",
+      "lesson": "the float reading != the coupling on a genuine-rounding cell; only the EFT account recovers the coupling \u2014 trusting the float reading alone would take the fingerprint for the coupling"
+    }
+  },
+  "depends_on": {
+    "manifest_v1_sha256": "648975d082407aebdb3b0ead340639a59820f11e98231f10a0fd412fb171a7ee"
+  },
+  "expectations_pinned_at_dry_run": {
+    "cells": [
+      {
+        "coupling": "-3.125e-02",
+        "fingerprint": "0.000e+00",
+        "kind": "protected",
+        "label": "PROT-1",
+        "verdict": "separated_clean"
+      },
+      {
+        "coupling": "-1.562e-02",
+        "fingerprint": "0.000e+00",
+        "kind": "protected",
+        "label": "PROT-2",
+        "verdict": "separated_clean"
+      },
+      {
+        "coupling": "-1.562e-02",
+        "fingerprint": "0.000e+00",
+        "kind": "protected",
+        "label": "PROT-3",
+        "verdict": "separated_clean"
+      },
+      {
+        "coupling": "-9.537e-07",
+        "fingerprint": "0.000e+00",
+        "kind": "coincidental",
+        "label": "COINC-1",
+        "verdict": "separated_coincidental"
+      },
+      {
+        "coupling": "-3.815e-06",
+        "fingerprint": "0.000e+00",
+        "kind": "coincidental",
+        "label": "COINC-2",
+        "verdict": "separated_coincidental"
+      },
+      {
+        "coupling": "-1.526e-05",
+        "fingerprint": "-3.469e-18",
+        "kind": "rounding",
+        "label": "ROUND-WITNESS-0.1",
+        "verdict": "separated_accounted"
+      },
+      {
+        "coupling": "-3.638e-12",
+        "fingerprint": "0.000e+00",
+        "kind": "boundary_above",
+        "label": "BOUND-ABOVE",
+        "verdict": "separated_clean"
+      },
+      {
+        "coupling": "-2.274e-13",
+        "fingerprint": "0.000e+00",
+        "kind": "boundary_below",
+        "label": "BOUND-BELOW",
+        "verdict": "below_detection"
+      }
+    ],
+    "floor_p": 40,
+    "n_cells": 8
+  },
+  "frozen": true,
+  "grader_clauses": {
+    "PMG-B.1": "the SEPARATOR closes (CL-G3): on every FX-G-B cell the EFT account closes exactly in \u211a \u2014 coupling-holonomy == holonomy_float + account \u2014 so the coupling is separable from the route fingerprint in finite precision. The protection predicate (HR134 amendment-6 L1-L4) is SOUND: predicate-protected \u27f9 fingerprint == 0 (coupling read clean). Units: cell.",
+    "PMG-B.2": "the coincidental class is NAMED, not banked (CL-G3 cont.): a NOT-protected cell whose four corner residues are common-mode cancels to fingerprint == 0 (the finite-precision cousin of Arm M CL-M4); it is reported as `separated_coincidental`, NOT conflated with a protected read and NOT banked as CL-M4 itself. The derived witness (0.1 = RN(1/10), s=53>26) is a genuine rounding cell: fingerprint != 0, coupling recovered exactly by the account. Two-sided. Units: cell.",
+    "PMG-B.3": "the boundary is distinct (CL-G4): the coupling crosses the pinned floor 2^-40; certify above (a separated verdict), refuse below (`below_detection`). The boundary cells are protected (no rounding), isolating representation-exhaustion from the rounding fingerprint. Units: cell.",
+    "PMG-B.4": "determinism: the Stage-B record set is byte-identical across two runs (sha256 over records)."
+  },
+  "stage": "B",
+  "status_move_rules": "CL-G3 -> DEMONSTRATED iff the account closes on EVERY cell AND the predicate is sound on EVERY cell (no protected cell with a nonzero fingerprint) AND the derived witness shows genuine accounted rounding AND protected cells read clean. CL-G4 -> DEMONSTRATED iff the boundary pair certifies-above / refuses-below at the pinned floor. K-G3 (REFUTE-ROW, continue \u2014 NOT a halt): any cell whose account does not close (FAIL_entangled) or any protected cell with a nonzero fingerprint (FAIL_predicate) -> CL-G3 REFUTED, scope reduced, witness and chain preserved. PARTIAL until both runs match (PMG-B.4)."
+}

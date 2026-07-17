@@ -1,0 +1,57 @@
+# Proposed Revision of Section 5 (Path-Basis Topology / Payload Family)
+
+**Scope note (for drafting):**  
+This describes the specific evaluation paths currently implemented in the V4 four-form battery and the two compound variants that have shown useful behavior in the tested fixtures. It does not claim completeness, universality across all possible rewrites, or that these paths solve routing for all cases.
+
+### 5. The Path-Basis Topology (The Payload Family)
+
+The multi-precision payload architecture generates multiple evaluation paths (F1, F2, F3, F4, and the two compound variants) for the same algebraic identity. These paths are used to separate different sources of floating-point behavior.
+
+### 5.1 F1: The Global Convergence Baseline
+`F1 = power - direct`
+
+F1 compares the computed power against a high-precision reference for the same direct operand. It is the primary path used for precision-scaling studies (see Task 017c and Phase 2 Task A) because it measures cumulative deviation of the entire chain against an external anchor. In practice it is used mainly for diagnostic and multi-precision work rather than as a runtime quantity.
+
+### 5.2 F2: The Lattice-Perturbation Path
+`F2 = (power - 1) + x_term`
+
+F2 is the direct, self-contained operational form used in the engine. It places the rounded power in explicit arithmetic contact with the small perturbation term. This path is sensitive to how cancellation and rounding interact with the integer lattice, especially near the Sterbenz boundary.
+
+In the pure-algebraic and Schwarzschild fixtures, explicit reassociation to a "late" form (`power + (x_term - 1)`) produced substantially higher rates of exact integer-lattice alignment inside the Sterbenz region compared with the standard early form (see `validate_top_down_lattice_prealignment_v2` results). The compound variants below were explored as ways to obtain similar alignment behavior without an explicit region test.
+
+### 5.3 Compound Variants (P_compound_split and P_sign_c)
+
+Two additional forms were carried in the precision fixtures:
+
+`P_compound_split = (power - 1) + (1 - direct)`  
+`P_sign_c = (power - 1) - (-1 + direct)`
+
+In the top-down pre-alignment experiments (v2), these two forms were measured alongside explicit early and late F2 across four fixtures and both sides of the Sterbenz boundary.
+
+Observed behavior in the tested grids (ulp1 normalization):
+
+- **Schwarzschild, inside Sterbenz**: Early F2 ~4.3% on-lattice (max |j|=1); Late F2, P_compound_split, and P_sign_c all ~52.2% on-lattice (max |j|=0).
+- **SR, inside Sterbenz**: Early F2 ~13.7% on-lattice (max |j|=1); Late/Compound/Sign_c ~57.4% on-lattice (max |j|=0).
+- **Outside Sterbenz** (several fixtures): Early F2 often matched or exceeded the late/compound rates on the same metric.
+- In the local-ulp normalization the picture was noisier and the advantage of the compound forms was smaller or absent in some regions.
+
+These variants were carried because they structurally separate the constant 1.0 on both sides of the addition, which in some regimes produced lattice alignment comparable to explicit late reassociation without requiring a runtime region decision in the measurement harness.
+
+They are not presented as a universal solution to routing or alignment; they are two additional observable paths whose behavior was characterized in the same grids used for the rest of the payload family.
+
+### 5.4 Root-Level Probes (F3 and F4)
+
+`F3 = root - root`  
+`F4 = root - alt_root`
+
+F3 is a sentinel that is zero when the identical root value is subtracted from itself. F4 measures the difference between the root computed from the direct operand versus an algebraically equivalent but differently parenthesized operand.
+
+These paths isolate the initial root-generation step before the subsequent powering amplifies error. In the current four-form implementation they are used to check root-level consistency and to provide a separate observable for how operand routing affects the starting ε_root before higher powers are taken.
+
+(Note on higher n: All n=4 lattice and grain data collected to date used the composed quartic implementation `sqrt(sqrt(·))`. Any statements about root-level behavior or downstream lattice effects at n=4 are therefore scoped to that implementation.)
+
+---
+
+**Status of this draft**: Descriptive only. No completeness or universality language. Grounded in the specific measurement campaigns that actually exercised these paths (task017c, task031, validate_top_down_lattice_prealignment_v2, and the precision fixtures). 
+
+Ready for further tightening or expansion once the exact scope the author intends is confirmed.

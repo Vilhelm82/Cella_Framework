@@ -1,0 +1,98 @@
+# Orphaned Scratch Work — Triage & Promotion Map
+
+**Date:** 2026-06-05 · **Status:** research-grade triage, no substrate or normative doc touched.
+**Scope:** the ~149-entry `scratch/` heap (132 .py, 64 .json, 15 .md), inventoried by one direct read pass + three parallel Explore agents.
+**Discipline note:** "promotion" of any `src/` or `Build_Docs/Architecture/` rules-doc item is substrate-touching → requires per-edit authorization + `/v4-axiom-check` + plan mode (CLAUDE.md §3/§6). Living-state-doc updates (HISTORICAL_RECORD / ledger / glossary / TASKS_TO_REVISIT) are free. Tags below mark which tier each item lands in.
+**Confidence tags:** [M] = measurement read directly from artifact/note; [A] = agent-reported, gate-passed, re-run before promotion; [INF] = my inference.
+
+---
+
+## TIER 1 — Promote now (closes or builds a specced/frozen item)
+
+### 1.1 Conjecture C — subnormal sqrt (n=2) — **CLOSES A FROZEN-OPEN ITEM** ★ top priority
+- **Finding:** Conjecture C holds for all binary64 **subnormal** square roots. Round-trip residual `V−f` is exactly `j·2⁻¹⁰⁷⁴` with **j ∈ {0} only**. [A]
+- **Evidence:** 10,026 subnormal inputs (10k consecutive from 2⁻¹⁰⁷⁴ + 26 log-spaced deeper), 0 violations; `phase2B_adversarial_verify.json` cross-checked against mpmath correctly-rounded sqrt (64 samples match). [A]
+- **Why it matters:** the canonical record has "C_subnormal **frozen open**." This closes it for n=2. Pure substrate **M**, no G.
+- **Target:** HISTORICAL_RECORD (new PROVEN row + supersede "C_subnormal frozen open"), glossary Conjecture-C entry, c2 scope-gate note. Source: `investigate_conjecture_c_subnormal_sqrt_v3.py` + `_v3_results.json`.
+- **Needed before promotion:** one clean byte-stable re-run printing the residual multiset. Low effort.
+
+### 1.2 Conjecture C — subnormal cbrt (n=3) — partial close (implementation-qualified)
+- **Finding:** subnormal cbrt round-trip residual lands on the 2⁻¹⁰⁷⁴ lattice; under numpy cbrt + float64 cubing, bulk set {−4..+1} ≈ 98.7%, documented excursions to {−7..+3}; under correctly-rounded cbrt it tightens to {−1,0,1}. [A]
+- **Evidence:** 5.5M subnormal round-trips; numpy-vs-mpmath diverges 27/64 but stays on-lattice (residual-integrality ≠ correct-rounding). [A]
+- **Caveat:** implementation-dependent (cbrt is not IEEE correctly-rounded). Promote as a *qualified bound*, not a clean theorem.
+- **Target:** HISTORICAL_RECORD extension citing HR73 (`bacl_subnormal_audit`), not a fresh proof. Source: `Phase2B_Subnormal_Cbrt_Combinatorics_Proof.md`, `phase2B_subnormal_topology.py`.
+
+### 1.3 `symbolic_analyzer/` — **task041 structural_cancellation_analyzer, already built**
+- **Finding:** complete 571-line implementation of the codex_task041 spec (DSL + classifier + analyzer + probe), fully exported, no external deps beyond stdlib. [A]
+- **Status in record:** task041 was specced (HR105) with completion "unknown." It exists and runs.
+- **Target:** migrate to `src/lloyd_v4/evals/symbolic_analysis/` (substrate-touching → gated; needs axiom check + tests). G-relevance: none (structural M/C).
+
+### 1.4 `gate_mvp.py` — task042 gate-lifecycle reference implementation
+- **Finding:** 175-line working demonstrator of the two-stage substrate gate (definition-time structural placement + construction-time closure via exact `Fraction`); 7 demo scenarios run clean. [A]
+- **Target:** `Build_Docs/Architecture/` reference doc (substrate-rules-adjacent → gated). Codifies the SUBSTRATE_CONSTRUCTION gate pattern. G-relevance: none (meta/architecture).
+
+---
+
+## TIER 2 — G-relevant leads (the actual treasure for the "does G exist" question)
+
+### 2.1 Lifted-fixture j-lattice **survives into multi-constraint geometry — and fixtures distinguish** ★ strongest G lead
+- **Finding:** the ULP-normalized residual lattice survives into the lifted/multi-constraint setting at **100% occupancy** on {−1,−0.5,0,0.5,1}, AND the fixtures **separate**: Morris-Thorne j_var 0.4907 vs Schwarzschild photon-sphere 0.4117. [M]
+- **Why it's a G candidate:** this is fixture-distinguishing structure in a *multi-D* setting — exactly where the MCG work said G might live and never actually looked. The prior "lattice doesn't survive into geometry" null was produced by a **bug** (`analyze_lifted` froze the physical coords and swept only the lift variable X, so geometry never entered the arithmetic — it measured X²/ulp(X²)). The corrected run (`lifted_sweep_fixed.py`) inverts the conclusion. [M]
+- **Status:** strong **eval-layer observation, NOT a derivation**. One perturbation axis, one density (N=15001), one centering; no uniform-noise null test. [M]
+- **This is the positive evidence that the "G empirically absent in 1D" record is not load-bearing** (see Tier 3.2 / the separate G-record correction).
+- **Source:** `f1_f2_common_mode_expanded_fixtures/corrected_findings.md`, `lifted_sweep_fixed.py`.
+
+### 2.2 F1−F2 common-mode rejection exposes a clean integer/half-integer lattice
+- **Finding:** F1−F2 cancels the shared root round-off (common mode = M); the remaining ULP-normalized j locks to {−1,−0.5,0,0.5,1} — Schwarzschild j_var ≈ 0.501, 100% on-lattice; SR/PA/cbrt partial (~40%). Negative control F1−F4 destroys it (var ~9e7). [M]
+- **Why it matters:** this is M-subtraction done *right* — on a non-M-saturated observable — i.e. the methodologically-correct inverse of the killswitch that was "substrate-dominated by construction." A lens that removes M and leaves structure.
+- **Counter-evidence to weigh:** `common_mode_rejection_test.py` (matched-K_G cross-fixture version) found common-mode does **NOT** break the 0.5 cross-fixture ceiling → exposing a clean lattice ≠ isolating geometry across fixtures *yet*. [A]
+- **Source:** `f1_f2_common_mode_ulp_lattice_geometry/`, `f1_f2_common_mode_rejection_sterbenz_dense/`.
+
+### 2.3 Information Loss Function `W(k) = min(53, −⌊αk + log₂|c|⌋)` — named mechanism
+- **Finding:** derived strict bit-loss function at the Sterbenz node, built from α (native observable) + input binade k. Graded-floor form confirmed by v6 revalidation (cluster Fb); two earlier variant forms explicitly withdrawn. [M]
+- **Why it matters:** this is the **named mechanism** the killswitch closeout (§7.A.2) demanded before any G test is legitimate — a positive constructive quantity, not a residual. Candidate theoretical spine for path-selection rules and for the G R&D phase.
+- **Status:** analytical note, not yet a theorem; §6 lists the 4 steps to V5-theorem. Source: `Information_Loss_Function_Sterbenz_Node.md`.
+
+---
+
+## TIER 3 — Resolve a contradiction before acting
+
+### 3.1 F2 lattice grain 0.5 vs 0.25 — **conflicting readings**
+- Revalidation **cluster D** reports the 0.5(Schw/SR)/0.25(PA/cbrt) grain split as reproducible, "no harness artifact," strong fixture-distinguishing G-signal. [A]
+- The canonical record (v6 revalidation cluster D, HR132 + glossary §13) concluded the **opposite**: F2 is the *same* half-integer lattice in all four fixtures, and the 0.5/0.25 split is a **measurement-convention artifact** (integer-snap vs half-snap reporting).
+- **Action:** do NOT promote either reading. Reconcile which "cluster D" is which and which conclusion stands before this touches the record. Likely a naming collision between two runs. [INF]
+
+### 3.2 The "G empirically absent in 1D" record itself
+- Established last session from primary sources: the Gate-3 killswitch was "substrate-dominated by construction" (uninformative HALT), and the geometry-first campaign left all 7 G/C candidates `unresolved_candidate` with Phases 2b/2c/2d never run. "G absent" is a documentation compression with no evidential basis.
+- **Action (free, living-doc):** soften HISTORICAL_RECORD + glossary G entries from *finding* → *untested (R&D phase skipped)*; log in TASKS_TO_REVISIT. Tier 2.1 supplies positive counter-evidence.
+
+---
+
+## TIER 4 — Quarantine / do not promote
+
+### 4.1 GR physics-interpretation overreach (discipline flag)
+- `whitepaper_gr_critical_exponents_v1.md`, `kerr_retrograde_45_over_16_derivation.md`, `gr_photon_sphere_singularity_probe.py`.
+- The 45/16 and the critical exponents are **imported from Bardeen-Press-Teukolsky (1972) literature**, numerically evaluated — **not substrate-derived**. Framing them as "V4 recovers Kerr/Schwarzschild critical exponents" is exactly the retired "floating-point natively simulates Kerr" overreach. [A]
+- **Salvageable substrate kernel (if stripped of GR frame):** "paired-probe architecture distinguishes well-conditioned vs formulation-burdened power-law sweeps; directional probe distinguishes α=2 (tangent/curvature) from α=1." Promote *that*, under a substrate title, only if wanted.
+- **Action:** archive the GR framing; do not promote as physics.
+
+### 4.2 Honest negatives (archive as falsified hypotheses, keep the discipline credit)
+- `common_mode_rejection_test.py` (matched-K_G): common-mode does not break the cross-fixture ceiling. [A]
+- Phase 2A precision-scaling boundary: all four fixtures are **instrument artifacts** (SR's "boundary" is the 80-bit float128 noise floor); the named "dominating term" was **refuted** (F1 residual exactly 0 at SR/Schw/PA cells — parity, not dominance). Already partly in record. [M/A]
+
+### 4.3 Validation infrastructure (keep as harnesses, not findings)
+- `revalidate_payload_sterbenz_2026-05-31.py`, `proposed_path_basis_section_v1.md` (draft scope note), `choptuik_step2_pure_noise_control.py` (matched-filter control: 7.8 vs 14.6 dB — "honest" but not a collapse-to-floor; rename to a control audit, strip Choptuik frame).
+
+---
+
+## Recommended sequence
+
+1. **Free / low-risk first:** correct the "G absent" record (Tier 3.2) + log subnormal-C close (Tier 1.1) in living docs. These are the highest value-per-risk.
+2. **Quick gated win:** promote subnormal-C sqrt (1.1) after a byte-stable re-run — it closes a frozen-open with clean adversarial backing.
+3. **Build the G thread:** develop Tier 2.1 (lifted-fixture lattice) into the proper G R&D phase we scoped — positive multi-D lead + the W(k) named mechanism (2.3) now in hand. This is the line that actually bears on Will's question.
+4. **Code migrations (gated, batchable):** symbolic_analyzer → src (1.3), gate_mvp → architecture doc (1.4).
+5. **Before any of Tier 3.1 touches the record:** resolve the F2-grain contradiction.
+6. **Quarantine** Tier 4.1 GR overreach so a future session doesn't mistake it for substrate.
+
+## Headline answer to "does the heap already answer G?"
+Not finished-answer. But it does two things: it **demolishes the false 'G absent' verdict** with a concrete bug, and it hands you a **positive multi-D lead** (lattice survives + fixtures distinguish) plus a **named mechanism** (W(k)) — which is materially more than "G is an open residual." The door you said was wrongly marked CLOSED is not just open; there's something moving on the other side of it.

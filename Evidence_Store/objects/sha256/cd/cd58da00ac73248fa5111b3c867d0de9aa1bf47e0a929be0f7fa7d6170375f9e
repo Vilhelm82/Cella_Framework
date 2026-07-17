@@ -1,0 +1,275 @@
+"""Choptuik critical-scaling Step 1: pure synthetic, no AMR noise.
+
+Tests whether V4's existing primitives can:
+  (a) recover the leading power-law exponent gamma from a log-periodically-
+      modulated signal, despite the DSS modulation
+  (b) preserve the log-periodic structure in the regression residuals,
+      enabling a follow-on spectral analysis to extract the period P_ln
+
+Synthetic observable (corrected per Will's note 2026-05-25):
+    g(eps) = eps^gamma * [1 + A * cos((4*pi*gamma/Delta) * ln(eps))]
+
+with Choptuik textbook values:
+    gamma   = 0.374
+    Delta   = 3.445   (spacetime DSS echo period in proper-time tau)
+    P_ln    = Delta / (2*gamma) ~= 4.607   (parameter-space log-period)
+
+The factor 2*gamma in P_ln comes from the curvature-observable scaling
+R ~ L^(-2) ~ eps^(-2*gamma), which doubles the Jacobian between tau and
+ln(eps) on the observable side.
+
+Sweep:  10 decades, eps in [1e-12, 1e-2], 100 log-spaced points
+           => ~5 DSS oscillation periods at ~20 points per period
+"""
+
+from __future__ import annotations
+
+import json
+import math
+from pathlib import Path
+
+from lloyd_v4.primitives.directional_alpha_probe import (
+    DeclaredAlphaModel,
+    directional_alpha_probe,
+)
+
+
+# ---------------------------------------------------------------------------
+# Choptuik parameters
+# ---------------------------------------------------------------------------
+
+GAMMA = 0.374
+DELTA = 3.445
+P_LN = DELTA / (2.0 * GAMMA)           # ~= 4.6056
+ANGULAR_FREQ = 4.0 * math.pi * GAMMA / DELTA   # = 2*pi / P_LN ~= 1.364
+
+print(f"Choptuik parameters:")
+print(f"  gamma           = {GAMMA}")
+print(f"  Delta           = {DELTA}")
+print(f"  P_ln (period)   = Delta/(2*gamma) = {P_LN:.6f}")
+print(f"  angular freq    = 4*pi*gamma/Delta = {ANGULAR_FREQ:.6f}")
+print(f"  freq in log10(eps) = {ANGULAR_FREQ * math.log(10):.6f}  (per decade)")
+print()
+
+
+def choptuik_signal(eps: float, amplitude: float = 0.10) -> float:
+    """g(eps) = eps^gamma * [1 + A * cos((4*pi*gamma/Delta) * ln(eps))]"""
+    if eps <= 0:
+        raise ValueError("eps must be positive")
+    return eps ** GAMMA * (1.0 + amplitude * math.cos(ANGULAR_FREQ * math.log(eps)))
+
+
+# ---------------------------------------------------------------------------
+# Sweep configuration
+# ---------------------------------------------------------------------------
+
+N_POINTS = 100
+EPS_START = 1e-2
+EPS_END = 1e-12
+ETA = 1e-4
+
+log_start = math.log10(EPS_START)
+log_end = math.log10(EPS_END)
+EPS_GRID = tuple(
+    10.0 ** (log_start + (log_end - log_start) * i / (N_POINTS - 1))
+    for i in range(N_POINTS)
+)
+
+# We declare a band around gamma = 0.374 plus neighbours for comparison.
+DECLARED_MODELS = (
+    DeclaredAlphaModel(name="choptuik_gamma", alpha=GAMMA, band=0.03),
+    DeclaredAlphaModel(name="one_third",     alpha=1.0/3.0, band=0.03),
+    DeclaredAlphaModel(name="two_fifths",    alpha=0.4,    band=0.03),
+    DeclaredAlphaModel(name="half_exponent", alpha=0.5,    band=0.03),
+)
+
+
+# ---------------------------------------------------------------------------
+# Run V4 alpha probe across multiple amplitudes
+# ---------------------------------------------------------------------------
+
+def probe_at_amplitude(amplitude: float) -> dict:
+    obs = lambda eps: choptuik_signal(eps, amplitude=amplitude)
+    result = directional_alpha_probe(
+        obs, EPS_GRID,
+        probe_id=f"choptuik_A_{amplitude:.3f}",
+        function_label=f"choptuik_A_{amplitude:.3f}",
+        eta=ETA,
+        declared_alpha_models=DECLARED_MODELS,
+        expression_path=f"choptuik_synthetic_A_{amplitude:.3f}",
+        companion_sweep_signature=True,
+    )
+    a = result.value
+    c = a.companion_sweep_signature_observation
+    cs = a.companion_sweep_signature_status
+
+    return {
+        "amplitude": amplitude,
+        "alpha_status": result.status.value,
+        "observed_alpha": a.observed_alpha,
+        "alpha_se": a.standard_error,
+        "r_squared": a.r_squared,
+        "stability": a.alpha_stability_status.value,
+        "window_span": a.alpha_window_span,
+        "selected_model": a.selected_alpha_model,
+        "matching_models": list(a.matching_alpha_model_names),
+        "sweep_status": cs.value if cs else None,
+        "sweep_cancel_grade": c.cancellation_grade if c else None,
+        "sweep_drop_rate": c.drop_rate if c else None,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Residual analysis: do the log-log residuals carry the DSS signature?
+# ---------------------------------------------------------------------------
+
+def compute_residuals(amplitude: float, gamma_recovered: float) -> list[tuple[float, float]]:
+    """Compute log-log residuals: log|g(eps)| - gamma_recovered * log(eps).
+
+    If the signal is g = eps^gamma * (1 + A*cos(omega*ln(eps))), then
+      log|g| = gamma * log(eps) + log(1 + A*cos(omega*ln(eps)))
+            ~= gamma * log(eps) + A * cos(omega * log(eps))   (for small A)
+    So residuals after subtracting gamma * log(eps) should oscillate
+    sinusoidally at omega = 4*pi*gamma/Delta in ln(eps).
+    """
+    points = []
+    # Use the geometric mean of g(eps) as intercept reference
+    log_g_values = [math.log(choptuik_signal(eps, amplitude)) for eps in EPS_GRID]
+    log_eps_values = [math.log(eps) for eps in EPS_GRID]
+    # Fit intercept: mean(log g) - gamma * mean(log eps)
+    mean_log_g = sum(log_g_values) / len(log_g_values)
+    mean_log_eps = sum(log_eps_values) / len(log_eps_values)
+    intercept = mean_log_g - gamma_recovered * mean_log_eps
+
+    for eps, log_g in zip(EPS_GRID, log_g_values):
+        log_eps = math.log(eps)
+        residual = log_g - gamma_recovered * log_eps - intercept
+        points.append((log_eps, residual))
+    return points
+
+
+def fit_sinusoid_to_residuals(residuals: list[tuple[float, float]]) -> dict:
+    """Brute-force fit a sinusoid log|g| residual = B * cos(omega * ln_eps + phi).
+
+    Sweep omega across a range, find the one that maximises the projection.
+    Then extract B (amplitude) and phi (phase).
+    """
+    # Search omega in [0.5, 3.0] in steps of 0.005
+    log_eps = [p[0] for p in residuals]
+    res = [p[1] for p in residuals]
+    n = len(residuals)
+
+    best_omega = None
+    best_power = -1.0
+    best_B_cos = 0.0
+    best_B_sin = 0.0
+
+    omega_grid = [0.5 + 0.005 * i for i in range(int((3.0 - 0.5) / 0.005) + 1)]
+    for omega in omega_grid:
+        # Project residual onto cos and sin basis at this omega
+        cos_basis = [math.cos(omega * x) for x in log_eps]
+        sin_basis = [math.sin(omega * x) for x in log_eps]
+        B_cos = (2.0 / n) * sum(res[i] * cos_basis[i] for i in range(n))
+        B_sin = (2.0 / n) * sum(res[i] * sin_basis[i] for i in range(n))
+        power = B_cos ** 2 + B_sin ** 2
+        if power > best_power:
+            best_power = power
+            best_omega = omega
+            best_B_cos = B_cos
+            best_B_sin = B_sin
+
+    amplitude = math.sqrt(best_power)
+    period_in_ln_eps = (2.0 * math.pi / best_omega) if best_omega else None
+    phase = math.atan2(best_B_sin, best_B_cos)
+
+    return {
+        "recovered_omega": best_omega,
+        "recovered_period_ln_eps": period_in_ln_eps,
+        "recovered_amplitude": amplitude,
+        "recovered_phase": phase,
+        "best_power": best_power,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
+
+def main() -> None:
+    print("=" * 100)
+    print("Choptuik Step 1: pure synthetic DSS-modulated power law")
+    print("=" * 100)
+    print(f"Grid: {N_POINTS} log-spaced points, eps in [{EPS_END:.0e}, {EPS_START:.0e}]")
+    print(f"True gamma: {GAMMA}")
+    print(f"True P_ln:  {P_LN:.6f}")
+    print(f"True omega: {ANGULAR_FREQ:.6f} (in ln(eps))")
+    print()
+
+    amplitudes = [0.0, 0.02, 0.05, 0.10, 0.20]
+    results = []
+
+    print(f"{'amplitude':>10} {'alpha':>10} {'se':>10} {'matched':18s} {'sweep':25s} "
+          f"{'recovered omega':>16} {'recovered P_ln':>16} {'period err %':>12}")
+    print("-" * 130)
+
+    for amplitude in amplitudes:
+        v4 = probe_at_amplitude(amplitude)
+        gamma_hat = v4["observed_alpha"]
+        if gamma_hat is None:
+            print(f"  amplitude {amplitude}: alpha probe returned None")
+            continue
+        residuals = compute_residuals(amplitude, gamma_hat)
+        spec = fit_sinusoid_to_residuals(residuals)
+
+        period_err_pct = (
+            100.0 * abs(spec["recovered_period_ln_eps"] - P_LN) / P_LN
+            if spec["recovered_period_ln_eps"] else float("nan")
+        )
+
+        results.append({**v4, **spec, "amplitude": amplitude, "period_err_pct": period_err_pct})
+
+        sweep_combined = f"{v4['sweep_status']} (g={v4['sweep_cancel_grade']:.3f}, d={v4['sweep_drop_rate']:.3f})"
+
+        print(f"{amplitude:>10.3f} {gamma_hat:>10.6f} {v4['alpha_se']:>10.3e} "
+              f"{(v4['selected_model'] or 'None'):18s} {sweep_combined:25s} "
+              f"{spec['recovered_omega']:>16.4f} {spec['recovered_period_ln_eps']:>16.4f} "
+              f"{period_err_pct:>11.2f}%")
+
+    print()
+    print("=" * 100)
+    print("DETAILED at A = 0.10 (Choptuik-realistic amplitude)")
+    print("=" * 100)
+    r = next(r for r in results if abs(r["amplitude"] - 0.10) < 1e-9)
+    print(f"  alpha recovered      : {r['observed_alpha']:.6f}  (true: {GAMMA})")
+    print(f"  alpha std error      : {r['alpha_se']:.3e}")
+    print(f"  alpha r_squared      : {r['r_squared']:.6f}")
+    print(f"  alpha stability      : {r['stability']}  (window span = {r['window_span']:.3e})")
+    print(f"  selected model       : {r['selected_model']}")
+    print(f"  sweep status         : {r['sweep_status']}")
+    print(f"  sweep cancel grade   : {r['sweep_cancel_grade']:.4f}")
+    print(f"  sweep drop rate      : {r['sweep_drop_rate']:.4f}")
+    print(f"  --- DSS residual spectral fit ---")
+    print(f"  recovered omega      : {r['recovered_omega']:.6f}  (true: {ANGULAR_FREQ:.6f})")
+    print(f"  recovered period P_ln: {r['recovered_period_ln_eps']:.6f}  (true: {P_LN:.6f})")
+    print(f"  period error         : {r['period_err_pct']:.3f}%")
+    print(f"  recovered amplitude  : {r['recovered_amplitude']:.6f}  (true: {r['amplitude']})")
+    print(f"  recovered phase      : {r['recovered_phase']:.4f} rad")
+
+    out_path = Path(__file__).parent / "choptuik_step1_results.json"
+    with out_path.open("w") as fh:
+        json.dump({
+            "parameters": {
+                "gamma": GAMMA, "delta": DELTA, "P_ln": P_LN,
+                "angular_freq": ANGULAR_FREQ,
+            },
+            "sweep": {
+                "n_points": N_POINTS, "eps_start": EPS_START, "eps_end": EPS_END,
+                "eta": ETA,
+            },
+            "results": results,
+        }, fh, indent=2)
+    print(f"\nResults: {out_path}")
+
+
+if __name__ == "__main__":
+    main()

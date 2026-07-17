@@ -1,0 +1,148 @@
+# Geometry Arm — Stage −1 Prior-Wins Audit
+
+**Date:** 2026-06-13 (machine date). **Authority:** the campaign brief's
+own §1 (`Build_Docs/Agent_tasks/CAMPAIGN_BRIEF_geometry_arm_DRAFT.md` —
+MANDATORY on-repo prior-wins audit before any derivation). **Standing:**
+audit report to Will's box. **Nothing is frozen; no prereg exists; no
+code was written.** The brief stays DRAFT; the §6 rulings (one-vs-two
+campaigns, charter relationship, names, n=2 cap) stay reserved; Stage 0
+freeze awaits Will's GO.
+
+**Method:** direct reads of `results/` (bigraded_jet, difference_tower,
+cradle_arm_m), the KEPT eval source under `src/lloyd_v4/evals/`, the
+probe, and the checker — each of the brief's 6 candidate hits verified
+against the actual repo, not trusted from chat-side context.
+
+---
+
+## Verdict table — the six candidate hits
+
+| # | Candidate hit (brief §1) | Verdict | Build-vs-grade |
+|---|---|---|---|
+| 1 | HR132 holonomy lanes (bigraded jet) | **REFINED** — it is a *route* holonomy, not axis-indexed | route machinery = GRADE; the (q,d) axis-indexed mixed-2nd-difference = **NEW BUILD** |
+| 2 | HR134 amendment-6 protection predicate (the keystone separator) | **CONFIRMED** — exact L1–L4 form located | reuse as-is = GRADE; lift into the coupling/finite-precision setting |
+| 3 | Arm M / HR137 (Clairaut defect == account gap) | **REFINED** — CL-M4 is **exact-ℚ**, NOT finite-precision roundings | cite as adjacent prior win; the finite-precision separation is the **new keystone** — do NOT pre-bank |
+| 4 | the probe `tests/holonomy_stress.py` | **CONFIRMED** — it *is* the (q,d) operator the keystone needs | unpinned print-script; lift into a pinned battery = **BUILD** |
+| 5 | V3 confirmation oracle (Axiom 10) | **CONFIRMED** — client + atlas oracle instrument exist | reuse as-is = GRADE |
+| 6 | bench-annex emitter/checker pattern | **CONFIRMED** (incl. "Throat = no repo anchor") | reuse the cella checker pattern as-is = GRADE |
+
+---
+
+## Per-hit detail
+
+**Hit 1 — HR132 holonomy lanes → REFINED.** `src/lloyd_v4/evals/bigraded_jet_stage_c.py`
+computes a **route** holonomy: `holonomy = delta − predicted` over two
+algebraically-equivalent expression routes (`(a−b)(a+b)` vs `a²−b²`),
+≡0 on flat segments, ≠0 exactly where accounts differ, exact in ℚ
+(`results/bigraded_jet/CAMPAIGN_REPORT.md`: "first measured curvature of
+the substrate connection"). That is a **loop-closure over expression
+paths at a fixed evaluation** — *not* the mixed second difference over
+two **refinement budgets** `(q,d)`. No `(q,d)` axis exists anywhere in
+the bigraded_jet sources. **Consequence:** the account-fold +
+flat-segment grading + reading-gap==account-gap pattern is reusable
+(GRADE); the campaign's keystone *object* — the axis-indexed
+mixed-2nd-difference — is **NEW**, and currently exists **only in the
+unpinned probe (Hit 4)**, in no closed campaign.
+
+**Hit 2 — HR134 amendment-6 protection predicate → CONFIRMED (the separator).**
+Exact form in `src/lloyd_v4/evals/difference_tower/make_prereg_h5_leg.py`:
+L1 (exact dyadic add/sub, result bit-span ≤ 53), L2 (Sterbenz), L3 (exact
+product, `s(a)+s(b) ≤ 53`), L4 (shared-op identity — identical float
+operands ⇒ RN rounds identically ⇒ the op cannot fingerprint).
+Predicate `P(x) ≡ [s(x) ≤ 26] ∧ [the ±1 sums span ≤ 53 bits]`; witness
+`RN(1/10)` (`s = 52 > 26`, L3 violated). The conditional-fingerprint law
+(*fingerprints appear ⟺ a route-distinguishing op actually rounds*) is
+implemented two-sided in `run_h5_raw_leg.py` (`classify_cell`,
+`_residue_zero`, `_distinguishing`, `LAW_TAGS`). **This is exactly the
+separator CL-G3 reuses** to gate the rounding fingerprint while reading
+the coupling-holonomy. Reuse the predicate + classifier = GRADE.
+
+**Hit 3 — Arm M / HR137 → REFINED (the no-bank ruling).** `results/cradle_arm_m/CLAIM_LEDGER.md`
+CL-M4: `C_raw == D₂−D₁ ==` the signed residue-sum gap, corner deviations
+**common-mode**, the fingerprint IS the account gap. **Critical: this is
+certified exactly in ℚ — it is NOT the finite-precision corner-rounding
+result.** The exact-ℚ probe does not exercise float roundings as a
+separate channel. **Ruling for this campaign:** CL-M4 is cited as the
+adjacent prior win (the multivariate fingerprint-law lift already
+exists), but the **finite-precision coupling-vs-rounding separation
+(CL-G3) is genuinely downstream and unclaimed — it must NOT be banked as
+already shown.** This is the checkpoint the campaign exists to clear; the
+arrow runs Arm-M-as-instance, and CL-M4's *exact-ℚ* content does not
+discharge CL-G3's *finite-precision* obligation.
+
+**Hit 4 — the probe `tests/holonomy_stress.py` → CONFIRMED.** Stdlib
+`fractions`, exact ℚ throughout; two encodings of one real (dyadic
+truncation × continued-fraction convergent); the holonomy is the **mixed
+2nd difference over (q,d)** — the operator Hit 1 does not contain. K1–K4
+present. It is a **print-script: zero `test_` functions, not collected by
+pytest** (`pyproject.toml testpaths=["tests"]`, default `test_*` pattern),
+and is **not pre-registered or pinned** (its only references are the new
+forward-looking campaign drafts). **Stage A's build = lift this into a
+frozen, byte-stable, prereg-pinned battery** with exact-ℚ predictions
+fixed before the harness.
+
+**Hit 5 — V3 confirmation oracle (Axiom 10) → CONFIRMED.** The KEPT
+`src/lloyd_v4/evals/shape_of_the_quiet_lv3_client.py` (stdio JSON-RPC,
+oracle-only, no V3 import, records request/response verbatim) and
+`root_closure_atlas/instruments/v3_oracle.py` (consumes the client) are
+the sanctioned path. Coupling-degeneracy / discriminant / K_G-class
+independent checks route through the lv3 surface (`lv3_singularity`,
+`lv3_closure_*`, `lv3_branch_classify` — deferred MCP, called via the
+client wrapper). Reuse the client + instrument pattern = GRADE.
+
+**Hit 6 — emitter/checker pattern → CONFIRMED.** `demo/cella_ten_minute/checker.py`
+is the independent "court clerk" (imports ⊆ {fractions, json, hashlib,
+sys}, no Lloyd organ, re-derives TRUE with its own evaluator, checks
+sha + `reading + account == TRUE` in ℚ + verdict consistency). The
+emit-(form, guard, certificate) + external-checker pattern is anchored
+on-repo in `CERTIFIED_FORM_SYNTHESIS_DESIGN_BRIEF.md`. **"Throat" has no
+repo anchor** (home-dir only; every on-repo mention notes its absence) —
+frozen docs cite the CFS brief / the cella checker, never "Throat."
+Reuse the checker pattern = GRADE.
+
+---
+
+## Build-vs-grade determination for Stage A (the brief's open question)
+
+The screen cleanly separates what to lift from what to build:
+
+- **GRADE (reuse mature assets):** the exact-ℚ account-fold + reading-gap
+  ==account-gap grading (HR132); the L1–L4 protection predicate +
+  two-sided fingerprint classifier (HR134 amendment-6); the V3 oracle
+  client/instrument (Hit 5); the independent stdlib checker (Hit 6).
+- **BUILD (genuinely new):** (1) the **axis-indexed mixed-2nd-difference
+  holonomy organ** over two refinement budgets — exists only in the
+  unpinned probe, in no closed campaign (Hit 1 + Hit 4); (2) the
+  **finite-precision separation lane** carrying the L1–L4 predicate so the
+  rounding fingerprint is provably gated while the coupling-holonomy is
+  read (CL-G3 keystone — Hit 2's predicate, applied to a new object);
+  (3) the boundary, symbolic-axis, three-account, and non-archimedean
+  fixtures (CL-G4..G8), none of which have a prior-win.
+
+## The two load-bearing findings
+
+1. **The campaign's keystone object is genuinely new.** HR132's holonomy
+   is a *route* operator; the campaign needs the *(q,d) axis-indexed*
+   one, which lives only in the unpinned probe. The novelty survives the
+   prior-wins screen — Stage A is a lift-and-pin, not a re-derivation.
+2. **CL-M4 must not be pre-banked.** It is exact-ℚ; the finite-precision
+   coupling-vs-rounding separation (CL-G3) is unclaimed and is the
+   hardest checkpoint. Conflating them would let the campaign skip its
+   keystone believing it had passed — exactly the failure the reframe
+   brief warned against. The HR134 amendment-6 predicate is the *tool*
+   for CL-G3, not a discharge of it.
+
+---
+
+## Disposition
+
+Stage −1 has landed: six hits verified on-repo, build-vs-grade fixed,
+the no-bank ruling on CL-M4 recorded, the keystone novelty confirmed
+unclaimed. **Surfaced before any derivation, per the brief.** Next gate
+is Will's: the §6 reserved rulings (one campaign or two; charter
+relationship; names; n=2-axis cap) and the Stage 0 freeze GO. No freeze,
+no schema, no instrument until then.
+
+*Carried from the brief: the probe is only ever allowed to be uncertainly
+right; Stage A pins it, Stage B fights the keystone the exact-ℚ probe
+could not reach.*

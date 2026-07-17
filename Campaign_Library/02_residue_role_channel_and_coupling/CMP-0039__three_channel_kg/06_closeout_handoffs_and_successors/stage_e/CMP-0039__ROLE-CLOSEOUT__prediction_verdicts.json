@@ -1,0 +1,196 @@
+{
+  "bench_resolved_dir": "/home/wlloyd/Lloyd_Engine_V4/src/lloyd_v4/evals/three_channel_kg",
+  "campaign_id": "three_channel_kg",
+  "counts": {
+    "predictions_fail": 0,
+    "predictions_pass": 6,
+    "predictions_total": 6
+  },
+  "cycle_id": "c001",
+  "date": "2026-06-23",
+  "defect_chain_count": 0,
+  "depends_on_reverified": {
+    "results/three_channel_kg/manifest_v1.json": "a28042d96a3588407a610f649388d93364c9be2b9294810cd666f3a7369b318b",
+    "src/lloyd_v4/evals/three_channel_kg/fixtures.py": "3d415011b7f4c81c38d70d94847cbdbacb9d02b7543cfe7e0d2f9e48b11f8b8c",
+    "src/lloyd_v4/evals/three_channel_kg/oracle.py": "b8af9397710490a8d548b653aa301cf0eb2bd37ca50579fc26c1b58a5c1c7798",
+    "src/lloyd_v4/evals/three_channel_kg/probe.py": "1f99965824afd3548841ca5360c56dc44250c858018f18349bf2a2c3b9e098d8",
+    "src/lloyd_v4/evals/three_channel_kg/referee_channel.py": "28eff76c9eceef94d9927845a9fca33ce01f4cd3f452635607cf42a806921175",
+    "src/lloyd_v4/evals/three_channel_kg/referee_total.py": "993ffd21f9eac6c13eb015eacc5f3ed9bfb00cded0648fc963a83cead51feb29",
+    "src/lloyd_v4/evals/three_channel_kg/schema.py": "40335dc1501e3d737fedbf236c4e66a7c7641c1b1b6e4d840499fe23260ca085"
+  },
+  "halt": null,
+  "predictions": {
+    "P1_sigma2_even_exact_Q": {
+      "claims": [
+        "CL-c5"
+      ],
+      "detail": {
+        "oracle_sigma_2_is_Fraction": true,
+        "sigma_2_eq_m3_49": true,
+        "sigma_2_eq_minus_det_over_q2": true,
+        "sigma_2_eq_oracle": true,
+        "sigma_2_eq_pathB_KG": true,
+        "sigma_2_eq_pathBprime_KG": true,
+        "sigma_2_is_Fraction": true
+      },
+      "kills_relevant": [
+        "K10"
+      ],
+      "pass": true,
+      "units": "exact Q (Fraction); boolean type predicate (isinstance Fraction) and exact equality across paths",
+      "values": {
+        "K_G_pathB": "frac:-3/49",
+        "K_G_pathBprime": "frac:-3/49",
+        "det_hb": "frac:12/1",
+        "sigma_2": "frac:-3/49"
+      }
+    },
+    "P2_sigma1_odd_radical": {
+      "claims": [
+        "CL-c5"
+      ],
+      "detail": {
+        "note_field_label_is_Q_sqrt14": true,
+        "note_withholds_numeric_sigma_1": true,
+        "oracle_withholds_sigma_1_attr": true,
+        "q_not_perfect_square": true,
+        "sigma_1_not_in_Q": true,
+        "sigma_1_squared_eq_72_343": true,
+        "trPHP_eq_12_7": true,
+        "trPHP_nonzero": true
+      },
+      "kills_relevant": [
+        "K10"
+      ],
+      "pass": true,
+      "units": "exact Q (Fraction) for tr and sigma_1^2; boolean perfect-square test; boolean oracle-withholding predicate",
+      "values": {
+        "q": "frac:14/1",
+        "sigma_1_field": "Q(sqrt14)",
+        "sigma_1_squared": "frac:72/343",
+        "trPHP": "frac:12/7"
+      }
+    },
+    "P3_C1hat_even_exact_Q": {
+      "claims": [
+        "CL-c5"
+      ],
+      "detail": {
+        "C1_hat_eq_m24": true,
+        "C1_hat_eq_minus_2_det_hb": true,
+        "C1_hat_is_Fraction": true,
+        "det_hb_eq_12": true
+      },
+      "kills_relevant": [
+        "K10"
+      ],
+      "pass": true,
+      "units": "exact Q (Fraction); exact equality",
+      "values": {
+        "C1_hat": "frac:-24/1",
+        "det_hb": "frac:12/1",
+        "minus_2_det_hb": "frac:-24/1"
+      }
+    },
+    "P4_parity_witness_contrast": {
+      "claims": [
+        "CL-c5"
+      ],
+      "detail": {
+        "contrast_holds": true,
+        "even_sigma_2_and_C1_hat_exact_Q_emitted": true,
+        "odd_sigma_1_radical_and_withheld": true,
+        "sigma_2_in_Q_vs_sigma_1_in_Q_sqrt14": true
+      },
+      "kills_relevant": [
+        "K10"
+      ],
+      "pass": true,
+      "units": "boolean (even-exact-Q-and-emitted AND odd-radical-and-withheld)",
+      "values": {}
+    },
+    "P5_K10_silent_on_truth": {
+      "claims": [
+        "CL-c5"
+      ],
+      "detail": {
+        "K10_silent_on_truth": true,
+        "P_frame_ok": true,
+        "P_self_cert_ok": true,
+        "no_odd_invariant_emitted_as_exact_Q": true,
+        "parity_distinction_intact": true
+      },
+      "kills_relevant": [
+        "K10"
+      ],
+      "pass": true,
+      "units": "boolean (K10 does not fire on truth)",
+      "values": {
+        "P_frame": {
+          "note_role_present": true,
+          "ok": true,
+          "oracle_F13_frame": "declared DBP frame (keystone, rungs r=1,2)"
+        },
+        "P_self_cert": {
+          "ABBprime_imports_of_oracle": {
+            "probe": [],
+            "referee_channel": [],
+            "referee_total": []
+          },
+          "ok": true,
+          "oracle_imports_of_ABBprime_fixtures": []
+        }
+      }
+    },
+    "P6_K10_fires_on_mutant": {
+      "claims": [
+        "CL-c5"
+      ],
+      "detail": {
+        "K10_fires_on_mutant": true,
+        "even_sigma_2_does_NOT_trip_K10": true,
+        "exactness_witness_fails_m2_ne_sigma1_2": true,
+        "mutant_emits_sigma_1_as_Fraction": true
+      },
+      "kills_relevant": [
+        "K10"
+      ],
+      "pass": true,
+      "units": "type predicate (emitted is Fraction); boolean (m^2 != 72/343) => K10 fires",
+      "values": {
+        "mutant_sigma_1": "frac:-114163753/249177629",
+        "mutant_sigma_1_squared": "frac:13033362499045009/62089490794061641",
+        "true_sigma_1_squared": "frac:72/343"
+      }
+    }
+  },
+  "prereg_pin": "0e714fed74de39a6a8f5fba9d8ce35efafbc5c27826ba6fed83e0308be521891",
+  "records_count": 5,
+  "records_sha256": "c78220f855c6d03f34fef5274d33b39a2230c7ee2154451ca2c92adbda107787",
+  "scope_note": "CL-c5 n=3 core only; n>=4 tower NOT established (successor c002). K10 armed. Eval-tier; nothing canonical until Will signs off.",
+  "stage": "stage_e",
+  "stage_title": "parity / sigma_2 exactness (CL-c5 n=3 core)",
+  "status_moves_proposed": [
+    {
+      "claim": "CL-c5",
+      "from": "NOT_YET_PROBED",
+      "gating_predictions": [
+        "P1_sigma2_even_exact_Q",
+        "P2_sigma1_odd_radical",
+        "P3_C1hat_even_exact_Q",
+        "P4_parity_witness_contrast",
+        "P5_K10_silent_on_truth",
+        "P6_K10_fires_on_mutant"
+      ],
+      "kill_disposition": "K10 ARMED: silent on truth (P5 PASS), fires on the constructed mutant (P6 PASS).",
+      "note": "verified-finite exact-Q parity/type contrast on the frozen keystone F13 row; NOT a symbolic-over-Q[g,H] universal, NOT n>=4.",
+      "scope": "n=3 CORE ONLY (parity => K_G = sigma_2 even => exact-Q). The even/odd type contrast holds (sigma_2 in Q vs sigma_1 in Q(sqrt14)); K10 silent on truth (sigma_1 withheld) and fires on a constructed mutant emitting sigma_1 as exact-Q.",
+      "to": "DEMONSTRATED",
+      "tower_disposition": "n>=4 tower NOT established (OPEN; successor c002). Status move does NOT cover the tower.",
+      "warrant_tier": "eval-tier; no substrate promotion; canonical only on Will's sign-off"
+    }
+  ],
+  "suite_exit_code": 0,
+  "two_run_byte_stable": true,
+  "two_run_records_sha256": "c78220f855c6d03f34fef5274d33b39a2230c7ee2154451ca2c92adbda107787"
+}

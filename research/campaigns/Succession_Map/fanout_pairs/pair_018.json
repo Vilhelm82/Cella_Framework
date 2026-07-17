@@ -1,0 +1,50 @@
+{
+  "rank": 18,
+  "lift": 49.2,
+  "count": 6,
+  "families": 2,
+  "a": {
+    "id": "OBJ:holonomy-channel-k-hol",
+    "label": "holonomy channel K_hol",
+    "standard_term": "closure residue of a discrete cycle of inverse-function transports (holonomy by analogy, not fiber-bundle holonomy)",
+    "nomenclature": "novel",
+    "symbols": [
+      "k_hol"
+    ]
+  },
+  "b": {
+    "id": "OBJ:spectral-channel-k-spec",
+    "label": "Spectral channel K_spec",
+    "standard_term": "spectrum (eigenvalues/singular values/transfer function) of the linearized coupling map at the operating point, i.e. classical operator spectral data",
+    "nomenclature": "identical-to",
+    "symbols": [
+      "k_spec"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-0117",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Coupling kernel",
+      "summary": "The \\emph{coupling kernel} $K(\\tau)$ of a well-posed triple $\\tau = (D, S, P)$ is the tuple $K = (K_{\\mathrm{spec}},\\; K_{\\mathrm{hol}},\\; \\kappa)$, where: $K_{\\mathrm{spec}}$ is the spectral data of $\\oplus$ at the oper",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_role_channel_and_orbit_geometry/theorem_8_1.tex"
+    },
+    {
+      "uid": "U-0223",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Fault classification logic (fault signature)",
+      "summary": "(a) Which invariant failed? Different invariants correspond to different physical conservation laws. A power invariant failure indicates energy is being dissipated, stored, or generated in an unaccounted manner. A phase ",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/08_patents_and_invention_disclosures/photonic_and_sensor_inventions/LLOYD-280326-01.pdf"
+    },
+    {
+      "uid": "U-0412",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Method 3: Systematic Configuration Validation (Centrifuge) p",
+      "summary": "For a system with three measured quantities (x_1, x_2, x_3), there exist six possible assignments of these quantities to the Directive, Substrate, and Product roles. The centrifuge diagnostic tests all six assignments to",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/08_patents_and_invention_disclosures/photonic_and_sensor_inventions/LLOYD-010426-02.pdf"
+    }
+  ]
+}

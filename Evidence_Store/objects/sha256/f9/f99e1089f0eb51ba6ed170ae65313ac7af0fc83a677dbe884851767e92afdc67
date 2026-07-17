@@ -1,0 +1,194 @@
+# Phase 3B — Negative-Space / Non-Family Mapping — Preregistry
+
+> **Status: DRAFT — PARKED.** Phase 3B is blocked on completion of the dual-arm probe work. The user's position (2026-05-17): *"this is why i started the dual arm probe work, we need to complete that work first to be completely honest, otherwise this campaign extension is going to find a hard ceiling fast."*
+>
+> The near-family traps (§5.5) and composite branches (§5.4) test the classifier's discrimination at the edge of its resolution — which is exactly what the dual-arm probe was designed to improve. Without a completed dual-arm probe, Phase 3B will hit a measurement ceiling where the apparatus can't honestly distinguish near-family from family.
+>
+> **Updated resume condition (2026-05-17 post-v11):** ✓ Met. The v11 fixture ([`Build_Docs/Reports/foldreadback_probe0_v11_genuine_separation/`](../foldreadback_probe0_v11_genuine_separation/)) constructs a probe run where ARM-W reads `F4_float64` and ARM-N reads `F1_float64` — algebraically equivalent (both = 0 on SR surface) but different at float64. The probe observed non-zero path separation in 14 of 41 records, with offset levels ranging from -120 to +65,536 ULP. The structural ceiling that blocked Phase 3B is removed.
+>
+> **Remaining gates before unfreezing Phase 3B:**
+> 1. Resolve the v11 control-silence logic quirk (current check is too strict; see v11 closeout §6).
+> 2. Confirm v11's non-zero separation gives Phase 3B's near-family-trap fixtures (§5.5) enough discrimination headroom — a per-3B-fixture question, not a probe question.
+>
+> Status: **ready, pending v11 control-silence fix.**
+>
+> Per `CAMPAIGN_DISCIPLINE.md` rule 1.1, this draft remains binding-when-frozen. Versioned amendments only; no quiet rewrites.
+
+## 1. Purpose
+
+Phase 3B is the inverse test of Phase 3A. Where 3A asks *"does (α−1) appear where predicted?"*, 3B asks *"does (α−1) refuse to appear where it isn't supposed to?"* The phase confirms classifier integrity on non-family surfaces and characterizes how V4's substrate handles fixtures that geometrically lack the algebraic branch structure (α−1) classifies.
+
+This phase carries the heaviest classifier-integrity load in the (α−1) exhaustion campaign. Every `wrong_*_clean_emit` fired in Phase 3B is a direct hit on classifier integrity. Per `V4_AUDIT_FRAMEWORK.md`, "wrong" means V4-honest (uses `propagated_window_error`, not `standard_error`).
+
+## 2. Scope and source
+
+- Campaign program: `/home/william_lloydlt/Documents/alpha_minus_one_exhaustion_campaign.md` (v1.0), §"Phase 3B".
+- Phase 3B was not executed by Vera (Vera ran Phase 3 / 3T / 3T-P as extended-α coverage, which maps to Phase 3A). **3B is V4-native new work.**
+- Operating on V4 substrate (`src/lloyd_v4/`). AlphaProbe (`directional_alpha_probe`) is the primary observable.
+- All fixtures use V4's existing eval-layer fixture pattern (cf. `Build_Docs/Reports/task024b_schwarzschild_four_form/` for shape).
+
+## 3. Discipline declarations (binding)
+
+- **Pre-registration is binding** (rule 1.1). Predictions in §5 are frozen at freeze-time.
+- **No substrate promotion** (rule 1.2). Phase 3B produces eval-layer evidence only. No new status types, no new primitives, no axiom changes.
+- **Master audit metric** is `wrong_clean_emit_count` decomposed per `V4_AUDIT_FRAMEWORK.md`.
+- **Surprise ledger** lives at `Build_Docs/Reports/phase3B_negative_space/surprise_ledger.md`. Append-only.
+- **Fork discipline** (rule 1.7). If any fixture produces unexpected family emission, expansion of this phase stops and the anomaly is characterized immediately.
+
+## 4. Audit framework specifics for this phase
+
+For each fixture, a high-confidence emit means:
+- `refusal = None`
+- `protocol = ok`
+- `validity.selectable = True`
+- `alpha_stability_status = stable`
+
+For each high-confidence emit, the wrong-criterion is:
+- `|observed_slope − predicted_slope| > propagated_window_error`
+
+For 3B specifically, the *predicted slope* per fixture is typically **"no algebraic family member should match"** — so any high-confidence emit landing on `{−2.0, −1.5, −2/3, −0.5, 0.0, +0.5, +1.0}` within `propagated_window_error` of those values fires `wrong_family_clean_emit` and triggers fork discipline.
+
+## 5. Fixtures and predicted classifications (FROZEN at freeze-time)
+
+Six fixture classes. Each fixture class lists: surface description, predicted classification, predicted status, expected stability, and the per-fixture pass criterion.
+
+### 5.1 Logarithmic boundary cases
+
+**Surfaces:**
+- F3B.1a: `g(f) = log(1/f)` on grid `f ∈ [ε, 1)`, ε = 2⁻⁴⁰ (or finest representable above true zero).
+- F3B.1b: `g(f) = f · log(1/f)` on same grid.
+
+**Predicted status:** `alpha_zero_boundary` or `alpha_unstable_window`.
+**Predicted stability:** `unstable` or `not_tested`.
+**Predicted classification:** NOT a family member.
+**Pass criterion:** AlphaProbe emits non-family status across the grid; no high-confidence family emit fires.
+
+### 5.2 Iterated logs
+
+**Surface:**
+- F3B.2: `g(f) = log(log(1/f))` on `f ∈ [ε, 1/e²)`, ε small enough that `log(1/f) > 1` everywhere.
+
+**Predicted status:** boundary-precedence (`alpha_zero_boundary` or stronger) or `alpha_insufficient_data`.
+**Predicted stability:** `not_tested` or `unstable`.
+**Predicted classification:** NOT a family member; no algebraic emission.
+**Pass criterion:** Same as 5.1 — no high-confidence family emit.
+
+### 5.3 Essential flats
+
+**Surface:**
+- F3B.3: `g(f) = exp(−1/f)` on `f ∈ (0, 1/2]`, sampled approaching 0.
+
+**Predicted status:** smooth at observed precisions; `alpha_unstable_window` or `alpha_insufficient_data` (all derivatives vanish at 0 — C-infinity flat, the apparatus can't see any algebraic structure).
+**Predicted stability:** `not_tested` or `unstable`.
+**Predicted classification:** NOT a family member; no family emission at any observed precision.
+**Pass criterion:** No high-confidence family emit. AlphaProbe declines to emit a stable slope.
+
+### 5.4 Composite branches
+
+**Surfaces:**
+- F3B.4a: `g(f) = √f + √(1−f)` on `f ∈ (0, 1)`. Two interacting branches; expected behavior at f→0 is dominated by `√f` (α=1/2), but the +`√(1−f)` term contributes structure.
+- F3B.4b: `g(f) = f^(1/3) · f^(1/2)` on `f ∈ (0, 1)`. Algebraically this is `f^(5/6)` (α=5/6, predicted slope = −1/6) — *off-family* but constructible as composite.
+
+**Predicted status (4a):** ambiguous, marked composite, or refused — NOT a clean family verdict on either of the two component α values (1/2 alone).
+**Predicted status (4b):** `alpha_negative_singularity` or stable but OFF-FAMILY (slope ≈ −1/6, not on `{−2, −1.5, −2/3, −0.5, 0, +0.5, +1}`).
+**Pass criterion (4a):** No high-confidence family emit on (α=1/2). If the apparatus correctly emits stable slope on the composite via dominant branch, that's a separate observation worth recording but not necessarily a violation.
+**Pass criterion (4b):** No high-confidence family emit. If stable+selectable, slope must be measurably off-family per the V4-honest test.
+
+### 5.5 Near-family traps
+
+**Surfaces:**
+- F3B.5a: `g(f) = f^(0.47)` (slope-1 = -0.53, near α=1/2's prediction of −0.5 but **not equal**).
+- F3B.5b: `g(f) = f^(0.49)` (slope-1 = -0.51, even closer to −0.5).
+- F3B.5c: `g(f) = f^(-0.66)` (slope-1 = -1.66, near α=-2/3's prediction of -2/3 ≈ -0.667 but **not equal**).
+
+**Predicted status:** stable (the underlying surface IS algebraic, just with non-family α). The classifier should emit a stable slope, but that slope must be **off-family** when audited V4-honestly.
+**Predicted stability:** `stable`.
+**Predicted classification:** off-family clean or `alpha_negative_singularity`. NOT a family member within tolerance.
+**Pass criterion:** No `wrong_off_family_clean_emit` — i.e., the apparatus must not classify these as the nearest family member within V4-honest tolerance (`propagated_window_error`).
+
+### 5.6 Removable-but-stressed
+
+**Surfaces:**
+- F3B.6a: `g(f) = f` (identity), computed via cancellation-heavy route: `((1+f) − 1)` near f=0.
+- F3B.6b: `g(f) = f`, computed via deeper cancellation: `(((1+f) · 1) − 1 · 1)`.
+- F3B.6c: `g(f) = f`, multiple cancellation sites: `(((1+f) − 1) + ((1+f) − 1)) / 2`.
+
+These surfaces have α=1 (slope-1 = 0) algebraically — a family member. The TEST is whether visible apparatus stress under cancellation manufactures a non-zero slope (which would fire `wrong_off_family_clean_emit` or `wrong_boundary_clean_emit` depending on which family member it lands on).
+
+**Predicted status:** stable or unstable depending on route depth.
+**Predicted classification:** if stable, MUST be the α=1 family member (slope = 0); if unstable, no family emit.
+**Pass criterion:** No `wrong_*_clean_emit`. Either correct α=1 classification or honest refusal/unstable status.
+
+## 6. Status precedence (binding)
+
+Per status calculus and per the (α−1) campaign program, classifier verdicts at non-family fixtures should follow this precedence (highest priority first):
+
+1. `refusal` (e.g., `alpha_insufficient_data`, full TypedRefusal) — apparatus declines.
+2. `alpha_zero_boundary` — boundary case, no algebraic emission.
+3. `alpha_unstable_window` — slope detected but not stable.
+4. `alpha_negative_singularity` — stable slope, observable, but flagged as singularity-region (off-family-able).
+5. Stable family classification — only when all earlier precedence levels do not apply.
+
+Pre-registered prediction: every 3B fixture lands in levels 1–4, NOT level 5 (no family emission).
+
+## 7. Expected outcomes (the four campaign-master sub-metrics)
+
+Predicted: **zero hits** on all four `wrong_*_clean_emit` sub-metrics across all six fixture classes at clean precision.
+
+| Sub-metric | Prediction |
+|---|---|
+| `wrong_family_clean_emit` | 0 — 3B fixtures are not in registered family |
+| `wrong_off_family_clean_emit` | 0 — near-family traps (5.5) and composites (5.4b) should land off-family OR refuse |
+| `wrong_boundary_clean_emit` | 0 — boundary fixtures (5.1, 5.2) should route to boundary status |
+| `wrong_refusal_failure` | 0 — fixtures that should classify (5.6 identity routes) must do so correctly |
+
+Any non-zero count is a fork condition. The phase pauses for characterization.
+
+## 8. Precision sweep
+
+Run each fixture at precision ladder: `{float64, mpmath_53, mpmath_100, mpmath_200}`.
+
+*Note: this uses `mpmath` in eval-layer code as a precision-comparison oracle, NOT as substrate. Permitted under Axiom 11 with explicit non-substrate framing.*
+
+Pre-registered prediction: classification is precision-invariant. If status changes across precision (e.g., unstable at float64 but stable at mpmath_200), record as precision-coupling observation.
+
+## 9. Execution scope (per fixture class)
+
+Per fixture class, the Codex execution spec (to be written into `Build_Docs/Agent_tasks/`) must:
+- Implement each fixture's `g(f)` and the route-bank (where applicable).
+- Sample at pre-registered grid.
+- Invoke `directional_alpha_probe` via the established eval-layer pattern.
+- Emit a per-fixture JSON artifact in `Build_Docs/Reports/phase3B_negative_space/<fixture_id>/`.
+- Emit a phase-level rollup at `Build_Docs/Reports/phase3B_negative_space/phase3B_rollup.json`.
+- Apply the `V4_AUDIT_FRAMEWORK.md` audit; emit `wrong_clean_emit_summary.json`.
+
+## 10. Closeout criteria
+
+Phase 3B closes when:
+1. Every fixture has produced a classification status across the precision sweep.
+2. The phase rollup JSON exists.
+3. `wrong_clean_emit_summary.json` exists with all four sub-metrics.
+4. Any anomalies (fork conditions) are characterized in dedicated reports.
+5. Surprise ledger is populated.
+6. A `closeout.md` is written in this directory summarizing what was tested, what verdict each fixture produced, and any open questions.
+
+## 11. Open design questions (to resolve before freeze)
+
+These are points where the preregistry has not yet committed:
+
+1. **F3B.4a (`√f + √(1−f)`)** — should the predicted result count "stable but only via dominant `√f` branch" as a pass (apparatus reading the dominant branch correctly) or as a partial fail (apparatus missing the composite structure)? Different criteria possible.
+2. **F3B.5 tolerance band** — how far from a family target is "near"? Using `propagated_window_error` as the tolerance directly is V4-honest, but if the propagated_window_error is wide enough to swallow 0.47-vs-0.50, the trap is toothless. Worth pre-checking what propagated_window_error looks like for a power-law fixture at clean precision before freezing 5.5's predicted-pass criterion.
+3. **F3B.6 route bank** — the (α−1) campaign program suggests "larger ULP gaps, deeper cancellation, multiple cancellation sites in series." Need to commit to specific route definitions. The dual-arm probe principles (`DUAL_ARM_PROBE_PRINCIPLES.md`) provide some constraint vocabulary that may apply.
+4. **Precision ladder bottom rung** — `float64` is included as baseline. Should `float32` also be tested (would stress the apparatus more) or excluded (per Phase 2's precision-invariance findings already establishing float64 as the operating floor)?
+5. **mpmath ladder for essential flats (5.3)** — `exp(−1/f)` underflows fast in float64 (any `f < ~1/710` underflows to zero); mpmath_200+ is needed to see the surface at all near boundary. Pre-register that float64 sub-rung for 5.3 is expected to return `validity.observable = False` for most of the grid.
+
+## 12. Not in scope
+
+- Phase 3A rational-α coverage (separate phase).
+- Phase 4 adjacent-invariant boundary mapping (separate phase).
+- Hardware rounding-mode variation (campaign §"What is not in this campaign").
+- Substrate promotion of any 3B finding (rule 1.2; campaign §"What is not in this campaign").
+
+---
+
+*Drafted 2026-05-17. Pre-registration draft pending user review. Freeze date TBD. Versioned amendments only after freeze.*

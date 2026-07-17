@@ -1,0 +1,430 @@
+"""
+MCG Discovery — Phase 1 — Candidate G-1 characterization
+========================================================
+
+Exploratory characterization of route-divergence-related symbol observables.
+Per the discovery handoff (2026-05-19): no pre-registry, no decision rules.
+This is *discovery* — record what these observables look like across three
+fixtures of differing geometry; let the implementation surface ambiguities
+the slate-document framing left underspecified.
+
+Discovery note (from first implementation pass):
+    The Phase 1 §1 definition `j_A = round(residue_A / ulp(f_A))` is ambiguous:
+    Route A and Route B have rounding errors that occur at DIFFERENT scales
+    (Route A Schwarzschild: rounding of 2/r at ulp(1) scale; Route B: rounding
+    of (r−2)/r at ulp(f_B) scale). Forcing both into a single ulp produces
+    dimensionally-confused integer indices. This pass records BOTH per-route
+    natural-ulp j-values AND a float-level divergence with its off-lattice
+    residual, allowing the analysis to proceed without committing to a
+    single normalisation.
+
+Observables recorded per record:
+    residue_A_mp        = f_A − f_exact         (mpmath, exact)
+    residue_B_mp        = f_B − f_exact
+    j_A_own             = round(residue_A_mp / ulp(f_A))   # in Route A's ulp
+    j_B_own             = round(residue_B_mp / ulp(f_B))   # in Route B's ulp
+    divergence_real_mp  = f_A − f_B            (mpmath, exact)
+    divergence_float    = float(f_A − f_B)      (float64 subtraction; BACL-bound)
+    u_div               = ulp(max(|f_A|, |f_B|))
+    j_div               = round(divergence_real_mp / u_div)  # integer-ulp index
+    off_lattice_residual_in_ulps = (divergence_real_mp − j_div · u_div) / u_div
+                          # the part of the divergence NOT on the integer-ulp lattice;
+                          # for Sterbenz-exact subtractions, this is identically 0.
+
+Three fixtures (Phase 1 §1.5):
+    1. Schwarzschild horizon approach: f(r) = 1 − 2/r,    r > 2
+       Route A: f_A = 1.0 − (2.0 / r)
+       Route B: f_B = (r − 2.0) / r
+    2. SR-like (Lorentz factor argument): f(β) = 1 − β²,  β → 1⁻
+       Route A: f_A = 1.0 − (β · β)
+       Route B: f_B = (1.0 − β) · (1.0 + β)
+    3. Conical / small-angle: f(θ) = 1 − cos(θ),          θ small
+       Route A: f_A = 1.0 − cos(θ)
+       Route B: f_B = 2.0 · (sin(θ/2.0))²    [trigonometric identity]
+
+Sweep design: log2-spaced parameter perturbations; 200 points per fixture.
+Output: byte-stable artifact per fixture + cross-fixture summary.
+No GREEN/HALT/VOID. Discovery is *seeing*, not *judging*.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import math
+from pathlib import Path
+
+import mpmath
+from lloyd_v4.primitives import typed_ulp
+
+
+mpmath.mp.dps = 100
+
+ROOT = Path(__file__).resolve().parents[1]
+REPORT_DIR = ROOT / "Build_Docs" / "Reports" / "mcg_discovery"
+ARTIFACT = REPORT_DIR / "phase_1_g1_artifact.json"
+
+LOG2_DELTA_MIN = -40
+LOG2_DELTA_MAX = -2
+N_GRID = 200
+
+
+# ---------------------------------------------------------------------------
+# Float64 primitives
+# ---------------------------------------------------------------------------
+
+
+def ulp_float64(x: float) -> float:
+    """ulp of a float64 value via the ``typed_ulp`` substrate primitive (GAP-003).
+
+    Behaviour change vs the original inline implementation: subnormal inputs
+    now return 2**-1074 instead of underflowing to 0.0 (DRY-003 bug fix; see
+    scratch/dry003_ulp_reconciliation_audit.py for the reconciliation audit
+    that established the canonical behaviour). For finite normal inputs the
+    return value is unchanged.
+    """
+    return float(typed_ulp(x).value.ulp)
+
+
+def j_integer_mp(residue_mp: mpmath.mpf, u: float) -> int:
+    """Nearest-integer rounding of (residue_mp / u). Python int, no overflow."""
+    if u == 0.0:
+        return 0
+    ratio = residue_mp / mpmath.mpf(u)
+    # mpmath.nint returns mpmath.mpf; convert via str → int avoids float overflow
+    return int(mpmath.nint(ratio))
+
+
+def off_lattice_residual_in_ulps_mp(value_mp: mpmath.mpf, u: float, j: int) -> float:
+    """(value_mp − j·u) / u  as a float64. For values on the integer-ulp lattice, returns 0.0."""
+    if u == 0.0:
+        return 0.0
+    delta_mp = value_mp - mpmath.mpf(j) * mpmath.mpf(u)
+    return float(delta_mp / mpmath.mpf(u))
+
+
+# ---------------------------------------------------------------------------
+# Fixtures
+# ---------------------------------------------------------------------------
+
+
+def fixture_schwarzschild(delta_target: float) -> dict:
+    """f(r) = 1 − 2/r, with r = 2 + delta. Two routes."""
+    r_float = 2.0 + float(delta_target)
+    delta_actual = r_float - 2.0
+    r_mp = mpmath.mpf(2) + mpmath.mpf(delta_actual)
+
+    # Route A
+    q_A = 2.0 / r_float
+    f_A = 1.0 - q_A
+
+    # Route B
+    num_B = r_float - 2.0
+    f_B = num_B / r_float
+
+    # Exact oracle
+    f_exact_mp = mpmath.mpf(1) - mpmath.mpf(2) / r_mp
+
+    return _build_record(
+        fixture="schwarzschild_horizon_approach",
+        parameter_name="r_minus_2",
+        parameter_value=delta_actual,
+        parameter_value_aux={"r": r_float},
+        f_A=f_A,
+        f_B=f_B,
+        f_exact_mp=f_exact_mp,
+        route_A_label="f_A = 1.0 − (2.0/r)",
+        route_B_label="f_B = (r − 2.0) / r",
+    )
+
+
+def fixture_sr_lorentz_argument(eps_target: float) -> dict:
+    """f(β) = 1 − β², with β = 1 − eps."""
+    beta_float = 1.0 - float(eps_target)
+    if beta_float <= 0.0 or beta_float >= 1.0:
+        return None
+    eps_actual = 1.0 - beta_float
+    beta_mp = mpmath.mpf(1) - mpmath.mpf(eps_actual)
+
+    # Route A
+    beta_sq = beta_float * beta_float
+    f_A = 1.0 - beta_sq
+
+    # Route B
+    one_minus = 1.0 - beta_float
+    one_plus = 1.0 + beta_float
+    f_B = one_minus * one_plus
+
+    # Exact oracle
+    f_exact_mp = mpmath.mpf(1) - beta_mp * beta_mp
+
+    return _build_record(
+        fixture="sr_lorentz_argument",
+        parameter_name="one_minus_beta",
+        parameter_value=eps_actual,
+        parameter_value_aux={"beta": beta_float},
+        f_A=f_A,
+        f_B=f_B,
+        f_exact_mp=f_exact_mp,
+        route_A_label="f_A = 1.0 − (β·β)",
+        route_B_label="f_B = (1.0 − β)·(1.0 + β)",
+    )
+
+
+def fixture_conical_small_angle(theta_target: float) -> dict:
+    """f(θ) = 1 − cos(θ), with θ small."""
+    theta_float = float(theta_target)
+    theta_mp = mpmath.mpf(theta_target)
+
+    # Route A
+    cos_theta = math.cos(theta_float)
+    f_A = 1.0 - cos_theta
+
+    # Route B
+    half = theta_float / 2.0
+    sin_half = math.sin(half)
+    f_B = 2.0 * sin_half * sin_half
+
+    # Exact oracle
+    f_exact_mp = mpmath.mpf(1) - mpmath.cos(theta_mp)
+
+    return _build_record(
+        fixture="conical_small_angle",
+        parameter_name="theta",
+        parameter_value=theta_float,
+        parameter_value_aux={},
+        f_A=f_A,
+        f_B=f_B,
+        f_exact_mp=f_exact_mp,
+        route_A_label="f_A = 1.0 − cos(θ)",
+        route_B_label="f_B = 2.0 · sin(θ/2)²",
+    )
+
+
+# ---------------------------------------------------------------------------
+# Common record builder
+# ---------------------------------------------------------------------------
+
+
+def _build_record(
+    *,
+    fixture: str,
+    parameter_name: str,
+    parameter_value: float,
+    parameter_value_aux: dict,
+    f_A: float,
+    f_B: float,
+    f_exact_mp: mpmath.mpf,
+    route_A_label: str,
+    route_B_label: str,
+) -> dict:
+    u_A = ulp_float64(f_A) if f_A != 0.0 else math.ldexp(1.0, -1074)
+    u_B = ulp_float64(f_B) if f_B != 0.0 else math.ldexp(1.0, -1074)
+    u_div = ulp_float64(max(abs(f_A), abs(f_B), 1e-300))
+    cross_binade = (u_A != u_B)
+
+    residue_A_mp = mpmath.mpf(f_A) - f_exact_mp
+    residue_B_mp = mpmath.mpf(f_B) - f_exact_mp
+    divergence_real_mp = mpmath.mpf(f_A) - mpmath.mpf(f_B)
+
+    # j-integers in each route's own natural ulp (the final-output ulp)
+    j_A_own = j_integer_mp(residue_A_mp, u_A)
+    j_B_own = j_integer_mp(residue_B_mp, u_B)
+
+    # Divergence j at the common (max-magnitude) ulp scale
+    j_div = j_integer_mp(divergence_real_mp, u_div)
+
+    # Off-lattice residual of the divergence at u_div (Sterbenz-exact ⟹ 0)
+    off_lattice_res = off_lattice_residual_in_ulps_mp(divergence_real_mp, u_div, j_div)
+
+    # Float-level subtraction (BACL-mandated to be on the integer-ulp lattice)
+    divergence_float = f_A - f_B
+
+    return {
+        "fixture": fixture,
+        "route_A": route_A_label,
+        "route_B": route_B_label,
+        "parameter_name": parameter_name,
+        "parameter_value": parameter_value,
+        **{f"aux_{k}": v for k, v in parameter_value_aux.items()},
+        "f_A": f_A,
+        "f_B": f_B,
+        "u_A": u_A,
+        "u_B": u_B,
+        "u_div": u_div,
+        "cross_binade_A_vs_B": bool(cross_binade),
+        "residue_A_in_u_A": float(residue_A_mp / mpmath.mpf(u_A)) if u_A != 0 else 0.0,
+        "residue_B_in_u_B": float(residue_B_mp / mpmath.mpf(u_B)) if u_B != 0 else 0.0,
+        "j_A_own_ulp": j_A_own,
+        "j_B_own_ulp": j_B_own,
+        "divergence_in_u_div": float(divergence_real_mp / mpmath.mpf(u_div)) if u_div != 0 else 0.0,
+        "j_div": j_div,
+        "off_lattice_residual_in_ulps": off_lattice_res,
+        "divergence_float": divergence_float,
+        "v4_validity": {
+            "defined": True,
+            "finite": math.isfinite(f_A) and math.isfinite(f_B),
+            "selectable": True,
+            "advanceable": True,
+            "observable": True,
+            "policy_accepted": True,
+        },
+    }
+
+
+# ---------------------------------------------------------------------------
+# Sweep + characterization
+# ---------------------------------------------------------------------------
+
+
+def sweep_fixture(fixture_func) -> list[dict]:
+    log2_vals = [
+        LOG2_DELTA_MIN
+        + (LOG2_DELTA_MAX - LOG2_DELTA_MIN) * i / (N_GRID - 1)
+        for i in range(N_GRID)
+    ]
+    records = []
+    for log2_v in log2_vals:
+        v = 2.0 ** log2_v
+        rec = fixture_func(v)
+        if rec is not None:
+            records.append(rec)
+    return records
+
+
+def _bounded_histogram(values: list[int], clamp_abs: int = 5) -> dict:
+    """Histogram clamping |v| > clamp_abs to ±clamp_abs±. Avoids unbounded keys."""
+    from collections import Counter
+    clamped = []
+    for v in values:
+        if v < -clamp_abs:
+            clamped.append(f"≤−{clamp_abs}")
+        elif v > clamp_abs:
+            clamped.append(f"≥+{clamp_abs}")
+        else:
+            clamped.append(v)
+    counter = Counter(clamped)
+    # sort: integer keys ascending, then ≥/≤ tags
+    int_keys = sorted([k for k in counter if isinstance(k, int)])
+    str_keys = [k for k in counter if not isinstance(k, int)]
+    return {**{str(k): counter[k] for k in int_keys}, **{k: counter[k] for k in sorted(str_keys)}}
+
+
+def characterize(records: list[dict]) -> dict:
+    n = len(records)
+    if n == 0:
+        return {"n_records": 0, "note": "empty sweep"}
+
+    j_A_vals = [rec["j_A_own_ulp"] for rec in records]
+    j_B_vals = [rec["j_B_own_ulp"] for rec in records]
+    j_div_vals = [rec["j_div"] for rec in records]
+    off_lat_vals = [rec["off_lattice_residual_in_ulps"] for rec in records]
+    div_in_ulps_vals = [rec["divergence_in_u_div"] for rec in records]
+
+    n_off_lattice_nonzero = sum(1 for v in off_lat_vals if abs(v) > 1e-15)
+    n_cross_binade = sum(1 for rec in records if rec["cross_binade_A_vs_B"])
+    n_div_zero = sum(1 for rec in records if rec["divergence_float"] == 0.0)
+
+    # j histograms (bounded — these are typically in {−1, 0, +1})
+    j_A_hist = _bounded_histogram(j_A_vals)
+    j_B_hist = _bounded_histogram(j_B_vals)
+    j_div_hist = _bounded_histogram(j_div_vals)
+
+    # Joint (j_A, j_B) distribution — the bivariate fingerprint
+    from collections import Counter
+    pairs = [(rec["j_A_own_ulp"], rec["j_B_own_ulp"]) for rec in records]
+    pairs_clamped = [
+        (max(-3, min(3, a)), max(-3, min(3, b))) for a, b in pairs
+    ]
+    pair_hist = {f"({a},{b})": c for (a, b), c in sorted(Counter(pairs_clamped).items())}
+
+    # Run-length / transition counts along sweep
+    j_A_transitions = sum(1 for i in range(1, n) if j_A_vals[i] != j_A_vals[i - 1])
+    j_B_transitions = sum(1 for i in range(1, n) if j_B_vals[i] != j_B_vals[i - 1])
+
+    # Divergence float magnitude stats
+    div_float_abs = [abs(rec["divergence_float"]) for rec in records]
+    div_float_max = max(div_float_abs) if div_float_abs else 0.0
+    div_float_zero_frac = n_div_zero / n
+
+    return {
+        "n_records": n,
+        "j_A_own_histogram": j_A_hist,
+        "j_B_own_histogram": j_B_hist,
+        "j_div_histogram": j_div_hist,
+        "joint_jA_jB_clamped_hist": pair_hist,
+        "n_j_A_transitions": j_A_transitions,
+        "n_j_B_transitions": j_B_transitions,
+        "n_off_lattice_residual_nonzero": n_off_lattice_nonzero,
+        "fraction_off_lattice_nonzero": n_off_lattice_nonzero / n,
+        "n_cross_binade_A_vs_B": n_cross_binade,
+        "fraction_cross_binade": n_cross_binade / n,
+        "divergence_float_zero_count": n_div_zero,
+        "fraction_divergence_float_zero": div_float_zero_frac,
+        "divergence_float_max_abs": div_float_max,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", default=str(ARTIFACT))
+    args = parser.parse_args()
+
+    REPORT_DIR.mkdir(parents=True, exist_ok=True)
+
+    fixtures = [
+        ("schwarzschild_horizon_approach", fixture_schwarzschild, "(r − 2)"),
+        ("sr_lorentz_argument", fixture_sr_lorentz_argument, "(1 − β)"),
+        ("conical_small_angle", fixture_conical_small_angle, "θ"),
+    ]
+
+    output = {
+        "audit_name": "mcg_phase_1_g1_route_divergence_characterization",
+        "phase": "discovery — Phase 1 §1 candidate G-1",
+        "type": "characterization log, not pre-registry",
+        "sweep_meta": {
+            "log2_delta_min": LOG2_DELTA_MIN,
+            "log2_delta_max": LOG2_DELTA_MAX,
+            "n_grid": N_GRID,
+            "spacing": "log2-uniform",
+        },
+        "fixtures": {},
+    }
+
+    print(f"MCG Phase 1 — G-1 characterization")
+    print(f"  {len(fixtures)} fixtures, {N_GRID} grid points each")
+    print()
+
+    for name, fn, param_label in fixtures:
+        records = sweep_fixture(fn)
+        char = characterize(records)
+        output["fixtures"][name] = {
+            "records": records,
+            "characterization": char,
+        }
+
+        print(f"  fixture: {name}")
+        print(f"    parameter: {param_label}, n={char['n_records']}")
+        print(f"    j_A (own ulp) histogram : {char['j_A_own_histogram']}")
+        print(f"    j_B (own ulp) histogram : {char['j_B_own_histogram']}")
+        print(f"    j_div histogram        : {char['j_div_histogram']}")
+        print(f"    joint (j_A, j_B)       : {char['joint_jA_jB_clamped_hist']}")
+        print(f"    j_A transitions / j_B  : {char['n_j_A_transitions']} / {char['n_j_B_transitions']}")
+        print(f"    off-lattice nonzero    : {char['n_off_lattice_residual_nonzero']} / {char['n_records']}"
+              f" ({char['fraction_off_lattice_nonzero']:.3f})")
+        print(f"    cross-binade A vs B    : {char['n_cross_binade_A_vs_B']} / {char['n_records']}")
+        print(f"    divergence_float zero  : {char['divergence_float_zero_count']} / {char['n_records']}"
+              f" ({char['fraction_divergence_float_zero']:.3f})")
+        print(f"    divergence_float max   : {char['divergence_float_max_abs']:.3e}")
+        print()
+
+    Path(args.output).write_text(json.dumps(output, indent=2, sort_keys=True))
+    print(f"Phase 1 G-1 artifact written to {args.output}")
+
+
+if __name__ == "__main__":
+    main()

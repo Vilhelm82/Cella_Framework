@@ -1,0 +1,115 @@
+{
+ "absorption_derivations_recorded_cited": {
+  "additive_characterization": "for c = a +/- b, a parent reflection shifts the child phenomenon by delta = +/-(u_p/2)*D, a power of two; commutation holds iff delta is a lattice multiple at the child's (q+1)-scale - the 2^(E_parent - E_child) characterization. CITED: Amendment-2 ruling.",
+  "lattice_equivariance_lemma": "if delta = x' - x is an integer multiple of the (q+1)-quantum of x's (unchanged) binade, then RN_{q+1}(x + delta) = RN_{q+1}(x) + delta - translation by lattice vectors commutes with rounding. CITED: Will's Amendment-2 ruling 2026-06-11 + authority section 1 (grid structure); not re-derived here.",
+  "multiplicative_characterization": "scaling by an exact power of two commutes with RN (RN(2^k x) = 2^k RN(x)); multiplicative absorption follows the power-of-two characterization. CITED: Amendment-2 ruling.",
+  "role": "these derivations FALSIFIED the fireside biconditional's converse pre-freeze; the commutation criterion is the operational, derivation-independent test the graders use."
+ },
+ "amendment_v2_2026_06_11": {
+  "classification": "transcription-fidelity correction GRANTED (bigraded Stage-A precedent): the v1 manifest transcribed DEVIATES in the s-form; the brief's binding text is the account form. v1 pin preserved (manifest_sha256_v1.pin); v1 verdicts preserved (records/verdicts_v1_sform.json) as Stage C's first finding.",
+  "code_bug_disclosure": "pre-ruling, disclosed, accepted: _commutes baseline corrected from s_q to RN_{q+1}(x_n); the FAILs survived the fix.",
+  "divergence_algebra_derived_cited": "define s_dev := s'_{q+1} - free_pred and e_dev := e'_{q+1} - (e_q - (u_q/2)*D). Two lines: e'_{q+1} = x' - s'_{q+1}; e_q - (u/2)*D = x - free_pred. Subtract: e_dev = (x' - x) - (s'_{q+1} - free_pred) = delta - s_dev, with delta = x' - x. FORCED ANATOMY: absorbed => s_dev = delta, e_dev = 0 (reading relocates in lockstep, account untouched); frozen-reading => s_dev = 0, e_dev = delta (reading holds, account absorbs the shift). CITED: Will's ruling 2026-06-11.",
+  "domain_note": "the Stage-A s-form/e-form equivalence is CERTIFIED FOR FIXED PHENOMENA ONLY (x fixed in the Stage-A batteries by construction); on shifted phenomena the forms diverge by exactly e_dev = delta - s_dev. Regime-limited equivalences carry their domain (glossary section-13 pair drafted in the Stage-C report).",
+  "s_deviation_routing": "the s-deviation set is routed to OBSERVATIONAL as reading-relocation events (real quantity, not the registered one)."
+ },
+ "authority": "covariance note section 3 + Will's Amendment-2 ruling (fee1614) + authority section 1",
+ "campaign": "precision_flow",
+ "date_approved": "2026-06-11 (Will's GO under Brief Amendment 2; binding order: manifest first)",
+ "definitions_frozen": {
+  "ABSORBED": "closure-node n is absorbed at step q iff x'_n != x_n AND RN_{q+1}(x'_n) - RN_{q+1}(x_n) == x'_n - x_n (the COMMUTATION CRITERION; equivalently e'(q+1) == e(q+1)) - decided exactly from carried state + the referee; tie-safe by construction (tests the fact, not parities)",
+  "ANCESTRY": "transitive over the computation DAG; closure(R) = nodes with at least one ancestor in R (strict)",
+  "DEVIATES": "BRIEF-VERBATIM (account form; Will's transcription-fidelity ruling 2026-06-11): a node DEVIATES at step q iff its ACCOUNT fails the free Law at that step - e'_{q+1} != e_q - (u_q/2)*D(t_q), decided exactly as NOT[ RN_{q+1}(x'_n) - RN_{q+1}(x_n) == x'_n - x_n ] with RN_{q+1}(x_n) supplied by the free-law-advanced reading (Stage-A-certified equal).",
+  "REFLECTS": "node n reflects at step q iff its own |t_q| > 1/4 (equivalently D != 0 under the Law's D; |t|=1/4 ties give D=0 and do NOT reflect)",
+  "interacting_semantics": "x_n(q) = op(parent READINGS at q); leaves are exact float64 dyadics (L <= 53), so leaf accounts are 0 for q >= 53 and leaves never reflect; sqrt-node children consume the sqrt READING (dyadic), keeping all non-sqrt phenomena rational"
+ },
+ "determinism": "fixtures literal/pinned; zero RNG; byte-stable; any FAIL stops the stage for Will.",
+ "environment_pins": {
+  "dependencies": "stdlib only",
+  "python": "3.14.4"
+ },
+ "fixtures": {
+  "i_route_pair": "the bigraded Stage-C route-pair battery REUSED under its existing pin a369d82eb46d1430 (35 operand pairs; routes A=(a-b)*(a+b), B=a^2-b^2)",
+  "ii_f1a_prefix": {
+   "note": "FENCE-3 ADAPTATION (recorded): the HR131 kappa route's transcendental tail (log/exp2/pow) is excluded by brief fence 3 (rational core + sqrt only); the fixture is the route's rational+sqrt prefix at the 16 pinned rungs: v1=1/r, v2=2*v1, v3=1-v2, v4=sqrt(v3), v5=v4*v4 (depth 5).",
+   "rungs": [
+    "3/1",
+    "4728779608739021/2251799813685248",
+    "1131529406376837/562949953421312",
+    "4505851427184181/2251799813685248",
+    "4503824807351865/2251799813685248",
+    "4503622145368633/2251799813685248",
+    "2251800939585155/1125899906842624",
+    "4503599852550477/2251799813685248",
+    "2251799824944247/1125899906842624",
+    "562949953702787/281474976710656",
+    "1125899906898919/562949953421312",
+    "2251799813696507/1125899906842624",
+    "1125899906843187/562949953421312",
+    "4503599627370721/2251799813685248",
+    "4503599627370519/2251799813685248",
+    "2251799813685249/1125899906842624"
+   ]
+  },
+  "iii_chain": {
+   "a": "2476979795053773/2251799813685248",
+   "b": "4165829655317709/1125899906842624",
+   "depth": 6,
+   "nodes": [
+    [
+     "n1",
+     "mul",
+     "a",
+     "a"
+    ],
+    [
+     "n2",
+     "add",
+     "n1",
+     "b"
+    ],
+    [
+     "n3",
+     "divc",
+     "n2",
+     "7"
+    ],
+    [
+     "n4",
+     "sub",
+     "n1",
+     "n3"
+    ],
+    [
+     "n5",
+     "mul",
+     "n4",
+     "n2"
+    ],
+    [
+     "n6",
+     "sqrt",
+     "n5",
+     null
+    ]
+   ]
+  }
+ },
+ "frozen": true,
+ "grading_formulas_derived_and_cited": {
+  "C-P3_reconstruction": "topo pass AT q+1 WITHOUT graph re-execution: each parent's q+1 reading advanced by the LAW from carried (s, x-binade, t-class) where its own phenomenon is unshifted, else taken from the already-reconstructed value; each node's shifted intermediate x'_n built by op algebra on reconstructed parent readings; e-hat(q+1) = x'_n - RN_{q+1}(x'_n) by the REFEREE. Asserted == the walker's independently-measured (x', s) pair, exact structural equality (sqrt nodes compared as (radicand, s) pairs). Per-op formulas are the Law (authority section 1) + op algebra; cited.",
+  "sqrt_commutation_compare": "for sqrt nodes, e' == e <=> sqrt(R') - sqrt(R) == s' - s, decided exactly: sqrt(R') == sqrt(R) + c <=> (R' - R - c^2)/(2c) == sqrt(R), a rational-vs-sqrt comparison (c = s'-s rational, c != 0 cases only; c = 0 => requires R' == R). Derived; cited to the Phen comparator machinery (Stage A).",
+  "walker": "per fixture, per q: topo pass computes x_n(q) from parent readings (exact Q; sqrt nodes as exact-sqrt phenomena over rational radicands), s_n(q) by the referee, reflection flags by exact |e| vs u/4 comparison (Stage-A law_d)."
+ },
+ "manifest_version": "stage-c-v2",
+ "object": "the interacting flow on graphs (Amendment 2: absorption discovered pre-freeze)",
+ "observational": "reflection densities per node/step; propagation-depth histograms; absorption statistics (counts, locations, additive-vs-multiplicative split); per-fixture flow timelines - OBSERVATIONAL, ungraded, separator-M3 raw material.",
+ "performance_budget": "120 s wall.",
+ "predictions_verbatim_from_brief_amendment_2": {
+  "C-P1prime": "at every node and every step on every fixture: free-Law deviation ==> at least one ancestor of that node reflected at that step. Equivalently: no ancestor reflected ==> the free Law holds.",
+  "C-P2prime": "at every step, the set of deviating nodes EQUALS { n in the descendant-closure of the reflecting set : RN_{q+1}(x'_n) - RN_{q+1}(x_n) != x'_n - x_n }. Set equality, both inclusions graded; containment of the deviating set in the closure follows and is graded en route.",
+  "C-P3": "for every deviating node at every step, the actual e_{q+1} is reproduced EXACTLY from: the step-q carried state (all node readings + accounts), the Refinement Law, and reference-rounding of the exactly-computed shifted intermediates - with ZERO re-execution of the computation at q+1.",
+  "C-P4": "at every closure-node where the commutation criterion marks ABSORBED, the free-Law verdict HOLDS exactly - the screened interaction leaves no trace in the account."
+ },
+ "q_sweep": "q = 53..75 inclusive per fixture (22 steps)",
+ "stage": "C"
+}

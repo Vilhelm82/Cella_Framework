@@ -1,0 +1,1 @@
+../../../../../Papers_Library/03_proofs_derivations_and_audits/dbp_role_channel_and_orbit_geometry/GAUGE_NORMAL_FORM_PROOF.md

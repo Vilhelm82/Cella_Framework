@@ -1,0 +1,189 @@
+#!/usr/bin/env python3
+"""
+dense_ulp_log_lattice.py
+
+Core investigation script for grok_task_f1_f2_common_mode_ulp_lattice_geometry.
+
+- Log-dense sampling (30k points) tightly clustered around the Sterbenz boundary (V_n ≈ 1.0)
+- Exact F1/F2 form reconstruction (matching prior validated logic)
+- Per-point ULP normalization: j = (F1 - F2 - closed_form) / ulp(reference)
+- Analysis of j quantization: variance, unique values, proximity to discrete lattice
+- Negative control: same normalization on F1 - F4
+"""
+
+from __future__ import annotations
+
+import json
+import math
+from pathlib import Path
+from typing import Dict, List, Tuple
+
+import numpy as np
+
+TASK_DIR = Path(__file__).resolve().parent
+OUT_DIR = TASK_DIR
+
+N_POINTS = 30001  # Good balance between density and runtime
+
+
+def ulp(x: float) -> float:
+    """Robust ULP for float64. Uses math.ulp when available, else bit manipulation."""
+    if x == 0.0:
+        return 5e-324  # smallest subnormal
+    try:
+        return math.ulp(x)
+    except AttributeError:
+        # Fallback for older Python
+        if not math.isfinite(x):
+            return float('inf')
+        m = math.frexp(x)[0]
+        return math.ldexp(1.0, math.frexp(x)[1] - 53)
+
+
+# === Exact form computations (identical to previous validated tasks) ===
+
+def schw_comp(r: float) -> Tuple[float, float, float, float]:
+    f_direct = 1.0 - 2.0 / r
+    x_term = 2.0 / r
+    f_alt = (r - 2.0) / r
+    R = f_direct ** 0.5
+    F1 = R * R - f_direct
+    F2 = R * R - 1.0 + x_term
+    F4 = R - f_alt ** 0.5
+    closed = (1.0 - x_term) - f_direct
+    return F1, F2, F4, closed
+
+
+def sr_comp(beta: float) -> Tuple[float, float, float, float]:
+    b = float(beta)
+    f_direct = 1.0 - b * b
+    x_term = b * b
+    f_alt = (1.0 - b) * (1.0 + b)
+    R = (1.0 - b * b) ** 0.5
+    F1 = R ** 2 + b * b - 1.0
+    F2 = (R ** 2 - 1.0) + b * b
+    F4 = R - f_alt ** 0.5
+    closed = (1.0 - x_term) - f_direct
+    return F1, F2, F4, closed
+
+
+def pa_cbrt_comp(x: float, is_cbrt: bool = False) -> Tuple[float, float, float, float]:
+    xv = float(x)
+    f_direct = 1.0 - xv
+    x_term = xv
+    f_alt = (1.0 - xv / 2.0) - xv / 2.0
+    if is_cbrt:
+        R = float(np.cbrt(f_direct))
+        F1 = R * R * R - f_direct
+        F2 = R * R * R - 1.0 + xv
+        F4 = R - float(np.cbrt(f_alt))
+    else:
+        R = f_direct ** 0.5
+        F1 = R * R - f_direct
+        F2 = R * R - 1.0 + xv
+        F4 = R - f_alt ** 0.5
+    closed = (1.0 - x_term) - f_direct
+    return F1, F2, F4, closed
+
+
+def get_sterbenz_log_grid(fixture: str, n: int) -> np.ndarray:
+    """
+    Generate log-dense grid heavily concentrated near the Sterbenz boundary (small perturbation).
+    For Schwarzschild we use a linear-ish window near the horizon that still captures high cancellation.
+    """
+    if fixture == "schwarzschild":
+        # Focus on region with significant cancellation near r slightly > 2
+        r_min, r_max = 2.0001, 2.05
+        return np.linspace(r_min, r_max, n)
+    else:
+        # Log spacing from extremely close to boundary out to moderate perturbation
+        # This aggressively samples the V_n ≈ 1.0 region
+        return np.logspace(-9, -1.0, n)  # from 1e-9 to ~0.1
+
+
+def compute_j_series(fixture: str, grid: np.ndarray) -> Dict:
+    residuals_f1f2 = []
+    residuals_f1f4 = []
+    j_f1f2 = []
+    j_f1f4 = []
+    ulp_refs = []
+
+    for c in grid:
+        if fixture == "schwarzschild":
+            F1, F2, F4, closed = schw_comp(c)
+            ref_for_ulp = abs(1.0 - 2.0 / c)  # f_direct as primary operand scale
+        elif fixture == "sr":
+            F1, F2, F4, closed = sr_comp(c)
+            ref_for_ulp = abs(1.0 - c * c)
+        elif fixture == "pure_algebraic":
+            F1, F2, F4, closed = pa_cbrt_comp(c, is_cbrt=False)
+            ref_for_ulp = abs(1.0 - c)
+        else:  # cbrt
+            F1, F2, F4, closed = pa_cbrt_comp(c, is_cbrt=True)
+            ref_for_ulp = abs(1.0 - c)
+
+        res_f1f2 = (F1 - F2) - closed
+        res_f1f4 = (F1 - F4) - closed
+
+        u = ulp(ref_for_ulp) if ref_for_ulp != 0 else ulp(1.0)
+        j2 = res_f1f2 / u
+        j4 = res_f1f4 / u
+
+        residuals_f1f2.append(res_f1f2)
+        residuals_f1f4.append(res_f1f4)
+        j_f1f2.append(j2)
+        j_f1f4.append(j4)
+        ulp_refs.append(u)
+
+    j_arr = np.array(j_f1f2)
+    j4_arr = np.array(j_f1f4)
+
+    # Quantization analysis
+    variance_j = float(np.var(j_arr))
+    unique_j_rounded = len(np.unique(np.round(j_arr, decimals=1)))  # tolerance for 0.1
+    max_abs_j = float(np.max(np.abs(j_arr)))
+    median_j = float(np.median(j_arr))
+
+    # Check closeness to discrete lattice {-1, -0.5, 0, 0.5, 1} within 0.1 tolerance
+    discrete_set = np.array([-1.0, -0.5, 0.0, 0.5, 1.0])
+    distances = np.abs(j_arr[:, None] - discrete_set[None, :])
+    min_dist = np.min(distances, axis=1)
+    in_discrete = np.sum(min_dist < 0.1) / len(j_arr)
+
+    return {
+        "n_points": len(grid),
+        "j_variance": variance_j,
+        "j_max_abs": max_abs_j,
+        "j_median": median_j,
+        "unique_rounded_to_0.1": unique_j_rounded,
+        "fraction_within_0.1_of_discrete_lattice": float(in_discrete),
+        "negative_control_j_variance_f1f4": float(np.var(j4_arr)),
+        "negative_control_j_max_abs_f1f4": float(np.max(np.abs(j4_arr))),
+    }
+
+
+def main():
+    fixtures = ["schwarzschild", "sr", "pure_algebraic", "cbrt"]
+    all_results = {}
+
+    for fx in fixtures:
+        print(f"Processing {fx} with {N_POINTS} log-dense points...")
+        grid = get_sterbenz_log_grid(fx, N_POINTS)
+        stats = compute_j_series(fx, grid)
+        all_results[fx] = stats
+        print(f"  j_variance = {stats['j_variance']:.3e}")
+        print(f"  fraction near discrete lattice = {stats['fraction_within_0.1_of_discrete_lattice']:.4f}")
+
+    out = {
+        "task": "grok_f1_f2_common_mode_ulp_lattice_geometry",
+        "n_points_per_fixture": N_POINTS,
+        "sampling": "log_dense_sterbenz_boundary",
+        "results": all_results,
+    }
+
+    (OUT_DIR / "ulp_lattice_results.json").write_text(json.dumps(out, indent=2, default=str))
+    print("\nDone. Results written to ulp_lattice_results.json")
+
+
+if __name__ == "__main__":
+    main()

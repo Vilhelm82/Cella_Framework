@@ -1,0 +1,179 @@
+{
+ "B-P1": {
+  "failures": [],
+  "n_cells": 73,
+  "n_holds": 73,
+  "pass": true,
+  "units": "(fixture, point, j) cells"
+ },
+ "B-P2": {
+  "failures": [],
+  "n_exact": 166,
+  "n_reconstructions": 166,
+  "pass": true,
+  "units": "(fixture, point, j, k) reconstructions"
+ },
+ "B-P3": {
+  "failures": [
+   {
+    "alpha_measured": 0.9932710368744457,
+    "alpha_predicted": 1,
+    "fixture": "P3",
+    "ok": false,
+    "point": "0x1.0000000000000p-1",
+    "r_squared": 0.5949625360594029,
+    "scheme": "forward",
+    "status": "slope_observed"
+   },
+   {
+    "alpha_measured": 1.0005951908281399,
+    "alpha_predicted": 1,
+    "fixture": "P3",
+    "ok": false,
+    "point": "0x1.4000000000000p+1",
+    "r_squared": 0.6010704709738357,
+    "scheme": "forward",
+    "status": "slope_observed"
+   },
+   {
+    "alpha_measured": 1.0156703183660485,
+    "alpha_predicted": 1,
+    "fixture": "P4",
+    "ok": false,
+    "point": "0x1.8000000000000p-1",
+    "r_squared": 0.6114515096663267,
+    "scheme": "forward",
+    "status": "slope_observed"
+   },
+   {
+    "alpha_measured": 0.9988003214918393,
+    "alpha_predicted": 1,
+    "fixture": "P4",
+    "ok": false,
+    "point": "-0x1.8000000000000p+0",
+    "r_squared": 0.6000351064025591,
+    "scheme": "forward",
+    "status": "slope_observed"
+   },
+   {
+    "alpha_measured": 0.9988092351608843,
+    "alpha_predicted": 1,
+    "fixture": "R1a",
+    "ok": false,
+    "point": "0x1.8000000000000p-1",
+    "r_squared": 0.6013563404356946,
+    "scheme": "forward",
+    "status": "slope_observed"
+   },
+   {
+    "alpha_measured": 0.9992715639747395,
+    "alpha_predicted": 1,
+    "fixture": "R1a",
+    "ok": false,
+    "point": "0x1.4000000000000p+1",
+    "r_squared": 0.6013227913654178,
+    "scheme": "forward",
+    "status": "slope_observed"
+   },
+   {
+    "alpha_measured": 0.9986904525351009,
+    "alpha_predicted": 1,
+    "fixture": "R3",
+    "ok": false,
+    "point": "0x1.0000000000000p-1",
+    "r_squared": 0.6014044824045287,
+    "scheme": "forward",
+    "status": "slope_observed"
+   },
+   {
+    "alpha_measured": 0.9992715640024228,
+    "alpha_predicted": 1,
+    "fixture": "R3",
+    "ok": false,
+    "point": "0x1.4000000000000p+1",
+    "r_squared": 0.6013227720337299,
+    "scheme": "forward",
+    "status": "slope_observed"
+   }
+  ],
+  "n_fits": 16,
+  "n_ok": 8,
+  "pass": false,
+  "units": "(fixture, point, scheme) slope fits"
+ },
+ "B-P4": {
+  "band_failures": [],
+  "fit_failures": [
+   {
+    "alpha_measured": 1.03793704107271,
+    "alpha_predicted": 1,
+    "fixture": "T1",
+    "ok": false,
+    "point": "0x1.0000000000000p-1",
+    "r_squared": 0.7145080940101363,
+    "scheme": "forward",
+    "status": "slope_observed"
+   },
+   {
+    "alpha_measured": 1.00605171178926,
+    "alpha_predicted": 1,
+    "fixture": "T1",
+    "ok": false,
+    "point": "0x1.4000000000000p+0",
+    "r_squared": 0.750862221090937,
+    "scheme": "forward",
+    "status": "slope_observed"
+   },
+   {
+    "alpha_measured": 1.0243538529996545,
+    "alpha_predicted": 1,
+    "fixture": "T2",
+    "ok": false,
+    "point": "0x1.0000000000000p-1",
+    "r_squared": 0.6775010282481749,
+    "scheme": "forward",
+    "status": "slope_observed"
+   },
+   {
+    "alpha_measured": 1.0243425572184515,
+    "alpha_predicted": 1,
+    "fixture": "T2",
+    "ok": false,
+    "point": "-0x1.8000000000000p+0",
+    "r_squared": 0.6770633902702379,
+    "scheme": "forward",
+    "status": "slope_observed"
+   },
+   {
+    "alpha_measured": 0.9175379925640774,
+    "alpha_predicted": 1,
+    "fixture": "T3",
+    "ok": false,
+    "point": "0x1.0000000000000p-1",
+    "r_squared": 0.7143749098365885,
+    "scheme": "forward",
+    "status": "slope_observed"
+   },
+   {
+    "alpha_measured": 0.9813787056153787,
+    "alpha_predicted": 1,
+    "fixture": "T3",
+    "ok": false,
+    "point": "0x1.4000000000000p+1",
+    "r_squared": 0.6868265946504598,
+    "scheme": "forward",
+    "status": "slope_observed"
+   }
+  ],
+  "n_band_cells": 54,
+  "n_band_ok": 54,
+  "n_fits": 12,
+  "n_fits_ok": 6,
+  "pass": false,
+  "units": "fits: (fixture, point, scheme); band: (fixture, point, j) cells"
+ },
+ "anomalies": [],
+ "dp2_firings_cells": 0,
+ "prereg_sha256": "dca8eb406211b51485f2eb53bb15abe5193fe494de86fb174144668ddbf56b07",
+ "records_sha256": "2c4db8612caaeeafaed32f2458ea539dd1aee5113545047c88219f550199c057"
+}

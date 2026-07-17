@@ -1,0 +1,102 @@
+{
+ "authority": "brief section 7 H7 + section 9 Stage E; Will's Stage-D GO block (Stage E clause) reaffirmed via Amendment 6",
+ "campaign": "difference_tower",
+ "date": "2026-06-12",
+ "depends_on": {
+  "h5_raw_leg_prereg_pin": "80a9e924c03ad4524bb1fd6f15b5496e925f486670413a15935d31367683581a",
+  "tier2_machinery": "run_stage_d (Amendment 5 engines, consumed read-only)"
+ },
+ "determinism": "byte-stable x2; sha-pinned records; suite green.",
+ "e_p1_battery": [
+  {
+   "class": "polynomial",
+   "d": 3,
+   "fixture_id": "P3",
+   "point": "0x1.0000000000000p-1"
+  },
+  {
+   "class": "polynomial",
+   "d": 4,
+   "fixture_id": "P4",
+   "point": "-0x1.8000000000000p+0"
+  },
+  {
+   "class": "rational",
+   "fixture_id": "R1a",
+   "j_deep": 40,
+   "point": "0x1.8000000000000p-1"
+  },
+  {
+   "class": "rational",
+   "fixture_id": "R3",
+   "j_deep": 40,
+   "point": "0x1.0000000000000p-1"
+  },
+  {
+   "class": "annex",
+   "fixture_id": "T1",
+   "point": "0x1.0000000000000p-1"
+  },
+  {
+   "class": "annex",
+   "fixture_id": "T2",
+   "point": "-0x1.8000000000000p+0"
+  },
+  {
+   "class": "annex",
+   "fixture_id": "T3",
+   "point": "0x1.4000000000000p+1"
+  }
+ ],
+ "e_p1_rule": "per battery point: |jet_g - tower_limit| <= declared floor (class-specific, derived - see module docstring recorded at freeze). Findings recorded either way; units: battery points.",
+ "e_p2_grid": {
+  "j": [
+   2,
+   9,
+   20
+  ],
+  "m": [
+   1,
+   2,
+   3
+  ],
+  "pair": [
+   "R2a",
+   "R2b"
+  ],
+  "points": [
+   "0x1.0000000000000p-1",
+   "0x1.4000000000000p+0"
+  ],
+  "schemes": [
+   "forward",
+   "centered"
+  ]
+ },
+ "e_p2_rule": "RECORDED: (a) per node |delta| <= exposure bound (sum of |residue| contributions composed through the deviation-carry, conservative); max ratio recorded; (b) zero-exposure stencils are undamaged cells (violations recorded, expected 0). Units: nodes / cells.",
+ "e_p3_grid": {
+  "fixtures": {
+   "T1": "0x1.0000000000000p-1",
+   "T2": "-0x1.8000000000000p+0",
+   "T3": "0x1.4000000000000p+1"
+  },
+  "j": [
+   2,
+   9
+  ],
+  "m": [
+   1,
+   2
+  ],
+  "precision_bits": 120,
+  "schemes": [
+   "forward"
+  ]
+ },
+ "e_p3_rule": "per cell: enclosure from the certified elementary set (typed_sin/typed_exp/typed_log @ 120 bits, consumed) via exact-Q interval differencing MUST contain the mp 240-dps cell value. Widths recorded. Units: cells.",
+ "frozen": true,
+ "no_kill": "an E-P1/E-P3 failure is a FINDING (recorded verbatim, reported), never a halt; anomalous signals still route via fork 1.7.",
+ "scope": "H7 stretch (brief section 7) \u2014 EXPLORATORY: arbiter/enclosure-graded, NO KILL; findings recorded either way; STOP at the Stage-E report.",
+ "stage": "E",
+ "version": 1
+}

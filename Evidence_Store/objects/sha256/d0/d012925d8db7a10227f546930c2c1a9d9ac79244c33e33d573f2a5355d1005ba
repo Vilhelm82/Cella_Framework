@@ -1,0 +1,149 @@
+{
+ "authority": "brief section 7 Arm I Stage C + Will's Stage-C GO (Stage B ACCEPTED; K-I3 live: a fire moves the arm to honest close per the brief, chain preserved)",
+ "campaign_id": "beyond_the_cradle_arm_i",
+ "date_stamped_from_machine": "2026-06-12",
+ "depends_on": {
+  "manifest_v1_sha256": "9b92fad78fd850a3fcf1d079e031258524e9119aceeb3f0aa5e747fb2e12a534",
+  "note": "bench code (incl. hull_dobell + intops) pinned inside the frozen manifest, enforced by require_frozen (rule 1.9); no external executed instrument."
+ },
+ "expectations": {
+  "hd_profiles": {
+   "FXID1": {
+    "c1_c_coprime_m": true,
+    "c2_a1_div_primes": true,
+    "c3_a1_div_4_if_4_div_m": true,
+    "full_period": true
+   },
+   "FXID2": {
+    "c1_c_coprime_m": false,
+    "c2_a1_div_primes": true,
+    "c3_a1_div_4_if_4_div_m": true,
+    "full_period": false
+   },
+   "FXID3": {
+    "c1_c_coprime_m": true,
+    "c2_a1_div_primes": true,
+    "c3_a1_div_4_if_4_div_m": false,
+    "full_period": false
+   }
+  },
+  "minstd": {
+   "refusal": "period_exceeds_pinned_budget",
+   "zero_fixed_point": true
+  },
+  "parity_frozen": {
+   "FXID1": false,
+   "FXID2": true,
+   "FXID3": false
+  },
+  "periods": {
+   "FXID1": 65536,
+   "FXID2": 32768,
+   "FXID3": 32768
+  },
+  "reconstruction_steps": [
+   1,
+   10,
+   100,
+   1000,
+   65536
+  ],
+  "towers": {
+   "FXID1": [
+    2,
+    4,
+    8,
+    16,
+    32,
+    64,
+    128,
+    256,
+    512,
+    1024,
+    2048,
+    4096,
+    8192,
+    16384,
+    32768,
+    65536
+   ],
+   "FXID2": [
+    1,
+    2,
+    4,
+    8,
+    16,
+    32,
+    64,
+    128,
+    256,
+    512,
+    1024,
+    2048,
+    4096,
+    8192,
+    16384,
+    32768
+   ],
+   "FXID3": [
+    2,
+    2,
+    4,
+    8,
+    16,
+    32,
+    64,
+    128,
+    256,
+    512,
+    1024,
+    2048,
+    4096,
+    8192,
+    16384,
+    32768
+   ]
+  },
+  "xorshift": {
+   "all_linear": true,
+   "linearity_pairs": 10,
+   "seed_return_in_cap": false
+  }
+ },
+ "f2_samples": [
+  1,
+  3735928559,
+  305419896,
+  4294967295,
+  7
+ ],
+ "frozen": true,
+ "minstd_cap": 200000,
+ "organ": "II_c_orbit_probe_v1: the orbit read through the ledger's own dyadic discard windows (projection tower) + the carry fold reconstructing the exact unwrapped trajectory + direct invariant measurement (parity freeze) + F2-linearity certification. Honest scope: dyadic windows require power-of-2 moduli; odd-modulus and F2 rows carry exact point facts and typed budget refusals only.",
+ "period_cap": 70000,
+ "pow2_battery": [
+  "FXID1",
+  "FXID2",
+  "FXID3"
+ ],
+ "predictions": {
+  "PIC.1": "orbit ledger exactness: on each power-of-2 LCG the carry fold M_n = a*M_(n-1) + carry_n*2^w reconstructs wrapped_x_n + M_n == a^n*seed + c*(a^n - 1)/(a - 1) exactly in Z at every pinned sample step {1, 10, 100, 1000, 65536} - the Stage-A fold applied to an orbit. Units: (fixture, sample step).",
+  "PIC.2": "THE BAR - Hull-Dobell recovered from ledger-window structure: per power-of-2 LCG the measured projection tower {P_k = period of x mod 2^k, k=1..16} equals the pinned fingerprint AND the fingerprints map one-to-one onto the exact Hull-Dobell condition profiles computed independently by arithmetic: full -> P_k = 2^k at every level; c1-broken (c even) -> P_1 = 1, the parity window FROZEN (parity invariance separately measured); c3-broken (a = 3 mod 4) -> P_1 = 2 but P_2 = 2, the mod-4 window fails to double, P_k = 2^(k-1) above. DISCRIMINATION clause (the non-triviality content): the two broken fixtures have IDENTICAL total periods (m/2 = 32768) - the tower distinguishes what the plain period cannot; total period alone IS divmod restatement, the tower is the ledger's window structure. K-I3 fires on any fingerprint mismatch or failure to separate the profiles. Units: fixtures x tower levels.",
+  "PIC.3": "honest budgets + the F2 stretch: MINSTD - the zero fixed point measured exactly; the seed orbit refuses TYPED (period_exceeds_pinned_budget) at the pinned 200k cap, recorded as CONSISTENT with its c1-broken expectation, never as proof. xorshift32 - F2-linearity certified exactly (T(0) == 0; T(x xor y) == T(x) xor T(y) on all 10 pinned pairs; domain_seam = F2 typed on every record); the seed orbit refuses TYPED at the 70k cap. Units: rows.",
+  "PIC.4": "refusal discipline: typed budget refusals EXACTLY where pinned (the two capped rows), none elsewhere; no tower level exceeds its per-level budget. Units: rows.",
+  "PIC.5": "determinism: battery byte-stable x2 (sha256 over records)."
+ },
+ "referee": "the Hull-Dobell theorem as EXTERNAL referee via the exact arithmetic predicate (hull_dobell, bench code pinned in the manifest); native-Z closed form for PIC.1.",
+ "sample_steps": [
+  1,
+  10,
+  100,
+  1000,
+  65536
+ ],
+ "stage": "C",
+ "status_move_rules": "CL-I4 -> DEMONSTRATED iff PIC.1 AND PIC.2 AND PIC.3 AND PIC.4 PASS. PIC.2 FAIL = K-I3 FIRES: CL-I4 -> REFUTED and the ARM MOVES TO HONEST CLOSE per the brief ('the arm has added nothing beyond divmod's restatement; close it honestly and say so') - chain preserved verbatim, STOP, route to Will. Any other FAIL: K-I1 halt-until-fixed.",
+ "telemetry": "permanently non-verdict-bearing (covenant 3); orbit step counts are telemetry.",
+ "tower_level_cap": 140000,
+ "version": 1
+}

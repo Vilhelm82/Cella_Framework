@@ -1,0 +1,223 @@
+{
+  "campaign": "shape_of_the_quiet",
+  "manifest_version": "v1",
+  "frozen": true,
+  "date_drafted": "2026-06-10",
+  "date_approved": "2026-06-10 (Will's audit: F1b interpretation confirmed with form-borne scope note; F2c approved; tolerances approved; F2 claim regime k>=7 approved)",
+  "authority": "Build_Docs/Agent_tasks/CAMPAIGN_SHAPE_OF_THE_QUIET.md",
+  "scoreboard": {
+    "file": "Build_Docs/PROBE_READINESS.md",
+    "rows_primary": ["A4", "A6"],
+    "rows_stretch": ["A9"]
+  },
+  "branch": "campaign/shape-of-the-quiet",
+
+  "rulings_2026_06_10": {
+    "1_f1_vocabulary": "F1 attribution vocabulary builds on the G2 == S2 substrate jet (HR129, Reports/substrate_invariant_search/phase_a_closeout.md). No Phase 2h extension, no new primitives.",
+    "2_attribution": "Raw instrument channels recorded per rung (phenomenon/substrate/ambiguous/format_precision_pinned). 'contaminated' is a campaign-level verdict only, assembled by the pre-registered rule in attribution_rules below. Nothing post-hoc.",
+    "3_e_at_depth": "E-derived signals are treated as suspect at deep rungs (E fails T2 format-invariance near singular coordinates, V4_GLOSSARY); the mpmath arbiter referees that regime.",
+    "4_oracle": "lloyd_v3 MCP registered at project scope (.mcp.json); smoke-verified 2026-06-10; I2 wired against the real lv3_* signatures via the committed stdio client."
+  },
+
+  "environment_pins": {
+    "python": "3.14.4",
+    "mpmath": "1.3.0",
+    "numpy": "2.4.4",
+    "scipy": "1.17.1",
+    "lloyd_v3_mcp": {
+      "server_name": "lloyd_v3_mcp",
+      "version": "1.27.0",
+      "binary": "/mnt/fast/lloyd_v3/.venv-v3/bin/lloyd-v3-mcp",
+      "binary_sha256_prefix": "e09bd3d873a30e752969",
+      "registration": ".mcp.json (project scope)",
+      "smoke_verified": "2026-06-10",
+      "client": "src/lloyd_v4/evals/shape_of_the_quiet_lv3_client.py"
+    },
+    "compiler_allowlist_probe_2026_06_10": {
+      "accepted": ["sqrt", "sin", "exp", "log", "arithmetic", "**"],
+      "rejected": ["besselj0", "zeta"],
+      "consequence": "F2 fixture functions (zeta, j0, airy_ai) are NOT expressible in the V3 oracle grammar; see fixtures.F2.instruments.I2."
+    }
+  },
+
+  "determinism_policy": {
+    "rng": "ZERO random-number use anywhere in the campaign; all grids and ladders are closed-form deterministic.",
+    "records": "JSONL, json.dumps(sort_keys=True), floats via Python repr (shortest round-trip). Raw per-rung errors (estimate - arbiter, signed, per instrument) are ALWAYS recorded regardless of verdict (Will's ruling 3, audit 2026-06-10).",
+    "byte_stability": "Every artefact regenerated and diffed before commit (CLAUDE.md SS8); determinism test re-runs one full fixture rung-set and asserts bit-identity, and must pass on two different days (Acceptance Criterion 6).",
+    "timestamps": "No wall-clock content inside byte-stable artefacts; dates live in this manifest and in commit metadata only."
+  },
+
+  "arbiter_policy": {
+    "engine": "mpmath",
+    "base_dps": 50,
+    "self_consistency": "Recompute at dps+10; accept when the two values agree within tol_fixture/10. Escalate in +10 steps to max 200 dps. Failure to self-consist => rung recorded 'arbiter_unresolved'; ladder extension stops at the previous rung (Design Principle 2).",
+    "operating_point_semantics": "The arbiter referees the EXACT BINARY operating point the instruments actually used (mpmath.mpf of the float64 value, which is exact), never the decimal nominal. Nominal vs effective rung values are both recorded per rung.",
+    "true_locus_refinement": "Where the quantity is defined against a true locus (F2 zeros), the arbiter refines the locus to working dps (mpmath.zetazero / besseljzero / airyaizero or findroot) and records both the float64 frozen locus and the refined locus."
+  },
+
+  "instruments": {
+    "I1_naive_float64": {
+      "definition": "Textbook float64 computation of the target quantity, no safeguards, no validity machinery. Self-validity report = isfinite(result) only.",
+      "code_home": "src/lloyd_v4/evals/shape_of_the_quiet_sweep.py (Phase 2)"
+    },
+    "I2_v3_oracle": {
+      "definition": "Same quantity via lv3_* MCP calls through the committed stdio client. V3's own trust/validity surface recorded verbatim per rung: trust (1.0/0.5/0.0), refusal_reasons, pathology, F_val. Self-validity report = (trust == 1.0 AND refusal_reasons empty).",
+      "tools_by_fixture": {
+        "F1a": "lv3_diagnose (K_G + principal_curvatures + trust)",
+        "F1b": "lv3_observe_full (diagnostic + geometry.* packets, recorded verbatim) and lv3_diagnose metadata",
+        "F2": "structurally refused - see fixtures.F2.instruments.I2",
+        "F1_boundary_classification_crosscheck": "lv3_branch_classify on r -> 2 (non-primary annotation, not a scored instrument reading)"
+      }
+    },
+    "I3_v4_typed_probe": {
+      "definition": "V4 typed pipeline end-to-end: value + validity + conditioning + provenance + BACL/E attribution per rung. Zero raw-float side channels (Acceptance Criterion 7; source audit enforces). Self-validity report = typed validity stamp accepted AND no typed refusal.",
+      "vocabulary_source": "HR129 G2 == S2 substrate jet (ruling 1). kappa is reconstructed MULTIVARIATELY from the full jet (S0, S1, S2), never one channel.",
+      "method_modules": [
+        "src/lloyd_v4/evals/substrate_invariant_search_phase_a_fd_metrology.py (fd_first_derivative, fd_second_derivative, reconstruct_kappa_from_substrate, operand-variation guard)",
+        "src/lloyd_v4/primitives (typed_ulp, typed_finite_difference, typed_log_log_slope)",
+        "src/lloyd_v4/observers (directional_alpha_probe as F2 companion)"
+      ],
+      "fd_policy": "FD step policy and operand-variation guard exactly as in the Phase A fd-metrology module; a rung where the guard fires is recorded as a typed FD-unresolved refusal, never an estimate (Axiom 3: declared limit).",
+      "per_rung_substrate_record": "BACL grain prediction, E value + in_sterbenz_cluster + E-unsafe flag (|base_operand| in the format-floor regime, ruling 3), jet (S0, S1, S2), attribution channel."
+    }
+  },
+
+  "attribution_rules": {
+    "raw_channels": ["phenomenon", "substrate", "ambiguous", "format_precision_pinned"],
+    "raw_channel_thresholds": {
+      "phenomenon": "signal_ratio > 1e3",
+      "substrate": "signal_ratio <= 1",
+      "ambiguous": "1 < signal_ratio <= 1e3",
+      "format_precision_pinned": "E in unsafe range (|base_operand| < 1e-4 per glossary entry) - overrides the ratio channels",
+      "signal_ratio_definition": "|quantity_reading| / bacl_predicted_noise_floor propagated to the quantity (glossary 'BACL grain' entry)"
+    },
+    "arbiter_ground_classification": {
+      "definition": "Per rung r, the arbiter computes Delta_q_ulp(r) = |q_true(x_r + ulp(x_r)) - q_true(x_r)| (the exact 1-ulp input transfer of the quantity, instrument-free).",
+      "phenomenon_dominated": "Delta_q_ulp(r) <= tol_fixture * |q_true(r)| (structure is resolvable by SOME float64 reading at this rung)",
+      "substrate_dominated": "Delta_q_ulp(r) > |q_true(r)| (one ulp of input slews the quantity by more than itself - any float64 reading is rounding-dominated)",
+      "indeterminate": "between the two bounds"
+    },
+    "per_rung_consistency": {
+      "phenomenon_dominated": ["phenomenon"],
+      "substrate_dominated": ["substrate", "format_precision_pinned"],
+      "indeterminate": "excluded from the attribution-quality denominator"
+    },
+    "attribution_quality": "consistent_rungs / classified_rungs (classified = arbiter class is not indeterminate and arbiter self-consistent).",
+    "format_precision_pinned_scoreboard_mapping": "Counts as substrate-family evidence at both rung level and campaign level (it declares a format-artefact regime). Recorded distinctly in all artefacts so the mapping is auditable.",
+    "campaign_level_verdict": {
+      "note": "Mechanical rule, applied once per fixture after the sweep. P = arbiter phenomenon_dominated rungs; S = arbiter substrate_dominated rungs, both restricted to the regime the V3 claim spans (claim regimes pinned per fixture below).",
+      "phenomenon": "attribution_quality >= 0.9 AND P nonempty AND I3 trustworthy (within tol AND self-valid) on >= 90% of P",
+      "substrate": "attribution_quality >= 0.9 AND P empty",
+      "contaminated": "attribution_quality >= 0.9 AND P nonempty AND S nonempty inside the claim regime (the V3 claim as stated mixes resolvable structure with substrate-dominated readings)",
+      "ambiguous": "anything else, including attribution_quality < 0.9 or arbiter_unresolved before the claim regime is reached"
+    }
+  },
+
+  "metrics": {
+    "last_trustworthy_rung": "Deepest rung with |estimate - arbiter| <= tol_fixture AND instrument self-reports valid (per-instrument validity definitions in instruments above).",
+    "divergence_onset": "Shallowest rung with |estimate - arbiter| > tol_fixture.",
+    "confidently_wrong": "Rung where the instrument self-reports valid AND |estimate - arbiter| > 10 * tol_fixture. First-class result, plotted on the headline figure.",
+    "depth_advantage": "Delta decades between I3 and I2 last trustworthy rungs (headline). For F2, where I2 is structurally refused, depth advantage is reported against I1 with the I2 refusal stated verbatim - an honest asymmetry, not a silent substitution.",
+    "attribution_quality": "As defined in attribution_rules."
+  },
+
+  "fixtures": {
+    "F1_schwarzschild_deep_approach": {
+      "serves": "A6",
+      "surface": {
+        "equation": "1 - 2/r - z*z",
+        "variables": ["r", "z"],
+        "source": "Reports/v3_calibration_fixtures/ frozen smoke fixture, extended past its r=2.1 stop",
+        "M": 1.0
+      },
+      "ladder": {
+        "proximity_parameter": "delta = r - 2",
+        "rungs": "k = 0..15; delta_nominal_k = 10**-k",
+        "operating_point": "r_k = float64(2 + 10**-k); z_k = float64(sqrt(1 - 2/r_k)) on-surface",
+        "effective_delta": "delta_eff_k = r_k - 2, computed in float64 (exact by Sterbenz for 2 <= r_k <= 4); recorded alongside nominal",
+        "grain_edge": "rungs where r_k == 2.0 exactly (nominal delta below ulp(2)/2) are recorded as typed domain refusals for all instruments; arbiter-only annotation rows may extend two more decades for the figure",
+        "extension_rule": "ladder extends deeper only while the arbiter remains self-consistent (arbiter_policy)"
+      },
+      "subpass_a": {
+        "quantity": "kappa(delta): Euclidean curve curvature of z(r) at the on-surface point. Closed form from z = sqrt(1 - 2/r): kappa = |z''| / (1 + z'^2)^(3/2).",
+        "claim_regime": "the full ladder (A6 deep approach: 'the quiet starts where the r=2.1 fixture ended')",
+        "tol": {"type": "relative", "value": 1e-3, "rationale": "I3 method floor is the HR129 kappa-reconstruction error <= 4.7e-4; tol is set one octave above the method floor, below any decade-scale structure."},
+        "instruments": {
+          "I1": "closed-form kappa in float64, textbook order of operations (pinned in code at Phase 2, frozen before sweep)",
+          "I2": "lv3_diagnose K_G == single principal curvature for this 1D-in-2D surface (smoke-verified r=10: K_G = 0.0023753768290201527, trust 1.0)",
+          "I3": "reconstruct_kappa_from_substrate on the FD jet (S0, S1, S2) of base_operand(r) = 1 - 2/r (ruling 1)",
+          "arbiter": "same closed form in mpmath at the exact binary r_k"
+        }
+      },
+      "subpass_b": {
+        "quantity": "the minus-2 Hessian eigenvalue. INTERPRETATION (CONFIRMED by Will, audit 2026-06-10): for F = 1 - 2*M/r - z*z the Hessian z-block is exactly [-2] and decouples analytically (d2F/dzdr = d2F/dzdM = 0 identically); the A6 'universal -2 eigenvalue' is read as this z-block eigenvalue, universal across operating points by construction of the constraint form.",
+        "scope_note_will_audit_2026_06_10": "V3's -2 was FORM-BORNE - definitional from the X^2 lifting in the lifted-compatibility construction (flagged 'partly definitional' in the paper's April 2026 review). F1(b) is therefore apples-to-apples: it attributes READABILITY of a construction-carried invariant at depth. The -2's layer-attribution is the REPRESENTATION layer, not emergent geometry; the campaign report must state this.",
+        "surface": {"equation": "1 - 2*M/r - z*z", "variables": ["r", "z", "M"], "operating_M": 1.0},
+        "claim_regime": "every rung where the eigenvalue remains computable per instrument",
+        "tol": {"type": "absolute", "value": 1e-9, "rationale": "the true value is exactly -2 (analytic); 1e-9 is ~4.5e8 ulps of slack at magnitude 2 - generous to instruments, tight against decade-scale contamination"},
+        "instruments": {
+          "I1": "numpy.linalg.eigvalsh of the float64 3x3 Hessian; comparator = eigenvalue nearest -2",
+          "I2": "lv3_observe_full per rung (diagnostic + geometry packets verbatim); comparator field = the V3 Hessian-eigenvalue diagnostic nearest -2 (exact field name pinned in the Phase 2 wiring addendum BEFORE the sweep, from the recorded smoke packet - not tuned afterwards)",
+          "I3": "typed second-order finite difference of F along z at the operating point (typed_finite_difference, existing primitive) - reads the decoupled z-block eigenvalue directly. NO typed eigensolve exists or is built (Design Principle 4): if full-spectrum attribution becomes necessary, STOP and file the gap.",
+          "arbiter": "mpmath eigenvalues of the exact Hessian at the exact binary operating point"
+        }
+      }
+    },
+
+    "F2_blowup_exponent_family": {
+      "serves": "A4",
+      "loci": {
+        "source": "Reports/blowup_exponent_v4_audit/artifact.json (frozen float64 zero values, cited not re-derived)",
+        "zeta_critical_line_t": [14.134725141734695, 21.022039638771556, 25.01085758014569, 30.424876125859512, 32.93506158773919],
+        "j0": [2.4048255576957724, 5.520078110286311, 8.653727912911013, 11.791534439014281, 14.930917708487787],
+        "airy_ai": [-2.3381074104597674, -4.08794944413097, -5.520559828095515, -6.786708090071912, -7.944133587112781]
+      },
+      "ladder": {
+        "proximity_parameter": "d = approach distance to the zero, from above (x = x0 + d)",
+        "rungs": "k = 0..14; d_nominal_k = 10**-k",
+        "evaluation_window": "per rung, the 5-point geometric window {d_k * 2**j : j = 0..4}; evaluation points x = float64(x0 + d); effective distances recorded",
+        "grain_adjacent_flag": "d_k < 16 * ulp(x0)",
+        "locus_caveat": "the frozen x0 is the float64 image of an irrational zero (off by <= 0.5 ulp); at deep rungs that offset IS part of the phenomenon-vs-substrate question and the arbiter referees it via the refined true locus"
+      },
+      "quantity": "sigma1 exponent estimate per rung: log-log slope of |f(x)| vs d over the 5-point window (the blowup_exponent_v4_audit linearization-order observable, per-rung localized)",
+      "claim_regime": "the deep half of the ladder, k >= 7 (the V3 K_G claim concerned behaviour AT the singular approach; shallow rungs are the sanity band)",
+      "tol": {"type": "absolute_on_exponent", "value": 0.01, "rationale": "V4-native baseline sigma1 = 1.000 +/- 0.000 at audit depth; typed-vs-raw estimator method gap <= 0.0033 (ledger retest B); 0.01 sits above method gap, below any structural deviation of interest"},
+      "instruments": {
+        "I1": "function values via the blowup audit's route-A evaluators (j0/airy_ai: scipy.special in float64; zeta: complex(mpmath.zeta(.)) truncated to float64 - PRE-REGISTERED CAVEAT: no pure-float64 zeta library exists, so I1-zeta is 'mpmath-computed, float64-truncated' and its substrate floor differs from a native float64 path); slope via numpy.polyfit on log10|f| vs log10 d",
+        "I2": "STRUCTURALLY REFUSED: zeta/besselj0/airy are not in the V3 compiler allowlist (probe 2026-06-10, environment_pins). Recorded per rung as refusal_kind = 'oracle_inexpressible'. This is a first-class result: V3's boundary on this family is expressibility, not noise.",
+        "I3": "typed_finite_difference + typed_log_log_slope on the same window (existing primitives, audit-grade); directional_alpha_probe companion record per rung; G2 jet of the local operand recorded where defined (ruling 1)",
+        "arbiter": "function values at >= 50 dps at the exact binary window points; sigma1_true from the same window geometry; plus the refined-locus sigma1 as an annotation"
+      },
+      "control_family_F2c": {
+        "status": "APPROVED by Will (audit 2026-06-10) - part of the frozen sweep",
+        "definition": "sin at x0 = float64(pi), float64(2*pi), float64(3*pi): the V3-EXPRESSIBLE simple-zero family ('sin(x) - y' compiles), so the I2 depth floor is measured on at least one zero family",
+        "operating_points": "exact float64 values (math.pi, 2*math.pi, 3*math.pi as stored doubles)",
+        "argument_reduction_offset": "per rung, record offset = x0_float64 - x0_true (arbiter-refined pi multiples) and the effective distance to the TRUE zero d_true = d_eff + offset, as data - mirroring F1's Sterbenz-exact effective delta (Will's ruling 2)",
+        "instruments_delta_from_F2": "identical to F2 except I2 runs: lv3_branch_classify per rung on 'sin(x) - y' approaching the zero, V3 trust/validity recorded verbatim; I1 uses math.sin (a true float64 path - no I1 caveat here)"
+      }
+    },
+
+    "F3_kerr_extremal": {
+      "serves": "A9 (stretch)",
+      "status": "DEFERRED - NOT in the frozen sweep. Requires Will to confirm the Kerr constraint-surface form (brief, Fixtures section). Attempted only if F1+F2 complete inside budget, and only via a manifest v2 re-freeze (new hash pin, new audit).",
+      "guardrail": "HR22: the 'floating-point grid natively simulates Kerr' framing is retired physics-overreach; F3 phrasing stays substrate-attributional throughout."
+    }
+  },
+
+  "commands": {
+    "red_slice": "PYTHONPATH=src python -m pytest tests/test_quiet_manifest_frozen.py tests/test_quiet_oracle_smoke.py -x",
+    "green_slice": "PYTHONPATH=src python -m pytest tests/test_quiet_determinism.py tests/test_quiet_shallow_agreement.py tests/test_quiet_oracle_smoke.py tests/test_quiet_manifest_frozen.py",
+    "full_suite": "PYTHONPATH=src python -m pytest",
+    "source_audit": "PYTHONPATH=src python -m pytest tests/test_source_purity.py && grep-based raw-float side-channel audit of the I3 path (no bare float arithmetic on quantity values outside typed primitives; exact command pinned in the Phase 2 wiring addendum)"
+  },
+
+  "gap_stop_protocol": "Design Principle 4: if any fixture exposes a missing primitive, STOP the stage, file the gap against Build_Docs/PROBE_READINESS.md (and the ledger), and end the stage. No primitive is invented mid-campaign. Pre-identified risk surface: F1(b) full-spectrum typed eigensolve (mitigated by the decoupled z-block reading; see fixtures).",
+
+  "honesty_clauses": [
+    "If V4 shows no depth advantage, that result goes on the scoreboard verbatim (Design Principle 1).",
+    "Instruments that report confidently-wrong values past their floor are a first-class result (metric confidently_wrong).",
+    "F2's I2 structural refusal is reported as V3's expressibility boundary, not hidden or substituted.",
+    "The F1(b) minus-2-eigenvalue interpretation (z-block) is declared here BEFORE any sweep; if Will's audit corrects it, the manifest is re-frozen.",
+    "E-derived attribution at deep rungs is suspect by pre-registration (ruling 3); the arbiter ground classification is authoritative there."
+  ]
+}

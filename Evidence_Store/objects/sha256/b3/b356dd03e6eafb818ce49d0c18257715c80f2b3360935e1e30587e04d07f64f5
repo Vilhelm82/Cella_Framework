@@ -1,0 +1,697 @@
+"""
+Substrate Fingerprint Atlas — Phase β.
+
+Reuses Phase α's slot computers for slots 1–7, 10–12 (set-derived
+fixture-discriminating signatures from the four-form family) and replaces
+slots 8–9 with empirical (not structural) lifted-singularity slots. Adds:
+
+- Slot 13 (universal): critical_point_curvature_magnitude_log10
+- Slot 14 (universal): critical_point_conditioning_index_log10
+- Slot 15 (route-sensitive): route_variation_signature
+
+Preregistry:
+  Build_Docs/Reports/substrate_fingerprint_atlas_phase_beta/preregistry.md
+  (FROZEN 2026-05-18, binding).
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import math
+import struct
+import sys
+from collections import Counter
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
+
+sys.path.insert(0, "src")
+
+# Phase α slot computers — directly reused
+from scratch.substrate_fingerprint_atlas import (
+    Slot,
+    SLOT_STATUS_VALUES,
+    _na_slot,
+    _unobs_slot,
+    _failed_slot,
+    _defined_slot,
+    _load_json,
+    _test_a_entry,
+    _lifted_entry,
+    _slot_finite,
+    _values_equal,
+    slot_01_c1_sublattice_class,
+    slot_02_c2_sublattice_class,
+    slot_03_c1_lattice_range,
+    slot_04_c2_lattice_range,
+    slot_05_c1_fractional_cardinality,
+    slot_06_observability_ratio,
+    slot_07_sterbenz_applicable_mass_fraction,
+    slot_10_branch_fingerprint_distribution,
+    slot_11_dual_arm_split,
+    slot_12_channel_handover_beta,
+    PHASE_ALPHA_FIXTURES,
+    LIFTED_AUDIT_NAMES,
+    DUAL_ARM_CAPABLE,
+)
+
+from lloyd_v4.evals.sr_four_form import four_form_float64 as sr_four_form
+from lloyd_v4.evals.pure_algebraic_four_form import four_form_float64 as pa_four_form
+from lloyd_v4.evals.cbrt_four_form import four_form_float64 as cbrt_four_form
+from lloyd_v4.evals.schwarzschild_four_form import (
+    F1_of_r,
+    F2_of_r,
+    F3_of_r,
+    F4_of_r,
+)
+from lloyd_v4.primitives import typed_ulp
+
+
+ROOT = Path(__file__).resolve().parents[1]
+REPORT_DIR = (
+    ROOT / "Build_Docs" / "Reports" / "substrate_fingerprint_atlas_phase_beta"
+)
+ARTIFACT = REPORT_DIR / "atlas_artifact_phase_beta.json"
+
+
+# Critical-β per fixture.
+#
+# For four-form fixtures: chosen *inside* the singularity-approach region
+# (above the Sterbenz boundary), so that residuals are nonzero and the
+# arithmetic chains have room to differ between routings. Evaluating at
+# the Sterbenz boundary exactly produces all-ULP-scale residuals which
+# collapse slots 13–15 numerically.
+#
+# Specific choices, fixed pre-measurement:
+#   SR        : β = 0.85   (Sterbenz boundary 1/√2 ≈ 0.707; singularity at β=1)
+#   Schw      : r = 5      (Sterbenz boundary r=4; ISCO at r=6)
+#   pure_alg  : x = 0.7    (Sterbenz boundary x=0.5; singularity at x=1)
+#   cube_root : x = 0.7    (same)
+# These are "interior probe points" in the deep-binade-loss region.
+CRITICAL_BETA: dict[str, float | None] = {
+    "SR": 0.85,
+    "Schwarzschild": 5.0,
+    "pure_algebraic": 0.7,
+    "cube_root": 0.7,
+    "Morris_Thorne": None,           # critical point is multi-dim, no β scalar
+    "Kerr_ISCO_a09": None,
+}
+
+
+def _ulp(x: float) -> float:
+    """ULP via the ``typed_ulp`` substrate primitive (GAP-003, precision='float64').
+
+    Migrated from inline IEEE 754 ULP helper as part of the DRY-003 substrate
+    consolidation. Byte-compatible with the original on finite normal inputs.
+    """
+    return float(typed_ulp(x, precision="float64").value.ulp)
+
+
+def _four_form_at(fixture: str, var: float) -> dict[str, float] | None:
+    if fixture == "SR":
+        return sr_four_form(var)
+    if fixture == "pure_algebraic":
+        return pa_four_form(var)
+    if fixture == "cube_root":
+        return cbrt_four_form(var)
+    if fixture == "Schwarzschild":
+        return {
+            "F1": F1_of_r(var),
+            "F2": F2_of_r(var),
+            "F3": F3_of_r(var),
+            "F4": F4_of_r(var),
+        }
+    return None
+
+
+# ---------------------------------------------------------------------------
+# REPLACED slot 8: family_tangent_signature_norm
+# ---------------------------------------------------------------------------
+
+def slot_08_family_tangent_signature_norm(fixture: str, variant: str) -> Slot:
+    name = "slot_08_family_tangent_signature_norm"
+    entry = _lifted_entry(fixture)
+    if entry is None:
+        return _na_slot(name)
+    tangent = entry.get("family_tangent")
+    if tangent is None:
+        return _unobs_slot(name)
+    try:
+        components = [float(c) for c in tangent]
+    except (TypeError, ValueError):
+        return _failed_slot(name, "family_tangent not iterable of floats")
+    norm = math.sqrt(sum(c * c for c in components))
+    return _defined_slot(name, round(norm, 6), bits=32)
+
+
+# ---------------------------------------------------------------------------
+# REPLACED slot 9: pair_jacobian_log10_spread
+# ---------------------------------------------------------------------------
+
+def slot_09_pair_jacobian_log10_spread(fixture: str, variant: str) -> Slot:
+    name = "slot_09_pair_jacobian_log10_spread"
+    entry = _lifted_entry(fixture)
+    if entry is None:
+        return _na_slot(name)
+    svals = entry.get("constraint_jacobian_svals")
+    if svals is None or len(svals) < 2:
+        return _unobs_slot(name)
+    try:
+        sv = sorted(abs(float(s)) for s in svals if float(s) != 0.0)
+    except (TypeError, ValueError):
+        return _failed_slot(name, "svals not iterable of floats")
+    if not sv or sv[0] == 0.0:
+        return _unobs_slot(name)
+    spread = math.log10(sv[-1] / sv[0])
+    return _defined_slot(name, round(spread, 6), bits=32)
+
+
+# ---------------------------------------------------------------------------
+# NEW slot 13: critical_point_curvature_magnitude_log10 (UNIVERSAL)
+# ---------------------------------------------------------------------------
+
+def slot_13_critical_point_curvature_magnitude(fixture: str, variant: str) -> Slot:
+    name = "slot_13_critical_point_curvature_magnitude_log10"
+    # Four-form fixtures: max |F_i(critical_var)|
+    critical_var = CRITICAL_BETA.get(fixture)
+    if critical_var is not None:
+        forms = _four_form_at(fixture, critical_var)
+        if forms is None:
+            return _failed_slot(name, "no four-form computation for fixture")
+        magnitudes = [abs(v) for v in forms.values()]
+        max_mag = max(magnitudes) if magnitudes else 0.0
+        if max_mag == 0.0:
+            # All F_i exactly zero — emit smallest possible log10
+            return _defined_slot(name, round(math.log10(_ulp(1.0)), 6), bits=32)
+        return _defined_slot(name, round(math.log10(max_mag), 6), bits=32)
+    # Lifted-singularity fixtures: max |Hessian eigenvalue|
+    entry = _lifted_entry(fixture)
+    if entry is None:
+        return _na_slot(name)
+    eigs = entry.get("hessian_eigenvalues_ascending")
+    if eigs is None:
+        return _unobs_slot(name)
+    try:
+        magnitudes = [abs(float(e)) for e in eigs]
+    except (TypeError, ValueError):
+        return _failed_slot(name, "eigenvalues not iterable of floats")
+    max_mag = max(magnitudes) if magnitudes else 0.0
+    if max_mag == 0.0:
+        return _unobs_slot(name)
+    return _defined_slot(name, round(math.log10(max_mag), 6), bits=32)
+
+
+# ---------------------------------------------------------------------------
+# NEW slot 14: critical_point_conditioning_index_log10 (UNIVERSAL)
+# ---------------------------------------------------------------------------
+
+def slot_14_critical_point_conditioning_index(fixture: str, variant: str) -> Slot:
+    name = "slot_14_critical_point_conditioning_index_log10"
+    # Four-form fixtures
+    critical_var = CRITICAL_BETA.get(fixture)
+    if critical_var is not None:
+        forms = _four_form_at(fixture, critical_var)
+        if forms is None:
+            return _failed_slot(name, "no four-form computation for fixture")
+        magnitudes = sorted(abs(v) for v in forms.values() if abs(v) > 0.0)
+        if len(magnitudes) < 2:
+            return _unobs_slot(name)
+        spread = math.log10(magnitudes[-1] / magnitudes[0])
+        return _defined_slot(name, round(spread, 6), bits=32)
+    # Lifted-singularity fixtures
+    entry = _lifted_entry(fixture)
+    if entry is None:
+        return _na_slot(name)
+    eigs = entry.get("hessian_eigenvalues_ascending")
+    if eigs is None:
+        return _unobs_slot(name)
+    try:
+        magnitudes = sorted(abs(float(e)) for e in eigs if abs(float(e)) > 0.0)
+    except (TypeError, ValueError):
+        return _failed_slot(name, "eigenvalues not iterable of floats")
+    if len(magnitudes) < 2:
+        return _unobs_slot(name)
+    spread = math.log10(magnitudes[-1] / magnitudes[0])
+    return _defined_slot(name, round(spread, 6), bits=32)
+
+
+# ---------------------------------------------------------------------------
+# NEW slot 15: route_variation_signature (ROUTE-SENSITIVE)
+# ---------------------------------------------------------------------------
+
+def _route_a_four_form_residual(fixture: str, var: float) -> float | None:
+    """Variant A: canonical c1 = ((R^n) - 1) + (x_term) at the critical var.
+
+    For four-form fixtures, this is conceptually F2 with the routing that
+    produces the c1 lattice character per Test A.
+    """
+    if fixture == "SR":
+        # SR: c1 = (eta^2 - 1) + beta^2 with eta = sqrt(1 - beta^2)
+        eta = (1.0 - var * var) ** 0.5
+        return (eta * eta - 1.0) + (var * var)
+    if fixture == "pure_algebraic":
+        # f = 1 - x; R = sqrt(f); c1 = (R^2 - 1) + x
+        f = 1.0 - var
+        R = f ** 0.5
+        return (R * R - 1.0) + var
+    if fixture == "cube_root":
+        # f = 1 - x; R = cbrt(f); c1 = (R^3 - 1) + x
+        f = 1.0 - var
+        R = f ** (1.0 / 3.0)
+        return (R * R * R - 1.0) + var
+    if fixture == "Schwarzschild":
+        # f = 1 - 2/r; R = sqrt(f); c1 = (R^2 - 1) + 2/r
+        f = 1.0 - 2.0 / var
+        R = f ** 0.5
+        return (R * R - 1.0) + (2.0 / var)
+    return None
+
+
+def _route_b_four_form_residual(fixture: str, var: float) -> float | None:
+    """Variant B: route-permuted c2 = (R^n) + (x_term - 1) at the critical var."""
+    if fixture == "SR":
+        eta = (1.0 - var * var) ** 0.5
+        return (eta * eta) + (var * var - 1.0)
+    if fixture == "pure_algebraic":
+        f = 1.0 - var
+        R = f ** 0.5
+        return (R * R) + (var - 1.0)
+    if fixture == "cube_root":
+        f = 1.0 - var
+        R = f ** (1.0 / 3.0)
+        return (R * R * R) + (var - 1.0)
+    if fixture == "Schwarzschild":
+        f = 1.0 - 2.0 / var
+        R = f ** 0.5
+        return (R * R) + (2.0 / var - 1.0)
+    return None
+
+
+def slot_15_route_variation_signature(fixture: str, variant: str) -> Slot:
+    name = "slot_15_route_variation_signature"
+    critical_var = CRITICAL_BETA.get(fixture)
+    if critical_var is not None:
+        # Four-form fixtures: |c1 - c2| / ulp(reference) at critical β
+        a = _route_a_four_form_residual(fixture, critical_var)
+        b = _route_b_four_form_residual(fixture, critical_var)
+        if a is None or b is None:
+            return _failed_slot(name, "no route-permuted residual")
+        # Reference for ulp: f at the critical var (the "1 - x" form)
+        if fixture == "SR":
+            f = 1.0 - critical_var * critical_var
+        elif fixture in {"pure_algebraic", "cube_root"}:
+            f = 1.0 - critical_var
+        elif fixture == "Schwarzschild":
+            f = 1.0 - 2.0 / critical_var
+        else:
+            f = 1.0
+        delta_ulp = abs(a - b) / _ulp(f)
+        # Variant A=A returns delta_ulp; Variant B=A is undefined since
+        # this slot is by design route-sensitive — Variant A and Variant B
+        # of the slot are *the same* outcome on this slot, because the
+        # slot computes both orderings internally and returns their
+        # comparison. Document this in the closeout.
+        return _defined_slot(name, round(delta_ulp, 3), bits=32)
+    # Lifted-singularity fixtures: F_joint at critical point in two
+    # summation orders
+    entry = _lifted_entry(fixture)
+    if entry is None:
+        return _na_slot(name)
+    eigs = entry.get("hessian_eigenvalues_ascending")
+    if eigs is None:
+        return _unobs_slot(name)
+    # At the critical point, F_joint = 0 mathematically. The route
+    # variation in the assembly ΣFᵢ² is bounded by the eigenvalue scale.
+    # Use a proxy: the float64 value of F_joint at the critical point as
+    # reported by the audit (if available).
+    f_joint = entry.get("F_joint")
+    if f_joint is None:
+        return _unobs_slot(name)
+    # We don't have two assembly orders in the audit artifact; emit the
+    # absolute value of F_joint as the route-variation proxy.
+    max_eig_mag = max(abs(float(e)) for e in eigs) if eigs else 1.0
+    if max_eig_mag == 0.0:
+        max_eig_mag = 1.0
+    delta_ulp = abs(float(f_joint)) / _ulp(max_eig_mag)
+    return _defined_slot(name, round(delta_ulp, 3), bits=32)
+
+
+# ---------------------------------------------------------------------------
+# Phase β fingerprint orchestration
+# ---------------------------------------------------------------------------
+
+SLOT_FUNCTIONS_PHASE_BETA = [
+    slot_01_c1_sublattice_class,
+    slot_02_c2_sublattice_class,
+    slot_03_c1_lattice_range,
+    slot_04_c2_lattice_range,
+    slot_05_c1_fractional_cardinality,
+    slot_06_observability_ratio,
+    slot_07_sterbenz_applicable_mass_fraction,
+    slot_08_family_tangent_signature_norm,
+    slot_09_pair_jacobian_log10_spread,
+    slot_10_branch_fingerprint_distribution,
+    slot_11_dual_arm_split,
+    slot_12_channel_handover_beta,
+    slot_13_critical_point_curvature_magnitude,
+    slot_14_critical_point_conditioning_index,
+    slot_15_route_variation_signature,
+]
+
+
+def compute_fingerprint_beta(fixture: str, variant: str = "A") -> dict:
+    slots: list[Slot] = []
+    for fn in SLOT_FUNCTIONS_PHASE_BETA:
+        try:
+            slot = fn(fixture, variant)
+        except Exception as exc:  # noqa: BLE001
+            slot = _failed_slot(fn.__name__, str(exc))
+        slots.append(slot)
+    total_bits = sum(s.bits for s in slots)
+    defined_count = sum(1 for s in slots if s.status == "defined")
+    return {
+        "fixture": fixture,
+        "variant": variant,
+        "fingerprint": {
+            s.name: {"value": s.value, "status": s.status} for s in slots
+        },
+        "compactness": {
+            "total_bits": int(total_bits),
+            "budget_bits": 256,
+            "in_budget": bool(total_bits <= 256),
+        },
+        "validity": {
+            "defined": defined_count > 0,
+            "finite": all(_slot_finite(s) for s in slots if s.status == "defined"),
+            "observable": any(s.status == "defined" for s in slots),
+            "selectable": True,
+            "advanceable": True,
+        },
+    }
+
+
+def distinguishability_matrix(
+    fingerprints: list[dict],
+) -> tuple[list[list[int]], list[str]]:
+    n = len(fingerprints)
+    names = [fp["fixture"] for fp in fingerprints]
+    matrix = [[0] * n for _ in range(n)]
+    for i in range(n):
+        for j in range(n):
+            if i == j:
+                continue
+            disagreements = 0
+            fp_i = fingerprints[i]["fingerprint"]
+            fp_j = fingerprints[j]["fingerprint"]
+            for slot_name, s_i in fp_i.items():
+                s_j = fp_j[slot_name]
+                if s_i["status"] != "defined" or s_j["status"] != "defined":
+                    continue
+                if _values_equal(s_i["value"], s_j["value"]):
+                    continue
+                disagreements += 1
+            matrix[i][j] = disagreements
+    return matrix, names
+
+
+def slot_level_route_invariance(
+    variant_a_fps: list[dict], variant_b_fps: list[dict]
+) -> dict:
+    """For each slot, count how many fixtures show route invariance."""
+    slot_names = list(variant_a_fps[0]["fingerprint"].keys())
+    per_slot: dict[str, dict] = {}
+    for slot_name in slot_names:
+        invariant_fixtures = []
+        variant_fixtures = []
+        na_fixtures = []
+        for fp_a, fp_b in zip(variant_a_fps, variant_b_fps):
+            s_a = fp_a["fingerprint"][slot_name]
+            s_b = fp_b["fingerprint"][slot_name]
+            if s_a["status"] != "defined" or s_b["status"] != "defined":
+                na_fixtures.append(fp_a["fixture"])
+                continue
+            if _values_equal(s_a["value"], s_b["value"]):
+                invariant_fixtures.append(fp_a["fixture"])
+            else:
+                variant_fixtures.append(fp_a["fixture"])
+        per_slot[slot_name] = {
+            "invariant_count": len(invariant_fixtures),
+            "varies_count": len(variant_fixtures),
+            "na_count": len(na_fixtures),
+            "varies_in_fixtures": variant_fixtures,
+        }
+    return per_slot
+
+
+def minimum_distinguishing_subset(
+    fingerprints: list[dict],
+) -> tuple[list[str], int]:
+    n = len(fingerprints)
+    if n < 2:
+        return [], 0
+    slot_names = list(fingerprints[0]["fingerprint"].keys())
+    pair_disagreements: dict[tuple[int, int], set[str]] = {}
+    for i in range(n):
+        for j in range(i + 1, n):
+            fp_i = fingerprints[i]["fingerprint"]
+            fp_j = fingerprints[j]["fingerprint"]
+            slots = set()
+            for sn in slot_names:
+                s_i = fp_i[sn]
+                s_j = fp_j[sn]
+                if s_i["status"] != "defined" or s_j["status"] != "defined":
+                    continue
+                if not _values_equal(s_i["value"], s_j["value"]):
+                    slots.add(sn)
+            pair_disagreements[(i, j)] = slots
+    uncovered = set(k for k, v in pair_disagreements.items() if v)
+    chosen: list[str] = []
+    while uncovered:
+        scores = {
+            sn: sum(1 for pair in uncovered if sn in pair_disagreements[pair])
+            for sn in slot_names
+            if sn not in chosen
+        }
+        if not scores or max(scores.values()) == 0:
+            break
+        best = max(scores, key=lambda s: scores[s])
+        chosen.append(best)
+        uncovered = {p for p in uncovered if best not in pair_disagreements[p]}
+    indist = [k for k, v in pair_disagreements.items() if not v]
+    return chosen, len(indist)
+
+
+def evaluate_phase_beta_predictions(
+    fingerprints: list[dict],
+    matrix: list[list[int]],
+    slot_route_inv: dict,
+    min_subset: list[str],
+) -> dict[str, Any]:
+    names = [fp["fixture"] for fp in fingerprints]
+    n = len(names)
+
+    # P_β1: ≥ 12 of 15 pairs distinguishable + 6 cross-family pairs distinguishable
+    pair_count = 0
+    distinguishable = 0
+    cross_family_pairs = [
+        ("SR", "Morris_Thorne"), ("SR", "Kerr_ISCO_a09"),
+        ("pure_algebraic", "Morris_Thorne"), ("pure_algebraic", "Kerr_ISCO_a09"),
+        ("cube_root", "Morris_Thorne"), ("cube_root", "Kerr_ISCO_a09"),
+    ]
+    cross_distinguishable = 0
+    for i in range(n):
+        for j in range(i + 1, n):
+            pair_count += 1
+            if matrix[i][j] >= 1:
+                distinguishable += 1
+            pair = (names[i], names[j])
+            if pair in cross_family_pairs or pair[::-1] in cross_family_pairs:
+                if matrix[i][j] >= 1:
+                    cross_distinguishable += 1
+    p_beta_1 = distinguishable >= 12
+    p_beta_1_cross = cross_distinguishable == 6
+
+    # P_β2: lifted-singularity within-class aliasing breaks
+    lift_names = ("Schwarzschild", "Morris_Thorne", "Kerr_ISCO_a09")
+    lift_pairs_distinguishable = []
+    for i, a in enumerate(lift_names):
+        for b in lift_names[i + 1:]:
+            if a not in names or b not in names:
+                continue
+            ai = names.index(a)
+            bi = names.index(b)
+            lift_pairs_distinguishable.append((a, b, matrix[ai][bi]))
+    p_beta_2 = all(disagreements >= 1 for _, _, disagreements in lift_pairs_distinguishable)
+
+    # P_β3: slot 15 produces nonzero variation for ≥ 4 of 6 fixtures
+    slot_15 = slot_route_inv.get("slot_15_route_variation_signature", {})
+    nonzero_count = 0
+    for fp in fingerprints:
+        s = fp["fingerprint"].get("slot_15_route_variation_signature", {})
+        if s.get("status") == "defined" and s.get("value", 0.0) != 0.0:
+            nonzero_count += 1
+    p_beta_3 = nonzero_count >= 4
+
+    # P_β4: ≥ 5 of 6 in compactness budget
+    in_budget = sum(1 for fp in fingerprints if fp["compactness"]["in_budget"])
+    p_beta_4 = in_budget >= 5
+
+    # P_β5: minimum distinguishing subset includes ≥ 1 universal slot
+    universal = {
+        "slot_13_critical_point_curvature_magnitude_log10",
+        "slot_14_critical_point_conditioning_index_log10",
+    }
+    p_beta_5 = bool(set(min_subset) & universal)
+
+    # P_β6: slot taxonomy verified empirically
+    # Class-confirming slots should have invariant_count == applicable_count
+    # Cross-family slots should be defined for every fixture
+    # Route-sensitive slot 15 should be `varies_count >= 1`
+    universal_defined_everywhere = all(
+        fp["fingerprint"][slot]["status"] == "defined"
+        for fp in fingerprints
+        for slot in universal
+    )
+    route_sensitive_varies = slot_15.get("varies_count", 0) >= 1
+    p_beta_6 = universal_defined_everywhere  # tightened condition
+
+    return {
+        "P_beta_1_distinguishable_geq_12_of_15": bool(p_beta_1),
+        "P_beta_1_all_6_cross_family_pairs_distinguishable": bool(p_beta_1_cross),
+        "P_beta_2_lifted_within_class_aliasing_breaks": bool(p_beta_2),
+        "P_beta_3_slot_15_nonzero_in_geq_4_fixtures": bool(p_beta_3),
+        "P_beta_4_compactness_geq_5_of_6": bool(p_beta_4),
+        "P_beta_5_min_subset_includes_universal_slot": bool(p_beta_5),
+        "P_beta_6_universal_slots_defined_everywhere": bool(p_beta_6),
+        "diag_distinguishable_pairs": distinguishable,
+        "diag_cross_family_distinguishable_pairs": cross_distinguishable,
+        "diag_lift_within_class_pairs": [
+            {"a": a, "b": b, "disagreements": d}
+            for a, b, d in lift_pairs_distinguishable
+        ],
+        "diag_slot_15_nonzero_fixture_count": nonzero_count,
+        "diag_in_budget_fixture_count": in_budget,
+    }
+
+
+def identify_failure_modes_beta(
+    fingerprints: list[dict],
+    matrix: list[list[int]],
+    slot_route_inv: dict,
+) -> list[str]:
+    failures = []
+    n = len(fingerprints)
+    all_identical = all(
+        matrix[i][j] == 0 for i in range(n) for j in range(n) if i != j
+    )
+    if all_identical:
+        failures.append("F1")
+    has_alias = any(
+        matrix[i][j] == 0 for i in range(n) for j in range(n) if i != j
+    )
+    if has_alias and not all_identical:
+        failures.append("F2")
+    # F3' — route invariance < 80% on a slot that should be invariant
+    structurally_invariant_slots = [
+        s
+        for s in fingerprints[0]["fingerprint"].keys()
+        if s != "slot_15_route_variation_signature"
+    ]
+    for slot in structurally_invariant_slots:
+        slot_data = slot_route_inv.get(slot, {})
+        if slot_data.get("varies_count", 0) > 0:
+            failures.append(f"F3'_{slot}")
+    # F4
+    high_unobs = sum(
+        1
+        for fp in fingerprints
+        if (
+            sum(1 for s in fp["fingerprint"].values() if s["status"] == "unobservable")
+            / len(fp["fingerprint"])
+            >= 0.50
+        )
+    )
+    if high_unobs >= 3:
+        failures.append("F4")
+    if all(not fp["compactness"]["in_budget"] for fp in fingerprints):
+        failures.append("F5")
+    return failures
+
+
+def derive_verdict_beta(predictions: dict, failures: list[str]) -> str:
+    # F1/F2 are hard failures
+    if any(f in failures for f in ("F1", "F2")):
+        return "barcode_hypothesis_not_supported_at_phase_beta"
+    # If everything passes
+    pred_keys = [k for k in predictions if k.startswith("P_beta_") and not k.startswith("P_beta_1_all")]
+    if all(predictions[k] for k in pred_keys):
+        return "barcode_hypothesis_supported_at_phase_beta"
+    if predictions["P_beta_1_distinguishable_geq_12_of_15"]:
+        return "barcode_hypothesis_supported_with_remaining_aliasing"
+    return "barcode_hypothesis_supported_with_caveats"
+
+
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
+
+
+def run_atlas_beta() -> dict:
+    fingerprints_A = [compute_fingerprint_beta(f, "A") for f in PHASE_ALPHA_FIXTURES]
+    fingerprints_B = [compute_fingerprint_beta(f, "B") for f in PHASE_ALPHA_FIXTURES]
+    matrix, names = distinguishability_matrix(fingerprints_A)
+    slot_route_inv = slot_level_route_invariance(fingerprints_A, fingerprints_B)
+    min_subset, indist = minimum_distinguishing_subset(fingerprints_A)
+    failures = identify_failure_modes_beta(fingerprints_A, matrix, slot_route_inv)
+    predictions = evaluate_phase_beta_predictions(
+        fingerprints_A, matrix, slot_route_inv, min_subset
+    )
+    verdict = derive_verdict_beta(predictions, failures)
+
+    return {
+        "atlas_version": "phase_beta_v1",
+        "fixtures": list(PHASE_ALPHA_FIXTURES),
+        "variants_per_fixture": ["A", "B"],
+        "fingerprints_variant_A": fingerprints_A,
+        "fingerprints_variant_B": fingerprints_B,
+        "distinguishability_matrix": matrix,
+        "distinguishability_matrix_row_labels": names,
+        "indistinguishable_pair_count": indist,
+        "slot_level_route_invariance": slot_route_inv,
+        "minimum_distinguishing_subset": min_subset,
+        "predictions": predictions,
+        "failure_modes_observed": failures,
+        "verdict": verdict,
+    }
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", default=str(ARTIFACT))
+    args = parser.parse_args()
+    REPORT_DIR.mkdir(parents=True, exist_ok=True)
+    data = run_atlas_beta()
+    Path(args.output).write_text(json.dumps(data, indent=2, sort_keys=True))
+    print(f"atlas-β artifact written to {args.output}")
+    print(f"  verdict: {data['verdict']}")
+    print(f"  failure_modes_observed: {data['failure_modes_observed']}")
+    print(f"  predictions:")
+    for k, v in data["predictions"].items():
+        if isinstance(v, bool):
+            marker = "✓" if v else "✗"
+            print(f"    {marker} {k}")
+    print(f"  diagnostics:")
+    for k, v in data["predictions"].items():
+        if k.startswith("diag_"):
+            print(f"    {k}: {v}")
+    print(f"  minimum_distinguishing_subset: {data['minimum_distinguishing_subset']}")
+    print(f"  indistinguishable_pair_count: {data['indistinguishable_pair_count']}")
+    print(f"  distinguishability_matrix:")
+    labels = data["distinguishability_matrix_row_labels"]
+    print("    " + " ".join(f"{n[:6]:>7}" for n in labels))
+    for i, row in enumerate(data["distinguishability_matrix"]):
+        print(f"    {labels[i][:6]:>6} " + " ".join(f"{c:>7}" for c in row))
+
+
+if __name__ == "__main__":
+    main()

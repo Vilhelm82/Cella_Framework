@@ -1,0 +1,37 @@
+"""Independent arithmetic check of the four Sterbenz boundary locations (Claim 1).
+
+Sterbenz lemma: for floats a,b of the same sign with a/2 <= b <= 2a, the
+subtraction a-b is computed EXACTLY (no rounding). The first subtraction in the
+F2 chain is (R^n) - 1.  With a=1, b=R^n, exactness holds when 1/2 <= R^n <= 2,
+i.e. R^n >= 1/2 (R^n<=2 is automatic since R^n<=1 here).  So the Sterbenz-exact
+half-space is R^n >= 1/2. Verify each fixture's stated boundary.
+"""
+import math
+
+def report(name, var_at_boundary, Rn_func, predicate_label, expected_boundary):
+    # Rn at the claimed boundary value should equal exactly 1/2
+    Rn = Rn_func(var_at_boundary)
+    ok = math.isclose(Rn, 0.5, rel_tol=0, abs_tol=1e-12)
+    print(f"{name:<16} boundary {expected_boundary:<22} -> R^n({var_at_boundary}) = {Rn!r}  ==1/2? {ok}")
+    return ok
+
+print("Sterbenz-exact condition for (R^n - 1): R^n >= 1/2\n")
+
+allok = []
+# Schwarzschild: R^2 = 1 - 2/r ; R^2 >= 1/2  <=>  1 - 2/r >= 1/2  <=>  2/r <= 1/2  <=> r >= 4
+allok.append(report("schwarzschild", 4.0, lambda r: 1.0 - 2.0/r, "r>=4", "R^2=1-2/r, r=4"))
+# SR: R^2 = 1 - beta^2 ; >=1/2 <=> beta^2 <= 1/2 <=> beta <= 1/sqrt2
+allok.append(report("sr", 1.0/math.sqrt(2.0), lambda b: 1.0 - b*b, "beta<=1/sqrt2", "R^2=1-b^2, b=1/sqrt2"))
+# pure_algebraic: R^2 = 1 - x ; >=1/2 <=> x <= 1/2
+allok.append(report("pure_algebraic", 0.5, lambda x: 1.0 - x, "x<=0.5", "R^2=1-x, x=0.5"))
+# cbrt: R^3 = 1 - x ; >=1/2 <=> x <= 1/2
+allok.append(report("cbrt", 0.5, lambda x: 1.0 - x, "x<=0.5", "R^3=1-x, x=0.5"))
+
+print()
+# Symbolic solve for each: at what var does R^n cross exactly 1/2?
+print("Inverse solve (R^n = 1/2):")
+print(f"  schwarzschild: 1 - 2/r = 1/2 -> r = {2.0/(1-0.5)}   (claim r=4): {2.0/0.5==4.0}")
+print(f"  sr: 1 - b^2 = 1/2 -> b = sqrt(1/2) = {math.sqrt(0.5)!r}   (claim 1/sqrt2={1.0/math.sqrt(2)!r})")
+print(f"  pure_algebraic: 1 - x = 1/2 -> x = {1-0.5}   (claim 0.5)")
+print(f"  cbrt: 1 - x = 1/2 -> x = {1-0.5}   (claim 0.5; note R^3=1-x not R=cbrt(1-x) cube)")
+print(f"\nALL FOUR BOUNDARIES CORRECT: {all(allok)}")

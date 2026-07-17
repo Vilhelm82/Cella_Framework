@@ -1,0 +1,354 @@
+# Task 050 — Drift Inventory
+
+**Audit date:** 2026-05-26
+
+Catalogues every DRY violation, misplaced module, composition violation, hidden guard rail, Axiom 11 violation, and Axiom 10 violation discovered during the audit.
+
+**Severity legend:**
+- **B** — blocks transplantation (must be addressed before substrate construction can proceed in the affected area)
+- **Q** — quality concern (substrate-construction methodology violation, but does not block specific transplants)
+- **I** — informational (declared deviation, documentation gap, or stylistic drift; not a methodology breach)
+
+Each entry references the file/line evidence and the axiom or principle implicated.
+
+---
+
+## A. DRY violations
+
+### DRY-001 — Four-form battery per-fixture duplication
+
+| field | value |
+|---|---|
+| **sites** | `src/lloyd_v4/evals/cbrt_four_form.py:five_form_*` and `four_form_float32/64`; `src/lloyd_v4/evals/sr_four_form.py:four_form_float32/64`; `src/lloyd_v4/evals/pure_algebraic_four_form.py:four_form_float32/64/decimal_oracle`; `src/lloyd_v4/evals/pure_algebraic_quartic_four_form.py:four_form_float32/64`; `src/lloyd_v4/evals/schwarzschild_four_form.py` (workhorse); `src/lloyd_v4/evals/schwarzschild_cbrt_four_form.py:four_form_float32/64`; `src/lloyd_v4/evals/schwarzschild_quartic_four_form.py:four_form_float32/64`; `src/lloyd_v4/evals/multi_precision_four_form.py:four_form_float32/64/decimal_oracle` |
+| **evidence** | 7 fixture-specific copies of `four_form_floatXX`. Algebraic identity is the same `F1 / F2 / F3 / F4` battery; only the radical and the fixture's `f(coordinate)` differ. |
+| **axiom_or_principle** | Generalisation-first (`SUBSTRATE_CONSTRUCTION.md §5`); also Mode 1 (`§5.1`) at the primitive level. |
+| **verified_agreement** | Empirically converge under the four-form battery's existing cross-fixture audits (Task 029c, Theorem 4 in paper); not bit-identical (operate on different fixtures). |
+| **severity** | **Q** |
+| **remediation** | See `parent_primitive_gaps.md` GAP-006. |
+
+### DRY-002 — BACL spectrum / grain helpers
+
+| field | value |
+|---|---|
+| **sites** | `scratch/bacl_composite_probe_v2.py:26 bacl_grain`; `scratch/bacl_boundary_and_composite_probe.py:42 bacl_grain`; `src/lloyd_v4/evals/substrate_invariant_search_phase_b.py:124 _bacl_grain`; `src/lloyd_v4/evals/substrate_invariant_search_phase_c.py:68 _bacl_spectrum_for`; `src/lloyd_v4/evals/substrate_invariant_search_phase_d.py:138 _bacl_spectrum + :153 _bacl_spectrum_float32`; `src/lloyd_v4/evals/substrate_invariant_search_phase_f.py:73 _bacl_spectrum_for`; `src/lloyd_v4/evals/substrate_invariant_search_phase_g.py:141 _bacl_spectrum` |
+| **evidence** | At least 7 reimplementations of "compute the BACL grain / spectrum over a chain of intermediates," with phase-specific variants (per-format, per-precision). |
+| **axiom_or_principle** | Generalisation-first; Mode 1 at primitive level (truly the same operation). |
+| **verified_agreement** | NOT explicitly cross-verified for bit-identity. The BACL theorem itself is universally proven, but these implementations have not been audited against each other. **Flag as DRY-violation candidate awaiting verification.** |
+| **severity** | **Q** |
+| **remediation** | See GAP-004. |
+
+### DRY-003 — ULP helpers
+
+| field | value |
+|---|---|
+| **sites** | `scratch/bacl_subnormal_audit.py:51 unified_ulp`; `scratch/bacl_invariant_audit.py:44 ulp_f64 + :50 ulp_f32`; `scratch/c2_theorem_scope_gate.py:42 _ulp_f64`; `scratch/c2_lattice_binade_danger_zone.py:37 _ulp_f64`; `scratch/c2_lattice_sharpness_audit.py:33 _ulp_f64 + :40 _ulp_f32`; `scratch/c2_lattice_substrate_derivation.py:33 _ulp`; `scratch/mcg_phase_1_g1_route_divergence.py:75 ulp_float64`; `scratch/mcg_gate_3_killswitch.py:51 ulp_float64`; `scratch/blowup_exponent_v4_audit.py:196 _ulp`; `scratch/substrate_fingerprint_atlas_phase_beta.py:100 _ulp`; `src/lloyd_v4/evals/scale_invariant_signature.py:96 _ulp_of_float32`; `src/lloyd_v4/evals/multi_precision_four_form.py:ulp_of_double` (referenced via cross_fixture_refinery_audit / observability_rule_audit_F4 imports). |
+| **evidence** | ≥10 implementations of `ulp(x, format)`. Most use the same `struct.unpack`/`pack` + bit-manipulation pattern. |
+| **axiom_or_principle** | Generalisation-first; **prerequisite per `SUBSTRATE_CONSTRUCTION.md §9`**. |
+| **verified_agreement** | Most appear functionally equivalent for normal-range floats; subnormal handling differs across `unified_ulp`, `_ulp`, and `ulp_f64`. **Not bit-verified across the set.** Subnormal divergence is a real risk. |
+| **severity** | **B** — blocks the conditioning-primitive transplant (GAP-003). |
+| **remediation** | See GAP-003. |
+
+### DRY-004 — K_G computation per-fixture
+
+| field | value |
+|---|---|
+| **sites** | `src/lloyd_v4/evals/substrate_invariant_search_phase_e.py:189 _kg_two_variable + :210 _kg_three_variable + :239 _kg_sr + :256 _kg_schw + :273 _kg_pa + :290 _kg_sphere + :349 _compute_kg_at`; `src/lloyd_v4/evals/substrate_invariant_search_phase_g.py:169 _kg_parabola + :186 _kg_schwarzschild`; `src/lloyd_v4/evals/substrate_invariant_search_phase_h.py:300 _sr_constant_kg_slice + :341 _cross_fixture_at_matched_kg`; `src/lloyd_v4/evals/mcg_geometry_first_geometry.py:446 _principal_curvature_1d`; `scratch/lifted_singularity_v4_audit.py:86 hessian_fd`. |
+| **evidence** | Multiple `_kg_*` helpers across phases, with overlapping responsibilities but no canonical home. Phase E is the most complete (six fixture-specific helpers + a dispatcher); phases F/G/H reimplement subsets. |
+| **axiom_or_principle** | Generalisation-first; Mode 1 underneath (gradient + hessian + bordered-determinant is the atomic operation; the per-fixture surface is just the input). |
+| **verified_agreement** | Phase E explicitly documents `lv3_called: False` and `substrate_derivation_status: not_substrate_derived_path_b_fallback`. Cross-phase agreement is NOT explicitly audited. |
+| **severity** | **Q** (downstream of substrate-invariant-search Gate 2 closure) |
+| **remediation** | See GAP-005. |
+
+### DRY-005 — `_log2(a)` defensive helpers
+
+| field | value |
+|---|---|
+| **sites** | `src/lloyd_v4/evals/mcg_geometry_first_v3_bridge.py:105 _log2`; `src/lloyd_v4/evals/mcg_geometry_first_cdef1_calibration.py:81 _log2`; `src/lloyd_v4/evals/mcg_geometry_first_e_reducibility.py:94 _log2`; `src/lloyd_v4/evals/mcg_geometry_first_solve_for_scout.py:86 _log2`; `src/lloyd_v4/evals/substrate_invariant_search_phase_b.py:132 _log2`; `src/lloyd_v4/evals/substrate_invariant_search_phase_d.py:193, :209, :226, :232 (multiple local _log2 closures)`; `src/lloyd_v4/evals/substrate_invariant_search_phase_f.py:112 _log2`; `src/lloyd_v4/evals/substrate_invariant_search_phase_g.py:213 _log2`. |
+| **evidence** | The same "if a > 0 and finite, return `math.log2(a)`, else None" helper pattern is duplicated 8+ times. |
+| **axiom_or_principle** | Generalisation-first. |
+| **verified_agreement** | All eight are functionally identical to within the `None`-vs-NaN return choice. |
+| **severity** | **I** (eval-layer cosmetic; will fold into GAP-002 typed_log2). |
+| **remediation** | Subset of GAP-002. |
+
+### DRY-006 — Binade exponent helpers
+
+| field | value |
+|---|---|
+| **sites** | `scratch/run_foldreadback_probe0.py:55 binade_exp`; `scratch/run_foldreadback_probe0_v5.py:47 binade_exp`; `scratch/run_foldreadback_probe0_v6.py:47 binade_exp`; `scratch/run_foldreadback_probe0_v7.py:47 binade_exp`; `scratch/observability_rule_audit_F4.py:32 binade_exp_float`; `scratch/bacl_invariant_audit.py:36 floor_binade`. |
+| **evidence** | 6 sites computing `floor(log2(|x|))` as the binade index. |
+| **axiom_or_principle** | Generalisation-first. |
+| **verified_agreement** | Mostly identical; `floor_binade` and `binade_exp` accept floats, return ints. |
+| **severity** | **Q** |
+| **remediation** | Fold into GAP-003 (ulp/binade primitive bundle). |
+
+### DRY-007 — Sterbenz boundary observation
+
+| field | value |
+|---|---|
+| **sites** | `src/lloyd_v4/evals/schwarzschild_quartic_campaign.py:140 sterbenz_boundary_observation`; `src/lloyd_v4/evals/schwarzschild_cbrt_campaign.py:134 sterbenz_boundary_observation`; `src/lloyd_v4/evals/pure_algebraic_quartic_campaign.py:134 sterbenz_boundary_observation`; `src/lloyd_v4/evals/cross_fixture_comparison.py:178 _sterbenz_boundary_comparison + :207 _sterbenz_row`. |
+| **evidence** | 4 sites computing the per-fixture Sterbenz boundary observation. |
+| **axiom_or_principle** | Generalisation-first. |
+| **verified_agreement** | Per-fixture boundary values agree with `V4_GLOSSARY.md §10` (Schw r=4.0, SR β=1/√2, PA x=0.5, cbrt x=0.5). |
+| **severity** | **Q** |
+| **remediation** | See GAP-007. |
+
+### DRY-008 — Sterbenz class / cancellation classifier
+
+| field | value |
+|---|---|
+| **sites** | `scratch/bacl_composite_probe_v2.py:13 sterbenz_class`; `scratch/bacl_boundary_and_composite_probe.py:29 sterbenz_class`; `scratch/symbolic_analyzer/classifier.py:CancellationPattern` (enum + classifier). |
+| **evidence** | 3 sites classifying Sterbenz vs catastrophic cancellation, two near-duplicates in scratch BACL prototypes. |
+| **axiom_or_principle** | Generalisation-first. |
+| **verified_agreement** | Not bit-verified; symbolic_analyzer's `classifier.py` is the most principled (sample-evaluation-based, not AST shape matching). |
+| **severity** | **Q** |
+| **remediation** | Fold into GAP-010 (symbolic cancellation analyzer transplant). |
+
+### DRY-009 — `evals/__init__.py` duplicated docstring
+
+| field | value |
+|---|---|
+| **sites** | `src/lloyd_v4/evals/__init__.py` (two literally identical `"""Deterministic V4 discovery campaigns."""` lines). |
+| **evidence** | grep shows two consecutive docstring lines; the file is otherwise empty. |
+| **axiom_or_principle** | n/a — typo / merge artefact. |
+| **severity** | **I** |
+| **remediation** | Out of audit scope — recorded for casual cleanup. |
+
+---
+
+## B. Misplaced modules
+
+### MIS-001 — Hardened dual-arm probe lives in `scratch/`
+
+| field | value |
+|---|---|
+| **location** | `scratch/hardened_dual_arm_probe.py` |
+| **evidence** | Header docstring asserts "V4's production gap-resolution instrument." `LIVE_CAMPAIGNS_LEDGER.md` `hardened-dual-arm-probe` marks the campaign `V1 complete and operative`; test suite exercises it. |
+| **axiom_or_principle** | Lifecycle / staging discipline. Not a §3 transplantation methodology violation in itself, but the substrate-construction doctrine says production instruments belong in `src/lloyd_v4/`. |
+| **severity** | **B** — blocks the L3 lifting; capability-spread reasoning makes this the natural first transplant (see `transplantation_readiness.md` candidate 1). |
+| **remediation** | See GAP-011. |
+
+### MIS-002 — Borderline placement of `branch/slope_flow.py`
+
+| field | value |
+|---|---|
+| **location** | `src/lloyd_v4/branch/slope_flow.py` |
+| **evidence** | LAYER_MANIFEST puts it in `branch` (L2). Internal logic at lines 244-245 uses `math.log(right.control) - math.log(left.control)` then differences — this is closer to an atomic typed-log-difference primitive than a "branch fingerprint composition." |
+| **axiom_or_principle** | Mode 2 — log-difference primitive and slope-flow comparison are arguably two operations under one filename. |
+| **severity** | **I** (does not block work; LAYER_MANIFEST's parent-layer list is honest for the current contract) |
+| **remediation** | Re-evaluate after GAP-002 (typed_log primitive) lands. May naturally split into L1 `typed_log_difference` + L2 `slope_flow_comparison`. |
+
+---
+
+## C. Composition violations
+
+**None at substrate layer detected.** Substrate L0 modules import nothing from L1+. L1 primitives import L0 only (with the sibling-composition exception noted in GAP-009). L2 modules import L0+L1+L2-siblings per the parents declared in LAYER_MANIFEST. L3 `solver` imports L0+L1+L2 per LAYER_MANIFEST.
+
+**Eval-layer composition violations: NONE.** All eval modules either import from `lloyd_v4.core.serialization`, `lloyd_v4.primitives.*`, or sibling evals. No eval module imports anything from `scratch/` or violates the L3 → {L0,L1,L2} dependency direction.
+
+**Scratch composition flags:**
+
+| location | flag | severity |
+|---|---|---|
+| `scratch/substrate_fingerprint_atlas.py:28-30` | scratch imports `lloyd_v4.evals.*` — by definition not a violation (scratch is unintegrated, may consume anything) but signals these atlas scripts have integration debt. | **I** |
+| `scratch/cross_fixture_refinery_audit.py:24-27` | same pattern: scratch consumes eval modules. | **I** |
+| `scratch/observability_rule_audit_F4.py:23-24` | scratch consumes eval modules. | **I** |
+
+---
+
+## D. Hidden guard rails (Axiom 3)
+
+### GUARD-001 — `scratch/blowup_exponent_v4_audit.py:100-101` local `epsilon`
+
+| field | value |
+|---|---|
+| **location** | `scratch/blowup_exponent_v4_audit.py:100-101` |
+| **evidence** | `epsilon = 1e-14` declared inside a function and immediately used in `sp.airy(x - epsilon) + sp.airy(x + epsilon) * epsilon`. |
+| **axiom** | Axiom 3 (hidden guard rails). |
+| **assessment** | This is a local finite-difference step parameter inside a numerical-derivative-of-Airy approximation. It is *local-scope* not module-level. Substrate would require it to be a *declared* parameter with provenance. However: (a) this is in scratch (not committed substrate); (b) the audit is closed; (c) `Reports/blowup_exponent_v4_audit/` documents the methodology. |
+| **severity** | **Q** — scratch-level, but indicative of how named tolerances slip in. |
+| **remediation** | If the audit is ever re-run as part of a transplant, lift `epsilon` to a named parameter with declared provenance. |
+
+### GUARD-002 — `_SPHERE_SANITY_TOL`, `_FLOAT64_ULP_TOL`, `_FLOAT32_ULP_TOL`
+
+| field | value |
+|---|---|
+| **location** | `src/lloyd_v4/evals/substrate_invariant_search_phase_e.py:392` (`tolerance_float64_ulp`); `_phase_d.py:614` (`tolerances` dict); etc. |
+| **evidence** | Module-level constants prefixed `_` (Python convention for module-internal), used to assess sphere sanity check and ULP equality. |
+| **axiom** | Axiom 3. |
+| **assessment** | These are **declared module-level parameters** (named, typed, scoped). They appear in JSON output (`"tolerances": {...}` block). **Compliant** per Axiom 3 — "declared measurement resolution, explicit policy parameters." |
+| **severity** | **I** (declared, not hidden) |
+| **remediation** | None needed — these are good examples of how to *do* tolerances in eval code. |
+
+### GUARD-003 — `CANCELLATION_GRADE_THRESHOLD`, `DROP_RATE_THRESHOLD`, `K_BOUNDARY`, `K_DRIFT`, `ALPHA_NUMERIC_FLOOR`, `DEFAULT_ALPHA_MATERIALITY`, `MIN_*`
+
+| field | value |
+|---|---|
+| **location** | `src/lloyd_v4/primitives/sweep_signature_probe.py:22-24`; `src/lloyd_v4/primitives/directional_alpha_probe.py:K_BOUNDARY = 2.0`, `K_DRIFT = 2.0`, `ALPHA_NUMERIC_FLOOR = 1e-9`, `DEFAULT_ALPHA_MATERIALITY = 0.05`. |
+| **evidence** | `Final[float]` / `Final[int]` typed module-level constants, exposed via `__init__.py`. `METROLOGY_PRINCIPLES.md §AlphaProbe Boundary And Window Reliability` documents the rationale and calibration. |
+| **axiom** | Axiom 3. |
+| **assessment** | **Compliant.** These are declared policy parameters with documented provenance (`METROLOGY_PRINCIPLES.md`). They are also reachable via `LAYER_MANIFEST.md` "Errors and utilities". |
+| **severity** | **I** (declared, documented) |
+| **remediation** | None needed. |
+
+### GUARD-004 — `CEILING_THRESHOLD`, `KG_MATCH_TOLERANCE`, `FORMAT_SAFE_E_THRESHOLD_LOG2`, `PHENOMENON_SIGNAL_RATIO_THRESHOLD`, `SUBSTRATE_SIGNAL_RATIO_THRESHOLD`
+
+| field | value |
+|---|---|
+| **location** | `src/lloyd_v4/evals/substrate_invariant_search_phase_i.py:51 CEILING_THRESHOLD = 0.5`; `phase_g.py:64 FORMAT_SAFE_E_THRESHOLD_LOG2 = math.log2(1.0e-4)`; `phase_f.py:60-... PHENOMENON_SIGNAL_RATIO_THRESHOLD + SUBSTRATE_SIGNAL_RATIO_THRESHOLD`. |
+| **evidence** | All module-level constants in eval scripts. Comments declare pre-registration: e.g., `# Pre-registered attribution rule thresholds (carry from Phase F)`. |
+| **axiom** | Axiom 3. |
+| **assessment** | **Compliant.** Pre-registered + module-scoped + documented. These are textbook declared parameters. Pre-registration is the substrate's analog to the SUBSTRATE_CONSTRUCTION methodology's "honest declaration." |
+| **severity** | **I** |
+| **remediation** | None needed. |
+
+### GUARD-005 — `constant_match_tolerance: float = 1e-3`
+
+| field | value |
+|---|---|
+| **location** | `scratch/symbolic_analyzer/classifier.py:81 constant_match_tolerance: float = 1e-3` (function default arg). |
+| **evidence** | Function parameter with default value, used to decide whether two constants match within tolerance. |
+| **axiom** | Axiom 3. |
+| **assessment** | **Compliant.** Function-API declared parameter; caller may override; default value documented in docstring. Scratch context — not substrate. |
+| **severity** | **I** |
+| **remediation** | None needed; would carry through naturally if symbolic_analyzer is transplanted (GAP-010). |
+
+### GUARD-006 — `_precision_floor` table
+
+| field | value |
+|---|---|
+| **location** | `src/lloyd_v4/primitives/typed_finite_difference.py:214` (lookup); table likely in same file. |
+| **evidence** | `METROLOGY_PRINCIPLES.md §precision_floor as finite-precision observability evidence` documents the full derivation: `2u = 2^-52` is the cancellation threshold of subtraction in IEEE 754 doubles. |
+| **axiom** | Axiom 3. |
+| **assessment** | **Compliant — exemplary.** This is the canonical V4 example of "declared finite-precision observability evidence per Axiom 3 — status-only: it determines stratum classification, never computed values." `METROLOGY_PRINCIPLES.md` explicitly enumerates `precision_floor IS NOT: a denominator floor, a rescue constant, a clamp, a hidden tolerance`. |
+| **severity** | **I** |
+| **remediation** | None — this is the pattern other tolerances should follow. |
+
+### Summary of guard-rail ripgrep matches
+
+Per task spec acceptance criterion 8 ("Hidden-guard-rail matches from the ripgrep audits are either justified as declared parameters or flagged as Axiom 3 violations — no match is left uncategorised"):
+
+- All `tolerance`, `threshold`, `epsilon`-named module constants in `src/` → **declared parameters** (GUARD-002 through GUARD-006).
+- One scratch `epsilon` (GUARD-001) → flagged as scratch-only Axiom 3 concern.
+- All other matches in the ripgrep set are docstring text, function parameter names, or column headers in JSON output — not implementations of guard rails. Categorised as documentation references.
+- `safe_divide`, `safe_denominator`, `denominator_floor`, `small_denominator`, `disc_floor`, `discriminant_floor`, `safe_sqrt`, `sqrt_guard` — **no matches in `src/`**. Substrate is clean. This was the case in Task 001/002/003 source audits and remains true.
+
+---
+
+## E. Axiom 11 violations (named mathematical content as substrate)
+
+### AX11-001 — `math.sqrt` in L1 primitives
+
+| field | value |
+|---|---|
+| **location** | `src/lloyd_v4/primitives/stratified_quadratic_roots.py:248 root_span = math.sqrt(discriminant)`; `src/lloyd_v4/primitives/typed_log_log_slope.py:177 standard_error = math.sqrt(ss_res / (n - 2) / sxx)`; `src/lloyd_v4/primitives/directional_alpha_probe.py:502 propagated_error = math.sqrt(...)`, `:569 standard_error = math.sqrt(max(0.0, ...))`. |
+| **evidence** | 4 substrate-layer sites import `math` and call `math.sqrt(...)`. |
+| **axiom** | Axiom 11 — "Imports of named mathematical content (`math`, ...)". |
+| **task_spec_caveat** | The spec (line 117) says: "`math` stdlib for basic arithmetic is currently permitted; flag uses that import *named mathematical content* specifically." `math.sqrt` IS named-math content (a named transcendental-class function). |
+| **severity** | **B** (per Axiom 11 strict form) / **Q** (per current concession). The substrate-construction methodology §7.1 names this as exactly the Axiom 11′ refinement criterion #1 — must close before Axiom 11 retires to historical. |
+| **remediation** | GAP-001. |
+
+### AX11-002 — `math.log` in L1 / L2 substrate
+
+| field | value |
+|---|---|
+| **location** | `src/lloyd_v4/primitives/typed_log_log_slope.py:104-105 math.log(f_value), math.log(abs(transfer))`; `src/lloyd_v4/primitives/directional_alpha_probe.py:540-541`; `src/lloyd_v4/primitives/sweep_signature_probe.py:302, 313`; `src/lloyd_v4/branch/slope_flow.py:244-245`. |
+| **evidence** | 5 substrate sites use `math.log` (natural log) directly. |
+| **axiom** | Axiom 11. |
+| **severity** | **B** / **Q** (same as AX11-001). |
+| **remediation** | GAP-002. |
+
+### AX11-003 — `mpmath` imports in scratch
+
+| field | value |
+|---|---|
+| **location** | `scratch/cbrt_alpha_probe_mpmath_oracle.py:23`; `scratch/mcg_phase_1_g1_route_divergence.py:56`; `scratch/mcg_gate_3_killswitch.py:30`; `scratch/conjecture_c_definition_grounded.py:35`; `scratch/conjecture_c_proof_audit.py:23`; `scratch/blowup_exponent_v4_audit.py:21`; `scratch/negative_alpha_baseline_probe.py:43 from mpmath import …`; `scratch/radical_family_alpha_probe.py:29 from mpmath import …`. |
+| **evidence** | 8 scratch files import `mpmath`. |
+| **axiom** | Axiom 11 (explicit forbidden import: `mpmath`). |
+| **assessment** | Scratch code is by definition not-yet-integrated. Using `mpmath` as a *cross-validation oracle* (as the explicit naming of `cbrt_alpha_probe_mpmath_oracle.py` implies) is consistent with V4's epistemic stance — `mpmath` is being used to *check* a V4 result, not as substrate. However, any transplant of these scratch files MUST strip the `mpmath` import per the §3 transplantation methodology. |
+| **severity** | **I** (scratch) — **B** if any of these is staged for transplant without `mpmath` removal. |
+| **remediation** | Document the `mpmath` removal as a precondition in each scratch file's transplantation plan. None are recommended for immediate transplant (per `transplantation_readiness.md`). |
+
+### AX11-004 — `math.pi`, `math.e`, `math.cos`, `math.sin` in evals/
+
+| field | value |
+|---|---|
+| **location** | `src/lloyd_v4/evals/substrate_invariant_search_phase_i.py:287-289 math.pi, math.cos(theta), math.sin(theta)`; `src/lloyd_v4/evals/zero_offset_transcendental_q_source_search.py:89, 173, 184, 370, 479, 482 math.pow(math.e, math.log(...))`. |
+| **evidence** | L3 eval scripts use named-mathematical content directly. |
+| **axiom** | Axiom 11. |
+| **assessment** | L3 is **task-spec-permitted concession** for `math` basic arithmetic. `math.pi/cos/sin` are stronger uses but `phase_i.py` uses them to enumerate angles on a probe sphere (parameter generation, not substrate-result claim). `zero_offset_transcendental_q_source_search.py` *explicitly self-documents* the deviation in its own docstring (lines 476-486 of that file) — the route depends on the rounded `math.e` constant and is **declared not to be in the same evidence class as the algebraic q-routes**. This is the substrate-construction methodology working as designed: an honest declared deviation, not a hidden one. |
+| **severity** | **I** (declared concession) |
+| **remediation** | None needed at L3. If any of these eval modules are ever lifted to L2 or below, the named-math uses must transplant per the methodology. |
+
+### AX11-005 — `math.log2`, `math.cos`, `math.sqrt` in eval scripts
+
+| field | value |
+|---|---|
+| **location** | Many sites in `src/lloyd_v4/evals/substrate_invariant_search_phase_*.py`, `mcg_geometry_first_*.py`. |
+| **evidence** | Eval-layer use of `math.log2`, `math.sqrt`, `math.log`. |
+| **axiom** | Axiom 11. |
+| **assessment** | **L3 concession permitted.** All uses are in fixture computation, gradient/hessian assembly, log-log slope plotting, etc. |
+| **severity** | **I** |
+| **remediation** | Will fold naturally into GAP-001 / GAP-002 typed primitives if the relevant eval script is ever lifted. |
+
+### AX11-006 — Hardcoded mathematical constants
+
+Per Axiom 11 (forbidden: `pi`, `tau`, `e`, `gamma`, `zeta`, `golden_ratio`):
+
+- `math.pi` — used in `evals/substrate_invariant_search_phase_i.py:287`. **L3 concession.**
+- `math.e` — used in `evals/zero_offset_transcendental_q_source_search.py:89, 173, 184, ...`. **L3 concession with self-declared documentation.**
+- `math.tau`, `math.gamma` (function or constant), `math.zeta` — **not found** in any `src/lloyd_v4/` module.
+- `golden_ratio` — **not found.**
+
+No hardcoded numeric constants resembling π, e, or other named constants found in substrate (L0/L1/L2/L3) modules. **Substrate is clean of named hardcoded constants** modulo the L3 declared concessions above.
+
+---
+
+## F. Axiom 10 violations (V3 runtime references)
+
+### AX10-001 — Search results
+
+| field | value |
+|---|---|
+| **search** | `rg "lloyd_v3\|from\s+lloyd_v3\|import\s+lloyd_v3\|lv3_" src/lloyd_v4 scratch -n` |
+| **matches in src/lloyd_v4/** | **TWO** matches, both in `src/lloyd_v4/evals/substrate_invariant_search_phase_e.py`: `:19 fixture. We do NOT call ``mcp__lloyd_v3__lv3_diagnose`` to fetch V3's K_G`; `:452 "lv3_called": False`. |
+| **matches in scratch/** | None visible in the run-scratch results. |
+| **assessment** | **Both src matches are explicit non-use declarations.** Line 19 is documentation in a comment block; line 452 is an explicit JSON field declaring `lv3_called: False`. These are Axiom 10 *compliance affirmations*, not violations. |
+| **severity** | **I** (compliance documentation, not violation) |
+| **remediation** | None. |
+
+**`mcp__lloyd_v3__*` / `mcp__lloyd_workbench__*` tools:** per `CLAUDE.md §5`, these MCP tools are AI-workflow-only confirmation oracles, not substrate dependencies. No `mcp__lloyd_v3__*` runtime call appears in any `src/` Python module.
+
+---
+
+## G. Other observations
+
+### OBS-001 — Per-fixture polarity-grid stability scripts
+
+7 polarity grid stability scripts share structure. This is more methodology-uniformity than DRY violation, but is a candidate for refactoring into a single `polarity_grid_stability(fixture, perturbation_grid)` driver.
+
+### OBS-002 — Per-fixture lattice campaign scripts
+
+Same pattern, 7 fixtures × lattice campaigns. Refactor candidate, not violation.
+
+### OBS-003 — `evals/refinery_mvp/` and `evals/sterbenz_audit/` are eval-layer instances of the L3 promotion campaign
+
+Per `LIVE_CAMPAIGNS_LEDGER.md` `layer-3-promotion`, these are "eval-layer instances feeding L3 promotion." They are not violations — they are appropriately staged as L3 consumer evidence.
+
+### OBS-004 — `scratch/run_phase4A.py` and `scratch/phase4A_artifact.json`
+
+Per `CLAUDE.md §10`, these are partially byte-identical Vera duplicates. Separate cleanup decision; not in audit scope.
+
+---
+
+## Cross-cutting summary
+
+| category | severity B count | severity Q count | severity I count |
+|---|---|---|---|
+| DRY violations | 1 (DRY-003 ulp) | 6 | 2 |
+| Misplaced modules | 1 (MIS-001 dual-arm probe) | 0 | 1 |
+| Composition violations | 0 | 0 | 3 (scratch consumer flags) |
+| Hidden guard rails | 0 | 1 (GUARD-001 scratch only) | 5 |
+| Axiom 11 violations | 2 (AX11-001 sqrt, AX11-002 log) | 0 | 4 (concessions, declared) |
+| Axiom 10 violations | 0 | 0 | 1 (compliance docs) |
+
+**B-severity total:** 4 items — all blocking specific transplants (sqrt, log, ulp, dual-arm-probe lift). All are addressed in the `parent_primitive_gaps.md` GAP-001/002/003/011 entries with named remediation plans.

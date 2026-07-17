@@ -1,0 +1,967 @@
+{
+  "allowed_ledger_states": [
+    "anti_candidate",
+    "M_owned",
+    "C_confounded",
+    "grid_artifact_candidate",
+    "normalization_unresolved",
+    "path_separation_unresolved",
+    "unexplained_correlation",
+    "unresolved_candidate",
+    "geometry_candidate",
+    "ready_for_phase3"
+  ],
+  "anti_candidates": [
+    {
+      "evidence_links": [
+        {
+          "label": "Gate 3 kill-switch closeout \u00a77.A",
+          "path": "../mcg_gate_3_killswitch/closeout.md"
+        },
+        {
+          "label": "c2 lattice sharpness Amendment IV (sqrt-specific tightening)",
+          "path": "../c2_lattice_sharpness_audit/closeout.md"
+        }
+      ],
+      "id": "ANTI-1",
+      "rationale": "Empirically confirmed substrate-mandated by Gate 3 (200/200 records collapsed to literal zero after integer-j subtraction; sha256 byte-stable). Structurally captured by c2 lattice theorem in scope; integer-j subtraction exhausts the residue.",
+      "title": "Cancellation-residue magnitude (e.g., c_schw \u2261 round(V_2 + round(x_term \u2212 1)))"
+    },
+    {
+      "evidence_links": [
+        {
+          "label": "Prior residue-first G-1 characterization",
+          "path": "../mcg_discovery/phase_1_g1_characterization.md"
+        }
+      ],
+      "id": "ANTI-2",
+      "rationale": "Empirically confirmed substrate-mandated by the prior residue-first campaign's Phase 1 G-1 characterization: off-lattice residual = 0 in 596/600 records (99.3%). f_A and f_B are both BACL-conformant; their float subtraction is on the integer-ulp lattice of max(|f_A|, |f_B|).",
+      "title": "Route-divergence magnitude |f_A \u2212 f_B|"
+    },
+    {
+      "evidence_links": [
+        {
+          "label": "Phase 0 M-contract \u00a73.1",
+          "path": "phase_0_m_contract.md"
+        }
+      ],
+      "id": "ANTI-3",
+      "rationale": "Magnitude alone cannot survive criterion-2 information-content filter once integer-j is subtracted: either zero (Sterbenz/lattice-on-lattice) or constant (no information). Symbolic structure observables (j, j-sequence, route-pair, transition grammar) escape this; magnitude does not.",
+      "title": "Pure-magnitude residue norm |f_route \u2212 f_exact| after M-subtraction (without symbolic structure)"
+    }
+  ],
+  "authority": "Build_Docs/Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md",
+  "campaign": "mcg_geometry_first_discovery",
+  "campaign_level_tags": [
+    "phase_2_control_clean: same-route controls 1644/1644 same_phase; F3 calibration zero 411/411 exact 0.0",
+    "phase_2_path_separation_zero_offset: Phase 2 used zero_operand_offset uniformly; nonzero-operand-offset characterization not yet attempted",
+    "phase_2b_c_profile_built: first-pass positive C-extractor scaffold built; log_radicand_magnitude is the dominant 1D C-covariate",
+    "phase_2b_c_association_observed_in_all_three_primary_fixtures: F1_to_F2 half_phase fraction is strongly C-bin-associated; the readback signal is characterized as C-associated, not G",
+    "phase_2c_grid_stability_observed: deterministic-jittered alternative grid replayed; F1_to_F2 C-bin association persists (no grid_artifact_candidate classifications)",
+    "phase_2c_C_bin_association_persists_under_deterministic_jitter: small-radicand suppression direction preserved exactly across grids",
+    "phase_2d_solve_for_observed: 4 relation families tested against endpoint_distance_substrate_image E",
+    "phase_2d_threshold_dominant_relation: threshold-on-E with abs_contrast 0.305-0.673 across all three fixtures",
+    "phase_2d_transition_grammar_strong_in_all_fixtures: MI/H_marg ratios 0.34-0.74",
+    "phase_2d_g_curv_1_reclassified_to_C_confounded: signature-driven hypothesis empirically refuted in 1D scope",
+    "phase_2e_log_base_pin_locked_at_2: E := log2(|base_operand|); distinct from Phase 2b log10",
+    "phase_2e_grammar_E_resistant_in_pure_algebraic: 2/5 E-bins exceed permutation null p95; mechanism unnamed",
+    "phase_2e_grammar_E_reducible_in_sr_and_schwarzschild: 0/5 bins above null p95",
+    "phase_2e_schwarzschild_residual_grid_driven: balanced partial 0.142 < null p95 0.239 after horizon downsample",
+    "phase_2e_g_curv_3_promoted_to_unexplained_correlation: discovery-allowed state per handoff \u00a77, NOT geometry_candidate",
+    "phase_2f_e_uniform_grid_designed_to_disturb_canonical_coord_to_base_operand: closed-form linear-in-E spacing for pure_algebraic",
+    "phase_2f_hypothesis_1_supported_e_resistance_was_sampling_artifact: 0/5 bins exceed null under E-uniform grid",
+    "phase_2f_g_curv_3_demoted_back_to_unresolved_candidate: discipline-clean demotion when subsequent evidence refutes earlier elevation",
+    "phase_2g_cdef1_operational_extractor_validated_1d: all 5 conditions met across SR/Schwarzschild/pure_algebraic",
+    "phase_2g_e_threshold_clusters_near_sterbenz_boundary: log2 thresholds [-0.95, -0.75] correspond to |base_operand| ~ 0.5",
+    "phase_2g_1d_campaign_complete: positively-defined C-extractor characterized; no positive G in 1D scope",
+    "phase_2g_v3_bridge_candidate_prepared: ready for the V3 diagnostic bridge artifact as the next deliverable",
+    "phase_2h_v3_bridge_built: descriptive V3 diagnostic bridge artifact landed; E maps to V3 vocabulary; 5 V3-side candidates classified",
+    "phase_2h_v3_bridge_candidate_mapped: C-def-1 / E mapped to K_G, condition_number, hessian_eigenvalue_diagnostics as diagnostic_neighbour; near_umbilic_label and lifted_singularity_null_direction as not_applicable_in_1d",
+    "phase_2h_oracle_crosscheck_available: optional non-primary lv3 oracle cross-check artifact built; overall verdict agreement across all 3 fixtures",
+    "phase_2h_multid_question_surfaced: 4 multi-D questions surfaced for user decision (MD_Q1 Sterbenz persistence; MD_Q2 K_G under multi-D coupling; MD_Q3 G-curv-2 multi-D; MD_Q4 G-route-1 nonzero-offset bridge)"
+  ],
+  "candidates": {
+    "C-def-1": {
+      "description": "Local-derivative magnitude C_FD(fixture, route, x_0) := |f_route(x_0 + \u03b5) \u2212 f_route(x_0)| / |\u03b5|, estimated by finite-difference with \u03b5 chosen in the linear regime. Direct measure of the route's effective derivative; captures algorithmic amplification (cancellation-prone routes show high C_FD beyond mathematical \u03ba). V4-native (float64 sub + div).",
+      "evidence_links": [
+        {
+          "label": "Prior C-def-1 design scaffold",
+          "path": "../mcg_discovery/phase_2_c_extractor_design.md",
+          "use": "design carries forward verbatim from the abandoned residue-first campaign; renumbered C-def-1 here matches"
+        },
+        {
+          "label": "Phase 1 geometry table",
+          "path": "phase_1_geometry_table.json",
+          "use": "the per-row J_value field is a 1D Jacobian readback that approximates the route's effective derivative; recorded as a geometric Jacobian, not as the C-extractor output proper. Phase 2b will turn the J-readback into a calibrated C extractor on rungs 1-5 of the conditioning ladder."
+        },
+        {
+          "label": "Phase 2b C profile",
+          "path": "phase_2b_c_profile.json",
+          "tags": [
+            "phase_2b_c_profile_built"
+          ],
+          "use": "First-pass positive C extractor built. The dominant 1D C-covariate is log_radicand_magnitude; J_condition and hessian_abs are recorded per row. Calibration ladder rungs 1-5 (well-conditioned -> cancellation -> near-singular) and the lv3 oracle cross-check remain pending."
+        },
+        {
+          "label": "Phase 2c grid stability",
+          "path": "phase_2c_grid_stability.json",
+          "tags": [
+            "phase_2c_grid_stability_observed"
+          ],
+          "use": "log_radicand_magnitude binning is grid_stable on pure_algebraic and grid_modestly_unstable on SR + Schwarzschild. The C-axis itself is robust to jitter in the small-radicand bin (T1 |delta| = 0 for SR + Schwarzschild) and modestly grid-sensitive in the large-radicand bin (T3 |delta| ~9pp for SR + Schwarzschild)."
+        },
+        {
+          "label": "Phase 2d solve-for scout",
+          "path": "phase_2d_solve_for_scout.json",
+          "tags": [
+            "phase_2d_solve_for_observed",
+            "phase_2d_operational_extractor_validated",
+            "phase_2d_threshold_relation_supported"
+          ],
+          "use": "Phase 2d formalizes endpoint_distance_substrate_image E = log2(|base_operand|) as the candidate geometric primitive. E is positively-defined, V4-native, grid-stable, cross-fixture-portable. Threshold-on-E fits all three fixtures with abs_contrast 0.305-0.673. The handoff \u00a711 calibration ladder (well-conditioned -> cancellation -> near-singular controlled fixtures) has NOT been run as a separate validation; state stays unresolved_candidate pending that ladder. Operational extractor validated on campaign fixtures."
+        },
+        {
+          "label": "Phase 2e E-reducibility",
+          "path": "phase_2e_e_reducibility.json",
+          "tags": [
+            "phase_2e_evaluated",
+            "phase_2e_schwarzschild_residual_grid_driven",
+            "phase_2e_1d_extractor_sufficient"
+          ],
+          "use": "Phase 2e finds Schwarzschild residual is grid-driven (balanced partial 0.142 < null p95 0.239). This means C-def-1 remains a clean 1D extractor with E as the dominant axis; no need to extend to 2D (E + endpoint_distance) for Schwarzschild. Calibration ladder still pending."
+        },
+        {
+          "label": "Phase 2g C-def-1 calibration ladder closeout",
+          "path": "phase_2g_cdef1_calibration.json",
+          "tags": [
+            "phase_2g_cdef1_operational_extractor_validated_1d",
+            "phase_2g_v3_bridge_candidate_prepared"
+          ],
+          "use": "C-def-1 classification: cdef1_operational_extractor_validated_1d. All five conditions met: (1) E := log2(|base_operand|) computable and stable across all three 1D primary fixtures; (2) E organizes F1_to_F2 phase behavior (per-fixture E-quintile spread > 0.10 in every fixture); (3) same-route controls 100% same_phase (1644/1644); (4) F3 calibration 411/411 exactly 0.0; (5) known grid artifacts accounted for via Phase 2e (Schwarzschild residual grid-driven) and Phase 2f (pure_algebraic apparent grammar sampling artifact). E threshold cluster near Sterbenz boundary at |base_operand| ~ 0.5. C-def-1 stays unresolved_candidate because handoff \u00a77 has no allowed C-extractor state; the operational validation is recorded via this tag."
+        },
+        {
+          "label": "Phase 2h V3 diagnostic bridge artifact",
+          "path": "phase_2h_v3_bridge.json",
+          "tags": [
+            "phase_2h_v3_bridge_built",
+            "phase_2h_v3_bridge_candidate_mapped"
+          ],
+          "use": "C-def-1 / E mapped to V3 diagnostic vocabulary as the campaign's V3 bridge candidate. K_G, condition_number, hessian_eigenvalue_diagnostics classified diagnostic_neighbour (E is substrate-derived endpoint-distance image, not curvature-tensor; co-varies in some regimes, decouples in others). near_umbilic_label and lifted_singularity_null_direction classified not_applicable_in_1d (require multi-D structure). Per-fixture classifications identical across SR / Schwarzschild / pure_algebraic since 1D scope is structurally equivalent. Primary artifact has no V3 runtime dependency."
+        },
+        {
+          "label": "Phase 2h optional lv3 oracle cross-check (non-primary)",
+          "path": "phase_2h_v3_oracle_crosscheck.json",
+          "tags": [
+            "phase_2h_oracle_crosscheck_available"
+          ],
+          "use": "9 lv3_diagnose calls (3 fixtures x 3 E-regime points). All three per-fixture verdicts: agreement. K_G monotonic with E for Schwarzschild and pure_algebraic; constant (decoupled) for SR. Sterbenz-cluster K_G interpolates smoothly between E-neighbours in all three fixtures: V4's Sterbenz discriminator (validated for V4's F1_to_F2 dual-arm phase pipeline) does NOT appear in V3's K_G pipeline. Consistent with diagnostic_neighbour classification. Per CLAUDE.md \u00a74 this is confirmation-oracle use only."
+        }
+      ],
+      "expected_response": "Monotonic on rungs 1\u20135 of the calibration ladder; specifically detects rung-3 cancellation regime as high-C beyond pure-math-\u03ba.",
+      "id": "C-def-1",
+      "iteration_log": [
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Initial entry per Phase 0."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 1 evidence attached: J_value (the finite-difference Jacobian) is recorded for the natural function on every row. This is geometric Jacobian, not the calibrated C extractor yet. C-def-1 graduates only after Phase 2b calibration ladder run."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2b evidence attached (phase_2b_c_profile_built): first-pass C profile built with log_radicand_magnitude as the dominant 1D C-covariate; calibration ladder rungs 1-5 + lv3 oracle still pending. State unchanged."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2c evidence attached (phase_2c_grid_stability_observed): log_radicand_magnitude as a C-axis is grid_stable to grid_modestly_unstable across the three fixtures. State unchanged."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2d evidence attached: E primitive operationalized and validated as threshold-on-E across all three fixtures. Calibration ladder still pending for full graduation. State unchanged."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2e evidence attached: Schwarzschild residual is grid-driven, not a second axis. C-def-1 remains 1D-sufficient. State unchanged (calibration ladder still pending)."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2g evidence attached: cdef1_operational_extractor_validated_1d (all 5 conditions met). State unchanged because handoff \u00a77 has no C-extractor-validated state; the operational validation is recorded as a tag. V3 bridge candidate prepared as the natural next deliverable."
+        },
+        {
+          "date": "2026-05-23",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2h evidence attached (phase_2h_v3_bridge_built, phase_2h_v3_bridge_candidate_mapped): C-def-1 / E mapped to V3 diagnostic vocabulary as the campaign's V3 bridge candidate. K_G, condition_number, hessian_eigenvalue_diagnostics classified diagnosti... State unchanged."
+        },
+        {
+          "date": "2026-05-23",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2h evidence attached (phase_2h_oracle_crosscheck_available): 9 lv3_diagnose calls (3 fixtures x 3 E-regime points). All three per-fixture verdicts: agreement. K_G monotonic with E for Schwarzschild and pure_algebraic; con... State unchanged."
+        }
+      ],
+      "ledger_state": "unresolved_candidate",
+      "observable_family": "conditioning_response",
+      "promotion_blockers": [
+        "no implementation yet (Phase 2b Task D)",
+        "no calibration-ladder characterization yet (handoff \u00a711 calibration ladder rungs 1\u20135)",
+        "lv3 cross-check oracle protocol not yet run",
+        "epsilon-selection heuristic not yet operationalized (stable-region detection)"
+      ],
+      "readback_feature": "C_FD value per (fixture, route, x_0) with epsilon-sweep selection of the stable region.",
+      "title": "Finite-difference conditioning response"
+    },
+    "C-def-2": {
+      "description": "Vector C-component: spectral spread of the Jacobian/Hessian of the constraint at each parameter point. Components include largest eigenvalue, smallest eigenvalue, condition number (\u03ba = \u03c3_max / \u03c3_min), Hessian spectral spread, near-null spectral gap. Tracks classical numerical-analysis conditioning.",
+      "evidence_links": [
+        {
+          "label": "Prior C-def design notes",
+          "path": "../mcg_discovery/phase_2_c_extractor_design.md",
+          "use": "prior C-def-2 was 'multi-precision deviation slope'; the new C-def-2 is the spectral form per handoff \u00a78. The multi-precision form may be reintroduced under a different ledger ID if useful."
+        },
+        {
+          "label": "Phase 1 geometry table",
+          "path": "phase_1_geometry_table.json",
+          "use": "the hessian_eigenvalue_summary field is on every row (1D fixtures: single eigenvalue; multi-D anchors: spectral spread once lifted construction added). Partial scaffolding only; full vector C-profile awaits Phase 2b."
+        },
+        {
+          "label": "Phase 2b C profile",
+          "path": "phase_2b_c_profile.json",
+          "tags": [
+            "phase_2b_c_profile_built"
+          ],
+          "use": "hessian_abs and J_condition are now in the C profile per row. Spectral spread for multi-D anchors still awaits the lifted-construction extension."
+        },
+        {
+          "label": "Phase 2c grid stability",
+          "path": "phase_2c_grid_stability.json",
+          "tags": [
+            "phase_2c_grid_stability_observed"
+          ],
+          "use": "spectral content still 1D on both grids; jitter does not advance this candidate. Awaits multi-D anchors."
+        },
+        {
+          "label": "Phase 2d solve-for scout",
+          "path": "phase_2d_solve_for_scout.json",
+          "tags": [
+            "phase_2d_solve_for_observed",
+            "structurally_rate_limited_in_1d_scope"
+          ],
+          "use": "Phase 2d does not advance: spectral content remains 1D-degenerate."
+        },
+        {
+          "label": "Phase 2e E-reducibility",
+          "path": "phase_2e_e_reducibility.json",
+          "tags": [
+            "phase_2e_no_new_evidence",
+            "structurally_rate_limited_in_1d_scope"
+          ],
+          "use": "1D-degenerate; no advance."
+        }
+      ],
+      "expected_response": "\u03ba and near_null_spectral_gap track conditioning monotonically; Hessian signature components track stratum (and are partially used by G-curv-1 as geometry side).",
+      "id": "C-def-2",
+      "iteration_log": [
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Initial entry per Phase 0; renamed from prior campaign's 'multi-precision deviation slope' to match handoff \u00a78 vocabulary."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 1 evidence attached: hessian_eigenvalue_summary is a per-row scaffold; 1D fixtures emit a single |H| eigenvalue. Multi-D spectral content awaits the lifted-construction extension on geometry_anchor."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2b evidence attached (phase_2b_c_profile_built): hessian_abs + J_condition recorded per row in the C profile. Multi-D spectral content pending lifted construction. State unchanged."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2c evidence attached (phase_2c_grid_stability_observed): spectral content unchanged; awaits multi-D extension. State unchanged."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2d evidence attached: 1D-degenerate; awaits multi-D extension. State unchanged."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2e evidence attached: 1D-degenerate. State unchanged."
+        },
+        {
+          "date": "2026-05-23",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2h evidence attached: Phase 2h is a descriptive bridge artifact; does not change this candidate. State unchanged."
+        }
+      ],
+      "ledger_state": "unresolved_candidate",
+      "observable_family": "spectral_geometry",
+      "promotion_blockers": [
+        "no implementation yet (Phase 2b)",
+        "no calibration-ladder characterization yet",
+        "v4-native derivation requires finite-difference Jacobian/Hessian (V3 lv3 spectral tools available as confirmation oracle only per CLAUDE.md \u00a74)"
+      ],
+      "readback_feature": "Spectral vector per (fixture, x_0): { \u03c3_max, \u03c3_min, \u03ba, hessian_trace, hessian_eigenvalue_summary, near_null_spectral_gap }.",
+      "title": "Jacobian/Hessian spectral response"
+    },
+    "C-def-3": {
+      "description": "Empirical perturbation-amplification slope: for a parameter point x_0, perturb input by \u03b5 over multiple orders of magnitude; record |\u0394output| / |\u0394input| ratio; characterize as a function of \u03b5. Captures non-linear conditioning structure (e.g., where amplification grows or saturates as perturbation crosses a regime boundary).",
+      "evidence_links": [
+        {
+          "label": "Phase 2b C profile",
+          "path": "phase_2b_c_profile.json",
+          "tags": [
+            "phase_2b_c_profile_built"
+          ],
+          "use": "The Phase 1 FD step ladder is geometry-side; the parameter-perturbation amplification ladder that C-def-3 requires remains a separate, unrun deliverable. This Phase 2b pass did not exercise that ladder."
+        },
+        {
+          "label": "Phase 2c grid stability",
+          "path": "phase_2c_grid_stability.json",
+          "tags": [
+            "phase_2c_grid_stability_observed"
+          ],
+          "use": "perturbation-amplification ladder still not exercised; jitter on the coordinate grid is distinct from the parameter-perturbation ladder C-def-3 requires."
+        },
+        {
+          "label": "Phase 2d solve-for scout",
+          "path": "phase_2d_solve_for_scout.json",
+          "tags": [
+            "phase_2d_solve_for_observed",
+            "phase_2d_perturbation_ladder_still_pending"
+          ],
+          "use": "Phase 2d does not exercise the parameter-perturbation ladder; C-def-3 remains pending."
+        },
+        {
+          "label": "Phase 2e E-reducibility",
+          "path": "phase_2e_e_reducibility.json",
+          "tags": [
+            "phase_2e_perturbation_ladder_still_pending"
+          ],
+          "use": "Parameter-perturbation ladder still not exercised."
+        }
+      ],
+      "expected_response": "Linear-regime slope tracks \u03ba; rung-3 cancellation shows amplified slope; rung-4 near-singular shows steep growth and possible threshold.",
+      "id": "C-def-3",
+      "iteration_log": [
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Initial entry per Phase 0; new candidate vs the prior campaign's C-def-3 (operation-tree aggregation), which may be reintroduced under a different ledger ID."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 1 did not address this candidate. The geometry table's step ladder (relative steps 1e-2..1e-5) is a *geometry-side* metrology probe, not the perturbation-amplification ladder C-def-3 requires; that is a Phase 2b deliverable."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2b evidence attached (phase_2b_c_profile_built): the perturbation-amplification ladder is still not exercised; C-def-3 implementation remains pending. State unchanged."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2c evidence attached (phase_2c_grid_stability_observed): perturbation ladder still pending. State unchanged."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2d evidence attached: perturbation ladder still not exercised. State unchanged."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2e evidence attached: perturbation ladder still pending. State unchanged."
+        },
+        {
+          "date": "2026-05-23",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2h evidence attached: Phase 2h is a descriptive bridge artifact; does not change this candidate. State unchanged."
+        }
+      ],
+      "ledger_state": "unresolved_candidate",
+      "observable_family": "conditioning_response",
+      "promotion_blockers": [
+        "no implementation yet (Phase 2b)",
+        "no calibration-ladder characterization yet",
+        "calibration question: what does the ladder look like for a known-conditioned fixture? Should be: linear-regime slope = \u03ba; saturation at \u03b5 \u2192 ulp."
+      ],
+      "readback_feature": "Amplification curve A(\u03b5; fixture, route, x_0), with linear-regime slope, saturation regime, and any threshold transitions.",
+      "title": "Perturbation amplification ladder"
+    },
+    "G-curv-1": {
+      "anti_candidate_check": "Not an anti-candidate at this level: the per-point j is a symbol observable (Phase 0 M-contract \u00a73.2 permits). However, if the per-stratum j-distribution reduces to 'lattice membership only' under C-control (i.e., the stratum predicts a conditioning that predicts j), the candidate degrades to C_confounded.",
+      "description": "Whether the Hessian signature (or rank stratum) of a constraint surface organizes which BACL-admissible lattice state j is selected at points within each stratum. Geometry-side feature: discrete signature class derived from \u2207\u00b2F or local Jacobian rank. Residue-side feature: per-point j or local j-sequence (per route).",
+      "evidence_links": [
+        {
+          "label": "Phase 1 geometry table",
+          "path": "phase_1_geometry_table.json",
+          "use": "hessian_signature uniformly 'negative' across all 411 four_form_primary rows; signature alone cannot stratify j-selection within this pass; |H| magnitude does vary across rows and is a candidate stratifier"
+        },
+        {
+          "label": "Phase 2 readback table (cross-tab)",
+          "path": "phase_2_joined_readback_table.json",
+          "tags": [
+            "phase_2_readback_observed"
+          ],
+          "use": "F1_to_F2 phase class is NOT signature-driven (signature uniformly negative); however the per-stratum half_phase fraction is non-uniform (e.g. Schwarzschild horizon_approach 0%, isco_vicinity 75%). Stratum-vs-phase association is candidate-only and C-confounded until Phase 2b."
+        },
+        {
+          "label": "Phase 2b C profile",
+          "path": "phase_2b_c_profile.json",
+          "tags": [
+            "phase_2b_c_profile_built",
+            "phase_2b_c_association_observed"
+          ],
+          "use": "F1_to_F2 half_phase fraction strongly associated with fixture-local tercile of log10(radicand_magnitude) in all three primary fixtures. C-bin spread > 0.10 in each fixture; T1_small_radicand is the lowest fraction in each. Signature-driven hypothesis (the original G-curv-1 framing) is unsupported in this pass; the readback signal is C-associated. Multi-D spectral C-vector pending for full characterization."
+        },
+        {
+          "label": "Phase 2c grid stability",
+          "path": "phase_2c_grid_stability.json",
+          "tags": [
+            "phase_2c_grid_stability_observed"
+          ],
+          "use": "Under deterministic jitter the Phase 2b C-bin association persists. SR + Schwarzschild classify grid_modestly_unstable (peak T3 magnitude shifts ~9pp); pure_algebraic classifies grid_stable. Small-radicand suppression direction is preserved exactly. C-association is not a grid artifact at this jitter level."
+        },
+        {
+          "label": "Phase 2d solve-for scout",
+          "path": "phase_2d_solve_for_scout.json",
+          "tags": [
+            "phase_2d_solve_for_observed",
+            "phase_2d_reclassified_to_C_confounded"
+          ],
+          "use": "Phase 2d reclassifies G-curv-1 from unresolved_candidate to C_confounded. The signature-driven hypothesis is empirically refuted across P1+P2+P2b+P2c+P2d: Hessian signature is uniformly negative in all 411 four_form_primary rows; the readback variation that exists is fully C-explained (threshold-on-E with abs_contrast 0.305-0.673 across fixtures). Per handoff \u00a77 allowed states, C_confounded is the correct characterization."
+        },
+        {
+          "label": "Phase 2e E-reducibility",
+          "path": "phase_2e_e_reducibility.json",
+          "tags": [
+            "phase_2e_no_new_evidence"
+          ],
+          "use": "Phase 2e does not address G-curv-1 directly; the candidate remains C_confounded from Phase 2d."
+        }
+      ],
+      "geometry_feature": "Hessian signature (indices of positive/negative/zero eigenvalues); rank stratum of the constraint Jacobian.",
+      "id": "G-curv-1",
+      "iteration_log": [
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Initial entry per Phase 0; awaiting Phase 1 geometry table."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 1 evidence attached: hessian_signature uniform across primary fixtures. Promotion still blocked: no joined readback table (Phase 2), no C profile (Phase 2b). State unchanged."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2 evidence attached (phase_2_readback_observed): per-stratum F1_to_F2 half_phase fraction is non-uniform across geometry strata. Signature uniformly negative remains; magnitude-stratification + Phase 2b C-extraction remain the path to characterization."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2b evidence attached (phase_2b_c_profile_built, phase_2b_c_association_observed): F1_to_F2 half_phase fraction shows strong C-bin association with log_radicand_magnitude in all three fixtures. Signature-based G hypothesis remains unsupported; the candidate is currently characterized as C-associated. State unchanged."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2c evidence attached (phase_2c_grid_stability_observed): the C-bin association persists under deterministic jitter; no fixture classifies as grid_artifact_candidate. State unchanged."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "C_confounded",
+          "note": "Phase 2d evidence attached and STATE CHANGED from unresolved_candidate to C_confounded. The original signature-driven mechanism is empirically refuted in 1D scope; threshold-on-E captures the variation cleanly with no signature dependence."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "C_confounded",
+          "note": "Phase 2e evidence attached: no new evidence on G-curv-1; state remains C_confounded."
+        },
+        {
+          "date": "2026-05-23",
+          "ledger_state": "C_confounded",
+          "note": "Phase 2h evidence attached: Phase 2h is a descriptive bridge artifact; does not change this candidate. State unchanged."
+        }
+      ],
+      "ledger_state": "C_confounded",
+      "normalization_provenance": null,
+      "observable_family": "curvature_stratum",
+      "path_separation_class": "separation_not_applicable",
+      "promotion_blockers": [
+        "no geometry table built yet (Phase 1 deliverable)",
+        "no C profile built yet (Phase 2b deliverable; Hessian eigenvalue spread is a C-covariate that must be excluded)",
+        "no normalization provenance fixed (Phase 2; sibling observables J_final / J_step pending)",
+        "named mechanism only partial: states 'geometry stratum organizes selection' but lacks counterfactual + calibration stratum",
+        "path/operand separation telemetry not applicable (single-route observable), but route-context id must be recorded"
+      ],
+      "readback_feature": "j (lattice index of the route's residue against oracle) or per-stratum j-distribution.",
+      "title": "Hessian/signature stratum vs j-selection"
+    },
+    "G-curv-2": {
+      "anti_candidate_check": "Not anti-candidate. Route-pair joint symbol is a symbol observable (\u00a73.2). Confound risk: curvature ratio often co-varies with conditioning; without Phase 2b C-extractor, cannot separate C and G.",
+      "description": "Whether the principal-curvature ratio of the constraint surface organizes the route-pair phase symbol (j_A, j_B) for two algebraically-equivalent routes evaluated on the same fixture/point. Geometry-side feature: ratio of largest to smallest principal curvature (or proxy). Residue-side feature: route-pair joint symbol modulo route-symmetry.",
+      "evidence_links": [
+        {
+          "label": "Prior route-divergence work (residue-first campaign)",
+          "path": "../mcg_discovery/phase_1_g1_characterization.md",
+          "use": "provenance only; lacked path/operand separation telemetry per handoff \u00a71.4"
+        },
+        {
+          "label": "Phase 1 geometry table",
+          "path": "phase_1_geometry_table.json",
+          "use": "principal_curvature_ratio = null for every 1D row in this pass \u2014 observable not measurable until multi-D lifted construction is added to the geometry_anchor class"
+        },
+        {
+          "label": "Phase 2 readback table",
+          "path": "phase_2_joined_readback_table.json",
+          "tags": [
+            "phase_2_readback_observed"
+          ],
+          "use": "route-pair phase observable (F1_to_F2 etc.) now exists per row; principal_curvature_ratio side of the relation remains null (1D); the candidate cannot graduate until multi-D anchors gain F1/F2/F3/F4 readbacks AND principal_curvature_ratio is computed via the lifted construction."
+        },
+        {
+          "label": "Phase 2b C profile",
+          "path": "phase_2b_c_profile.json",
+          "tags": [
+            "phase_2b_c_profile_built"
+          ],
+          "use": "principal_curvature_ratio remains null for 1D fixtures; Phase 2b cannot characterize this candidate further until multi-D anchors land. The C profile DID surface a strong association between F1_to_F2 half_phase and log_radicand_magnitude \u2014 this is a C-associated readback signal, not a curvature-ratio-driven one."
+        },
+        {
+          "label": "Phase 2c grid stability",
+          "path": "phase_2c_grid_stability.json",
+          "tags": [
+            "phase_2c_grid_stability_observed"
+          ],
+          "use": "principal_curvature_ratio remains null on both grids (1D fixtures unchanged by jitter). Phase 2c does not advance this candidate further; awaits multi-D anchors."
+        },
+        {
+          "label": "Phase 2d solve-for scout",
+          "path": "phase_2d_solve_for_scout.json",
+          "tags": [
+            "phase_2d_solve_for_observed",
+            "structurally_rate_limited_in_1d_scope"
+          ],
+          "use": "Phase 2d does not advance this candidate. principal_curvature_ratio is 1D-degenerate and requires multi-D anchor extension. State unchanged."
+        },
+        {
+          "label": "Phase 2e E-reducibility",
+          "path": "phase_2e_e_reducibility.json",
+          "tags": [
+            "phase_2e_no_new_evidence",
+            "structurally_rate_limited_in_1d_scope"
+          ],
+          "use": "Still 1D-degenerate. Phase 2e does not advance."
+        },
+        {
+          "label": "Phase 2h V3 diagnostic bridge \u2014 multi-D question MD_Q3 surfaced",
+          "path": "phase_2h_v3_bridge.json",
+          "tags": [
+            "phase_2h_multid_question_surfaced"
+          ],
+          "use": "MD_Q3: Does G-curv-2 (principal_curvature_ratio vs route-pair phase) produce a non-zero signal under multi-D anchor extension that is independent of E? Sense (B) restructure required. State unchanged; surfaced as question for user decision."
+        }
+      ],
+      "geometry_feature": "Principal-curvature ratio (\u03ba_max / \u03ba_min) or analogous curvature anisotropy proxy.",
+      "id": "G-curv-2",
+      "iteration_log": [
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Initial entry per Phase 0; absorbs but does not import prior G-1 work from the abandoned residue-first campaign."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 1 evidence attached: principal_curvature_ratio is structurally null in 1D fixtures; awaits lifted-construction extension on geometry_anchor. State unchanged."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2 evidence attached (phase_2_readback_observed): route-pair phase observable lives; principal_curvature_ratio side is still null. State unchanged."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2b evidence attached (phase_2b_c_profile_built): principal_curvature_ratio still null; the readback signal that exists is C-associated with radicand magnitude. State unchanged."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2c evidence attached (phase_2c_grid_stability_observed): 1D principal_curvature_ratio still null on the jittered grid. State unchanged."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2d evidence attached: no allowed ledger state matches structurally untestable in 1D; state remains unresolved_candidate with explicit tag."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2e evidence attached: still 1D-degenerate. State unchanged."
+        },
+        {
+          "date": "2026-05-23",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2h evidence attached (phase_2h_multid_question_surfaced): MD_Q3: Does G-curv-2 (principal_curvature_ratio vs route-pair phase) produce a non-zero signal under multi-D anchor extension that is independent of E? Sense (B... State unchanged."
+        }
+      ],
+      "ledger_state": "unresolved_candidate",
+      "normalization_provenance": null,
+      "observable_family": "route_pair_phase",
+      "path_separation_class": "to_be_determined_in_phase_2",
+      "promotion_blockers": [
+        "no geometry table built yet (Phase 1)",
+        "no joined readback table yet (Phase 2)",
+        "no C profile yet (Phase 2b; J_condition is a C-covariate that often correlates with curvature ratio)",
+        "no path/operand separation telemetry built into the readback joiner yet (Phase 2 requirement)",
+        "normalization choice not yet fixed (J_final vs J_step sibling observables both required per handoff \u00a76)",
+        "named mechanism partial: states 'curvature ratio organizes phase' but counterfactual + calibration require: (i) a flat-curvature control fixture predicts no phase organization, (ii) an isotropic-curvature control predicts no phase organization, (iii) anisotropic curvature varies phase in a stratum-resolved way"
+      ],
+      "readback_feature": "Joint (j_A, j_B) symbol or its derived 'phase' class.",
+      "title": "Principal-curvature ratio vs route-pair phase"
+    },
+    "G-curv-3": {
+      "anti_candidate_check": "Not anti-candidate. Transition grammar is a symbol/structure observable (\u00a73.2). The blowup_exponent_v4_audit's |cos \u03b8| = 1.0000 cross-fixture universal observation is relevant prior; it observed alignment but did not measure j-transition correlations.",
+      "description": "Whether the alignment (or anti-alignment) of a null tangent direction with the parameter sweep coordinate organizes the *transitions* between j-values across the sweep. Geometry-side feature: null-tangent alignment event (binary or continuous) along the sweep. Residue-side feature: j-transition class (sequence statistics of j_n \u2192 j_{n+1}).",
+      "evidence_links": [
+        {
+          "label": "Blowup exponent audit \u2013 null-tangent universality",
+          "path": "../blowup_exponent_v4_audit/",
+          "use": "prior observation of |cos \u03b8| = 1.0000 across 18 cases; provides geometry-side prior; does not address transition grammar yet"
+        },
+        {
+          "label": "Phase 1 geometry table",
+          "path": "phase_1_geometry_table.json",
+          "use": "null_tangent_alignment computed per row as 1/sqrt(1+J^2); varies smoothly across each fixture's sweep; transition grammar requires Phase 2 readback joining"
+        },
+        {
+          "label": "Phase 2 readback table",
+          "path": "phase_2_joined_readback_table.json",
+          "tags": [
+            "phase_2_readback_observed"
+          ],
+          "use": "per-row bacl_phase_mod_1 is now available; joined to per-row null_tangent_alignment from Phase 1 via geometry_row_id. Transition-grammar metric (the candidate's readback feature) is a Phase 2d deliverable."
+        },
+        {
+          "label": "Phase 2b C profile",
+          "path": "phase_2b_c_profile.json",
+          "tags": [
+            "phase_2b_c_profile_built"
+          ],
+          "use": "null_tangent_alignment was not used as a binning axis in this pass; the C-profile binning on log_radicand_magnitude is the more powerful first-pass instrument. Transition-grammar pending Phase 2d."
+        },
+        {
+          "label": "Phase 2c grid stability",
+          "path": "phase_2c_grid_stability.json",
+          "tags": [
+            "phase_2c_grid_stability_observed"
+          ],
+          "use": "transition grammar metric deferred to Phase 2d on both grids; null_tangent_alignment per-row is grid-dependent at the point level but no transition-grammar persistence claim is yet possible."
+        },
+        {
+          "label": "Phase 2d solve-for scout",
+          "path": "phase_2d_solve_for_scout.json",
+          "tags": [
+            "phase_2d_solve_for_observed",
+            "structurally_rate_limited_in_1d_scope",
+            "phase_2d_transition_grammar_observed_strong_MI"
+          ],
+          "use": "Phase 2d exercised transition grammar on the F1_to_F2 phase_class sequence. MI/H_marg ratios 0.34/0.37/0.74 across SR/Schwarzschild/pure_algebraic \u2014 STRONG transition structure exists. Whether this structure is E-reducible (C-driven via coordinate ordering correlating with E) or independent (a second primitive) is unresolved. Null-tangent-alignment side remains 1D-degenerate."
+        },
+        {
+          "label": "Phase 2e E-reducibility",
+          "path": "phase_2e_e_reducibility.json",
+          "tags": [
+            "phase_2e_evaluated",
+            "phase_2e_grammar_E_resistant_in_pure_algebraic",
+            "phase_2e_grammar_E_reducible_in_sr_and_schwarzschild"
+          ],
+          "use": "Phase 2e tests E-reducibility of the transition grammar via conditional MI within E-bins (quintiles of log2(|base_operand|)). SR + Schwarzschild: grammar IS reducible to E (0/5 bins above null p95; within-bin mean MI is 12-15% of unconditional). pure_algebraic: grammar is E-RESISTANT (2/5 bins above null p95; within-bin mean MI is 33% of unconditional). Pure_algebraic carries a transition-grammar signal that is NOT predicted by E alone. Per user pre-authorization, this elevates G-curv-3 from unresolved_candidate to unexplained_correlation \u2014 a discovery-allowed state per handoff \u00a77, NOT promotion to geometry_candidate."
+        },
+        {
+          "label": "Phase 2f PA E-resistance disambiguation",
+          "path": "phase_2f_pa_e_resistance_disambig.json",
+          "tags": [
+            "phase_2f_pa_e_uniform_grid_tested",
+            "phase_2f_hypothesis_1_supported_e_resistance_collapses",
+            "phase_2f_g_curv_3_demoted"
+          ],
+          "use": "Phase 2f tests whether pure_algebraic's Phase 2e E-resistant grammar is sampling artifact (hypothesis 1) or intrinsic (hypothesis 2). E-uniform alternative grid (linear in E by index) preserves endpoints/count/domain, is deterministic, specifically disturbs the canonical linear coord -> base_operand mapping. Result: hypothesis_1_supported_e_resistance_collapses \u2014 0/5 bins exceed null under both canonical-edges and recomputed-edges binning. The Phase 2e E-resistance was sampling artifact. G-curv-3 demotes back to unresolved_candidate."
+        },
+        {
+          "label": "Phase 2h V3 diagnostic bridge \u2014 context only",
+          "path": "phase_2h_v3_bridge.json",
+          "tags": [
+            "phase_2h_no_new_evidence"
+          ],
+          "use": "Phase 2h surfaces multi-D questions but does not address G-curv-3 specifically. State remains unresolved_candidate from Phase 2f demotion."
+        }
+      ],
+      "geometry_feature": "Null-tangent alignment (|cos \u03b8| between the null tangent vector and the sweep direction) or alignment events (crossings).",
+      "id": "G-curv-3",
+      "iteration_log": [
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Initial entry per Phase 0; null-tangent computation infrastructure exists from prior atlas work."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 1 evidence attached: null_tangent_alignment is recorded per row but varies smoothly with no 'alignment event' threshold yet operationalized; transition grammar awaits Phase 2 readback. State unchanged."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2 evidence attached (phase_2_readback_observed): phase observable joined to null_tangent_alignment by coordinate_id. Transition-grammar metric still pending Phase 2d. State unchanged."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2b evidence attached (phase_2b_c_profile_built): null_tangent_alignment not used as binning axis in this pass; transition grammar still pending Phase 2d. State unchanged."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2c evidence attached (phase_2c_grid_stability_observed): transition grammar deferred on both grids; no advance. State unchanged."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2d evidence attached: transition grammar shows strong MI in all three fixtures; E-reducibility test remains a follow-up. State unchanged."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unexplained_correlation",
+          "note": "Phase 2e evidence attached and STATE CHANGED from unresolved_candidate to unexplained_correlation. Per-fixture: SR grammar_E_reducible, Schwarzschild grammar_E_reducible, pure_algebraic grammar_E_resistant_candidate (2/5 bins exceed null p95). Mechanism unnamed."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2f evidence attached and STATE CHANGED from unexplained_correlation back to unresolved_candidate. Targeted E-uniform alternative grid disambiguation shows the Phase 2e E-resistance was a sampling artifact of the canonical x-uniform grid (not intrinsic to the substrate). Both canonical-edges and recomputed-edges binning agree: 0/5 bins exceed permutation null p95 under the new grid. Canonical-grid reproducibility check confirms Phase 2e finding still holds on canonical sampling (2/5 bins above null), so the test machinery discriminates correctly."
+        },
+        {
+          "date": "2026-05-23",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2h evidence attached (phase_2h_no_new_evidence): Phase 2h surfaces multi-D questions but does not address G-curv-3 specifically. State remains unresolved_candidate from Phase 2f demotion.... State unchanged."
+        }
+      ],
+      "ledger_state": "unresolved_candidate",
+      "normalization_provenance": null,
+      "observable_family": "transition_grammar",
+      "path_separation_class": "separation_not_applicable",
+      "promotion_blockers": [
+        "no geometry table yet (Phase 1; null-tangent computation is fixture-specific)",
+        "no joined readback table yet (Phase 2)",
+        "no C profile yet (Phase 2b; near-null directions are C-relevant: spectral_gap, near-null eigenvalue magnitude per handoff \u00a79)",
+        "grid stability not yet characterized (Phase 2c; transition statistics are sensitive to grid spacing)",
+        "named mechanism partial: states 'null-tangent alignment organizes transitions' but lacks (i) operational definition of 'alignment event' (threshold? continuous fit?) and (ii) counterfactual transition pattern under no-alignment baseline"
+      ],
+      "readback_feature": "j-transition statistics: run lengths, transition matrix, transition entropy, run-length histogram.",
+      "title": "Null-tangent alignment vs transition grammar"
+    },
+    "G-route-1": {
+      "anti_candidate_check": "Not anti-candidate by construction; the route-pair joint symbol is symbolic. Same-path or zero-offset configurations are *automatically demoted* to path_separation_unresolved by the M-contract \u00a73.5.",
+      "description": "Route-pair phase observable derived from two routes whose path identity AND operand offset AND offset level are explicitly recorded. The phase symbol is admitted as independent only if the path/operand-separation class is nonzero_operand_offset or path_distinct_operand_equal. Per handoff \u00a71.4, this is the corrective form of route-pair observables after the active dual-arm lesson.",
+      "evidence_links": [
+        {
+          "label": "Hardened dual-arm probe V1 \u2013 prior infrastructure",
+          "path": "../hardened_dual_arm_probe/",
+          "use": "6 operational conditions enforced as code; reuse for path/operand separation telemetry where applicable"
+        },
+        {
+          "label": "Prior residue-first G-1 work",
+          "path": "../mcg_discovery/phase_1_g1_characterization.md",
+          "use": "demonstrates the SAME observable form without the required path/operand telemetry; not admissible as G evidence per handoff \u00a71.4"
+        },
+        {
+          "label": "Phase 2 readback table",
+          "path": "phase_2_joined_readback_table.json",
+          "tags": [
+            "phase_2_readback_observed",
+            "phase_2_path_separation_zero_offset"
+          ],
+          "use": "route-pair phase observable F1_to_F2 is now recorded per (fixture, coordinate_id) with full separation telemetry (path/operand/phase/lineage/normalization). operand_separation_class is uniformly zero_operand_offset in this pass. Per handoff \u00a71.4 this is acceptable as a discovery observation but does NOT promote G-route-1 to independent G evidence \u2014 nonzero operand offset is structurally required for that promotion."
+        },
+        {
+          "label": "Phase 2b C profile",
+          "path": "phase_2b_c_profile.json",
+          "tags": [
+            "phase_2b_c_profile_built",
+            "phase_2b_c_association_observed"
+          ],
+          "use": "C-bin analysis of the F1_to_F2 route-pair phase signal: strong association with log_radicand_magnitude in all three primary fixtures. The signal is currently characterized as C-associated. Promotion to independent G evidence ALSO blocked by handoff \u00a71.4 zero-offset rule; the C-association would itself need to be ruled out before any G claim, in addition to the nonzero-offset requirement."
+        },
+        {
+          "label": "Phase 2c grid stability",
+          "path": "phase_2c_grid_stability.json",
+          "tags": [
+            "phase_2c_grid_stability_observed"
+          ],
+          "use": "route-pair phase signal robust within grid_modestly_unstable tolerance on the jittered grid. The \u00a71.4 zero-operand-offset constraint still binds independent of grid stability; promotion to independent G evidence still requires nonzero operand offset characterization."
+        },
+        {
+          "label": "Phase 2d solve-for scout",
+          "path": "phase_2d_solve_for_scout.json",
+          "tags": [
+            "phase_2d_solve_for_observed",
+            "phase_2d_zero_offset_gap_unchanged"
+          ],
+          "use": "Phase 2d does not address the \u00a71.4 zero-operand-offset gap. Status unchanged."
+        },
+        {
+          "label": "Phase 2e E-reducibility",
+          "path": "phase_2e_e_reducibility.json",
+          "tags": [
+            "phase_2e_evaluated",
+            "phase_2e_zero_offset_gap_unchanged"
+          ],
+          "use": "Phase 2e tests transition-grammar reducibility on the existing zero-operand-offset F1_to_F2 data. The \u00a71.4 zero-offset gap remains independent."
+        },
+        {
+          "label": "Phase 2h V3 diagnostic bridge \u2014 multi-D question MD_Q4 surfaced",
+          "path": "phase_2h_v3_bridge.json",
+          "tags": [
+            "phase_2h_multid_question_surfaced"
+          ],
+          "use": "MD_Q4: Does G-route-1 nonzero-operand-offset characterization (\u00a71.4) produce a route-pair phase observable independent of the zero-offset readback, and does that observable bridge to V3's lifted-singularity null-direction events? Independent of multi-D scope; \u00a71.4 gap still binds. Surfaced as question for user decision. State unchanged."
+        }
+      ],
+      "geometry_feature": "Reserved for Phase 2d (geometry-vs-phase relation). Phase 2 produces only the phase observable with full telemetry.",
+      "id": "G-route-1",
+      "iteration_log": [
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Initial entry per Phase 0; supersedes the prior 'G-1 route divergence' candidate which lacked path/operand telemetry."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 1 was not the appropriate phase to address this candidate; geometry is keyed by (fixture, coordinate_id) and not route-duplicated. Awaits Phase 2 readback table with path/operand separation telemetry."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2 evidence attached (phase_2_readback_observed + phase_2_path_separation_zero_offset): route-pair phase observable lives with the five separation classes recorded independently. Operand offset is uniformly zero in this pass \u2014 admissible as discovery observation, NOT admissible as independent G evidence until a nonzero-operand-offset characterization is run. State unchanged."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2b evidence attached (phase_2b_c_profile_built, phase_2b_c_association_observed): F1_to_F2 half_phase is strongly C-associated with log_radicand_magnitude. Promotion now blocked by TWO axes: (a) zero-offset rule from \u00a71.4, (b) C-association needs to be ruled out for any G claim. State unchanged."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2c evidence attached (phase_2c_grid_stability_observed): phase signal grid-stable to modestly-unstable; zero-operand-offset rule still blocks promotion. State unchanged."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2d evidence attached: zero-offset rule from \u00a71.4 still binds independently. State unchanged."
+        },
+        {
+          "date": "2026-05-19",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2e evidence attached: zero-offset gap still binds independently. State unchanged."
+        },
+        {
+          "date": "2026-05-23",
+          "ledger_state": "unresolved_candidate",
+          "note": "Phase 2h evidence attached (phase_2h_multid_question_surfaced): MD_Q4: Does G-route-1 nonzero-operand-offset characterization (\u00a71.4) produce a route-pair phase observable independent of the zero-offset readback, and does tha... State unchanged."
+        }
+      ],
+      "ledger_state": "unresolved_candidate",
+      "normalization_provenance": null,
+      "observable_family": "route_pair_phase",
+      "path_separation_class": "to_be_determined_in_phase_2",
+      "promotion_blockers": [
+        "path/operand separation telemetry not yet built into a V4 eval-layer harness (Phase 2 Task C deliverable: src/lloyd_v4/evals/mcg_geometry_first_readback.py)",
+        "no joined geometry+readback table yet (Phase 2)",
+        "no C profile yet (Phase 2b; route-pair-conditioning covariates needed)",
+        "no normalization provenance fixed",
+        "named mechanism partial: same as G-curv-2's mechanism with the path/operand-separation hardening; calibration / counterfactual still required"
+      ],
+      "readback_feature": "(j_A, j_B) phase symbol, path_identity, operand_identity, operand_offset, local_lattice_unit, offset_level, separation_class.",
+      "title": "Path/operand-separated F1/F2 route-pair phase"
+    }
+  },
+  "created": "2026-05-19",
+  "iteration_log": [
+    {
+      "date": "2026-05-19",
+      "event": "ledger_initialized",
+      "note": "Phase 0 deliverable. 7 candidates from handoff \u00a78 + 3 anti-candidates (one from Gate 3, one from prior residue-first campaign, one from M-contract). No characterizations yet; all candidates in 'unresolved_candidate' state pending Phase 1/2/2b/2c work."
+    },
+    {
+      "date": "2026-05-19",
+      "event": "phase_1_geometry_table_landed",
+      "note": "Phase 1 geometry table generated (413 rows; 411 four_form_primary + 2 geometry_anchor; sha256 6502e9...df42df54 byte-stable). Per-candidate evidence links added; NO ledger states changed per the discipline 'attach Phase 1 observations as evidence, do not promote'. All 7 candidates remain unresolved_candidate. 7 focused tests pass; broader subset including test_f1_f2_natural_phase.py and test_f4_route_comb_search.py also pass (23/23). See phase_1_geometry_characterization.md for full discovery writeup."
+    },
+    {
+      "date": "2026-05-19",
+      "event": "phase_2_readback_table_landed",
+      "note": "Phase 2 joined readback table generated (3699 rows = 3 fixtures x 137 coordinates x 9 route pairs; sha256 6a212e...f28cc33 byte-stable; references Phase 1 sha256 6502e9...df42df54). Per-candidate evidence links added with phase_2_readback_observed tags; G-route-1 also tagged phase_2_path_separation_zero_offset (this pass uses zero_operand_offset uniformly, admissible as discovery observation but NOT as independent G evidence per handoff \u00a71.4). 10 focused tests pass; full subset (33/33) passes. Control summaries: same_route controls 1644/1644 same_phase (controls reject manufactured half-phase); F3 calibration zero 411/411 exactly 0.0 (clean); F4 stressor channel active in 159/411 records varying by fixture. Per-stratum F1_to_F2 half_phase fraction is non-uniform across Phase 1 strata (Schwarzschild horizon_approach 0%, isco_vicinity 75%; SR relativistic 0%, intermediate 29%; pure_algebraic near_zero_radicand 0%, intermediate 27%) \u2014 recorded as observation only, not as G claim, C-confound unresolved without Phase 2b. All 7 candidates remain unresolved_candidate."
+    },
+    {
+      "date": "2026-05-19",
+      "event": "phase_2b_c_profile_landed",
+      "note": "Phase 2b positive C-extractor scaffold built (sha256 e4268f...62afd31 byte-stable; references Phase 1 sha256 6502e9...df42df54 and Phase 2 sha256 6a212e...f28cc33). 411-row C profile per coordinate (base_operand, radicand_magnitude, log_radicand_magnitude, endpoint_distance, hessian_abs, J_condition, fd_stability_status, geometry_stratum). Two predeclared bin schemes: fixture-local terciles on log_radicand_magnitude (within-fixture comparable) and global log10 edges [-2.0, -0.5] (across-fixture comparable). F1_to_F2 half_phase fraction by fixture-local tercile shows STRONG C-bin association in all three fixtures (SR: T1 4.5% / T2 47.8% / T3 10.6%; Schwarzschild: T1 0% / T2 0% / T3 34%; pure_algebraic: T1 0% / T2 19.6% / T3 23.4%). T1_small_radicand has the lowest fraction in every fixture, reproducing Phase 2 \u00a7Q7 with deterministic bins. Per the discipline \u00a7Important interpretation rule, this is characterized as C-associated candidate behavior, NOT G. Controls clean across all bins: same-route 1644/1644 same_phase; F3 411/411 exactly zero. F4 stressor activation itself C-bin-correlated (Schwarzschild T1 98% -> T3 21%). Per-fixture classifications: all three C_bin_association_observed. 9 focused tests pass (including forbidden-language scan of the characterization); full subset (42/42) passes. All 7 candidates remain unresolved_candidate."
+    },
+    {
+      "date": "2026-05-19",
+      "event": "phase_2c_grid_stability_landed",
+      "note": "Phase 2c grid stability scaffold built (sha256 62d86e...b8887b85 byte-stable; references Phase 1 6502e9...df42df54, Phase 2 6a212e...f28cc33, Phase 2b e4268f...62afd31). Deterministic-jittered alternative grid via fixed-seed LCG (seed=12345), endpoints preserved, count preserved, domain-safe clamping. Bin rule: canonical-grid tercile edges from Phase 2b applied as fixed cuts to both grids. Per-fixture classifications: pure_algebraic_four_form grid_stable (max |delta| 0.044); sr_four_form + schwarzschild_four_form grid_modestly_unstable (max |delta| 0.085 in T3). No fixture classifies as grid_artifact_candidate. Small-radicand suppression direction preserved exactly (T1 |delta| = 0 in SR + Schwarzschild). Controls clean on jittered grid: same-route 1644/1644 same_phase; F3 411/411 exactly zero. Phase 2b headline (C-bin association) PERSISTS under jitter. 9 focused tests pass; full subset (51/51) passes. All 7 candidates remain unresolved_candidate."
+    },
+    {
+      "date": "2026-05-19",
+      "event": "phase_2d_solve_for_scout_landed",
+      "note": "Phase 2d solve-for scout built (sha256 ea4f29...e43942 byte-stable; references all four prior artifacts). Candidate primitive endpoint_distance_substrate_image E := log2(|base_operand|) defined with substrate derivation chain. Four relation families tested. KEY FINDINGS: (1) continuous_monotone is the WRONG family (R\u00b2 0.11-0.47); (2) threshold-on-E is the RIGHT family \u2014 abs_contrast 0.305-0.673 across all three fixtures, threshold E ~ -0.75 to -0.95; (3) Schwarzschild has strong residual structure (Pearson r=0.416 between resid and endpoint_distance); (4) transition grammar carries STRONG structure (MI/H_marg 0.34/0.37/0.74). G-curv-1 reclassified to C_confounded; G-curv-2/G-curv-3 carry structurally_rate_limited_in_1d_scope tag. C-def-1 has operational-extractor-validated tag. Campaign-level recommendation: investigate_residual_structure_in_1d_before_multi_d. 11 focused tests pass. Sense (B) decision point surfaced: extend to multi-D anchors OR conclude 1D characterization with V3-bridge artifact."
+    },
+    {
+      "date": "2026-05-19",
+      "event": "phase_2e_e_reducibility_landed",
+      "note": "Phase 2e E-reducibility tested (sha256 549f0a...28489ca byte-stable; references all five prior artifacts). E := log2(|base_operand|) PRIMITIVE PIN \u2014 log base 2 throughout (distinct from Phase 2b log10 binning). PRIMARY FINDING: per-fixture differentiation \u2014 SR + Schwarzschild grammar IS E-reducible (0/5 bins above null p95; within-bin mean MI 12-15% of unconditional); pure_algebraic grammar is E-RESISTANT (2/5 bins above null p95; within-bin mean MI 33% of unconditional). SECONDARY FINDING: Schwarzschild endpoint_distance residual is GRID-DRIVEN (balanced partial 0.142 < null p95 0.239 after horizon_approach downsampling to 48); the Phase 2d apparent residual was sampling artifact. G-curv-3 reclassified from unresolved_candidate to unexplained_correlation per user pre-authorization (E-resistant pure_algebraic). C-def-1 remains 1D-sufficient (no need for 2D extractor). 11 focused tests pass."
+    },
+    {
+      "date": "2026-05-19",
+      "event": "phase_2f_pa_e_resistance_disambig_landed",
+      "note": "Phase 2f built (sha256 286e8b...c798a7ed byte-stable; references all six prior artifacts). E-uniform alternative grid for pure_algebraic: closed-form linear-in-E spacing, endpoints/count/domain preserved, deterministic. RESULT: hypothesis_1_supported_e_resistance_collapses \u2014 the Phase 2e E-resistance was sampling artifact of the canonical x-uniform grid. Both primary (canonical edges as fixed cuts) and secondary (recomputed edges) classifications agree (0/5 bins exceed null p95 on the new grid). Canonical-grid reproducibility check confirms Phase 2e finding still holds under canonical sampling (2/5 bins). G-curv-3 DEMOTED from unexplained_correlation back to unresolved_candidate. The campaign now has zero candidates above unresolved_candidate in a positive direction; only G-curv-1 sits in the C_confounded negative-classification slot. 12 focused tests pass."
+    },
+    {
+      "date": "2026-05-19",
+      "event": "phase_2g_cdef1_calibration_landed",
+      "note": "Phase 2g C-def-1 calibration ladder closeout built (sha256 8089f0...b1bb4730 byte-stable; references all seven prior artifacts + ledger). Five conditions evaluated; ALL FIVE MET. Classification: cdef1_operational_extractor_validated_1d. C-def-1 stays unresolved_candidate per handoff \u00a77 (no allowed C-extractor state); tag phase_2g_cdef1_operational_extractor_validated_1d added. E threshold across fixtures clusters in [\u22120.95, \u22120.75] log2 (|base_operand| ~ 0.5\u20130.6) near the Sterbenz boundary. Same-route controls 1644/1644 same_phase. F3 411/411 exactly zero. Grid artifacts from Phase 2e (Schwarzschild residual) and Phase 2f (pure_algebraic apparent grammar) accounted for. No G candidate promoted. 8 focused tests pass. The 1D campaign is complete; V3 diagnostic bridge artifact is the natural next deliverable (per user campaign-reframe goal)."
+    },
+    {
+      "date": "2026-05-23",
+      "event": "phase_2h_v3_bridge_landed",
+      "note": "Phase 2h V3 diagnostic bridge artifact built (primary phase_2h_v3_bridge.json + optional non-primary phase_2h_v3_oracle_crosscheck.json). E maps to V3 vocabulary: K_G, condition_number, hessian_eigenvalue_diagnostics classified diagnostic_neighbour; near_umbilic_label and lifted_singularity_null_direction classified not_applicable_in_1d. Optional lv3 oracle cross-check (9 calls across 3 fixtures \u00d7 3 E-regime points): agreement on diagnostic_neighbour classification across all three primary fixtures. Per CLAUDE.md \u00a74, lv3 is confirmation oracle only. Four multi-D questions surfaced (MD_Q1 Sterbenz persistence under multi-D; MD_Q2 K_G under multi-D coupling; MD_Q3 G-curv-2 multi-D test; MD_Q4 G-route-1 nonzero-offset bridge). No G candidate promoted. 10 focused tests pass; smallest reasonable subset passes (102 tests). 1D campaign delivered: M=BACL, C=C-def-1/E operationally validated, G empirically absent in 1D, V3 bridge built. User decision required for sense-(B) multi-D extension or campaign closeout."
+    }
+  ],
+  "ledger_name": "mcg_geometry_first_candidate_ledger",
+  "ledger_version": "1.0",
+  "m_contract": "Build_Docs/Reports/mcg_geometry_first/phase_0_m_contract.md",
+  "schema_notes": {
+    "evidence_links": "Array of report/artifact references that support the current ledger state.",
+    "iteration_log": "Each candidate has its own iteration log: { date, ledger_state, evidence, note }.",
+    "ledger_state": "Required, one of allowed_ledger_states.",
+    "normalization_provenance": "Required for any lattice/phase/readback observable. Schema per handoff \u00a76: { normalization_unit, unit_source_value, unit_binade, route_stage, normalization_role }. Sibling observables (J_final / J_step) get separate ledger entries.",
+    "observable_family": "Required, one of: value_magnitude | lattice_symbol | transition_grammar | route_pair_phase | fingerprint_slot | path_separation | spectral_geometry | curvature_stratum | conditioning_response. Per handoff \u00a75.",
+    "path_separation_class": "Required for any route-based observable. One of: nonzero_operand_offset | zero_operand_offset | same_path_duplicate | path_distinct_operand_equal | separation_unobservable | separation_not_applicable. Per handoff \u00a710."
+  }
+}

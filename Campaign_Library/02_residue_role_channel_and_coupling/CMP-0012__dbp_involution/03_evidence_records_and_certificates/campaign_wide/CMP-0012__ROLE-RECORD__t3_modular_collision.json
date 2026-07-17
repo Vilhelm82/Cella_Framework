@@ -1,0 +1,406 @@
+{
+  "console_log": "DBP prime-2 T3 modular collision\ngate_passed = True\nn_range = [4, 5, 6, 7, 8, 9, 10]\nlargest_n_reached = 10\nall_identity_holds = True\ncollision_total_all_n = True\ntrivial_same_as_phantom = False\nn=4: shape={'(3,1)': 1}; orientation={'(3,1)': 1, '(4)': 1}; shared={'(3,1)': 1}; identity=True\nn=5: shape={'(5)': 1, '(3,2)': 1}; orientation={'(5)': 2, '(3,2)': 1}; shared={'(5)': 1, '(3,2)': 1}; identity=True\nn=6: shape={'(6)': 1, '(5,1)': 1, '(4,2)': 1}; orientation={'(6)': 2, '(5,1)': 1, '(4,2)': 1}; shared={'(6)': 1, '(5,1)': 1, '(4,2)': 1}; identity=True\nn=7: shape={'(5,2)': 1}; orientation={'(5,2)': 1, '(7)': 1}; shared={'(5,2)': 1}; identity=True\nn=8: shape={'(7,1)': 1, '(6,2)': 1}; orientation={'(7,1)': 1, '(6,2)': 1, '(8)': 1}; shared={'(7,1)': 1, '(6,2)': 1}; identity=True\nn=9: shape={'(9)': 1, '(7,2)': 1}; orientation={'(9)': 2, '(7,2)': 1}; shared={'(9)': 1, '(7,2)': 1}; identity=True\nn=10: shape={'(10)': 1, '(9,1)': 1, '(8,2)': 1}; orientation={'(10)': 2, '(9,1)': 1, '(8,2)': 1}; shared={'(10)': 1, '(9,1)': 1, '(8,2)': 1}; identity=True\nverdict = The modular collision is total: every shape composition factor of S^(n-2,2) also occurs in S^(n-2,1,1), and orientation equals shape plus one trivial. The n=4 V4 quotient is the first special case of this generic mod-2 collision, while the T1 phantom trivial is a distinct gauge non-saturation direction.\n",
+  "gate_passed": true,
+  "json_path": "results/dbp_involution/dbp_prime2_structure/T3_modular_collision.json",
+  "markdown_path": "results/dbp_involution/dbp_prime2_structure/DBP_PRIME2_REPORT.md",
+  "n_range": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "results": {
+    "all_dimension_checks_pass": true,
+    "all_identity_holds": true,
+    "collision_total_all_n": true,
+    "dimension_failures": [],
+    "final_thesis": "The modular collision is total: every shape composition factor of S^(n-2,2) also occurs in S^(n-2,1,1), and orientation equals shape plus one trivial. The n=4 V4 quotient is the first special case of this generic mod-2 collision, while the T1 phantom trivial is a distinct gauge non-saturation direction.",
+    "gate": {
+      "passed": true,
+      "per_n": [
+        {
+          "n": 4,
+          "passed": true
+        },
+        {
+          "n": 5,
+          "passed": true
+        },
+        {
+          "n": 6,
+          "passed": true
+        },
+        {
+          "n": 7,
+          "passed": true
+        }
+      ],
+      "tier": "[computer-verified]"
+    },
+    "gate_passed": true,
+    "identity_failures": [],
+    "largest_n_reached": 10,
+    "n_range": [
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "partial_collision_n": [],
+    "rows": [
+      {
+        "collision_total": true,
+        "identity_holds": true,
+        "n": 4,
+        "orientation_dimension_check": true,
+        "orientation_factor_dimension_sum": 3,
+        "orientation_factors": {
+          "(3,1)": 1,
+          "(4)": 1
+        },
+        "orientation_partition": "(2,1,1)",
+        "orientation_specht_dimension": 3,
+        "shape_dimension_check": true,
+        "shape_factor_dimension_sum": 2,
+        "shape_factors": {
+          "(3,1)": 1
+        },
+        "shape_partition": "(2,2)",
+        "shape_specht_dimension": 2,
+        "shared_factors": {
+          "(3,1)": 1
+        },
+        "simple_dimensions": {
+          "(3,1)": {
+            "hook_dimension": 3,
+            "simple_dimension": 2,
+            "specht_dimension": 3,
+            "tabloid_count": 4
+          },
+          "(4)": {
+            "hook_dimension": 1,
+            "simple_dimension": 1,
+            "specht_dimension": 1,
+            "tabloid_count": 1
+          }
+        },
+        "tier": "[computer-verified]"
+      },
+      {
+        "collision_total": true,
+        "identity_holds": true,
+        "n": 5,
+        "orientation_dimension_check": true,
+        "orientation_factor_dimension_sum": 6,
+        "orientation_factors": {
+          "(3,2)": 1,
+          "(5)": 2
+        },
+        "orientation_partition": "(3,1,1)",
+        "orientation_specht_dimension": 6,
+        "shape_dimension_check": true,
+        "shape_factor_dimension_sum": 5,
+        "shape_factors": {
+          "(3,2)": 1,
+          "(5)": 1
+        },
+        "shape_partition": "(3,2)",
+        "shape_specht_dimension": 5,
+        "shared_factors": {
+          "(3,2)": 1,
+          "(5)": 1
+        },
+        "simple_dimensions": {
+          "(3,2)": {
+            "hook_dimension": 5,
+            "simple_dimension": 4,
+            "specht_dimension": 5,
+            "tabloid_count": 10
+          },
+          "(5)": {
+            "hook_dimension": 1,
+            "simple_dimension": 1,
+            "specht_dimension": 1,
+            "tabloid_count": 1
+          }
+        },
+        "tier": "[computer-verified]"
+      },
+      {
+        "collision_total": true,
+        "identity_holds": true,
+        "n": 6,
+        "orientation_dimension_check": true,
+        "orientation_factor_dimension_sum": 10,
+        "orientation_factors": {
+          "(4,2)": 1,
+          "(5,1)": 1,
+          "(6)": 2
+        },
+        "orientation_partition": "(4,1,1)",
+        "orientation_specht_dimension": 10,
+        "shape_dimension_check": true,
+        "shape_factor_dimension_sum": 9,
+        "shape_factors": {
+          "(4,2)": 1,
+          "(5,1)": 1,
+          "(6)": 1
+        },
+        "shape_partition": "(4,2)",
+        "shape_specht_dimension": 9,
+        "shared_factors": {
+          "(4,2)": 1,
+          "(5,1)": 1,
+          "(6)": 1
+        },
+        "simple_dimensions": {
+          "(4,2)": {
+            "hook_dimension": 9,
+            "simple_dimension": 4,
+            "specht_dimension": 9,
+            "tabloid_count": 15
+          },
+          "(5,1)": {
+            "hook_dimension": 5,
+            "simple_dimension": 4,
+            "specht_dimension": 5,
+            "tabloid_count": 6
+          },
+          "(6)": {
+            "hook_dimension": 1,
+            "simple_dimension": 1,
+            "specht_dimension": 1,
+            "tabloid_count": 1
+          }
+        },
+        "tier": "[computer-verified]"
+      },
+      {
+        "collision_total": true,
+        "identity_holds": true,
+        "n": 7,
+        "orientation_dimension_check": true,
+        "orientation_factor_dimension_sum": 15,
+        "orientation_factors": {
+          "(5,2)": 1,
+          "(7)": 1
+        },
+        "orientation_partition": "(5,1,1)",
+        "orientation_specht_dimension": 15,
+        "shape_dimension_check": true,
+        "shape_factor_dimension_sum": 14,
+        "shape_factors": {
+          "(5,2)": 1
+        },
+        "shape_partition": "(5,2)",
+        "shape_specht_dimension": 14,
+        "shared_factors": {
+          "(5,2)": 1
+        },
+        "simple_dimensions": {
+          "(5,2)": {
+            "hook_dimension": 14,
+            "simple_dimension": 14,
+            "specht_dimension": 14,
+            "tabloid_count": 21
+          },
+          "(7)": {
+            "hook_dimension": 1,
+            "simple_dimension": 1,
+            "specht_dimension": 1,
+            "tabloid_count": 1
+          }
+        },
+        "tier": "[computer-verified]"
+      },
+      {
+        "collision_total": true,
+        "identity_holds": true,
+        "n": 8,
+        "orientation_dimension_check": true,
+        "orientation_factor_dimension_sum": 21,
+        "orientation_factors": {
+          "(6,2)": 1,
+          "(7,1)": 1,
+          "(8)": 1
+        },
+        "orientation_partition": "(6,1,1)",
+        "orientation_specht_dimension": 21,
+        "shape_dimension_check": true,
+        "shape_factor_dimension_sum": 20,
+        "shape_factors": {
+          "(6,2)": 1,
+          "(7,1)": 1
+        },
+        "shape_partition": "(6,2)",
+        "shape_specht_dimension": 20,
+        "shared_factors": {
+          "(6,2)": 1,
+          "(7,1)": 1
+        },
+        "simple_dimensions": {
+          "(6,2)": {
+            "hook_dimension": 20,
+            "simple_dimension": 14,
+            "specht_dimension": 20,
+            "tabloid_count": 28
+          },
+          "(7,1)": {
+            "hook_dimension": 7,
+            "simple_dimension": 6,
+            "specht_dimension": 7,
+            "tabloid_count": 8
+          },
+          "(8)": {
+            "hook_dimension": 1,
+            "simple_dimension": 1,
+            "specht_dimension": 1,
+            "tabloid_count": 1
+          }
+        },
+        "tier": "[computer-verified]"
+      },
+      {
+        "collision_total": true,
+        "identity_holds": true,
+        "n": 9,
+        "orientation_dimension_check": true,
+        "orientation_factor_dimension_sum": 28,
+        "orientation_factors": {
+          "(7,2)": 1,
+          "(9)": 2
+        },
+        "orientation_partition": "(7,1,1)",
+        "orientation_specht_dimension": 28,
+        "shape_dimension_check": true,
+        "shape_factor_dimension_sum": 27,
+        "shape_factors": {
+          "(7,2)": 1,
+          "(9)": 1
+        },
+        "shape_partition": "(7,2)",
+        "shape_specht_dimension": 27,
+        "shared_factors": {
+          "(7,2)": 1,
+          "(9)": 1
+        },
+        "simple_dimensions": {
+          "(7,2)": {
+            "hook_dimension": 27,
+            "simple_dimension": 26,
+            "specht_dimension": 27,
+            "tabloid_count": 36
+          },
+          "(9)": {
+            "hook_dimension": 1,
+            "simple_dimension": 1,
+            "specht_dimension": 1,
+            "tabloid_count": 1
+          }
+        },
+        "tier": "[computer-verified]"
+      },
+      {
+        "collision_total": true,
+        "identity_holds": true,
+        "n": 10,
+        "orientation_dimension_check": true,
+        "orientation_factor_dimension_sum": 36,
+        "orientation_factors": {
+          "(10)": 2,
+          "(8,2)": 1,
+          "(9,1)": 1
+        },
+        "orientation_partition": "(8,1,1)",
+        "orientation_specht_dimension": 36,
+        "shape_dimension_check": true,
+        "shape_factor_dimension_sum": 35,
+        "shape_factors": {
+          "(10)": 1,
+          "(8,2)": 1,
+          "(9,1)": 1
+        },
+        "shape_partition": "(8,2)",
+        "shape_specht_dimension": 35,
+        "shared_factors": {
+          "(10)": 1,
+          "(8,2)": 1,
+          "(9,1)": 1
+        },
+        "simple_dimensions": {
+          "(10)": {
+            "hook_dimension": 1,
+            "simple_dimension": 1,
+            "specht_dimension": 1,
+            "tabloid_count": 1
+          },
+          "(8,2)": {
+            "hook_dimension": 35,
+            "simple_dimension": 26,
+            "specht_dimension": 35,
+            "tabloid_count": 45
+          },
+          "(9,1)": {
+            "hook_dimension": 9,
+            "simple_dimension": 8,
+            "specht_dimension": 9,
+            "tabloid_count": 10
+          }
+        },
+        "tier": "[computer-verified]"
+      }
+    ],
+    "theorem": {
+      "boundary_note": "n=4 is allowed even though (n-2,2)=(2,2) is not 2-regular; its Specht row is D^(3,1).",
+      "identity": "[S^(n-2,1,1)] = [S^(n-2,2)] + [D^(n)] for all n >= 4",
+      "proof": [
+        "Over F2 the natural polarization map gives an exact sequence 0 -> std^(1) -> Sym^2(std) -> wedge^2(std) -> 0; for S_n the Frobenius twist has the same composition factors as std.",
+        "Reducing the characteristic-zero carrier decomposition gives [Sym^2(std)] = [D^(n)] + [std] + [S^(n-2,2)] in the Grothendieck group.",
+        "Subtracting [std] via the exact sequence yields [wedge^2(std)] = [S^(n-2,2)] + [D^(n)].",
+        "The integral Specht lattice for wedge^2(std) is S^(n-2,1,1), so the identity follows."
+      ],
+      "tier": "[proven]"
+    },
+    "tier": "[computer-verified n=4..10 + proven all n>=4]",
+    "trivial_vs_phantom": {
+      "collision_trivial_generator": "the nonzero S_n-fixed all-role-pair line in Sym^2(std_F2)",
+      "collision_trivial_projection": "nonzero in the modular carrier and in the Grothendieck identity",
+      "phantom_generator": "g g^T in Sym^2(Z^n)/Im(G_g)",
+      "same_generator": false,
+      "std_projection_of_phantom": "q(g) tensor q(g) = 0 because q(g)=0",
+      "tested_n": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "tier": "[proven]",
+      "verdict": "No: layer (a)'s phantom trivial is killed before the std tensor carrier, while layer (c)'s surplus trivial is the invariant line inside the modular std-carrier."
+    },
+    "v4_reconciliation": {
+      "dim_D_(2,1)_S3": 2,
+      "dim_D_(3,1)_S4": 2,
+      "matches_inflated_modular_std_S3": true,
+      "n": 4,
+      "quotient_order": 6,
+      "s4_shape": "S^(2,2)",
+      "s4_shape_mod2": {
+        "(3,1)": 1
+      },
+      "tier": "[computer-verified + proven quotient action]",
+      "v4_kernel_order_on_three_2_plus_2_partitions": 4,
+      "verdict": "The n=4 shape factor is the two-dimensional modular standard of S3 inflated through S4/V4, but the same orient=shape+trivial mechanism holds for n>=5, so V4 is the boundary special case, not the cause."
+    }
+  },
+  "task": "T3",
+  "timestamp": "byte-stable"
+}

@@ -1,0 +1,163 @@
+# Substrate Invariant Search — Phase C — Irreducible Basis Analysis
+
+**Status:** Phase C complete. Irreducible basis identified: **3 elements**. Two Phase A candidates demoted to preconditions.
+**Date:** 2026-05-23
+**Authority:** [`Build_Docs/Agent_tasks/substrate_invariant_search_2026_05_23.md`](../../Agent_tasks/substrate_invariant_search_2026_05_23.md)
+**Pre-registry:** [`Build_Docs/Agent_tasks/substrate_invariant_search_phase_c_basis.md`](../../Agent_tasks/substrate_invariant_search_phase_c_basis.md)
+**Source chain:** Phase B vector table sha256 prefix `58574ba766e34bcc...`
+
+**Deliverables landed:**
+- [`phase_c_irreducible_basis.json`](phase_c_irreducible_basis.json) — basis analysis artefact, byte-stable.
+- [`src/lloyd_v4/evals/substrate_invariant_search_phase_c.py`](../../../src/lloyd_v4/evals/substrate_invariant_search_phase_c.py) — generator.
+- [`tests/test_substrate_invariant_search_phase_c.py`](../../../tests/test_substrate_invariant_search_phase_c.py) — 8 focused tests.
+- This characterisation markdown.
+
+---
+
+## 1. The irreducible basis
+
+**3 elements.**
+
+| Basis element | Substrate origin | Represented group |
+|---|---|---|
+| `ulp_spread_log2` | BACL (proven) — operand-chain binade spread `log2(max_ulp / min_ulp)` | BACL-spectrum family |
+| `E_log2_base_operand` | BACL + binade chain (Phase 2g sketch) — `log2(\|1 - x_term\|)` | E family (E + base_operand + in_sterbenz_cluster) |
+| `two_form_partition` | Algebraic-form structural invariant (silent vs residual_carrying per route) | Algebraic-form structural |
+
+Each is P1-satisfied (input-derivable, no F evaluation required at probe time).
+
+---
+
+## 2. The BACL spectrum reformulation
+
+Phase B's first finding: single-value BACL_grain at the dominant intermediate is constant 2.220e-16 across all 18 probes (every dominant intermediate is O(1) in the probe set).
+
+**Phase C reformulates BACL as a spectrum** across the operand chain:
+
+```
+ulp_vector       = (ulp(|v_i|) for v_i in intermediates)
+max_ulp          = max(ulp_vector)         [= Phase B's BACL_grain]
+min_ulp          = min(nonzero ulp values)
+ulp_spread_log2  = log2(max_ulp / min_ulp) [binade spread]
+ulp_ratio        = max_ulp / min_ulp
+```
+
+`ulp_spread_log2` varies meaningfully across probes because the *non-dominant* intermediates' ulps depend on coordinate (e.g., `2/r` in Schwarzschild has ulp tracking `r`). The reformulation promotes BACL from a constant to a discriminating substrate observable.
+
+This is also the substrate observable the c2 lattice theorem implicitly encodes — it's the binade ratio between operands, not the maximum ulp alone.
+
+---
+
+## 3. Pairwise correlations on the 15 1-x_term probes
+
+Selected entries from the full correlation matrix (`correlation_matrix_1_x_term`):
+
+| Pair | Pearson r | Interpretation |
+|---|---|---|
+| `ulp_spread_log2` × `E_log2_base_operand` | **−0.6431** | Moderate negative. **The two are NOT redundant** — they capture different substrate aspects. Both remain in the basis. |
+| `ulp_spread_log2` × `base_operand` | −0.2044 | Weak. ulp_spread isn't a simple function of base_operand. |
+| `E_log2_base_operand` × `base_operand` | +0.8356 | Strong (monotone log relation). Confirms E-family collapse to E representative. |
+| `ulp_spread_log2` × `min_ulp` | −0.8582 | Strong. Within the BACL family — same equivalence group, ulp_spread_log2 is the representative. |
+| `ulp_spread_log2` × `max_ulp` | (undefined — `max_ulp` constant in this probe set) | max_ulp has zero variance — preconditional flag, not a basis element. |
+| `E_log2_base_operand` × `in_sterbenz_cluster` | (deterministic) | Boolean interval test on E. Equivalence collapse. |
+| `conjecture_c_in_normal_range` × `c2_lattice_chain_applies` | (constant True both) | Joint precondition. Demoted. |
+
+Full matrix in `phase_c_irreducible_basis.json` `correlation_matrix_1_x_term`.
+
+The pivotal correlation is **ulp_spread_log2 × E ≈ −0.64**. Tight enough to share some binade structure (both observables read the operand chain's binade arrangement), loose enough that **they carry independent information**. If this had been ≥ |0.95|, one of the two would have been demoted; if it had been ≈ 0, they'd be fully orthogonal. The middle ground confirms: keep both, and Phase D's transformation-invariance audit will determine which is the more fundamental substrate quantity.
+
+---
+
+## 4. Equivalence groups (collapsed)
+
+### BACL-spectrum family
+Members: `BACL_grain_max_ulp`, `max_ulp`, `min_ulp`, `ulp_ratio`, `ulp_spread_log2`.
+Representative: **`ulp_spread_log2`**.
+Rationale: All derived from the operand-chain ulp vector via BACL pair invariant. `ulp_spread_log2` carries the binade-spread information that single-value BACL_grain misses.
+
+### E family
+Members: `E_log2_base_operand`, `base_operand`, `in_sterbenz_cluster`.
+Representative: **`E_log2_base_operand`**.
+Rationale: All derived from 1-x_term `base_operand` via deterministic transformations (log2, identity, interval test). E retains the most information (continuous).
+
+### Precondition group (demoted)
+Members: `conjecture_c_in_normal_range`, `c2_lattice_chain_applies`.
+Reclassified as preconditions.
+Rationale: Both constant True across all in-scope probes. They function as scope-validity gates, not discriminating observables. Their discriminating value may surface under subnormal probing (out of current scope) or alternative algebraic chains.
+
+---
+
+## 5. Closeout answers
+
+### Q1 — Basis cardinality
+**3.** Down from the 6 P1-satisfied Phase A candidates, via equivalence-group collapse (BACL family → 1, E family → 1) plus 2 precondition demotions plus 1 algebraic-form-structural invariant (`two_form_partition`).
+
+### Q2 — Basis representatives
+`ulp_spread_log2`, `E_log2_base_operand`, `two_form_partition`.
+
+### Q3 — Equivalence collapses
+- BACL family (5 candidates) → `ulp_spread_log2`
+- E family (3 candidates) → `E_log2_base_operand`
+- Precondition group (2 candidates) → demoted, no representative
+
+### Q4 — Preconditions demoted
+`conjecture_c_in_normal_range` and `c2_lattice_chain_applies`. Both constant True across all in-scope Phase B probes. They remain in the campaign as scope-validity gates; subnormal extension (out of current scope) or alternative algebraic chains could surface discriminating value.
+
+### Q5 — BACL spectrum contribution
+The single-value BACL_grain at the dominant intermediate is constant 2.220e-16 across the probe set (all dominant intermediates are O(1)). The BACL *spectrum* — operand-chain ulp vector — captures the binade spread between the largest and smallest intermediate operands. `ulp_spread_log2` varies meaningfully across probes (range: see `derived_observables.per_probe_spectrum`) because the non-dominant intermediates' ulps depend on coordinate. The reformulation promotes BACL from a constant to a discriminating substrate observable.
+
+### Q6 — Surprising correlations
+Pearson(`ulp_spread_log2`, `E_log2_base_operand`) = **−0.6431**. This is the pivotal correlation: tight enough to share binade-structure information, loose enough to confirm the two carry independent substrate observables. **Both kept in the basis.** Phase D's transformation-invariance audit will determine whether one is more fundamental than the other.
+
+Pearson(`E_log2_base_operand`, `base_operand`) = +0.8356 confirms the E-family collapse (log-monotone relation). Pearson(`ulp_spread_log2`, `min_ulp`) = −0.8582 confirms the BACL-family collapse.
+
+### Q7 — Supports Phase D?
+Yes. The irreducible basis is small (3 elements), each P1-satisfied, each substrate-derivable. Phase D can test transformation-invariance per element under (1) algebraic route choice, (2) format change float32 ↔ float64, (3) reparameterisation of the constraint. Each test is well-scoped.
+
+---
+
+## 6. Implications for the substrate invariant `I(F, x)`
+
+The campaign authority's invariant `I(F, x)` must be built from substrate primitives. Phase C's basis identifies three substrate-derived ingredients:
+
+- **`ulp_spread_log2`**: operand-chain binade-structure observable. Sensitive to which operands matter at the probe point.
+- **`E_log2_base_operand`**: endpoint-distance substrate image. Sensitive to proximity to singular boundaries (Sterbenz cluster, lightspeed, horizon).
+- **`two_form_partition`**: algebraic-form structural invariant. Sensitive to which routes produce silent vs residual_carrying behaviour.
+
+These are the three orthogonal substrate axes the synthesis target must combine. Plus Phase E's V4-native K_G as the missing canonical-curvature ingredient (added under plan-mode discipline).
+
+The substrate-as-probe instrument therefore has **4 substrate axes**: BACL spectrum (substrate granularity), E (substrate distance), partition (substrate algebraic-route structure), K_G (substrate curvature). All P1-satisfied, all substrate-derived, none requiring iteration on F.
+
+That's the synthesis target Phase F will work with.
+
+---
+
+## 7. What Phase C does *not* claim
+
+- Phase C does **not** test transformation-invariance. That is Phase D.
+- Phase C does **not** propose K_G synthesis. The missing K_G primitive is Phase E.
+- Phase C does **not** synthesise the invariant. That is Phase F.
+- Phase C does **not** modify any substrate, fixture, or architecture file.
+- Phase C does **not** run new measurements; all values derive from Phase B's byte-stable table.
+
+---
+
+## 8. Source artefact chain
+
+| Artefact | sha256 prefix |
+|---|---|
+| `phase_b_invariant_vector_table.json` | `58574ba766e34bcc` |
+| `phase_a_candidate_catalogue.json` | `18bd80e6fc395df0` |
+| `phase_c_irreducible_basis.json` | (recorded live post-build) |
+
+---
+
+## 9. References
+
+- Campaign authority: [`Build_Docs/Agent_tasks/substrate_invariant_search_2026_05_23.md`](../../Agent_tasks/substrate_invariant_search_2026_05_23.md)
+- Phase C pre-registry: [`Build_Docs/Agent_tasks/substrate_invariant_search_phase_c_basis.md`](../../Agent_tasks/substrate_invariant_search_phase_c_basis.md)
+- Phase A catalogue: [`phase_a_candidate_catalogue.json`](phase_a_candidate_catalogue.json), [`phase_a_candidate_catalogue.md`](phase_a_candidate_catalogue.md)
+- Phase B vector table: [`phase_b_invariant_vector_table.json`](phase_b_invariant_vector_table.json), [`phase_b_invariant_vector_table.md`](phase_b_invariant_vector_table.md)
+- BACL invariant proof: `Build_Docs/Reports/bacl_invariant_audit/closeout.md`
+- c2 lattice theorem: `Build_Docs/Reports/c2_lattice_substrate_derivation/closeout.md`
+- MCG Phase 2g (E validated): `Build_Docs/Reports/mcg_geometry_first/phase_2g_cdef1_calibration.md`

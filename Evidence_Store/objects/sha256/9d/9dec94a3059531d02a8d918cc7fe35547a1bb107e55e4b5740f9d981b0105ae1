@@ -1,0 +1,450 @@
+{
+  "schwarzschild": {
+    "sterbenz": {
+      "n_points": 2001,
+      "ulp1": {
+        "early": {
+          "name": "Early (F2)",
+          "n": 2001,
+          "frac_on_lattice": 0.04297851074462768,
+          "max_abs_j": 1.0,
+          "mean_frac_error": 0.2443153423288356,
+          "median_frac_error": 0.25
+        },
+        "late": {
+          "name": "Late (reassoc F2)",
+          "n": 2001,
+          "frac_on_lattice": 0.5222388805597201,
+          "max_abs_j": 0.0,
+          "mean_frac_error": 0.23888055972013994,
+          "median_frac_error": 0.0
+        },
+        "compound": {
+          "name": "P_compound_split",
+          "n": 2001,
+          "frac_on_lattice": 0.5222388805597201,
+          "max_abs_j": 0.0,
+          "mean_frac_error": 0.23888055972013994,
+          "median_frac_error": 0.0
+        },
+        "sign_c": {
+          "name": "P_sign_c",
+          "n": 2001,
+          "frac_on_lattice": 0.5222388805597201,
+          "max_abs_j": 0.0,
+          "mean_frac_error": 0.23888055972013994,
+          "median_frac_error": 0.0
+        }
+      },
+      "local": {
+        "early": {
+          "name": "Early (local ulp)",
+          "n": 2001,
+          "frac_on_lattice": 1.0,
+          "max_abs_j": 8725724278030336.0,
+          "mean_frac_error": 0.0,
+          "median_frac_error": 0.0
+        },
+        "late": {
+          "name": "Late (local ulp)",
+          "n": 2001,
+          "frac_on_lattice": 1.0,
+          "max_abs_j": 9007199254740992.0,
+          "mean_frac_error": 0.0,
+          "median_frac_error": 0.0
+        }
+      }
+    },
+    "non_sterbenz": {
+      "n_points": 2000,
+      "ulp1": {
+        "early": {
+          "name": "Early (F2)",
+          "n": 2000,
+          "frac_on_lattice": 0.814,
+          "max_abs_j": 0.0,
+          "mean_frac_error": 0.093,
+          "median_frac_error": 0.0
+        },
+        "late": {
+          "name": "Late (reassoc F2)",
+          "n": 2000,
+          "frac_on_lattice": 0.455,
+          "max_abs_j": 0.0,
+          "mean_frac_error": 0.111625,
+          "median_frac_error": 0.0625
+        },
+        "compound": {
+          "name": "P_compound_split",
+          "n": 2000,
+          "frac_on_lattice": 0.814,
+          "max_abs_j": 0.0,
+          "mean_frac_error": 0.093,
+          "median_frac_error": 0.0
+        },
+        "sign_c": {
+          "name": "P_sign_c",
+          "n": 2000,
+          "frac_on_lattice": 0.814,
+          "max_abs_j": 0.0,
+          "mean_frac_error": 0.093,
+          "median_frac_error": 0.0
+        }
+      },
+      "local": {
+        "early": {
+          "name": "Early (local ulp)",
+          "n": 2000,
+          "frac_on_lattice": 1.0,
+          "max_abs_j": 4503599627370496.0,
+          "mean_frac_error": 0.0,
+          "median_frac_error": 0.0
+        },
+        "late": {
+          "name": "Late (local ulp)",
+          "n": 2000,
+          "frac_on_lattice": 0.641,
+          "max_abs_j": 2251799813685248.0,
+          "mean_frac_error": 0.13025,
+          "median_frac_error": 0.0
+        }
+      }
+    }
+  },
+  "sr": {
+    "sterbenz": {
+      "n_points": 2001,
+      "ulp1": {
+        "early": {
+          "name": "Early (F2)",
+          "n": 2001,
+          "frac_on_lattice": 0.13693153423288357,
+          "max_abs_j": 1.0,
+          "mean_frac_error": 0.23316924301521114,
+          "median_frac_error": 0.25
+        },
+        "late": {
+          "name": "Late (reassoc F2)",
+          "n": 2001,
+          "frac_on_lattice": 0.5737131434282858,
+          "max_abs_j": 0.0,
+          "mean_frac_error": 0.21314342828585708,
+          "median_frac_error": 0.0
+        },
+        "compound": {
+          "name": "P_compound_split",
+          "n": 2001,
+          "frac_on_lattice": 0.5737131434282858,
+          "max_abs_j": 0.0,
+          "mean_frac_error": 0.21314342828585708,
+          "median_frac_error": 0.0
+        },
+        "sign_c": {
+          "name": "P_sign_c",
+          "n": 2001,
+          "frac_on_lattice": 0.5737131434282858,
+          "max_abs_j": 0.0,
+          "mean_frac_error": 0.21314342828585708,
+          "median_frac_error": 0.0
+        }
+      },
+      "local": {
+        "early": {
+          "name": "Early (local ulp)",
+          "n": 2001,
+          "frac_on_lattice": 1.0,
+          "max_abs_j": 8936830510563328.0,
+          "mean_frac_error": 0.0,
+          "median_frac_error": 0.0
+        },
+        "late": {
+          "name": "Late (local ulp)",
+          "n": 2001,
+          "frac_on_lattice": 1.0,
+          "max_abs_j": 9007199254740992.0,
+          "mean_frac_error": 0.0,
+          "median_frac_error": 0.0
+        }
+      }
+    },
+    "non_sterbenz": {
+      "n_points": 2001,
+      "ulp1": {
+        "early": {
+          "name": "Early (F2)",
+          "n": 2001,
+          "frac_on_lattice": 0.848575712143928,
+          "max_abs_j": 0.0,
+          "mean_frac_error": 0.07571214392803598,
+          "median_frac_error": 0.0
+        },
+        "late": {
+          "name": "Late (reassoc F2)",
+          "n": 2001,
+          "frac_on_lattice": 0.47876061969015493,
+          "max_abs_j": 0.0,
+          "mean_frac_error": 0.09247719890054973,
+          "median_frac_error": 0.015625
+        },
+        "compound": {
+          "name": "P_compound_split",
+          "n": 2001,
+          "frac_on_lattice": 0.848575712143928,
+          "max_abs_j": 0.0,
+          "mean_frac_error": 0.07571214392803598,
+          "median_frac_error": 0.0
+        },
+        "sign_c": {
+          "name": "P_sign_c",
+          "n": 2001,
+          "frac_on_lattice": 0.848575712143928,
+          "max_abs_j": 0.0,
+          "mean_frac_error": 0.07571214392803598,
+          "median_frac_error": 0.0
+        }
+      },
+      "local": {
+        "early": {
+          "name": "Early (local ulp)",
+          "n": 2001,
+          "frac_on_lattice": 1.0,
+          "max_abs_j": 4503599627370496.0,
+          "mean_frac_error": 0.0,
+          "median_frac_error": 0.0
+        },
+        "late": {
+          "name": "Late (local ulp)",
+          "n": 2001,
+          "frac_on_lattice": 0.6301849075462269,
+          "max_abs_j": 2251799813685248.0,
+          "mean_frac_error": 0.10924225387306347,
+          "median_frac_error": 0.0
+        }
+      }
+    }
+  },
+  "pure_algebraic_n2": {
+    "sterbenz": {
+      "n_points": 2001,
+      "ulp1": {
+        "early": {
+          "name": "Early (F2)",
+          "n": 2001,
+          "frac_on_lattice": 0.19940029985007496,
+          "max_abs_j": 1.0,
+          "mean_frac_error": 0.22948535497876063,
+          "median_frac_error": 0.25
+        },
+        "late": {
+          "name": "Late (reassoc F2)",
+          "n": 2001,
+          "frac_on_lattice": 0.5832083958020989,
+          "max_abs_j": 0.0,
+          "mean_frac_error": 0.20839580209895053,
+          "median_frac_error": 0.0
+        },
+        "compound": {
+          "name": "P_compound_split",
+          "n": 2001,
+          "frac_on_lattice": 0.5832083958020989,
+          "max_abs_j": 0.0,
+          "mean_frac_error": 0.20839580209895053,
+          "median_frac_error": 0.0
+        },
+        "sign_c": {
+          "name": "P_sign_c",
+          "n": 2001,
+          "frac_on_lattice": 0.5832083958020989,
+          "max_abs_j": 0.0,
+          "mean_frac_error": 0.20839580209895053,
+          "median_frac_error": 0.0
+        }
+      },
+      "local": {
+        "early": {
+          "name": "Early (local ulp)",
+          "n": 2001,
+          "frac_on_lattice": 1.0,
+          "max_abs_j": 8936830510563328.0,
+          "mean_frac_error": 0.0,
+          "median_frac_error": 0.0
+        },
+        "late": {
+          "name": "Late (local ulp)",
+          "n": 2001,
+          "frac_on_lattice": 1.0,
+          "max_abs_j": 9007199254740992.0,
+          "mean_frac_error": 0.0,
+          "median_frac_error": 0.0
+        }
+      }
+    },
+    "non_sterbenz": {
+      "n_points": 2001,
+      "ulp1": {
+        "early": {
+          "name": "Early (F2)",
+          "n": 2001,
+          "frac_on_lattice": 0.8800599700149925,
+          "max_abs_j": 0.0,
+          "mean_frac_error": 0.05997001499250375,
+          "median_frac_error": 0.0
+        },
+        "late": {
+          "name": "Late (reassoc F2)",
+          "n": 2001,
+          "frac_on_lattice": 0.4832583708145927,
+          "max_abs_j": 0.0,
+          "mean_frac_error": 0.09006043853073463,
+          "median_frac_error": 0.015625
+        },
+        "compound": {
+          "name": "P_compound_split",
+          "n": 2001,
+          "frac_on_lattice": 0.8800599700149925,
+          "max_abs_j": 0.0,
+          "mean_frac_error": 0.05997001499250375,
+          "median_frac_error": 0.0
+        },
+        "sign_c": {
+          "name": "P_sign_c",
+          "n": 2001,
+          "frac_on_lattice": 0.8800599700149925,
+          "max_abs_j": 0.0,
+          "mean_frac_error": 0.05997001499250375,
+          "median_frac_error": 0.0
+        }
+      },
+      "local": {
+        "early": {
+          "name": "Early (local ulp)",
+          "n": 2001,
+          "frac_on_lattice": 1.0,
+          "max_abs_j": 4503599627370496.0,
+          "mean_frac_error": 0.0,
+          "median_frac_error": 0.0
+        },
+        "late": {
+          "name": "Late (local ulp)",
+          "n": 2001,
+          "frac_on_lattice": 0.6031984007996002,
+          "max_abs_j": 2251799813685248.0,
+          "mean_frac_error": 0.12015086206896551,
+          "median_frac_error": 0.0
+        }
+      }
+    }
+  },
+  "cbrt_n3": {
+    "sterbenz": {
+      "n_points": 2001,
+      "ulp1": {
+        "early": {
+          "name": "Early (F2)",
+          "n": 2001,
+          "frac_on_lattice": 0.16891554222888555,
+          "max_abs_j": 4.0,
+          "mean_frac_error": 0.2474773355509745,
+          "median_frac_error": 0.25
+        },
+        "late": {
+          "name": "Late (reassoc F2)",
+          "n": 2001,
+          "frac_on_lattice": 0.5182408795602199,
+          "max_abs_j": 4.0,
+          "mean_frac_error": 0.24087956021989004,
+          "median_frac_error": 0.0
+        },
+        "compound": {
+          "name": "P_compound_split",
+          "n": 2001,
+          "frac_on_lattice": 0.5182408795602199,
+          "max_abs_j": 4.0,
+          "mean_frac_error": 0.24087956021989004,
+          "median_frac_error": 0.0
+        },
+        "sign_c": {
+          "name": "P_sign_c",
+          "n": 2001,
+          "frac_on_lattice": 0.5182408795602199,
+          "max_abs_j": 4.0,
+          "mean_frac_error": 0.24087956021989004,
+          "median_frac_error": 0.0
+        }
+      },
+      "local": {
+        "early": {
+          "name": "Early (local ulp)",
+          "n": 2001,
+          "frac_on_lattice": 1.0,
+          "max_abs_j": 8972014882652160.0,
+          "mean_frac_error": 0.0,
+          "median_frac_error": 0.0
+        },
+        "late": {
+          "name": "Late (local ulp)",
+          "n": 2001,
+          "frac_on_lattice": 1.0,
+          "max_abs_j": 9007199254740992.0,
+          "mean_frac_error": 0.0,
+          "median_frac_error": 0.0
+        }
+      }
+    },
+    "non_sterbenz": {
+      "n_points": 2001,
+      "ulp1": {
+        "early": {
+          "name": "Early (F2)",
+          "n": 2001,
+          "frac_on_lattice": 0.6256871564217891,
+          "max_abs_j": 2.0,
+          "mean_frac_error": 0.18715642178910544,
+          "median_frac_error": 0.0
+        },
+        "late": {
+          "name": "Late (reassoc F2)",
+          "n": 2001,
+          "frac_on_lattice": 0.18040979510244878,
+          "max_abs_j": 2.0,
+          "mean_frac_error": 0.21785591579210395,
+          "median_frac_error": 0.25
+        },
+        "compound": {
+          "name": "P_compound_split",
+          "n": 2001,
+          "frac_on_lattice": 0.6256871564217891,
+          "max_abs_j": 2.0,
+          "mean_frac_error": 0.18715642178910544,
+          "median_frac_error": 0.0
+        },
+        "sign_c": {
+          "name": "P_sign_c",
+          "n": 2001,
+          "frac_on_lattice": 0.6256871564217891,
+          "max_abs_j": 2.0,
+          "mean_frac_error": 0.18715642178910544,
+          "median_frac_error": 0.0
+        }
+      },
+      "local": {
+        "early": {
+          "name": "Early (local ulp)",
+          "n": 2001,
+          "frac_on_lattice": 1.0,
+          "max_abs_j": 6755399441055744.0,
+          "mean_frac_error": 0.0,
+          "median_frac_error": 0.0
+        },
+        "late": {
+          "name": "Late (local ulp)",
+          "n": 2001,
+          "frac_on_lattice": 0.6526736631684158,
+          "max_abs_j": 7881299347898368.0,
+          "mean_frac_error": 0.1006293728135932,
+          "median_frac_error": 0.0
+        }
+      }
+    }
+  }
+}

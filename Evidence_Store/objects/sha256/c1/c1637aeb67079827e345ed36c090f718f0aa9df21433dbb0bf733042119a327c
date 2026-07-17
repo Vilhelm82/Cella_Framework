@@ -1,0 +1,108 @@
+# Retest A — F2 Sterbenz-region b_k probe via exact rationals
+
+**Layer:** eval-layer only · research-grade · no substrate promotion.
+**Path under test:** F2 (`R^2 - 1 + x`) · pure_algebraic fixture (`f = 1-x`, `R = sqrt(f)`).
+**Method:** residuals carried as EXACT `fractions.Fraction` (every IEEE float and
+every `Decimal` result is an exact rational), escaping the float128 80-bit noise
+floor; per-cell exact-rational OLS of `C = a + u_p·b_k`; precision ladder =
+{float32, float64, float128(80-bit), decimal_30/50/80/120}.
+
+All three JSON outputs are **byte-stable** across re-runs.
+
+---
+
+## (i) Retrodiction gate — **PASS**
+
+| Sub-gate | Result |
+|---|---|
+| **G1** Sterbenz boundary at x = 0.5 | PASS — for x ≤ 1/2, `fl(power − 1)` is exact (Sterbenz: `power ∈ [1/2,1]`, so `1/2 ≤ power ≤ 2·1`); boundary cell x = 0.5 exact. |
+| **G2** F2 dyadic grain | PASS — every binary-float F2 residual is an exact integer multiple of a power-of-two ULP; residual/local-ULP exposes the half-integer-lattice character. |
+
+The known F2 half-integer lattice grain and the Sterbenz boundary at x = 0.5 are
+reproduced on the grid before any b_k is interpreted.
+
+---
+
+## (ii) Did exact arithmetic escape the degeneracy? — **YES, in the F2 Sterbenz region**
+
+Fraction of Sterbenz cells with **≥ 2 distinct nonzero residuals** across the ladder
+(the non-degeneracy condition F1 failed):
+
+| Grid | F2 Sterbenz gate-pass | F1 control gate-pass |
+|---|---|---|
+| Engineered dyadic (x∈(0,½), n=2047) | **0.83** | 0.83 |
+| Canonical-style non-dyadic (x<½, n=66) | **0.97** | — |
+
+Carrying exact rationals exposes **each tier's own nonzero rounding floor** instead
+of letting all-but-float128 collapse to 0. The gate that F1 failed *near the
+singularity* is comfortably passed by F2 *in the Sterbenz region*.
+
+**Where the Phase 2A degeneracy actually lives (reproduced exactly):** F1 collapses
+to "only float128 nonzero" **near the singularity f→0 (x→1)** — float32/float64/
+decimal give *exactly* 0 there (equal-and-opposite parity cancellation is exact);
+only float128 shows a value, and that value (e.g. 3.3e-24) is exactly its 80-bit
+floor. 23% of near-singularity F1 cells are degenerate. This is a **different
+region** from the F2 Sterbenz target (x ≤ 0.5).
+
+---
+
+## (iii) F2 Sterbenz b_k vs Regular b_k — identifiable, nonzero, ~1.8× LARGER
+
+Matched non-dyadic instrument (same grid construction as Task 017c), exact-rational
+across-tier RMS fit `RMS_C = a + u_p·b_k`:
+
+| Region | across-tier b_k | R² | per-cell \|res/u_p\| max | mean | within 2 ULP |
+|---|---|---|---|---|---|
+| **F2 Sterbenz** (x<½) | **0.720** | **1.000** | 1.500 | 0.485 | 100% |
+| **F2 Regular** (x>½) | **0.400** | **1.000** | 1.000 | 0.585 | 100% |
+| F1 Sterbenz (control) | 0.652 | 1.000 | 1.000 | 0.537 | 100% |
+
+- **Sterbenz/Regular b_k ratio = 1.80** — the Sterbenz conditioning amplitude is
+  **larger**, not vanishing.
+- b_k is **identifiable and nonzero** (R² = 1.0) when measured exactly.
+- The earlier Task 017c bootstrap CI `[5.5e-41, 0.738]` (lower bound pinned at
+  machine floor → read as "unresolved / includes ~0") was a **float-lstsq /
+  bootstrap-resampling artifact**: exact-rational OLS pins b_k = 0.720, R² = 1.0,
+  excluding zero cleanly.
+
+---
+
+## (iv) Verdict candidate (orchestrator decides)
+
+The open sub-claim — *"in the Sterbenz region the F2 conditioning amplitude b_k
+vanishes (CI includes zero)"* — is, by exact-rational measurement:
+
+- **Identifiable:** YES (across-tier R² = 1.0).
+- **Nonzero:** YES (b_k = 0.720, does not include zero).
+- **Vanishing (the pre-registered prediction):** **REFUTED** — b_k is not ~0; it is
+  ~1.8× the regular-region value.
+
+**But the structure is apparatus-grounded, not a hidden substrate amplitude.** The
+diagnosis (`f2_residual_floor_diagnosis.json`) shows that at **every** tier the F2
+Sterbenz residual is at that tier's **own rounding floor**:
+`residual_p / u_p ∈ {0, ±1}` (binary) and `{0, ±0.2}` (decimal), exactly, with
+~50/50 parity-random sign and ~59% of cells exactly 0. So
+`residual_p ≈ c_p · u_p` with `c_p` a small parity-determined integer that is the
+**same magnitude across all tiers**. Because RMS-residual is then proportional to
+u_p across the ladder, the across-tier fit is R² = 1.0 by construction and
+`b_k = RMS(c_p)` — a **rounding-floor coefficient**, an apparatus property of
+correctly-rounded sqrt + Sterbenz-exact subtraction, **not** an emergent substrate
+conditioning amplitude.
+
+**Recommended cleaner statement (candidate, not asserted):** *On path F2 in the
+Sterbenz-exact region, the precision-scaling separation `C = a + u_p·b_k` holds with
+R² = 1.0 and an identifiable nonzero b_k ≈ 0.72 (≈1.8× the regular-region b_k ≈
+0.40). However, the per-tier residual is bounded by its own ULP (`|res| ≤ 1.5 u_p`)
+at every precision, so b_k here measures the rounding-floor coefficient of the
+correctly-rounded sqrt round-trip, not a distinct conditioning mechanism. The claim
+is best read as **apparatus-bound**: the amplitude is real and stable but is a floor
+coefficient, so it does not establish a substrate boundary beyond the floor.* The
+Phase 2A "degeneracy" finding stands but applies to **F1 near the singularity**, a
+different region; it does not transfer to F2 in the Sterbenz region.
+
+---
+
+### Artifacts
+- `f2_sterbenz_exact_rational_probe.py/.json` — full per-cell probe, retrodiction gate, both normalizations (raw + /f).
+- `f2_residual_floor_diagnosis.py/.json` — proof that residual_p ∈ {0,±1}·u_p (binary) / {0,±0.2}·u_p (decimal) at every tier.
+- `f2_matched_grid_bk_comparison.py/.json` — apples-to-apples Sterbenz-vs-Regular b_k on the Task-017c instrument (exact OLS).

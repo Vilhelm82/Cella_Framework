@@ -1,0 +1,38 @@
+# F2 Phase Drift Diagnostics Closeout
+
+Cause classification: `cancellation_operand_phase_inheritance`
+
+## Answers
+
+1. Drift cause: `cancellation_operand_phase_inheritance`.
+2. F2 generates an independent coherent half-comb: `False`.
+3. `(sqrt(f)^2 - 1) / ulp(f)` is integer-phase at all measured points: `True`.
+4. `phase(F2 / ulp(f))` matches the cancellation operand phase at all measured points: `True`.
+5. Double-precision language justified: `False`.
+
+## Fixture Findings
+
+- `sr_four_form`: diagnosis `operand_phase_drift_on_beta_grid`; usable pairs `95`, F2 nonzero `95`.
+  F2 phase matches `beta^2` phase: `137` / `137`.
+  Usable-pair F2 phase classes: integer `14`, half `26`, other `55`.
+- `schwarzschild_four_form`: diagnosis `operand_phase_sparse_far_binade`; usable pairs `81`, F2 nonzero `28`.
+  F2 phase matches `2/r` phase: `137` / `137`.
+  Usable-pair F2 phase classes: integer `62`, half `16`, other `3`.
+
+## Interpretation
+
+F2 is not drifting because it owns a stable hidden half-ULP comb. The intermediate `(sqrt(f)^2 - 1)` is integer-phase on the `ulp(f)` lattice, and the visible F2 phase is exactly the phase of the cancellation operand measured against that same lattice.
+
+For SR, `beta^2 / ulp(1 - beta^2)` walks through many fractional residues on the canonical beta grid, so the F2 phase drifts inside the broad `f` binade. For Schwarzschild, `2/r / ulp(1 - 2/r)` is mostly integer in the near/transition region, with half/other residues concentrated in the far `f` binade.
+
+## Verification
+
+- `PYTHONPATH=src python -m lloyd_v4.evals.f2_phase_drift_diagnostics`
+  Result: passed; generated artifact_f2_phase_drift_diagnostics.json and closeout_f2_phase_drift_diagnostics.md.
+- `PYTHONPATH=src python -m pytest tests/test_f2_phase_drift_diagnostics.py -q`
+  Result: passed; 6 tests.
+
+## Artifacts
+
+- `Build_Docs/Reports/f2_phase_drift_diagnostics/artifact_f2_phase_drift_diagnostics.json`
+- `Build_Docs/Reports/f2_phase_drift_diagnostics/closeout_f2_phase_drift_diagnostics.md`

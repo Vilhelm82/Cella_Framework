@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "authority": "historical V4 retirement reference; not current Cella authority",
+  "package_id": "V4PKG-0014",
+  "family": "campaigns",
+  "label": "cubic_role_branch_census",
+  "manifest_path": "manifests/campaigns/V4PKG-0014__cubic_role_branch_census.json",
+  "member_count": 2,
+  "logical_bytes": 86824,
+  "evidence_covered_count": 2,
+  "evidence_origin_bound_count": 2,
+  "path_bound_count": 2,
+  "certificate_related_count": 0,
+  "member_tree_sha256": "75b47d966840c13c594c4eaeeb2ea7f461c93a8262c681a41812a627fcbee790",
+  "members": [
+    {
+      "path": "research/campaigns/cubic_role_branch_census/census_report.json",
+      "file_type": "regular",
+      "sha256": "1eeae7a5fa6ba789bfd773456a006c80b762e202fe031956f2e85351f667aa2e",
+      "bytes": 40680,
+      "mode": 420,
+      "evidence_id": "EVD-000199",
+      "evidence_origin_bound": true,
+      "path_bound": true,
+      "certificate_related": false,
+      "report_ids": []
+    },
+    {
+      "path": "research/campaigns/cubic_role_branch_census/census_script.py",
+      "file_type": "regular",
+      "sha256": "268bb970a83dc17238222235d54fb663e2b89b04ea30dfbf034746ee3e626a53",
+      "bytes": 46144,
+      "mode": 420,
+      "evidence_id": "EVD-000244",
+      "evidence_origin_bound": true,
+      "path_bound": true,
+      "certificate_related": false,
+      "report_ids": []
+    }
+  ]
+}

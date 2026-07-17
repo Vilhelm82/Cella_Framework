@@ -1,0 +1,207 @@
+{
+  "FTZ_detection": {
+    "FTZ_detected": false,
+    "ftz_indicator_diff_equals_normal": false,
+    "smallest_subnormal_nonzero": true,
+    "subnormal_sum_correct": true,
+    "subnormal_sum_is_subnormal": true
+  },
+  "audit_name": "bacl_subnormal_audit",
+  "failure_modes_observed": [],
+  "pair_classes": {
+    "NormSub": {
+      "BACL_S_holds": true,
+      "BACL_S_violations": 0,
+      "class": "NormSub",
+      "first_sharpness_examples": [],
+      "first_violations": [],
+      "hypothesis_holds_count": 2000,
+      "n_pairs": 2000,
+      "proviso_violated_integer_count": 0,
+      "sharpness_count": 0
+    },
+    "SubNormHigherBinade": {
+      "BACL_S_holds": true,
+      "BACL_S_violations": 0,
+      "class": "SubNormHigherBinade",
+      "first_sharpness_examples": [
+        {
+          "a": 1.2752580422829536e-308,
+          "a_subnormal": true,
+          "b": 2.5717978196431487e-303,
+          "b_subnormal": false,
+          "ulp_a": 5e-324,
+          "ulp_b": 3.2379e-319
+        },
+        {
+          "a": 1.806076357012453e-308,
+          "a_subnormal": true,
+          "b": 1.3764078575904308e-304,
+          "b_subnormal": false,
+          "ulp_a": 5e-324,
+          "ulp_b": 2.0237e-320
+        },
+        {
+          "a": 1.734088331949883e-308,
+          "a_subnormal": true,
+          "b": 2.9068883319868645e-304,
+          "b_subnormal": false,
+          "ulp_a": 5e-324,
+          "ulp_b": 4.0474e-320
+        },
+        {
+          "a": 9.09116331308094e-309,
+          "a_subnormal": true,
+          "b": 4.874192180410633e-303,
+          "b_subnormal": false,
+          "ulp_a": 5e-324,
+          "ulp_b": 6.4758e-319
+        },
+        {
+          "a": 1.396162265261462e-308,
+          "a_subnormal": true,
+          "b": 1.0056869101128491e-302,
+          "b_subnormal": false,
+          "ulp_a": 5e-324,
+          "ulp_b": 1.295163e-318
+        }
+      ],
+      "first_violations": [],
+      "hypothesis_holds_count": 0,
+      "n_pairs": 2000,
+      "proviso_violated_integer_count": 45,
+      "sharpness_count": 1955
+    },
+    "SubNormSameUlp": {
+      "BACL_S_holds": true,
+      "BACL_S_violations": 0,
+      "class": "SubNormSameUlp",
+      "first_sharpness_examples": [],
+      "first_violations": [],
+      "hypothesis_holds_count": 2000,
+      "n_pairs": 2000,
+      "proviso_violated_integer_count": 0,
+      "sharpness_count": 0
+    },
+    "SubSub": {
+      "BACL_S_holds": true,
+      "BACL_S_violations": 0,
+      "class": "SubSub",
+      "first_sharpness_examples": [],
+      "first_violations": [],
+      "hypothesis_holds_count": 2000,
+      "n_pairs": 2000,
+      "proviso_violated_integer_count": 0,
+      "sharpness_count": 0
+    }
+  },
+  "predictions": {
+    "P_BS_1_SubSub_BACL_holds": true,
+    "P_BS_2_NormSub_BACL_holds": true,
+    "P_BS_3_sharpness_geq_50pct": true,
+    "P_BS_4_specialization_to_original_BACL": true,
+    "P_BS_5_proof_extends_via_ulp_directly": true,
+    "P_BS_6_no_FTZ_or_arithmetic_interference": true,
+    "diag_sharpness_fraction": 0.9775
+  },
+  "preregistry_path": "Build_Docs/Reports/bacl_subnormal_audit/preregistry.md",
+  "proof_samples": [
+    {
+      "N_a_is_int": true,
+      "N_b_is_int": true,
+      "a": 2.5e-323,
+      "a_subnormal": true,
+      "b": 1.5e-323,
+      "b_subnormal": true,
+      "diff_int_value_in_ulp_b_units": 2,
+      "diff_is_integer_multiple_of_ulp_b": true,
+      "diff_real": 1e-323,
+      "hypothesis_ulp_a_geq_ulp_b": true,
+      "ulp_a": 5e-324,
+      "ulp_b": 5e-324,
+      "ulp_ratio_is_pow2_int": true
+    },
+    {
+      "N_a_is_int": true,
+      "N_b_is_int": true,
+      "a": 1.1125369292536007e-308,
+      "a_subnormal": true,
+      "b": 5.562684646268003e-309,
+      "b_subnormal": true,
+      "diff_int_value_in_ulp_b_units": 1125899906842624,
+      "diff_is_integer_multiple_of_ulp_b": true,
+      "diff_real": 5.562684646268003e-309,
+      "hypothesis_ulp_a_geq_ulp_b": true,
+      "ulp_a": 5e-324,
+      "ulp_b": 5e-324,
+      "ulp_ratio_is_pow2_int": true
+    },
+    {
+      "N_a_is_int": true,
+      "N_b_is_int": true,
+      "a": 8.900295434028806e-308,
+      "a_subnormal": false,
+      "b": 1.5e-323,
+      "b_subnormal": true,
+      "diff_int_value_in_ulp_b_units": 18014398509481981,
+      "diff_is_integer_multiple_of_ulp_b": true,
+      "diff_real": 8.900295434028804e-308,
+      "hypothesis_ulp_a_geq_ulp_b": true,
+      "ulp_a": 2e-323,
+      "ulp_b": 5e-324,
+      "ulp_ratio_is_pow2_int": true
+    },
+    {
+      "N_a_is_int": true,
+      "N_b_is_int": true,
+      "a": 1.0,
+      "a_subnormal": false,
+      "b": 1e-323,
+      "b_subnormal": true,
+      "diff_int_value_in_ulp_b_units": 202402253307310618352495346718917307049556649764142118356901358027430339567995346891960383701437124495187077864316811911389808737385793476867013399940738509921517424276566361364466907742093216341239767678472745068562007483424692698618103355649159556340810056512358769552333414615230502532186327508646006263307707741093494782,
+      "diff_is_integer_multiple_of_ulp_b": true,
+      "diff_real": 1.0,
+      "hypothesis_ulp_a_geq_ulp_b": true,
+      "ulp_a": 2.220446049250313e-16,
+      "ulp_b": 5e-324,
+      "ulp_ratio_is_pow2_int": true
+    },
+    {
+      "N_a_is_int": true,
+      "N_b_is_int": true,
+      "a": 1.5e-323,
+      "a_subnormal": true,
+      "b": 2.2250738585072014e-308,
+      "b_subnormal": false,
+      "diff_int_value_in_ulp_b_units": -4503599627370493,
+      "diff_is_integer_multiple_of_ulp_b": true,
+      "diff_real": -2.2250738585072e-308,
+      "hypothesis_ulp_a_geq_ulp_b": true,
+      "ulp_a": 5e-324,
+      "ulp_b": 5e-324,
+      "ulp_ratio_is_pow2_int": true
+    },
+    {
+      "N_a_is_int": true,
+      "N_b_is_int": true,
+      "a": 1.1125369292536007e-308,
+      "a_subnormal": true,
+      "b": 2.225073858507202e-308,
+      "b_subnormal": false,
+      "diff_int_value_in_ulp_b_units": -2251799813685249,
+      "diff_is_integer_multiple_of_ulp_b": true,
+      "diff_real": -1.112536929253601e-308,
+      "hypothesis_ulp_a_geq_ulp_b": true,
+      "ulp_a": 5e-324,
+      "ulp_b": 5e-324,
+      "ulp_ratio_is_pow2_int": true
+    }
+  ],
+  "specialization_check": {
+    "mismatches": 0,
+    "n_samples": 100,
+    "specialization_holds": true
+  },
+  "unified_BACL_statement": "For a, b > 0 in any IEEE 754 binary format (including subnormals), if ulp(a) >= ulp(b), then a - b is integer multiple of ulp(b).",
+  "verdict": "BACL_extends_to_subnormal_natively"
+}

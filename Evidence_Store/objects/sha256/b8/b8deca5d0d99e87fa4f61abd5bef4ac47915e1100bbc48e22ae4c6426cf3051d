@@ -1,0 +1,224 @@
+"""
+c2 Lattice Theorem — Binade Danger Zone Probe.
+
+Following external mathematical review (2026-05-18 conversation), the
+proviso V_n ∈ [f_float/2, 2·f_float] is too loose. When V_n is in the
+LOWER-adjacent binade (V_n ∈ [f_float/2, f_float)), ulp(V_n) = ulp(f_float)/2,
+which produces half-integer offsets relative to ulp(f_float).
+
+This probe directly constructs f values where V_n can drop into the lower
+binade, and checks whether c2 actually produces half-integer levels there.
+
+Three outcomes:
+  (A) Half-integer levels appear → corrected theorem (tighter hypothesis)
+  (B) Levels stay integer → an additional structural reason prevents the
+      lower-binade case from ever producing half-integers
+  (C) V_n never actually drops to lower binade despite f being right at
+      the boundary → the lower-binade case is unreachable for correctly-
+      rounded sqrt, narrowing the hypothesis differently.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import math
+import struct
+import sys
+from pathlib import Path
+
+import numpy as np
+from lloyd_v4.primitives import typed_ulp
+
+
+ROOT = Path(__file__).resolve().parents[1]
+REPORT_DIR = ROOT / "Build_Docs" / "Reports" / "c2_lattice_sharpness_audit"
+ARTIFACT = REPORT_DIR / "binade_danger_zone_artifact.json"
+
+
+def _ulp_f64(x: float) -> float:
+    """ULP via the ``typed_ulp`` substrate primitive (GAP-003, precision='float64').
+
+    Migrated from inline IEEE 754 ULP helper as part of the DRY-003 substrate
+    consolidation. Byte-compatible with the original on finite normal inputs.
+    """
+    return float(typed_ulp(x, precision="float64").value.ulp)
+
+
+def _binade_index(x: float) -> int:
+    """Return k such that x ∈ [2^k, 2^(k+1))."""
+    if x <= 0:
+        return -2000
+    return math.frexp(x)[1] - 1
+
+
+def _next_float_up(x: float) -> float:
+    """Next representable float64 above x."""
+    return math.nextafter(x, math.inf)
+
+
+def _next_float_down(x: float) -> float:
+    return math.nextafter(x, -math.inf)
+
+
+def _probe_at_binade_boundary(k: int, n_floats_above: int = 200) -> list[dict]:
+    """For binade boundary at 2^k, probe the first n_floats_above values
+    of f just above 2^k. For each, compute R = sqrt(f), V_2 = R*R, and
+    check whether V_2 drops into the lower binade [2^(k-1), 2^k).
+    Then compute c2 and check the lattice level.
+    """
+    boundary = math.ldexp(1.0, k)
+    rows = []
+    f = boundary
+    for i in range(n_floats_above):
+        f = _next_float_up(f)
+        # Compute x_term that would produce this f (via x_term = 1 - f)
+        # Only valid if f < 1 (so x_term > 0).
+        if f >= 1.0:
+            break
+        x_term = 1.0 - f
+        # Compute via the c2 chain
+        f_computed = 1.0 - x_term  # may differ from f by rounding
+        R = f_computed ** 0.5
+        V = R * R
+        c2 = V + (x_term - 1.0)
+        ulp_f = _ulp_f64(f_computed)
+        level = c2 / ulp_f
+        level_int = round(level)
+        residual = abs(level - level_int)
+        f_binade = _binade_index(f_computed)
+        V_binade = _binade_index(V)
+        rows.append(
+            {
+                "boundary_2_to_k": k,
+                "i_above_boundary": i,
+                "f_target": f,
+                "x_term": x_term,
+                "f_computed": f_computed,
+                "R": R,
+                "V_2": V,
+                "c2": c2,
+                "ulp_f": ulp_f,
+                "level": level,
+                "level_int": int(level_int),
+                "residual_to_nearest_int": float(residual),
+                "is_integer_lattice": bool(residual < 1e-9),
+                "f_binade_k": f_binade,
+                "V_binade_k": V_binade,
+                "V_in_lower_binade": V_binade < f_binade,
+                "V_in_same_binade": V_binade == f_binade,
+                "V_in_upper_binade": V_binade > f_binade,
+                "binade_delta_V_minus_f": V_binade - f_binade,
+            }
+        )
+    return rows
+
+
+def run_probe() -> dict:
+    """Probe every binade boundary in (0, 1) up to a reasonable depth."""
+    all_rows = []
+    # k = 0 corresponds to boundary 1.0 (but f < 1, so we start at k = -1)
+    # k = -1 → boundary 0.5
+    # k = -2 → boundary 0.25
+    # ...
+    # k = -50 → boundary ~9e-16
+    boundaries_to_probe = list(range(-1, -51, -1))
+    for k in boundaries_to_probe:
+        rows = _probe_at_binade_boundary(k, n_floats_above=500)
+        all_rows.extend(rows)
+
+    # Summarize
+    total = len(all_rows)
+    lower_binade_count = sum(1 for r in all_rows if r["V_in_lower_binade"])
+    same_binade_count = sum(1 for r in all_rows if r["V_in_same_binade"])
+    upper_binade_count = sum(1 for r in all_rows if r["V_in_upper_binade"])
+    non_integer_count = sum(1 for r in all_rows if not r["is_integer_lattice"])
+    lower_binade_non_integer = sum(
+        1
+        for r in all_rows
+        if r["V_in_lower_binade"] and not r["is_integer_lattice"]
+    )
+    lower_binade_integer = sum(
+        1
+        for r in all_rows
+        if r["V_in_lower_binade"] and r["is_integer_lattice"]
+    )
+    # Find the most extreme non-integer residual
+    max_residual = max((r["residual_to_nearest_int"] for r in all_rows), default=0.0)
+    near_half_count = sum(
+        1
+        for r in all_rows
+        if 0.4 < r["residual_to_nearest_int"] < 0.6
+    )
+
+    # First 10 lower-binade cases (if any)
+    lower_binade_samples = [
+        r for r in all_rows if r["V_in_lower_binade"]
+    ][:10]
+    # First 10 non-integer cases (if any)
+    non_integer_samples = [
+        r for r in all_rows if not r["is_integer_lattice"]
+    ][:10]
+
+    # Verdict
+    if lower_binade_count == 0:
+        verdict = "lower_binade_case_unreachable_for_correctly_rounded_sqrt"
+    elif lower_binade_non_integer > 0:
+        verdict = "lower_binade_breaks_integer_lattice_corrected_theorem_needed"
+    elif lower_binade_count > 0 and lower_binade_non_integer == 0:
+        verdict = "lower_binade_reachable_but_lattice_stays_integer_additional_structure"
+    else:
+        verdict = "indeterminate"
+
+    return {
+        "probe_name": "c2_lattice_binade_danger_zone",
+        "total_records": total,
+        "binade_boundaries_probed": [int(k) for k in boundaries_to_probe],
+        "n_floats_per_boundary": 500,
+        "summary": {
+            "lower_binade_count": lower_binade_count,
+            "same_binade_count": same_binade_count,
+            "upper_binade_count": upper_binade_count,
+            "non_integer_lattice_count": non_integer_count,
+            "lower_binade_non_integer": lower_binade_non_integer,
+            "lower_binade_integer": lower_binade_integer,
+            "max_residual_to_nearest_int": max_residual,
+            "near_half_count": near_half_count,
+        },
+        "lower_binade_samples": lower_binade_samples,
+        "non_integer_samples": non_integer_samples,
+        "verdict": verdict,
+    }
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", default=str(ARTIFACT))
+    args = parser.parse_args()
+    REPORT_DIR.mkdir(parents=True, exist_ok=True)
+    data = run_probe()
+    Path(args.output).write_text(json.dumps(data, indent=2, sort_keys=True))
+    print(f"binade-danger-zone artifact written to {args.output}")
+    print(f"  verdict: {data['verdict']}")
+    print(f"  Summary:")
+    for k, v in data["summary"].items():
+        print(f"    {k}: {v}")
+    if data["lower_binade_samples"]:
+        print(f"  First lower-binade samples:")
+        for r in data["lower_binade_samples"][:5]:
+            print(
+                f"    f_target=2^{r['boundary_2_to_k']} + {r['i_above_boundary']}·ulp, "
+                f"V_n binade={r['V_binade_k']} (f binade={r['f_binade_k']}, Δ={r['binade_delta_V_minus_f']}), "
+                f"level={r['level']:.4f}, integer={r['is_integer_lattice']}"
+            )
+    if data["non_integer_samples"]:
+        print(f"  First non-integer samples:")
+        for r in data["non_integer_samples"][:5]:
+            print(
+                f"    f_target=2^{r['boundary_2_to_k']} + {r['i_above_boundary']}·ulp, "
+                f"V_n binade={r['V_binade_k']} (f binade={r['f_binade_k']}, Δ={r['binade_delta_V_minus_f']}), "
+                f"level={r['level']:.4f}, residual={r['residual_to_nearest_int']:.4e}"
+            )
+
+
+if __name__ == "__main__":
+    main()

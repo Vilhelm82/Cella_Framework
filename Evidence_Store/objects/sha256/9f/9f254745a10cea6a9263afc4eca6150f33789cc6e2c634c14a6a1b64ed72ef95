@@ -1,0 +1,313 @@
+# MCG Geometry-First — Phase 2b — C Profile Characterization
+
+**Status:** Phase 2b discovery characterization log. **C profile built; conditioning covariates recorded; F1_to_F2 half-phase behavior cross-tabbed by C-bin; same-route controls and F3 calibration verified clean across C-bins; F4 stressor activation profiled by C-bin.** No G claim is made. No precision claim is made. No candidate is promoted out of `unresolved_candidate`.
+
+**Authority:** [`Build_Docs/Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md`](../../Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md) §11, with user-imposed Phase 2b constraints (2026-05-19): inputs from Phase 1 + Phase 2 (source sha256 recorded, not recomputed), three `four_form_primary` fixtures only, fixture-native 1D C-covariates, predeclared C bins (fixture-local terciles + global log-radicand thresholds), no V3 oracle, no symbolic backend, no fixture mods.
+
+**Deliverables landed:**
+- [`phase_2b_c_profile.json`](phase_2b_c_profile.json) — C profile + cross-tabs; sha256 `e4268f…62afd31`; byte-stable on rerun.
+- [`src/lloyd_v4/evals/mcg_geometry_first_c_profile.py`](../../../src/lloyd_v4/evals/mcg_geometry_first_c_profile.py) — V4-native C-profile assembler.
+- [`tests/test_mcg_geometry_first_c_profile.py`](../../../tests/test_mcg_geometry_first_c_profile.py) — 9 focused tests; all pass (the forbidden-language test reads this characterization).
+
+---
+
+## 1. What was built
+
+### 1.1 Inputs (referenced by sha256, not recomputed)
+
+| Source | sha256 | Role |
+|---|---|---|
+| `phase_1_geometry_table.json` | `6502e942558f699d24011ae1d78601a07dea835c9ec9441fe42185a9df42df54` | Coordinate-level geometry (411 four_form_primary rows) |
+| `phase_2_joined_readback_table.json` | `6a212ee610d80893afd9a2629820006b2a74d34a373f9e7dd334e2042f28cc33` | Route-pair phase readback (3,699 rows) |
+
+Both hashes are recorded in the C profile artifact's `source_phase_1_sha256` / `source_phase_2_sha256` fields. Neither artifact is recomputed.
+
+### 1.2 C-covariates recorded per coordinate
+
+1D-fixture-native covariates (411 rows):
+
+| Field | Source | Description |
+|---|---|---|
+| `base_operand` | recomputed from coord_value | `1 − β²` (SR) / `1 − 2/r` (Schwarzschild) / `1 − x` (pure_algebraic) |
+| `radicand_magnitude` | derived | `\|base_operand\|` |
+| `log_radicand_magnitude` | derived | `log10(radicand_magnitude)` |
+| `endpoint_distance` | derived | distance from `coord_value` to the small-radicand singular endpoint (β=1, r=2, x=1 respectively) |
+| `hessian_abs` | from Phase 1 `hessian_value` | `\|H\|` finite-difference at the finest stable step |
+| `J_condition` | from Phase 1 | relative slope `\|t·J/y\|` |
+| `finite_difference_stability_status` | from Phase 1 | `stable` / `unstable` / `indeterminate` |
+| `geometry_stratum` | from Phase 1 | Phase 1 stratum label |
+
+C-covariates **null for 1D fixtures, explicitly recorded as null-not-missing**: `spectral_gap`, `smallest_singular_value`, `near_null_eigenvalue_magnitude`, `lifted_hessian_null_vector`, `principal_curvature_ratio`. These slots await the multi-D lifted-anchor extension.
+
+### 1.3 C bin rules (predeclared, fully recorded)
+
+Two bin schemes, both deterministic and recorded in the artifact:
+
+**Scheme 1: Fixture-local terciles on `log10(radicand_magnitude)`.**
+- Rule: per-fixture 33rd and 66th percentiles via integer-index quantile (lower-index convention, byte-stable).
+- Labels: `T1_small_radicand`, `T2_intermediate_radicand`, `T3_large_radicand`.
+- Per-fixture tercile edges (recorded in `c_bin_rules.fixture_local_terciles.fixture_local_edges`):
+  - SR: t1 ≈ −1.14, t2 ≈ −0.20 (in log10 radicand)
+  - Schwarzschild: t1 ≈ −1.74, t2 ≈ −0.78
+  - pure_algebraic: t1 ≈ −0.59, t2 ≈ −0.20
+- Comparability: **within-fixture only**. Bin names are NOT comparable across fixtures.
+
+**Scheme 2: Global log-radicand thresholds (-2.0, -0.5).**
+- Rule: fixed edges applied uniformly across all fixtures.
+- Labels: `C_bin_global_small_radicand` (log10 < −2.0), `C_bin_global_intermediate_radicand` (−2.0 ≤ log10 < −0.5), `C_bin_global_large_radicand` (log10 ≥ −0.5), `C_bin_global_indeterminate` (non-finite).
+- Comparability: **across-fixture comparable by construction**.
+- Per-fixture occupancy (recorded):
+  - SR: small 1, intermediate 23, large 113
+  - Schwarzschild: small 17, intermediate 88, large 32
+  - pure_algebraic: small 0, intermediate 43, large 94
+
+Both bin assignments are emitted per C-profile row.
+
+---
+
+## 2. Answers to Phase 2b's seven closeout questions
+
+The user's §"Required closeout questions" specifies seven questions, with discipline that strong association → "C-associated candidate behavior" (not G), and persistence after C-bin stratification → "C-resistant readback pattern requiring Phase 2d solve-for" (not G).
+
+### Q1. Does C-profile binning reproduce the small-radicand half-phase suppression observed in Phase 2?
+
+**Yes.** F1_to_F2 half_phase_fraction across the three fixture-local terciles:
+
+| Fixture | T1_small_radicand | T2_intermediate_radicand | T3_large_radicand |
+|---|---|---|---|
+| `sr_four_form` | 4.5% (2/44) | **47.8% (22/46)** | 10.6% (5/47) |
+| `schwarzschild_four_form` | **0% (0/44)** | **0% (0/46)** | 34.0% (16/47) |
+| `pure_algebraic_four_form` | **0% (0/44)** | 19.6% (9/46) | 23.4% (11/47) |
+
+**In every fixture, T1_small_radicand has the lowest half_phase_fraction.** The Phase 2 §Q7 observation that "small-radicand regimes suppress half_phase across all three fixtures" is reproduced by deterministic predeclared C-bins. No fitted-after-the-fact strata.
+
+Per-fixture spread (max − min of half_phase_fraction across terciles): SR 43.3 percentage points, Schwarzschild 34.0 pp, pure_algebraic 23.4 pp. All three exceed the artifact's `decision_rule_for_C_bin_association_observed` spread threshold of 0.10.
+
+Per-fixture classification per the discipline §"Classification language":
+
+| Fixture | Classification |
+|---|---|
+| `sr_four_form` | `C_bin_association_observed` |
+| `schwarzschild_four_form` | `C_bin_association_observed` |
+| `pure_algebraic_four_form` | `C_bin_association_observed` |
+
+Campaign-level: `C_profile_built` + all three fixtures show `C_bin_association_observed` for F1_to_F2.
+
+### Q2. Is F1_to_F2 half_phase fraction strongly associated with radicand magnitude / endpoint distance / hessian magnitude?
+
+**Yes, with strong association on radicand magnitude.** The fixture-local tercile analysis (Q1) gives the cleanest signal — every fixture's T1_small_radicand bin has the *lowest* half_phase_fraction (in two of three fixtures, exactly 0%). The asymmetry is structural: the small-radicand bin is the most suppressed in all three fixtures.
+
+The fixture-by-fixture *shape* of the association differs:
+- **SR**: peak in middle tercile (T2 = 47.8%), low at both extremes (T1 = 4.5%, T3 = 10.6%).
+- **Schwarzschild**: zero in T1 and T2, concentrated in T3 (34%). Effectively monotonic from suppressed at small radicand to substantial at large radicand.
+- **pure_algebraic**: monotonic from zero (T1) to 19.6% (T2) to 23.4% (T3). Smoothly increasing with radicand.
+
+`radicand_magnitude` and `log_radicand_magnitude` are recorded per row; `endpoint_distance` is recorded per row; `hessian_abs` is recorded per row. The fixture-local tercile (on `log_radicand_magnitude`) was sufficient to surface the association in this pass. A finer regression of half_phase_fraction against the continuous covariates is a Phase 2d deliverable.
+
+Per the user's discipline §"Important interpretation rule": this **strong association with radicand magnitude** is described as **C-associated candidate behavior**, not G.
+
+### Q3. Are same-route controls still clean across C bins?
+
+**Yes, perfectly clean.** Same-route control records (F1_to_F1, F2_to_F2, F3_to_F3, F4_to_F4) by fixture-local tercile:
+
+| Fixture | T1 | T2 | T3 |
+|---|---|---|---|
+| `sr_four_form` | 176/176 same_phase | 184/184 same_phase | 188/188 same_phase |
+| `schwarzschild_four_form` | 176/176 same_phase | 184/184 same_phase | 188/188 same_phase |
+| `pure_algebraic_four_form` | 176/176 same_phase | 184/184 same_phase | 188/188 same_phase |
+
+**Zero half_phase_candidate, zero phase_drift, zero phase_unobservable** in any control bin. The control machinery does not manufacture half-phase artifacts at any C-bin position.
+
+### Q4. Does F3 remain calibration-zero across C bins?
+
+**Yes, uniformly.** F3 == 0.0 exactly in **every record across every C-bin**:
+
+| Fixture | T1 | T2 | T3 |
+|---|---|---|---|
+| `sr_four_form` | 44/44 F3 = 0.0 | 46/46 F3 = 0.0 | 47/47 F3 = 0.0 |
+| `schwarzschild_four_form` | 44/44 F3 = 0.0 | 46/46 F3 = 0.0 | 47/47 F3 = 0.0 |
+| `pure_algebraic_four_form` | 44/44 F3 = 0.0 | 46/46 F3 = 0.0 | 47/47 F3 = 0.0 |
+
+The calibration-zero channel stays clean regardless of conditioning regime.
+
+### Q5. Does F4 behave as a stressor across C bins?
+
+**Yes, with strong C-bin dependence.** F4_nonzero rate per fixture-local tercile:
+
+| Fixture | T1_small_radicand | T2_intermediate_radicand | T3_large_radicand |
+|---|---|---|---|
+| `sr_four_form` | 14/44 (32%) | 7/46 (15%) | 6/47 (13%) |
+| `schwarzschild_four_form` | **43/44 (98%)** | 39/46 (85%) | 10/47 (21%) |
+| `pure_algebraic_four_form` | 18/44 (41%) | 12/46 (26%) | 10/47 (21%) |
+
+**F4's stressor activation correlates inversely with radicand magnitude**: F4 is more likely to be nonzero when the radicand is small (T1). This is most pronounced for Schwarzschild (98% activation in T1 vs 21% in T3). The pattern is consistent across all three fixtures.
+
+This is an observation about F4 itself (it diverges more from the direct route when the algebraic operands are small), not a claim about F4's relationship to G. F4's role per the user direction is `route_residual_stressor`, never `primary_phase_candidate`.
+
+### Q6. Are the C covariates sufficient for a future C-vs-G separation test?
+
+**Sufficient for a fixture-local C-association characterization (this pass); not yet sufficient for the full C-vs-G separation that the campaign's Phase 3 entry gate requires.**
+
+What's sufficient now:
+- `log_radicand_magnitude` is a strong covariate that organizes F1_to_F2 half_phase_fraction within each fixture (Q1 / Q2).
+- `endpoint_distance` is recorded per row and is monotone with radicand magnitude (since both go to 0 at the same singular endpoint).
+- `hessian_abs` and `J_condition` are recorded per row and are available for joint regression in Phase 2d.
+
+What's not yet sufficient:
+- **Multi-D spectral covariates** (`spectral_gap`, `smallest_singular_value`, `near_null_eigenvalue_magnitude`) are null for the 1D primary fixtures. The Phase 2b acceptance specifies "C is a vector, not one scalar" (handoff §11), and the 1D restriction means only a thin C vector is currently available. The full vector requires the lifted-construction extension to geometry_anchor rows.
+- **Sibling normalization (`J_step`)** was not run in Phase 2; this remains a Phase 2c / Phase 2d gap.
+- **Grid stability (Phase 2c)** — whether the half_phase_fraction structure persists under alternative grid families is not yet tested.
+
+The campaign-level Phase 3 entry gate (handoff §14) requires all of these; Phase 2b alone does not graduate any candidate.
+
+### Q7. What remains unresolved before any G claim?
+
+The following must be established before a G claim is admissible per the campaign discipline:
+
+1. **Lifted multi-D C-vector on geometry_anchor rows.** Spectral gap and null-direction stability components must be populated for at least one fixture class so the C vector is not just `log_radicand_magnitude` in a thin disguise.
+2. **Grid stability characterization (Phase 2c).** Re-run F1_to_F2 phase classification on at least one alternative grid family per fixture (deterministic jitter / linear grid where applicable). Verify the half_phase_fraction structure persists; classify as `grid_artifact_candidate` if it does not.
+3. **Sibling normalization (`J_step`).** Re-classify phase using step-natural ULP normalization; verify the half_phase_fraction structure persists; classify as `normalization_unresolved` if it depends on the choice.
+4. **Path/operand separation telemetry with nonzero offset.** The G-route-1 candidate cannot be promoted to independent G evidence at zero operand offset (per handoff §1.4). A nonzero-offset characterization is required for that promotion path.
+5. **Solve-for scout (Phase 2d).** A relation between geometry strata and BACL-filtered selection that survives M filtering AND is not explained by C covariates AND is stable across grid family AND has a named mechanism is the Phase 3 entry gate.
+6. **A G mechanism that the data cannot be explained by purely C.** Even with all of the above, a positive G claim requires a *named mechanism* (handoff §4 graduation gate). The current Phase 2b result — strong C-association of F1_to_F2 half_phase fraction — is consistent with a pure-C explanation; no candidate G mechanism is supported by this evidence.
+
+Per the user direction: this pass's headline observation is described as **C-associated candidate behavior** at all three fixtures. No alternative interpretation is offered.
+
+---
+
+## 3. Classification (per the user's allowed language)
+
+Phase 2b's classifications, recorded in the artifact's `classification` field:
+
+- **Campaign status**: `C_profile_built`.
+- **Per-fixture F1_to_F2 classification**:
+  - SR: `C_bin_association_observed`
+  - Schwarzschild: `C_bin_association_observed`
+  - pure_algebraic: `C_bin_association_observed`
+- **Decision rule** (recorded): spread (max half_phase_fraction − min) > 0.10 AND T1_small_radicand has the lowest fraction. Underpowered (any bin n < 10) would override to `C_profile_underpowered`. No bin is underpowered (every bin has n ≥ 44).
+
+No classification is `G_supported`, `G_refuted`, `precision_supported`, or `precision_refuted` (forbidden by the discipline).
+
+---
+
+## 4. What this pass does *not* claim
+
+Per handoff §16 (allowed Phase 1–2 language), §17 (banned-promotion language), and user §"Forbidden language":
+
+- This pass does **not** claim that **G** is discovered or confirmed.
+- This pass does **not** claim **precision** is doubled or that any sub-noise-floor threshold has been reached.
+- This pass does **not** claim that geometry explains residue.
+- This pass does **not** claim that the F1_to_F2 half-phase observation is conclusive — only that it is **C-associated candidate behavior**, with the discipline rule that strong association with C covariates is described as C-associated, never as G.
+- This pass does **not** promote any ledger candidate beyond `unresolved_candidate` (tested by Test 7).
+
+What this pass **does** observe (descriptively, not as a promotion):
+
+- The Phase 2 §Q7 small-radicand half_phase suppression is reproduced by deterministic predeclared bins (Q1).
+- F1_to_F2 half_phase_fraction is strongly associated with radicand magnitude in all three fixtures (Q2).
+- Same-route controls (Q3) and F3 calibration zero (Q4) stay clean across all C-bins.
+- F4 stressor activation rate is itself C-bin-dependent and varies sharply across fixtures (Q5).
+
+---
+
+## 5. Candidate ledger updates (evidence links only)
+
+Per user direction, the ledger is updated only with Phase 2b evidence + allowed tags. No promotion. Tags added per candidate:
+
+| Candidate | Phase 2b tag | Phase 2b evidence summary |
+|---|---|---|
+| `G-curv-1` (Hessian stratum vs j-selection) | `phase_2b_c_profile_built`, `phase_2b_c_association_observed` | Hessian signature is uniformly negative (Phase 1), but the half_phase fraction shows strong association with `log_radicand_magnitude` — the F1_to_F2 readback signal is C-associated, not signature-driven |
+| `G-curv-2` (principal-curvature ratio vs route-pair phase) | `phase_2b_c_profile_built` | principal_curvature_ratio remains null for 1D fixtures; Phase 2b cannot characterize this candidate further until multi-D anchors land |
+| `G-curv-3` (null-tangent alignment vs transition grammar) | `phase_2b_c_profile_built` | null_tangent_alignment from Phase 1 is available; transition-grammar metric pending Phase 2d |
+| `G-route-1` (path/operand-separated route-pair phase) | `phase_2b_c_profile_built`, `phase_2b_c_association_observed` | F1_to_F2 phase signal is C-associated at fixture-local tercile resolution; admissibility as independent G evidence still requires nonzero operand offset (separate from C-vs-G separation) |
+| `C-def-1` (finite-difference conditioning response) | `phase_2b_c_profile_built` | the Phase 2b C profile is the first-pass C-extractor; `log_radicand_magnitude` is the dominant 1D C covariate; the full ladder calibration (rungs 1–5) and lv3 oracle cross-check are still pending |
+| `C-def-2` (Jacobian/Hessian spectral response) | `phase_2b_c_profile_built` | hessian_abs and J_condition recorded; spectral spread requires multi-D anchors |
+| `C-def-3` (perturbation amplification ladder) | `phase_2b_c_profile_built` | the Phase 1 FD step ladder is a geometry-side ladder; the perturbation-amplification ladder (parameter-perturbation, output-amplification) remains a separate deliverable |
+
+**All seven candidates remain `unresolved_candidate`.** Test 7 enforces this.
+
+Campaign-level tags appended: `phase_2b_c_profile_built`, `phase_2b_c_association_observed_in_all_three_primary_fixtures`.
+
+---
+
+## 6. Tests and exact commands
+
+9 focused tests in [`tests/test_mcg_geometry_first_c_profile.py`](../../../tests/test_mcg_geometry_first_c_profile.py):
+
+| # | Assertion |
+|---|---|
+| 1 | C profile artifact generation — required top-level keys present |
+| 2 | Source Phase 1 and Phase 2 sha256 hashes recorded (64-hex pattern) |
+| 3 | C bins are deterministic and recorded (both fixture-local terciles + global log-radicand) |
+| 4 | F1_to_F2 summaries exist by fixture and C-bin with required count fields |
+| 5 | Same-route controls summarized by C-bin — must be 100% same_phase in every bin |
+| 6 | F3 calibration summarized by C-bin — phase summary + value-exactly-zero count (must be all zero) |
+| 7 | Candidate ledger states are not promoted (all remain `unresolved_candidate`) |
+| 8 | No forbidden G/precision claim language in this characterization (scanner with negation-context allowance) |
+| 9 | JSON artifact is deterministic / byte-stable across reruns + `main()`-to-disk identity |
+
+### Exact commands and results
+
+```bash
+# 9 focused tests (Phase 2b)
+$ PYTHONPATH=src python -m pytest tests/test_mcg_geometry_first_c_profile.py -v
+… 9 passed in 0.40s   (test 8 picks up this characterization)
+
+# Smallest reasonable existing subset (P1 + P2 + P2b + four-form-adjacent)
+$ PYTHONPATH=src python -m pytest \
+    tests/test_mcg_geometry_first_geometry.py \
+    tests/test_mcg_geometry_first_readback.py \
+    tests/test_mcg_geometry_first_c_profile.py \
+    tests/test_f1_f2_natural_phase.py \
+    tests/test_f4_route_comb_search.py -v
+… 42 passed in <2s
+
+# Byte-stability of Phase 2b artifact
+$ cp Build_Docs/Reports/mcg_geometry_first/phase_2b_c_profile.json /tmp/cp_run1.json
+$ PYTHONPATH=src python -m lloyd_v4.evals.mcg_geometry_first_c_profile --output /tmp/cp_run2.json
+$ diff -q /tmp/cp_run1.json /tmp/cp_run2.json
+# (silent — files identical)
+$ sha256sum /tmp/cp_run1.json
+# e4268f25ebdd743dd9a463d32c53bf470843ba09852df1164e272a68962afd31
+```
+
+No manifest, status family, primitive, fixture definition, architecture document, or protocol was modified.
+
+---
+
+## 7. Methodology notes (for the iteration log)
+
+- **The C-profile binning analysis reproduces the Phase 1 stratum-based observation with deterministic, predeclared cuts.** The Phase 1 strata used eyeball thresholds (e.g., `r < 2.5` for horizon_approach); the Phase 2b terciles use 33rd / 66th percentiles of `log10(radicand_magnitude)` per fixture. Both surfaces show the same small-radicand half_phase suppression pattern. Either characterization can serve future joins.
+
+- **The fixture-by-fixture shape of the radicand-vs-half_phase association differs.** SR shows a non-monotonic pattern (peak in middle tercile), while Schwarzschild and pure_algebraic show monotonic-in-radicand patterns. The non-monotonicity in SR is a discovery observation worth recording but not interpreted here.
+
+- **F4's stressor activation is itself C-bin-dependent.** This is a meta-observation about F4 as a route-residual channel: its activation rate climbs as radicand shrinks. For Schwarzschild T1 (small radicand near horizon) F4 fires in 98% of records; for T3 (large radicand, far field) only 21%. This is consistent with F4's split-routing arithmetic being more sensitive to operand magnitude when the operands themselves are small.
+
+- **The global log-radicand bin scheme reveals fixture-asymmetric grid sampling.** SR has only 1 small-radicand-global record (the β=0.9999 point); Schwarzschild has 17 (its grid is biased toward horizon); pure_algebraic has 0. The fixture-local tercile scheme is the more useful instrument for within-fixture analysis; the global scheme reveals the grid-occupancy disparity.
+
+- **C is currently a thin 1D vector.** Multi-D spectral components (`spectral_gap`, etc.) await the lifted-construction extension; Phase 2b honors the user direction that 1D-null C-covariate slots are explicitly recorded as null-not-missing rather than omitted.
+
+---
+
+## 8. What this pass did *not* attempt (logged honestly)
+
+- **Multi-D lifted anchors with F1/F2/F3/F4 readbacks** — out of scope for this pass.
+- **Grid stability characterization (Phase 2c)** — separate deliverable; required before any persistence-after-C-stratification claim.
+- **Solve-for scout (Phase 2d)** — separate deliverable; required before any G claim.
+- **Sibling normalization `J_step`** — only `J_final` / base_operand_ulp recorded; sibling observable is a Phase 2c/2d item.
+- **Continuous regression of half_phase_fraction against `log_radicand_magnitude`** — only tercile aggregations performed in this pass; continuous regression is a Phase 2d deliverable.
+- **lv3 oracle cross-check** — per CLAUDE.md §4, deferred to a separate non-primary artifact if useful.
+- **cbrt/quartic variants** — out of scope.
+
+---
+
+## 9. References
+
+- [`Build_Docs/Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md`](../../Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md) §11, §16, §17
+- [`phase_0_m_contract.md`](phase_0_m_contract.md) — M-contract this Phase 2b honors
+- [`phase_1_geometry_table.json`](phase_1_geometry_table.json) — Phase 1 inputs; sha256 captured at run time
+- [`phase_2_joined_readback_table.json`](phase_2_joined_readback_table.json) — Phase 2 inputs; sha256 captured at run time
+- [`phase_2_readback_characterization.md`](phase_2_readback_characterization.md) — Phase 2 §Q7 small-radicand suppression observation reproduced here
+- [`candidate_ledger.json`](candidate_ledger.json) — updated with Phase 2b evidence (no state promotions)
+- [`phase_2b_c_profile.json`](phase_2b_c_profile.json) — Phase 2b artifact, byte-stable
+- [`../../../src/lloyd_v4/evals/mcg_geometry_first_c_profile.py`](../../../src/lloyd_v4/evals/mcg_geometry_first_c_profile.py) — Phase 2b assembler
+- [`../../../tests/test_mcg_geometry_first_c_profile.py`](../../../tests/test_mcg_geometry_first_c_profile.py) — 9 focused tests

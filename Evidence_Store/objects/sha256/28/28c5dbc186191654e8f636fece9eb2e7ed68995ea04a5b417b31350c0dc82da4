@@ -1,0 +1,173 @@
+# Substrate Invariant Search — Phase F Amendment
+
+**Subject:** Channel 2 (`E_log2_base_operand`) — interpretive amendment from Phase H findings + cross-fixture unification audit
+**Date:** 2026-05-23
+**Status:** Amendment to Phase F's documented interpretation. **Phase F's artefact and sha256 chain remain unmodified.** This document supplements rather than replaces.
+
+**Source chain:**
+- Phase F synthesis sha256: `b19c0ee9ef3c6e3c` (unchanged)
+- Phase H semantic characterisation sha256: `e5540003e41596d7`
+- Phase 1 geometry table sha256: `6502e942558f699d`
+
+---
+
+## 1. What Phase F said about Channel 2
+
+Phase F's `synthesis_form.channels[1]` documented `E_log2_base_operand` as the "endpoint-distance substrate image" — a precision-conditional channel that's format-stable when `|base_operand| > ~10⁻⁴` and triggers `format_precision_pinned` attribution below that.
+
+This is correct but incomplete. Phase H surfaced two additional empirical roles for Channel 2.
+
+---
+
+## 2. Phase H finding (within-fixture)
+
+Across 137 rows per fixture in MCG Phase 1's geometry table:
+
+| Fixture | Spearman ρ(E, K_G) | K_G varies? |
+|---|---|---|
+| Schwarzschild | **−1.0000** (perfect rank-monotone) | yes |
+| pure_algebraic | **−1.0000** (perfect rank-monotone) | yes |
+| SR | +0.0042 (noise) | no — constant |
+
+**E is K_G's rank-perfect within-fixture cousin.** Substrate alone can rank-order points by K_G within a fixture without computing the bordered determinant.
+
+---
+
+## 3. Post-Phase-H cross-fixture audit (this amendment)
+
+Pooled cross-fixture Spearman ρ across 274 rows (Schwarzschild + pure_algebraic):
+
+| Candidate | Pooled ρ |
+|---|---|
+| **`E_log2_base_operand`** | **−0.9396** |
+| `signed_asymmetry` | −0.9362 |
+| `log2_base_operand_ulp` | −0.9329 |
+| `log2_x_term_ulp` | +0.7477 |
+
+At matched K_G across fixtures (rel_diff < 0.5%, n=22 pairs), mean |Δ| in candidate value:
+
+| Candidate | mean \|Δ\| (log2 units) |
+|---|---|
+| `log2_base_operand_ulp` | 0.818 |
+| `E_log2_base_operand` | 1.098 |
+| `log2_x_term_ulp` | 1.318 |
+| `signed_asymmetry` | 2.136 |
+
+**Cross-fixture E is a noisy K_G correlate (ρ ≈ −0.94), with ~1 log2 unit noise at matched K_G.** Phase H's original 5/5 cross-fixture match for `log2_x_term_ulp` was a localized binade-alignment artefact, not a general unification.
+
+**Mechanism**: each fixture's K_G is a different function of its `base_operand`. Both functions are monotone in `base_operand → 0`, which is why E broadly tracks across both fixtures. But the constants differ, so at matched K_G, `base_operand` differs by ~1 binade, so E differs by ~1 log2 unit. Cross-fixture invariance would require encoding the fixture's K_G-vs-base_operand function — which is K_G itself. No substrate-only shortcut exists.
+
+---
+
+## 4. Amended interpretation of Channel 2
+
+Channel 2 (`E_log2_base_operand`) has **three distinct roles** within the substrate-as-probe instrument:
+
+| Scope | Role | Empirical support |
+|---|---|---|
+| **Within a single fixture (varying K_G)** | K_G's rank-perfect cousin (ρ = −1.0000) | Phase H, both Schw + PA, n=137 each |
+| **Cross-fixture (varying K_G fixtures)** | Noisy K_G correlate, ~1 log2 unit noise at matched K_G | Pooled audit, n=274, ρ = −0.94 |
+| **Format-precision-pinned regime** | Triggers `format_precision_pinned` attribution when E < log2(1e-4) | Phase D scope caveat, Phase F decision rule |
+
+The Phase F `synthesis_form.channels[1]` should be read with this expanded interpretation. The original description ("endpoint-distance substrate image, precision-conditional") remains accurate at the channel-derivation level. The role-level interpretation now includes the K_G rank cousin function.
+
+---
+
+## 5. Implications for the substrate-as-probe instrument
+
+### Within-fixture diagnostic enhancement
+The instrument can compute **K_G ranking** between probe points within a fixture from E alone, without invoking the bordered-determinant. For many diagnostic uses (regime comparison, near-singular flagging, anomaly detection), the ranking is sufficient.
+
+### Internal cross-check capability
+Within a fixture, K_G (from Path B canonical formula) and E (from substrate) should agree on rank ordering. **Disagreement is a flag** — either numerical issue, format-precision artefact, or fixture-mis-identification. This is the multi-channel epistemic redundancy of the instrument in action.
+
+### Cross-fixture limitation acknowledged
+At cross-fixture comparison, E carries broad K_G monotone signal (ρ = −0.94) but with ~1 log2 unit noise. Not a universal K_G surrogate. The synthesis treats this correctly by keeping K_G as Channel 4 (canonical formula) rather than relying on E for value extraction.
+
+### Decision rule unchanged
+Phase F's attribution decision rule uses `K_G` directly in `signal_ratio = |K_G| / noise_floor`. No structural change is required. The amendment adds *interpretation* of what Channel 2 means, not new code paths.
+
+---
+
+## 6. Why this amendment is documentational, not a code change
+
+Phase F's JSON artefact is sha256-chained throughout the campaign: Phase G chains it (`b19c0ee9ef3c6e3c`), Phase H referenced Phase 1 directly but the F→G→H provenance is sound. Modifying Phase F's artefact would break that chain.
+
+The Phase F implementation (`src/lloyd_v4/evals/substrate_invariant_search_phase_f.py`) is also unchanged. The decision rule is unchanged. The synthesis form is unchanged.
+
+What's updated is **the campaign-level documentation of what Channel 2 means** in light of empirical evidence Phase H produced after Phase F's artefact landed. The amendment lives as a supplementary document referenced by future work.
+
+If a Phase F v2 is ever produced (e.g., to incorporate Channel 2's enhanced role into the synthesis form structurally), it would supersede Phase F v1 with a new sha256 and an explicit replacement note. That's not done here — this is interpretive, not structural.
+
+---
+
+## 7. Open work surfaced
+
+Cross-fixture unification via substrate primitives is **structurally blocked** at fine resolution. A genuine cross-fixture K_G invariant would require encoding the fixture's K_G-vs-base_operand function, which equals K_G itself. The substrate's encoding language is fixture-bound by design.
+
+This isn't a failure to record — it's a clean negative finding. The substrate observable is **rank-perfect within fixtures, noisy across fixtures, and fundamentally fixture-bound at fine resolution**. Future campaigns might explore richer signature spaces (e.g., the full operand-chain log-magnitude vector instead of single scalars), but the structural barrier is the per-fixture functional relationship between K_G and base_operand.
+
+### 7.1 Empirical verification of the ceiling (post-amendment audit, 2026-05-23)
+
+After this amendment was drafted, two further routes were tested empirically against the cross-fixture ceiling:
+
+**Option 2 — BACL-guided route selection.** F1, F2, and F4 routes were each used as the operand-chain source for substrate observables; cross-fixture pooled Spearman ρ was computed per route.
+
+| Route source | min_ulp pooled ρ | ulp_spread pooled ρ |
+|---|---|---|
+| F1 | −0.6912 | +0.6912 |
+| F2 | +0.7477 | −0.7477 |
+| F4 (Schw only) | n/a cross-fixture | n/a |
+
+**No route beats E's −0.94.** Route selection does not move the cross-fixture ceiling.
+
+**Coarsening test — floor(E).** Replacing continuous E with its binade index:
+
+| Observable | Pooled cross-fixture ρ |
+|---|---|
+| E (continuous) | **−0.9396** |
+| floor(E) (binade index) | −0.9329 |
+
+Coarsening slightly *degrades* the rank correlation. At matched K_G (n=22 pairs, rel_diff < 0.005), floor(E) matches exactly in only 5/22 — not a clean binade-level invariant.
+
+**Conclusion**: ρ ≈ −0.94 is the empirical ceiling for cross-fixture K_G rank via single-scalar substrate observables. The fixture-binding is structurally deeper than route choice or resolution can address.
+
+### 7.2 Exact-arithmetic test of the "rounding noise" hypothesis (post-amendment audit, 2026-05-23)
+
+A further hypothesis was proposed: the −0.94 ceiling exists because of **fixture-specific rounding behaviour**. If substrate observables were computed via exact, non-rounded operations (sign patterns, exponent extraction, error-free pair tracking, or simply higher-precision arithmetic), the fixture-specific rounding noise would vanish, and cross-fixture invariance might improve.
+
+This was tested by recomputing `E = log2(|base_operand|)` two ways for each matched-K_G pair:
+
+1. **Rounded**: `1.0 - 2.0/r` and `1.0 - x` in IEEE 754 binary64 (Phase H's E)
+2. **Exact**: `Fraction(1) - Fraction(2) / Fraction(r_float)` and `Fraction(1) - Fraction(x_float)` then `log2` via Decimal at 50-digit precision
+
+For 22 matched-K_G pairs (rel_diff < 0.005):
+
+| Quantity | Rounded E | Exact E |
+|---|---|---|
+| Mean cross-fixture \|ΔE\| | **1.0981** | **1.0981** |
+| Max cross-fixture \|ΔE\| | 1.6863 | 1.6863 |
+| Pair-by-pair difference (rounded − exact) | **+0.0000 in every pair** | — |
+| Reduction from exact arithmetic | **0.00%** | — |
+
+**Exact arithmetic produces zero reduction in cross-fixture variance.**
+
+The rounding-noise hypothesis is empirically refuted. The cross-fixture |ΔE| at matched K_G is not from float64 rounding — it's from `base_operand` being **mathematically different** values across fixtures at matched K_G. Schwarzschild and pure_algebraic have different K_G(coord) functions; at matched K_G, their `base_operand` values are mathematically different (typically by ~1 binade), and log2 of mathematically different values is mathematically different regardless of computation precision.
+
+**Strengthened conclusion**: The cross-fixture ceiling at ρ ≈ −0.94 is **mathematically structural, not from rounding**. Substrate observables that use non-rounded operations (sign patterns, exponent extraction, error-free pairs) would read the same underlying mathematical geometry — they cannot break the ceiling because the ceiling is in the geometry, not in the arithmetic. Any substrate-only encoding faces this limit because no substrate-only operation can encode `K_G(base_operand)` without becoming K_G itself.
+
+---
+
+## 8. Summary in one sentence
+
+`E_log2_base_operand` is the substrate's rank-perfect K_G cousin within a fixture, a noisy ~1-log2-unit K_G correlate across fixtures, and a format-precision-pinned trigger below `log2(1e-4)`. Phase F's Channel 2 has these three roles even though Phase F's pre-registration only documented the third.
+
+---
+
+## 9. References
+
+- Phase F synthesis: `Build_Docs/Reports/substrate_invariant_search/phase_f_invariant_synthesis.md` + `.json`
+- Phase H characterisation: `Build_Docs/Reports/substrate_invariant_search/phase_h_substrate_semantic_characterization.md` + `.json`
+- Cross-fixture unification audit: this document
+- MCG Phase 1 geometry table (source corpus)
+- Campaign authority: `Build_Docs/Agent_tasks/substrate_invariant_search_2026_05_23.md`

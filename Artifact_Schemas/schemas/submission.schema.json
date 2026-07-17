@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cella.local/schemas/submission-v1.json",
+  "title": "Cella DAG mutation submission",
+  "type": "object",
+  "required": ["schema_version", "submission_id", "base_revision", "idempotency_key", "submitted_by", "summary", "artifacts", "graph_delta", "declared_impacts", "extensions"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "submission_id": {"type": "string"},
+    "base_revision": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "idempotency_key": {"type": "string", "minLength": 8},
+    "submitted_by": {"type": "string"},
+    "summary": {"type": "string", "minLength": 1},
+    "artifacts": {
+      "type": "array",
+      "description": "Validated sidecars carried with this mutation. Every new node must bind one of these artifact_id values through external_ids.artifacts, unless it binds a submitted file digest.",
+      "items": {"$ref": "artifact.schema.json"}
+    },
+    "graph_delta": {
+      "type": "object",
+      "required": ["upsert_nodes", "upsert_edges", "retire_nodes", "remove_edges"],
+      "properties": {
+        "upsert_nodes": {
+          "type": "array",
+          "description": "Canonical DAG nodes. A node that introduces a new id or source digest must set external_ids.artifacts to include a matching artifacts[].artifact_id, or share a SHA-256 with a submitted artifact file."
+        },
+        "upsert_edges": {"type": "array"},
+        "retire_nodes": {"type": "array", "items": {"type": "string"}},
+        "remove_edges": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "declared_impacts": {"type": "array"},
+    "extensions": {"type": "object"}
+  },
+  "additionalProperties": false
+}

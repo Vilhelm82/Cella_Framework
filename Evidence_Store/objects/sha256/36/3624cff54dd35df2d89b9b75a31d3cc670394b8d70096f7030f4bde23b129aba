@@ -1,0 +1,1540 @@
+{
+  "accepted_outcome": "offset_guard_exact_for_route_bank_with_zero_offset_hard_cells",
+  "campaign": "route_bank_offset_guard_audit",
+  "closeout_answers": {
+    "double_precision_language_justified": false,
+    "guard_precision": 1.0,
+    "guard_recall": 1.0,
+    "hard_zero_offset_keys": [
+      {
+        "index": 130,
+        "variant_id": "nextafter_up"
+      },
+      {
+        "index": 130,
+        "variant_id": "alternating_nextafter"
+      }
+    ],
+    "hard_zero_offset_records": [
+      {
+        "all_companion_offsets_zero": true,
+        "direct_delta_phase_class": "integer",
+        "index": 130,
+        "offset_guard_selected": false,
+        "r": 8.551724137931037,
+        "route_bank_success": false,
+        "route_offset_summary": {
+          "cbrt_power": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "cbrt_ratio_cubed": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "denominator_root_product": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "direct_2_over_r": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "exp_log": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "sqrt2_over_sqrtr_squared": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "sqrt_four_over_r_squared": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "sqrt_ratio_squared": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "two_over_sqrtr_over_sqrtr": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          }
+        },
+        "selected_route": null,
+        "variant_id": "nextafter_up"
+      },
+      {
+        "all_companion_offsets_zero": true,
+        "direct_delta_phase_class": "integer",
+        "index": 130,
+        "offset_guard_selected": false,
+        "r": 8.551724137931037,
+        "route_bank_success": false,
+        "route_offset_summary": {
+          "cbrt_power": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "cbrt_ratio_cubed": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "denominator_root_product": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "direct_2_over_r": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "exp_log": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "sqrt2_over_sqrtr_squared": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "sqrt_four_over_r_squared": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "sqrt_ratio_squared": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "two_over_sqrtr_over_sqrtr": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          }
+        },
+        "selected_route": null,
+        "variant_id": "alternating_nextafter"
+      }
+    ],
+    "offset_guard_exact_on_tested_scope": true,
+    "route_bank_resolves_all_tested_cells": false,
+    "route_bank_success_count": 62,
+    "route_bank_success_fraction": 0.96875,
+    "support_count": 64
+  },
+  "gates": {
+    "guard_precision_required": 1.0,
+    "guard_recall_required": 1.0,
+    "min_support": 12,
+    "phase_tol": 1e-12
+  },
+  "guard_definition": "direct route is half-phase OR any companion q_route differs from q_direct by a nonzero float64 value",
+  "headline_classification": "operand_offset_guard_identifies_route_bank_basin",
+  "overall_summary": {
+    "guard_false_negative_count": 0,
+    "guard_false_positive_count": 0,
+    "guard_precision": 1.0,
+    "guard_recall": 1.0,
+    "hard_zero_offset_count": 2,
+    "hard_zero_offset_records": [
+      {
+        "all_companion_offsets_zero": true,
+        "direct_delta_phase_class": "integer",
+        "index": 130,
+        "offset_guard_selected": false,
+        "r": 8.551724137931037,
+        "route_bank_success": false,
+        "route_offset_summary": {
+          "cbrt_power": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "cbrt_ratio_cubed": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "denominator_root_product": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "direct_2_over_r": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "exp_log": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "sqrt2_over_sqrtr_squared": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "sqrt_four_over_r_squared": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "sqrt_ratio_squared": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "two_over_sqrtr_over_sqrtr": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          }
+        },
+        "selected_route": null,
+        "variant_id": "nextafter_up"
+      },
+      {
+        "all_companion_offsets_zero": true,
+        "direct_delta_phase_class": "integer",
+        "index": 130,
+        "offset_guard_selected": false,
+        "r": 8.551724137931037,
+        "route_bank_success": false,
+        "route_offset_summary": {
+          "cbrt_power": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "cbrt_ratio_cubed": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "denominator_root_product": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "direct_2_over_r": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "exp_log": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "sqrt2_over_sqrtr_squared": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "sqrt_four_over_r_squared": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "sqrt_ratio_squared": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          },
+          "two_over_sqrtr_over_sqrtr": {
+            "delta_phase_class": "integer",
+            "q_offset_level": 0.0,
+            "q_offset_nonzero": false
+          }
+        },
+        "selected_route": null,
+        "variant_id": "alternating_nextafter"
+      }
+    ],
+    "offset_guard_selected_count": 62,
+    "route_bank_success_count": 62,
+    "route_bank_success_fraction": 0.96875,
+    "support_count": 64
+  },
+  "route_bank": [
+    "direct_2_over_r",
+    "sqrt_ratio_squared",
+    "cbrt_power",
+    "sqrt_four_over_r_squared",
+    "exp_log",
+    "sqrt2_over_sqrtr_squared",
+    "cbrt_ratio_cubed",
+    "two_over_sqrtr_over_sqrtr",
+    "denominator_root_product"
+  ],
+  "scope": "Schwarzschild f_binade_-1 support over native and one-ULP perturbed grids",
+  "target_definition": "route bank has at least one half-phase read on the cell",
+  "variants": [
+    {
+      "coordinate_count": 137,
+      "guard_false_negative_records": [],
+      "guard_false_positive_records": [],
+      "hard_cell_records": [],
+      "hard_zero_offset_indices": [],
+      "offset_guard_selected_count": 20,
+      "perturbation": "none",
+      "representative_success_records": [
+        {
+          "all_companion_offsets_zero": false,
+          "direct_delta_phase_class": "half",
+          "index": 112,
+          "offset_guard_selected": true,
+          "r": 4.206896551724138,
+          "route_bank_success": true,
+          "route_offset_summary": {
+            "cbrt_power": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "cbrt_ratio_cubed": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "denominator_root_product": {
+              "delta_phase_class": "half",
+              "q_offset_level": -1.0,
+              "q_offset_nonzero": true
+            },
+            "direct_2_over_r": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "exp_log": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt2_over_sqrtr_squared": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt_four_over_r_squared": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt_ratio_squared": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "two_over_sqrtr_over_sqrtr": {
+              "delta_phase_class": "half",
+              "q_offset_level": -1.0,
+              "q_offset_nonzero": true
+            }
+          },
+          "selected_route": "direct_2_over_r",
+          "variant_id": "native_grid"
+        },
+        {
+          "all_companion_offsets_zero": false,
+          "direct_delta_phase_class": "integer",
+          "index": 113,
+          "offset_guard_selected": true,
+          "r": 4.448275862068965,
+          "route_bank_success": true,
+          "route_offset_summary": {
+            "cbrt_power": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 1.0,
+              "q_offset_nonzero": true
+            },
+            "cbrt_ratio_cubed": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.5,
+              "q_offset_nonzero": true
+            },
+            "denominator_root_product": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "direct_2_over_r": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "exp_log": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt2_over_sqrtr_squared": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.5,
+              "q_offset_nonzero": true
+            },
+            "sqrt_four_over_r_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt_ratio_squared": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.5,
+              "q_offset_nonzero": true
+            },
+            "two_over_sqrtr_over_sqrtr": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            }
+          },
+          "selected_route": "sqrt_ratio_squared",
+          "variant_id": "native_grid"
+        },
+        {
+          "all_companion_offsets_zero": false,
+          "direct_delta_phase_class": "integer",
+          "index": 121,
+          "offset_guard_selected": true,
+          "r": 6.379310344827586,
+          "route_bank_success": true,
+          "route_offset_summary": {
+            "cbrt_power": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.5,
+              "q_offset_nonzero": true
+            },
+            "cbrt_ratio_cubed": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 1.0,
+              "q_offset_nonzero": true
+            },
+            "denominator_root_product": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "direct_2_over_r": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "exp_log": {
+              "delta_phase_class": "half",
+              "q_offset_level": -0.5,
+              "q_offset_nonzero": true
+            },
+            "sqrt2_over_sqrtr_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 1.0,
+              "q_offset_nonzero": true
+            },
+            "sqrt_four_over_r_squared": {
+              "delta_phase_class": "half",
+              "q_offset_level": -0.5,
+              "q_offset_nonzero": true
+            },
+            "sqrt_ratio_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "two_over_sqrtr_over_sqrtr": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.5,
+              "q_offset_nonzero": true
+            }
+          },
+          "selected_route": "cbrt_power",
+          "variant_id": "native_grid"
+        }
+      ],
+      "route_bank_success_count": 20,
+      "route_bank_success_fraction": 1.0,
+      "selected_route_counts": {
+        "cbrt_power": 1,
+        "direct_2_over_r": 16,
+        "sqrt_ratio_squared": 3
+      },
+      "support_count": 20,
+      "support_mask": "f_binade_-1",
+      "variant_id": "native_grid"
+    },
+    {
+      "coordinate_count": 137,
+      "guard_false_negative_records": [],
+      "guard_false_positive_records": [],
+      "hard_cell_records": [
+        {
+          "all_companion_offsets_zero": true,
+          "direct_delta_phase_class": "integer",
+          "index": 130,
+          "offset_guard_selected": false,
+          "r": 8.551724137931037,
+          "route_bank_success": false,
+          "route_offset_summary": {
+            "cbrt_power": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "cbrt_ratio_cubed": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "denominator_root_product": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "direct_2_over_r": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "exp_log": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt2_over_sqrtr_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt_four_over_r_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt_ratio_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "two_over_sqrtr_over_sqrtr": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            }
+          },
+          "selected_route": null,
+          "variant_id": "nextafter_up"
+        }
+      ],
+      "hard_zero_offset_indices": [
+        130
+      ],
+      "offset_guard_selected_count": 13,
+      "perturbation": "r -> nextafter(r, +inf)",
+      "representative_success_records": [
+        {
+          "all_companion_offsets_zero": false,
+          "direct_delta_phase_class": "half",
+          "index": 112,
+          "offset_guard_selected": true,
+          "r": 4.206896551724139,
+          "route_bank_success": true,
+          "route_offset_summary": {
+            "cbrt_power": {
+              "delta_phase_class": "half",
+              "q_offset_level": 1.0,
+              "q_offset_nonzero": true
+            },
+            "cbrt_ratio_cubed": {
+              "delta_phase_class": "half",
+              "q_offset_level": 1.0,
+              "q_offset_nonzero": true
+            },
+            "denominator_root_product": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "direct_2_over_r": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "exp_log": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt2_over_sqrtr_squared": {
+              "delta_phase_class": "half",
+              "q_offset_level": 1.0,
+              "q_offset_nonzero": true
+            },
+            "sqrt_four_over_r_squared": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt_ratio_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": -0.5,
+              "q_offset_nonzero": true
+            },
+            "two_over_sqrtr_over_sqrtr": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            }
+          },
+          "selected_route": "direct_2_over_r",
+          "variant_id": "nextafter_up"
+        },
+        {
+          "all_companion_offsets_zero": false,
+          "direct_delta_phase_class": "integer",
+          "index": 123,
+          "offset_guard_selected": true,
+          "r": 6.862068965517243,
+          "route_bank_success": true,
+          "route_offset_summary": {
+            "cbrt_power": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "cbrt_ratio_cubed": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "denominator_root_product": {
+              "delta_phase_class": "half",
+              "q_offset_level": -0.5,
+              "q_offset_nonzero": true
+            },
+            "direct_2_over_r": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "exp_log": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt2_over_sqrtr_squared": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.5,
+              "q_offset_nonzero": true
+            },
+            "sqrt_four_over_r_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt_ratio_squared": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.5,
+              "q_offset_nonzero": true
+            },
+            "two_over_sqrtr_over_sqrtr": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            }
+          },
+          "selected_route": "sqrt_ratio_squared",
+          "variant_id": "nextafter_up"
+        },
+        {
+          "all_companion_offsets_zero": false,
+          "direct_delta_phase_class": "integer",
+          "index": 128,
+          "offset_guard_selected": true,
+          "r": 8.068965517241383,
+          "route_bank_success": true,
+          "route_offset_summary": {
+            "cbrt_power": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.5,
+              "q_offset_nonzero": true
+            },
+            "cbrt_ratio_cubed": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.75,
+              "q_offset_nonzero": true
+            },
+            "denominator_root_product": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "direct_2_over_r": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "exp_log": {
+              "delta_phase_class": "integer",
+              "q_offset_level": -0.25,
+              "q_offset_nonzero": true
+            },
+            "sqrt2_over_sqrtr_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.25,
+              "q_offset_nonzero": true
+            },
+            "sqrt_four_over_r_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt_ratio_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": -0.25,
+              "q_offset_nonzero": true
+            },
+            "two_over_sqrtr_over_sqrtr": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            }
+          },
+          "selected_route": "cbrt_power",
+          "variant_id": "nextafter_up"
+        },
+        {
+          "all_companion_offsets_zero": false,
+          "direct_delta_phase_class": "integer",
+          "index": 129,
+          "offset_guard_selected": true,
+          "r": 8.310344827586208,
+          "route_bank_success": true,
+          "route_offset_summary": {
+            "cbrt_power": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.5,
+              "q_offset_nonzero": true
+            },
+            "cbrt_ratio_cubed": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.25,
+              "q_offset_nonzero": true
+            },
+            "denominator_root_product": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "direct_2_over_r": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "exp_log": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt2_over_sqrtr_squared": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.25,
+              "q_offset_nonzero": true
+            },
+            "sqrt_four_over_r_squared": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.25,
+              "q_offset_nonzero": true
+            },
+            "sqrt_ratio_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": -0.25,
+              "q_offset_nonzero": true
+            },
+            "two_over_sqrtr_over_sqrtr": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            }
+          },
+          "selected_route": "sqrt_four_over_r_squared",
+          "variant_id": "nextafter_up"
+        },
+        {
+          "all_companion_offsets_zero": false,
+          "direct_delta_phase_class": "integer",
+          "index": 133,
+          "offset_guard_selected": true,
+          "r": 9.27586206896552,
+          "route_bank_success": true,
+          "route_offset_summary": {
+            "cbrt_power": {
+              "delta_phase_class": "integer",
+              "q_offset_level": -0.25,
+              "q_offset_nonzero": true
+            },
+            "cbrt_ratio_cubed": {
+              "delta_phase_class": "integer",
+              "q_offset_level": -0.25,
+              "q_offset_nonzero": true
+            },
+            "denominator_root_product": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "direct_2_over_r": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "exp_log": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt2_over_sqrtr_squared": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.25,
+              "q_offset_nonzero": true
+            },
+            "sqrt_four_over_r_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt_ratio_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": -0.25,
+              "q_offset_nonzero": true
+            },
+            "two_over_sqrtr_over_sqrtr": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            }
+          },
+          "selected_route": "sqrt2_over_sqrtr_squared",
+          "variant_id": "nextafter_up"
+        },
+        {
+          "all_companion_offsets_zero": false,
+          "direct_delta_phase_class": "integer",
+          "index": 136,
+          "offset_guard_selected": true,
+          "r": 10.000000000000002,
+          "route_bank_success": true,
+          "route_offset_summary": {
+            "cbrt_power": {
+              "delta_phase_class": "integer",
+              "q_offset_level": -0.25,
+              "q_offset_nonzero": true
+            },
+            "cbrt_ratio_cubed": {
+              "delta_phase_class": "half",
+              "q_offset_level": -0.5,
+              "q_offset_nonzero": true
+            },
+            "denominator_root_product": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "direct_2_over_r": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "exp_log": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.25,
+              "q_offset_nonzero": true
+            },
+            "sqrt2_over_sqrtr_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.25,
+              "q_offset_nonzero": true
+            },
+            "sqrt_four_over_r_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt_ratio_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": -0.25,
+              "q_offset_nonzero": true
+            },
+            "two_over_sqrtr_over_sqrtr": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.25,
+              "q_offset_nonzero": true
+            }
+          },
+          "selected_route": "cbrt_ratio_cubed",
+          "variant_id": "nextafter_up"
+        }
+      ],
+      "route_bank_success_count": 13,
+      "route_bank_success_fraction": 0.9285714285714286,
+      "selected_route_counts": {
+        "cbrt_power": 1,
+        "cbrt_ratio_cubed": 1,
+        "direct_2_over_r": 7,
+        "sqrt2_over_sqrtr_squared": 1,
+        "sqrt_four_over_r_squared": 1,
+        "sqrt_ratio_squared": 2
+      },
+      "support_count": 14,
+      "support_mask": "f_binade_-1",
+      "variant_id": "nextafter_up"
+    },
+    {
+      "coordinate_count": 137,
+      "guard_false_negative_records": [],
+      "guard_false_positive_records": [],
+      "hard_cell_records": [],
+      "hard_zero_offset_indices": [],
+      "offset_guard_selected_count": 13,
+      "perturbation": "r -> nextafter(r, -inf)",
+      "representative_success_records": [
+        {
+          "all_companion_offsets_zero": false,
+          "direct_delta_phase_class": "half",
+          "index": 117,
+          "offset_guard_selected": true,
+          "r": 5.413793103448275,
+          "route_bank_success": true,
+          "route_offset_summary": {
+            "cbrt_power": {
+              "delta_phase_class": "half",
+              "q_offset_level": 1.0,
+              "q_offset_nonzero": true
+            },
+            "cbrt_ratio_cubed": {
+              "delta_phase_class": "half",
+              "q_offset_level": 1.0,
+              "q_offset_nonzero": true
+            },
+            "denominator_root_product": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "direct_2_over_r": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "exp_log": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt2_over_sqrtr_squared": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt_four_over_r_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": -0.5,
+              "q_offset_nonzero": true
+            },
+            "sqrt_ratio_squared": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "two_over_sqrtr_over_sqrtr": {
+              "delta_phase_class": "integer",
+              "q_offset_level": -0.5,
+              "q_offset_nonzero": true
+            }
+          },
+          "selected_route": "direct_2_over_r",
+          "variant_id": "nextafter_down"
+        },
+        {
+          "all_companion_offsets_zero": false,
+          "direct_delta_phase_class": "integer",
+          "index": 112,
+          "offset_guard_selected": true,
+          "r": 4.206896551724137,
+          "route_bank_success": true,
+          "route_offset_summary": {
+            "cbrt_power": {
+              "delta_phase_class": "half",
+              "q_offset_level": -0.5,
+              "q_offset_nonzero": true
+            },
+            "cbrt_ratio_cubed": {
+              "delta_phase_class": "half",
+              "q_offset_level": -0.5,
+              "q_offset_nonzero": true
+            },
+            "denominator_root_product": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 1.0,
+              "q_offset_nonzero": true
+            },
+            "direct_2_over_r": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "exp_log": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt2_over_sqrtr_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 1.0,
+              "q_offset_nonzero": true
+            },
+            "sqrt_four_over_r_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt_ratio_squared": {
+              "delta_phase_class": "half",
+              "q_offset_level": -0.5,
+              "q_offset_nonzero": true
+            },
+            "two_over_sqrtr_over_sqrtr": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.5,
+              "q_offset_nonzero": true
+            }
+          },
+          "selected_route": "sqrt_ratio_squared",
+          "variant_id": "nextafter_down"
+        },
+        {
+          "all_companion_offsets_zero": false,
+          "direct_delta_phase_class": "integer",
+          "index": 115,
+          "offset_guard_selected": true,
+          "r": 4.93103448275862,
+          "route_bank_success": true,
+          "route_offset_summary": {
+            "cbrt_power": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.5,
+              "q_offset_nonzero": true
+            },
+            "cbrt_ratio_cubed": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.5,
+              "q_offset_nonzero": true
+            },
+            "denominator_root_product": {
+              "delta_phase_class": "half",
+              "q_offset_level": -0.5,
+              "q_offset_nonzero": true
+            },
+            "direct_2_over_r": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "exp_log": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt2_over_sqrtr_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt_four_over_r_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt_ratio_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "two_over_sqrtr_over_sqrtr": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            }
+          },
+          "selected_route": "cbrt_power",
+          "variant_id": "nextafter_down"
+        },
+        {
+          "all_companion_offsets_zero": false,
+          "direct_delta_phase_class": "integer",
+          "index": 125,
+          "offset_guard_selected": true,
+          "r": 7.344827586206896,
+          "route_bank_success": true,
+          "route_offset_summary": {
+            "cbrt_power": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "cbrt_ratio_cubed": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "denominator_root_product": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "direct_2_over_r": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "exp_log": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt2_over_sqrtr_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt_four_over_r_squared": {
+              "delta_phase_class": "half",
+              "q_offset_level": -0.5,
+              "q_offset_nonzero": true
+            },
+            "sqrt_ratio_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "two_over_sqrtr_over_sqrtr": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            }
+          },
+          "selected_route": "sqrt_four_over_r_squared",
+          "variant_id": "nextafter_down"
+        }
+      ],
+      "route_bank_success_count": 13,
+      "route_bank_success_fraction": 1.0,
+      "selected_route_counts": {
+        "cbrt_power": 4,
+        "direct_2_over_r": 5,
+        "sqrt_four_over_r_squared": 1,
+        "sqrt_ratio_squared": 3
+      },
+      "support_count": 13,
+      "support_mask": "f_binade_-1",
+      "variant_id": "nextafter_down"
+    },
+    {
+      "coordinate_count": 137,
+      "guard_false_negative_records": [],
+      "guard_false_positive_records": [],
+      "hard_cell_records": [
+        {
+          "all_companion_offsets_zero": true,
+          "direct_delta_phase_class": "integer",
+          "index": 130,
+          "offset_guard_selected": false,
+          "r": 8.551724137931037,
+          "route_bank_success": false,
+          "route_offset_summary": {
+            "cbrt_power": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "cbrt_ratio_cubed": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "denominator_root_product": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "direct_2_over_r": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "exp_log": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt2_over_sqrtr_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt_four_over_r_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt_ratio_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "two_over_sqrtr_over_sqrtr": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            }
+          },
+          "selected_route": null,
+          "variant_id": "alternating_nextafter"
+        }
+      ],
+      "hard_zero_offset_indices": [
+        130
+      ],
+      "offset_guard_selected_count": 16,
+      "perturbation": "even r -> +inf, odd r -> -inf",
+      "representative_success_records": [
+        {
+          "all_companion_offsets_zero": false,
+          "direct_delta_phase_class": "half",
+          "index": 112,
+          "offset_guard_selected": true,
+          "r": 4.206896551724139,
+          "route_bank_success": true,
+          "route_offset_summary": {
+            "cbrt_power": {
+              "delta_phase_class": "half",
+              "q_offset_level": 1.0,
+              "q_offset_nonzero": true
+            },
+            "cbrt_ratio_cubed": {
+              "delta_phase_class": "half",
+              "q_offset_level": 1.0,
+              "q_offset_nonzero": true
+            },
+            "denominator_root_product": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "direct_2_over_r": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "exp_log": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt2_over_sqrtr_squared": {
+              "delta_phase_class": "half",
+              "q_offset_level": 1.0,
+              "q_offset_nonzero": true
+            },
+            "sqrt_four_over_r_squared": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt_ratio_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": -0.5,
+              "q_offset_nonzero": true
+            },
+            "two_over_sqrtr_over_sqrtr": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            }
+          },
+          "selected_route": "direct_2_over_r",
+          "variant_id": "alternating_nextafter"
+        },
+        {
+          "all_companion_offsets_zero": false,
+          "direct_delta_phase_class": "integer",
+          "index": 119,
+          "offset_guard_selected": true,
+          "r": 5.89655172413793,
+          "route_bank_success": true,
+          "route_offset_summary": {
+            "cbrt_power": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 1.0,
+              "q_offset_nonzero": true
+            },
+            "cbrt_ratio_cubed": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 1.0,
+              "q_offset_nonzero": true
+            },
+            "denominator_root_product": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.5,
+              "q_offset_nonzero": true
+            },
+            "direct_2_over_r": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "exp_log": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt2_over_sqrtr_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 1.0,
+              "q_offset_nonzero": true
+            },
+            "sqrt_four_over_r_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt_ratio_squared": {
+              "delta_phase_class": "half",
+              "q_offset_level": -0.5,
+              "q_offset_nonzero": true
+            },
+            "two_over_sqrtr_over_sqrtr": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            }
+          },
+          "selected_route": "sqrt_ratio_squared",
+          "variant_id": "alternating_nextafter"
+        },
+        {
+          "all_companion_offsets_zero": false,
+          "direct_delta_phase_class": "integer",
+          "index": 115,
+          "offset_guard_selected": true,
+          "r": 4.93103448275862,
+          "route_bank_success": true,
+          "route_offset_summary": {
+            "cbrt_power": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.5,
+              "q_offset_nonzero": true
+            },
+            "cbrt_ratio_cubed": {
+              "delta_phase_class": "half",
+              "q_offset_level": 0.5,
+              "q_offset_nonzero": true
+            },
+            "denominator_root_product": {
+              "delta_phase_class": "half",
+              "q_offset_level": -0.5,
+              "q_offset_nonzero": true
+            },
+            "direct_2_over_r": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "exp_log": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt2_over_sqrtr_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt_four_over_r_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt_ratio_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "two_over_sqrtr_over_sqrtr": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            }
+          },
+          "selected_route": "cbrt_power",
+          "variant_id": "alternating_nextafter"
+        },
+        {
+          "all_companion_offsets_zero": false,
+          "direct_delta_phase_class": "integer",
+          "index": 125,
+          "offset_guard_selected": true,
+          "r": 7.344827586206896,
+          "route_bank_success": true,
+          "route_offset_summary": {
+            "cbrt_power": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "cbrt_ratio_cubed": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "denominator_root_product": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "direct_2_over_r": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "exp_log": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt2_over_sqrtr_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt_four_over_r_squared": {
+              "delta_phase_class": "half",
+              "q_offset_level": -0.5,
+              "q_offset_nonzero": true
+            },
+            "sqrt_ratio_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "two_over_sqrtr_over_sqrtr": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            }
+          },
+          "selected_route": "sqrt_four_over_r_squared",
+          "variant_id": "alternating_nextafter"
+        },
+        {
+          "all_companion_offsets_zero": false,
+          "direct_delta_phase_class": "integer",
+          "index": 136,
+          "offset_guard_selected": true,
+          "r": 10.000000000000002,
+          "route_bank_success": true,
+          "route_offset_summary": {
+            "cbrt_power": {
+              "delta_phase_class": "integer",
+              "q_offset_level": -0.25,
+              "q_offset_nonzero": true
+            },
+            "cbrt_ratio_cubed": {
+              "delta_phase_class": "half",
+              "q_offset_level": -0.5,
+              "q_offset_nonzero": true
+            },
+            "denominator_root_product": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "direct_2_over_r": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "exp_log": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.25,
+              "q_offset_nonzero": true
+            },
+            "sqrt2_over_sqrtr_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.25,
+              "q_offset_nonzero": true
+            },
+            "sqrt_four_over_r_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.0,
+              "q_offset_nonzero": false
+            },
+            "sqrt_ratio_squared": {
+              "delta_phase_class": "integer",
+              "q_offset_level": -0.25,
+              "q_offset_nonzero": true
+            },
+            "two_over_sqrtr_over_sqrtr": {
+              "delta_phase_class": "integer",
+              "q_offset_level": 0.25,
+              "q_offset_nonzero": true
+            }
+          },
+          "selected_route": "cbrt_ratio_cubed",
+          "variant_id": "alternating_nextafter"
+        }
+      ],
+      "route_bank_success_count": 16,
+      "route_bank_success_fraction": 0.9411764705882353,
+      "selected_route_counts": {
+        "cbrt_power": 3,
+        "cbrt_ratio_cubed": 1,
+        "direct_2_over_r": 8,
+        "sqrt_four_over_r_squared": 1,
+        "sqrt_ratio_squared": 3
+      },
+      "support_count": 17,
+      "support_mask": "f_binade_-1",
+      "variant_id": "alternating_nextafter"
+    }
+  ],
+  "verification": [
+    {
+      "command": "PYTHONPATH=src python -m lloyd_v4.evals.route_bank_offset_guard_audit",
+      "result": "passed; generated artifact_route_bank_offset_guard_audit.json and route_bank_offset_guard_audit_report.md"
+    },
+    {
+      "command": "PYTHONPATH=src python -m pytest tests/test_route_bank_offset_guard_audit.py -q",
+      "result": "passed; focused route-bank offset guard tests"
+    },
+    {
+      "command": "PYTHONPATH=src python -m pytest tests/test_route_bank_offset_guard_audit.py tests/test_route_pair_selection_stability_audit.py tests/test_hard_cell_q_source_exhaustion_search.py -q",
+      "result": "passed; focused compatibility subset"
+    }
+  ]
+}

@@ -1,0 +1,160 @@
+#!/usr/bin/env python3
+"""RetestA diagnosis: is each tier's F2 Sterbenz residual at its OWN rounding
+floor (residual = small-integer * u_p)?  If so, the per-cell C = a + u_p*b_k
+fit is the SAME degeneracy Phase 2A found for float128 -- now exposed at every
+tier by exact-rational measurement. The per-cell b_k is then NOT an identifiable
+conditioning amplitude; it is the per-tier rounding-floor coefficient with
+parity-random sign.
+
+EVAL-LAYER ONLY. RESEARCH-GRADE. Apparatus = numpy/Decimal/Fraction.
+
+Run:
+    PYTHONPATH=src python3 scratch/_revalidation/retestA/f2_residual_floor_diagnosis.py
+"""
+from __future__ import annotations
+
+import json
+from collections import Counter
+from decimal import Decimal, localcontext
+from fractions import Fraction
+from pathlib import Path
+
+import numpy as np
+
+OUT_DIR = Path(__file__).resolve().parent
+
+FLOAT_TIERS = {"float32": (np.float32, 24), "float64": (np.float64, 53),
+               "float128": (np.float128, 64)}
+DECIMAL_TIERS = (30, 50, 80, 120)
+
+
+def u_p_fraction(label: str) -> Fraction:
+    if label in FLOAT_TIERS:
+        return Fraction(1, 2) ** FLOAT_TIERS[label][1]
+    prec = int(label.split("_", 1)[1])
+    return Fraction(5) * Fraction(10) ** (-prec)
+
+
+def f2_binary(x_frac: Fraction, dtype) -> Fraction:
+    s = dtype
+    one = s(1.0)
+    x = s(float(x_frac))
+    direct = one - x
+    root = np.sqrt(direct)
+    power = root * root
+    return Fraction(float((power - one) + x))
+
+
+def f2_decimal(x_frac: Fraction, prec: int) -> Fraction:
+    with localcontext() as ctx:
+        ctx.prec = prec
+        one = Decimal(1)
+        x = +Decimal(x_frac.numerator) / Decimal(x_frac.denominator)
+        direct = one - x
+        root = direct.sqrt()
+        power = root * root
+        return Fraction((power - one) + x)
+
+
+def residual(x_frac, label):
+    if label in FLOAT_TIERS:
+        return f2_binary(x_frac, FLOAT_TIERS[label][0])
+    return f2_decimal(x_frac, int(label.split("_", 1)[1]))
+
+
+LADDER = list(FLOAT_TIERS) + [f"decimal_{p}" for p in DECIMAL_TIERS]
+
+
+def engineered_dyadic_sterbenz(bits=12):
+    kmax = (1 << (bits - 1)) - 1
+    return [Fraction(k, 1 << bits) for k in range(1, kmax + 1)]
+
+
+def main():
+    grid = engineered_dyadic_sterbenz(12)
+    # Per tier: residual / u_p  -- if this is always a small integer/half-integer,
+    # the residual is AT the tier's rounding floor (1 ULP-ish), not a substrate
+    # amplitude. Collect the multiset of residual/u_p ratios per tier.
+    per_tier = {lbl: Counter() for lbl in LADDER}
+    per_tier_nonzero = {lbl: 0 for lbl in LADDER}
+    per_tier_total = {lbl: 0 for lbl in LADDER}
+    max_abs_ratio = {lbl: 0.0 for lbl in LADDER}
+    all_ratio_small = True
+    for x in grid:
+        for lbl in LADDER:
+            up = u_p_fraction(lbl)
+            res = residual(x, lbl)
+            per_tier_total[lbl] += 1
+            ratio = res / up  # exact
+            r_round = round(float(ratio), 6)
+            per_tier[lbl][r_round] += 1
+            if res != 0:
+                per_tier_nonzero[lbl] += 1
+            max_abs_ratio[lbl] = max(max_abs_ratio[lbl], abs(float(ratio)))
+            if abs(float(ratio)) > 8:  # "small" = within a handful of ULP
+                all_ratio_small = False
+
+    # The KEY test: across the whole Sterbenz grid, is every tier's residual
+    # bounded by a few ULP of THAT tier? (residual/u_p in a small fixed set.)
+    tier_summary = {}
+    for lbl in LADDER:
+        ratios = sorted(per_tier[lbl].items(), key=lambda kv: -kv[1])
+        tier_summary[lbl] = {
+            "u_p": float(u_p_fraction(lbl)),
+            "n_total": per_tier_total[lbl],
+            "n_nonzero": per_tier_nonzero[lbl],
+            "frac_nonzero": per_tier_nonzero[lbl] / per_tier_total[lbl],
+            "max_abs_residual_over_u_p": max_abs_ratio[lbl],
+            "residual_over_u_p_histogram_top": ratios[:9],
+        }
+
+    # Interpretation gate:
+    #   If every tier's residual is within a few ULP (max |res/u_p| small) and
+    #   the distribution of res/u_p is a tight discrete set centered near 0,
+    #   then the F2 Sterbenz residual is the tier's own rounding floor: the
+    #   per-cell C=a+u_p*b fit is degenerate (each y_p ~ c_p * u_p with c_p a
+    #   parity-random O(1) integer), so b_k is NOT identifiable as a substrate
+    #   conditioning amplitude.
+    verdict = {
+        "all_tiers_residual_within_8_ulp": all_ratio_small,
+        "max_abs_residual_over_u_p_overall": max(max_abs_ratio.values()),
+        "interpretation": (
+            "Each precision tier's F2 Sterbenz residual is at that tier's own "
+            "rounding floor: |residual| <= a few ULP of the tier, with sign set "
+            "by sqrt rounding parity. residual_p ~ c_p * u_p, c_p a small "
+            "parity-random integer. Therefore C_p = residual_p ~ c_p*u_p, and a "
+            "per-cell linear fit C = a + u_p*b yields b ~ c_p (the floor "
+            "coefficient), NOT an identifiable path-conditioning amplitude. This "
+            "is the SAME degeneracy Phase 2A reported for float128 -- exact "
+            "rationals merely expose it at every tier instead of hiding it as a "
+            "single nonzero tier."
+        ),
+    }
+
+    out = {
+        "task": "retestA_f2_residual_floor_diagnosis",
+        "path": "F2",
+        "region": "sterbenz (engineered dyadic, x in (0,1/2), bits=12)",
+        "n_cells": len(grid),
+        "ladder": LADDER,
+        "per_tier": tier_summary,
+        "verdict": verdict,
+    }
+    (OUT_DIR / "f2_residual_floor_diagnosis.json").write_text(
+        json.dumps(out, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    print("F2 Sterbenz residual-floor diagnosis (engineered dyadic grid, n=%d)" % len(grid))
+    print("=" * 70)
+    for lbl in LADDER:
+        ts = tier_summary[lbl]
+        print("%-12s u_p=%.2e  nonzero=%4d/%d (%.1f%%)  max|res/u_p|=%.3f" % (
+            lbl, ts["u_p"], ts["n_nonzero"], ts["n_total"],
+            100 * ts["frac_nonzero"], ts["max_abs_residual_over_u_p"]))
+        print("     res/u_p top values:", ts["residual_over_u_p_histogram_top"][:5])
+    print()
+    print("all tiers within 8 ULP:", verdict["all_tiers_residual_within_8_ulp"])
+    print("overall max |res/u_p| :", verdict["max_abs_residual_over_u_p_overall"])
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,117 @@
+# BACL Multi-Format Extension Audit Preregistry
+
+> **Status: FROZEN 2026-05-18 pre-measurement.** Per `CAMPAIGN_DISCIPLINE.md` Rule 1.1, binding.
+
+## 0. Context
+
+The BACL_subnormal audit ([`../bacl_subnormal_audit/closeout.md`](../bacl_subnormal_audit/closeout.md)) established the unified BACL statement:
+
+> For `a, b ∈ 𝔽⁺` in any IEEE 754 binary format, if `ulp(a) ≥ ulp(b)`, then `a − b = j · ulp(b)` for integer j.
+
+The proof uses only binade-spacing (every float is `N · ulp` for integer N). This mechanism is format-agnostic — only the specific value of `ulp` changes per format.
+
+This audit verifies BACL at multiple IEEE 754 binary formats:
+- **float16** (IEEE binary16, half-precision): 11-bit precision, exponent range [−14, +15]
+- **float32** (IEEE binary32, single-precision): 24-bit precision, exponent range [−126, +127]
+- **float128** (x86 80-bit extended on this platform): 64-bit explicit mantissa, exponent range [−16382, +16383] — **NOT IEEE binary128**; treat as platform-extended format
+
+True IEEE binary128 (128-bit precision, 113-bit mantissa) is not available in standard numpy on this platform. Bfloat16 (8-bit exponent, 7-bit mantissa) requires non-stdlib libraries.
+
+## 1. Per-format BACL parameters (FROZEN)
+
+| Format | Mantissa bits (precision − 1) | emin (smallest normal exp) | smallest_normal | smallest_subnormal | Notes |
+|---|---|---|---|---|---|
+| float16 | 10 | −14 | 2^(−14) ≈ 6.10e−5 | 2^(−24) ≈ 5.96e−8 | IEEE binary16 |
+| float32 | 23 | −126 | 2^(−126) ≈ 1.18e−38 | 2^(−149) ≈ 1.40e−45 | IEEE binary32 |
+| float128 | 63 (x86 80-bit ext) | −16382 | 2^(−16382) ≈ 3.36e−4932 | 2^(−16382 − 63) ≈ 4e−4951 | **Platform-extended**, not IEEE binary128 |
+
+For each format, define:
+- `ulp(x)` for x in normal binade `[2^k, 2^(k+1))`: `2^(k − mantissa_bits)`
+- `ulp(subnormal)` = smallest_subnormal value (uniform spacing in subnormal range)
+
+## 2. Pair-class sweeps per format (FROZEN)
+
+For each format, four pair classes (same structure as BACL_subnormal audit):
+
+| Class | a | b | n_samples |
+|---|---|---|---|
+| **SubSub** | random subnormal | random subnormal | 2000 |
+| **NormSub** | random normal | random subnormal | 2000 |
+| **SubNormSameUlp** | random subnormal | random in smallest-normal binade | 2000 |
+| **SubNormHigherBinade** | random subnormal | random in higher binade | 2000 |
+
+Total per format: 8000 records. Total across 3 formats: 24,000 records.
+
+## 3. The proof's format-agnosticism (FROZEN as audited claim)
+
+The unified BACL proof:
+
+> 1. Every positive float `x` is `N · ulp(x)` for integer N (precision-dependent N range, but always integer).
+> 2. If `ulp(a) ≥ ulp(b)`, both are powers of 2 with `ulp(a)/ulp(b)` a non-negative integer power of 2.
+> 3. So `a = N_a · ulp(a) = N_a · (ulp(a)/ulp(b)) · ulp(b)` — integer multiple of `ulp(b)`.
+> 4. `b = N_b · ulp(b)` — integer multiple of `ulp(b)`.
+> 5. `a − b` is integer multiple of `ulp(b)`. ∎
+
+Lines 1–5 use only integer arithmetic and the lattice structure of floats. **No format-specific parameter** enters the proof — only the value of `ulp` changes. Therefore the proof transfers to any binary floating-point format with the same lattice structure.
+
+## 4. Pre-registered predictions
+
+| # | Prediction | Threshold |
+|---|---|---|
+| P_MF_1 | BACL holds at float32 across all 4 pair classes | strict, zero violations |
+| P_MF_2 | BACL holds at float16 across all 4 pair classes | strict, zero violations |
+| P_MF_3 | BACL holds at float128 (80-bit extended) across all 4 pair classes | strict, zero violations — extends despite non-IEEE format |
+| P_MF_4 | Sharpness demonstrable at float32 (SubNormHigherBinade ≥ 50%) | strict |
+| P_MF_5 | Sharpness demonstrable at float16 | strict |
+| P_MF_6 | Proof structure is format-agnostic | qualitative review |
+
+## 5. Pre-registered failure modes
+
+| ID | Condition |
+|---|---|
+| F_MF_1 | BACL violation at any format on a pair satisfying the hypothesis |
+| F_MF_2 | Sharpness fails (lower-ulp pairs always produce integer differences) |
+| F_MF_3 | float128 (80-bit extended) deviates from BACL — would suggest non-IEEE format breaks the property |
+| F_MF_4 | Numerical artifacts in numpy.float16 arithmetic (e.g., implicit upconversion to float32) confound the test |
+
+## 6. V4 typed outputs
+
+For each format × pair-class:
+
+```json
+{
+  "format": "float16" | "float32" | "float128",
+  "pair_class": "SubSub" | "NormSub" | "SubNormSameUlp" | "SubNormHigherBinade",
+  "n_pairs": int,
+  "hypothesis_holds_count": int,
+  "BACL_S_violations": int,
+  "sharpness_count": int,
+  "first_violations": [...],
+  "first_sharpness_examples": [...]
+}
+```
+
+Cross-format aggregator with verdict.
+
+## 7. Closeout criteria
+
+1. All 3 formats × 4 pair classes = 12 audit records emitted.
+2. Each P_MF_1–P_MF_6 audited.
+3. Failure modes named.
+4. Verdict assigned.
+5. Reproducibility.
+6. float128's "platform-extended" caveat documented honestly.
+
+## 8. Out of scope
+
+- True IEEE binary128 (not available without third-party libraries).
+- Bfloat16 (not in numpy stdlib).
+- Non-RN rounding modes.
+- Negative / zero operands.
+
+## 9. References
+
+- BACL_subnormal audit: [`../bacl_subnormal_audit/closeout.md`](../bacl_subnormal_audit/closeout.md)
+- Original BACL audit: [`../bacl_invariant_audit/closeout.md`](../bacl_invariant_audit/closeout.md)
+- IEEE 754 binary16, binary32, binary64 standards
+- x86 80-bit extended precision (non-IEEE-conforming format used by numpy.float128 on Linux x86_64)

@@ -1,0 +1,79 @@
+#!/usr/bin/env python3
+"""Independent recompute of the gate-ii (alpha-1) slope for n=3.
+
+Build harness reports residual/ulp-vs-f log-log slope n3=0.917 (r2~0.10).
+Recompute independently on (a) the full sweep and (b) log-power-only,
+to test robustness of the 0.917 figure.
+"""
+import math
+import struct
+from fractions import Fraction
+
+import numpy as np
+import mpmath as mp
+
+ULP = Fraction(1, 2 ** 1074)
+
+
+def round_f64(fr):
+    with mp.workdps(80):
+        return float(mp.mpf(fr.numerator) / mp.mpf(fr.denominator))
+
+
+def sweep_full():
+    vals = set()
+    for k in range(0, 52):
+        v = math.ldexp(1.0, -1074 + k)
+        if Fraction(v) < Fraction(1, 2 ** 1022):
+            vals.add(v)
+    x = math.nextafter(math.ldexp(1.0, -1022), 0.0)
+    for _ in range(12):
+        bits = struct.unpack(">Q", struct.pack(">d", x))[0]
+        if ((bits >> 52) & 0x7FF) != 0:
+            break
+        vals.add(x)
+        x = math.nextafter(x, 0.0)
+    return sorted(vals, reverse=True)
+
+
+def sweep_logpow():
+    return [math.ldexp(1.0, -1074 + k) for k in range(0, 52)
+            if Fraction(math.ldexp(1.0, -1074 + k)) < Fraction(1, 2 ** 1022)]
+
+
+def res_over_ulp(f, n, root):
+    R = float(root(np.float64(f)))
+    V = round_f64(Fraction(R) ** n)
+    return (Fraction(V) - Fraction(f)) / ULP
+
+
+def loglog_slope(fs, ratios):
+    xs, ys = [], []
+    for f, r in zip(fs, ratios):
+        if f > 0 and abs(float(r)) > 0:
+            xs.append(math.log(f))
+            ys.append(math.log(abs(float(r))))
+    n = len(xs)
+    if n < 2:
+        return None, None, n
+    mx = sum(xs) / n
+    my = sum(ys) / n
+    sxx = sum((x - mx) ** 2 for x in xs)
+    sxy = sum((x - mx) * (y - my) for x, y in zip(xs, ys))
+    slope = sxy / sxx
+    yhat = [my + slope * (x - mx) for x in xs]
+    sstot = sum((y - my) ** 2 for y in ys)
+    ssres = sum((y - yh) ** 2 for y, yh in zip(ys, yhat))
+    r2 = 1 - ssres / sstot if sstot else None
+    return slope, r2, n
+
+
+for label, fs in [("FULL", sweep_full()), ("LOGPOW", sweep_logpow())]:
+    r3 = [res_over_ulp(f, 3, np.cbrt) for f in fs]
+    r2arr = [res_over_ulp(f, 2, np.sqrt) for f in fs]
+    s3, rr3, n3 = loglog_slope(fs, r3)
+    s2, rr2, n2 = loglog_slope(fs, r2arr)
+    print(f"[{label}] count={len(fs)}")
+    print(f"   n3 slope={s3} r2={rr3} n_points={n3}")
+    print(f"   n2 slope={s2} r2={rr2} n_points={n2} (n2 all-zero -> n_points small)")
+    print(f"   n2 distinct multiples={sorted(set(int(x) for x in r2arr))}")

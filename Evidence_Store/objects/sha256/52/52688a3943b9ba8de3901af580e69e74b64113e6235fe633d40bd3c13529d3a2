@@ -1,0 +1,319 @@
+# Substrate Invariant Search — α-Recovery Instrument Exploratory Findings
+
+**Date:** 2026-05-26
+**Status:** Exploratory characterisation of the V4 α-recovery instrument (`directional_alpha_probe`, `singular_alpha_jet_bundle`) across rational-radical, negative-α, and non-power-law observables. Five status-calculus cells empirically observed; routing-composition substrate signature characterised at n=6; `REGULAR_INTEGER` classifier mechanism documented. Inputs to the pending substrate-invariant-search authority rewrite (`substrate_invariant_search_2026_05_26.md`).
+**Authority:** Pre-authority exploration; not stamped as a phase under either the retired 2026-05-23 authority or the pending 2026-05-26 authority.
+**Source primitives:** `src/lloyd_v4/primitives/directional_alpha_probe.py`, `src/lloyd_v4/primitives/singular_alpha_jet_bundle.py`
+**Source paper:** Docs/transfer_function_exponent_family_v4.tex
+**Session artefacts:** `scratch/radical_family_alpha_probe.py`, `scratch/n6_routing_diversity_probe.py`, `scratch/negative_alpha_baseline_probe.py`, `scratch/hard_case_singular_probe.py`, `scratch/regular_integer_probe.py`, `scratch/regular_integer_probe_with_band.py`
+
+---
+
+## 1. Headline findings
+
+1. **The α-recovery instrument is robust across the rational radical family n=2..8.** Same 12-point sweep (1e-2 → 1e-9), eta=1e-6, agnostic mode (declared_alpha_models=()). All seven n values emit `alpha_fractional_branch`/`stable`/12-of-12 transfers, with bias from 1/n in the 10⁻¹² to 5·10⁻¹¹ range. Most biases are within ~1σ of zero; n=6 is a 3.66σ outlier (bias −5.31e-11) — the only statistically significant non-zero in the family.
+
+2. **The n=6 outlier resolves to a libm `pow(x, 1/6)` composition signature.** Five routings of f^(1/6) reveal that Python `**(1/6)`, `cbrt(sqrt(f))`, and `numpy.power(f, 1/6)` are **bit-identical at every sweep point** (max abs diff = 0 across 12 points), while `sqrt(cbrt(f))` differs by 1 ULP and explicit `exp(log(f)/6)` differs by ~4 ULPs. The corresponding V4-chain biases span −5.31e-11 to −1.37e-11; the operand-level routing difference of 1 ULP propagates to a ~2e-11 swing in observed_α. **Substrate-to-α amplification factor ≈ 10⁶** through the finite-difference + log-log-fit chain.
+
+3. **The negative-α regime is empirically *cleaner* than the positive-α radical family.** `singular_alpha_jet_bundle` at x₀=0 with f(x) ∈ {1/x, 1/x², 1/√x, x^(−3/2)} recovers α to ~10⁻¹³ for integer/half-integer α — an order of magnitude tighter than the positive-α floor. Mechanism: |g(h)| → ∞ as h → 0 for negative α, so the finite-difference subtraction operates on two large numbers in the same binade where BACL gives bit-exact cancellation. For positive α, |g(f)| → 0 and the subtraction enters precision-floor territory. The substrate behaviour is opposite-signed.
+
+4. **Five of eleven `AlphaProbeStatus` cells are now empirically observed.** Today's hard-case probe (log(1/x), sin(x)/x, x·log(x), exp(−1/x)) added `ALPHA_ZERO_BOUNDARY` and `ALPHA_INSUFFICIENT_DATA` to the previously-observed `ALPHA_FRACTIONAL_BRANCH`, `ALPHA_NEGATIVE_SINGULARITY`. `ALPHA_REGULAR_INTEGER` is reachable but caller-gated (see §3.5). Six remaining cells (`MODEL_AMBIGUOUS`, `MODEL_NO_MATCH`, `CANCELLATION_DOMINATED`, `UNSTABLE_WINDOW`, `INDETERMINATE`, `DOMAIN_REFUSED`, `NONFINITE`) have trigger conditions known from `_classify_alpha`; not exercised this session.
+
+5. **`ALPHA_REGULAR_INTEGER` requires the caller to provide a declared band.** With `declared_alpha_band=None` and `declared_alpha_models=()`, the classifier routes every positive observed_α — including bit-clean integer cases like f(x)=x, x², x³ recovered to 10⁻¹² — to `ALPHA_FRACTIONAL_BRANCH`. With `declared_alpha_band=0.01`, the same observables fire `ALPHA_REGULAR_INTEGER`. Mechanism: the calculus refuses to round to integer without an explicit caller-supplied tolerance. Epistemically honest; documented now as a permanent calibration fact.
+
+---
+
+## 2. The rational radical family — baseline characterisation
+
+### 2.1 Pre-registration
+
+Observable: `lambda f: f**(1/n)` via Python `**` operator, for n ∈ {2, 3, 4, 5, 6, 7, 8}. f-sweep: 12 log-spaced points 1e-2 → 1e-9. eta = 1e-6. declared_alpha_models = (). mpmath oracle at 50 dps per n.
+
+Predicted: observed_α ≈ 1/n with V4-chain precision-floor bias around 10⁻¹¹.
+
+### 2.2 Per-n results
+
+| n | 1/n | V4 observed_α | V4 bias from 1/n | std_err | \|bias/σ\| |
+|---|---|---|---|---|---|
+| 2 | 0.5000... | 0.5000000000181296 | +1.81e-11 | 7.39e-12 | 2.45 |
+| 3 | 0.3333... | 0.3333333333377432 | +4.41e-12 | 1.05e-11 | 0.42 |
+| 4 | 0.2500... | 0.2499999999942180 | −5.78e-12 | 1.28e-11 | 0.45 |
+| 5 | 0.2000... | 0.1999999999883667 | −1.16e-11 | 1.96e-11 | 0.59 |
+| 6 | 0.1666... | **0.1666666666135272** | **−5.31e-11** | 1.45e-11 | **3.66** |
+| 7 | 0.1428... | 0.1428571428332764 | −2.39e-11 | 2.37e-11 | 1.01 |
+| 8 | 0.1250... | 0.1250000000131272 | +1.31e-11 | 3.11e-11 | 0.42 |
+
+All seven: status `alpha_fractional_branch`, stability `stable`, 12/12 transfers. mpmath oracle confirms 1/n at every n to 10⁻⁴⁵ (oracle precision floor).
+
+### 2.3 Reading
+
+The primitive generalises cleanly across the rational radical family. The V4-chain precision floor is ~10⁻¹¹ — set by finite-window OLS fit through finite-precision finite-difference output, independent of n. The bias is sign-mixed and non-monotonic; most n values sit within ~1σ of zero, consistent with measurement noise.
+
+n=6 is the lone statistically significant outlier (3.66σ from zero). Investigated in §3.
+
+---
+
+## 3. The n=6 outlier — routing-composition signature
+
+### 3.1 Pre-registration
+
+Five routings of f^(1/6), all mathematically identical:
+
+- R1: `f ** (1/6)` (Python `**`)
+- R2: `(f**(1/3))**(1/2)` (sqrt of cbrt)
+- R3: `(f**(1/2))**(1/3)` (cbrt of sqrt)
+- R4: `math.exp(math.log(f)/6)` (explicit exp/log)
+- R5: `float(np.power(f, 1/6))` (numpy.power)
+
+Same sweep, same eta, agnostic mode.
+
+### 3.2 Per-point g(f) identity matrix
+
+Max absolute difference in g(f) across the 12-point sweep:
+
+| Pair | max \|Δ\| |
+|---|---|
+| R1 ≡ R3 ≡ R5 (Python `**`, cbrt(sqrt), numpy.power) | **0** (bit-identical) |
+| R2 (sqrt(cbrt)) vs the R1≡R3≡R5 cluster | 1 ULP |
+| R4 (exp(log/6)) vs all others | ~4 ULPs |
+
+Python's `**(1/6)` is empirically bit-identical to `(f^(1/2))^(1/3)` and to `numpy.power(f, 1/6)` at every sweep point. The libm `pow(x, 1/6)` path that Python and numpy share happens to coincide with the `cbrt(sqrt(f))` composite at our precision. The `sqrt(cbrt(f))` composite differs (operand order matters at the ULP level). The explicit `exp(log/6)` decomposition is the most divergent of the five.
+
+### 3.3 V4-chain bias per routing
+
+| Routing | observed_α | bias | std_err | \|bias/σ\| | structural signature |
+|---|---|---|---|---|---|
+| R1 Python `**(1/6)` | 0.16666666661352725 | −5.31e-11 | 1.45e-11 | 3.67 | systematic, tight |
+| R2 sqrt(cbrt(f)) | 0.16666666661879160 | −4.79e-11 | 2.63e-11 | 1.82 | systematic, medium scatter |
+| R3 cbrt(sqrt(f)) | 0.16666666663384289 | −3.28e-11 | 1.66e-11 | 1.98 | systematic, medium scatter |
+| R4 exp(log(f)/6) | 0.16666666665295450 | −1.37e-11 | 7.56e-11 | 0.18 | high scatter, low bias |
+| R5 numpy.power | **0.16666666661352725** | **−5.31e-11** | **1.45e-11** | **3.67** | bit-identical to R1 through V4 chain |
+
+R1 and R5 produce identical observed_α to all 17 displayed digits, identical window_span (2.88e-11), and identical std_err (1.45e-11). The bit-identity of g(f) propagates through finite-difference, log-log fit, and OLS slope to the V4-chain output.
+
+R3 has bit-identical g(f) to R1 but a meaningfully different observed_α (−3.28e-11 vs −5.31e-11, a 2e-11 gap). The g(f) table covers only the sweep points; the divergence must live in g(f+δf) — i.e., the operand-perturbed evaluation. A 1-ULP difference at perturbed-operand points propagates through finite-difference + OLS to a ~2e-11 swing in α.
+
+### 3.4 Substrate-to-α amplification factor
+
+For R1 vs R3 (bit-identical at f, presumed 1-ULP off at some f+δf):
+
+- ULP at g(f), f=1e-9, α=1/6: g ≈ 0.0316, ULP ≈ 5.6e-18.
+- Difference at g(f+δf): ~1 ULP ≈ 5.6e-18.
+- Resulting α difference: 2e-11.
+- **Amplification factor ≈ 10⁶.**
+
+This is the substrate-to-α-reading amplification for the standard sweep configuration. Single-ULP routing-composition differences in the operand-perturbed evaluation become ~10⁻¹¹ in the recovered α.
+
+### 3.5 Refined IEEE-mandate taxonomy
+
+The earlier framing of the taxonomy was binary:
+- **Mandated** (sqrt, +/-, ×, /, FMA, remainder, conversions): bit-exact identity across implementations
+- **Implementation-free** (cbrt, pow, exp, log, transcendentals): free to vary
+
+Today's data refines this:
+
+- **Bit-identity of different routings is empirically possible in the implementation-free class** when implementations dispatch through the same libm (R1 ≡ R5 for `**(1/6)`).
+- **The variation in the implementation-free class is *compositional*, not merely *implementational***: different mathematical decompositions of the same operation (R2 vs R3 vs R4) reliably produce different per-point ULP signatures even when all dispatch through libm-class primitives.
+- For substrate-as-probe purposes, **routing-diversity is most informative when it varies the composition, not the call site**.
+
+---
+
+## 4. Negative-α regime via `singular_alpha_jet_bundle`
+
+### 4.1 Pre-registration
+
+Four power-law singularities at x₀=0:
+- f(x) = 1/x (α = −1)
+- f(x) = 1/x² (α = −2)
+- f(x) = 1/√x (α = −1/2)
+- f(x) = x^(−3/2) (α = −3/2)
+
+Same sweep, same eta, agnostic mode. mpmath oracle at 50 dps per α.
+
+### 4.2 Results
+
+| Observable | α_true | V4 observed_α | bias | std_err | \|bias/σ\| | outer status |
+|---|---|---|---|---|---|---|
+| 1/x | −1 | −0.9999999999986382 | +1.36e-12 | 4.81e-12 | 0.28 | `singular_jet_negative_alpha_singularity` |
+| 1/x² | −2 | −2.000000000000358 | −3.58e-13 | 4.11e-12 | 0.09 | `singular_jet_negative_alpha_singularity` |
+| 1/√x | −1/2 | −0.4999999999836 | +1.64e-11 | 1.00e-11 | 1.64 | `singular_jet_negative_alpha_singularity` |
+| x^(−3/2) | −3/2 | −1.499999999999583 | +4.17e-13 | 3.81e-12 | 0.11 | `singular_jet_negative_alpha_singularity` |
+
+mpmath oracle confirms truth at every α (10⁻⁴⁵ floor). All four emit `alpha_negative_singularity` (inner) → `singular_jet_negative_alpha_singularity` (outer). Validity: `selectable=True, advanceable=False` — the contract's "observable but non-advanceable singular point" propagates correctly.
+
+### 4.3 Mechanism — large-binade cancellation works in our favour
+
+For positive-α radicals: |g(f)| → 0 as f → 0+. The finite-difference subtraction `g(f+δf) − g(f)` involves two small numbers losing precision through cancellation; relative cancellation grows as f → 0+ (we have measured this directly via the BACL grain probe).
+
+For negative-α singularities: |g(h)| → ∞ as h → 0+. The finite-difference subtraction operates on two large numbers in the same binade. BACL guarantees bit-exact cancellation when `floor_binade(a) ≥ floor_binade(b)` and both operands are in normal range — exactly the regime here. The subtraction is exact; the only precision loss is in the operand evaluations themselves.
+
+Empirically: three of four negative-α observables sit at bias 10⁻¹³ or below — an order of magnitude tighter than the positive-α radical family floor. The substrate behaviour is **opposite-signed** between the two regimes.
+
+### 4.4 Open texture — R3 vs R4 asymmetry
+
+The `1/√x` routing (`1.0 / (x**0.5)`) gives bias +1.64e-11 — noisier than the other three by ~40×. Naively this should be the *tightest* case since both sqrt and reciprocal are IEEE-mandated. Hypothesis: reciprocal of a small magnitude expands the ULP grain. At h=1e-9, sqrt(h) ≈ 3.16e-5 with ULP ≈ 3.5e-21; `1/sqrt(h)` ≈ 3.16e4 with ULP ≈ 3.6e-12 — the reciprocal step expands ULP by the magnitude of 1/h itself. Whereas `x^(−1.5)` via libm `pow()` computes the inverse-and-power in one step without an intermediate small-magnitude representation.
+
+Single-test observation; n=1; could be measurement noise (only 1.64σ). Worth a follow-up dig if cleaner mechanism understanding wanted.
+
+---
+
+## 5. Status-calculus coverage map
+
+### 5.1 Today's hard-case probe — 4 non-power-law observables
+
+Observable, prediction, V4 emission:
+
+| obs | predicted | got | observed_α |
+|---|---|---|---|
+| log(1/x) | REGULAR_INTEGER(0) or ZERO_BOUNDARY | **`alpha_zero_boundary`** | −1.91e-11 |
+| sin(x)/x | REGULAR_INTEGER(2) | `alpha_fractional_branch` | 1.9695 ± 0.014 |
+| x·log(x) | REGULAR_INTEGER(1) or UNSTABLE_WINDOW | `alpha_fractional_branch` | 0.9013 ± 0.0073 |
+| exp(−1/x) | DOMAIN_REFUSED/NONFINITE/INSUFFICIENT_DATA | **`alpha_insufficient_data`** | None |
+
+Two prediction matches (H1, H4); two surprises (H2, H3 went FRACTIONAL where I predicted REGULAR_INTEGER). See §5.4 for the calibration insight that explains the surprises.
+
+### 5.2 ZERO_BOUNDARY — structural log-signature refusal
+
+H1 (log(1/x)) recovers observed_α ≈ −1.9e-11 ≈ 0. The calculus refuses to classify this as a power law: it emits `alpha_zero_boundary` with `selectable=False`. The semantic is correct — α=0 in this convention is the log signature (transfer ∝ 1/x), and a log singularity is *not* a power law of order zero. The calculus has explicit handling for this boundary rather than collapsing it into REGULAR_INTEGER(0).
+
+Mechanism (from `_is_zero_boundary`):
+```
+return abs(observed_alpha) <= max(K_BOUNDARY * standard_error, ALPHA_NUMERIC_FLOOR)
+```
+where `K_BOUNDARY = 2.0` and `ALPHA_NUMERIC_FLOOR = 1e-9`. The ZERO_BOUNDARY cell fires whenever observed_α sits within ~2σ of zero (with a 10⁻⁹ absolute floor). For H1, the recovered α was 1.9e-11 — well inside the 1e-9 floor.
+
+### 5.3 INSUFFICIENT_DATA — clean refusal cascade
+
+H4 (exp(−1/x)) underflows 11 of 12 sweep points to zero in float64 (only h=1e-2 gives a finite exp(−100) ≈ 3.7e-44). The calculus emits `alpha_insufficient_data` with `validity = (defined=False, finite=False, selectable=False, advanceable=False)` — all four flags False. No spurious value propagated.
+
+Contrast with H1's ZERO_BOUNDARY refusal: `validity = (defined=True, finite=True, selectable=False, advanceable=False)`. ZERO_BOUNDARY is "real measurement but not consumable"; INSUFFICIENT_DATA is "no measurement at all." The validity record's four flags carry independent information — this is the multi-field validity of Axiom 4 working in practice.
+
+### 5.4 The REGULAR_INTEGER caller-gating mechanism
+
+Probing pure positive-integer monomials f(x) ∈ {x, x², x³} at x₀=0:
+
+| obs | observed_α | bias | classifier output (band=None) | classifier output (band=0.01) |
+|---|---|---|---|---|
+| x | 1.000000000000667 | +6.67e-13 | `alpha_fractional_branch` | **`alpha_regular_integer`** |
+| x² | 1.9999999999985298 | −1.47e-12 | `alpha_fractional_branch` | **`alpha_regular_integer`** |
+| x³ | 2.9999999999994413 | −5.59e-13 | `alpha_fractional_branch` | **`alpha_regular_integer`** |
+
+Same observable, same observed_α, same precision (better than the radical family's 10⁻¹¹ — these are *cleaner* than the cleanest fractional radical). Only the classifier output changes once `declared_alpha_band` is provided.
+
+The mechanism (from `_classify_alpha`):
+```python
+if observed_alpha < 0:
+    return ALPHA_NEGATIVE_SINGULARITY, None, ()
+if declared_alpha_band is not None and _is_close_to_positive_integer(observed_alpha, declared_alpha_band):
+    return ALPHA_REGULAR_INTEGER, None, ()
+return ALPHA_FRACTIONAL_BRANCH, None, ()
+```
+
+Without declared_alpha_models or declared_alpha_band, the classifier has no basis for the "how close to integer is close enough" decision and stays in FRACTIONAL_BRANCH for any positive α. **The cell is caller-gated.** Epistemic discipline: the calculus refuses to round to integer without an explicit caller-supplied tolerance.
+
+This re-frames §5.1's H2 and H3 surprises: sin(x)/x recovered α=1.97 ± 0.014, x·log(x) recovered α=0.9013 ± 0.0073. With no declared band, both are FRACTIONAL_BRANCH by default. With declared_alpha_band=0.05, sin(x)/x would fire REGULAR_INTEGER(2); x·log(x) would still be FRACTIONAL_BRANCH because |0.9013 − 1| = 0.099 > 0.05. The band parameter directly controls consumer-defined rigor on integer classification.
+
+**Calibration implication for prior campaign results:** every FRACTIONAL_BRANCH reading we've reported across V4 (radical family α = 1/2, 1/3, ..., 1/n; positive-integer cases tested today) was classified the same way for the same reason — no declared band carried with the probe call. Consumers wanting to act on the integer-vs-fractional distinction must set the band parameter; the verdict is consumer-defined.
+
+### 5.5 Window-averaged α reporting
+
+H3 (x·log(x)) has asymptotic α → 1 as h → 0+ (the log(h) eventually dominates the h¹ factor in the transfer slope's logarithm). Across the standard 12-point sweep, the recovered α is 0.9013, not 1.0. The log correction modulates inside the window and the OLS fit captures the *window-averaged* slope, not the limit.
+
+This is honest behaviour by the primitive: it reports what the measurement at this sweep gives, not what would happen at infinite resolution. **For observables with non-power-law subleading terms (logs, products of powers, etc.), the V4 α reading is sweep-dependent.** Downstream primitives that consume α need to know they're getting a window measurement, not an asymptote.
+
+For pure power-law observables (no subleading terms), the window/asymptote distinction collapses: the precision floor is the only deviation from the limit, and it's ~10⁻¹¹ regardless of window.
+
+### 5.6 Coverage status
+
+```
+✓ ALPHA_REGULAR_INTEGER      — caller-gated; mechanism characterised (§5.4)
+✓ ALPHA_FRACTIONAL_BRANCH    — agnostic positive-α default (radicals, sin/x, x·log(x))
+✓ ALPHA_NEGATIVE_SINGULARITY — negative observed_α (1/x, 1/x², 1/√x, x^(−3/2))
+✓ ALPHA_ZERO_BOUNDARY        — log signature (log(1/x))
+✓ ALPHA_INSUFFICIENT_DATA    — < 3 usable transfers (exp(−1/x))
+
+  ALPHA_MODEL_AMBIGUOUS      — needs multiple overlapping declared models
+  ALPHA_MODEL_NO_MATCH       — needs declared models, observed outside all bands
+  ALPHA_CANCELLATION_DOMINATED — majority of transfers cancellation-dominated
+  ALPHA_UNSTABLE_WINDOW      — nested-window span exceeds materiality + K_DRIFT·σ
+  ALPHA_INDETERMINATE        — slope_degenerate_input from log-log primitive
+  ALPHA_DOMAIN_REFUSED       — majority of transfers domain-refused
+  ALPHA_NONFINITE            — slope or intercept non-finite
+```
+
+Each of the remaining six has a known trigger condition derivable from the source. Targeted probes for each are a future-session candidate.
+
+---
+
+## 6. Implications for the substrate-invariant-search authority rewrite
+
+### 6.1 What today characterised
+
+- **The α-recovery instrument is robust across positive-rational, integer, and negative-α regimes**, with a precision floor of ~10⁻¹¹ to 10⁻¹³ depending on regime.
+- **Routing-composition signatures are a substrate observable in their own right.** The n=6 dig showed that ULP-level routing differences propagate through the V4 chain at ~10⁶ amplification. This is analogous to what BACL does for the per-operation grain but at the per-composition level.
+- **The status calculus is conservative and caller-aware.** It refuses to make calls without explicit tolerances, propagates the multi-field validity faithfully, and distinguishes "no measurement" from "measurement but not consumable."
+
+### 6.2 What today did not characterise
+
+- The remaining six status cells were not exercised (each needs a targeted observable).
+- The R3 vs R4 negative-α asymmetry (1/√x noisier than x^(−1.5)) was identified but not investigated.
+- No new cross-fixture invariants were tested — today was instrument-side, not fixture-side.
+- No formal audit (`wrong_clean_emit_count`, `propagated_window_error`) was applied; readings are exploratory.
+
+### 6.3 Carryover to the new authority
+
+These exploratory findings establish baseline characterisations that the authority rewrite should build on:
+
+1. **α-recovery instrument coverage** is now characterised across regimes; the new authority can reference these baselines when designing phases.
+2. **Routing-composition substrate signature** at n=6 is a worked example of how routing-diversity probes can serve as substrate observables — directly relevant to the substrate-as-probe channel design.
+3. **The REGULAR_INTEGER caller-gating** is a calibration fact that consumers of `directional_alpha_probe`/`singular_alpha_jet_bundle` need to know; should be referenced explicitly in any phase that depends on integer-vs-fractional classification.
+4. **The window-averaged α observation** flags a class of observables (log-modulated, log-corrected) where the primitive reports a window value rather than the asymptote; relevant for any phase that wants to read off "the α at the branch point."
+
+---
+
+## 7. Session artefacts
+
+All scratch scripts are in `scratch/`:
+
+- `radical_family_alpha_probe.py` — §2 baseline sweep
+- `n6_routing_diversity_probe.py` — §3 routing dig
+- `negative_alpha_baseline_probe.py` — §4 negative-α sweep
+- `hard_case_singular_probe.py` — §5.1–5.3 hard-case probe
+- `regular_integer_probe.py` — §5.4 initial probe (band=None)
+- `regular_integer_probe_with_band.py` — §5.4 verification (band=0.01)
+
+Prior session artefacts referenced:
+
+- `scratch/cbrt_alpha_probe.py` and `scratch/cbrt_alpha_probe_mpmath_oracle.py` — cube-root α probe (foundational; n=3 case of the radical family)
+- `scratch/sqrt_alpha_probe.py` — sqrt three-routing identity test (foundational; n=2 case)
+- `scratch/bacl_grain_probe.py` — BACL grain confirmation across cube-root and sqrt routings
+- `scratch/bacl_invariant_audit.py` — existing BACL theorem audit (binade proviso, C1-C7 chains)
+
+No formal Reports/ artefacts produced this session; all findings are research-grade exploratory.
+
+---
+
+## 8. Open texture (not blockers)
+
+1. **R3 vs R4 negative-α asymmetry.** Single-test observation; could be noise or could be a ULP-grain-expansion mechanism. Cheap follow-up if wanted.
+2. **n=6 outlier residual content beyond routing.** Even within the R4 (exp(log/6)) routing, the bias is non-zero (−1.37e-11) though within noise. May or may not reflect deeper structural content.
+3. **Six remaining status-calculus cells.** Trigger conditions known; targeted probes are a future-session candidate.
+4. **`scalar_alpha_jet_bundle` not touched this session.** Today exercised only `directional_alpha_probe` and `singular_alpha_jet_bundle`. The sibling primitive (regular regions with operand subtraction) wasn't tested; would be needed for full instrument coverage.
+
+---
+
+## Appendix A — Per-n statistical significance table (radical family)
+
+(From §2.2, sigma test against zero bias hypothesis.)
+
+| n | bias | std_err | bias/σ | verdict at \|σ\|>2 |
+|---|---|---|---|---|
+| 2 | +1.81e-11 | 7.39e-12 | +2.45 | borderline significant |
+| 3 | +4.41e-12 | 1.05e-11 | +0.42 | noise-consistent |
+| 4 | −5.78e-12 | 1.28e-11 | −0.45 | noise-consistent |
+| 5 | −1.16e-11 | 1.96e-11 | −0.59 | noise-consistent |
+| 6 | −5.31e-11 | 1.45e-11 | **−3.66** | **statistically significant** |
+| 7 | −2.39e-11 | 2.37e-11 | −1.01 | noise-consistent |
+| 8 | +1.31e-11 | 3.11e-11 | +0.42 | noise-consistent |
+
+Five of seven n values consistent with noise; n=6 is the standout outlier (resolved in §3 as a libm composition signature); n=2 is borderline (worth a future routing dig if curiosity strikes).

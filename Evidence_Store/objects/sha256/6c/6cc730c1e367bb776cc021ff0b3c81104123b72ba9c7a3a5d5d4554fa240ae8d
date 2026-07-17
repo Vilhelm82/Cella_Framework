@@ -1,0 +1,245 @@
+"""Rounding-dial CURVE — chains compute the INTEGER target 1, across TWO ROOTS (sqrt + cbrt).
+
+Surface fixture, root n:   x = (1-c)^(1/n)  =>  x^n + c = 1.
+  n=2 (sqrt): R = √(1-c),   R²+c = 1     (one multiply to build R²)
+  n=3 (cbrt): Q = ∛(1-c),   Q³+c = 1     (two multiplies to build Q³ -> rounder)
+
+The chain's ANSWER is the integer 1; the deviation value-1 is the identity x^n+c-1 = 0 on the surface.
+A nonzero integer target keeps the cleanest forms off the trivial zero node. Forms emerge from the
+constraint (canonical enumeration over {x,1,c,½} + membership + constant-g irreducibility), are scored
+by exact total rounding (the dial axis, least→most) with BACL integer-ulp(1) cleanliness overlaid, and
+both root families are drawn on one chart so the dial spans two roots. Eval-layer, exact (Fraction).
+"""
+import math, struct, json, sys
+from fractions import Fraction as Fr
+
+ATOMS = [('x',), ('one',), ('c',), ('half',)]   # x = the root atom (√ or ∛ depending on family)
+OPS = ('+', '-', '*')
+T = 1.0
+MAX_DEPTH = int(sys.argv[1]) if len(sys.argv) > 1 else 3   # depth-3 default; pass 4 for the depth-4 pass
+if MAX_DEPTH >= 4:                               # depth-4 full structural enum explodes -> tractability:
+    ATOMS = [('x',), ('one',), ('c',)]          #   drop ½ (the split family is covered at depth-3)
+TERMINAL_CAP = 1 if MAX_DEPTH >= 4 else 99       # depth-4 terminal = (deep expr) op (simple, depth≤1)
+ROOTS_N = (2, 3)                                 # surface degrees the terminal stream pre-screens for
+SUBNORMAL = 'sub' in sys.argv                    # `... 3 sub` -> score chains in the subnormal regime
+SC = 2.0 ** -1050                                # subnormal target scale (terms land ~2^-1053, ~21 bits)
+def cof(r): return 2.0 / r
+SWEEP_RS = [2.2031 + i * 0.2531 for i in range(30)]
+OFF_PAIRS = [(0.3137, 0.271), (0.83, 0.11), (1.4, 0.55), (0.51, 0.9),
+             (1.21, 0.2), (0.66, 0.42), (1.07, 0.73), (0.92, 0.31)]   # generic (x, c), off surface
+
+
+def evfree(node, xv, cv):
+    def go(m):
+        k = m[0]
+        if k == 'x': return xv
+        if k == 'one': return 1.0
+        if k == 'c': return cv
+        if k == 'half': return 0.5
+        a, b = go(m[1]), go(m[2])
+        return a + b if k == '+' else a - b if k == '-' else a * b
+    return go(node)
+
+
+def s(node):
+    if len(node) == 1: return {'x': 'x', 'one': '1', 'c': 'c', 'half': '½'}[node[0]]
+    return f"({s(node[1])} {node[0]} {s(node[2])})"
+
+
+def canon(node):
+    if len(node) == 1: return node[0]
+    op = node[0]; a, b = canon(node[1]), canon(node[2])
+    if op in ('+', '*') and a > b: a, b = b, a
+    return f"({op} {a} {b})"
+
+
+def make_family(n):
+    """return (on_pairs, D, root_on_surface) for root degree n."""
+    on_pairs = [((1 - cv) ** (1.0 / n), cv) for cv in
+                (0.151, 0.227, 0.339, 0.418, 0.503, 0.611, 0.704, 0.812)]
+    def D(xv, cv): return xv ** n + cv - 1.0
+    return on_pairs, D
+
+
+def on_surface(node, on_pairs):
+    return all(abs(evfree(node, xv, cv) - T) <= 1e-9 for xv, cv in on_pairs)
+def trivial(node):
+    return all(abs(evfree(node, xv, cv) - T) <= 1e-12 for xv, cv in OFF_PAIRS)
+def g_constant(node, D):
+    gs = [(evfree(node, xv, cv) - T) / D(xv, cv) for xv, cv in OFF_PAIRS if abs(D(xv, cv)) > 0.05]
+    return gs and (max(gs) - min(gs) < 1e-6)
+def embeds_answer(node, on_pairs):
+    def sub(m, top):
+        if len(m) == 1: return False
+        if not top and on_surface(m, on_pairs) and not trivial(m): return True
+        return sub(m[1], False) or sub(m[2], False)
+    return sub(node, True)
+
+
+def score(node, n):
+    # Normal mode: target=1, atoms unscaled, ulp = ulp(1). Subnormal mode: every operand scaled by SC
+    # into the subnormal range so arithmetic rounds on the absolute 2^-1074 grid; target = SC,
+    # ulp = ulp(SC). Form SELECTION stays algebraic/normal; only the rounding REGIME changes here.
+    tot_round = 0.0; bacl_int = 0; cnt = 0
+    sc = SC if SUBNORMAL else 1.0
+    target = sc; u1 = math.ulp(sc)
+    sc_root = sc ** (1.0 / n)
+    for r in SWEEP_RS:
+        c = cof(r)
+        xv = ((1.0 - c) ** (1.0 / n)) * sc_root        # x^n scales to (1-c)*sc
+        cv = c * sc; onev = 1.0 * sc; halfv = 0.5 * sc
+        acc = [Fr(0)]
+        def go(m):
+            k = m[0]
+            if k == 'x': return xv
+            if k == 'one': return onev
+            if k == 'c': return cv
+            if k == 'half': return halfv
+            a, b = go(m[1]), go(m[2])
+            fl = a + b if m[0] == '+' else a - b if m[0] == '-' else a * b
+            ex = (Fr(a) + Fr(b)) if m[0] == '+' else (Fr(a) - Fr(b)) if m[0] == '-' else (Fr(a) * Fr(b))
+            uop = math.ulp(fl) if fl != 0.0 else math.ulp(0.0)   # roundoff in this op's OWN ulp (scale-free)
+            acc[0] += abs(ex - Fr(fl)) / Fr(uop); return fl
+        v = go(node)
+        tot_round += float(acc[0])
+        j = (Fr(v) - Fr(target)) / Fr(u1)
+        if j.denominator == 1: bacl_int += 1
+        cnt += 1
+    return tot_round / cnt, bacl_int / cnt
+
+
+# prescreen surface points: 2 per root. A true identity hits 1 exactly at all of its root's points
+# (no false negatives); occasional false positives are caught by the full 8-point on_surface later.
+# Nodes are stored FLAT: (node_tuple, s0, s1, q0, q1) = values at 2 sqrt + 2 cbrt surface points.
+PRE_SQRT = [((1 - cv) ** 0.5, cv) for cv in (0.319, 0.461)]
+PRE_CBRT = [((1 - cv) ** (1.0 / 3), cv) for cv in (0.319, 0.461)]
+E = 1e-6
+def _hit(s0, s1, q0, q1):                       # identity iff ≈1 at both points of SOME root
+    return (abs(s0 - 1) < E and abs(s1 - 1) < E) or (abs(q0 - 1) < E and abs(q1 - 1) < E)
+
+
+OFF0, OFF1 = (0.713, 0.317), (1.187, 0.622)     # generic off-surface points for the dedup key
+def _vkey(s0, s1, q0, q1, o0, o1):
+    return struct.pack('>6d', s0, s1, q0, q1, o0, o1)
+
+
+def enumerate_forms():
+    # Stored nodes are flat: (node, depth, s0,s1,q0,q1, o0,o1) — 4 surface prescreen + 2 off-surface.
+    # Stored layers are deduped by VALUE-key (collapses exact dups, keeps rounding siblings) so the
+    # depth-4 building set stays tractable where canon-dedup would explode. Terminal streamed.
+    def av(a):
+        return (a, 0, evfree(a, *PRE_SQRT[0]), evfree(a, *PRE_SQRT[1]),
+                evfree(a, *PRE_CBRT[0]), evfree(a, *PRE_CBRT[1]), evfree(a, *OFF0), evfree(a, *OFF1))
+    seen = set()
+    bd = {0: [av(a) for a in ATOMS]}
+    for e in bd[0]: seen.add(_vkey(*e[2:]))
+    for d in range(1, MAX_DEPTH):
+        bd[d] = []; shallow = [e for dd in range(0, d) for e in bd[dd]]
+        for (na, _da, a2, a3, a4, a5, a6, a7) in bd[d - 1]:
+            for (nb, _db, b2, b3, b4, b5, b6, b7) in shallow:
+                for op in OPS:
+                    pairs = (((na, a2, a3, a4, a5, a6, a7), (nb, b2, b3, b4, b5, b6, b7)),) \
+                        if op != '-' else \
+                        (((na, a2, a3, a4, a5, a6, a7), (nb, b2, b3, b4, b5, b6, b7)),
+                         ((nb, b2, b3, b4, b5, b6, b7), (na, a2, a3, a4, a5, a6, a7)))
+                    for x, y in pairs:
+                        if op == '+': v = (x[1]+y[1], x[2]+y[2], x[3]+y[3], x[4]+y[4], x[5]+y[5], x[6]+y[6])
+                        elif op == '-': v = (x[1]-y[1], x[2]-y[2], x[3]-y[3], x[4]-y[4], x[5]-y[5], x[6]-y[6])
+                        else: v = (x[1]*y[1], x[2]*y[2], x[3]*y[3], x[4]*y[4], x[5]*y[5], x[6]*y[6])
+                        kk = _vkey(*v)
+                        if kk not in seen:
+                            seen.add(kk); bd[d].append(((op, x[0], y[0]), d) + v)
+    cand = {}
+    for d in range(1, MAX_DEPTH):
+        for e in bd[d]:
+            if _hit(e[2], e[3], e[4], e[5]): cand[canon(e[0])] = e[0]
+    # terminal layer depth==MAX_DEPTH: deepest operand from bd[MAX-1], partner depth ≤ TERMINAL_CAP.
+    partners = [e for dd in range(0, min(MAX_DEPTH, TERMINAL_CAP + 1)) for e in bd[dd]]
+    for (na, _da, a2, a3, a4, a5, a6, a7) in bd[MAX_DEPTH - 1]:
+        for (nb, _db, b2, b3, b4, b5, b6, b7) in partners:
+            if _hit(a2+b2, a3+b3, a4+b4, a5+b5): cand[canon(('+', na, nb))] = ('+', na, nb)
+            if _hit(a2*b2, a3*b3, a4*b4, a5*b5): cand[canon(('*', na, nb))] = ('*', na, nb)
+            if _hit(a2-b2, a3-b3, a4-b4, a5-b5): cand[canon(('-', na, nb))] = ('-', na, nb)
+            if _hit(b2-a2, b3-a3, b4-a4, b5-a5): cand[canon(('-', nb, na))] = ('-', nb, na)
+    return list(cand.values())
+
+
+def dial_for(n, nodes):
+    on_pairs, D = make_family(n)
+    genuine = [nd for nd in nodes
+               if len(nd) > 1 and on_surface(nd, on_pairs) and not trivial(nd)
+               and g_constant(nd, D) and not embeds_answer(nd, on_pairs)]
+    uniq = {}
+    for nd in genuine:
+        rnd, bacl = score(nd, n)
+        key = (round(rnd, 6), round(bacl, 4))
+        if key not in uniq or len(s(nd)) < len(s(uniq[key][0])):
+            uniq[key] = (nd, rnd, bacl)
+    rows = [{"ast": s(nd), "rounding": round(rnd, 5), "bacl": round(bacl, 3)}
+            for (nd, rnd, bacl) in uniq.values()]
+    rows.sort(key=lambda d: d["rounding"])
+    return rows
+
+
+def main():
+    nodes = enumerate_forms()
+    families = {"sqrt (n=2)": 2, "cbrt (n=3)": 3}
+    results = {}
+    print(f"surface-candidate chains: {len(nodes)}  (max_depth={MAX_DEPTH})\n")
+    for label, n in families.items():
+        rows = dial_for(n, nodes)
+        results[label] = rows
+        if not rows:
+            print(f"=== {label}: 0 genuine forms ===\n"); continue
+        print(f"=== {label}: {len(rows)} genuine forms,  rounding "
+              f"{rows[0]['rounding']:.3f} → {rows[-1]['rounding']:.3f} ulp ===")
+        for i, d in enumerate(rows):
+            if i < 6 or i >= len(rows) - 3:
+                print(f"  {i:>3} {d['rounding']:>9.4f} ulp  {d['bacl']*100:>4.0f}%  {d['ast']}")
+            elif i == 6:
+                print("   ...")
+        print()
+
+    data = json.dumps(results)
+    if SUBNORMAL:
+        title = "SUBNORMAL cancellation regime, two roots"
+        subtitle = ("Chains compute a subnormal target (SC=2&#8315;&#185;&#8304;&#8309;&#8304;); rounding scored per-op in its own ulp. "
+                    "Note BACL = 100% on every form — subnormals ARE the integer-2&#8315;&#185;&#8304;&#8311;&#8308; lattice, so cleanliness is "
+                    "automatic; subnormal +/&minus; is exact, so only multiplications round and the dial collapses to a few notches.")
+    else:
+        title = "chains computing 1, across two roots"
+        subtitle = ("Each point is a genuine form that equals 1 on its surface (R&sup2;+c=1 / Q&sup3;+c=1). x = dial notch (rounding rank "
+                    "within its root). y = mean total rounding (ulp). Cbrt sits higher — cubing costs two multiplies. Hover for the chain.")
+    html = """<!DOCTYPE html><html><head><meta charset=utf-8>
+<title>Rounding Dial — two roots</title>
+<script src=https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js></script>
+<style>body{background:#0a0e1a;color:#c8d6e5;font-family:system-ui;padding:24px}
+h1{font-size:18px;color:#e8f0fe}.sub{color:#6b7fa3;font-size:13px;margin-bottom:18px}
+.wrap{max-width:980px;height:470px;background:#111827;border:1px solid #1e2a3a;border-radius:12px;padding:18px}
+.lg{margin-top:10px;font-size:12px;color:#8aa0c0}</style>
+</head><body>
+<h1>The Rounding Dial &mdash; __TITLE__</h1>
+<div class=sub>__SUBTITLE__</div>
+<div class=wrap><canvas id=c></canvas></div>
+<div class=lg>● cyan = sqrt (n=2) &nbsp;&nbsp; ● magenta = cbrt (n=3)</div>
+<script>
+const R = __DATA__;
+const series = [['sqrt (n=2)','#22d3ee'],['cbrt (n=3)','#f472b6']];
+const ds = series.filter(([k])=>R[k]&&R[k].length).map(([k,col])=>({
+  label:k, borderColor:col, backgroundColor:col, borderWidth:1.5, tension:0.15,
+  pointRadius:5, data:R[k].map((d,i)=>({x:i,y:d.rounding})), _meta:R[k]}));
+new Chart(document.getElementById('c'),{type:'line',data:{datasets:ds},
+ options:{plugins:{legend:{display:false},tooltip:{callbacks:{
+   title:i=>i[0].dataset.label+' · notch '+i[0].dataIndex,
+   label:ctx=>{const m=ctx.dataset._meta[ctx.dataIndex];return ['rounding '+m.rounding.toFixed(4)+' ulp','BACL-int '+(m.bacl*100).toFixed(0)+'%',m.ast];}}}},
+  scales:{x:{title:{display:true,text:'dial notch (forms ordered by rounding)'},grid:{color:'#1e2a3a'}},
+          y:{title:{display:true,text:'mean total rounding (ulp)'},grid:{color:'#1e2a3a'}}}}});
+</script></body></html>""".replace("__TITLE__", title).replace("__SUBTITLE__", subtitle).replace("__DATA__", data)
+    tag = (f"_d{MAX_DEPTH}" if MAX_DEPTH >= 4 else "") + ("_sub" if SUBNORMAL else "")
+    out = f"scratch/rounding_dial_curve{tag}.html"
+    open(out, "w").write(html)
+    print("wrote", out)
+
+
+if __name__ == "__main__":
+    main()

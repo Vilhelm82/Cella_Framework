@@ -1,0 +1,36 @@
+# Experiment 1 — Exact Forward M⊕C Decomposition — Closeout
+
+**Date:** 2026-06-05 · **Status:** research-grade, eval-layer, **one run**, byte-stable
+(artifact sha256 `8d34c0e8800daa6ad50d55251ad1178330761f4b15d2849a2728b27cc8b47376`, reproduced on re-run).
+Oracles only (`fractions.Fraction` exact + `mpmath` dps=80); **no float128 anywhere → no apparatus floor**.
+Spec: `Build_Docs/Agent_tasks/g_forward_decomposition_prereg_2026-06-05.md`.
+Code: `scratch/g_forward_decomposition_exp1.py` · Artifact: `scratch/g_forward_decomposition_exp1_results.json`.
+
+## Result
+
+| Check | Schwarzschild | SR | pure_algebraic |
+|---|---|---|---|
+| **G ≡ 0 exactly (residual = M⊕C, floorless)** | ✅ max\|G\|=0 | ✅ max\|G\|=0 | ✅ max\|G\|=0 |
+| Conditioning model `2√f·e+e²` vs exact R²−f | ✅ rel-err 1.1e-64 | ✅ 2.2e-63 | ✅ 3.6e-64 |
+| sqrt `e` within ½ ulp (IEEE correctly-rounded) | ✅ | ✅ | ✅ |
+| Dark-field leak = ±1-ulp comb, fully reconstructed (G=0) | ✅ 18/137, 18 near-bnd/0 far | ✅ 27/137, 22/5 | ✅ 36/137, 21/15 |
+| Retrodiction gate: F3 ≡ 0 | ✅ | ✅ | ✅ |
+| Retrodiction gate: F4 integer grain | ✅ {0.0} | ✅ {0.0} | ✅ {0.0} |
+| Retrodiction gate: F2 half-integer grain | ⚠️ {0,.25,.5,.75} | ⚠️ broad spread | ⚠️ {0,.0625,.125,.25,.5,.75,…} |
+
+## Reading (honest)
+
+1. **The 1D G question is closed as a definitive null.** The residual is *exactly* M (BACL integer-ulp lattice) ⊕ C (the sqrt round-off `e` propagated, exactly), with **zero unexplained remainder, computed with no apparatus floor.** This converts the retracted "G empirically absent in 1D" (asserted / floor-limited, R9) into a **provable** absence in 1D. It is the expected H0 — and that is the deliverable: a *proof*, not an absence of evidence.
+2. **J2 confirmed:** conditioning is **computed, not floor-estimated** — the between-grid value matches `2√f·e+e²` to oracle precision (~1e-63). W(k)'s loss is backward-only; forward, C is exact.
+3. **Dark-field / "leakage is signal" confirmed:** the F1−F2 comb is a deterministic **±1-ulp, boundary-concentrated, BACL-quantized conditioning fingerprint** — fully reconstructed (G=0). It is C-channel (a finer per-form discriminator than the coarse grain), **not** G. No G hides even in the high-contrast window.
+4. **Yellow flag — F2-grain retrodiction did NOT cleanly reproduce the canonical half-integer.** Under naive `ulp(f)` normalization F2's grain is a *spread*, not 0.5. This is **not** a decomposition failure (G≡0 is exact and normalization-independent) — it is the **F2-grain convention contradiction (triage Tier 3.1 / glossary §13) surfacing in situ**: the "F2 half-integer grain" is normalization-dependent. The gate is **green on F3/F4/G, yellow on F2.**
+
+## Discipline holds
+
+- 1D "curvature" here is M+C, never written as K_G. G in 1D is now *provably* zero, not "below a floor."
+- Eval-layer, research-grade, one run. **NOT promoted** to canonical "G definitively absent in 1D" — blocked on resolving the F2-grain convention (Tier 3.1) so the retrodiction gate is fully green.
+
+## Next
+
+- **Resolve the F2-grain convention (Tier 3.1)** using the canonical `base_operand_ulp` lattice normalization the four-form campaigns use, so the retrodiction gate goes fully green; then the 1D null is promotable.
+- **Experiment 2 (the real G hunt):** apply the same exact forward M⊕C decomposition to the **lifted/multi-constraint fixtures** (`scratch/lifted_sweep_fixed.py`). There the single-algebraic-identity argument that forces G=0 in 1D **no longer applies** — a joint-state remainder surviving exact M⊕C subtraction would be the Gate-2 "derivable joint-state law," i.e. the actual prize. This is where G can exist; 1D is now proven it cannot.

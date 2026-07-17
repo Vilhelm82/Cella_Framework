@@ -1,0 +1,238 @@
+{
+  "audit_name": "c2_lattice_substrate_derivation",
+  "bound_checks": {
+    "SR": {
+      "bound_satisfied": true,
+      "gap": 0.5,
+      "n": 2,
+      "observed_max_abs_level": 1,
+      "theoretical_bound_a(n)": 1.5
+    },
+    "Schwarzschild": {
+      "bound_satisfied": true,
+      "gap": 0.5,
+      "n": 2,
+      "observed_max_abs_level": 1,
+      "theoretical_bound_a(n)": 1.5
+    },
+    "cube_root": {
+      "bound_satisfied": false,
+      "gap": -3.0,
+      "n": 3,
+      "observed_max_abs_level": 7,
+      "theoretical_bound_a(n)": 4.0
+    },
+    "cube_root_via_pow": {
+      "bound_satisfied": true,
+      "gap": 2.0,
+      "n": 3,
+      "observed_max_abs_level": 2,
+      "theoretical_bound_a(n)": 4.0
+    },
+    "pure_algebraic": {
+      "bound_satisfied": true,
+      "gap": 0.5,
+      "n": 2,
+      "observed_max_abs_level": 1,
+      "theoretical_bound_a(n)": 1.5
+    }
+  },
+  "failure_modes_observed": [
+    "F_C3"
+  ],
+  "fixtures": [
+    "SR",
+    "Schwarzschild",
+    "pure_algebraic",
+    "cube_root",
+    "cube_root_via_pow"
+  ],
+  "grid_density": 5000,
+  "predictions": {
+    "P_C1_universality_holds": true,
+    "P_C2_n2_bound_satisfied": true,
+    "P_C3_n3_bound_satisfied": false,
+    "P_C4_n2_cross_fixture_invariance": true,
+    "P_C5_cube_root_lattice_matches_test_a": false,
+    "P_C6_derivation_fixture_independent": true,
+    "diag_integer_violations_per_fixture": {
+      "SR": 0,
+      "Schwarzschild": 0,
+      "cube_root": 0,
+      "cube_root_via_pow": 0,
+      "pure_algebraic": 0
+    },
+    "diag_max_abs_per_fixture": {
+      "SR": 1,
+      "Schwarzschild": 1,
+      "cube_root": 7,
+      "cube_root_via_pow": 2,
+      "pure_algebraic": 1
+    },
+    "diag_n2_lattices": {
+      "SR": [
+        -1,
+        0,
+        1
+      ],
+      "Schwarzschild": [
+        -1,
+        0,
+        1
+      ],
+      "pure_algebraic": [
+        -1,
+        0,
+        1
+      ]
+    },
+    "diag_n3_lattices": {
+      "cube_root": [
+        -7,
+        -6,
+        -5,
+        -4,
+        -3,
+        -2,
+        -1,
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "cube_root_via_pow": [
+        -2,
+        -1,
+        0,
+        1,
+        2
+      ]
+    }
+  },
+  "preregistry_path": "Build_Docs/Reports/c2_lattice_substrate_derivation/preregistry.md",
+  "sweep_results": {
+    "SR": {
+      "first_5_violations": [],
+      "fixture": "SR",
+      "grid_range": [
+        0.001,
+        0.7071067811865475
+      ],
+      "grid_size": 4999,
+      "integer_lattice_holds": true,
+      "integer_violations_count": 0,
+      "level_max_abs": 1,
+      "levels_observed": [
+        -1,
+        0,
+        1
+      ],
+      "max_integer_residual": 0.0,
+      "n": 2,
+      "x_label": "beta"
+    },
+    "Schwarzschild": {
+      "first_5_violations": [],
+      "fixture": "Schwarzschild",
+      "grid_range": [
+        4.0,
+        100.0
+      ],
+      "grid_size": 4999,
+      "integer_lattice_holds": true,
+      "integer_violations_count": 0,
+      "level_max_abs": 1,
+      "levels_observed": [
+        -1,
+        0,
+        1
+      ],
+      "max_integer_residual": 0.0,
+      "n": 2,
+      "x_label": "r"
+    },
+    "cube_root": {
+      "first_5_violations": [],
+      "fixture": "cube_root",
+      "grid_range": [
+        0.001,
+        0.5
+      ],
+      "grid_size": 4999,
+      "integer_lattice_holds": true,
+      "integer_violations_count": 0,
+      "level_max_abs": 7,
+      "levels_observed": [
+        -7,
+        -6,
+        -5,
+        -4,
+        -3,
+        -2,
+        -1,
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "max_integer_residual": 0.0,
+      "n": 3,
+      "x_label": "x"
+    },
+    "cube_root_via_pow": {
+      "first_5_violations": [],
+      "fixture": "cube_root_via_pow",
+      "grid_range": [
+        0.001,
+        0.5
+      ],
+      "grid_size": 4999,
+      "integer_lattice_holds": true,
+      "integer_violations_count": 0,
+      "level_max_abs": 2,
+      "levels_observed": [
+        -2,
+        -1,
+        0,
+        1,
+        2
+      ],
+      "max_integer_residual": 0.0,
+      "n": 3,
+      "x_label": "x"
+    },
+    "pure_algebraic": {
+      "first_5_violations": [],
+      "fixture": "pure_algebraic",
+      "grid_range": [
+        0.001,
+        0.5
+      ],
+      "grid_size": 4999,
+      "integer_lattice_holds": true,
+      "integer_violations_count": 0,
+      "level_max_abs": 1,
+      "levels_observed": [
+        -1,
+        0,
+        1
+      ],
+      "max_integer_residual": 0.0,
+      "n": 2,
+      "x_label": "x"
+    }
+  },
+  "theoretical_bounds": {
+    "a(2)": 1.5,
+    "a(3)": 4.0
+  },
+  "verdict": "substrate_derivation_failed"
+}

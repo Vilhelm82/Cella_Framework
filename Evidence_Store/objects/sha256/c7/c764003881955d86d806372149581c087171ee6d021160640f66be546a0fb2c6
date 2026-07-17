@@ -1,0 +1,124 @@
+"""Step 1: Read the F1 substrate image of Schwarzschild.
+
+No K_G. No comparisons. No other fixtures, no other forms.
+Just: what does the F1 signature look like as we walk across the
+Schwarzschild constraint surface? What's the shape of each channel?
+What's smooth, what's discrete, what's monotone, where do transitions
+happen?
+"""
+from __future__ import annotations
+import json
+import math
+from pathlib import Path
+from collections import Counter
+
+
+CHANNELS = ("ulp_spread_log2", "log2_min_ulp", "log2_base_operand_ulp",
+            "log2_x_term_ulp", "signed_asymmetry", "E_log2_base_operand")
+
+
+def F1_chain(r):
+    x_term = 2.0 / r
+    base = 1.0 - x_term
+    R = base ** 0.5
+    R_sq = R * R
+    residual = R_sq - base
+    return (R, R_sq, base, residual), base, x_term
+
+
+def signature(intermediates, base, x_term):
+    nonzero = [abs(v) for v in intermediates if v != 0.0]
+    ulps = [math.ulp(v) for v in nonzero] if nonzero else []
+    if not ulps: return {k: None for k in CHANNELS}
+    mn, mx = min(ulps), max(ulps)
+    bu = math.ulp(abs(base)) if base != 0 else None
+    xu = math.ulp(abs(x_term)) if x_term != 0 else None
+    return {
+        "ulp_spread_log2": math.log2(mx/mn) if mn > 0 else None,
+        "log2_min_ulp": math.log2(mn) if mn > 0 else None,
+        "log2_base_operand_ulp": math.log2(bu) if bu else None,
+        "log2_x_term_ulp": math.log2(xu) if xu else None,
+        "signed_asymmetry": math.log2(bu/xu) if bu and xu else None,
+        "E_log2_base_operand": math.log2(abs(base)) if base else None,
+    }
+
+
+def main():
+    ROOT = Path("/home/william_lloydlt/projects/V4/Lloyd_Engine_V4")
+    phase_1 = json.loads((ROOT / "Build_Docs/Reports/mcg_geometry_first"
+                         "/phase_1_geometry_table.json").read_text())
+    rows = [r for r in phase_1["rows"]
+            if r.get("fixture") == "schwarzschild_four_form"
+            and r.get("principal_curvature") is not None]
+    rows.sort(key=lambda r: r["coordinate_value"])
+
+    # Build the F1 image
+    image = []
+    for row in rows:
+        r = row["coordinate_value"]
+        sig = signature(*F1_chain(r))
+        image.append({"r": r, **sig})
+
+    print(f"=== F1 image of Schwarzschild: {len(image)} pixels ===")
+    print(f"r range: [{image[0]['r']:.4f}, {image[-1]['r']:.4f}]")
+    print()
+
+    # Per-channel summary
+    for ch in CHANNELS:
+        vals = [p[ch] for p in image if p[ch] is not None]
+        if not vals:
+            print(f"  {ch:<26}  [no data]")
+            continue
+        mn, mx = min(vals), max(vals)
+        rng = mx - mn
+        # Distinct values (binade-discrete check)
+        rounded = [round(v, 6) for v in vals]
+        distinct = len(set(rounded))
+        # Monotonicity in r
+        ordered = [p[ch] for p in image if p[ch] is not None]
+        increasing = sum(1 for i in range(len(ordered)-1)
+                         if ordered[i+1] > ordered[i])
+        decreasing = sum(1 for i in range(len(ordered)-1)
+                         if ordered[i+1] < ordered[i])
+        flat = sum(1 for i in range(len(ordered)-1)
+                   if ordered[i+1] == ordered[i])
+        # Discrete or continuous?
+        is_discrete = distinct < len(vals) * 0.5
+        print(f"  {ch:<26}")
+        print(f"    range:       [{mn:+.4f}, {mx:+.4f}]   span={rng:.4f}")
+        print(f"    distinct:    {distinct} of {len(vals)} "
+              f"({'DISCRETE' if is_discrete else 'continuous'})")
+        print(f"    direction:   {increasing} ↑  {decreasing} ↓  {flat} =")
+        print()
+
+    # Show binade structure: how do channels relate within each pixel?
+    print("=== Pixel samples across the coordinate range ===")
+    print()
+    sample_indices = [0, 5, 15, 30, 60, 100, 136]
+    print(f"{'r':>10}  " + "  ".join(f"{ch:>22}" for ch in CHANNELS))
+    for i in sample_indices:
+        p = image[i]
+        vals = "  ".join(
+            f"{p[ch]:>22.4f}" if p[ch] is not None else f"{'N/A':>22}"
+            for ch in CHANNELS)
+        print(f"{p['r']:>10.4f}  {vals}")
+    print()
+
+    # Channel transitions: where do values jump?
+    print("=== Discrete transitions per channel ===")
+    for ch in CHANNELS:
+        transitions = []
+        for i in range(len(image)-1):
+            v1, v2 = image[i][ch], image[i+1][ch]
+            if v1 is None or v2 is None: continue
+            if v1 != v2:
+                transitions.append((image[i]['r'], v1, v2))
+        print(f"  {ch:<26}: {len(transitions)} transitions across 137 pixels")
+        if transitions and len(transitions) <= 10:
+            for r, v1, v2 in transitions[:5]:
+                print(f"    at r≈{r:.4f}: {v1:.4f} → {v2:.4f}")
+    print()
+
+
+if __name__ == "__main__":
+    main()

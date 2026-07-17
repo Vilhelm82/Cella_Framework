@@ -1,0 +1,793 @@
+{
+  "audit_name": "blowup_exponent_v4_audit",
+  "deltas": [
+    0.1,
+    0.01,
+    0.001,
+    0.0001,
+    1e-05,
+    1e-06,
+    1e-07,
+    1e-08,
+    1e-09,
+    1e-10
+  ],
+  "failure_modes_observed": [],
+  "functions": [
+    "zeta",
+    "j0",
+    "airy_ai"
+  ],
+  "predictions": {
+    "P_B1_sigma1_alpha_near_unity": true,
+    "P_B1_violations": [],
+    "P_B2_sigma2_mirrors_sigma1": true,
+    "P_B2_violations": [],
+    "P_B3_sigma3_function_specific_universal": false,
+    "P_B4_sigma4_bounded": false,
+    "P_B5_observability_ordering_zeta_lt_j0_lt_ai": false,
+    "P_B6_H_verdict": "H2_universal_within_and_across",
+    "diag_obs_deltas": {
+      "airy_ai": null,
+      "j0": null,
+      "zeta": null
+    },
+    "diag_sigma3_means": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "diag_sigma3_within_stds": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "diag_sigma4_range": [
+      -1.0086,
+      -0.9963
+    ]
+  },
+  "preregistry_path": "Build_Docs/Reports/blowup_exponent_v4_audit/preregistry.md",
+  "records": [
+    {
+      "fits": {
+        "sigma_1": {
+          "alpha": 1.0,
+          "beta": -0.1007,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_2": {
+          "alpha": -3.3219,
+          "beta": 4.1557,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_3": {
+          "alpha": null,
+          "beta": null,
+          "n_pts": 0,
+          "r_squared": null
+        },
+        "sigma_4": {
+          "alpha": null,
+          "beta": null,
+          "n_pts": 0,
+          "r_squared": null
+        }
+      },
+      "function": "zeta",
+      "n_samples": 20,
+      "observability_boundary_delta": null,
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "zero_index": 1,
+      "zero_value": 14.134725141734695
+    },
+    {
+      "fits": {
+        "sigma_1": {
+          "alpha": 1.0,
+          "beta": 0.0556,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_2": {
+          "alpha": -3.3219,
+          "beta": 4.2092,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_3": {
+          "alpha": -0.0,
+          "beta": 0.0,
+          "n_pts": 4,
+          "r_squared": 0.0
+        },
+        "sigma_4": {
+          "alpha": null,
+          "beta": null,
+          "n_pts": 0,
+          "r_squared": null
+        }
+      },
+      "function": "zeta",
+      "n_samples": 20,
+      "observability_boundary_delta": null,
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "zero_index": 2,
+      "zero_value": 21.022039638771556
+    },
+    {
+      "fits": {
+        "sigma_1": {
+          "alpha": 1.0,
+          "beta": 0.1371,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_2": {
+          "alpha": -3.3219,
+          "beta": 4.189,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_3": {
+          "alpha": -0.0,
+          "beta": 0.0,
+          "n_pts": 5,
+          "r_squared": 0.0
+        },
+        "sigma_4": {
+          "alpha": null,
+          "beta": null,
+          "n_pts": 0,
+          "r_squared": null
+        }
+      },
+      "function": "zeta",
+      "n_samples": 20,
+      "observability_boundary_delta": null,
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "zero_index": 3,
+      "zero_value": 25.01085758014569
+    },
+    {
+      "fits": {
+        "sigma_1": {
+          "alpha": 1.0,
+          "beta": 0.115,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_2": {
+          "alpha": -3.3218,
+          "beta": 4.5451,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_3": {
+          "alpha": null,
+          "beta": null,
+          "n_pts": 1,
+          "r_squared": null
+        },
+        "sigma_4": {
+          "alpha": null,
+          "beta": null,
+          "n_pts": 0,
+          "r_squared": null
+        }
+      },
+      "function": "zeta",
+      "n_samples": 20,
+      "observability_boundary_delta": null,
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "zero_index": 4,
+      "zero_value": 30.424876125859512
+    },
+    {
+      "fits": {
+        "sigma_1": {
+          "alpha": 1.0,
+          "beta": 0.1403,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_2": {
+          "alpha": -3.3218,
+          "beta": 4.5755,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_3": {
+          "alpha": -0.0,
+          "beta": 0.0,
+          "n_pts": 5,
+          "r_squared": 0.0
+        },
+        "sigma_4": {
+          "alpha": null,
+          "beta": null,
+          "n_pts": 0,
+          "r_squared": null
+        }
+      },
+      "function": "zeta",
+      "n_samples": 20,
+      "observability_boundary_delta": null,
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "zero_index": 5,
+      "zero_value": 32.93506158773919
+    },
+    {
+      "fits": {
+        "sigma_1": {
+          "alpha": 1.0,
+          "beta": -0.2849,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_2": {
+          "alpha": -3.3218,
+          "beta": 2.2125,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_3": {
+          "alpha": -0.0,
+          "beta": -0.0,
+          "n_pts": 9,
+          "r_squared": 0.3989
+        },
+        "sigma_4": {
+          "alpha": null,
+          "beta": null,
+          "n_pts": 0,
+          "r_squared": null
+        }
+      },
+      "function": "j0",
+      "n_samples": 20,
+      "observability_boundary_delta": null,
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "zero_index": 1,
+      "zero_value": 2.4048255576957724
+    },
+    {
+      "fits": {
+        "sigma_1": {
+          "alpha": 1.0,
+          "beta": -0.4685,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_2": {
+          "alpha": -3.3218,
+          "beta": 4.0209,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_3": {
+          "alpha": -0.0,
+          "beta": -0.0,
+          "n_pts": 9,
+          "r_squared": 0.3537
+        },
+        "sigma_4": {
+          "alpha": null,
+          "beta": null,
+          "n_pts": 0,
+          "r_squared": null
+        }
+      },
+      "function": "j0",
+      "n_samples": 20,
+      "observability_boundary_delta": null,
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "zero_index": 2,
+      "zero_value": 5.520078110286311
+    },
+    {
+      "fits": {
+        "sigma_1": {
+          "alpha": 1.0,
+          "beta": -0.5666,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_2": {
+          "alpha": -3.3218,
+          "beta": 4.9955,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_3": {
+          "alpha": -0.0,
+          "beta": -0.0,
+          "n_pts": 10,
+          "r_squared": 0.3278
+        },
+        "sigma_4": {
+          "alpha": null,
+          "beta": null,
+          "n_pts": 0,
+          "r_squared": null
+        }
+      },
+      "function": "j0",
+      "n_samples": 20,
+      "observability_boundary_delta": null,
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "zero_index": 3,
+      "zero_value": 8.653727912911013
+    },
+    {
+      "fits": {
+        "sigma_1": {
+          "alpha": 1.0,
+          "beta": -0.6339,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_2": {
+          "alpha": -3.3218,
+          "beta": 5.6656,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_3": {
+          "alpha": -0.0,
+          "beta": -0.0,
+          "n_pts": 10,
+          "r_squared": 0.3218
+        },
+        "sigma_4": {
+          "alpha": null,
+          "beta": null,
+          "n_pts": 0,
+          "r_squared": null
+        }
+      },
+      "function": "j0",
+      "n_samples": 20,
+      "observability_boundary_delta": null,
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "zero_index": 4,
+      "zero_value": 11.791534439014281
+    },
+    {
+      "fits": {
+        "sigma_1": {
+          "alpha": 1.0,
+          "beta": -0.6853,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_2": {
+          "alpha": -3.3218,
+          "beta": 6.1767,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_3": {
+          "alpha": -0.0,
+          "beta": -0.0,
+          "n_pts": 10,
+          "r_squared": 0.3215
+        },
+        "sigma_4": {
+          "alpha": null,
+          "beta": null,
+          "n_pts": 0,
+          "r_squared": null
+        }
+      },
+      "function": "j0",
+      "n_samples": 20,
+      "observability_boundary_delta": null,
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "zero_index": 5,
+      "zero_value": 14.930917708487787
+    },
+    {
+      "fits": {
+        "sigma_1": {
+          "alpha": 0.9999,
+          "beta": -0.1548,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_2": {
+          "alpha": -3.3216,
+          "beta": 1.7397,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_3": {
+          "alpha": -0.0,
+          "beta": -0.0,
+          "n_pts": 9,
+          "r_squared": 0.4563
+        },
+        "sigma_4": {
+          "alpha": -1.0022,
+          "beta": 2.0198,
+          "n_pts": 20,
+          "r_squared": 0.9991
+        }
+      },
+      "function": "airy_ai",
+      "n_samples": 20,
+      "observability_boundary_delta": null,
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "zero_index": 1,
+      "zero_value": -2.3381074104597674
+    },
+    {
+      "fits": {
+        "sigma_1": {
+          "alpha": 0.9998,
+          "beta": -0.0964,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_2": {
+          "alpha": -3.3214,
+          "beta": 2.3517,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_3": {
+          "alpha": -0.0,
+          "beta": -0.0,
+          "n_pts": 15,
+          "r_squared": 0.2119
+        },
+        "sigma_4": {
+          "alpha": -1.0067,
+          "beta": 1.9078,
+          "n_pts": 20,
+          "r_squared": 0.9993
+        }
+      },
+      "function": "airy_ai",
+      "n_samples": 20,
+      "observability_boundary_delta": null,
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "zero_index": 2,
+      "zero_value": -4.08794944413097
+    },
+    {
+      "fits": {
+        "sigma_1": {
+          "alpha": 0.9998,
+          "beta": -0.0645,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_2": {
+          "alpha": -3.3212,
+          "beta": 2.6791,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_3": {
+          "alpha": -0.0,
+          "beta": -0.0,
+          "n_pts": 12,
+          "r_squared": 0.3586
+        },
+        "sigma_4": {
+          "alpha": -1.0086,
+          "beta": 1.9051,
+          "n_pts": 20,
+          "r_squared": 0.9991
+        }
+      },
+      "function": "airy_ai",
+      "n_samples": 20,
+      "observability_boundary_delta": null,
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "zero_index": 3,
+      "zero_value": -5.520559828095515
+    },
+    {
+      "fits": {
+        "sigma_1": {
+          "alpha": 0.9997,
+          "beta": -0.0425,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_2": {
+          "alpha": -3.321,
+          "beta": 2.904,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_3": {
+          "alpha": -0.0,
+          "beta": -0.0,
+          "n_pts": 11,
+          "r_squared": 0.5159
+        },
+        "sigma_4": {
+          "alpha": -1.0085,
+          "beta": 1.917,
+          "n_pts": 20,
+          "r_squared": 0.9991
+        }
+      },
+      "function": "airy_ai",
+      "n_samples": 20,
+      "observability_boundary_delta": null,
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "zero_index": 4,
+      "zero_value": -6.786708090071912
+    },
+    {
+      "fits": {
+        "sigma_1": {
+          "alpha": 0.9998,
+          "beta": -0.0255,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_2": {
+          "alpha": -3.3211,
+          "beta": 3.0747,
+          "n_pts": 20,
+          "r_squared": 1.0
+        },
+        "sigma_3": {
+          "alpha": -0.0,
+          "beta": -0.0,
+          "n_pts": 14,
+          "r_squared": 0.2949
+        },
+        "sigma_4": {
+          "alpha": -0.9963,
+          "beta": 1.9662,
+          "n_pts": 20,
+          "r_squared": 0.999
+        }
+      },
+      "function": "airy_ai",
+      "n_samples": 20,
+      "observability_boundary_delta": null,
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "zero_index": 5,
+      "zero_value": -7.944133587112781
+    }
+  ],
+  "summary_per_function": {
+    "airy_ai": {
+      "observability_boundary_delta": {
+        "max": null,
+        "mean": null,
+        "min": null,
+        "n": 0
+      },
+      "per_sigma": {
+        "sigma_1": {
+          "max": 0.9999,
+          "mean": 0.9998,
+          "min": 0.9997,
+          "n": 5,
+          "std": 0.0001
+        },
+        "sigma_2": {
+          "max": -3.321,
+          "mean": -3.3213,
+          "min": -3.3216,
+          "n": 5,
+          "std": 0.0002
+        },
+        "sigma_3": {
+          "max": -0.0,
+          "mean": 0.0,
+          "min": -0.0,
+          "n": 5,
+          "std": 0.0
+        },
+        "sigma_4": {
+          "max": -0.9963,
+          "mean": -1.0045,
+          "min": -1.0086,
+          "n": 5,
+          "std": 0.0047
+        }
+      }
+    },
+    "j0": {
+      "observability_boundary_delta": {
+        "max": null,
+        "mean": null,
+        "min": null,
+        "n": 0
+      },
+      "per_sigma": {
+        "sigma_1": {
+          "max": 1.0,
+          "mean": 1.0,
+          "min": 1.0,
+          "n": 5,
+          "std": 0.0
+        },
+        "sigma_2": {
+          "max": -3.3218,
+          "mean": -3.3218,
+          "min": -3.3218,
+          "n": 5,
+          "std": 0.0
+        },
+        "sigma_3": {
+          "max": -0.0,
+          "mean": 0.0,
+          "min": -0.0,
+          "n": 5,
+          "std": 0.0
+        },
+        "sigma_4": {
+          "max": null,
+          "mean": null,
+          "min": null,
+          "n": 0,
+          "std": null
+        }
+      }
+    },
+    "zeta": {
+      "observability_boundary_delta": {
+        "max": null,
+        "mean": null,
+        "min": null,
+        "n": 0
+      },
+      "per_sigma": {
+        "sigma_1": {
+          "max": 1.0,
+          "mean": 1.0,
+          "min": 1.0,
+          "n": 5,
+          "std": 0.0
+        },
+        "sigma_2": {
+          "max": -3.3218,
+          "mean": -3.3219,
+          "min": -3.3219,
+          "n": 5,
+          "std": 0.0
+        },
+        "sigma_3": {
+          "max": -0.0,
+          "mean": 0.0,
+          "min": -0.0,
+          "n": 3,
+          "std": 0.0
+        },
+        "sigma_4": {
+          "max": null,
+          "mean": null,
+          "min": null,
+          "n": 0,
+          "std": null
+        }
+      }
+    }
+  },
+  "verdict": "blowup_exponent_audit_passed_with_caveats",
+  "zeros": {
+    "airy_ai": [
+      -2.3381074104597674,
+      -4.08794944413097,
+      -5.520559828095515,
+      -6.786708090071912,
+      -7.944133587112781
+    ],
+    "j0": [
+      2.4048255576957724,
+      5.520078110286311,
+      8.653727912911013,
+      11.791534439014281,
+      14.930917708487787
+    ],
+    "zeta": [
+      14.134725141734695,
+      21.022039638771556,
+      25.01085758014569,
+      30.424876125859512,
+      32.93506158773919
+    ]
+  }
+}

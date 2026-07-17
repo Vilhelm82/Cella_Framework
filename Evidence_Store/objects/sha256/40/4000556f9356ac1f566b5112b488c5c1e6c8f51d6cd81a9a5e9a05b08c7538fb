@@ -1,0 +1,123 @@
+# Substrate Fingerprint Atlas — Phase δ — Preregistry
+
+> **Status: FROZEN 2026-05-18 pre-measurement.** Per `CAMPAIGN_DISCIPLINE.md` Rule 1.1, binding.
+
+## 0. Context
+
+Phase α / β / γ progressively built and refined a 16-slot fingerprint vector. Current status:
+
+- 15 / 15 fixture pairs distinguishable (Phase β/γ).
+- Stress-test smoothness on universal slots (Phase γ).
+- Minimum distinguishing subset = 2 slots (Phase γ).
+- Slot design polishing: slot 16 redundant with slot 13 (F_γ1); slot 15 still 3/6 nonzero; SR/Schwarzschild over 256-bit budget.
+
+Phase δ shifts focus from **slot design** to **slot use**. The user's strategic frame was:
+
+> *"use the noise as a new form of probe... testing of a surface as trivial as scanning a barcode."*
+
+Phases α/β/γ established that the fingerprint discriminates fixtures *given the full 16-slot vector*. Phase δ tests the **barcode use case** directly: does a small subset of *cheap* slots (computable in seconds without artifact loading) already discriminate?
+
+## 1. Purpose
+
+Three distinct tests in one phase:
+
+1. **Cheap-fingerprint discrimination.** Define a "cheap subset" of 5-6 slots that can be computed from fresh per-fixture computation (no Test A re-run, no lifted-singularity audit re-run, no hardened-probe re-run). Test whether the cheap subset alone distinguishes the 6 fixtures.
+
+2. **Redesigned slot 16 — orthogonal to slot 13.** Phase γ's slot 16 was monotonic-redundant with slot 13 (F_γ1 fired). Redesign as `channel_spread_log10` — the log10 ratio of largest to smallest nonzero |F_i| at the central probe point, over a 3-point window. This captures *channel-level variation*, not residual magnitude.
+
+3. **Near-miss robustness — perturbed-probe-window SR.** Compute the SR cheap fingerprint at an *alternative* 3-point window {0.80, 0.82, 0.84} (vs canonical {0.83, 0.85, 0.87}). Verify that this perturbed-window cheap fingerprint is closer (Hamming-style) to canonical SR than to any other fixture's cheap fingerprint. **This is the literal barcode-scan test: does a slightly-mis-aimed probe still identify the surface?**
+
+## 2. The cheap fingerprint (FROZEN)
+
+**Cheap slot set:** slots that can be computed from fresh per-fixture computation in O(1)–O(10) operations, without loading any pre-existing artifact:
+
+| Slot | Why "cheap" |
+|---|---|
+| slot_06 (observability_ratio) | Known from preregistry table (or computable from β-grid + Sterbenz predicate) |
+| slot_07 (sterbenz_applicable_mass_fraction) | Direct β-grid + Sterbenz predicate computation |
+| slot_13r (critical_curvature_log10) | 3-point four-form evaluation |
+| slot_14r (conditioning_index_log10) | Same 3-point evaluation, max/min |
+| slot_15r (route_variation_signature) | Same 3-point evaluation, two routings |
+| slot_16d (channel_spread_log10, REDESIGNED) | Same 3-point evaluation, channel max/min spread |
+
+**Total: 6 slots.** All computable from a single 3-point β-evaluation plus a Sterbenz-predicate β-grid pass. Cost: ~12 floating-point operations per fixture, no JSON I/O.
+
+**Expensive slot set** (excluded from cheap fingerprint): slots 1–5, 8, 9, 10, 11, 12.
+
+## 3. Slot 16 redesign — `channel_spread_log10` (FROZEN)
+
+**Old slot 16 (Phase γ):** `binade_loss_depth_log2` = log2(operand) − log2(max residual). Monotonic with slot 13's `log10(max residual)` for fixed operand magnitude → redundant.
+
+**New slot 16d (Phase δ):**
+
+- **Four-form fixtures:** at each probe point in the 3-point window, compute the four |F_i| values; collect all 12 across the window; sort the nonzero ones; emit `log10(largest / smallest_nonzero)`. If fewer than 2 nonzero, `unobservable`. This is the **channel spread** — how much do the four channels disagree at the interior probe?
+- **Lifted-singularity fixtures:** at the critical point, compute log10 ratio of the two **non-extreme eigenvalues** (sorted by magnitude, take middle ones). This captures inner-eigenvalue spread, which slot 13 (max-eigenvalue magnitude) doesn't.
+
+For four-form fixtures, slot 16d differs from slot 14r in that slot 14r captures the **outer** spread (max/min across all nonzero); slot 16d is meant to be more orthogonal information — but since the data is the same 12 nonzero values, the implementations will coincide for fixtures with ≥ 3 distinct nonzero magnitudes. In such cases the slot values may still be linearly correlated; Phase δ will measure that.
+
+The Phase δ test is genuine: if slot 16d's discriminations are STILL a subset of slot 13's, F_γ1 will reoccur as F_δ1.
+
+## 4. Near-miss robustness test (FROZEN)
+
+Definitions:
+
+- **Canonical SR cheap fingerprint** = cheap fingerprint computed at probe window {0.83, 0.85, 0.87}.
+- **Perturbed SR cheap fingerprint** = same computation at window {0.80, 0.82, 0.84}.
+- **Other fixtures' cheap fingerprints** = computed at their canonical windows.
+
+Test: For each of 5 non-SR fixtures, compute the cheap-fingerprint distance from the **perturbed SR** to that fixture. Compute also the distance from perturbed SR to canonical SR. **Pass** iff the perturbed-SR-to-canonical-SR distance is strictly less than the minimum perturbed-SR-to-other-fixture distance.
+
+Distance metric: For continuous slots (6, 7, 13r, 14r, 15r, 16d), use squared L2 over the slots that are `defined` on both sides. Normalize each slot by its observed range across the 6 fixtures (so slot 13r doesn't dominate by its large absolute scale). For `unobservable` or `not_applicable` mismatches between perturbed-SR and the target fixture, count 1 unit of distance per mismatch.
+
+**Predicted outcome:** perturbed-SR sits closer to canonical SR than to any other fixture. If true, the barcode survives the probe-aim test. If false (perturbed SR's fingerprint drifts closer to e.g. Schwarzschild), the cheap fingerprint is **probe-aim-fragile** — substantive negative finding.
+
+## 5. Frozen predictions
+
+| # | Prediction | Threshold |
+|---|---|---|
+| P_δ1 | All 6 fixtures have unique cheap fingerprints (pairwise distinguishable on cheap subset alone) | strict |
+| P_δ2 | Cheap-fingerprint pairwise discrimination ≥ 12 of 15 pairs (vs full 15/15) | weakened from strict by 3 |
+| P_δ3 | Slot 16d's discriminations are NOT a strict subset of slot 13's | strict; failure mode F_δ1 if violated |
+| P_δ4 | Perturbed-SR cheap fingerprint is closer to canonical SR than to any other fixture | strict; the headline barcode-scan test |
+| P_δ5 | All 15 pairs in the **full** fingerprint still distinguishable (no regression from Phase γ) | strict |
+| P_δ6 | Slot 16d defined on every fixture (including SR — fixing the Phase γ unobservable) | strict |
+
+## 6. Pre-registered failure modes
+
+| ID | Condition |
+|---|---|
+| F_δ1 | Slot 16d discriminations strict-subset of slot 13's (still redundant) |
+| F_δ2 | Cheap-fingerprint pairs indistinguishable for ≥ 4 of 15 (cheap subset insufficient) |
+| F_δ3 | Perturbed-SR fingerprint closest to a non-SR fixture (probe-aim-fragile) |
+| F_δ4 | Slot 16d `unobservable` on any fixture |
+| Carry-over | F1 / F2 (full fingerprint) — would override |
+
+## 7. Out of scope (logged)
+
+- Adding new fixtures.
+- Re-running source artifacts (Test A, lifted-singularity audit, hardened-probe).
+- Lifted-singularity 2-route F_joint computation (Phase ε).
+- Substrate-level branch fingerprint plumbing.
+- Quantization/compression beyond Phase γ levels.
+
+## 8. Closeout criteria
+
+1. Cheap fingerprint computed for all 6 fixtures.
+2. Slot 16d redesigned and computed.
+3. Perturbed-SR cheap fingerprint computed.
+4. Cheap-fingerprint pairwise distinguishability matrix.
+5. Near-miss-distance table (perturbed-SR to each fixture).
+6. All 6 predictions audited.
+7. Failure modes named.
+8. Verdict:
+   - `barcode_scan_use_case_validated_at_phase_delta` (cheap discrimination + near-miss robustness both hold)
+   - `barcode_scan_use_case_validated_with_caveats` (cheap discrimination holds, near-miss partial)
+   - `barcode_scan_use_case_not_validated` (either fails substantively)
+9. Reproducibility.
+10. Phase ε follow-up list.
+
+## 9. References
+
+- Phase α/β/γ closeouts: [`../substrate_fingerprint_atlas/closeout.md`](../substrate_fingerprint_atlas/closeout.md), [`../substrate_fingerprint_atlas_phase_beta/closeout.md`](../substrate_fingerprint_atlas_phase_beta/closeout.md), [`../substrate_fingerprint_atlas_phase_gamma/closeout.md`](../substrate_fingerprint_atlas_phase_gamma/closeout.md)
+- Strategic frame: 2026-05-18 conversation, "noise as fingerprint barcode."
+- Discipline: `CAMPAIGN_DISCIPLINE.md` Rule 1.1.

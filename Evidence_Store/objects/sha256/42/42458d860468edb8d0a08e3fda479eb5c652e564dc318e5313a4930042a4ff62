@@ -1,0 +1,179 @@
+"""Form generator v2 — derive-don't-select, hardened.
+
+Fixes over v1:
+  (1) Non-degeneracy filter: a genuine form is zero ON the surface (R^2 = 1 - c)
+      AND not a STRUCTURAL zero (not identically 0 for independent free R, c).
+      This excludes the (R - R)*g trivial-zero flood; the structural zeros are the
+      calibration-zero class (F3 + multiples) = the origin, not forms.
+  (2) Schwarzschild fixture (c = 2/r) in the Sterbenz region, so Task-031's
+      "operation-exact vs globally-clean" contrast can actually appear:
+      c1 = (R^2 - 1) + c   has a Sterbenz-EXACT cancellation (R^2 - 1, exact for r>=4)
+      c2 = R^2 + (c - 1)   reassociated; Task-031: cleaner GLOBAL lattice.
+      We test whether "has an exact operation" (greedy/local) and "min global lattice
+      burden" pick DIFFERENT forms -> Will's early-absorb finding.
+
+Eval-layer, research-grade. Oracles only (Fraction, mpmath).
+"""
+import math, struct
+from fractions import Fraction as Fr
+import mpmath as mp
+mp.mp.dps = 50
+
+ATOMS = [('R',), ('one',), ('c',)]
+OPS = ('+', '-', '*')
+# Schwarzschild: c = 2/r, f = 1 - c, R = sqrt(f). Sterbenz boundary r=4 (c=0.5).
+RGRID = [4.0 + i * (10.0 - 4.0) / 31 for i in range(32)]      # Sterbenz region r>=4
+def c_of_r(r): return 2.0 / r
+
+
+def ev64(node, r):
+    c = c_of_r(r); R = math.sqrt(1.0 - c)
+    def go(n):
+        k = n[0]
+        if k == 'R': return R
+        if k == 'one': return 1.0
+        if k == 'c': return c
+        a, b = go(n[1]), go(n[2])
+        return a + b if k == '+' else a - b if k == '-' else a * b
+    return go(node)
+
+
+def evfree(node, Rv, cv):                                     # free R, c (mpmath) — structural test
+    def go(n):
+        k = n[0]
+        if k == 'R': return Rv
+        if k == 'one': return mp.mpf(1)
+        if k == 'c': return cv
+        a, b = go(n[1]), go(n[2])
+        return a + b if k == '+' else a - b if k == '-' else a * b
+    return go(node)
+
+
+def evsurf(node, cv):                                         # on surface: R = sqrt(1-c)
+    return evfree(node, mp.sqrt(1 - cv), cv)
+
+
+def valvec(node):
+    return tuple(struct.pack('>d', ev64(node, r)).hex() for r in RGRID)
+
+
+def depth(node):
+    return 0 if len(node) == 1 else 1 + max(depth(node[1]), depth(node[2]))
+
+
+def ast_str(node):
+    if len(node) == 1:
+        return {'R': 'R', 'one': '1', 'c': 'c'}[node[0]]
+    return f"({ast_str(node[1])} {node[0]} {ast_str(node[2])})"
+
+
+def is_structural_zero(node):
+    for Rv, cv in ((mp.mpf('0.31'), mp.mpf('0.27')), (mp.mpf('0.83'), mp.mpf('0.11')),
+                   (mp.mpf('1.4'), mp.mpf('0.55'))):
+        if abs(evfree(node, Rv, cv)) > mp.mpf('1e-40'):
+            return False
+    return True
+
+
+def is_member(node):                                          # zero on surface AND not structural zero
+    if is_structural_zero(node):
+        return False
+    for cv in (mp.mpf('0.137'), mp.mpf('0.42'), mp.mpf('0.491'), mp.mpf('0.30')):
+        if abs(evsurf(node, cv)) > mp.mpf('1e-40'):
+            return False
+    return True
+
+
+def per_op_roundoffs(node, r):
+    c = c_of_r(r); R = math.sqrt(1.0 - c); u = math.ulp(1.0 - c); ros = []
+    def go(n):
+        k = n[0]
+        if k == 'R': return R
+        if k == 'one': return 1.0
+        if k == 'c': return c
+        a, b = go(n[1]), go(n[2])
+        fl = a + b if k == '+' else a - b if k == '-' else a * b
+        ex = (Fr(a) + Fr(b)) if k == '+' else (Fr(a) - Fr(b)) if k == '-' else (Fr(a) * Fr(b))
+        ros.append(abs(ex - Fr(fl)) / Fr(u))
+        return fl
+    res = go(node)
+    return ros, res
+
+
+def metrics(node):
+    sum_ro = 0.0; min_ro_overall = None; has_exact_op = 0; int_res_max = 0.0; n = 0
+    for r in RGRID:
+        ros, res = per_op_roundoffs(node, r)
+        sum_ro += float(sum(ros))
+        if ros:
+            m = float(min(ros)); min_ro_overall = m if min_ro_overall is None else min(min_ro_overall, m)
+            if min(ros) == 0:
+                has_exact_op += 1
+        level = res / math.ulp(1.0 - c_of_r(r))
+        int_res_max = max(int_res_max, abs(level - round(level)))
+        n += 1
+    return dict(greedy_sum=round(sum_ro, 3),
+                has_sterbenz_exact_op=f"{has_exact_op}/{n}",
+                global_int_residual_max=round(int_res_max, 6))
+
+
+F1 = ('-', ('*', ('R',), ('R',)), ('-', ('one',), ('c',)))   # R*R - (1 - c)
+C1 = ('+', ('-', ('*', ('R',), ('R',)), ('one',)), ('c',))   # (R*R - 1) + c   (Sterbenz-blessed)
+C2 = ('+', ('*', ('R',), ('R',)), ('-', ('c',), ('one',)))   # R*R + (c - 1)   (reassociated)
+F3 = ('-', ('R',), ('R',))
+REFS = {"F1": F1, "c1_sterbenz": C1, "c2_reassoc": C2, "F3(structural)": F3}
+
+
+def main():
+    seen = {}; by_depth = {0: []}
+    for a in ATOMS:
+        seen[valvec(a)] = a; by_depth[0].append(a)
+    CAP = 120000
+    for d in range(1, 4):
+        by_depth[d] = []
+        shallow = [n for dd in range(0, d) for n in by_depth[dd]]
+        for a in by_depth[d - 1]:
+            for b in shallow:
+                for (x, y) in ((a, b), (b, a)):
+                    for op in OPS:
+                        if len(seen) >= CAP: break
+                        node = (op, x, y); vv = valvec(node)
+                        if vv not in seen:
+                            seen[vv] = node; by_depth[d].append(node)
+        if len(seen) >= CAP: break
+    total = len(seen)
+
+    members = [n for n in seen.values() if is_member(n)]
+    structural = sum(1 for n in seen.values() if is_structural_zero(n))
+    member_vvs = {valvec(n) for n in members}
+    recovered = {k: (valvec(v) in seen, valvec(v) in member_vvs) for k, v in REFS.items()}
+
+    print("=" * 84)
+    print(f"ENUMERATION  Schwarzschild atoms {{R,1,c=2/r}}  depth<=3  ->  {total} deduped codes")
+    print(f"FILTER       structural zeros (degenerate, = origin class): {structural}")
+    print(f"             GENUINE forms (zero-on-surface AND not structural): {len(members)}   "
+          f"[v1 leaked 1226; non-degeneracy filter cuts the trivial-zero flood]")
+    print(f"RETRODICTION recovered by free enumeration (in_codes / is_genuine_member):")
+    for k, (a, b) in recovered.items():
+        print(f"               {k:16} codes={'YES' if a else 'no '}  member={'YES' if b else 'no (structural=origin)' if 'struct' in k else 'no'}")
+    print()
+    print("TASK-031 SHOWDOWN — operation-exactness (greedy/local) vs global lattice burden:")
+    print(f"  {'form':14} {'AST':26} {'greedy_sum':>10} {'Sterbenz-exact op':>18} {'global_int_res':>14}")
+    rows = []
+    for k, v in REFS.items():
+        if k.startswith("F3"): continue
+        m = metrics(v); rows.append((k, m))
+        print(f"  {k:14} {ast_str(v):26} {m['greedy_sum']:10.3f} {m['has_sterbenz_exact_op']:>18} {m['global_int_residual_max']:14.6f}")
+    by_exact = max(rows, key=lambda kv: int(kv[1]['has_sterbenz_exact_op'].split('/')[0]))
+    by_global = min(rows, key=lambda kv: kv[1]['global_int_residual_max'])
+    print()
+    print(f"  pick by OPERATION-EXACTNESS (most Sterbenz-exact ops) -> {by_exact[0]} "
+          f"({by_exact[1]['has_sterbenz_exact_op']} exact)")
+    print(f"  pick by GLOBAL lattice burden (min int-residual)      -> {by_global[0]} "
+          f"(int_res {by_global[1]['global_int_residual_max']})")
+    print(f"  DISAGREE: {by_exact[0] != by_global[0]}   "
+          f"=> {'early-absorb confirmed: the locally-exact form is NOT the globally-clean one (Task-031 / Will).' if by_exact[0]!=by_global[0] else 'no disagreement on this grid.'}")
+
+
+if __name__ == "__main__":
+    main()

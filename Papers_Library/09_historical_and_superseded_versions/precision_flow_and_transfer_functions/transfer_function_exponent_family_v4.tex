@@ -1,0 +1,616 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\hypersetup{colorlinks=true,urlcolor=blue,linkcolor=black}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{diagnostic}[theorem]{Diagnostic Rule}
+\newtheorem{observation}[theorem]{Observation}
+
+\title{The Transfer-Function Exponent Family at Algebraic Branch Points\\
+\large A Sharpened Structural Law, Cross-Fixture Substrate Validation,\\
+and an Identified Mechanism for Arithmetic-Path Conditioning}
+\author{William Lloyd\\\small Lloyd Geometric Diagnostics Pty Ltd}
+\date{May 2026 (V4 typed-substrate revision, post-031 hardening)}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+This note sharpens the transfer-function exponent law used by the Lloyd Geometric Diagnostic framework near one-sided algebraic branch points, and reports its empirical validation in the V4 typed-substrate engine across four independent fixtures spanning two radical degrees. The chain-rule statement is strengthened into an asymptotic theorem with explicit regularity assumptions on the remainder and an explicit relative-perturbation condition. If the principal observable has controlled branch form
+\[
+    g(f)=g_0+c f^{\alpha}L(f)(1+r(f)),
+\]
+where $c\ne0$, $\alpha\ne0$, $L$ is slowly varying in logarithmic scale, and $r$ is a controlled lower-order term, then the finite-difference transfer from a perturbation $\delta f$ to $\delta g$ satisfies
+\[
+    \frac{\delta g}{\delta f}\sim \alpha c f^{\alpha-1}L(f),
+    \qquad f\to0^+,
+\]
+provided $\delta f/f\to0$. Hence the limiting log--log slope is $\alpha-1$. The note also gives finite-window bias formulae for subleading powers, a data-driven replacement for fixed non-algebraic stability thresholds, and a precision-scaling test that separates genuine geometric signal from arithmetic-path conditioning when both carry the same exponent.
+
+V4 typed primitives validate the transfer law directly via \texttt{typed\_finite\_difference} and \texttt{typed\_log\_log\_slope}, removing the V3 dependence on a projected-Hessian proxy. Cross-fixture campaigns across Schwarzschild radial coordinate, special-relativistic time dilation, a physics-stripped pure-algebraic control, and a higher-radical cube-root fixture find five substrate invariants preserved at the classification level: $F_1/F_2$ grid-stable parallel polarity coupling, $F_3$ identity silence, $F_2$ non-integer lattice grain, $F_4$ integer lattice character, and a predicted directional bias at a fixture-shifted Sterbenz boundary. The cross-fixture invariants extend to controlled-branch radical chains beyond the original square-root case.
+
+The precision-scaling separation theorem has been empirically validated: a linear-in-$u_p$ model fits the regular-region conditioning amplitude $C_{p,k}$ at $R^2 = 1.0$ across all four fixtures. The Sterbenz exact-subtraction condition is one concrete derivable mechanism contributing to the arithmetic-path conditioning amplitude $b_k$. The boundary location varies with operand transformation in a calculable way and the predicted directional density bias is observed in every fixture; the value-level boundary identification extends across radical degrees.
+
+A six-candidate refinery audit of algebraically-equivalent rewrites of the same constraint identity in the pure-algebraic fixture finds that the Sterbenz-blessed form is not the minimum-burden representation under the V4 evaluation-policy burden vector. A reassociated form that trades operation-level exact subtraction for sub-lattice alignment dominates on lattice burden while tying on arithmetic conditioning amplitude. This is a V4-native discovery of \emph{sub-lattice alignment} as a separate optimization criterion from operation-level exactness; it does not refute Sterbenz's exactness claim, which concerns one operation while the audit measures the total chain residual structure on the algebraic identity. A diagnostic-versus-evaluation policy tension surfaces as a substantive substrate observation rather than a philosophical concern.
+\end{abstract}
+
+\section{Setup and notation}
+
+Let $f\in(0,\varepsilon)$ be a one-sided boundary coordinate with $f\to0^+$. Let $g(f)$ denote a principal observable induced by a constraint surface or by a one-dimensional branch parameterisation of that surface. The ambient constraint surface may be smooth on the punctured region $0<f<\varepsilon$ while becoming singular, non-regular, or non-extendable at the boundary itself.
+
+Write
+\[
+    D := f\frac{d}{df}
+\]
+for the logarithmic derivative. For a finite perturbation $\delta f$, define
+\[
+    \Delta_{\delta f}g(f):=g(f+\delta f)-g(f),
+    \qquad
+    T_{\delta f}(f):=\left|\frac{\Delta_{\delta f}g(f)}{\delta f}\right|,
+\]
+whenever $f+\delta f>0$.
+
+\begin{definition}[Controlled branch expansion]
+A branch observable has controlled exponent $\alpha$ if
+\begin{equation}\label{eq:controlled-branch}
+    g(f)=g_0+c f^{\alpha}L(f)(1+r(f)),
+    \qquad c\ne0,\quad \alpha\ne0,
+\end{equation}
+where $L(f)>0$ is $C^2$ on $(0,\varepsilon)$ and slowly varying in logarithmic scale,
+\begin{equation}\label{eq:slowly-varying}
+    \frac{DL}{L}\to0,
+    \qquad
+    D\!\left(\frac{DL}{L}\right)\to0,
+    \qquad f\to0^+,
+\end{equation}
+and the remainder is controlled by
+\begin{equation}\label{eq:controlled-r}
+    r(f)\to0,
+    \qquad Dr(f)\to0,
+    \qquad D^2r(f)\to0.
+\end{equation}
+The pure algebraic case is recovered by taking $L\equiv1$.
+\end{definition}
+
+\section{Sharpened transfer theorem}
+
+\begin{theorem}[Robust branch transfer law]\label{thm:robust-transfer}
+Assume $g$ has the controlled branch expansion \eqref{eq:controlled-branch}. Let $\eta(f):=\delta f/f$ and assume $\eta(f)\to0$ as $f\to0^+$. Then
+\begin{equation}\label{eq:finite-difference-transfer}
+    \frac{\Delta_{\delta f}g(f)}{\delta f}
+    =c f^{\alpha-1}L(f)\left(\alpha+\frac{DL}{L}+o(1)+O(\eta(f))\right).
+\end{equation}
+In particular, since $\alpha\ne0$,
+\begin{equation}\label{eq:transfer-asymptotic}
+    T_{\delta f}(f)
+    \sim |\alpha c| f^{\alpha-1}L(f),
+    \qquad f\to0^+,
+\end{equation}
+and the limiting log--log transfer slope is
+\begin{equation}\label{eq:limiting-slope}
+    \lim_{f\to0^+}D\log T_{\delta f}(f)=\alpha-1.
+\end{equation}
+\end{theorem}
+
+\noindent\emph{Proof.}
+Set $u(f)=L(f)(1+r(f))$. From \eqref{eq:slowly-varying}--\eqref{eq:controlled-r},
+\[
+    \frac{Du}{u}=\frac{DL}{L}+o(1),
+    \qquad
+    D\!\left(\frac{Du}{u}\right)=o(1).
+\]
+Differentiating $g(f)=g_0+c f^{\alpha}u(f)$ gives
+\[
+    g'(f)=c f^{\alpha-1}u(f)\left(\alpha+\frac{Du}{u}\right)
+    =c f^{\alpha-1}L(f)\left(\alpha+\frac{DL}{L}+o(1)\right).
+\]
+The same hypotheses give $g''(f)=O(f^{\alpha-2}L(f))$. Taylor's theorem therefore yields
+\[
+    \frac{\Delta_{\delta f}g(f)}{\delta f}
+    =g'(f)+O\left(g''(f)\delta f\right)
+    =c f^{\alpha-1}L(f)\left(\alpha+\frac{DL}{L}+o(1)+O(\eta(f))\right),
+\]
+which proves \eqref{eq:finite-difference-transfer}. Equation \eqref{eq:transfer-asymptotic} follows because $\alpha\ne0$ and $DL/L\to0$. Taking the logarithmic derivative of \eqref{eq:transfer-asymptotic} gives
+\[
+    D\log T_{\delta f}(f)
+    =\alpha-1+D\log L(f)+o(1)
+    =\alpha-1+o(1),
+\]
+which proves \eqref{eq:limiting-slope}.\hfill$\square$
+
+\subsection*{Why this improves the original theorem}
+
+The earlier statement used $g(f)=c f^\alpha+O(f^{\alpha+1})$ and then differentiated the $O(\cdot)$ term. That step is only justified if the remainder has derivative control. A reviewer can attack the old proof with a pathological remainder that is $O(f^{\alpha+1})$ but whose derivative oscillates too strongly. The controlled expansion above blocks that attack.
+
+A compact way to state the pure algebraic version is to use symbol-class notation: $h(f)=O_2(f^\mu)$ means $h^{(k)}(f)=O(f^{\mu-k})$ for $k=0,1,2$.
+
+\begin{corollary}[Pure algebraic branch]\label{cor:pure-algebraic}
+If
+\[
+    g(f)=g_0+c f^\alpha+O_2(f^{\alpha+\rho}),
+    \qquad c\ne0,
+    \quad \alpha\ne0,
+    \quad \rho>0,
+\]
+and $\delta f/f\to0$, then
+\begin{equation}\label{eq:pure-transfer}
+    \Delta_{\delta f}g(f)
+    =\alpha c f^{\alpha-1}\delta f
+    \left(1+O(f^\rho)+O\left(\frac{\delta f}{f}\right)\right),
+\end{equation}
+so
+\begin{equation}\label{eq:pure-slope}
+    D\log T_{\delta f}(f)=\alpha-1+O(f^\rho)+O\left(\frac{\delta f}{f}\right)+o(1).
+\end{equation}
+\end{corollary}
+
+\section{Direct measurement of the transfer observable in V4}\label{sec:v4-direct}
+
+The V3 engine validated the transfer law via a projected-Hessian eigenvalue proxy $|\lambda_{\max}|$, which is asymptotically equivalent to $T_{\delta f}$ only under an additional calibration hypothesis:
+\begin{equation}\label{eq:observable-equivalence}
+    |\lambda_{\max}(f)|=K(f)\,T_{\delta f}(f)(1+o(1)),
+    \qquad D\log K(f)\to0,
+\end{equation}
+with $K(f)$ nonzero and slowly varying.
+
+The V4 typed-substrate engine eliminates this dependency. Two Layer~1 calibrated primitives produce $T_{\delta f}$ directly as a first-class typed observable:
+
+\begin{itemize}
+    \item \texttt{typed\_finite\_difference} (Task 015): computes $T_{\delta f}(f)=|\Delta_{\delta f}g(f)/\delta f|$ as a typed observation. Emits one of five strata: \texttt{transfer\_observed}, \texttt{transfer\_cancellation\_dominated}, \texttt{transfer\_non\_finite}, \texttt{transfer\_domain\_refused}, \texttt{transfer\_delta\_indeterminate}.
+    \item \texttt{typed\_log\_log\_slope} (Task 016): consumes a collection of typed transfer observations and fits the log--log slope with a typed-result envelope. Returns the slope as a typed observable with full provenance lineage to its constituent transfer observations.
+\end{itemize}
+
+Under this substrate, equation \eqref{eq:observable-equivalence} is not required for validating Theorem \ref{thm:robust-transfer}. The observable being fitted IS $T_{\delta f}$; no proxy calibration enters. The V3 proxy results remain as independent corroborating evidence at $|\lambda_{\max}|$, but the V4 primary validation path runs directly on the transfer observable.
+
+\section{Finite-window bias from subleading terms}\label{sec:finite-window-bias}
+
+Open question 2 of the original manuscript asked whether the slope $\alpha-1$ survives when subleading terms are non-negligible. Asymptotically, yes. On finite windows, subleading powers create a computable bias.
+
+\begin{proposition}[Two-term finite-window bias]\label{prop:finite-window-bias}
+Let
+\[
+    g(f)=g_0+c f^\alpha\left(1+a f^\rho+O_2(f^{\rho+\epsilon})\right),
+    \qquad \alpha\ne0,
+    \quad \rho>0,
+    \quad \epsilon>0.
+\]
+For infinitesimal transfer, or finite differences with $\delta f/f=o(f^\rho)$,
+\begin{equation}\label{eq:bias-formula}
+    D\log |g'(f)|
+    =\alpha-1+\frac{a\rho(\alpha+\rho)}{\alpha}f^\rho
+    +O(f^{2\rho})+O(f^{\rho+\epsilon}).
+\end{equation}
+\end{proposition}
+
+\noindent\emph{Proof.}
+Differentiate:
+\[
+    g'(f)=c\alpha f^{\alpha-1}
+    \left(1+a\frac{\alpha+\rho}{\alpha}f^\rho+O(f^{\rho+\epsilon})\right).
+\]
+Taking $D\log$ gives \eqref{eq:bias-formula}.\hfill$\square$
+
+\noindent
+Thus subleading terms do not change the limiting exponent when $\alpha\ne0$, but they do shift measured slopes on finite sweeps. The V4 typed primitives carry the structure needed to fit
+\[
+    s(f)=s_\infty+Bf^\rho
+\]
+across nested windows, infer $s_\infty$, and report $\alpha=s_\infty+1$ with a finite-window bias estimate. A nested-window drift analyser is a forward task and not yet built at the time of writing.
+
+The exception is a nonzero constant leading term. If $g(f)=g_0+c f^\beta+\cdots$ with $\beta\ne0$, the exponent of the first nonconstant term is the branch exponent. A constant offset $g_0$ must not be treated as $\alpha=0$ in the algebraic branch theorem, because its derivative is zero.
+
+\section{Non-algebraic singularities and automatic thresholds}\label{sec:non-algebraic}
+
+Open question 1 asked how to choose the stability threshold automatically and whether the non-algebraic test generalises. The answer is to stop using a fixed absolute threshold as the mathematical criterion. Replace it with model comparison on local slopes.
+
+Let $t=-\log f$ and let $s_j$ be the fitted log--log slope on nested windows $W_j$, with standard error $\sigma_j$. The following rule is a data-driven replacement for a fixed threshold such as $0.30$ or $0.05$.
+
+\begin{diagnostic}[Automatic stability threshold]\label{diag:auto-threshold}
+Compute adjacent slope differences $d_j=s_{j+1}-s_j$. Set
+\begin{equation}\label{eq:auto-threshold}
+    \tau_{j,\mathrm{auto}}
+    =z_{1-\gamma/2}\sqrt{\sigma_j^2+\sigma_{j+1}^2},
+\end{equation}
+where $z_{1-\gamma/2}$ is the desired normal quantile. Treat the slope as stable only if
+\[
+    |d_j|\le \tau_{j,\mathrm{auto}}
+\]
+for the relevant adjacent windows and if a constant-slope model passes the weighted residual test
+\begin{equation}\label{eq:chi-square-stability}
+    Q_0=\sum_j\frac{(s_j-\bar{s})^2}{\sigma_j^2},
+    \qquad
+    \bar{s}=\frac{\sum_j s_j/\sigma_j^2}{\sum_j1/\sigma_j^2}.
+\end{equation}
+If the constant-slope model fails, compare the following finite-window drift models by AIC, BIC, or cross-validation:
+\begin{align*}
+    M_A:&&s(t)&=s_\infty+B e^{-\rho t} &&\text{algebraic subleading powers},\\
+    M_L:&&s(t)&=s_\infty+\frac{B}{t}+\frac{C}{t\log t} &&\text{logarithmic/slow variation},\\
+    M_E:&&s(t)&=A+B e^{pt} \quad\text{or}\quad s(t)=A+B t^q &&\text{essential or super-power drift}.
+\end{align*}
+Classify as a pure algebraic branch only when $M_A$ or the constant model wins and the estimated $s_\infty$ is stable under nested-window deletion. Classify as non-algebraic when $M_L$ or $M_E$ wins by the chosen information criterion or when its drift coefficient is statistically significant.
+\end{diagnostic}
+
+This rule explains the V3 iterated-logarithm test. For
+\[
+    g(f)=\log\log(1/f),
+    \qquad t=\log(1/f),
+\]
+one has
+\begin{equation}\label{eq:iterated-log-slope}
+    |g'(f)|=\frac{1}{f\log(1/f)},
+    \qquad
+    D\log |g'(f)|=-1+\frac{1}{\log(1/f)}=-1+\frac{1}{t}.
+\end{equation}
+Thus the apparent exponent inferred from $s+1$ drifts like $1/t$. A loose fixed threshold can mistake this for a small algebraic exponent over a finite range. The automatic rule detects the $1/t$ drift and labels it as non-algebraic slow variation rather than as a true power law.
+
+The V4 typed substrate has not yet retested the iterated-logarithm case under this diagnostic. The retest is a forward task that composes \texttt{typed\_log\_log\_slope} across nested windows with an information-criterion model comparator.
+
+\section{Self-reference and arithmetic-path conditioning}\label{sec:self-reference}
+
+Open question 3 is the most serious one. If the genuine signal and the conditioning artefact carry the same exponent, exponent data alone cannot separate them.
+
+\begin{lemma}[Exponent-only non-identifiability]\label{lem:nonidentifiability}
+Suppose an observed residual satisfies
+\[
+    R(f)=C f^{\alpha-1}L(f)(1+o(1)).
+\]
+From measurements of the exponent and the total amplitude $C$ alone, one cannot uniquely decompose $R$ into a genuine geometric component and an arithmetic-conditioning component with the same exponent.
+\end{lemma}
+
+\noindent\emph{Proof.}
+For any split $C=A+B$, the decomposition
+\[
+    R(f)=A f^{\alpha-1}L(f)+B f^{\alpha-1}L(f)+o(f^{\alpha-1}L(f))
+\]
+fits the same exponent and total amplitude. Hence the decomposition is not identifiable from exponent data alone.\hfill$\square$
+
+The fix is to introduce an independent axis: precision, arithmetic path, or both. IEEE 754 arithmetic error scales with the unit roundoff $u_p$ of the chosen precision; a genuine geometric residual does not.
+
+\begin{theorem}[Precision-scaling separation test]\label{thm:precision-separation}
+Assume measurements at precision $p$ and arithmetic path $k$ have asymptotic form
+\begin{equation}\label{eq:precision-model}
+    R_{p,k}(f)=
+    \left(a+u_p b_k\right)f^{\alpha-1}L(f)(1+o(1))
+    +o(u_p f^{\alpha-1}L(f)),
+\end{equation}
+where $u_p$ is the unit roundoff, $a$ is the path-invariant geometric amplitude, and $b_k$ is the path-dependent conditioning amplitude. Define the measured branch amplitude
+\begin{equation}\label{eq:measured-amplitude}
+    C_{p,k}:=\lim_{f\to0^+}\frac{R_{p,k}(f)}{f^{\alpha-1}L(f)}.
+\end{equation}
+Then
+\[
+    C_{p,k}=a+u_p b_k.
+\]
+With at least two distinct precisions, $a$ and $b_k$ are identifiable for each fixed path $k$ by a linear fit in $u_p$. With multiple algebraically equivalent paths, variation in $b_k$ provides an additional path-dependence test for arithmetic conditioning.
+\end{theorem}
+
+\noindent
+Operationally:
+\begin{itemize}
+    \item If $C_{p,k}$ is constant across precision and path, the residual is geometric to this order.
+    \item If $C_{p,k}/u_p$ is constant across precision but varies across arithmetic path, the residual is dominated by floating-point conditioning.
+    \item If $C_{p,k}=a+u_p b_k$ with both nonzero intercept and nonzero slope, the residual is mixed and the fitted intercept $a$ estimates the geometric component.
+\end{itemize}
+
+This does not claim that exponent information alone solves self-reference. It proves the opposite, then supplies the missing independent observable needed to separate the two mechanisms.
+
+\smallskip\noindent\emph{Status of empirical validation:} Theorem \ref{thm:precision-separation} is empirically validated at the regular-region level. V4 Task 017c executed the multi-precision battery at \texttt{float32}, \texttt{float64}, \texttt{float128} (where applicable), and a Decimal oracle on all four fixtures (Schwarzschild, special-relativistic time dilation, pure-algebraic control, and cube-root). The linear-in-$u_p$ model
+\[
+    C_{p,k} = a + u_p b_k
+\]
+fits the regular-region $C_{p,k}$ observations at $R^2 = 1.0$ across every load-bearing fixture--path combination. The slope $b_k$ recovers as positive and finite; the intercept $a$ is identifiable per path.
+
+Three sub-claims of the empirical instantiation diverged from the strongest reading of the theorem and remain open. First, the cbrt $F_1$ intercept confidence interval excludes zero at a magnitude below the precision floor of the available oracle, leaving the geometric component identifiable only as bounded-above. Second, slope distinguishability between $F_1$ and $F_2$ failed within the available precision count (three to four distinct $u_p$ values per fixture); the confidence intervals overlap. Third, an over-strong prediction that $b_k$ should vanish inside the Sterbenz-exact half-space was not supported in any fixture; this prediction conflated the operation-level Sterbenz mechanism with the asymptotic $C_{p,k}$ framework and was malformed rather than empirically falsified. Section \ref{sec:sterbenz} carries the corrected reading.
+
+The substrate observation that the malformed prediction inverted is itself substantive. In every fixture, the $F_2$ Sterbenz-region $b_k$ confidence interval upper bound is \emph{larger} than the corresponding regular-region upper bound, not smaller:
+
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+Fixture & $F_2$ regular-region $b_k$ CI upper & $F_2$ Sterbenz-region $b_k$ CI upper \\
+\midrule
+Schwarzschild & $0.231$ & $0.665$ \\
+Special relativity & $0.383$ & $0.738$ \\
+Pure algebraic & $0.364$ & $0.738$ \\
+Cube-root algebraic & $0.437$ & $0.990$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The arithmetic-path conditioning amplitude in the Sterbenz-applicable region is empirically higher than in the regular region across every fixture. The likely mechanism: Sterbenz's lemma protects the first subtraction $R^n - 1$ from rounding at the operation level, but the resulting intermediate must still be added to $x_{\mathrm{term}}$; the structure of that final-addition rounding amplifies more in the Sterbenz region than outside it. The lemma protects the wrong operation for the $C_{p,k}$ asymptotic framework. This observation is consistent with the finding of Section \ref{sec:refinery}: operation-level exactness and macroscopic burden are different optimization criteria measuring different observables on the same chain.
+
+A supplementary observation from the same campaign: F5+ rewrite candidates introduced in the path-basis rank work (Tasks 029, 029b, 029c) exhibit b\_k values bit-identical to $F_2$ in every fixture. The P\_compound\_split and P\_sign\_c paths are reformulations of $F_2$'s arithmetic chain, not independent substrate paths.
+
+\section{V4 typed-substrate validation of the transfer law}\label{sec:v4-validation}
+
+The V4 engine validates the transfer law directly on $T_{\delta f}$ via the typed primitives of Section \ref{sec:v4-direct}. The validations below use the canonical synthetic family $g(f)=c f^\alpha$ and four constraint-surface fixtures.
+
+\subsection{Synthetic family validation}
+
+The Layer 1 primitive \texttt{typed\_log\_log\_slope} fits the slope of $\log T_{\delta f}$ versus $\log f$ for a synthetic power-law branch. The fitted slope is reported as a typed observable; the inferred $\alpha = \text{slope} + 1$ recovers the underlying branch exponent.
+
+\begin{center}
+\begin{tabular}{rrrrl}
+\toprule
+$\alpha$ & predicted slope & measured slope & $R^2$ & typed status\\
+\midrule
+$0.5$ & $-0.5$    & $-0.500000000021128$ & $1.0$ & \texttt{slope\_observed}\\
+$1.5$ & $+0.5$    & $+0.499999999988428$ & $1.0$ & \texttt{slope\_observed}\\
+$2.0$ & $+1.0$    & $+1.000000000001573$ & $1.0$ & \texttt{slope\_observed}\\
+$3.0$ & $+2.0$    & $+1.999999999992809$ & $1.0$ & \texttt{slope\_observed}\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent
+The fitted slope matches $\alpha-1$ to $\sim 10^{-11}$ in all four cases. This is direct measurement of $T_{\delta f}$, not an $|\lambda_{\max}|$ proxy.
+
+The \texttt{directional\_alpha\_probe} primitive (Task 018) composes the slope fit with a typed-stratum classifier and emits $\alpha$ itself as the typed observable, with strata including \texttt{alpha\_regular\_integer}, \texttt{alpha\_fractional\_branch}, \texttt{alpha\_negative\_singularity}, and refusal strata such as \texttt{alpha\_cancellation\_dominated}, \texttt{alpha\_insufficient\_data}, and \texttt{alpha\_domain\_refused}. The probe recovers $\alpha$ for clean cases to $\sim 10^{-10}$ precision and refuses cleanly when transfer evidence is dominated by finite-precision cancellation.
+
+\subsection{Negative-$\alpha$ limit and the dual-probe structure}
+
+The local additive construction $g_{\mathrm{local}}(h) := f(x_0+h) - f(x_0)$ used by \texttt{scalar\_alpha\_jet\_bundle} (Task 019) tends to zero as $h \to 0^+$ whenever $f(x_0)$ is finite. Negative-$\alpha$ singularities at the branch point therefore do not directly arise from $g_{\mathrm{local}}$; they require the singular-direct probe $g_{\mathrm{singular}}(h) := f(x_0+h)$ without subtraction.
+
+This is a structurally honest substrate observation, not a limitation of the theorem. The two probe constructions are sibling Layer 1 primitives that observe complementary regions: $g_{\mathrm{local}}$ for the regular region where $f(x_0)$ is finite, $g_{\mathrm{singular}}$ for the singular region where $|f(x_0+h)|$ blows up as $h \to 0^+$. A joint composition layer over both arms preserves both lineages in provenance without committing to dispatch labels at substrate. Full architecture is documented in the V4 dual-probe design note.
+
+\subsection{Cross-fixture validation across four constraint-surface fixtures}
+
+Beyond synthetic branches, V4 has validated the transfer law on four constraint-surface fixtures spanning two radical degrees and three levels of physics content:
+
+\begin{enumerate}
+    \item Schwarzschild radial coordinate (Task 024b): $f = 1 - 2/r$, swept over $r \in [2.005, 10.0]$ on a $137$-point grid. Square-root radical.
+    \item Special relativistic time dilation (Task 027): $f = 1 - \beta^2$, swept over $\beta \in [0.01, 0.9999]$ on a $137$-point grid. Square-root radical.
+    \item Pure algebraic control (Task 028): $f = 1 - x$, swept over $x \in [0.01, 0.99]$ on a $137$-point grid. Square-root radical, no physical interpretation of the operand.
+    \item Cube-root algebraic control (Task 029c): $f = 1 - x$, swept over $x \in [0.01, 0.99]$ on a $137$-point grid. Cube-root radical, no physical interpretation of the operand.
+\end{enumerate}
+
+Each fixture is evaluated through a battery of four algebraically-equivalent routings of the same constraint identity $R^2 - f = 0$ where $R = \sqrt{f}$:
+
+\begin{itemize}
+    \item $F_1 := R^2 - f_{\mathrm{direct}}$ \quad (direct ratio precomputed)
+    \item $F_2 := R^2 - 1 + x_{\mathrm{term}}$ \quad (split addition; $x_{\mathrm{term}} = 2/r,\ \beta^2,\ x$)
+    \item $F_3 := R - \sqrt{f_{\mathrm{direct}}}$ \quad (same path twice; calibration zero)
+    \item $F_4 := R - \sqrt{f_{\mathrm{alt}}}$ \quad (alternative factored routing of $f$)
+\end{itemize}
+
+Each $F_i$ is computed in \texttt{float32}, \texttt{float64}, and a $\mathrm{decimal}_{50}$ oracle. The four forms are algebraically zero at every operand; non-zero values are arithmetic-path residuals.
+
+\begin{theorem}[Cross-fixture invariance, classification level]\label{thm:cross-fixture}
+Across the four fixtures above, the following classification-level observations are jointly preserved at \texttt{float64} on the reference grid:
+\begin{enumerate}
+    \item $F_3$ silence: $F_3(f) = 0$ at every cell, every precision.
+    \item $F_2$ non-integer lattice grain: non-zero $F_2$ values populate a half-integer lattice (residual $0.5$) in Schwarzschild and SR, quarter-integer (residual $0.25$) in pure algebraic and cube-root. Classification \texttt{non\_integer\_lattice} is invariant.
+    \item $F_4$ integer lattice character: non-zero $F_4$ values populate an integer lattice (residual $0$). Classification \texttt{lattice\_integer} is invariant; the spectral width (number of distinct levels) varies with grid coverage.
+    \item $F_1 \parallel F_2$ grid-stable parallel polarity coupling: where both $F_1$ and $F_2$ fire on the same cell, their signs agree with $100\%$ frequency across all four perturbation grids tested per fixture (\texttt{reference}, \texttt{coarse\_perturbation}, \texttt{fine\_perturbation}, \texttt{independent\_uniform}).
+    \item Sterbenz boundary directional bias: the predicted boundary shift (Section \ref{sec:sterbenz}) produces the predicted directional density bias in every fixture, including across the change in radical degree.
+\end{enumerate}
+\end{theorem}
+
+The invariance pattern is summarised in the following table, which records the substrate classification observed in each fixture per invariant:
+
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+Invariant & Schwarzschild & SR & Pure algebraic & Cube-root \\
+\midrule
+$F_3$ silence & yes & yes & yes & yes \\
+$F_2$ non-integer lattice grain & \texttt{non\_integer} & \texttt{non\_integer} & \texttt{non\_integer} & \texttt{non\_integer} \\
+$F_4$ integer lattice character & \texttt{lattice\_integer} & \texttt{lattice\_integer} & \texttt{lattice\_integer} & \texttt{lattice\_integer} \\
+$F_1 \parallel F_2$ polarity coupling & grid-stable & grid-stable & grid-stable & grid-stable \\
+Sterbenz boundary directional bias & yes & yes & yes & yes \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent\emph{Status.} Theorem \ref{thm:cross-fixture} is an empirical-invariance statement, not a derived mathematical theorem. It states what the V4 substrate observes across four fixtures. The cube-root fixture confirms that the invariants extend to controlled-branch radical chains beyond the original square-root case; the universality claim of the framework therefore strengthens from sqrt-near-unity to controlled-branch radical chains in general.
+
+A mechanism-specificity result distinguishes substrate-universal rewrite paths from operation-specific ones. The path-basis rank work of Task 029c included pre-registered F5+ predictions: P\_compound\_split (universal across radical degrees), P\_sign\_c (universal across radical degrees), and P\_distrib\_sqrt\_mul (predicted \emph{absent} in cube-root at cofire 0.0). All three predictions held; the negative prediction for P\_distrib\_sqrt\_mul confirms that the substrate distinguishes operation-class-specific paths from substrate-universal ones at the value level. Operation-level Sterbenz annotation, which would derive Theorem \ref{thm:cross-fixture} from per-operation rounding propagation, remains a forward task; the substrate has now demonstrated that such mechanism-specific predictions can be made and tested with substrate-native evidence.
+
+\section{The Sterbenz boundary: an identified mechanism for arithmetic-path conditioning}\label{sec:sterbenz}
+
+Lemma \ref{lem:nonidentifiability} establishes that exponent and amplitude data alone cannot separate geometric signal from arithmetic-path conditioning. Theorem \ref{thm:precision-separation} proposes the resolution: multi-precision linear fit isolates the conditioning amplitude $b_k$. The remaining substantive question is whether $b_k$ is a single opaque scalar per path, or whether it has identifiable structure.
+
+V4 has identified one concrete mechanism contributing to $b_k$ that has the following properties:
+\begin{itemize}
+    \item It is derivable from IEEE 754 exact-subtraction conditions (Sterbenz's Lemma).
+    \item It produces a fixture-specific predicted boundary location.
+    \item The predicted boundary location varies with operand transformation in a calculable way.
+    \item The predicted directional density bias is observed in every fixture tested.
+\end{itemize}
+
+\subsection*{Sterbenz's Lemma and the $F_2$ chain}
+
+\begin{lemma}[Sterbenz, restated for context]\label{lem:sterbenz}
+Let $a, b$ be IEEE 754 floating-point numbers of the same precision, both nonzero, satisfying
+\[
+    \frac{a}{2} \le b \le 2a.
+\]
+Then $a - b$ is computed exactly: the result is representable without rounding.
+\end{lemma}
+
+The $F_2$ chain begins with the subtraction $R^n - 1$ where $n$ is the radical degree of the fixture. Under Lemma \ref{lem:sterbenz}, this subtraction is exact whenever $R^n \ge 1/2$. Substituting the fixture-specific definition:
+
+\begin{itemize}
+    \item Schwarzschild ($n=2$): $R^2 = 1 - 2/r$, so $R^2 \ge 1/2 \iff r \ge 4$.
+    \item Special relativity ($n=2$): $R^2 = 1 - \beta^2$, so $R^2 \ge 1/2 \iff \beta \le 1/\sqrt{2}$.
+    \item Pure algebraic ($n=2$): $R^2 = 1 - x$, so $R^2 \ge 1/2 \iff x \le 1/2$.
+    \item Cube-root algebraic ($n=3$): $R^3 = 1 - x$, so $R^3 \ge 1/2 \iff x \le 1/2$.
+\end{itemize}
+
+The pure-algebraic and cube-root boundaries coincide because the Sterbenz half-space depends on the algebraic relationship $R^n = 1 - x$ rather than on the value of $n$. Task 029c confirmed the value-level boundary at $x = 1/2$ in the cube-root fixture, showing that the Sterbenz boundary identification extends across radical degrees.
+
+In each fixture, the Sterbenz-exact region of the operand sweep is a half-space bounded by a specific value of the native variable. Inside this region, the first subtraction in the $F_2$ chain introduces no rounding; the chain's measured non-zero residuals come entirely from the second subtraction (or addition) involving $1 - x_{\mathrm{term}}$. Outside this region, both operations may round.
+
+The empirical prediction is that the directional density of $F_2$ firings should be biased toward the Sterbenz-exact region. The biasing direction varies by fixture because the Sterbenz-exact half-space sits on different sides of the canonical grid:
+
+\begin{center}
+\begin{tabular}{lcccc}
+\toprule
+Fixture & Boundary & Below count/density & Above count/density & Supports prediction\\
+\midrule
+Schwarzschild & $r=4.0$ & $6\ /\ 0.054$ & $22\ /\ 0.880$ & yes (above higher)\\
+SR & $\beta=1/\sqrt{2}$ & $86\ /\ 0.896$ & $9\ /\ 0.220$ & yes (below higher)\\
+Pure algebraic & $x=0.5$ & $55\ /\ 0.797$ & $9\ /\ 0.132$ & yes (below higher)\\
+Cube-root algebraic & $x=0.5$ & $65\ /\ 0.942$ & $33\ /\ 0.485$ & yes (below higher)\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+In every fixture, the Sterbenz-exact half-space (above for Schwarzschild, below for SR, pure algebraic, and cube-root algebraic) carries higher $F_2$ firing density at the predicted ratio range. The boundary location shifts with operand transformation, the directional bias appears at the shifted location in every case, and the value-level boundary identification extends across radical degrees: the cube-root fixture (Task 029c) reproduces the boundary at the same value-level location with the same directional bias as the pure-algebraic square-root fixture.
+
+\begin{observation}[Sterbenz boundary as $b_k$ component]\label{obs:sterbenz-component}
+The Sterbenz-exact subtraction condition is a derivable, operand-dependent, path-specific mechanism contributing to the arithmetic-path conditioning amplitude $b_k$ of Theorem \ref{thm:precision-separation}. The mechanism predicts a fixture-shifted directional bias in the residual density, and the prediction is confirmed in three independent fixtures. Sterbenz boundary structure is an example of identifiable substructure within $b_k$, not the whole of $b_k$.
+\end{observation}
+
+This is one identified component, derived from substrate-native value-level measurement. The path-basis rank exploration of Tasks 029, 029b, and 029c surfaced additional non-canonical signature clusters in every fixture, suggesting $b_k$ has further multi-component structure beyond the Sterbenz mechanism. Section \ref{sec:refinery} reports a refinery audit that took the further substantive step of comparing the Sterbenz-blessed arithmetic form against a hand-curated set of algebraically-equivalent rewrites; the finding is a V4-native discovery that classical numerical-analysis theory would not have proposed.
+
+\section{Refinery audit: V4-native discovery of sub-lattice alignment as a separate optimization criterion}\label{sec:refinery}
+
+The Sterbenz boundary identification establishes that the operation-level exact-subtraction condition contributes to $b_k$. A separate question is whether the arithmetic form blessed by Sterbenz's lemma --- the explicit subtraction $(R \cdot R) - 1 + x$ --- is the \emph{minimum-burden} representation of the algebraic identity $R^n - 1 + x \equiv 0$ in the Sterbenz-applicable region, or whether some algebraically-equivalent rewrite produces a cleaner substrate signature.
+
+V4 Task 031 conducted a six-candidate refinery audit of the pure-algebraic fixture in the Sterbenz-applicable region $x \le 1/2$. The candidates are hand-curated, with each declaring an explicit hypothesis it tests:
+
+\begin{itemize}
+    \item $c_1 = (R \cdot R) - 1 + x$ \quad (the Sterbenz-blessed explicit subtraction; reference candidate)
+    \item $c_2 = (R \cdot R) + (x - 1)$ \quad (reassociation that swaps Sterbenz protection from $x \le 1/2$ to $x \ge 1/2$)
+    \item $c_3 = (R - 1)(R + 1) + x$ \quad (catastrophic-cancellation negative control)
+    \item $c_4 = R^2 - 1 + x$ \quad (operator-shift; $R^2$ via Python's \texttt{**} rather than $R \cdot R$)
+    \item $c_5 = ((R \cdot R) - 1)/1 + x$ \quad (identity-padding to probe operation-chain depth discrimination)
+    \item $c_6 = \mathrm{float}(\mathrm{Decimal}(R)\cdot\mathrm{Decimal}(R) - \mathrm{Decimal}(1)) + x$ \quad (Decimal-100 intermediate before binary final addition; substrate-admissible analog of fused multiply-add)
+\end{itemize}
+
+Each candidate is admitted through a typed geometry-admissibility gate (matching fixture, operand grid, declared algebraic identity, calibration status, and domain stratum), and is characterized by a burden vector with eight typed dimensions drawn from existing V4 campaign reports: the arithmetic conditioning amplitude $b_k$ with confidence interval, lattice class, maximum integer residual, polarity coupling class, calibration-zero preservation, and static operation-chain depth. The audit applies a componentwise N-way Pareto comparison; there is no weighted aggregation and no scalar score. A candidate is on the frontier if no other candidate strictly dominates it on every required dimension.
+
+The result, pre-registered before measurement code was executed: $c_2$ is the sole Pareto frontier member in the Sterbenz-applicable region. The Sterbenz-blessed reference $c_1$ is strictly dominated by $c_2$ on \texttt{lattice\_class} (integer\_lattice versus non\_integer\_lattice) and \texttt{max\_integer\_residual} ($0$ versus $0.25$), while tying on $b_k$ (overlapping confidence intervals), \texttt{operation\_chain\_depth} (both $2$), and the required equality and pairing dimensions. The calibration control $c_3$ remained off the frontier as pre-registered, confirming that the audit can detect and reject deliberately pathological rewrites. The Decimal-emulated candidate $c_6$ did not dominate the reference: although its $b_k$ point estimate was lower in the audit region, the declared confidence-interval rule tied $b_k$ while $c_6$ retained the same lattice class as the reference and had higher operation-chain depth.
+
+\begin{observation}[Sub-lattice alignment as a separate optimization criterion]\label{obs:sublattice-alignment}
+Under the V4 evaluation-policy burden vector, the Sterbenz-blessed arithmetic form is not the minimum-burden representation of the algebraic identity $R^n - 1 + x \equiv 0$ in the Sterbenz-applicable region of the pure-algebraic fixture. A reassociated form whose intermediate subtraction is not Sterbenz-protected produces a cleaner macroscopic residual lattice. The reassociated form trades operation-level exact subtraction for sub-lattice alignment of the intermediate value with the final-addition sub-lattice.
+\end{observation}
+
+Observation \ref{obs:sublattice-alignment} does not refute Sterbenz's lemma. Sterbenz's claim concerns one operation level; the audit measures the total chain residual structure on the algebraic identity. The two claims are about different observables. The substantive finding is that the V4 burden vector --- and by extension any optimization policy that weighs macroscopic lattice structure --- can reach a different conclusion than the operation-level optimization criterion that classical numerical-analysis discipline (minimize rounding at every step) would recommend.
+
+A diagnostic-versus-evaluation policy tension surfaces from this result. The non-integer lattice grain of $0.25$ that $c_1$ produces in the Sterbenz region is the same lattice signal that encodes the Sterbenz boundary location at $x = 1/2$ (Section \ref{sec:sterbenz}, Task 029c). The reassociated form $c_2$ has cleaner final lattice structure but does not carry this boundary signal in its residuals. Under an evaluation policy that treats lattice grain as pure burden, $c_2$ dominates. Under a hypothetical diagnostic policy that treats lattice grain carrying mechanism-boundary information as positive burden (information density rather than cost), $c_1$ would dominate. Both readings are honest substrate observations; the choice between them is a policy choice rather than a substrate fact. The Layer 2 refinery architecture must accommodate this distinction; demonstrating policy-sensitive refinery decisions on identical substrate evidence is itself a substrate capability that V3 implementations of the refinery concept did not deliver.
+
+The mechanism for $c_2$'s dominance can be stated cleanly. The intermediate value $(R \cdot R) - 1$ in the reference form lives on a sub-lattice of float64 whose alignment with the final $+ x$ sub-lattice produces a quarter-integer macroscopic residual. The intermediate value $(x - 1)$ in the reassociated form is subject to rounding at the operation level (it is not Sterbenz-protected for $x \le 1/2$), but the rounding that operation introduces snaps the intermediate onto a sub-lattice aligned with $(R \cdot R)$'s sub-lattice. The total residual lands on an integer lattice. The rounding error in $(x - 1)$ is doing structural alignment work; calling it ``rounding error'' is itself a category mistake from the constraint-surface perspective. Absorbing a localized rounding error early in the chain can structurally heal the final constraint surface, trading microscopic node-level exactness for macroscopic lattice purity. A classical theoretical analysis optimizing at the operation level would not propose making a subtraction intentionally noisy; the V4 refinery, measuring the total chain signature on substrate-native terms, identifies the trade as favorable under the evaluation-policy burden vector.
+
+\section{Status of cross-domain validation}\label{sec:cross-domain}
+
+The May 8, 2026 manuscript reported V3 cross-domain validation across three physics domains. The V4 cross-fixture campaign extends this with a physics-stripped pure-algebraic control. The two evidence sources address complementary risks: V3 covers physical-domain diversity at $|\lambda_{\max}|$, V4 covers algebraic-routing diversity at direct $T_{\delta f}$.
+
+\subsection{Original V3 cross-domain results (preserved)}
+
+\begin{center}
+\begin{tabular}{lcccr}
+\toprule
+Domain & $g(f)$ & $\alpha$ & Measured slope & Error\\
+\midrule
+SR time dilation & $f^{1/2}$ & $+1/2$ & $-0.4995$ & $0.10\%$\\
+Schwarzschild redshift & $f^{1/2}$ & $+1/2$ & $-0.4989$ & $0.22\%$\\
+Bell strain & $f^{-1/2}$ & $-1/2$ & $-1.5010$ & $0.07\%$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{V3 $\alpha$-family validation (preserved)}
+
+\begin{center}
+\begin{tabular}{rlrrr}
+\toprule
+$\alpha$ & $g(f) = f^\alpha$ & Predicted slope & Measured slope & Error\\
+\midrule
+$-1$ & $1/(1-\beta)$ & $-2$ & $-2.0000$ & $<10^{-7}$\\
+$-1/2$ & $1/\sqrt{1-\beta^2}$ & $-3/2$ & $-1.5010$ & $0.07\%$\\
+$+1/3$ & $(1-\beta)^{1/3}$ & $-2/3$ & $-0.6648$ & $0.27\%$\\
+$+1/2$ & $\sqrt{1-\beta^2}$ & $-1/2$ & $-0.4995$ & $0.10\%$\\
+$+1$ & $1-\beta$ & $0$ & $\sim 0$ (no divergence) & ---\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{V4 typed-primitive validation (added)}
+
+Section \ref{sec:v4-validation} replaces the $|\lambda_{\max}|$ proxy with direct $T_{\delta f}$ measurement. The combined evidence is:
+
+\begin{itemize}
+    \item Theorem \ref{thm:robust-transfer} validated at $\alpha \in \{0.5, 1.5, 2.0, 3.0\}$ via V4 \texttt{typed\_log\_log\_slope} on synthetic branches, slope error $\sim 10^{-11}$.
+    \item Theorem \ref{thm:robust-transfer} validated at $\alpha \in \{-1, -1/2, +1/3, +1/2\}$ via V3 $|\lambda_{\max}|$ proxy on synthetic branches, slope error $\le 0.5\%$.
+    \item Theorem \ref{thm:cross-fixture} (cross-fixture invariance) validated across Schwarzschild, SR, pure-algebraic, and cube-root fixtures via V4 four-form battery (Tasks 024b, 027, 028, 029c).
+    \item Theorem \ref{thm:precision-separation} (precision-scaling separation) validated at $R^2 = 1.0$ in the regular region across all four fixtures via V4 multi-precision battery (Task 017c).
+    \item Observation \ref{obs:sterbenz-component} (Sterbenz boundary as a $b_k$ component) validated across all four fixtures, with value-level boundary identification extending across radical degrees (Task 029c).
+    \item Mechanism-specificity result (Task 029c Section B): three F5+ predictions held including the pre-registered negative prediction that P\_distrib\_sqrt\_mul is absent in cube-root at cofire 0.0; substrate distinguishes operation-class-specific from substrate-universal rewrite paths at the value level.
+    \item Observation \ref{obs:sublattice-alignment} (sub-lattice alignment as a separate optimization criterion) surfaced empirically by the six-candidate refinery audit on pure-algebraic (Task 031).
+\end{itemize}
+
+The V3 and V4 evidence are mutually independent, share no implementation code, and corroborate the same exponent law. Per the V4 architectural discipline (Axiom 10, V3 reference-only), V3 results are reported here as historical independent evidence and not as runtime dependencies of V4.
+
+\section{Revised empirical framing}
+
+The mathematical theorem is elementary once stated correctly: it is the chain rule plus controlled asymptotics. The nontrivial empirical claim should therefore be stated as an instrumentation and universality claim, not as a new consequence of calculus.
+
+A sharper empirical conjecture is:
+
+\begin{quote}
+For constraint surfaces generated by the Lloyd V4 domain adapters, the typed transfer observable $T_{\delta f}$ recovers the limiting log--log slope $\alpha - 1$ predicted by Theorem \ref{thm:robust-transfer}. Across four physically independent fixtures spanning two radical degrees, including a physics-stripped pure-algebraic and cube-root control, the substrate exhibits classification-level invariants in the arithmetic-path residuals of algebraically-equivalent routings (Theorem \ref{thm:cross-fixture}). The path-conditioning amplitude $b_k$ of Theorem \ref{thm:precision-separation} is empirically identifiable per path via a linear-in-$u_p$ fit; the regular-region fit holds at $R^2 = 1.0$ across all four fixtures. The Sterbenz exact-subtraction condition is one derivable mechanism contributing to $b_k$ and predicts a fixture-shifted directional density bias confirmed in every fixture tested, with value-level boundary identification extending across radical degrees. A substrate-level refinery audit of algebraically-equivalent rewrites in the pure-algebraic fixture identifies sub-lattice alignment as a separate optimization criterion from operation-level exactness, under which the Sterbenz-blessed arithmetic form is not the minimum-burden representation of the algebraic identity in its applicable region (Observation \ref{obs:sublattice-alignment}).
+\end{quote}
+
+This version separates six claims that reviewers should be able to test independently:
+\begin{enumerate}
+    \item the mathematical transfer law for controlled branches (Theorem \ref{thm:robust-transfer});
+    \item the typed-primitive measurement of $T_{\delta f}$ in V4 (Section \ref{sec:v4-direct});
+    \item the cross-fixture classification invariants across four fixtures and two radical degrees (Theorem \ref{thm:cross-fixture});
+    \item the Sterbenz boundary as one identified $b_k$ component with value-level confirmation across radical degrees (Observation \ref{obs:sterbenz-component});
+    \item the IEEE 754 amplitude-scaling law for arithmetic-path residuals as the resolution of the self-reference problem, empirically instantiated at $R^2 = 1.0$ in the regular region (Theorem \ref{thm:precision-separation});
+    \item the V4-native discovery of sub-lattice alignment as a separate optimization criterion from operation-level exactness, with diagnostic-versus-evaluation policy tension as a substrate observation (Observation \ref{obs:sublattice-alignment}).
+\end{enumerate}
+
+\section{Recommended manuscript changes}
+
+\begin{enumerate}
+    \item Replace the original theorem with Theorem \ref{thm:robust-transfer} or the shorter Corollary \ref{cor:pure-algebraic}. This closes the differentiability gap in the old $O(\cdot)$ proof.
+    \item Note that V4 measures $T_{\delta f}$ directly via \texttt{typed\_finite\_difference}; equation \eqref{eq:observable-equivalence} is needed only when validating through the V3 $|\lambda_{\max}|$ proxy.
+    \item Replace fixed non-algebraic stability thresholds with the automatic rule \eqref{eq:auto-threshold}--\eqref{eq:chi-square-stability} and model comparison among $M_A$, $M_L$, and $M_E$. Note that the V4 retest of the iterated-logarithm case is a forward task.
+    \item Use Proposition \ref{prop:finite-window-bias} to report finite-window bias bars on measured exponents.
+    \item Treat self-reference as an identifiability problem. State Lemma \ref{lem:nonidentifiability}, then use Theorem \ref{thm:precision-separation} as the proposed resolution. Empirical instantiation was completed in V4 Task 017c: the linear-in-$u_p$ model fits $C_{p,k}$ at $R^2 = 1.0$ across all four fixtures. Three sub-claims diverged from the strongest reading of the theorem and are documented in Section \ref{sec:self-reference}.
+    \item Add the cross-fixture invariance results of Theorem \ref{thm:cross-fixture} as direct V4 evidence for the universality claim. The cube-root fixture (Task 029c) extends universality from sqrt-near-unity to controlled-branch radical chains. The pure-algebraic and cube-root controls are the strongest members of the invariance.
+    \item Add the Sterbenz boundary observation as an identified mechanism contributing to $b_k$. Note that this is one component, not the whole of $b_k$; mechanism-specificity results from Task 029c Section B (P\_distrib\_sqrt\_mul absent in cube-root at cofire 0.0) demonstrate substrate-level discrimination between universal and operation-class-specific rewrite paths.
+    \item Add the refinery audit findings of Section \ref{sec:refinery} as a V4-native discovery distinct from the empirical-invariance results: sub-lattice alignment is identified as a separate optimization criterion from operation-level exactness, and the diagnostic-versus-evaluation policy tension is reported as a substrate observation rather than a philosophical concern.
+    \item Change claims such as ``six independent $\alpha$ values'' unless the manuscript includes six distinct nontrivial exponents. The combined V3+V4 evidence supports ``four nontrivial V3 algebraic exponents plus a linear V3 control plus four V4 typed-primitive exponents validated via \texttt{typed\_log\_log\_slope}, plus four-fixture cross-fixture invariance spanning two radical degrees.''
+    \item Distinguish V3 and V4 evidence explicitly throughout: V3 evidence is independent corroboration at the $|\lambda_{\max}|$ proxy; V4 evidence is direct measurement of $T_{\delta f}$. Per Axiom 10 of the V4 architecture, V3 is reference-only, never a runtime authority.
+\end{enumerate}
+
+\section{Open challenges at the time of writing}
+
+\begin{enumerate}
+    \item \textbf{Three sub-claims of Theorem \ref{thm:precision-separation}}. The regular-region linear-in-$u_p$ fit at $R^2 = 1.0$ is the empirical core and is validated. Three sub-claims of the theorem's strongest reading remain open: cube-root $F_1$ intercept distinguishability at sub-precision-floor magnitude, $F_1/F_2$ slope distinguishability with three to four available $u_p$ values, and the operation-level Sterbenz-region $b_k$ structure. The third has been reframed; the first two require either higher-precision oracles or additional precision strata.
+    \item \textbf{Operation-level mechanism for Theorem \ref{thm:cross-fixture}}. The cross-fixture invariants are observed at the classification level. Operation-graph annotation deriving them from per-operation Sterbenz conditions and per-operation rounding propagation is a forward task. Task 029c demonstrated mechanism-specificity discrimination at the value level (P\_distrib\_sqrt\_mul predicted absent in cube-root and confirmed); the full operation-level annotation extends this from value-level prediction to per-operation derivation.
+    \item \textbf{Diagnostic-versus-evaluation policy mechanism in the refinery}. Observation \ref{obs:sublattice-alignment} surfaces the requirement empirically. A Layer 2 refinery architecture admitting selectable burden policies, with substrate-typed evidence common to both, is the natural next architectural step. Demonstration of policy-sensitive frontier decisions on identical substrate evidence is a forward task.
+    \item \textbf{Multi-fixture refinery audits}. The Sterbenz audit was conducted on the pure-algebraic fixture only. Extension to Schwarzschild, special-relativistic, and cube-root fixtures would test whether the sub-lattice alignment finding generalizes across operand transformations and radical degrees, or whether it is fixture-specific.
+    \item \textbf{Non-algebraic discrimination retest}. The V3 iterated-logarithm test has not yet been retested in the V4 typed substrate under Diagnostic Rule \ref{diag:auto-threshold}.
+    \item \textbf{Family-dependence beyond the leading exponent on V4 fixtures}. Proposition \ref{prop:finite-window-bias} provides the bias model; the V4 fitting harness that applies it across nested windows is a forward task.
+    \item \textbf{Path-basis rank closure}. The path-basis rank result of Task 029 (basis rank divergent at cut $0.10$ in clustering: $8$/$9$/$8$ across fixtures) closed under the methodology refinement of Task 029b. Stronger structural rank claims about $b_k$'s multi-component substructure require operation-level annotation and remain open.
+\end{enumerate}
+
+\section{Notes on Scope}
+
+The mathematical core of Theorem \ref{thm:robust-transfer} is the chain rule with controlled asymptotics. The novelty of the framework lies in:
+\begin{enumerate}
+    \item the observation that constraint surfaces produced by the Lloyd framework, across physically unrelated domains, exhibit branch behaviour governed by the same one-parameter law;
+    \item the empirical conjecture that this law conditions IEEE 754 arithmetic-path residuals into a measurable, predictable amplification structure, now empirically instantiated for the regular region at $R^2 = 1.0$;
+    \item the V4 typed substrate's direct measurement of $T_{\delta f}$, with full status, validity, conditioning, provenance, and protocol contracts on every observation;
+    \item the V4 typed substrate's classification-level cross-fixture invariants across four fixtures spanning two radical degrees, including the physics-stripped pure-algebraic and cube-root controls;
+    \item the Sterbenz boundary as one identified, derivable, fixture-shifted mechanism contributing to the arithmetic-path conditioning amplitude, with value-level confirmation across radical degrees;
+    \item the V4-native discovery of sub-lattice alignment as a separate optimization criterion from operation-level exactness (Observation \ref{obs:sublattice-alignment}), surfaced empirically by a refinery audit and not derivable from classical operation-level numerical-analysis discipline.
+\end{enumerate}
+None of these is established by the chain rule alone; all rest on the cross-domain and cross-fixture validation reported above, and on the typed-substrate architectural commitments documented in the V4 axioms.
+
+\end{document}

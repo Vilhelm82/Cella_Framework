@@ -1,0 +1,101 @@
+# Observability Rule Audit — Follow-up Findings
+
+Date: 2026-05-17 (extension to `closeout.md`).
+Audit code (extension): inline in this session; per-fixture observability check.
+
+Follow-ups #1 and #2 from `closeout.md` §9.
+
+## Follow-up #2: F2 noise correlation with substrate-meaningful quantities
+
+K_q (V4's proxy calibration factor) is defined as a calibration protocol at `src/lloyd_v4/metrology/proxy_calibration.py:20`. It's a projective ratio between a proxy observable and a transfer observable, not a simple per-β scalar. Without plumbing the full calibration protocol, the practical test is: does F2's unobservable-region noise correlate with substrate-meaningful candidate quantities?
+
+Pearson + Spearman correlations of F2 (signed residual) in the unobservable region (n=96, β = 0.01–0.70) against:
+
+| Candidate | Pearson | Spearman |
+|---|---|---|
+| β | +0.113 | +0.108 |
+| β² | +0.127 | +0.108 |
+| 1 − β² (operand) | -0.127 | -0.108 |
+| eta = sqrt(1-β²) | -0.126 | -0.108 |
+| ulp(f) | +0.000 | +0.108 |
+| ulp(β) | +0.057 | +0.108 |
+| binade_gap = e_x − e_f | +0.034 | +0.108 |
+| eta/β (transfer/parameter ratio) | +0.018 | -0.108 |
+| β/eta (parameter/transfer ratio) | +0.117 | +0.108 |
+| log(1−β²) | -0.125 | -0.108 |
+
+**Verdict:** all correlations are weak (max ~0.13 Pearson, ~0.11 Spearman). The lattice-level correlation (F2 quantized to ULPs) shows Spearman ~0.47, but this is monotonic ULP drift across the grid, not predictive structure (all candidates share the same rank order because β is monotonically increasing).
+
+Sign distribution: 40.6% positive, 49.0% negative, 10.4% zero — roughly balanced. Lattice levels are concentrated at 0 (52/96) with thin tails at ±1 and ±2.
+
+**F2's broad-region nonzero rate (89.6%) is rounding noise, not a calibration-input.** It is not a hidden substrate signal disguised as noise; it is genuinely noise with the slight monotonic ULP drift one expects from the floating-point grid expanding across the parameter range.
+
+## Follow-up #1: Cross-fixture observability patterns
+
+Same observability rule (`e_f < e_x`) applied to four V4 fixtures:
+
+| Fixture | Grid | Observable | Unobservable | F4 max | F4 in obs | F4 in unob |
+|---|---|---|---|---|---|---|
+| **SR** | β ∈ [0.01, 0.9999] | 30% (41/137) | 70% (96/137) | **1.78e-15 (16 ULP)** | 14/41 (34%) | 13/96 (14%) |
+| **Schwarzschild** | r ∈ [2.005, 10] | **100%** (137/137) | 0% | 3.89e-16 (3-4 ULP) | 92/137 (67%) | — |
+| **Pure algebraic** | x ∈ [0.01, 0.99] | 50% (68/137) | 50% (69/137) | 1.94e-16 (2 ULP) | 24/68 (35%) | 16/69 (23%) |
+| **Cube-root** | x ∈ [0.01, 0.99] | 50% (68/137) | 50% (69/137) | 2.22e-16 (2 ULP) | 20/68 (29%) | 11/69 (16%) |
+
+The rule is **fixture-invariant in form** but **fixture-specific in effect**:
+
+- **SR:** filter excludes 70% of grid — the half where β and 1-β² are in similar binades. The rule does the most work here.
+- **Schwarzschild:** filter excludes 0% — `r ≥ 2.005` always sits in a higher binade than `f = 1-2/r`. Every grid point has binade loss; the rule passes everything.
+- **Pure algebraic & cube-root:** filter excludes 50% — clean cutoff at x = 0.5 (above which f = 1-x drops a binade below x).
+
+### Why the rule is well-behaved despite fixture-specific filter ratios
+
+The observability rule is a uniform implementation of Axiom 6: "measure where binade-loss has occurred; refuse where it hasn't." The different ratios reflect each fixture's physics, not a flaw in the rule:
+
+- Schwarzschild's parameter range starts at r=2 (the singularity boundary); by construction, f is always small compared to r. Every measurement is in the "cancellation regime."
+- SR's parameter range starts at β=0.01; for low β, the operand 1-β² is nearly equal to 1, so no cancellation. The rule correctly excludes low-β regions.
+- Pure-algebraic and cube-root have a linear operand `f = 1-x`; the rule kicks in exactly when x crosses the binade-half threshold at 0.5.
+
+**This is a validation of the rule, not a problem with it.** The same Axiom-6 commitment ("zero must be measured, not assumed") plays out differently per fixture because each fixture has a different parameter/operand binade structure. The rule does not impose a one-size-fits-all filter — it asks the same question (has binade loss happened?) and gets fixture-appropriate answers.
+
+### F4 magnitudes vary dramatically across fixtures
+
+- **SR:** F4 reaches 16 ULP on the observable grid, and 500,000+ ULP in densified β near 1. Strongest microscope signal.
+- **Schwarzschild:** F4 reaches 3-4 ULP. Moderate signal — Schwarzschild's r=2 boundary is "softer" than SR's β=1 limit.
+- **Pure algebraic & cube-root:** F4 reaches 2 ULP. Weak microscope signal — these fixtures have less cancellation dynamic range.
+
+**The dual-arm probe's design payoff (F4 microscope vs wide-lens disagreement near singularity) is most pronounced for SR.** For Schwarzschild and the algebraic fixtures, F4's advantage over other forms is much smaller — measurable but not dramatic.
+
+### F3 is dead across all four fixtures
+
+F3 has 0% nonzero across every fixture tested. This is the same structural reason in every case: F3 = `eta - sqrt(...)` where the sqrt is bit-identical to how eta itself was originally computed. The two values cancel exactly because they are literally the same float64 computation re-run.
+
+**Implication:** F3 is structurally redundant as a measurement form. It could be retired entirely, or used only as a control (it should always return 0; nonzero would indicate apparatus malfunction). The "four forms" are really three forms plus a tautology.
+
+## Combined verdict
+
+The two follow-ups produce a coherent picture:
+
+1. **F2's broad-region "signal" is confirmed as noise, not hidden calibration data.** Weak correlations with all substrate-meaningful candidates; sign distribution roughly balanced; magnitudes concentrated at single-ULP scale.
+
+2. **The observability rule is well-behaved across fixtures.** It implements Axiom 6 uniformly; the fixture-specific filter ratios are correct reflections of each fixture's parameter/operand binade structure, not a defect.
+
+3. **F3 is a tautology across all fixtures.** Worth flagging in V4 docs and possibly retiring from the canonical four-form set.
+
+4. **F4 microscope sensitivity is fixture-specific.** SR amplifies cancellation residuals most dramatically (16 ULP → 500,000 ULP). Schwarzschild and algebraic fixtures show milder F4 advantages (2-4 ULP).
+
+## What this means for the methodology doc decision (closeout §8 revisit)
+
+The methodology doc (`AXIOM_IMPLEMENTATION_EVOLUTION.md`) was deferred because no rule extension was warranted. The follow-up findings **reinforce that deferral** — the rule is correct across all four fixtures. There is no observed structured signal in any fixture's unobservable region that would justify extending the rule.
+
+**A worthwhile related doc:** a short note in `Build_Docs/Architecture/` (or as an addendum to `METROLOGY_PRINCIPLES.md`) recording that:
+- The observability rule is fixture-invariant in form, fixture-specific in effect.
+- F3 is structurally redundant across the standard four-form battery.
+- F4's microscope sensitivity scales with the fixture's binade dynamic range near singularity.
+
+This is a 1-page methodology note worth writing — not the full evolution-doc, but a clarification of what the four-form battery actually measures across fixtures.
+
+## Open questions raised by this audit (lower priority)
+
+1. Is F3's structural tautology a property of the V4 four-form construction, or is it a property of float64 specifically? At higher precisions (mpmath), does F3 still cancel to zero? (Would be a quick check — useful for understanding whether F3 has any latent role at extended precision.)
+2. Does the cube-root fixture's F1 (118/137 nonzero) carry structured signal or richer rounding noise than the square-root-based fixtures? Spearman/Pearson test on cbrt F1 would clarify.
+3. Are there V4 fixtures where the observability rule actually fails to capture the right region? (i.e., where Axiom 6 would be served by a different rule shape.) None observed in this audit, but the test was limited to 4 fixtures.

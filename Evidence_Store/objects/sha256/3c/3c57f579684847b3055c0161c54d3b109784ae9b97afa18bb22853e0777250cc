@@ -1,0 +1,130 @@
+{
+ "authority": "brief section 7 Arm I Stage A (wrap + shift ledgers + the CL-I2 unification) + Will's freeze GO on manifest_v1 + standing rules 1.8/1.9 (HR135)",
+ "campaign_id": "beyond_the_cradle_arm_i",
+ "chain_battery": [
+  "FXIA1",
+  "FXIA2",
+  "FXIA3",
+  "FXIA4",
+  "FXIA5"
+ ],
+ "date_stamped_from_machine": "2026-06-12",
+ "depends_on": {
+  "manifest_v1_sha256": "9b92fad78fd850a3fcf1d079e031258524e9119aceeb3f0aa5e747fb2e12a534",
+  "note": "bench code (schema/intops/fixtures) is pinned inside the frozen manifest and enforced by require_frozen; this prereg pins the manifest itself + the executed float-side instrument.",
+  "precision_flow_py_sha256": "de8f629b0150badaca34047983e0a29bf39ac8fac98b9b4e30b07ae8f7b8aff0"
+ },
+ "expectations": {
+  "chains": {
+   "FXIA1": {
+    "n_entries": 3,
+    "n_nonzero": 2,
+    "true": "6442451093",
+    "value": "-2147483499"
+   },
+   "FXIA2": {
+    "n_entries": 3,
+    "n_nonzero": 3,
+    "true": "79935890986074723687",
+    "value": "6148914691236517223"
+   },
+   "FXIA3": {
+    "n_entries": 5,
+    "n_nonzero": 4,
+    "true": "2147483645",
+    "value": "2147483645"
+   },
+   "FXIA4": {
+    "n_entries": 1,
+    "n_nonzero": 1,
+    "true": "4294967296",
+    "value": "0"
+   },
+   "FXIA5": {
+    "n_entries": 2,
+    "n_nonzero": 1,
+    "true": "352125166812049247254072816",
+    "value": "-8444509513898537488"
+   }
+  },
+  "float_deaths": {
+   "1048576/2^24@q5": true,
+   "1048577/2^24@q44": true,
+   "1048577/2^24@q45": true,
+   "3/2^8@q10": true,
+   "45056/2^16@q3": false,
+   "45056/2^16@q4": true,
+   "45056/2^16@q53": true
+  },
+  "int_deaths": {
+   "-1>>1": false,
+   "-1>>31": false,
+   "-45056>>12": true,
+   "-45056>>13": false,
+   "-45056>>4": true,
+   "1099512676352>>20": true,
+   "1099512676352>>21": false,
+   "45056>>12": true,
+   "45056>>13": false,
+   "45056>>16": false,
+   "45056>>4": true,
+   "9223372036854775808>>1": true
+  }
+ },
+ "float_joint_battery": [
+  [
+   45056,
+   16,
+   53
+  ],
+  [
+   45056,
+   16,
+   4
+  ],
+  [
+   45056,
+   16,
+   3
+  ],
+  [
+   3,
+   8,
+   10
+  ],
+  [
+   1048576,
+   24,
+   5
+  ],
+  [
+   1048577,
+   24,
+   45
+  ],
+  [
+   1048577,
+   24,
+   44
+  ]
+ ],
+ "frozen": true,
+ "organ": "II_a_ledger_walk_v1 (role=probe): wrapped chain evaluation w/ per-op ledger + the DEVIATION FOLD reconstruction (pinned verbatim in ledger_walk.py docstring): add/sub D+=d*2^w; mul-b D=b*D+d*2^w; shl-s D=2^s*D+d*2^w; shr-s D=(D+r)>>s. TRUE == value + D, from ledger and route constants alone.",
+ "predictions": {
+  "PIA.1": "ledger exactness (CL-I1 core): on every FX-I-A chain x width, the deviation-fold reconstruction from (final value, ledger, pinned route) equals the independent native-Z referee evaluation exactly, AND every per-op closure identity holds at every step (value + discard*2^w == raw op result for wrap kinds; value*2^k + discard == input for shifted_out_bits). Units: (fixture, step).",
+  "PIA.2": "the CL-I2 unification: ONE predicate - nu2(operand) >= window_floor - decides residue death on BOTH substrates: integer (window = k, instrument = shr_w) on every pinned FX-I-C pair including both sides of the val2 boundary and negative operands; float (window = b - q + 1, instrument = HR133's rn, IMPORTED never rebuilt) on every pinned dyadic-rational case including both sides of its boundary. The certificate is total agreement of both instruments with the single shared comparison; either instrument disagreeing anywhere refutes the unification. Units: pinned cases (12 integer + 7 float).",
+  "PIA.3": "no dead weight: corrupting ANY single ledger entry breaks reconstruction, on every chain (every-entry corruption sweep - the ledger is load-bearing at every position); the FXIA4 exhibit graded explicitly (value 0 carries nothing; the ledger reconstructs 2^32); the FXIA3 exhibit graded explicitly (value == truth COINCIDENTALLY - nonzero discards cancel in the fold; right-by-cancellation certified lawful, not lucky - the integer cousin of HR134's coincidental-agreement class). Units: corruption trials + 2 exhibits.",
+  "PIA.4": "refusal honesty: out-of-fragment ops (div at Stage A), out-of-range shifts, and non-representable seed constants refuse TYPED; zero refusals on the lawful battery. Units: refusal probes + battery rows.",
+  "PIA.5": "determinism: battery byte-stable x2 (sha256 over records)."
+ },
+ "referee": "native Z chain evaluation (independent, unwrapped); HR133 rn for the float joint cases (executed instrument, content-pinned per rule 1.9).",
+ "shift_battery": [
+  "FXIC1",
+  "FXIC2",
+  "FXIC3"
+ ],
+ "stage": "A",
+ "status_move_rules": "CL-I1 -> DEMONSTRATED iff PIA.1 AND PIA.3 AND PIA.4 PASS. CL-I2 -> DEMONSTRATED iff PIA.2 PASS. Any FAIL: K-I1 halt-until-fixed, chain preserved verbatim, STOP, route to Will.",
+ "telemetry": "permanently non-verdict-bearing (covenant 3).",
+ "version": 1
+}

@@ -1,0 +1,49 @@
+{
+ "PD.1": {
+  "e52_floor_refusal": true,
+  "n_fixtures": 13,
+  "n_ok": 13,
+  "pass": true,
+  "units": "fixtures"
+ },
+ "PD.2": {
+  "closed_form_e_plus_1": true,
+  "pass": true,
+  "q_star_e_ladder": [
+   11,
+   27,
+   41,
+   53
+  ],
+  "q_star_kerr": [
+   4,
+   12
+  ],
+  "units": "cluster fixtures + ladder laws"
+ },
+ "PD.3": {
+  "n_fixtures": 13,
+  "n_ok": 13,
+  "pass": true,
+  "units": "root phenomena"
+ },
+ "PD.4": {
+  "a_typed_transition": true,
+  "b_counts": {
+   "n_e_converged_inside": 16,
+   "n_e_judge": 16,
+   "n_oracle": 22,
+   "n_s3": 22
+  },
+  "pass": true,
+  "units": "ladder members + derived record counts"
+ },
+ "PD.5": "graded across two runs (sha compare by the caller)",
+ "prereg_pin": "04c430dcec105ed4d60043187040a27c8cc23ebaa436a7cf7ca449616151b883",
+ "records_sha256": "3db0bc636949345977c752d47eaac6171aa05b0e9c5053aaa6a4baa81cf42ccb",
+ "status_moves_proposed": {
+  "A9": "presentation only \u2014 scoreboard application reserved to Will (stricter clause, Facet-D GO)",
+  "CL-4": "DEMONSTRATED",
+  "CL-7": "PARTIAL (evidence appended: the lattice-floor refusal \u2014 no float64 stands inside the FXC_e52 cluster)"
+ }
+}

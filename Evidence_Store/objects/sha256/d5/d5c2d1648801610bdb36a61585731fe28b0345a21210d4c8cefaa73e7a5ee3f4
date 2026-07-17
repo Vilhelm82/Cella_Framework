@@ -1,0 +1,321 @@
+{
+  "platform": {
+    "caveat": "numpy.float128 is 80-bit x86 extended on this host (storage 128 bits, ~64-bit mantissa, ~18-19 decimal digits); treated as caveated. Decimal anchors are the true high-precision reference.",
+    "float128_bits": 128,
+    "float128_eps": "1.084202172485504434e-19",
+    "float128_is_ieee_binary128": false,
+    "float128_precision_decimal_digits": 18,
+    "float64_bits": 64,
+    "float64_eps": "2.220446049250313e-16"
+  },
+  "jobs": {
+    "job1_recorded_anchor_dependence": {
+      "cbrt_chain": {
+        "recorded_classification": "degenerate_fit_artifact_not_a_substrate_boundary",
+        "first_dirty_f_per_anchor": {
+          "binary_only": 0.9
+        },
+        "recorded_anchor_invariant": null,
+        "distinct_first_dirty_f_count": 1,
+        "moves_with_anchor": null
+      },
+      "pure_algebraic": {
+        "recorded_classification": "degenerate_fit_artifact_not_a_substrate_boundary",
+        "first_dirty_f_per_anchor": {
+          "decimal_120": 0.5571606608279347,
+          "decimal_50": 0.74291253059288
+        },
+        "recorded_anchor_invariant": false,
+        "distinct_first_dirty_f_count": 2,
+        "moves_with_anchor": true
+      },
+      "schwarzschild": {
+        "recorded_classification": "degenerate_fit_artifact_not_a_substrate_boundary",
+        "first_dirty_f_per_anchor": {
+          "decimal_120": 0.5571606608279347,
+          "decimal_50": 0.74291253059288
+        },
+        "recorded_anchor_invariant": false,
+        "distinct_first_dirty_f_count": 2,
+        "moves_with_anchor": true
+      },
+      "sr": {
+        "recorded_classification": "degenerate_fit_artifact_not_a_substrate_boundary",
+        "first_dirty_f_per_anchor": {
+          "decimal_120": 0.74291253059288,
+          "decimal_50": 0.74291253059288
+        },
+        "recorded_anchor_invariant": true,
+        "distinct_first_dirty_f_count": 1,
+        "moves_with_anchor": false
+      }
+    },
+    "job2_sr_independent_tier_swap": {
+      "target_f": 0.74291253059288,
+      "grid_neighbourhood": [
+        0.74291253059288,
+        0.6749712437142019,
+        0.817692654689763,
+        0.6132433645687965,
+        0.9
+      ],
+      "configs": {
+        "baseline_f32_f64_f128_dec50": {
+          "first_dirty_f": 0.74291253059288,
+          "last_clean_f": 0.817692654689763,
+          "first_dirty_r2": 0.11111111166246701,
+          "first_dirty_n_distinct_nonzero": 1,
+          "first_dirty_per_precision": {
+            "float32": 0.0,
+            "float64": 0.0,
+            "float128": 5.421010862427522e-20,
+            "decimal_50": 0.0
+          }
+        },
+        "baseline_f32_f64_f128_dec120": {
+          "first_dirty_f": 0.74291253059288,
+          "last_clean_f": 0.817692654689763,
+          "first_dirty_r2": 0.11111111166246701,
+          "first_dirty_n_distinct_nonzero": 1,
+          "first_dirty_per_precision": {
+            "float32": 0.0,
+            "float64": 0.0,
+            "float128": 5.421010862427522e-20,
+            "decimal_120": 0.0
+          }
+        },
+        "f128_REMOVED_f32_f64_dec50": {
+          "first_dirty_f": 0.34492000219357877,
+          "last_clean_f": 0.37963897583499634,
+          "first_dirty_r2": 0.24999999860301625,
+          "first_dirty_n_distinct_nonzero": 1,
+          "first_dirty_per_precision": {
+            "float32": 0.0,
+            "float64": 5.551115123125783e-17,
+            "decimal_50": 0.0
+          }
+        },
+        "f128_REMOVED_f32_f64_dec120": {
+          "first_dirty_f": 0.34492000219357877,
+          "last_clean_f": 0.37963897583499634,
+          "first_dirty_r2": 0.24999999860301625,
+          "first_dirty_n_distinct_nonzero": 1,
+          "first_dirty_per_precision": {
+            "float32": 0.0,
+            "float64": 5.551115123125783e-17,
+            "decimal_120": 0.0
+          }
+        },
+        "f128_REMOVED_f32_f64_dec200": {
+          "first_dirty_f": 0.34492000219357877,
+          "last_clean_f": 0.37963897583499634,
+          "first_dirty_r2": 0.24999999860301625,
+          "first_dirty_n_distinct_nonzero": 1,
+          "first_dirty_per_precision": {
+            "float32": 0.0,
+            "float64": 5.551115123125783e-17,
+            "decimal_200": 0.0
+          }
+        },
+        "f128_REMOVED_f32_f64_dec300": {
+          "first_dirty_f": 0.34492000219357877,
+          "last_clean_f": 0.37963897583499634,
+          "first_dirty_r2": 0.24999999860301625,
+          "first_dirty_n_distinct_nonzero": 1,
+          "first_dirty_per_precision": {
+            "float32": 0.0,
+            "float64": 5.551115123125783e-17,
+            "decimal_300": 0.0
+          }
+        },
+        "full_ladder_dec200": {
+          "first_dirty_f": 0.74291253059288,
+          "last_clean_f": 0.817692654689763,
+          "first_dirty_r2": 0.11111111166246701,
+          "first_dirty_n_distinct_nonzero": 1,
+          "first_dirty_per_precision": {
+            "float32": 0.0,
+            "float64": 0.0,
+            "float128": 5.421010862427522e-20,
+            "decimal_200": 0.0
+          }
+        },
+        "full_ladder_dec300": {
+          "first_dirty_f": 0.74291253059288,
+          "last_clean_f": 0.817692654689763,
+          "first_dirty_r2": 0.11111111166246701,
+          "first_dirty_n_distinct_nonzero": 1,
+          "first_dirty_per_precision": {
+            "float32": 0.0,
+            "float64": 0.0,
+            "float128": 5.421010862427522e-20,
+            "decimal_300": 0.0
+          }
+        }
+      },
+      "distinct_first_dirty_f_across_configs": [
+        0.344920002194,
+        0.742912530593
+      ],
+      "sr_boundary_moves_when_tiers_changed": true
+    },
+    "job3_degenerate_fit_distinct_residuals": {
+      "cbrt_chain": {
+        "recorded_classification": "degenerate_fit_artifact_not_a_substrate_boundary",
+        "any_anchor_first_dirty_cell": {
+          "binary_only": {
+            "first_dirty_f": 0.9,
+            "operand": 0.09999999999999998,
+            "r_squared": 0.24999999860369837,
+            "n_tiers_total": 3,
+            "n_tiers_nonzero": 1,
+            "n_distinct_nonzero_residuals": 1,
+            "fit_carries_substrate_signal": false,
+            "per_precision_residual": {
+              "float128": 0.0,
+              "float32": 0.0,
+              "float64": 1.1102230246251565e-16
+            }
+          }
+        },
+        "collapse_float64_decomposition": {
+          "operand": 0.09999999999999998,
+          "dominating_term": "eps_root_sqrt_roundtrip",
+          "ratio": 6.657784052803804,
+          "additive_check": "0",
+          "eps_pow": 1.962293036042915e-17,
+          "eps_root": -1.306452328229448e-16
+        }
+      },
+      "pure_algebraic": {
+        "recorded_classification": "degenerate_fit_artifact_not_a_substrate_boundary",
+        "any_anchor_first_dirty_cell": {
+          "decimal_120": {
+            "first_dirty_f": 0.5571606608279347,
+            "operand": 0.4428393391720653,
+            "r_squared": 0.11111111000759089,
+            "n_tiers_total": 4,
+            "n_tiers_nonzero": 2,
+            "n_distinct_nonzero_residuals": 2,
+            "fit_carries_substrate_signal": true,
+            "per_precision_residual": {
+              "decimal_120": 1e-120,
+              "float128": 0.0,
+              "float32": 0.0,
+              "float64": 1.1102230246251565e-16
+            }
+          },
+          "decimal_50": {
+            "first_dirty_f": 0.74291253059288,
+            "operand": 0.25708746940712,
+            "r_squared": 0.11111111166327536,
+            "n_tiers_total": 4,
+            "n_tiers_nonzero": 1,
+            "n_distinct_nonzero_residuals": 1,
+            "fit_carries_substrate_signal": false,
+            "per_precision_residual": {
+              "decimal_50": 1e-50,
+              "float128": 0.0,
+              "float32": 0.0,
+              "float64": 0.0
+            }
+          }
+        },
+        "collapse_float64_decomposition": {
+          "operand": 0.25708746940712,
+          "dominating_term": "eps_pow_squaring_round",
+          "ratio": 1.0,
+          "additive_check": "0",
+          "eps_pow": -3.1050974754189676e-17,
+          "eps_root": 3.1050974754189676e-17
+        }
+      },
+      "schwarzschild": {
+        "recorded_classification": "degenerate_fit_artifact_not_a_substrate_boundary",
+        "any_anchor_first_dirty_cell": {
+          "decimal_120": {
+            "first_dirty_f": 0.5571606608279347,
+            "operand": 4.5163105963874175,
+            "r_squared": 0.11111111000759089,
+            "n_tiers_total": 4,
+            "n_tiers_nonzero": 1,
+            "n_distinct_nonzero_residuals": 1,
+            "fit_carries_substrate_signal": false,
+            "per_precision_residual": {
+              "decimal_120": 0.0,
+              "float128": 0.0,
+              "float32": 0.0,
+              "float64": 1.1102230246251565e-16
+            }
+          },
+          "decimal_50": {
+            "first_dirty_f": 0.74291253059288,
+            "operand": 7.779453446767679,
+            "r_squared": 0.11111111166327536,
+            "n_tiers_total": 4,
+            "n_tiers_nonzero": 1,
+            "n_distinct_nonzero_residuals": 1,
+            "fit_carries_substrate_signal": false,
+            "per_precision_residual": {
+              "decimal_50": 1e-50,
+              "float128": 0.0,
+              "float32": 0.0,
+              "float64": 0.0
+            }
+          }
+        },
+        "collapse_float64_decomposition": {
+          "operand": 7.779453446767679,
+          "dominating_term": "eps_pow_squaring_round",
+          "ratio": 1.0,
+          "additive_check": "0",
+          "eps_pow": -3.1050974754189676e-17,
+          "eps_root": 3.1050974754189676e-17
+        }
+      },
+      "sr": {
+        "recorded_classification": "degenerate_fit_artifact_not_a_substrate_boundary",
+        "any_anchor_first_dirty_cell": {
+          "decimal_120": {
+            "first_dirty_f": 0.74291253059288,
+            "operand": 0.5070379368519875,
+            "r_squared": 0.11111111166246712,
+            "n_tiers_total": 4,
+            "n_tiers_nonzero": 1,
+            "n_distinct_nonzero_residuals": 1,
+            "fit_carries_substrate_signal": false,
+            "per_precision_residual": {
+              "decimal_120": 0.0,
+              "float128": 5.421010862427522e-20,
+              "float32": 0.0,
+              "float64": 0.0
+            }
+          },
+          "decimal_50": {
+            "first_dirty_f": 0.74291253059288,
+            "operand": 0.5070379368519875,
+            "r_squared": 0.11111111166246712,
+            "n_tiers_total": 4,
+            "n_tiers_nonzero": 1,
+            "n_distinct_nonzero_residuals": 1,
+            "fit_carries_substrate_signal": false,
+            "per_precision_residual": {
+              "decimal_50": 0.0,
+              "float128": 5.421010862427522e-20,
+              "float32": 0.0,
+              "float64": 0.0
+            }
+          }
+        },
+        "collapse_float64_decomposition": {
+          "operand": 0.5070379368519875,
+          "dominating_term": "eps_pow_squaring_round",
+          "ratio": 1.0,
+          "additive_check": "0",
+          "eps_pow": 4.9312238722904746e-17,
+          "eps_root": -4.9312238722904746e-17
+        }
+      }
+    }
+  }
+}

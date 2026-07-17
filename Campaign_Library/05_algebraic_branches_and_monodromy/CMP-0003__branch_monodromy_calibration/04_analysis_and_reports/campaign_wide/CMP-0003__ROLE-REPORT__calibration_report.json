@@ -1,0 +1,514 @@
+{
+  "console_log": "[1] Multiplication  P=D*S, solve for D\n    loop param P around 5.0: monodromy = identity                       (predicted: identity)   PASS\n    degree 1 in solved var -> empty discriminant, oracle n/a                                     PASS\n\n[2] Keystone  F=x1^2+x1*x2+x3^2-3, solve for x1, fix x3=2\n    loop x2 around +2, radius=0.5: track=[1,0]  prox=[1,0]  oracle=[1,0]                         PASS\n    loop x2 around +2, radius=1.0: track=[1,0]  prox=[1,0]  oracle=[1,0]                         PASS\n    loop x2 around +2, radius=1.5: track=[1,0]  prox=[1,0]  oracle=[1,0]                         PASS\n    loop x2 around -2, radius=1.0: track=[1,0]  prox=[1,0]  oracle=[1,0]                         PASS\n    contractible loop x2 around 10, radius=1.0: track=identity prox=identity oracle=identity     PASS\n    strained loop x2 around 4, radius=1.0:      track=identity prox=identity oracle=identity     PASS\n    closure  m(+2) \u2218 m(-2) = identity                                   (predicted: identity)   PASS\n    gauge  F -> 2.5*F, loop +2 radius 1: monodromy = [1,0]              (must equal ungauged)    PASS\n    every keystone tracker permutation equals oracle permutation                                 PASS\n    every keystone loop: pi_track == pi_prox                                                     PASS\n    every reported monodromy has status CERTIFIED_PERMUTATION                                    PASS\n",
+  "controls": [
+    {
+      "detail": {
+        "plus_radius_permutations": [
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ]
+      },
+      "name": "radius_independence",
+      "passed": true
+    },
+    {
+      "detail": {
+        "permutation": [
+          0,
+          1
+        ]
+      },
+      "name": "contractible_loop_identity",
+      "passed": true
+    },
+    {
+      "detail": {
+        "composition": [
+          0,
+          1
+        ],
+        "m_minus": [
+          1,
+          0
+        ],
+        "m_plus": [
+          1,
+          0
+        ]
+      },
+      "name": "composition_closure",
+      "passed": true
+    },
+    {
+      "detail": {
+        "gauged_mu_2_5": [
+          1,
+          0
+        ],
+        "ungauged": [
+          1,
+          0
+        ]
+      },
+      "name": "gauge_invariance",
+      "passed": true
+    },
+    {
+      "detail": {
+        "non_structural_statuses": [
+          [
+            "keystone_plus_r0_5",
+            "CERTIFIED_PERMUTATION"
+          ],
+          [
+            "keystone_plus_r1_0",
+            "CERTIFIED_PERMUTATION"
+          ],
+          [
+            "keystone_plus_r1_5",
+            "CERTIFIED_PERMUTATION"
+          ],
+          [
+            "keystone_minus_r1_0",
+            "CERTIFIED_PERMUTATION"
+          ],
+          [
+            "keystone_contractible_10_r1_0",
+            "CERTIFIED_PERMUTATION"
+          ],
+          [
+            "keystone_strained_4_r1_0",
+            "CERTIFIED_PERMUTATION"
+          ],
+          [
+            "keystone_gauge_2_5_plus_r1_0",
+            "CERTIFIED_PERMUTATION"
+          ]
+        ]
+      },
+      "name": "certified_closure",
+      "passed": true
+    },
+    {
+      "detail": {
+        "keystone_oracle_matches": [
+          [
+            "keystone_plus_r0_5",
+            true
+          ],
+          [
+            "keystone_plus_r1_0",
+            true
+          ],
+          [
+            "keystone_plus_r1_5",
+            true
+          ],
+          [
+            "keystone_minus_r1_0",
+            true
+          ],
+          [
+            "keystone_contractible_10_r1_0",
+            true
+          ],
+          [
+            "keystone_strained_4_r1_0",
+            true
+          ],
+          [
+            "keystone_gauge_2_5_plus_r1_0",
+            true
+          ]
+        ]
+      },
+      "name": "discriminant_oracle_agreement",
+      "passed": true
+    },
+    {
+      "detail": {
+        "permutation": [
+          0,
+          1
+        ]
+      },
+      "name": "strained_contractible_loop_identity",
+      "passed": true
+    }
+  ],
+  "loops": [
+    {
+      "branch_locus": "empty",
+      "center": 5.0,
+      "closure_certificate": {
+        "best_assignment_pi_prox": [
+          0
+        ],
+        "best_cost": 0.0,
+        "bijective": true,
+        "initial_min_sep": 0.0,
+        "passed": true,
+        "second_best_cost": null,
+        "status": "CERTIFIED_PERMUTATION",
+        "track_prox_agree": true
+      },
+      "discriminant_oracle": {
+        "applies": false
+      },
+      "fixed_params": {
+        "S": 2
+      },
+      "loop_name": "multiplication_degree1",
+      "loop_param": "P",
+      "monodromy": "identity",
+      "n_steps": 0,
+      "pi_track": [
+        0
+      ],
+      "radius": 1.0,
+      "root_fidelity_max_residual": 0.0,
+      "solved_role": "D",
+      "status": "CERTIFIED_PERMUTATION",
+      "step_safety_max_motion_ratio": 0.0,
+      "surface": "multiplication"
+    },
+    {
+      "center": 2,
+      "closure_certificate": {
+        "best_assignment_pi_prox": [
+          1,
+          0
+        ],
+        "best_cost": 0.0,
+        "bijective": true,
+        "initial_min_sep": 1.5,
+        "passed": true,
+        "second_best_cost": 1.5,
+        "status": "CERTIFIED_PERMUTATION",
+        "track_prox_agree": true
+      },
+      "discriminant_oracle": {
+        "applies": true,
+        "branch_points": [
+          -2,
+          2
+        ],
+        "oracle_monodromy": [
+          1,
+          0
+        ],
+        "status": "OK",
+        "tracker_matches_oracle": true,
+        "w_delta": 1
+      },
+      "fixed_params": {
+        "x3": 2
+      },
+      "loop_name": "keystone_plus_r0_5",
+      "n_steps": 4000,
+      "pi_track": [
+        1,
+        0
+      ],
+      "radius": 0.5,
+      "root_fidelity_max_residual": 5.667352310773115e-16,
+      "solved_role": "x1",
+      "status": "CERTIFIED_PERMUTATION",
+      "step_safety_max_motion_ratio": 0.0006981316715565576,
+      "surface": "keystone"
+    },
+    {
+      "center": 2,
+      "closure_certificate": {
+        "best_assignment_pi_prox": [
+          1,
+          0
+        ],
+        "best_cost": 0.0,
+        "bijective": true,
+        "initial_min_sep": 2.236067977499789,
+        "passed": true,
+        "second_best_cost": 2.236067977499789,
+        "status": "CERTIFIED_PERMUTATION",
+        "track_prox_agree": true
+      },
+      "discriminant_oracle": {
+        "applies": true,
+        "branch_points": [
+          -2,
+          2
+        ],
+        "oracle_monodromy": [
+          1,
+          0
+        ],
+        "status": "OK",
+        "tracker_matches_oracle": true,
+        "w_delta": 1
+      },
+      "fixed_params": {
+        "x3": 2
+      },
+      "loop_name": "keystone_plus_r1_0",
+      "n_steps": 4000,
+      "pi_track": [
+        1,
+        0
+      ],
+      "radius": 1.0,
+      "root_fidelity_max_residual": 7.136886099838201e-16,
+      "solved_role": "x1",
+      "status": "CERTIFIED_PERMUTATION",
+      "step_safety_max_motion_ratio": 0.0008224796689997072,
+      "surface": "keystone"
+    },
+    {
+      "center": 2,
+      "closure_certificate": {
+        "best_assignment_pi_prox": [
+          1,
+          0
+        ],
+        "best_cost": 0.0,
+        "bijective": true,
+        "initial_min_sep": 2.8722813232690134,
+        "passed": true,
+        "second_best_cost": 2.8722813232690134,
+        "status": "CERTIFIED_PERMUTATION",
+        "track_prox_agree": true
+      },
+      "discriminant_oracle": {
+        "applies": true,
+        "branch_points": [
+          -2,
+          2
+        ],
+        "oracle_monodromy": [
+          1,
+          0
+        ],
+        "status": "OK",
+        "tracker_matches_oracle": true,
+        "w_delta": 1
+      },
+      "fixed_params": {
+        "x3": 2
+      },
+      "loop_name": "keystone_plus_r1_5",
+      "n_steps": 4000,
+      "pi_track": [
+        1,
+        0
+      ],
+      "radius": 1.5,
+      "root_fidelity_max_residual": 7.581375427945589e-16,
+      "solved_role": "x1",
+      "status": "CERTIFIED_PERMUTATION",
+      "step_safety_max_motion_ratio": 0.0009140177097577811,
+      "surface": "keystone"
+    },
+    {
+      "center": -2,
+      "closure_certificate": {
+        "best_assignment_pi_prox": [
+          1,
+          0
+        ],
+        "best_cost": 0.0,
+        "bijective": true,
+        "initial_min_sep": 1.7320508075688772,
+        "passed": true,
+        "second_best_cost": 1.7320508075688772,
+        "status": "CERTIFIED_PERMUTATION",
+        "track_prox_agree": true
+      },
+      "discriminant_oracle": {
+        "applies": true,
+        "branch_points": [
+          -2,
+          2
+        ],
+        "oracle_monodromy": [
+          1,
+          0
+        ],
+        "status": "OK",
+        "tracker_matches_oracle": true,
+        "w_delta": 1
+      },
+      "fixed_params": {
+        "x3": 2
+      },
+      "loop_name": "keystone_minus_r1_0",
+      "n_steps": 4000,
+      "pi_track": [
+        1,
+        0
+      ],
+      "radius": 1.0,
+      "root_fidelity_max_residual": 7.8360798756855605e-16,
+      "solved_role": "x1",
+      "status": "CERTIFIED_PERMUTATION",
+      "step_safety_max_motion_ratio": 0.0008224796689996523,
+      "surface": "keystone"
+    },
+    {
+      "center": 10,
+      "closure_certificate": {
+        "best_assignment_pi_prox": [
+          0,
+          1
+        ],
+        "best_cost": 0.0,
+        "bijective": true,
+        "initial_min_sep": 10.816653826391969,
+        "passed": true,
+        "second_best_cost": 10.816653826391969,
+        "status": "CERTIFIED_PERMUTATION",
+        "track_prox_agree": true
+      },
+      "discriminant_oracle": {
+        "applies": true,
+        "branch_points": [
+          -2,
+          2
+        ],
+        "oracle_monodromy": [
+          0,
+          1
+        ],
+        "status": "OK",
+        "tracker_matches_oracle": true,
+        "w_delta": 0
+      },
+      "fixed_params": {
+        "x3": 2
+      },
+      "loop_name": "keystone_contractible_10_r1_0",
+      "n_steps": 4000,
+      "pi_track": [
+        0,
+        1
+      ],
+      "radius": 1.0,
+      "root_fidelity_max_residual": 8.415141878210511e-16,
+      "solved_role": "x1",
+      "status": "CERTIFIED_PERMUTATION",
+      "step_safety_max_motion_ratio": 0.00018130419374090174,
+      "surface": "keystone"
+    },
+    {
+      "center": 4,
+      "closure_certificate": {
+        "best_assignment_pi_prox": [
+          0,
+          1
+        ],
+        "best_cost": 0.0,
+        "bijective": true,
+        "initial_min_sep": 4.58257569495584,
+        "passed": true,
+        "second_best_cost": 4.58257569495584,
+        "status": "CERTIFIED_PERMUTATION",
+        "track_prox_agree": true
+      },
+      "discriminant_oracle": {
+        "applies": true,
+        "branch_points": [
+          -2,
+          2
+        ],
+        "oracle_monodromy": [
+          0,
+          1
+        ],
+        "status": "OK",
+        "tracker_matches_oracle": true,
+        "w_delta": 0
+      },
+      "fixed_params": {
+        "x3": 2
+      },
+      "loop_name": "keystone_strained_4_r1_0",
+      "n_steps": 4000,
+      "pi_track": [
+        0,
+        1
+      ],
+      "radius": 1.0,
+      "root_fidelity_max_residual": 8.861399574689865e-16,
+      "solved_role": "x1",
+      "status": "CERTIFIED_PERMUTATION",
+      "step_safety_max_motion_ratio": 0.0008224793854202819,
+      "surface": "keystone"
+    },
+    {
+      "center": 2,
+      "closure_certificate": {
+        "best_assignment_pi_prox": [
+          1,
+          0
+        ],
+        "best_cost": 0.0,
+        "bijective": true,
+        "initial_min_sep": 2.236067977499789,
+        "passed": true,
+        "second_best_cost": 2.236067977499789,
+        "status": "CERTIFIED_PERMUTATION",
+        "track_prox_agree": true
+      },
+      "discriminant_oracle": {
+        "applies": true,
+        "branch_points": [
+          -2,
+          2
+        ],
+        "oracle_monodromy": [
+          1,
+          0
+        ],
+        "status": "OK",
+        "tracker_matches_oracle": true,
+        "w_delta": 1
+      },
+      "fixed_params": {
+        "x3": 2
+      },
+      "loop_name": "keystone_gauge_2_5_plus_r1_0",
+      "n_steps": 4000,
+      "pi_track": [
+        1,
+        0
+      ],
+      "radius": 1.0,
+      "root_fidelity_max_residual": 6.189944687734732e-16,
+      "solved_role": "x1",
+      "status": "CERTIFIED_PERMUTATION",
+      "step_safety_max_motion_ratio": 0.0008224796689997072,
+      "surface": "keystone"
+    }
+  ],
+  "overall_status": "PASS",
+  "status_counts": {
+    "CERTIFIED_PERMUTATION": 8,
+    "CONTINUATION_PROXIMITY_DISAGREEMENT": 0,
+    "DISCRIMINANT_ORACLE_MISMATCH": 0,
+    "LOOP_HITS_DISCRIMINANT": 0,
+    "NON_BIJECTIVE_CLOSURE": 0,
+    "ROOT_FIDELITY_FAILURE": 0,
+    "UNCERTIFIED_CLOSURE_MATCH": 0,
+    "UNCERTIFIED_STEP_MATCH": 0
+  },
+  "test_name": "branch_monodromy_calibration_v2",
+  "timestamp": "2026-06-27T13:42:04+10:00"
+}

@@ -1,0 +1,562 @@
+#!/usr/bin/env python3
+"""RetestA: F2 Sterbenz-region b_k probe carrying residuals as EXACT RATIONALS.
+
+EVAL-LAYER ONLY. RESEARCH-GRADE. No substrate promotion. numpy / mpmath /
+Decimal / fractions.Fraction are MEASUREMENT APPARATUS only; no mathematical
+constant is hardcoded as substrate truth.
+
+------------------------------------------------------------------------------
+WHAT THIS RE-RUNS
+------------------------------------------------------------------------------
+Theorem 3 / Task 017c precision-scaling separation:
+
+        C_{p,k} = a + u_p * b_k
+
+  a   = path-invariant geometric amplitude
+  b_k = path-dependent conditioning amplitude   <-- the OPEN object
+  u_p = unit roundoff at precision p
+
+Validated R^2 = 1.0 in the *regular* region. The OPEN sub-claim is the
+structure of b_k inside the *Sterbenz-exact* region on path F2.
+
+Prior probe (Phase 2A) ran path F1 and found it DEGENERATE near the boundary:
+at the collapse cells the residual was exactly 0 at every precision tier
+*except* float128 (which was merely its own 80-bit noise floor), giving < 2
+distinct nonzero residuals per cell -> a degenerate fit. F1 residuals are
+exactly 0 there by an equal-and-opposite parity cancellation.
+
+------------------------------------------------------------------------------
+THE FORMS (pure_algebraic fixture: f = 1 - x, R = sqrt(f), constraint R^2-f = 0)
+------------------------------------------------------------------------------
+  F1 := R^2 - f_direct       (f_direct precomputed as 1-x)
+  F2 := R^2 - 1 + x          (split addition; x_term = x)   <-- load-bearing
+  algebraic truth of BOTH is exactly 0, so the computed F-value IS the residual.
+
+Sterbenz region: x <= 1/2  (R^2 = 1-x >= 1/2 makes R^2 - 1 Sterbenz-exact).
+
+------------------------------------------------------------------------------
+THE FIX vs Phase 2A
+------------------------------------------------------------------------------
+1. Carry the residual as an EXACT Fraction (every IEEE float is an exact dyadic
+   rational; every Decimal result is an exact decimal rational). This escapes
+   the float128 80-bit noise floor entirely -- no tier "bottoms out".
+2. Per-cell measurement (not the RMS-over-region aggregate Task 017c fitted),
+   so the per-cell non-degeneracy condition (>= 2 distinct nonzero residuals
+   across the ladder) can be evaluated directly -- the exact condition F1 failed.
+3. Grid ENGINEERED so each cell yields >= 2 distinct nonzero residuals: we use
+   dyadic x with a controlled number of significant bits so that float32,
+   float64, float128 round R = sqrt(1-x) to genuinely different values and the
+   F2 residual differs per tier.
+
+Run:
+    PYTHONPATH=src python3 scratch/_revalidation/retestA/f2_sterbenz_exact_rational_probe.py
+"""
+
+from __future__ import annotations
+
+import json
+import math
+from dataclasses import dataclass
+from decimal import Decimal, localcontext
+from fractions import Fraction
+from pathlib import Path
+from typing import Any, Callable
+
+import numpy as np
+
+OUT_DIR = Path(__file__).resolve().parent
+
+# ---------------------------------------------------------------------------
+# Precision ladder.  Each entry: (label, u_p as exact Fraction, residual fn).
+# u_p (unit roundoff) conventions match Task 017c / unit_roundoff.u_p:
+#   binary tier:  eps/2 = 2^-(t)  with t = mantissa bits (incl. implicit)
+#   decimal tier: 5 * 10^-prec
+# ---------------------------------------------------------------------------
+
+# float128 on this host is 80-bit x86 extended: 64-bit mantissa -> u = 2^-64.
+FLOAT_TIERS = {
+    "float32": (np.float32, 24),    # 24-bit mantissa  -> u = 2^-24
+    "float64": (np.float64, 53),    # 53-bit mantissa  -> u = 2^-53
+    "float128": (np.float128, 64),  # 80-bit extended  -> u = 2^-64 (host caveat)
+}
+DECIMAL_TIERS = (30, 50, 80, 120)   # decimal "precisions" with much smaller u_p
+
+
+def u_p_fraction(label: str) -> Fraction:
+    if label in FLOAT_TIERS:
+        t = FLOAT_TIERS[label][1]
+        return Fraction(1, 2) ** t
+    if label.startswith("decimal_"):
+        prec = int(label.split("_", 1)[1])
+        return Fraction(5) * Fraction(10) ** (-prec)
+    raise ValueError(label)
+
+
+def _float_to_fraction(value: Any) -> Fraction:
+    """Exact rational value of an IEEE float (incl. numpy scalars)."""
+    return Fraction(float(value))
+
+
+def f2_residual_binary(x_frac: Fraction, dtype, path: str) -> Fraction:
+    """Compute F1 or F2 at a binary float precision, returning the EXACT
+    Fraction value of the computed (rounded) result. x is rounded into the
+    dtype first (it is the operand); all subsequent ops are dtype-rounded.
+
+    F2 := fl(fl(fl(R*R) - 1) + x)   where R = fl(sqrt(fl(1 - x)))
+    F1 := fl(fl(R*R) - fl(1 - x))
+    """
+    s = dtype
+    one = s(1.0)
+    x = s(float(x_frac))            # operand rounded into the tier
+    direct = one - x                # fl(1 - x)
+    root = np.sqrt(direct)          # fl(sqrt(direct))  (correctly rounded)
+    power = root * root             # fl(R*R)
+    if path == "F1":
+        result = power - direct
+    elif path == "F2":
+        result = (power - one) + x  # split addition, matches _payload F2
+    else:
+        raise ValueError(path)
+    return _float_to_fraction(result)
+
+
+def f2_residual_decimal(x_frac: Fraction, prec: int, path: str) -> Fraction:
+    """Compute F1 or F2 at a Decimal precision, returning the EXACT Fraction
+    value of the computed result. Mirrors the binary routing exactly."""
+    with localcontext() as ctx:
+        ctx.prec = prec
+        one = Decimal(1)
+        # operand rounded into this decimal tier
+        x = +Decimal(x_frac.numerator) / Decimal(x_frac.denominator)
+        direct = one - x
+        root = direct.sqrt()
+        power = root * root
+        if path == "F1":
+            result = power - direct
+        elif path == "F2":
+            result = (power - one) + x
+        else:
+            raise ValueError(path)
+    # exact rational of a Decimal
+    return Fraction(result)
+
+
+def residual_exact(x_frac: Fraction, label: str, path: str) -> Fraction:
+    if label in FLOAT_TIERS:
+        return f2_residual_binary(x_frac, FLOAT_TIERS[label][0], path)
+    if label.startswith("decimal_"):
+        return f2_residual_decimal(x_frac, int(label.split("_", 1)[1]), path)
+    raise ValueError(label)
+
+
+LADDER = list(FLOAT_TIERS.keys()) + [f"decimal_{p}" for p in DECIMAL_TIERS]
+
+
+# ---------------------------------------------------------------------------
+# C_{p,k} normalization.
+#
+# Task 017c used C_p_k_summary == raw residual (NO f^(alpha-1)L(f) division for
+# the aggregate fit). For pure_algebraic sqrt, alpha-1 maps so that the
+# reference f^(alpha-1)L(f) is ~ O(1) near the branch and the raw residual was
+# used directly.  We REPORT BOTH:
+#   C_raw  = residual                         (matches Task 017c aggregate)
+#   C_norm = residual / f                     (f = 1-x; the natural sqrt-branch
+#                                              reference, harmless O(1) rescale
+#                                              in the Sterbenz region where
+#                                              f in [0.5, 1))
+# Per-cell b_k is reported for both so the structure is visible regardless of
+# normalization choice; conclusions are drawn from C_raw to match 017c, with
+# C_norm as a robustness check.
+# ---------------------------------------------------------------------------
+
+def normalization_f(x_frac: Fraction) -> Fraction:
+    return Fraction(1) - x_frac  # f = 1 - x, exact
+
+
+# ---------------------------------------------------------------------------
+# Exact / high-precision linear fit of C = a + u_p * b  over the ladder.
+# Uses exact-rational ordinary least squares (closed form), then converts to
+# float only at the very end for reporting.  No numpy lstsq float roundoff.
+# ---------------------------------------------------------------------------
+
+@dataclass
+class ExactFit:
+    a: Fraction
+    b: Fraction
+    n: int
+    ss_res_over_ss_tot_float: float  # 1 - R^2  (float, for reporting only)
+    r_squared_float: float
+    distinct_nonzero: int
+    points: list[tuple[str, Fraction, Fraction]]  # (label, u_p, C)
+
+
+def exact_linear_fit(points: list[tuple[str, Fraction, Fraction]]) -> ExactFit:
+    """Closed-form exact-rational OLS:  C = a + b * u_p."""
+    n = len(points)
+    xs = [p[1] for p in points]
+    ys = [p[2] for p in points]
+    sx = sum(xs, Fraction(0))
+    sy = sum(ys, Fraction(0))
+    sxx = sum((x * x for x in xs), Fraction(0))
+    sxy = sum((x * y for x, y in zip(xs, ys)), Fraction(0))
+    denom = Fraction(n) * sxx - sx * sx
+    if denom == 0:
+        b = Fraction(0)
+        a = sy / Fraction(n) if n else Fraction(0)
+    else:
+        b = (Fraction(n) * sxy - sx * sy) / denom
+        a = (sy - b * sx) / Fraction(n)
+    # exact residual sum of squares and total sum of squares
+    ybar = sy / Fraction(n)
+    ss_res = sum(((y - (a + b * x)) ** 2 for x, y in zip(xs, ys)), Fraction(0))
+    ss_tot = sum(((y - ybar) ** 2 for y in ys), Fraction(0))
+    if ss_tot == 0:
+        r2 = 1.0 if ss_res == 0 else 0.0
+        ratio = 0.0 if ss_res == 0 else float("inf")
+    else:
+        ratio = float(ss_res / ss_tot)
+        r2 = 1.0 - ratio
+    nonzero = {y for y in ys if y != 0}
+    return ExactFit(
+        a=a, b=b, n=n,
+        ss_res_over_ss_tot_float=ratio,
+        r_squared_float=r2,
+        distinct_nonzero=len(nonzero),
+        points=points,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Grids.
+# ---------------------------------------------------------------------------
+
+def canonical_x_grid() -> list[Fraction]:
+    """Exact rationals matching the Task 017c canonical 137-point grid
+    (x in [0.01, 0.99]); these x are NOT dyadic, so each tier rounds the
+    operand differently -> a fair retrodiction of the published behavior."""
+    x_min, x_max, count = Fraction(1, 100), Fraction(99, 100), 137
+    interval = (x_max - x_min) / Fraction(count - 1)
+    # Note: float construction in 017c introduces its own rounding; we mirror
+    # by using the exact float value of the float-built grid point so the
+    # retrodiction is faithful to the published artifact.
+    out = []
+    for i in range(count):
+        xf = float(0.01 + (0.99 - 0.01) / float(count - 1) * i)
+        out.append(Fraction(xf))
+    return out
+
+
+def engineered_dyadic_grid(bits: int = 12, count: int = 400) -> list[Fraction]:
+    """Engineered Sterbenz-region grid of DYADIC x with `bits` significant
+    fractional bits, spread over (0, 1/2). Dyadic x is exactly representable
+    in every binary tier (no operand-rounding noise), so the ONLY source of
+    per-tier residual variation is the sqrt rounding -- which differs across
+    float32 / float64 / float128 / decimal, giving distinct nonzero residuals.
+    This is engineered to satisfy the >= 2-distinct-nonzero gate the F1 probe
+    failed."""
+    out = []
+    # x = k / 2^bits, k = 1 .. 2^(bits-1) - 1  (so x in (0, 1/2))
+    kmax = (1 << (bits - 1)) - 1
+    if count >= kmax:
+        ks = list(range(1, kmax + 1))
+    else:
+        # evenly spaced k across the open interval (0, 1/2)
+        ks = sorted(set(max(1, round(kmax * (i + 1) / (count + 1))) for i in range(count)))
+    for k in ks:
+        out.append(Fraction(k, 1 << bits))
+    return out
+
+
+def regular_region_dyadic_grid(bits: int = 12, count: int = 400) -> list[Fraction]:
+    """Same construction but x in (1/2, 1): the REGULAR region, for the
+    head-to-head b_k comparison."""
+    out = []
+    kmin = (1 << (bits - 1)) + 1
+    kmax = (1 << bits) - 1
+    span = list(range(kmin, kmax + 1))
+    if count < len(span):
+        idx = sorted(set(round((len(span) - 1) * i / (count - 1)) for i in range(count)))
+        span = [span[i] for i in idx]
+    for k in span:
+        out.append(Fraction(k, 1 << bits))
+    return out
+
+
+# ---------------------------------------------------------------------------
+# RETRODICTION GATE.
+# ---------------------------------------------------------------------------
+
+def retrodiction_gate() -> dict[str, Any]:
+    """Reproduce, on our grid, two KNOWN facts before interpreting any b_k:
+
+    (G1) Sterbenz boundary at x = 0.5: for x <= 1/2, R^2 = 1-x >= 1/2 so the
+         subtraction R^2 - 1 is Sterbenz-exact (no rounding) in float64. We
+         verify the float64 F2 first-subtraction (power - 1) equals the exact
+         rational (power - 1) with ZERO rounding for x <= 1/2 on a dyadic grid,
+         and that this Sterbenz-exactness can break for x > 1/2.
+
+    (G2) F2 grain: the float64 F2 residual lives on the half-integer lattice of
+         the local ULP, i.e. residual / ulp(scale) is (close to) a half-integer
+         / integer multiple. We confirm the residuals are exact multiples of a
+         power-of-two ULP (dyadic), which is the 'grain'.
+    """
+    # --- G1: Sterbenz-exactness of (power - 1) for x <= 1/2 -----------------
+    s = np.float64
+    one = s(1.0)
+    g1_rows = []
+    g1_pass = True
+    test_xs = [Fraction(k, 1 << 12) for k in (1, 7, 100, 1000, 2047)]  # x <= 1/2
+    test_xs += [Fraction(2049, 1 << 12), Fraction(3000, 1 << 12), Fraction(4000, 1 << 12)]  # x > 1/2
+    for xf in test_xs:
+        x = s(float(xf))
+        direct = one - x
+        root = np.sqrt(direct)
+        power = root * root
+        first_sub = power - one                      # fl(power - 1)
+        exact_first_sub = _float_to_fraction(power) - Fraction(1)  # exact (power-1)
+        sterbenz_exact = (_float_to_fraction(first_sub) == exact_first_sub)
+        in_sterbenz = (xf <= Fraction(1, 2))
+        # Sterbenz THEOREM: a - b exact when b/2 <= a <= 2b. Here a=power(~1-x),
+        # b=1. For x<=1/2, power in [1/2,1], so 1/2 <= power <= 2*1 -> exact.
+        g1_rows.append({
+            "x": float(xf),
+            "in_sterbenz_region": in_sterbenz,
+            "power_minus_1_is_exact": sterbenz_exact,
+        })
+        if in_sterbenz and not sterbenz_exact:
+            g1_pass = False
+    # boundary cell x = 1/2 exactly
+    xb = s(0.5)
+    db = one - xb
+    rb = np.sqrt(db)
+    pb = rb * rb
+    fsb = pb - one
+    boundary_exact = (_float_to_fraction(fsb) == _float_to_fraction(pb) - Fraction(1))
+
+    # --- G2: F2 residual lies on a dyadic (power-of-two) grain --------------
+    # Every binary-float F2 residual is exactly an integer multiple of some
+    # 2^-m (its value is dyadic). We confirm the residual denominators are all
+    # powers of two (the grain is dyadic), and report the half-integer-ULP
+    # character: residual / ulp(power) where ulp(power) is the float64 ULP at
+    # the scale of `power`.
+    grain_rows = []
+    grain_pass = True
+    for xf in [Fraction(k, 1 << 12) for k in (1, 5, 37, 511, 1023, 2047)]:
+        x = s(float(xf))
+        direct = one - x
+        root = np.sqrt(direct)
+        power = root * root
+        res_f2 = (power - one) + x
+        res_q = _float_to_fraction(res_f2)
+        den = res_q.denominator
+        is_dyadic = (den & (den - 1)) == 0  # power of two (or 1)
+        # local ULP at the residual scale (half-integer lattice check)
+        if res_f2 != 0.0:
+            _, exp = math.frexp(float(res_f2))
+            ulp = 2.0 ** (exp - 53)
+            ratio_to_ulp = float(res_q / Fraction(ulp))
+        else:
+            ulp = None
+            ratio_to_ulp = 0.0
+        grain_rows.append({
+            "x": float(xf),
+            "f2_residual": float(res_f2),
+            "residual_denominator_is_power_of_two": is_dyadic,
+            "residual_over_local_ulp": ratio_to_ulp,
+        })
+        if not is_dyadic:
+            grain_pass = False
+
+    return {
+        "G1_sterbenz_boundary_at_half": {
+            "pass": bool(g1_pass),
+            "boundary_cell_x_eq_half_power_minus_1_exact": bool(boundary_exact),
+            "rows": g1_rows,
+            "interpretation": (
+                "For x <= 1/2, fl(power - 1) is exact (Sterbenz): no rounding in "
+                "the first F2 subtraction. This is the Sterbenz boundary at x=0.5."
+            ),
+        },
+        "G2_f2_dyadic_grain": {
+            "pass": bool(grain_pass),
+            "rows": grain_rows,
+            "interpretation": (
+                "Every float64 F2 residual is an exact integer multiple of a "
+                "power-of-two ULP (dyadic grain); residual/local_ulp reveals the "
+                "half-integer-lattice character."
+            ),
+        },
+        "gate_pass": bool(g1_pass and grain_pass and boundary_exact),
+    }
+
+
+# ---------------------------------------------------------------------------
+# Per-cell measurement + region aggregation.
+# ---------------------------------------------------------------------------
+
+def measure_cell(x_frac: Fraction, path: str) -> dict[str, Any]:
+    raw_pts: list[tuple[str, Fraction, Fraction]] = []
+    norm_pts: list[tuple[str, Fraction, Fraction]] = []
+    fnorm = normalization_f(x_frac)
+    per_prec = {}
+    for label in LADDER:
+        res = residual_exact(x_frac, label, path)
+        up = u_p_fraction(label)
+        raw_pts.append((label, up, res))
+        norm_pts.append((label, up, res / fnorm if fnorm != 0 else Fraction(0)))
+        per_prec[label] = {
+            "u_p": float(up),
+            "residual_exact_float": float(res),
+            "residual_is_zero": res == 0,
+        }
+    fit_raw = exact_linear_fit(raw_pts)
+    fit_norm = exact_linear_fit(norm_pts)
+    return {
+        "x": float(x_frac),
+        "x_num": x_frac.numerator,
+        "x_den": x_frac.denominator,
+        "f": float(fnorm),
+        "per_precision": per_prec,
+        "distinct_nonzero_residuals": fit_raw.distinct_nonzero,
+        "meets_gate_ge2_distinct_nonzero": fit_raw.distinct_nonzero >= 2,
+        "b_k_raw": float(fit_raw.b),
+        "a_k_raw": float(fit_raw.a),
+        "r_squared_raw": fit_raw.r_squared_float,
+        "b_k_norm": float(fit_norm.b),
+        "a_k_norm": float(fit_norm.a),
+        "r_squared_norm": fit_norm.r_squared_float,
+    }
+
+
+def _spread(values: list[float]) -> dict[str, float]:
+    if not values:
+        return {"n": 0}
+    vs = sorted(values)
+    n = len(vs)
+    mean = sum(vs) / n
+    var = sum((v - mean) ** 2 for v in vs) / n if n > 1 else 0.0
+    std = var ** 0.5
+    # percentile-based 95% spread
+    lo = vs[int(0.025 * (n - 1))]
+    hi = vs[int(0.975 * (n - 1))]
+    return {
+        "n": n,
+        "mean": mean,
+        "std": std,
+        "median": vs[n // 2],
+        "min": vs[0],
+        "max": vs[-1],
+        "p2_5": lo,
+        "p97_5": hi,
+        "frac_positive": sum(1 for v in vs if v > 0) / n,
+        "frac_zero": sum(1 for v in vs if v == 0) / n,
+    }
+
+
+def aggregate(cells: list[dict[str, Any]], gate_only: bool) -> dict[str, Any]:
+    pool = [c for c in cells if (c["meets_gate_ge2_distinct_nonzero"] or not gate_only)]
+    return {
+        "n_cells": len(cells),
+        "n_cells_meeting_gate": sum(1 for c in cells if c["meets_gate_ge2_distinct_nonzero"]),
+        "frac_cells_meeting_gate": (
+            sum(1 for c in cells if c["meets_gate_ge2_distinct_nonzero"]) / len(cells)
+            if cells else 0.0
+        ),
+        "gate_only_pool_size": len(pool),
+        "b_k_raw_spread": _spread([c["b_k_raw"] for c in pool]),
+        "b_k_norm_spread": _spread([c["b_k_norm"] for c in pool]),
+        "a_k_raw_spread": _spread([c["a_k_raw"] for c in pool]),
+        "r_squared_raw_spread": _spread([c["r_squared_raw"] for c in pool]),
+    }
+
+
+def run() -> dict[str, Any]:
+    gate = retrodiction_gate()
+
+    # --- Grids -------------------------------------------------------------
+    eng_sterbenz = engineered_dyadic_grid(bits=12, count=400)        # x in (0, 1/2)
+    eng_regular = regular_region_dyadic_grid(bits=12, count=400)     # x in (1/2, 1)
+    canon = canonical_x_grid()
+    canon_sterbenz = [x for x in canon if x < Fraction(1, 2)]
+    canon_regular = [x for x in canon if x > Fraction(1, 2)]
+
+    out: dict[str, Any] = {
+        "task": "retestA_f2_sterbenz_exact_rational_probe",
+        "eval_layer_only": True,
+        "model": "C_{p,k} = a + u_p * b_k  (Theorem 3 / Task 017c)",
+        "path_under_test": "F2",
+        "method": "exact-rational residuals (Fraction), per-cell exact OLS in u_p",
+        "ladder": LADDER,
+        "u_p_by_label": {lbl: float(u_p_fraction(lbl)) for lbl in LADDER},
+        "retrodiction_gate": gate,
+    }
+
+    datasets = {
+        "engineered_sterbenz_F2": (eng_sterbenz, "F2"),
+        "engineered_regular_F2": (eng_regular, "F2"),
+        "canonical_sterbenz_F2": (canon_sterbenz, "F2"),
+        "canonical_regular_F2": (canon_regular, "F2"),
+        # F1 control on the engineered Sterbenz grid: reproduce the degeneracy
+        "engineered_sterbenz_F1_control": (eng_sterbenz, "F1"),
+    }
+
+    results: dict[str, Any] = {}
+    sample_cells: dict[str, Any] = {}
+    for name, (grid, path) in datasets.items():
+        cells = [measure_cell(x, path) for x in grid]
+        results[name] = aggregate(cells, gate_only=True)
+        results[name]["aggregate_all_cells_no_gate"] = aggregate(cells, gate_only=False)["b_k_raw_spread"]
+        # keep a few representative cells for the JSON (not all, to stay small)
+        sample_cells[name] = cells[: min(8, len(cells))]
+    out["datasets"] = results
+    out["sample_cells"] = sample_cells
+
+    # --- Head-to-head Sterbenz vs Regular b_k (engineered, gate-passing) ----
+    st = results["engineered_sterbenz_F2"]["b_k_raw_spread"]
+    rg = results["engineered_regular_F2"]["b_k_raw_spread"]
+    out["headline_sterbenz_vs_regular_F2"] = {
+        "sterbenz_b_k_raw": {"mean": st.get("mean"), "median": st.get("median"),
+                             "p2_5": st.get("p2_5"), "p97_5": st.get("p97_5"),
+                             "n": st.get("n")},
+        "regular_b_k_raw": {"mean": rg.get("mean"), "median": rg.get("median"),
+                            "p2_5": rg.get("p2_5"), "p97_5": rg.get("p97_5"),
+                            "n": rg.get("n")},
+        "sterbenz_frac_cells_with_ge2_distinct_nonzero":
+            results["engineered_sterbenz_F2"]["frac_cells_meeting_gate"],
+        "regular_frac_cells_with_ge2_distinct_nonzero":
+            results["engineered_regular_F2"]["frac_cells_meeting_gate"],
+        "f1_control_frac_cells_with_ge2_distinct_nonzero":
+            results["engineered_sterbenz_F1_control"]["frac_cells_meeting_gate"],
+    }
+    return out
+
+
+def main() -> None:
+    out = run()
+    (OUT_DIR / "f2_sterbenz_exact_rational_probe.json").write_text(
+        json.dumps(out, indent=2, sort_keys=True, allow_nan=False) + "\n",
+        encoding="utf-8",
+    )
+    g = out["retrodiction_gate"]
+    print("RETRODICTION GATE:", "PASS" if g["gate_pass"] else "FAIL")
+    print("  G1 Sterbenz boundary at x=0.5:", "PASS" if g["G1_sterbenz_boundary_at_half"]["pass"] else "FAIL")
+    print("  G2 F2 dyadic grain          :", "PASS" if g["G2_f2_dyadic_grain"]["pass"] else "FAIL")
+    print()
+    h = out["headline_sterbenz_vs_regular_F2"]
+    print("Engineered Sterbenz F2: frac cells with >=2 distinct nonzero residuals =",
+          h["sterbenz_frac_cells_with_ge2_distinct_nonzero"])
+    print("Engineered F1 control : frac cells with >=2 distinct nonzero residuals =",
+          h["f1_control_frac_cells_with_ge2_distinct_nonzero"])
+    print()
+    print("Sterbenz F2 b_k (raw): mean=%s median=%s  CI[%s, %s]  n=%s" % (
+        h["sterbenz_b_k_raw"]["mean"], h["sterbenz_b_k_raw"]["median"],
+        h["sterbenz_b_k_raw"]["p2_5"], h["sterbenz_b_k_raw"]["p97_5"],
+        h["sterbenz_b_k_raw"]["n"]))
+    print("Regular  F2 b_k (raw): mean=%s median=%s  CI[%s, %s]  n=%s" % (
+        h["regular_b_k_raw"]["mean"], h["regular_b_k_raw"]["median"],
+        h["regular_b_k_raw"]["p2_5"], h["regular_b_k_raw"]["p97_5"],
+        h["regular_b_k_raw"]["n"]))
+
+
+if __name__ == "__main__":
+    main()

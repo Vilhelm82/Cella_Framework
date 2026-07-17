@@ -1,0 +1,147 @@
+import json
+from pathlib import Path
+
+from lloyd_v4.evals.sr_four_form import beta_grid, eta_of_beta, four_form_float64
+
+import scratch.run_foldreadback_probe0_v10_active_dualarm as v10
+
+
+ROOT = Path(__file__).resolve().parents[1]
+REPORT_DIR = ROOT / "Build_Docs" / "Reports" / "foldreadback_probe0_v10_active_dualarm"
+REPORT_ARTIFACT = REPORT_DIR / "artifact_v10_sr_pathsep.json"
+CLOSEOUT = REPORT_DIR / "closeout_v10_sr_pathsep.md"
+
+
+def _artifact() -> dict[str, object]:
+    return json.loads(REPORT_ARTIFACT.read_text(encoding="utf-8"))
+
+
+def _valid_core_records() -> list[dict[str, object]]:
+    return _artifact()["path_separation_summary"]["valid_core_gap_records"]
+
+
+def test_sr_fixture_import_grid_still_matches_contract() -> None:
+    values = beta_grid()
+
+    assert len(values) == 137
+    assert values[0] == 0.01
+    assert values[-1] == 0.9999
+    assert eta_of_beta(values[-1]) > 0.0
+    assert "F4" in four_form_float64(values[-1])
+
+
+def test_path_separation_schema_appears_in_artifact() -> None:
+    artifact = _artifact()
+    first_record = artifact["primary_scan"]["records"][0]
+    first_core = _valid_core_records()[0]["path_separation"]
+
+    assert artifact["surface"] == "sr"
+    assert artifact["accepted_outcome"] == "active_handoff_gap_unresolved_zero_separation"
+    assert artifact["old_accepted_label"] == "active_handoff_gap_resolved"
+    assert artifact["new_accepted_label"] == artifact["accepted_outcome"]
+    assert "path_separation" in first_record
+    assert {
+        "armW_path",
+        "armN_path",
+        "operand_equal",
+        "operand_delta",
+        "lattice_unit",
+        "offset_level",
+        "separation_class",
+        "separation_observable",
+    } <= set(first_core)
+    assert first_core["separation_class"] == "zero_operand_offset"
+    assert first_core["operand_equal"] is True
+    assert first_core["offset_level"] == 0.0
+
+
+def test_zero_separation_downgrades_old_gap_resolved_label() -> None:
+    artifact = _artifact()
+    summary = artifact["path_separation_summary"]
+    answers = artifact["closeout_answers"]
+
+    assert summary["valid_core_gap_count"] == 13
+    assert summary["valid_core_gap_nonzero_separation_count"] == 0
+    assert summary["valid_core_gap_zero_or_unknown_separation_count"] == 13
+    assert summary["class_counts_valid_core_gap"]["zero_operand_offset"] == 13
+    assert answers["previous_gap_resolved_label_downgraded"] is True
+    assert answers["armN_path_operand_separated_from_armW"] is False
+    assert answers["corrected_accepted_outcome"] == "active_handoff_gap_unresolved_zero_separation"
+
+
+def test_unknown_or_unobservable_separation_downgrades_to_readable_unproven() -> None:
+    scan = {
+        "active_N_intervals": [{"core_start": 0, "core_end": 0, "active_start": 0, "active_end": 0, "guard": 1}],
+        "records": [
+            {
+                "armW": {"inference": "searched_no_separation", "falloff_state": "below_floor"},
+                "armN": {"active": True, "valid": True, "activation_reason": "core_gap"},
+                "path_separation": {"separation_class": "separation_unobservable"},
+            }
+        ],
+    }
+
+    assert v10.select_sr_pathsep_outcome(scan) == "active_handoff_gap_readable_unproven_separation"
+
+
+def test_nonzero_separation_permits_resolved_independent_only_with_gates() -> None:
+    scan = {
+        "active_N_intervals": [{"core_start": 0, "core_end": 0, "active_start": 0, "active_end": 0, "guard": 1}],
+        "records": [
+            {
+                "armW": {"inference": "searched_no_separation", "falloff_state": "below_floor"},
+                "armN": {"active": True, "valid": True, "activation_reason": "core_gap"},
+                "path_separation": {"separation_class": "nonzero_operand_offset", "offset_level": 0.5},
+            }
+        ],
+    }
+
+    assert v10.select_sr_pathsep_outcome(scan) == "active_handoff_gap_resolved_independent"
+    assert v10.select_sr_pathsep_outcome(scan, controls_silent=False) == "active_handoff_disqualified_control"
+    assert v10.select_sr_pathsep_outcome(scan, partition_invariant=False) == "active_handoff_partition_unstable"
+    assert v10.select_sr_pathsep_outcome(scan, guard_invariant=False) == "active_handoff_guard_unstable"
+
+
+def test_same_route_control_cannot_produce_independent_resolution() -> None:
+    scan = {
+        "active_N_intervals": [{"core_start": 0, "core_end": 0, "active_start": 0, "active_end": 0, "guard": 1}],
+        "records": [
+            {
+                "armW": {"inference": "searched_no_separation", "falloff_state": "below_floor"},
+                "armN": {"active": True, "valid": True, "activation_reason": "core_gap"},
+                "path_separation": {"separation_class": "same_path_duplicate", "offset_level": 0.0},
+            }
+        ],
+    }
+
+    assert v10.select_sr_pathsep_outcome(scan) == "active_handoff_gap_unresolved_zero_separation"
+
+
+def test_existing_v10_sr_mechanics_are_unchanged() -> None:
+    historical = v10.run_sr_campaign()
+
+    assert historical["accepted_outcome"] == "active_handoff_gap_resolved"
+    assert v10.select_sr_outcome(historical["primary_scan"]) == "active_handoff_gap_resolved"
+    assert historical["source_reuse"]["new_dual_arm_method"] is False
+    assert historical["source_reuse"]["v7_primitives_copied_or_modified"] is False
+
+
+def test_controls_and_invariance_still_hold() -> None:
+    artifact = _artifact()
+
+    assert artifact["controls"]["exact_zero"]["silent"] is True
+    assert artifact["controls"]["matched_affine"]["silent"] is True
+    assert artifact["invariance"]["partition_phase_0_1_match"] is True
+    assert artifact["invariance"]["guard_1_2_outcome_safe"] is True
+    assert artifact["closeout_answers"]["controls_remained_silent"] is True
+    assert artifact["closeout_answers"]["partition_invariance_held"] is True
+    assert artifact["closeout_answers"]["guard_invariance_held"] is True
+
+
+def test_pathsep_artifact_bytes_and_closeout_are_stable() -> None:
+    assert v10.artifact_sr_pathsep_bytes() == REPORT_ARTIFACT.read_bytes()
+    closeout = CLOSEOUT.read_text(encoding="utf-8")
+
+    assert "Corrected accepted outcome: `active_handoff_gap_unresolved_zero_separation`" in closeout
+    assert "ARM-N made the gap readable but did not prove independent resolution." in closeout
+    assert "PYTHONPATH=src python scratch/run_foldreadback_probe0_v10_active_dualarm.py --sr-pathsep" in closeout

@@ -1,0 +1,26 @@
+[    0.0s] x-chart forward
+[    2.9s] x-chart backward
+[    5.5s] u-chart forward
+[    7.1s] u-chart backward
+== ELIMINANTS ==
+[x/inv] shared [('t1**2 + 1', 1, 'corner-class'), ('x1**2 + 1', 1, 'corner-class')] raw (32, 40) corner [('x2**2 + 1', 6), ('x1**2 + 1', 9)] lc-removed [('x2', 4, 'gcd_deg=5', 'CHART-INF SOLUTIONS')] honest [(14, 24, 1)]
+[x/inv] PB.2 fwd==bwd: True
+[x/inv] honest sha16: 127d9475a31d1dc3
+[x/bot] shared [('x2**2 + 1', 1, 'corner-class'), ('t1**2 + 1', 1, 'corner-class'), ('x1**2 + 1', 1, 'corner-class')] raw (32, 28) corner [('x2**2 + 1', 2), ('x1**2 + 1', 9)] lc-removed [] honest [(14, 24, 1)]
+[x/bot] PB.2 fwd==bwd: True
+[x/bot] honest sha16: a3a500c8b5af736b
+[u/inv] shared [('t1**2 + 1', 1, 'corner-class'), ('x1**2 + 1', 1, 'corner-class')] raw (32, 36) corner [('u**2 + 1', 6), ('x1**2 + 1', 9)] lc-removed [] honest [(14, 24, 1)]
+[u/inv] PB.2 fwd==bwd: True
+[u/inv] honest sha16: 9f355a0ebe3b84ca
+== DF-7 CLASSIFICATION + PB.1' + PB.5 ==
+[x/inv] witnesses=68 principal=0 ghost=68 unresolved=0 | mu_P_max=- mu_G_min=0.602 sep=inf
+[x/inv] energy violations: principal=0 ghost=20
+[u/inv] witnesses=238 principal=38 ghost=200 unresolved=0 | mu_P_max=5.54e-64 mu_G_min=7.65e-5 sep=1.38e+59
+[u/inv] energy violations: principal=0 ghost=6
+== VERDICTS ==
+PB.1' (principal-only energy gate): PASS
+SP-1(a) all x-grid witnesses ghost: True
+SP-1(b) principal T_1 nonempty in u-chart: True
+SP-1(c) PB.1' passes non-vacuously: True
+RESULTS-SHA256: 723454a5247d62241c3824c417a33641aa53598e22681a8c9c19729f80324885
+[   77.3s] done

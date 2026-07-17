@@ -1,0 +1,51 @@
+{
+  "task_id": "grok_f1_f2_common_mode_expanded_fixtures",
+  "campaign": "substrate-invariant-search",
+  "producer": "grok-cli",
+  "retrodiction_gate": {
+    "description": "Three-layer gate passed cleanly before this refinement run.",
+    "passed": true,
+    "evidence_path": "scratch/f1_f2_common_mode_expanded_fixtures/retrodiction.json"
+  },
+  "claims": [
+    {
+      "claim_id": "sum_of_squares_grouping_refinement",
+      "statement": "Testing four different floating-point groupings/accumulation strategies for the sum-of-squares term in F_joint (naive, fsum, pairwise, reversed) produced essentially identical j distributions on lifted fixtures, all with extremely large variance (~1.78e30) and near-zero membership in the discrete lattice.",
+      "kind": "measured",
+      "status": "PROVEN",
+      "confidence": "high",
+      "value": "All four strategies give j_variance ~1.78e30 and fraction ~6.7e-5 on both Morris-Thorne and Schwarzschild photon fixtures.",
+      "generating_script": "scratch/f1_f2_common_mode_expanded_fixtures/expanded_fixtures_ulp_j.py",
+      "raw_output": "scratch/f1_f2_common_mode_expanded_fixtures/expanded_fixtures_results.json",
+      "byte_stable": true,
+      "derivation": "scratch/f1_f2_common_mode_expanded_fixtures/derivation_expanded.md",
+      "falsifier": "Different sum-of-squares groupings produce materially different j quantization on lifted fixtures.",
+      "axiom_smuggling_check": "derived from spec+axioms only"
+    },
+    {
+      "claim_id": "grouping_insufficient_for_lifted",
+      "statement": "Varying only the final accumulation order of the sum-of-squares terms is not sufficient to recover the clean j-lattice behavior seen on classical Schwarzschild when moving to lifted multi-constraint geometries.",
+      "kind": "inferred",
+      "status": "PARTIAL",
+      "confidence": "med",
+      "value": "The dominant source of residual error in these lifted cases lies elsewhere (likely in the individual constraint evaluations or the overall scale near the critical point).",
+      "generating_script": "scratch/f1_f2_common_mode_expanded_fixtures/expanded_fixtures_ulp_j.py",
+      "raw_output": "scratch/f1_f2_common_mode_expanded_fixtures/expanded_fixtures_results.json",
+      "byte_stable": true,
+      "derivation": "scratch/f1_f2_common_mode_expanded_fixtures/derivation_expanded.md",
+      "falsifier": "A different residual construction (e.g. at the level of individual Fi before squaring, or different evaluation of the constraint functions themselves) produces strong j quantization on lifted fixtures.",
+      "axiom_smuggling_check": "derived from spec+axioms only"
+    }
+  ],
+  "scope_compliance": {
+    "touched_substrate": false,
+    "touched_normative_docs": false,
+    "wrote_canonical_record": false
+  },
+  "not_established": [
+    "Whether a more sophisticated residual definition (operating on the individual constraint functions before the squaring step) would recover lattice structure.",
+    "Behavior on Kerr ISCO fixtures.",
+    "Whether the phenomenon is fundamentally limited to the classical single-constraint four-form battery."
+  ],
+  "calibration_notes": "This refinement directly tested the hypothesis that different groupings of the sum-of-squares would act as the 'F1 vs F2' split for lifted joints. The data falsifies the simple version of that hypothesis. The classical Schwarzschild result remains the strongest observed so far."
+}

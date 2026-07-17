@@ -1,0 +1,56 @@
+# Hard-Cell Q-Source Exhaustion Search
+
+Accepted outcome: `hard_cell_resolved_by_natural_companion_pair`
+Headline classification: `natural_q_source_pair_closes_split_gap`
+
+## Test Design
+
+This campaign keeps the `c=1/2` split-constant form from the prior companion-gap search and expands only the arithmetic route used to compute `q`.
+
+```text
+F_direct = (R * R - 1/2) + (q_direct - 1/2)
+F_route  = (R * R - 1/2) + (q_route  - 1/2)
+```
+
+The primary support mask is chosen from the direct route, then every companion route is scored only on the direct-route gap cells. Natural routes and diagnostic `nextafter` routes are reported separately so manufactured shifts cannot promote the result.
+
+## Required Findings
+
+1. Best single natural route: `sqrt_ratio_squared`.
+2. Single route covers: `[113, 117, 135]` and leaves hard cells `[121]`.
+3. Natural pair resolves the direct gap: `True`.
+4. Best natural pair: `('cbrt_power', 'sqrt_ratio_squared')`.
+5. Pair covers: `[113, 117, 121, 135]` and leaves hard cells `[]`.
+6. Pair union fraction: `1.0`.
+7. Primary support: `f_binade_-1`, `16` / `20` direct half reads, gaps `[113, 117, 121, 135]`.
+8. SR/pure controls promoted: `False` / `False`.
+9. Diagnostic shifts can resolve: `True`.
+10. Double-precision language justified: `False`.
+
+## Fixture Findings
+
+- `schwarzschild` (primary): outcome `hard_cell_resolved_by_natural_companion_pair`; best single `sqrt_ratio_squared` gives `19` / `20`, best pair `('cbrt_power', 'sqrt_ratio_squared')` gives `20` / `20`.
+- `sr` (secondary_control): outcome `hard_cell_invariant_across_q_sources`; best single `cbrt_power` gives `50` / `70`, best pair `('cbrt_power', 'exp_log_square')` gives `51` / `70`.
+- `pure_affine_control` (affine_control): outcome `hard_cell_support_candidate_only`; best single `sqrt_roundtrip` gives `32` / `42`, best pair `('cbrt_power', 'sqrt_roundtrip')` gives `37` / `42`.
+
+## Interpretation
+
+The previous hard cell was not invariant. Single natural q sources still leave a gap: `sqrt_ratio_squared` covers indices `113`, `117`, and `135`, while index `121` remains hard. Expanded routes such as `cbrt_power`, `sqrt_four_over_r_squared`, and `exp_log` flip index `121` into the half grid but do not cover the other three gap cells by themselves.
+
+A natural companion pair closes the full direct-route gap on the Schwarzschild `f_binade_-1` support mask. The best pair combines the high-coverage `sqrt_ratio_squared` route with the hard-cell-targeting `cbrt_power` route, producing `20 / 20` union half-grid coverage.
+
+The result is still a candidate route-composition principle, not a precision claim. It depends on a diagnostic handoff over route families, and the control fixtures remain below the stability gate rather than proving a general-purpose interleaved readback law.
+
+## Verification
+
+- `PYTHONPATH=src python -m lloyd_v4.evals.hard_cell_q_source_exhaustion_search`
+  Result: passed; generated artifact_hard_cell_q_source_exhaustion_search.json and hard_cell_q_source_exhaustion_search_report.md.
+- `PYTHONPATH=src python -m pytest tests/test_hard_cell_q_source_exhaustion_search.py -q`
+  Result: passed; focused hard-cell q-source tests.
+- `PYTHONPATH=src python -m pytest tests/test_hard_cell_q_source_exhaustion_search.py tests/test_dual_q_source_companion_gap_search.py tests/test_split_constant_integer_cell_diagnostic.py -q`
+  Result: passed; focused compatibility subset.
+
+## Artifacts
+
+- `Build_Docs/Reports/hard_cell_q_source_exhaustion_search/artifact_hard_cell_q_source_exhaustion_search.json`
+- `Build_Docs/Reports/hard_cell_q_source_exhaustion_search/hard_cell_q_source_exhaustion_search_report.md`

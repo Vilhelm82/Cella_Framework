@@ -1,0 +1,59 @@
+"""Independent reproduction of the paper's Sterbenz directional-density-bias table.
+
+Paper table (transfer_function_exponent_family_v4.tex sec:sterbenz):
+  Schwarzschild r=4.0:  below 6/0.054   above 22/0.880   (above higher)
+  SR beta=1/sqrt2:      below 86/0.896  above 9/0.220    (below higher)
+  Pure algebraic x=0.5: below 55/0.797  above 9/0.132    (below higher)
+  Cube-root x=0.5:      below 65/0.942  above 33/0.485   (below higher)
+
+We recompute F2 nonzero firing counts and densities on each side of the boundary
+using the eval modules' native four-form computation, in float64.
+"""
+import sys, math
+sys.path.insert(0, "src")
+import numpy as np
+
+from lloyd_v4.evals.pure_algebraic_four_form import four_form_float64 as pa_ff, x_grid as pa_grid
+from lloyd_v4.evals.sr_four_form import beta_grid as sr_grid
+from lloyd_v4.evals.schwarzschild_four_form import sweep_r_values as schw_grid
+
+# F2 forms per fixture. F2 = (R^n - 1) + x_term, with R=root(1-x_term).
+def f2_pa(x):
+    R = (1.0 - x) ** 0.5
+    return (R*R - 1.0) + x
+def f2_sr(beta):
+    xt = beta*beta
+    R = (1.0 - xt) ** 0.5
+    return (R*R - 1.0) + xt
+def f2_schw(r):
+    xt = 2.0/r
+    R = (1.0 - xt) ** 0.5
+    return (R*R - 1.0) + xt
+def f2_cbrt(x):
+    xt = x
+    R = float(np.cbrt(1.0 - xt))
+    return (R*R*R - 1.0) + xt
+
+def density(grid, f2, boundary, below_is_sterbenz):
+    below = [v for v in grid if v < boundary]
+    above = [v for v in grid if v > boundary]
+    nb = sum(1 for v in below if f2(v) != 0.0)
+    na = sum(1 for v in above if f2(v) != 0.0)
+    db = nb/len(below) if below else float('nan')
+    da = na/len(above) if above else float('nan')
+    return nb, db, na, da, len(below), len(above)
+
+print(f"{'fixture':<16}{'boundary':<14}{'below n/dens':<22}{'above n/dens':<22}{'sterbenz side higher?':<22}")
+print("-"*96)
+rows = [
+    ("schwarzschild", "r=4.0", schw_grid(), f2_schw, 4.0, False),
+    ("sr", "beta=1/sqrt2", sr_grid(), f2_sr, 1.0/math.sqrt(2.0), True),
+    ("pure_algebraic", "x=0.5", pa_grid(), f2_pa, 0.5, True),
+    ("cube_root", "x=0.5", pa_grid(), f2_cbrt, 0.5, True),
+]
+for name, blab, grid, f2, b, below_st in rows:
+    nb, db, na, da, lb, la = density(grid, f2, b, below_st)
+    st_density = db if below_st else da
+    nonst_density = da if below_st else db
+    higher = st_density > nonst_density
+    print(f"{name:<16}{blab:<14}{f'{nb}/{db:.3f}':<22}{f'{na}/{da:.3f}':<22}{str(higher):<22}")

@@ -1,0 +1,139 @@
+# Substrate Fingerprint Atlas — Phase γ — Preregistry
+
+> **Status: FROZEN 2026-05-18 pre-measurement.** Per `CAMPAIGN_DISCIPLINE.md` Rule 1.1, binding.
+
+## 0. Context
+
+Phase α ([`../substrate_fingerprint_atlas/`](../substrate_fingerprint_atlas/)) returned `barcode_hypothesis_not_supported_at_phase_alpha` with failure mode F2 (cross-family aliasing).
+
+Phase β ([`../substrate_fingerprint_atlas_phase_beta/`](../substrate_fingerprint_atlas_phase_beta/)) replaced structural slots with empirical ones, added universal slot 13, and achieved 15/15 distinguishable pairs. Verdict: `supported_with_secondary_caveats`. Three caveats:
+
+1. Slot 14 (universal conditioning index) `unobservable` on SR and pure_algebraic — only one residual channel nonzero at interior probe point.
+2. Slot 15 (route variation) nonzero on only 2 of 6 fixtures — single-point sampling, lifted fixtures lack 2-route data.
+3. Compactness exceeds 256 bits for 4 of 6 fixtures.
+
+Phase γ does four things, in order:
+
+1. **Refine slot 14** — replace single-point max/min with a small-window aggregation so all 6 fixtures get a defined value.
+2. **Refine slot 15** — sample over a β-window, take max route variation, so more fixtures register nonzero.
+3. **Add a second universal cross-family slot** (slot 16) — provide redundancy so SR↔Morris_Thorne and SR↔Kerr_ISCO_a09 don't depend on slot 13 alone.
+4. **Compactness compression** — quantize over-budgeted slots without losing discrimination.
+5. **Within-fixture stress test** — for each four-form fixture, compute the universal slots (13, 14, 15, 16) at multiple interior probe points and verify that:
+   - Slot values vary smoothly (no discontinuous jumps);
+   - The fingerprint at the central probe point remains distinguishable from every other fixture's fingerprint across all probe points; and
+   - The within-fixture spread in any single universal slot is smaller than the between-fixture distance.
+
+This is the strategic-frame's **claim 2 stress test** (within-fixture invariance under irrelevant transformations) at miniature scope — perturbing the probe point rather than the entire β-grid.
+
+## 1. Slot refinements (FROZEN)
+
+### Slot 14: `critical_point_conditioning_index_log10` (REFINED)
+
+**Old definition (Phase β):** log10(max/min) over the four F_i magnitudes at a single interior probe point. Breaks when only one F_i is nonzero.
+
+**New definition (Phase γ):** Sample the four F_i values at **3 closely-spaced probe points** straddling the interior probe (e.g., β ∈ {0.83, 0.85, 0.87} for SR). Collect all 12 |F_i| values; take max/min of the **nonzero** values; emit `log10(max/min)`. If fewer than 2 nonzero values across all 12 samples, emit `unobservable`.
+
+This widens the data each slot has to compute its ratio from, and is robust to single-channel collapse.
+
+### Slot 15: `route_variation_signature` (REFINED)
+
+**Old definition (Phase β):** |c1 − c2| / ulp(f) at a single interior probe point. Often rounds to 0.
+
+**New definition (Phase γ):** For four-form fixtures, evaluate `|c1 − c2| / ulp(f)` at the **same 3 probe points** used by the refined slot 14 and emit the **maximum**. For lifted-singularity fixtures, recompute F_joint at the critical point under two different summation orders (left-fold vs right-fold of `ΣFᵢ²`) and emit `|F_joint_A − F_joint_B| / ulp(reference)`.
+
+This converts route variation from a single-point sample to a maximum-over-window, which is the right statistic when the signature is locally bounded.
+
+### NEW slot 16: `binade_loss_depth_log2` (UNIVERSAL)
+
+**Definition:** Log₂ of the ratio between the operand's binade and the dominant residual's binade. Captures "how many binades of cancellation have occurred between the operand and the result."
+
+- **Four-form fixtures:** `log2(|operand_critical|) − log2(max |F_i|)` at the central interior probe.
+  - SR: log2(0.85) − log2(max|F_i|) ≈ −0.23 − (−52.0) = 51.8 — substantial binade loss
+  - Schwarzschild: same flavor
+- **Lifted-singularity fixtures:** `log2(|critical_point_coord_norm|) − log2(max |Hessian eigenvalue|)`. The "operand" is the L2 norm of the critical coordinate vector; the "result" is the dominant Hessian eigenvalue magnitude.
+
+Universal because every fixture has an operand magnitude and a dominant result magnitude.
+
+Cross-family discriminating expected because four-form fixtures have *negative* binade loss (cancellation reduces signal below operand) while lifted-singularity fixtures have *positive* binade growth (Hessian eigenvalues can be macroscopic).
+
+## 2. Compactness compression (FROZEN)
+
+Targeted compression per slot. Bit budgets:
+
+| Slot | Phase β bits | Phase γ bits | Compression strategy |
+|---|---|---|---|
+| 3 (c1_lattice_range) | 32 | 16 | Single `max_abs` int instead of `(min, max)` tuple |
+| 4 (c2_lattice_range) | 32 | 16 | Same |
+| 11 (dual_arm_split) | 48 | 24 | Quantize 3 fractions to 8 bits each |
+| 13 (curvature_magnitude_log10) | 32 | 16 | Half-precision (signed log10 in 16 bits) |
+| 14 (conditioning_index_log10) | 32 | 16 | Half-precision |
+
+Total savings: ~80 bits per fixture (where slots apply). Target: **all 6 fixtures ≤ 256 bits**.
+
+## 3. Within-fixture stress test (FROZEN)
+
+For each four-form fixture, define **3 interior probe points** within the singularity-approach region:
+
+| Fixture | Probe points (β, r, or x) |
+|---|---|
+| SR | {0.83, 0.85, 0.87} |
+| Schwarzschild | {4.5, 5.0, 5.5} |
+| pure_algebraic | {0.65, 0.70, 0.75} |
+| cube_root | {0.65, 0.70, 0.75} |
+
+For each four-form fixture × probe point combination, compute slots 13, 14, 15, 16. Lifted-singularity fixtures use their single critical point (no within-fixture perturbation in Phase γ — would require re-running the audit).
+
+**Stress test pass criteria:**
+
+1. **Smoothness:** For each of slots 13–16, the three values per fixture stay within 1 order of magnitude of each other. (Slot 15 is bounded above and may be 0 at some probe points, so the smoothness criterion is "the maximum minus the minimum is at most 1 decade".)
+2. **Discrimination preserved:** The fingerprints derived using probe-point 1 (lowest) are still pairwise distinguishable from every other fixture's fingerprint at any probe point. Equivalent: the within-fixture spread of any universal slot is smaller than the smallest between-fixture distance in that slot.
+
+If both criteria pass, the barcode hypothesis withstands within-fixture probe-point perturbation. If not, the fingerprint is **probe-point-fragile** — that's a substantive negative finding.
+
+## 4. Pre-registered predictions
+
+| # | Prediction | Threshold |
+|---|---|---|
+| P_γ1 | Slot 14 defined on ≥ 5 of 6 fixtures after refinement | strict |
+| P_γ2 | Slot 15 nonzero on ≥ 4 of 6 fixtures after refinement | strict |
+| P_γ3 | All 15 pairs still distinguishable | strict |
+| P_γ4 | Compactness ≤ 256 bits on ≥ 5 of 6 fixtures | strict |
+| P_γ5 | Slot 16 defined on every fixture, with cross-family discrimination | strict |
+| P_γ6 | Within-fixture stress test smoothness criterion holds for slots 13, 14, 16 | strict (slot 15 exempt — it's allowed to be 0 at some probe points by design) |
+| P_γ7 | Within-fixture stress test discrimination criterion holds for all 6 fixtures across all probe points | strict |
+
+## 5. Pre-registered failure modes (Phase-γ-specific)
+
+| ID | Condition |
+|---|---|
+| F_γ1 | Slot 16 redundancy fails — slot 16's values do not discriminate any pair that slot 13 doesn't already discriminate |
+| F_γ2 | Within-fixture stress test reveals a fixture whose slot values jump by > 1 decade across the 3 probe points (probe-point-fragile) |
+| F_γ3 | Compactness compression breaks discrimination (a pair becomes indistinguishable due to quantization) |
+
+Plus carry-overs from Phase α/β: F1 (all identical), F2 (aliasing), F4 (≥3 fixtures with ≥50% unobservable), F5 (all 6 over budget).
+
+## 6. Closeout criteria
+
+1. Fingerprint computed on all 6 fixtures with the refined 16-slot vector.
+2. Within-fixture stress test: 4 fixtures × 3 probe points × 4 universal slots = 48 measurement data points logged.
+3. Distinguishability matrix recomputed with refined slot values.
+4. All 7 predictions audited.
+5. Failure modes named.
+6. Verdict named: `supported_at_phase_gamma` (all hold) / `supported_with_remaining_caveats` (1–2 fail) / `not_supported` (≥3 fail or any F_γ trigger).
+7. Reproducibility check.
+8. Phase δ follow-up list.
+
+## 7. Out of scope (logged)
+
+- Adding new fixtures (Phase δ candidate: quartic four-form on Kerr ISCO at a different spin).
+- Cheap-slot prediction modeling (Phase δ candidate).
+- Substrate-level branch fingerprint plumbing (Phase δ candidate).
+- Re-running the lifted-singularity audit with 2-route F_joint computation (Phase γ uses the existing single-route F_joint as the lifted-fixture slot-15 proxy; replacing this is Phase δ scope).
+- Full grid-resolution stress test (Phase γ does probe-point perturbation only; β-grid perturbation is Phase δ scope).
+
+## 8. References
+
+- Phase α: [`../substrate_fingerprint_atlas/`](../substrate_fingerprint_atlas/)
+- Phase β: [`../substrate_fingerprint_atlas_phase_beta/`](../substrate_fingerprint_atlas_phase_beta/)
+- Phase β closeout §11 (Phase γ follow-up list): direct source for slots 14, 15, 16 refinements.
+- Discipline: `CAMPAIGN_DISCIPLINE.md` Rule 1.1.

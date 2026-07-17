@@ -1,0 +1,185 @@
+# MCG Discovery — Phase 0 — Operational Criteria for a G Candidate
+
+**Status:** Working definition. **Discovery, not confirmatory** (Discipline Rule 1). This document is a characterization log, not a pre-registry. It sharpens the four criteria from [`Agent_tasks/mcg_discovery_campaign_handoff_2026_05_19.md`](../../Agent_tasks/mcg_discovery_campaign_handoff_2026_05_19.md) §Phase 0 into operational language that Phase 1 candidate characterizations can apply consistently.
+
+**Source / authority:** the handoff. This file does not invent new criteria; it operationalizes the four given ones, adds failure modes, fixes the order of application, and pins anti-candidates.
+
+---
+
+## 0. The four criteria in one sentence each
+
+A G candidate is an observable `O(fixture, route)` such that:
+
+1. **Computable** — deterministic, byte-stable, V4-typed.
+2. **Survives M-subtraction** — retains *information content* (not just magnitude) after the BACL-mandated component is removed.
+3. **Discriminates** — varies with fixture identity / route / geometry above the within-cell reproducibility floor.
+4. **Has a named mechanism** — a stated reason *why*, distinguishable from M and C, with a stated counterfactual and a calibration control.
+
+The criteria are applied in order. A candidate failing at criterion `n` is eliminated before `n+1` is tested. This prevents the trap of declaring "discrimination" on something whose residual is non-deterministic at the level of criterion 1.
+
+---
+
+## 1. Criterion 1 — Computable
+
+**Definition.** `O(fixture, route)` is a deterministic function of (fixture parameters, computational route), expressible in V4-typed primitives, byte-stable on rerun, finite for the fixture's parameter domain.
+
+**Operational tests** (all required):
+- An implementation exists in `scratch/` or equivalent.
+- A rerun of the implementation produces a byte-identical artifact (sha256 match).
+- Each emitted record carries explicit V4 validity tags `{defined, finite, selectable, advanceable, observable, policy_accepted}`. A candidate that emits `unobservable` or `computation_failed` on a non-trivial fraction of its domain is failing this criterion.
+
+**Failure modes to avoid:**
+- **Hidden randomness.** A library call that uses time-seeded RNG, an iterator over a dict whose order is not stable, parallel reduction with non-deterministic FMA scheduling. Any of these breaks byte-stability.
+- **Underspecified routes.** "Compute `f` via the two-step subtraction" is not a route; "compute `f = round(1 − round(2/r))` evaluated in binary64 round-to-nearest-ties-to-even" is. The route must pin every floating-point operation.
+- **Implicit precision shifts.** A candidate that silently promotes to `float128` or `Fraction` mid-pipeline is computing a different observable than one staying in `float64`.
+
+**Relationship to other criteria.** This is a precondition. Until criterion 1 holds, criteria 2–4 cannot be tested honestly: discrimination measured against a non-deterministic baseline is meaningless.
+
+---
+
+## 2. Criterion 2 — Survives M-subtraction (the filter)
+
+**Definition.** After the BACL-mandated integer-j subtraction at the appropriate ulp scale is applied to `O`, the residual `O_msub` retains *information content* that is not identically the same across the fixture/route domain.
+
+**Operational definition of M-subtraction.** For a residue `O` referenced to a representable quantity `f_float`:
+```
+j_BACL(O, f_float)        = round( O / ulp(f_float) )            # nearest integer
+O_msub                    = O − j_BACL · ulp(f_float)
+```
+The ulp scale must be chosen *from the fixture's algebraic structure*, not retrofitted. If the natural ulp is ambiguous, the candidate has not yet been operationally specified; resolve before applying this filter.
+
+**Operational tests.** "Survives" is **not** the same as "has nonzero magnitude." The Gate 3 lesson: cancellation residues collapse to literal `0.0` under integer-j subtraction by construction (the c2 lattice theorem says they are *on* the lattice), so they fail this criterion catastrophically — but a more subtle failure mode is a candidate whose `O_msub` is everywhere a *constant nonzero value*. That has magnitude but no information.
+
+The candidate passes criterion 2 iff **at least one** of:
+- `Var(O_msub | over the fixture domain) > 0` — i.e., `O_msub` is not a constant function.
+- `H(O_msub | conditioned on a control variable) > 0` — i.e., `O_msub` retains entropy after conditioning on at least one control (fixture parameter, route choice, etc.).
+- A distinguishability metric `d(O_msub | A, O_msub | B) > 0` for at least one pair of fixture/route conditions A ≠ B.
+
+The threshold is "nonzero," not "above noise floor" — that is a Criterion 3 question.
+
+**Failure modes to avoid:**
+- **Magnitude/information confusion.** "After M-subtraction, `|O_msub|` is still 1.0e-15" is not survival if that 1.0e-15 is the same value for every record. Survival is structural.
+- **Wrong ulp scale.** Picking `ulp(some-other-quantity)` instead of the natural scale of the residue silently violates the M-subtraction definition. The natural scale is `ulp(f_float)` for the *quantity O is a residue of*.
+- **Premature collapse.** If `O` is itself a magnitude (e.g., `|c_schw|`), the integer-j subtraction operates on the magnitude only, which discards sign information that could carry survival. The candidate's signed form should be M-subtracted, then any magnitude-taking happens after.
+- **Skipping the integer-j step.** Subtracting "what BACL says O should be" without explicitly extracting the integer multiplier hides the lattice structure and admits arbitrary off-lattice claims.
+
+**Relationship to other criteria.** This is the **filter** per Discipline Rule 3. A candidate that fails here is M (substrate); drop it. That is successful filtering, not a HALT, not a severity event. A candidate that *passes* this filter is admitted to criterion 3; passing does not yet make it a G candidate, only an M-survivor.
+
+**Anti-candidates locked out by this criterion.** Cancellation-residue-type observables (e.g., σ1 on c2-style residue, anything of the form `round(V − f) where V ≈ f`). The c2 lattice theorem (in-scope) says these are *on* the BACL lattice; integer-j subtraction exhausts them by construction. **Excluded a priori** per Discipline Rule 4.
+
+---
+
+## 3. Criterion 3 — Discriminates
+
+**Definition.** `O_msub` varies in a way that correlates with something of interest (fixture identity, route choice, or constraint-surface geometry) at signal level **above the within-cell reproducibility floor**.
+
+**Operational tests.**
+- **Define the discrimination axis explicitly.** Examples: "across two fixtures of differing geometry," "across two routes computing the same algebraic value," "across two parameter regions of the same fixture (e.g., r near horizon vs r far from horizon)."
+- **Define a discrimination metric `d`.** Examples: difference of means, mutual information, KL divergence between distributions, distinguishability under a fingerprint-atlas comparison.
+- **Compute the within-cell reproducibility floor.** Repeat the measurement N times within the same fixture/route cell (with whatever sources of measurement variability the candidate exposes — e.g., perturbations to the parameter grid). The floor is the natural scale of `d` when comparing same-cell-against-same-cell.
+- **Discrimination claim**: `d(across-cell) > d(within-cell)` at the candidate's natural scale. Effect size first, "significance" is a Phase 3 question.
+
+**Failure modes to avoid:**
+- **Cherry-picking the discrimination axis post-hoc.** If discrimination is claimed across "fixtures A and B" but A and B were chosen *after* seeing `O_msub`, the claim is post-hoc. The candidate's mechanism (criterion 4) should predict which axes discriminate *before* characterization.
+- **Conflating C with G.** Two fixtures of differing geometry usually also have differing conditioning. A naive discrimination claim conflates G and C. The mechanism (criterion 4) must include a confound-control proposal (e.g., compare cells of equal condition number, or characterize the C-residual explicitly).
+- **Discrimination on noise.** If `O_msub` is dominated by floating-point noise at the candidate's natural scale, "discrimination" is just noise variance. The within-cell floor catches this.
+- **Universal discrimination.** A candidate that discriminates *every* pair of fixtures equally (no structure in the discrimination, just "everything differs from everything else") has not found a signal; it has found that floats are different from floats. Useful discrimination has a structure that correlates with a meaningful axis.
+
+**Relationship to other criteria.** Depends on criterion 1 (reproducibility floor needs deterministic implementation) and criterion 2 (need M-survivor to have something to discriminate with). Criterion 3 is the **characterization phase's central instrument**. A candidate passing criterion 3 — with the discrimination axis correlating with a meaningful property — graduates to criterion 4 (the mechanism gate).
+
+---
+
+## 4. Criterion 4 — Has a named mechanism (the graduation gate)
+
+**Definition.** A stated hypothesis, *prior to characterization*, for **why** `O` would carry the criterion-3 discrimination, **why that mechanism is distinct from M and C**, with stated counterfactuals and a calibration control.
+
+**Operational form.** The mechanism must be a written statement (a paragraph, not a hand-wave) containing:
+
+- **(a) Generative phenomenon.** What physical, algorithmic, or geometric process generates the signal in `O`? Concrete: "distinct algebraic routes traverse distinct operation sequences; the off-lattice residue encodes route-specific rounding history" is a candidate generative phenomenon. "The residue might encode geometry" is not.
+
+- **(b) Counterfactual.** What would `O_msub` look like if the mechanism were absent? This is a *concrete prediction*, not a "things would be different." Example: "if the off-lattice residue is purely route-specific rounding without geometric content, then `O_msub` would be route-discriminating but not geometry-correlated across fixtures of similar conditioning."
+
+- **(c) Calibration control.** A specific fixture or route where the mechanism predicts a *specific* `O_msub` behavior. Example: "for two fixtures with identical algebraic structure but different `r` parameterization, the mechanism predicts `O_msub` is invariant under the parameterization shift."
+
+- **(d) Separation from M and C.** A specific control where the mechanism predicts a different `O_msub` than either pure-M or pure-C would predict. Example: "two routes of equal conditioning and same fixture should have identical `O_msub` under C-only, but the route-divergence mechanism predicts they differ; under M-only, both routes collapse to zero after M-subtraction."
+
+**Failure modes to avoid:**
+- **Vague mechanism.** "The geometry leaks through somehow." Useless.
+- **Residual-definition mechanism.** "G is whatever survives after M and C are removed." This is a definition by elimination, not a mechanism. It fails (a).
+- **No counterfactual.** A mechanism that doesn't say what the world would look like if it were wrong cannot be characterized usefully and cannot graduate to Phase 3 testing.
+- **Indistinguishable from C.** A mechanism whose prediction is identical to "conditioning amplifies substrate noise" is not a G mechanism, even if it sounds different.
+- **Retrofitted mechanism.** Picking the mechanism after seeing `O_msub` discriminate is post-hoc rationalization; criterion 4 requires the mechanism *before* characterization. (Phase 1 may iterate: state a mechanism → characterize → fail → revise mechanism → re-characterize. Iteration is fine; what's not fine is claiming "the mechanism passed" on the same characterization that informed its statement.)
+
+**Relationship to other criteria.** Criterion 4 is the **graduation gate** from Phases 1–2 (investigate, characterize) to Phase 3 (test, with pre-registration). A candidate without a named mechanism stays in Phase 1 indefinitely; characterization continues until either a mechanism crystallizes or the candidate is dropped. **Named mechanism is required before *testing*, never before *investigating*** (Discipline Rule 2).
+
+---
+
+## 5. Order of application
+
+The four criteria are applied **in order**, and a candidate failing at criterion `n` is eliminated before `n+1` is tested. This matters operationally:
+
+1. **First**, check computability (a non-deterministic candidate cannot be filtered).
+2. **Then**, apply M-subtraction (drop M-mandated observables before measuring anything else).
+3. **Then**, check discrimination (relative to a reproducibility floor that exists only if criterion 1 holds).
+4. **Finally**, check that the mechanism is named (the graduation gate).
+
+A candidate may sit indefinitely between criteria 3 and 4 — it has discrimination but no named mechanism. That is the *normal Phase 1 state* for a not-yet-characterized hunch. The discipline is that **such a candidate is not eligible for Phase 3 pre-registered testing**, no matter how striking its discrimination.
+
+---
+
+## 6. Anti-candidates (locked out)
+
+The following observable families are excluded from the candidate slate a priori:
+
+- **Cancellation-residue-type observables.** Any residue of the form `round(V − f)` where V and f share a binade. By the c2 lattice theorem (in-scope `f ≥ 2^(−1021)`), these are on the BACL integer-ulp lattice; integer-j subtraction exhausts them by construction. The Gate 3 audit ([`mcg_gate_3_killswitch/closeout.md`](../mcg_gate_3_killswitch/closeout.md)) is the canonical case study; cf. its §7.A methodology finding. **Failing criterion 2 by structural certainty, not empirical observation.**
+
+- **Pure-magnitude residue norms.** `|O|` without sign or distributional structure. Magnitude alone fails criterion 2's information-content requirement except by accident.
+
+- **Observables defined by elimination.** "G = R − M − C" as a definition. This fails criterion 4(a) (no generative phenomenon); using it would smuggle in any unstructured noise as G.
+
+The anti-candidate list is open: as Phase 1 enumeration proceeds, candidates that fail criterion 2 *by structural argument* (not just empirical measurement) are added here so future iterations don't propose them again.
+
+---
+
+## 7. The criteria applied to G *vs* C
+
+These four criteria specify what makes an observable a **G candidate**. **C candidates** (Phase 2) have a parallel set with one critical addition:
+
+> **C-additional:** the candidate C-extractor must **track conditioning monotonically** on known-conditioning fixtures (well-conditioned control vs deliberately ill-conditioned), with a stated functional dependence on a recognized conditioning quantity (condition number, Hessian spectrum, etc.).
+
+C and G are distinguished operationally by criterion 4(d): a G candidate's mechanism must produce a prediction *separable from C*. A C extractor's mechanism must produce a prediction *correlated with conditioning*. Both must produce predictions *separable from M*.
+
+---
+
+## 8. What this document is, and is not
+
+**Is:** a working definition of the operational tests for G-candidacy. The Phase 1 candidate slate ([`phase_1_candidate_slate.md`](phase_1_candidate_slate.md)) and Phase 2 C-extractor design ([`phase_2_c_extractor_design.md`](phase_2_c_extractor_design.md)) apply these criteria.
+
+**Is not:**
+- A pre-registry of any kind. Criteria are subject to iteration; failure modes can be added; the anti-candidate list grows as Phase 1 finds new structural eliminations.
+- A test of any specific candidate. Application happens in Phase 1.
+- A theorem about MCG. MCG is a *research direction*; this document specifies what would count as a real candidate within that direction, not whether the direction will succeed.
+
+**Iteration policy.** This document is updated when:
+- A new structural anti-candidate is identified in Phase 1.
+- A failure mode not currently listed is found in a real candidate characterization.
+- The relationship between criteria proves to need refinement based on Phase 1 experience.
+
+Updates are recorded in §9 below as dated entries; the criteria themselves are not retroactively renumbered.
+
+---
+
+## 9. Iteration log
+
+- **2026-05-19** — Initial draft, ratifying the four criteria from the discovery handoff with operational tests, failure modes, ordering, anti-candidate list, and G/C distinction. No application yet.
+
+---
+
+## 10. References
+
+- [`Agent_tasks/mcg_discovery_campaign_handoff_2026_05_19.md`](../../Agent_tasks/mcg_discovery_campaign_handoff_2026_05_19.md) — Source authority for the four criteria.
+- [`bacl_invariant_audit/closeout.md`](../bacl_invariant_audit/closeout.md) — BACL as M (the filter).
+- [`c2_lattice_sharpness_audit/closeout.md`](../c2_lattice_sharpness_audit/closeout.md) — c2 lattice theorem; structural basis for the cancellation-residue anti-candidate (Amendments I–IV).
+- [`mcg_gate_3_killswitch/closeout.md`](../mcg_gate_3_killswitch/closeout.md) — Canonical case study of an observable failing criterion 2 by construction; §7.A methodology finding folded into criterion 2's failure modes.
+- `CAMPAIGN_DISCIPLINE.md` — General campaign discipline; discovery vs confirmatory in this campaign overrides Rule 1.1 for Phases 0–2.
+- `Architecture/AXIOMS.md` — V4 axioms (especially 5: numerical representation is a path; 6: zero must be measured; 11: epistemic stance).

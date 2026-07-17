@@ -1,0 +1,61 @@
+{
+ "authority": "brief 7A Amendment 6 (the disposition \u2014 LAW); Amendment 5 untouched; Stage-D records sha 9b03cb5bbc5d87fe36324dd5ebd9a531d8bf0b00230133e7294aec4d8883c175 (commit bc27583)",
+ "campaign": "difference_tower",
+ "classifier_spec": {
+  "consistency_cross_check": "for every cell: lane set-equality certified => raw_a - raw_b == (account difference of member a) - (account difference of member b) in Q (for C: via the raw-only identities). FINGERPRINTED <=> that difference is nonzero. Any inconsistency = classifier defect => leg FAIL.",
+  "distinguishing_ops": {
+   "C": "all account entries (sqrt routes share no ops); residues from the HR132 upsilon account (exact_upsilon, consumed - sqrt is PAIR_EXACT, residue-zero test is pair r == 0)",
+   "R1": "all account entries EXCEPT the final div (numerator ops); the final div is L4-shared iff the numerator floats coincide",
+   "R2": "all account entries (no shared ops between Horner and expanded forms)"
+  },
+  "grids": "the Stage-D pinned H5 grids for R1/R2/C, plus the witness cell",
+  "output": "route_agreement_classification.json + summary table in the leg report",
+  "status": "recorded artifact, non-verdict-bearing (Amendment 6); pair-level registry + intake = fenced follow-on, NOT this leg",
+  "three_way": {
+   "COINCIDENTALLY_IDENTICAL": "raw_a == raw_b with nonzero distinguishing residues that cancel",
+   "FINGERPRINTED": "raw_a != raw_b; account identity verified at the cell (full identity for rational members, raw-only for C)",
+   "LAWFULLY_IDENTICAL": "raw_a == raw_b AND every route-distinguishing op residue is zero at every stencil node in both members; certificate = list of (op, protecting law): mul->L3_exact_product, add/sub->L1_exact_dyadic_or_L2_Sterbenz, shared final div->L4_shared_op_identity, sqrt->exact_sqrt"
+  }
+ },
+ "conditional_law": "raw route fingerprints present <=> intermediate-rounding asymmetry present (Amendment 6 sharpening of the v1 registered prediction; finding #3 preserved verbatim as the protected side's mechanism)",
+ "date": "2026-06-12",
+ "determinism": "byte-stable x2 (sha256 over records); sha-pinned; suite green at leg close.",
+ "frozen": true,
+ "grid_informativeness": "standing law (Amendment 6): the witness cell's contrast-achievability is dry-run-verified from mechanism BEFORE the pin (P(x_w) false by L3; distinguishing residues unequal in Q; node-level raw divergence shown), recorded below at freeze.",
+ "leg": "h5_raw_leg_v2",
+ "original_r1_grid": {
+  "j": [
+   2,
+   5,
+   9,
+   14,
+   20
+  ],
+  "m": [
+   1,
+   2,
+   3
+  ],
+  "points": [
+   "0x1.8000000000000p-1",
+   "0x1.4000000000000p+1"
+  ],
+  "schemes": [
+   "forward",
+   "centered"
+  ]
+ },
+ "prediction_i_witness": "raw_cell(R1a) != raw_cell(R1b) at the witness cell (bit-for-bit float compare), AND the account identity Q(raw) - lane == -dev_chain + iterdiff(deltas)/h^m holds exactly for BOTH members at the witness. FAIL => chain verbatim, STOP, Will.",
+ "prediction_ii_protected": "raw_cell(R1a) == raw_cell(R1b) at EVERY cell of the original pinned R1 grid (re-pinned at exactly zero raw difference; 60 cells). FAIL => chain verbatim, STOP, Will.",
+ "protection_predicate_derivation": "see module docstring, recorded verbatim at freeze: P(x) from L1 exact-dyadic / L2 Sterbenz / L3 exact-product / L4 shared-op identity; operational test: EVERY route-distinguishing op residue zero at every stencil node (decided in Q by the lift's account).",
+ "scope": "the H5 raw leg ONLY (Amendment 6). H4 (22/0/0/0) and the H5 exact legs (120/120, 360/360) stand CLOSED \u2014 not re-run, not touched.",
+ "stage": "D",
+ "version": 2,
+ "witness_cell": {
+  "j": 8,
+  "m": 1,
+  "pair": "R1",
+  "point": "0x1.999999999999ap-4",
+  "scheme": "forward"
+ }
+}

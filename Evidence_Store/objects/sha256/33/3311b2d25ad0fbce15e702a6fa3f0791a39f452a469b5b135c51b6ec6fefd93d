@@ -1,0 +1,330 @@
+{
+ "H1": {
+  "n_cells": 9873,
+  "n_equal": 9872,
+  "n_refusals_logged_cells": 1,
+  "pass": false,
+  "units": "(fixture, point, scheme, j, m) cells",
+  "violations": []
+ },
+ "H3": {
+  "n_false_positive_certificates": 0,
+  "negative": [
+   {
+    "fixture": "K1",
+    "n_cells": 207,
+    "n_nonzero_cells": 25,
+    "ok": true,
+    "probe_m": 2
+   },
+   {
+    "fixture": "K1",
+    "n_cells": 207,
+    "n_nonzero_cells": 6,
+    "ok": true,
+    "probe_m": 3
+   },
+   {
+    "fixture": "K1",
+    "n_cells": 207,
+    "n_nonzero_cells": 29,
+    "ok": true,
+    "probe_m": 4
+   },
+   {
+    "fixture": "K2",
+    "n_cells": 276,
+    "n_nonzero_cells": 252,
+    "ok": true,
+    "probe_m": 2
+   },
+   {
+    "fixture": "K2",
+    "n_cells": 276,
+    "n_nonzero_cells": 27,
+    "ok": true,
+    "probe_m": 3
+   },
+   {
+    "fixture": "K2",
+    "n_cells": 276,
+    "n_nonzero_cells": 2,
+    "ok": true,
+    "probe_m": 4
+   },
+   {
+    "fixture": "K3",
+    "n_cells": 207,
+    "n_nonzero_cells": 207,
+    "ok": true,
+    "probe_m": 2
+   },
+   {
+    "fixture": "K3",
+    "n_cells": 207,
+    "n_nonzero_cells": 207,
+    "ok": true,
+    "probe_m": 3
+   },
+   {
+    "fixture": "K3",
+    "n_cells": 207,
+    "n_nonzero_cells": 24,
+    "ok": true,
+    "probe_m": 4
+   },
+   {
+    "fixture": "R1a",
+    "n_cells": 138,
+    "n_nonzero_cells": 138,
+    "ok": true,
+    "probe_m": 2
+   },
+   {
+    "fixture": "R1a",
+    "n_cells": 138,
+    "n_nonzero_cells": 138,
+    "ok": true,
+    "probe_m": 3
+   },
+   {
+    "fixture": "R1a",
+    "n_cells": 138,
+    "n_nonzero_cells": 138,
+    "ok": true,
+    "probe_m": 4
+   },
+   {
+    "fixture": "R1a",
+    "n_cells": 138,
+    "n_nonzero_cells": 138,
+    "ok": true,
+    "probe_m": 5
+   },
+   {
+    "fixture": "R1a",
+    "n_cells": 138,
+    "n_nonzero_cells": 138,
+    "ok": true,
+    "probe_m": 6
+   },
+   {
+    "fixture": "R1b",
+    "n_cells": 138,
+    "n_nonzero_cells": 138,
+    "ok": true,
+    "probe_m": 2
+   },
+   {
+    "fixture": "R1b",
+    "n_cells": 138,
+    "n_nonzero_cells": 138,
+    "ok": true,
+    "probe_m": 3
+   },
+   {
+    "fixture": "R1b",
+    "n_cells": 138,
+    "n_nonzero_cells": 138,
+    "ok": true,
+    "probe_m": 4
+   },
+   {
+    "fixture": "R1b",
+    "n_cells": 138,
+    "n_nonzero_cells": 138,
+    "ok": true,
+    "probe_m": 5
+   },
+   {
+    "fixture": "R1b",
+    "n_cells": 138,
+    "n_nonzero_cells": 138,
+    "ok": true,
+    "probe_m": 6
+   },
+   {
+    "fixture": "R3",
+    "n_cells": 138,
+    "n_nonzero_cells": 138,
+    "ok": true,
+    "probe_m": 2
+   },
+   {
+    "fixture": "R3",
+    "n_cells": 138,
+    "n_nonzero_cells": 138,
+    "ok": true,
+    "probe_m": 3
+   },
+   {
+    "fixture": "R3",
+    "n_cells": 138,
+    "n_nonzero_cells": 138,
+    "ok": true,
+    "probe_m": 4
+   },
+   {
+    "fixture": "R3",
+    "n_cells": 138,
+    "n_nonzero_cells": 138,
+    "ok": true,
+    "probe_m": 5
+   },
+   {
+    "fixture": "R3",
+    "n_cells": 137,
+    "n_nonzero_cells": 137,
+    "ok": true,
+    "probe_m": 6
+   }
+  ],
+  "pass": true,
+  "positive": [
+   {
+    "degree": 0,
+    "degree_exact_below_nonzero": null,
+    "fixture": "P0",
+    "n_cells_at_d_plus_1": 138,
+    "ok": true,
+    "terminates_exactly": true
+   },
+   {
+    "degree": 1,
+    "degree_exact_below_nonzero": true,
+    "fixture": "P1",
+    "n_cells_at_d_plus_1": 138,
+    "ok": true,
+    "terminates_exactly": true
+   },
+   {
+    "degree": 10,
+    "degree_exact_below_nonzero": true,
+    "fixture": "P10",
+    "n_cells_at_d_plus_1": 78,
+    "ok": true,
+    "terminates_exactly": true
+   },
+   {
+    "degree": 2,
+    "degree_exact_below_nonzero": true,
+    "fixture": "P2",
+    "n_cells_at_d_plus_1": 153,
+    "ok": true,
+    "terminates_exactly": true
+   },
+   {
+    "degree": 3,
+    "degree_exact_below_nonzero": true,
+    "fixture": "P3",
+    "n_cells_at_d_plus_1": 138,
+    "ok": true,
+    "terminates_exactly": true
+   },
+   {
+    "degree": 4,
+    "degree_exact_below_nonzero": true,
+    "fixture": "P4",
+    "n_cells_at_d_plus_1": 138,
+    "ok": true,
+    "terminates_exactly": true
+   },
+   {
+    "degree": 3,
+    "degree_exact_below_nonzero": true,
+    "fixture": "R2a",
+    "n_cells_at_d_plus_1": 138,
+    "ok": true,
+    "terminates_exactly": true
+   },
+   {
+    "degree": 3,
+    "degree_exact_below_nonzero": true,
+    "fixture": "R2b",
+    "n_cells_at_d_plus_1": 138,
+    "ok": true,
+    "terminates_exactly": true
+   }
+  ],
+  "units": "positive: cells at level d+1; negative: nonzero cells at probe order"
+ },
+ "certificates": [
+  {
+   "certificate_degree": null,
+   "fired": false,
+   "fixture": "K1"
+  },
+  {
+   "certificate_degree": null,
+   "fired": false,
+   "fixture": "K2"
+  },
+  {
+   "certificate_degree": null,
+   "fired": false,
+   "fixture": "K3"
+  },
+  {
+   "certificate_degree": 0,
+   "fired": true,
+   "fixture": "P0"
+  },
+  {
+   "certificate_degree": 1,
+   "fired": true,
+   "fixture": "P1"
+  },
+  {
+   "certificate_degree": 10,
+   "fired": true,
+   "fixture": "P10"
+  },
+  {
+   "certificate_degree": 2,
+   "fired": true,
+   "fixture": "P2"
+  },
+  {
+   "certificate_degree": 3,
+   "fired": true,
+   "fixture": "P3"
+  },
+  {
+   "certificate_degree": 4,
+   "fired": true,
+   "fixture": "P4"
+  },
+  {
+   "certificate_degree": null,
+   "fired": false,
+   "fixture": "R1a"
+  },
+  {
+   "certificate_degree": null,
+   "fired": false,
+   "fixture": "R1b"
+  },
+  {
+   "certificate_degree": 3,
+   "fired": true,
+   "fixture": "R2a"
+  },
+  {
+   "certificate_degree": 3,
+   "fired": true,
+   "fixture": "R2b"
+  },
+  {
+   "certificate_degree": null,
+   "fired": false,
+   "fixture": "R3"
+  }
+ ],
+ "dp2_below_sufficient_condition_firings_cells": 0,
+ "kills": {
+  "K1_triggered": false,
+  "K2_triggered": false
+ },
+ "prereg_sha256": "216bc623dbcbd1825e83d4725d4af87f4a692cd62b10f58dc5e9326b6f0ac21a",
+ "records_sha256": "b23294c9911c27f38735164c1731609aed2c277621907c6ea6c9b2929acbc816"
+}

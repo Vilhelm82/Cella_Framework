@@ -1,0 +1,42 @@
+{
+  "schema_id": "cella.continuation.pathfinder_state_transition_inventory",
+  "schema_version": "1.0",
+  "constructor": "cella.pathfinder.plan_request with dbp_native_released_evaluation provider",
+  "states": [
+    "received_typed_request",
+    "lowered_to_typed_pathfinder_request",
+    "dbp_native_provider_selected",
+    "adapter_target_precision_and_manifest_guards_checked",
+    "packaged_schedule_digest_checked",
+    "schedule_schema_and_partition_admitted",
+    "exact_orders_and_work_bits_derived",
+    "valid_plan_emitted",
+    "unsupported_request_emitted"
+  ],
+  "output_constructors": {
+    "valid": "ComputationalRoute, then canonical PathfinderPlan envelope",
+    "unsupported": "PlanningOutcome with RecognitionRefusal, then UnsupportedRequest"
+  },
+  "failure_partition": {
+    "invalid_plan": "unreachable in the confirmed six-request domain",
+    "unsupported_request": "any adapter, target, precision, manifest, path, state or ring mismatch",
+    "inadequate_budget": "valid plan plus plan_fits_budget(request, plan) == false",
+    "resource_exhaustion": "not present in the finite 32-panel constructor",
+    "implementation_exception": "outside confirmed domain; treated as a defect, never a typed mathematical result"
+  },
+  "determinism": {
+    "randomness": false,
+    "ambient_precision": false,
+    "platform_float_semantics": false,
+    "mutable_cache_semantics": false,
+    "iteration_order_dependency": false,
+    "numeric_domain": "integers and fractions",
+    "source_digest_recorded": true,
+    "static_schedule_digest_checked": true
+  },
+  "excluded_components": [
+    "all live Cella Pathfinder providers except dbp_native_released_evaluation",
+    "unreleased target or precision requests",
+    "analytic execution and certificate verification"
+  ]
+}

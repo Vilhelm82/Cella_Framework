@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "registry_id": "cella-artifact-schemas-v1",
+  "canonical_format": "JSON",
+  "schemas": {
+    "artifact": "schemas/artifact.schema.json",
+    "dag": "schemas/dag.schema.json",
+    "derived_view": "schemas/derived-view.schema.json",
+    "submission": "schemas/submission.schema.json"
+  },
+  "registries": {
+    "relations": "RELATION_REGISTRY.json",
+    "campaign_families": "CAMPAIGN_FAMILY_MAP.json"
+  },
+  "artifact_types": [
+    "theorem",
+    "proof",
+    "draft",
+    "paper",
+    "campaign",
+    "report",
+    "evidence",
+    "certificate",
+    "gap",
+    "erratum_or_supersession",
+    "retirement_package",
+    "object",
+    "definition",
+    "formula"
+  ],
+  "claim_statuses": [
+    "machine-verified",
+    "proved",
+    "demonstrated",
+    "conjectured",
+    "refuted",
+    "open"
+  ],
+  "lifecycle_statuses": [
+    "proposed",
+    "draft",
+    "active",
+    "released",
+    "superseded",
+    "retired",
+    "archived"
+  ],
+  "reachability_values": [
+    "EASY",
+    "MODERATE",
+    "WALL",
+    "INVARIANT"
+  ],
+  "llm_contract": {
+    "stable_keys": true,
+    "explicit_nulls": true,
+    "sidecar_suffix": ".artifact.json",
+    "required_retrieval_fields": [
+      "title",
+      "summary",
+      "subject_families",
+      "llm.key_terms",
+      "llm.retrieval_questions",
+      "llm.context_priority",
+      "llm.context_role"
+    ],
+    "mutation_protocol": "validate -> impact preview -> submit -> explicit apply",
+    "new_node_artifact_binding": "Every newly introduced node must list at least one submitted sidecar artifact_id in node.external_ids.artifacts, unless a new source digest matches a submitted sidecar file digest."
+  }
+}

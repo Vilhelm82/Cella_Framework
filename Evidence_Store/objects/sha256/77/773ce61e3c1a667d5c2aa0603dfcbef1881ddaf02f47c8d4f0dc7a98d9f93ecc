@@ -1,0 +1,121 @@
+"""ADVERSARIAL revalidation — Cluster B, Claim 1.
+
+Synthetic slope recovery using the V4 typed primitives
+typed_finite_difference + typed_collection + typed_log_log_slope.
+
+Paper Table (transfer_function_exponent_family_v4.tex lines 347-350):
+  alpha=0.5 -> measured slope -0.500000000021128  (predicted -0.5)
+  alpha=1.5 -> measured slope +0.499999999988428  (predicted +0.5)
+  alpha=2.0 -> measured slope +1.000000000001573  (predicted +1.0)
+  alpha=3.0 -> measured slope +1.999999999992809  (predicted +2.0)
+  all R^2 = 1.0, status slope_observed.
+
+We do NOT know the exact f-grid the paper used. We sweep several plausible
+grids and report the slope each yields, flagging which (if any) reproduces
+the headline digits. The law itself (slope -> alpha-1) is the claim; the
+exact 11th-digit value is grid-dependent float noise.
+"""
+from __future__ import annotations
+
+import sys
+
+sys.path.insert(0, "/home/william_lloydlt/projects/V4/Lloyd_Engine_V4/src")
+
+from lloyd_v4.core.status import SlopeStatus
+from lloyd_v4.primitives import (
+    typed_collection,
+    typed_finite_difference,
+    typed_log_log_slope,
+)
+
+PAPER = {
+    0.5: -0.500000000021128,
+    1.5: +0.499999999988428,
+    2.0: +1.000000000001573,
+    3.0: +1.999999999992809,
+}
+
+ALPHAS = [0.5, 1.5, 2.0, 3.0]
+
+
+def power_observations(alpha, f_values, delta_ratio):
+    return [
+        typed_finite_difference(
+            lambda x, a=alpha: x ** a,
+            f,
+            delta_ratio * f,
+            function_label=f"power_{alpha}",
+        )
+        for f in f_values
+    ]
+
+
+def fit_slope(alpha, f_values, delta_ratio):
+    obs = power_observations(alpha, f_values, delta_ratio)
+    res = typed_log_log_slope(typed_collection(obs))
+    return res
+
+
+# Candidate grids, each (label, f_values, delta_ratio)
+GRIDS = []
+# A: canonical test grid (test_task016 test_alpha_minus_one_law)
+GRIDS.append(("A: [1e-6..1e-1] x6, dr=1e-6", [1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1], 1e-6))
+# B: drop the 1e-6 -> [1e-5..1e-1]
+GRIDS.append(("B: [1e-5..1e-1] x5, dr=1e-6", [1e-5, 1e-4, 1e-3, 1e-2, 1e-1], 1e-6))
+# C: [1e-2..1e-9] 12pt log (exploratory radical grid), dr=1e-6
+import math
+c_fs = [10 ** (-2 - i * (7 / 11)) for i in range(12)]  # 1e-2 to 1e-9, 12 pts
+GRIDS.append(("C: 12pt 1e-2..1e-9, dr=1e-6", c_fs, 1e-6))
+# D: 0.001..0.3 grid from test (quadratic test)
+GRIDS.append(("D: [.001,.003,.01,.03,.1,.3], dr=1e-6", [0.001, 0.003, 0.01, 0.03, 0.1, 0.3], 1e-6))
+# E: same as A but dr=1e-7
+GRIDS.append(("E: [1e-6..1e-1] x6, dr=1e-7", [1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1], 1e-7))
+# F: same as A but dr=1e-5
+GRIDS.append(("F: [1e-6..1e-1] x6, dr=1e-5", [1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1], 1e-5))
+
+
+def main():
+    print("=" * 78)
+    print("CLAIM 1: synthetic slope recovery via V4 typed primitives")
+    print("=" * 78)
+
+    best = {}  # alpha -> (grid_label, slope, err_vs_paper)
+    for label, f_values, dr in GRIDS:
+        print(f"\n--- GRID {label} ---")
+        print(f"  {'alpha':>6} {'predicted':>10} {'measured slope':>22} {'R^2':>6} {'status':>16} {'err vs paper':>14}")
+        for alpha in ALPHAS:
+            res = fit_slope(alpha, f_values, dr)
+            st = res.status
+            if st is SlopeStatus.SLOPE_OBSERVED:
+                slope = res.value.slope
+                r2 = res.value.r_squared
+                paper = PAPER[alpha]
+                err = abs(slope - paper)
+                err_alpha = abs(slope - (alpha - 1.0))
+                print(f"  {alpha:>6} {alpha-1.0:>10.3f} {slope:>22.15f} {r2:>6.3f} "
+                      f"{st.value:>16} {err:>14.2e}")
+                # track grid that best reproduces paper digits
+                if alpha not in best or err < best[alpha][2]:
+                    best[alpha] = (label, slope, err, err_alpha, r2)
+            else:
+                print(f"  {alpha:>6} {alpha-1.0:>10.3f} {'<refused>':>22} {'--':>6} {st.value:>16}")
+
+    print("\n" + "=" * 78)
+    print("BEST MATCH TO PAPER (per alpha, across grids)")
+    print("=" * 78)
+    print(f"  {'alpha':>6} {'paper slope':>22} {'best reproduced':>22} {'|err|':>12} {'grid':>30}")
+    for alpha in ALPHAS:
+        label, slope, err, err_alpha, r2 = best[alpha]
+        print(f"  {alpha:>6} {PAPER[alpha]:>22.15f} {slope:>22.15f} {err:>12.2e} {label:>30}")
+
+    print("\n" + "=" * 78)
+    print("LAW VERDICT (slope vs alpha-1, best grid per alpha)")
+    print("=" * 78)
+    for alpha in ALPHAS:
+        label, slope, err, err_alpha, r2 = best[alpha]
+        print(f"  alpha={alpha}: slope={slope:.15f}  alpha-1={alpha-1.0:.1f}  "
+              f"|slope-(alpha-1)|={err_alpha:.2e}  R^2={r2:.6f}")
+
+
+if __name__ == "__main__":
+    main()

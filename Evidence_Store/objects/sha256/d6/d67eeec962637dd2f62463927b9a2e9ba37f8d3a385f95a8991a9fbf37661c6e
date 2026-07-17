@@ -1,0 +1,285 @@
+# MCG Geometry-First — Phase 2 — BACL-Filtered Readback Characterization
+
+**Status:** Phase 2 discovery characterization log. **BACL-filtered readback table built; route phase behavior characterized; path/operand/phase separation telemetry recorded; controls characterized; candidate evidence links added.** No candidate is promoted out of `unresolved_candidate`. No G claim is made. No precision claim is made.
+
+**Authority:** [`Build_Docs/Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md`](../../Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md) §10, with user-imposed Phase 2 constraints (2026-05-19): scope = three `four_form_primary` fixtures, join by `(fixture, coordinate_id)`, route pairs F1_to_F2 (primary) + F1/F2/F3/F4 same-route controls + F1/F2_to_F3 calibration-zero controls + F1/F2_to_F4 route-residual stressors, `base_operand_ulp` normalization convention recorded explicitly, no V3 oracle, no symbolic backend.
+
+**Deliverables landed:**
+- [`phase_2_joined_readback_table.json`](phase_2_joined_readback_table.json) — 3,699 rows; sha256 `6a212e…f28cc33`; byte-stable on rerun; references the Phase 1 geometry artifact by sha256 `6502e9…df42df54`.
+- [`src/lloyd_v4/evals/mcg_geometry_first_readback.py`](../../../src/lloyd_v4/evals/mcg_geometry_first_readback.py) — V4-native readback joiner.
+- [`tests/test_mcg_geometry_first_readback.py`](../../../tests/test_mcg_geometry_first_readback.py) — 10 focused tests; all pass.
+
+---
+
+## 1. What was built
+
+### 1.1 Scope (user constraint, honored)
+
+| Item | Honored | Where |
+|---|---|---|
+| Only `four_form_primary` fixtures (SR + Schwarzschild + pure_algebraic) | ✓ | `_fixture_specs()` excludes anchors and cbrt/quartic |
+| No anchor rows in readback table | ✓ | Phase 1's `geometry_anchor` rows are not joined; only 411 four_form_primary geometry rows feed Phase 2 |
+| Join by `(fixture, coordinate_id)` only | ✓ | `_phase_1_coordinate_index()` builds the join index; `geometry_row_id` equals `coordinate_id` per row; **no route-duplicated geometry** (tested) |
+| No geometry recomputed in Phase 2 | ✓ | Test 2 asserts no Phase-1-owned geometry field names appear in Phase 2 rows |
+
+### 1.2 Route pairs emitted per coordinate (9)
+
+| Pair ID | route_a | route_b | role |
+|---|---|---|---|
+| `F1_to_F2` | F1 | F2 | `primary_phase_candidate` |
+| `F1_to_F1` | F1 | F1 | `same_route_control` |
+| `F2_to_F2` | F2 | F2 | `same_route_control` |
+| `F3_to_F3` | F3 | F3 | `same_route_control` |
+| `F4_to_F4` | F4 | F4 | `same_route_control` |
+| `F1_to_F3` | F1 | F3 | `calibration_zero_control` |
+| `F2_to_F3` | F2 | F3 | `calibration_zero_control` |
+| `F1_to_F4` | F1 | F4 | `route_residual_stressor` |
+| `F2_to_F4` | F2 | F4 | `route_residual_stressor` |
+
+Row count: 3 fixtures × 137 coordinates × 9 pairs = **3,699 rows**.
+
+### 1.3 Normalization convention (recorded explicitly)
+
+**Convention:** `base_operand_ulp`, inherited from prior lattice campaigns:
+
+| Fixture | Established convention | Source module |
+|---|---|---|
+| SR four-form | `ulp(1 − β · β)` | `sr_lattice_campaign.py` (line 119) |
+| Schwarzschild four-form | `ulp(1 − 2/r)` | `schwarzschild_*_lattice_campaign.py` (line 113) |
+| pure_algebraic four-form | `ulp(1 − x)` | `pure_algebraic_lattice_campaign.py` (line 112) |
+
+`ulp_of_double` is inherited from `multi_precision_four_form` for parity. No hidden normalization choices. Phase 2 emits only this single normalization in this pass; if a future iteration emits `J_step` (step-natural ULP) as a sibling observable, per handoff §6 it appears as a separate ledger candidate.
+
+### 1.4 Pair-level telemetry recorded independently
+
+Per row, the following five separation classes are recorded **independently** (test 8):
+
+| Class | Values present |
+|---|---|
+| `path_identity_class` | `same_path_duplicate`, `distinct_named_route` |
+| `operand_separation_class` | `zero_operand_offset` (uniform — all pairs share the same coordinate input) |
+| `phase_separation_class` | `same_phase`, `half_phase_candidate`, `phase_drift` |
+| `rounding_lineage_class` | `same_lineage`, `known_distinct_lineage` |
+| `normalization_separation_class` | `same_unit` (uniform — single normalization convention) |
+
+Classification tolerances declared in the artifact (`classification_tolerances` field):
+- `half_phase_tolerance` = 0.05 (|delta_mod_1 − 0.5| ≤ this → `half_phase_candidate`)
+- `zero_phase_tolerance` = 0.05 (distance to {0, 1} ≤ this → `same_phase`)
+
+Per row, per route: `route_id, route_value, route_value_finite, normalization_unit, normalization_unit_source, normalization_unit_value, normalization_operand, normalization_operand_binade, bacl_level, bacl_phase_mod_1, distance_to_integer_phase, distance_to_half_phase, bacl_readback_status`. Per pair: `phase_delta_mod_1, distance_delta_to_zero, distance_delta_to_half, route_value_delta, route_value_delta_level, [5 separation classes above]`.
+
+---
+
+## 2. Answers to Phase 2's eight characterization questions
+
+The user's §"Primary Phase 2 questions" specifies the eight allowed questions and forbids three (G-discovery / precision / etc.). Discovery-only language used throughout.
+
+### Q1. Does F1_to_F2 show pointwise half-phase behavior relative to the declared BACL unit?
+
+**Yes, in a non-trivial fraction of records, in every fixture.** Distribution of `phase_separation_class` across 137 × 3 = 411 `F1_to_F2` rows:
+
+| Fixture | n | same_phase | half_phase_candidate | phase_drift | phase_unobservable |
+|---|---|---|---|---|---|
+| `sr_four_form` | 137 | 58 (42.3%) | **29 (21.2%)** | 50 (36.5%) | 0 |
+| `schwarzschild_four_form` | 137 | 118 (86.1%) | **16 (11.7%)** | 3 (2.2%) | 0 |
+| `pure_algebraic_four_form` | 137 | 96 (70.1%) | **20 (14.6%)** | 21 (15.3%) | 0 |
+
+The observation is **candidate pointwise half-phase readback behavior** — recorded as such, not as a precision claim. The fraction varies modestly across fixtures (12–21%). All records are observable; no NaN/inf phase failures.
+
+### Q2. Is the F1_to_F2 phase behavior stable across each fixture?
+
+**Mixed.** Within each fixture, the phase classes form a non-uniform distribution (cf. §3 stratum cross-tab). The half_phase_candidate fraction is bounded (12–21%) but not constant. Across fixtures, Schwarzschild is the cleanest (86% same_phase, 12% half) while SR is the noisiest (42% same_phase, 21% half, 37% drift). No fixture shows half_phase as a *uniform* signature across its sweep — the behavior is regional, organized by parameter region (see Q7 / §3).
+
+### Q3. Is the behavior pointwise or only marginal/global?
+
+**Pointwise, with an asymmetric carrier.** For every one of the 65 `F1_to_F2` half_phase_candidate records (across all three fixtures), the same coordinate also shows:
+- `F1_to_F3`: 65/65 `same_phase` (F1's phase is at integer position relative to F3 = 0, i.e., F1 is on-lattice).
+- `F1_to_F4`: 65/65 `same_phase` (F1's phase is at integer position relative to F4, indicating F1 and F4 both land on the same lattice grid).
+
+Reading: at half_phase_candidate records, **F1 sits at the integer-ulp lattice while F2 sits at the half-ulp midpoint**. The half-phase observation is asymmetric — it is carried by F2, not by a symmetric arrangement of F1 and F2 around 0.5. This is **candidate natural F1/F2 interleaving evidence at the pointwise level**, not a precision claim and not a G claim.
+
+(The same-coordinate `F2_to_F3` classifications would be the dual check; the test would be that `F2_to_F3` shows `half_phase_candidate` at those same coordinates — the data supports this directionally but the full cross-tab is left to Phase 2d.)
+
+### Q4. Do same-route controls reject manufactured half-phase?
+
+**Yes, cleanly.** All 1,644 same-route control records (F1↔F1, F2↔F2, F3↔F3, F4↔F4 across 3 fixtures × 137 coordinates) are classified `same_phase`. No manufactured half-phase appears in the control channel. Test 4 enforces this.
+
+### Q5. Does F3 calibration zero stay clean?
+
+**Yes.** F3 == 0.0 exactly in 411/411 records across all three fixtures. F3 is computed in each four-form module as `R − R` or equivalent, which is float-exact identity. No `control_warning` is needed; F3 is uncontaminated.
+
+### Q6. Does F4 behave as a stressor rather than the primary companion?
+
+**Yes — F4 is an active stressor channel, not a degenerate zero.** F4 is nonzero in:
+
+| Fixture | F4 nonzero records | F4 nonzero fraction |
+|---|---|---|
+| `sr_four_form` | 27/137 | 20% |
+| `schwarzschild_four_form` | 92/137 | 67% |
+| `pure_algebraic_four_form` | 40/137 | 29% |
+
+For SR and pure_algebraic, F4 is zero in the majority of records (the alternative split routing happens to round to the same float as the direct routing). For Schwarzschild, F4 is nonzero in 2/3 of records — its split routing diverges meaningfully across most of the grid. **F4 is not a substitute primary companion; it is a route-residual stressor whose activation rate varies by fixture algebra.** Tests 6 enforces that F4 pairs carry `route_residual_stressor` role, never `primary_phase_candidate`.
+
+### Q7. Which geometry strata from Phase 1 are available to join later?
+
+**All Phase 1 strata are available via `geometry_row_id`.** A first-pass cross-tabulation of F1_to_F2 phase class by `geometry_stratum` (recorded in Phase 1) shows the half_phase_candidate fraction is **strongly non-uniform across strata**:
+
+**SR `four_form_primary`:**
+| Stratum | n | same | half | drift | half % |
+|---|---|---|---|---|---|
+| non_relativistic (β < 0.3) | 40 | 2 | 5 | 33 | 12% |
+| intermediate (0.3 ≤ β < 0.9) | 83 | 42 | 24 | 17 | **29%** |
+| relativistic (β > 0.9) | 14 | 14 | 0 | 0 | 0% |
+
+**Schwarzschild `four_form_primary`:**
+| Stratum | n | same | half | drift | half % |
+|---|---|---|---|---|---|
+| horizon_approach (r < 2.5) | 89 | 89 | 0 | 0 | 0% |
+| photon_sphere_vicinity (r ∈ [2.5, 3.5]) | 21 | 21 | 0 | 0 | 0% |
+| isco_vicinity (r ∈ [5.5, 6.5]) | 4 | 1 | 3 | 0 | **75%** |
+| near_field (r > 10) | 23 | 7 | 13 | 3 | **57%** |
+
+**pure_algebraic `four_form_primary`:**
+| Stratum | n | same | half | drift | half % |
+|---|---|---|---|---|---|
+| near_unity_radicand (x < 0.3) | 41 | 15 | 5 | 21 | 12% |
+| intermediate (0.3 ≤ x < 0.7) | 55 | 40 | 15 | 0 | **27%** |
+| near_zero_radicand (x > 0.7) | 41 | 41 | 0 | 0 | 0% |
+
+**Pattern worth noting (recorded as observation, not as G claim):** half_phase_candidate behavior **vanishes in the small-radicand regime** of each fixture — SR relativistic (β → 1), Schwarzschild horizon_approach (r → 2), pure_algebraic near_zero_radicand (x → 1). In all three, the natural function `y = √(1 − ψ(t))` approaches zero, the base operand `1 − ψ(t)` approaches zero, and `ulp(base_operand)` becomes very fine; everything lands on integer positions of the fine lattice. Half-phase observability concentrates in *intermediate* regimes where the lattice spacing is moderate.
+
+This is a **geometry-stratum-conditioned readback observation**. It is *not* a G claim because:
+- The strata co-vary with conditioning (the C-confound is unresolved without Phase 2b's C extractor).
+- The half-phase classes themselves are observed relative to a *single* normalization convention; sibling normalization (`J_step`) was not run.
+- The grid family was not varied (Phase 2c not yet run).
+
+The candidate evidence is recorded; promotion is gated by Phase 2b + Phase 2c + Phase 2d.
+
+### Q8. Which C-covariates from Phase 1 are available to control later?
+
+**All Phase 1 C-covariate slots are available via `geometry_row_id` join.** The Phase 1 schema's `covariate_role` legend marks four fields as `C_covariate`:
+- `J_condition` — per-row relative slope `|t · J / y|`, recorded for all 411 four_form_primary rows.
+- `spectral_gap` — `null` for 1D fixtures (recorded as C-tagged slot for future multi-D extension).
+- `smallest_singular_value` — reserved C-slot (currently `null`).
+- `near_null_eigenvalue_magnitude` — reserved C-slot (currently `null`).
+
+For this pass, `J_condition` is the actionable C-covariate; the others await the lifted-construction extension to the `geometry_anchor` class. Phase 2b's C extractor (`C-def-1` calibration ladder) will produce a positive C profile that can then be regressed against the Phase 2 readback to ask whether half_phase_candidate density is C-explained or C-residual.
+
+---
+
+## 3. What Phase 2 does *not* claim
+
+Per handoff §"Interpretation discipline" and user §"Forbidden language":
+- ✗ No claim that G is discovered or confirmed.
+- ✗ No claim of half-ULP precision, double precision, sub-noise-floor, or precision doubling.
+- ✗ No claim that geometry explains residue.
+- ✗ No claim that the F1_to_F2 half-phase observation is "the natural F1/F2 lattice interleaving" as a resolved phenomenon. It is recorded as **candidate natural F1/F2 interleaving evidence at the pointwise level**, with the C-confound unresolved.
+- ✗ No promotion of any ledger candidate beyond `unresolved_candidate` (tested by Test 9).
+
+The half_phase fractions reported above are descriptive readback counts under a single declared normalization and a single declared tolerance; they are not interpreted as physical or geometric resolutions.
+
+---
+
+## 4. Candidate ledger updates (evidence links only)
+
+Per user direction, the ledger is updated only by attaching Phase 2 evidence links to the existing candidates. No promotion. Evidence tags added per candidate; details in [`candidate_ledger.json`](candidate_ledger.json):
+
+| Candidate | Phase 2 evidence | Tag |
+|---|---|---|
+| `G-curv-1` (Hessian/signature stratum vs j-selection) | Phase 2 `F1_to_F2` half_phase_candidate distribution differs across Phase 1 strata; cross-tab attached | `phase_2_readback_observed` |
+| `G-curv-2` (principal-curvature ratio vs route-pair phase) | route-pair phase observable now exists per row; principal-curvature ratio remains `null` for 1D fixtures | `phase_2_readback_observed` |
+| `G-curv-3` (null-tangent alignment vs transition grammar) | per-row `null_tangent_alignment` from Phase 1 + per-row `bacl_phase_mod_1` from Phase 2 are now jointly available; transition-grammar metric is a Phase 2d deliverable | `phase_2_readback_observed` |
+| `G-route-1` (path/operand-separated route-pair phase) | route-pair phase observable exists; **operand_separation_class is uniformly `zero_operand_offset`** across this pass; per handoff §1.4 this does not preclude characterization but admissibility as independent G evidence requires nonzero operand offset, which Phase 2 does not introduce | `phase_2_readback_observed`, `phase_2_path_separation_zero_offset` |
+| `C-def-1` (finite-difference conditioning response) | not addressed in Phase 2 (Phase 2b deliverable) | no Phase 2 tag |
+| `C-def-2` (Jacobian/Hessian spectral response) | not addressed in Phase 2 (Phase 2b deliverable) | no Phase 2 tag |
+| `C-def-3` (perturbation amplification ladder) | not addressed in Phase 2 (Phase 2b deliverable) | no Phase 2 tag |
+
+Same-route controls clean → tag `phase_2_control_clean` recorded at the campaign level.
+F3 calibration zero clean (411/411 exact zero) → tag `phase_2_control_clean` recorded.
+
+**All seven candidates remain `unresolved_candidate`.** Test 9 enforces this.
+
+---
+
+## 5. Tests and exact commands
+
+10 focused tests in [`tests/test_mcg_geometry_first_readback.py`](../../../tests/test_mcg_geometry_first_readback.py):
+
+| # | Assertion |
+|---|---|
+| 1 | Phase 2 rows join to Phase 1 rows by `(fixture, coordinate_id)`. |
+| 2 | Geometry is not duplicated or recomputed in Phase 2 rows. |
+| 3 | Required primary route pair `F1_to_F2` exists for all usable primary fixture coordinates. |
+| 4 | Same-route controls (F1_to_F1, F2_to_F2, F3_to_F3, F4_to_F4) exist; phase class `same_phase`. |
+| 5 | F3 calibration-zero controls (F1_to_F3, F2_to_F3) exist for every fixture. |
+| 6 | F4 stressor pairs (F1_to_F4, F2_to_F4) exist and are marked `route_residual_stressor`, never `primary_phase_candidate`. |
+| 7 | Normalization provenance fields are present on every per-route readback. |
+| 8 | Phase / operand / path / lineage / normalization separation classes are recorded independently with allowed values. |
+| 9 | Candidate ledger states are not promoted (all candidates remain `unresolved_candidate`). |
+| 10 | JSON artifact is deterministic / byte-stable across reruns + `main()`-to-disk identity. |
+
+### Exact commands and results
+
+```bash
+# 10 focused tests (Phase 2)
+$ PYTHONPATH=src python -m pytest tests/test_mcg_geometry_first_readback.py -v
+… 10 passed in 0.50s
+
+# Smallest reasonable existing subset (Phase 1 + Phase 2 + four-form-adjacent)
+$ PYTHONPATH=src python -m pytest \
+    tests/test_mcg_geometry_first_geometry.py \
+    tests/test_mcg_geometry_first_readback.py \
+    tests/test_f1_f2_natural_phase.py \
+    tests/test_f4_route_comb_search.py -v
+… 33 passed in 1.45s
+
+# Byte-stability of Phase 2 artifact
+$ cp Build_Docs/Reports/mcg_geometry_first/phase_2_joined_readback_table.json /tmp/rb_run1.json
+$ PYTHONPATH=src python -m lloyd_v4.evals.mcg_geometry_first_readback --output /tmp/rb_run2.json
+$ diff -q /tmp/rb_run1.json /tmp/rb_run2.json
+# (silent — files identical)
+$ sha256sum /tmp/rb_run1.json
+# 6a212ee610d80893afd9a2629820006b2a74d34a373f9e7dd334e2042f28cc33
+```
+
+No manifest, status family, primitive, fixture definition, architecture document, or protocol was modified.
+
+---
+
+## 6. Methodology notes (for the iteration log)
+
+- **F4 is a genuine stressor for all three fixtures, but with very different activation rates** (SR: 20%, Schwarzschild: 67%, pure_algebraic: 29%). The Schwarzschild F4 split routing `((r − 2)/r)^0.5` is the most divergent from the direct `(1 − 2/r)^0.5` route; this is a discovery observation about the four-form fixtures themselves, not about G.
+
+- **F3 ≡ 0 exactly in all 411 records**, confirming the calibration-zero design of the four-form fixtures. F3 == `R − R` (or equivalent identity) holds at the float level.
+
+- **The aggregate phase-class counts for `calibration_zero_control` and `route_residual_stressor` happen to coincide at the across-fixture sum level** (823 same / 65 half / 74 drift each, across 822 records of each class). The per-fixture breakdown differs; this is a counting coincidence at the aggregate, not a structural identity. Worth a follow-up cross-tab in Phase 2c if grid-stability work reveals it persists.
+
+- **The half_phase_candidate observation is asymmetric** (Q3): F1 sits at integer positions and F2 at half-ulp positions at those coordinates. The phenomenon is carried by F2 specifically. This is recorded but not interpreted.
+
+- **The small-radicand regime suppresses half_phase observability** in all three fixtures (Q7). This pattern is consistent with the lattice quantization being fine relative to the route's rounding error in that regime. *Whether* the suppression is C-driven or G-relevant is unresolved without Phase 2b.
+
+---
+
+## 7. What this pass did *not* attempt (logged honestly)
+
+- **C profile / Phase 2b** — separate deliverable.
+- **Grid stability / Phase 2c** — separate deliverable.
+- **Solve-for relations / Phase 2d** — separate deliverable.
+- **Nonzero operand offset** — Phase 2 used `zero_operand_offset` uniformly. Per handoff §"Do not require nonzero operand offset," this is acceptable as a discovery observation; it limits G-route-1 admissibility per §1.4 of the campaign handoff.
+- **Sibling normalization `J_step`** — only `J_final`/`base_operand_ulp` recorded. Sibling observable is a future iteration item.
+- **Multi-D anchor readback** — anchors are geometry-only in this campaign; F1/F2/F3/F4 routes are not defined on the anchor class.
+
+---
+
+## 8. References
+
+- [`Build_Docs/Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md`](../../Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md) §10, §16, §17
+- [`phase_0_m_contract.md`](phase_0_m_contract.md) — M-contract this Phase 2 honors
+- [`phase_1_geometry_table.json`](phase_1_geometry_table.json) — Phase 1 artifact joined by `(fixture, coordinate_id)`; sha256 `6502e9…df42df54` captured at run time
+- [`phase_1_geometry_characterization.md`](phase_1_geometry_characterization.md) — Phase 1 discovery writeup
+- [`candidate_ledger.json`](candidate_ledger.json) — updated with Phase 2 evidence (no state promotions)
+- [`phase_2_joined_readback_table.json`](phase_2_joined_readback_table.json) — 3,699-row joined artifact, byte-stable
+- [`../../../src/lloyd_v4/evals/mcg_geometry_first_readback.py`](../../../src/lloyd_v4/evals/mcg_geometry_first_readback.py) — Phase 2 readback joiner
+- [`../../../tests/test_mcg_geometry_first_readback.py`](../../../tests/test_mcg_geometry_first_readback.py) — 10 focused tests
+- Existing lattice-campaign normalization references (read-only): [`src/lloyd_v4/evals/sr_lattice_campaign.py`](../../../src/lloyd_v4/evals/sr_lattice_campaign.py), [`src/lloyd_v4/evals/schwarzschild_cbrt_lattice_campaign.py`](../../../src/lloyd_v4/evals/schwarzschild_cbrt_lattice_campaign.py), [`src/lloyd_v4/evals/pure_algebraic_lattice_campaign.py`](../../../src/lloyd_v4/evals/pure_algebraic_lattice_campaign.py)
+- Existing four-form fixtures (read-only, unmodified): `sr_four_form.py`, `schwarzschild_four_form.py`, `pure_algebraic_four_form.py`

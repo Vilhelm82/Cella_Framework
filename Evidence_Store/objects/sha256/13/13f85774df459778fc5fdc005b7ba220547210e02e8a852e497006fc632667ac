@@ -1,0 +1,86 @@
+"""Adversarial revalidation of Cluster C (Task 017c) — precision-scaling
+separation theorem C_{p,k} = a + u_p * b_k.
+
+Run with: PYTHONPATH=src python3 scratch/_revalidation/clusterC/revalidate_task017c.py
+
+Checks, all against a FRESH in-memory campaign run (not the committed file)
+plus byte-stability against the committed JSON:
+  1. byte-stability of precision_aggregate.json / headline / f5
+  2. regular-region R^2 == 1.0 for all fixture/path (campaign fit)
+  3. INDEPENDENT OLS R^2 via numpy.lstsq on raw rms_C vs u_p (load-bearing paths)
+  4. three open sub-claims still open (intercept, slope, sterbenz)
+  5. Sterbenz F2 b_k CI-upper table vs paper .tex values
+"""
+import json
+from pathlib import Path
+
+import numpy as np
+
+from lloyd_v4.evals.precision import multi_precision_campaign as c
+
+ROOT = Path(__file__).resolve().parents[3]
+RPT = ROOT / "Build_Docs" / "Reports" / "task017c_multi_precision_theorem2"
+
+
+def main() -> None:
+    # 1. byte-stability
+    assert c.precision_aggregate_bytes() == (RPT / "precision_aggregate.json").read_bytes()
+    assert c.headline_bytes() == (RPT / "headline_classification.md").read_bytes()
+    assert c.f5_supplementary_bytes() == (RPT / "f5_plus_supplementary.json").read_bytes()
+    print("[1] byte-stable: PASS")
+
+    out = c.run_precision_campaign()
+    fits = out["fits"]
+    assert out["headline_classification"] == "theorem2_partial"
+
+    # 2. campaign-reported regular R^2
+    for fx in fits:
+        for path in ("F1", "F2", "F3", "F4"):
+            assert fits[fx][path]["regular_region"]["fit"]["r_squared"] == 1.0
+    print("[2] all regular-region R^2 == 1.0 (campaign fit): PASS")
+
+    # 3. independent OLS R^2 on raw rms_C vs u_p
+    for fx in fits:
+        for path in ("F1", "F2", "F4"):
+            pps = fits[fx][path]["regular_region"]["per_precision_summary"]
+            u = np.array([float(r["u_p"]) for r in pps])
+            y = np.array([float(r["rms_C"]) for r in pps])
+            A = np.vstack([np.ones_like(u), u]).T
+            coef, *_ = np.linalg.lstsq(A, y, rcond=None)
+            yhat = A @ coef
+            ss_res = np.sum((y - yhat) ** 2)
+            ss_tot = np.sum((y - y.mean()) ** 2)
+            r2 = 1.0 if ss_tot == 0 else 1 - ss_res / ss_tot
+            assert abs(r2 - 1.0) < 1e-6, (fx, path, r2)
+    print("[3] independent numpy.lstsq R^2 == 1.0 (load-bearing): PASS")
+
+    # 4. three open sub-claims
+    sc = {s["subclaim"]: s["match"] for s in out["subclaim_results"]}
+    assert sc["intercept_ci_includes_zero"] is False
+    assert sc["slope_structure"] is False
+    assert sc["sterbenz_region_f2_vanishing"] is False
+    cf1 = fits["cbrt_chain"]["F1"]["regular_region"]
+    assert cf1["a_k_ci_includes_zero"] is False
+    assert cf1["a_k_ci_95"][1] < 1.2e-16  # CI upper below float64 oracle floor
+    print("[4] three sub-claims genuinely OPEN: PASS")
+
+    # 5. Sterbenz table vs paper
+    paper = {
+        "schwarzschild": (0.231, 0.665),
+        "sr": (0.383, 0.738),
+        "pure_algebraic": (0.364, 0.738),
+        "cbrt_chain": (0.437, 0.990),
+    }
+    for fx, (creg, cste) in paper.items():
+        reg = fits[fx]["F2"]["regular_region"]["b_k_ci_95"][1]
+        ste = fits[fx]["F2"]["sterbenz_region"]["b_k_ci_95"][1]
+        assert round(reg, 3) == creg, (fx, reg, creg)
+        assert round(ste, 3) == cste, (fx, ste, cste)
+        assert ste > reg
+    print("[5] Sterbenz F2 b_k CI-upper table matches paper, ste>reg: PASS")
+
+    print("\nALL CLUSTER-C CHECKS PASS")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,45 @@
+{
+  "rank": 80,
+  "lift": 5.7,
+  "count": 2,
+  "families": 1,
+  "a": {
+    "id": "OBJ:alpha-beta-gamma-crown-invariants-e-4-w-u-e-2-w-u-2-e-3-w-u-",
+    "label": "alpha, beta, gamma crown invariants (e_4(w)+u e_2(w)+u^2, e_3(w)+u e_1(w), 2(alp",
+    "standard_term": "auxiliary symmetric-function combinations (elementary symmetric polynomials in the root data, mixed with the mass parameter u) defining the crown square-class data",
+    "nomenclature": "novel",
+    "symbols": [
+      "e_1",
+      "e_2",
+      "e_3",
+      "e_4"
+    ]
+  },
+  "b": {
+    "id": "OBJ:triangle-weight-t-s",
+    "label": "triangle weight T_S",
+    "standard_term": "novel per-3-subset weighting function T_S := 1/∏_{m∉S} g_m² used in the triangle/shadow-law decomposition",
+    "nomenclature": "novel",
+    "symbols": [
+      "t_s"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-1248",
+      "type": "theorem",
+      "claim_status": "machine-verified",
+      "label": "THEOREM (shadow law + scalar, all n ≥ 3)",
+      "summary": "```\nshadow(Q_ν) = s(g)·[(n−2)·I − A₁] ,  s(g) = (Σ_{|S|=3} T_S)/C(n,3)\n            = e_3(g²)/(C(n,3)·e_n(g²))\n```\nProof. Linearity of shadow over Lemma 3, then Lemma 4; and Σ_S T_S = Σ_S ∏_{m∈S} g_m²/e_n(g²) = e_3(g²)/e_",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/09_historical_and_superseded_versions/cross_program_and_unclassified/SHADOW_LAW_THEOREM.md"
+    },
+    {
+      "uid": "U-1108",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Machine verification protocol (shadow_law_verify.py)",
+      "summary": "`shadow_law_verify.py`: (V1) SYMBOLIC n=4: Q_ν == Σ_S T_S(2I−J)_S with symbolic g (sympy, exact); (V2) exact-Fraction identity check at all 15 banked fixtures (n=4,5,6; Stage-B + B′ g's); (V3) shadow + scalar recomputed ",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/09_historical_and_superseded_versions/cross_program_and_unclassified/SHADOW_LAW_THEOREM.md"
+    }
+  ]
+}

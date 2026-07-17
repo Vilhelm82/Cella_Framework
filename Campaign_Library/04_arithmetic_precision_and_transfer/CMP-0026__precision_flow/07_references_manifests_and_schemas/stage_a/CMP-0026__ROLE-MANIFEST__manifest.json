@@ -1,0 +1,49 @@
+{
+ "authority": "Build_Docs/Reports/precision_flow/covariance_derivation_2026_06_10.md (bf1e2c9) section 1; brief CAMPAIGN_PRECISION_FLOW.md (Amendment 1 in)",
+ "battery_counts": {
+  "dyadic": 200,
+  "products": 1500,
+  "quotients": 800,
+  "sqrts": 200,
+  "straddle_km_pairs": 48,
+  "sums": 1500,
+  "ties_each_kind": 100
+ },
+ "battery_pins_sha256_prefix16": {
+  "dyadic.json": "998e191e4fab3fbc",
+  "products.json": "17714fe96f6d7863",
+  "quotients.json": "562ec06c347e40ce",
+  "sqrts.json": "493daba4fbdc076f",
+  "straddle.json": "b075afb7e38170b8",
+  "sums.json": "9fcf12f8e8502081",
+  "ties.json": "1c509e5063fa428f"
+ },
+ "binade_quantum_convention": "u_q = 2^(floor(log2|x|) - q + 1) - x's OWN binade (authority section 1; straddle-safe, NO special-casing anywhere)",
+ "campaign": "precision_flow",
+ "date_approved": "2026-06-11 (Will's GO; binding order: manifest first)",
+ "determinism": "batteries are literals; zero RNG at runtime; byte-stable re-run required before commit; FAIL stops the stage for Will.",
+ "environment_pins": {
+  "dependencies": "stdlib only (fractions, math.isqrt)",
+  "python": "3.14.4"
+ },
+ "frozen": true,
+ "grading_formulas_derived_and_cited": {
+  "A-P2_grading": "quarter-kind (built at q0=53, x = s +- u/4 with s mid-binade on the 53-bit grid): assert s_54 == s_53 (ancestor) AND e_54 == e_53. half-kind (x = s +- u/2): assert e_54 == 0 exactly (s_54 == x). Cited: authority section 1 tie anatomy + section 2 corollary 2.",
+  "A-P3_grading": "for each dyadic case (odd significand of exact bit-length L, times 2^j): for every q in sweep: (s_q == x) <=> (q >= L). Cited: authority section 2 corollary 3 + the representability of an L-bit odd significand at precision q iff q >= L.",
+  "D_from_RNE": "D = RNE(2t_q) evaluated by exact comparison (authority section 1 case anatomy): D = 0 iff |e_q| < u_q/4 OR |e_q| == u_q/4 (tie 2t=+-1/2 -> even = 0); D = sign(e_q) iff |e_q| > u_q/4 (incl. |e_q| == u_q/2 where 2t = +-1 is integer). Derived from RNE on {-1,0,+1} grid; cited: authority section 1.",
+  "independent_rounding": "s_q = RN_q(x) computed DIRECTLY by the reference rounder at each q (round-to-nearest-ties-even to q bits at x's own binade, unbounded exponent). The Law must PREDICT the independently-computed s_{q+1}.",
+  "law_in_s_form": "e_{q+1} = e_q - (u_q/2)*D <=> s_{q+1} = s_q + (u_q/2)*D, since e_q = x - s_q with x FIXED (subtract the two definitions). Graded in the s-form because s-values are dyadic rationals exactly representable for ALL phenomenon classes including sqrt (whose e is irrational but whose s-increments are in Q). Cited: authority section 1 definitions.",
+  "sqrt_exact_comparisons": "for x = sqrt(R), R rational positive non-square: floor(x/u) via isqrt(P*Q)//Q on x/u = sqrt(P/Q); all comparisons x vs rational c (c>0) decided by R vs c^2 in Q. No floating point in any decision."
+ },
+ "instrument_class": "REFEREE-CLASS (brief fence 4): exact-Q rounder + Law stepper, pure stdlib fractions, flow RECORDS not TypedResults - no Amendment-1 membrane, no eval-registry entry",
+ "object": "the Free Law at campaign grade (Refinement Law certification)",
+ "performance_budget": "120 s wall per full grading run, declared from the Phase-0 measurement (213,988 Q-steps/s on this host; projected ~2 s). Shrinkage protocol inherited: recorded reasons, never silent.",
+ "predictions_verbatim_from_brief": {
+  "A-P1": "zero violations of e_{q+1} = e_q - (u_q/2)*RNE(2t_q) across the entire pinned battery, every op class, every step, exact in Q - straddle and tie cases included under the x-binade-quantum convention with NO special-casing.",
+  "A-P2": "on the constructed tie battery, |t|=1/4 cases resolve to the ancestor (e unchanged) and |t|=1/2 cases annihilate (e_{q+1} = 0 exactly), 100%, no exceptions.",
+  "A-P3": "for every dyadic battery case with bit-length L: e_q = 0 <=> q >= L. Both directions graded (the <= catches premature death; the => catches immortal dyadics - either would be an instrument defect)."
+ },
+ "q_sweep": "q = 53..80 inclusive (27 refinement steps per case)",
+ "rows_served": "Obs 2/R6 (foundation stage), B3, separator M3 grounding",
+ "stage": "A"
+}

@@ -1,0 +1,36 @@
+{
+ "battery": "PA.5",
+ "byte_stable_x2": true,
+ "env": {
+  "numpy": "2.4.4",
+  "python": "3.12.3",
+  "sympy": "1.14.0"
+ },
+ "expected_records_sha": "848b8d8eca916edf",
+ "predecl_pin": "44a2c8019b2929b2",
+ "runs": [
+  {
+   "last_line": "OUTCOME: INCONCLUSIVE-budget (runs at cap still descending)",
+   "rc": 0,
+   "records_sha": "848b8d8eca916edf",
+   "run": 1,
+   "stderr_tail": "",
+   "stdout_sha16": "ed185242aef51d75",
+   "terminal_ok": true,
+   "wall_s": 211.73
+  },
+  {
+   "last_line": "OUTCOME: INCONCLUSIVE-budget (runs at cap still descending)",
+   "rc": 0,
+   "records_sha": "848b8d8eca916edf",
+   "run": 2,
+   "stderr_tail": "",
+   "stdout_sha16": "ed185242aef51d75",
+   "terminal_ok": true,
+   "wall_s": 215.39
+  }
+ ],
+ "script": "portfolio/campaigns/deficit_engine/realfiber_probe2.py",
+ "terminal_required": "OUTCOME: INCONCLUSIVE-budget (runs at cap still descending)",
+ "verdict": "PASS"
+}

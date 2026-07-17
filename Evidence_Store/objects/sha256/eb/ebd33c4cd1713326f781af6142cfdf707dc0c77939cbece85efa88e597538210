@@ -1,0 +1,208 @@
+# V4 Development Timeline — Chronological Drift Audit (Flipbook Cover)
+
+This is the **index / flipbook cover** for the 2026-05-30 chronological drift audit. It does not
+restate the arc bodies. Each arc has its own report under
+`Build_Docs/Reports/_audit/NN_<arc>.md` (each carrying its own evidence, confidence levels, and an
+appended `## Adversarial check (independent refutation attempt)` section). This file freezes the
+north star, lays the 15 arcs in order against it, and reads the north-star-distance column
+top-to-bottom.
+
+**Audit discipline reminder (applies to this file too):** the record shows X; where an arc diverges
+from the record, that is reported as "arc Y diverges from the record." The USER is ground truth on
+intent. This file does not assert the project's true intent and does not certify scientific
+correctness.
+
+---
+
+## 1. FROZEN NORTH STAR
+
+> **The following paragraph is FROZEN. It is the fixed reference against which every arc below is
+> measured. It is not revised by any later arc; later arcs are measured against it, never the
+> reverse.**
+
+ORIGINAL INTENT (frozen, from `Build_Docs/where_i_got_stuck.md` ~2026-05-15, corroborated by the
+earliest reports task000-task023 and the two earliest handoffs `session_handoff_v4_substrate.md` /
+`session_handoff_v4_curvature_pivot.md`): Will Lloyd was studying standard physics identities
+(gravitational redshift, special-relativistic time dilation) that both reduce to the same shape — a
+quantity depending on the square root of something that goes to zero at a boundary (the horizon;
+lightspeed). He wrote the SAME physics as a constraint that should evaluate to EXACTLY zero by
+construction, expressed two algebraically-identical ways (one routed around a squaring operation,
+one around the square root), evaluated both across a matched sweep in floating point, and examined
+the residuals. Observed: (Obs1) the two forms behave completely differently — one identically zero
+everywhere, the other nonzero on ~half the points; (Obs2) the nonzero residuals look
+structured/self-similar ("fractal" — a gut reaction, not a claim); (Obs3, most confident) the
+residuals sit on a discrete DOUBLING ladder, each rung ~2x the one below; (Obs4) the silent form is
+silent because of the arithmetic PATH (bit-level self-cancellation), not because the physics is
+trivial — both forms do the same physics; (Obs5) more algebraically-equivalent routes produce more
+distinct residual fingerprints; (Obs6) residual amplitude is not flat — it changes near the
+boundary; (Obs7, the one he could not let go of) residuals scale with precision by what looks like
+an EXACT ratio between precisions — lawful, not noise-like. He built the V4 typed substrate (typed
+results, explicit refusal, provenance, no hidden rescue) as the foundation to study this properly,
+but lacked the METHOD: a measurement technique that gets under the arithmetic noise floor, recovers
+the real structure without disturbing it, and that he can trust enough to answer Q5. The six open
+questions (verbatim/paraphrased): **Q1** What is the thing casting these patterns? — only the shadow
+on the float grid is ever seen, never the object. **Q2** Why does the route through the expression
+matter so much? — what property of a path selects which rounding survives vs cancels? **Q3** Why is
+the residual ladder a doubling ladder (factor-of-two rung spacing)? — measurable but underived.
+**Q4** What is the boundary actually doing to the amplitude? — there is an envelope near the
+horizon/lightspeed he cannot characterise. **Q5 (the one that actually stops him)** Is the structure
+a real property of the phenomenon, or an artefact of the measurement? — instrument and object may be
+entangled and he has no way to separate "this is real" from "this is the measurement." **Q6** The
+tooling wall — the current method can DETECT that structure is there but cannot RESOLVE it finer than
+the arithmetic noise floor; the instrument is too coarse. This is the fixed reference against which
+every later arc is measured.
+
+> **END FROZEN NORTH STAR.**
+
+---
+
+## 2. The flipbook — ordered arc index
+
+Columns: **#** = arc number / link target | **arc title** | **window** = reconstructed
+calendar window (mtime + dated body + handoff triangulation; absolute dates medium-confidence per the
+known snapshot-commit unreliability, ordering high-confidence) | **intent** (one line) | **deliver
+verdict** | **north-star distance** (the arc report's field-3 classification) | **adversarial
+outcome** (stands / weakened — from the independent refutation appended to each arc) | **link**.
+
+| # | arc title | window | intent (one line) | deliver verdict | north-star distance | adversarial outcome | link |
+|---|---|---|---|---|---|---|---|
+| 1 | Foundational L0-L2 typed-substrate buildout (Tasks 000-019) | ~May 11 | Bootstrap the typed kernel (typed results, refusal, provenance, no hidden rescue) as the disciplined foundation for later studying the residual phenomenon | delivered | **on-vector** — foundation/instrument-trust underwriting Q5/Q6; does not yet touch the phenomenon (correct) | **both STAND** (high); cosmetic citation-path nit + arc-label imprecision (017b/017c numbered-in-range but chronologically later) noted, verdicts unaffected | [01](01_foundational-l0-l2-substrate-buildout.md) |
+| 2 | AlphaProbe / jet-bundle discovery and iterated-log gap (Tasks 020-023b) | ~May 11 late | Harden the alpha-probe/jet-bundle primitive line, then run the first observation-only discovery campaign and fix the honesty gap it exposes | delivered | **on-vector** — instrument-honesty / first Q5 down-payment at the AlphaProbe level; phenomenon axes correctly untouched | **both STAND** (high); cosmetic cone-dir mtime nit (22:29 subdir vs 22:43 dir), gate-held conclusion unaffected | [02](02_alphaprobe-jetbundle-discovery-campaigns.md) |
+| 3 | Four-form battery & cross-fixture invariance (Tasks 024b-029) | May 12-13 | First arc to point the now-honest substrate at Will's actual two-form GR/SR phenomenon; test substrate-vs-fixture via cross-fixture comparison | delivered | **advancing** — first sustained attack on the real phenomenon (Obs1/Obs4 route-matters strong; Obs3 ladder NOT recovered; Obs7/Q5/Q6 deferred) | deliver **STANDS** (high); **north-star does NOT stand as written** (high) — Task 017b (in-window, e598e6e, float32/float64 ratio 2^29, obs/exp=1.0) is a real in-window Obs7 down-payment the arc wrongly called "banked"; coarse "advancing" direction survives but the "Obs7-banked / none-in-window" framing is contradicted | [03](03_four-form-battery-cross-fixture-invariance.md) |
+| 4 | Transfer-function exponent-family paper hardening | May 13 (08:31) | Consolidate Arc 03 evidence into the paper; adversarially map the reviewer attack surface (7 ranked attacks) and queue 029c→017b→030; no execution | delivered | **on-vector** — methodology/honesty axis; Q5 + Obs7 made adversarially honest via Theorem 2 + non-identifiability lemma; one contained over-broadening risk | **both STAND** (deliver high; north-star medium-high); deliver strengthened (v3.tex directly verified, timeline confirmed); one correction — the cbrt over-broadening SEED is in-brief, not purely downstream, so "flagged-and-contained" is slightly too clean | [04](04_paper-hardening-transfer-function-exponent-family.md) |
+| 5 | Refinery MVP, Sterbenz audit, lattice-grain block, and the curvature pivot (Tasks 029c-034) | May 13-15 | Execute the queued hardening/refinery experiments; the session-defining outcome is a pivot from arithmetic-organized to curvature-organized methodology | pivoted | **on-vector** — methodology/honesty (Q5/Q1); Obs7 brought to partial close (017c=theorem2_partial); curvature pivot restates the frozen Q1/Q5 framing | **both STAND** (high); curvature confirmed V4-native (0 Vera hits); methodology genuinely NOT built in-window (→ "pivoted" correct); 752-vs-803 test count a benign drafting artifact | [05](05_refinery-sterbenz-lattice-grain-and-curvature-pivot.md) |
+| 6 | May-16 phenomenology cluster (route/offset/q-source/half-grid probes) | May 16 (20:13-23:38) | One question in 15 forms: can a second equivalent route sit at half-ULP phase to make a "doubled comb"? Every probe answers the precision-doubling gate False | partial | **on-vector** — Q6 (tooling wall) + Q2 (why route matters) directly; Q5 via controls; trajectory-watch on continued arithmetic-organized search vs Arc 05's pivot | **both STAND** (deliver high; north-star high on classification, medium on curvature-pivot watch); disciplined "no" + two standing by-products = correct middle category; continuing-the-arithmetic-axis is a project-internal trajectory signal, not north-star distance | [06](06_may16-phenomenology-probe-cluster.md) |
+| 7 | Dual-arm probe verification/extension & lifted-singularity audit | May 16-18 | Empirically test whether ARM-N reads genuinely new data vs a collapsed restatement of ARM-W; build the genuine-separation fixture; reproduce V3's lifted-singularity audit V4-natively | delivered | **on-vector** — Q5/Q6 at the instrument level (highest-grade Q5 self-downgrade); F4 audit a disciplined no defending Axiom 6; trajectory-watch on arithmetic/arm axis | **both STAND** (high; medium on the curvature-pivot read); 4-of-7 separated overlaps is a logged scope-narrowing inside a correctly-scoped delivery, not concealment; Q5 reframe verified verbatim | [07](07_dual-arm-probe-and-lifted-singularity.md) |
+| 8 | Workshop discipline infrastructure & Vera-unification setup | May 17 | Stand up CLAUDE.md + /v4-axiom-check, codify CAMPAIGN_DISCIPLINE + V4_AUDIT_FRAMEWORK, establish Vera strip-and-replicate (reference-only) | delivered | **on-vector** — Q5 at methodology / instrument-trust / cross-validation-discipline level; trajectory-watch on arithmetic axis vs pivot | **both STAND** (high on on-vector/no-divergence; medium on frozen-Q5 needle); locational nit (CLAUDE.md/command live at workshop root, not engine dir); one new finding — `wrong_clean_emit_count` is both listed as Vera scaffolding AND adopted as V4 metric, resolved by independent (α-1)-program provenance | [08](08_workshop-discipline-and-vera-unification-setup.md) |
+| 9 | BACL substrate invariant, Conjecture C, c2 theorem & hardened dual-arm probe V1 | May 18-19 | Iterate (under external-review pressure) toward a proven IEEE-754 geometric invariant (BACL) independent of any algebraic chain; harden the dual-arm probe to code-enforced | delivered | **advancing** — Q3 (the doubling ladder / Obs3) answered outright; first arc claimed to close a frozen open question rather than build method around it | deliver **STANDS** (high); **north-star does NOT fully stand** (high) — the Q3-advance is solid and on-vector, but the SUPERLATIVE "first arc to close a frozen open question" is contradicted by the May-13 transfer-law/Theorem 3/Task 017c arc (ledger credits it with Obs7-closed, Q4-answered earlier); recommend narrowing to "first arc to answer Q3 outright by derivation from a proven substrate invariant" | [09](09_bacl-substrate-invariant-and-hardened-probe.md) |
+| 10 | MCG master-invariant gate campaign (R=M+C+G) and Gate-3 HALT | May 19 | Turn scattered observations into a generative engine (R=M+C+G, master invariant); pulled Gate-3 kill-switch to the front; the disciplined outcome is a HALT | delivered | **on-vector** — Q5 via a disciplined negative (the HALT separates instrument from object and finds G absent in this 1D slice); Q1 touched via that negative | **both STAND** (high on Q5/honesty/no-divergence; medium on curvature-trajectory read); independent recompute reproduces the HALT byte-for-aggregate; one field-4 body overreach — the "G empirically absent in 1D scope" ledger line traces to Arc-11 Phase 2h, so the HALT is a precursor, not "the source" | [10](10_mcg-gate-campaign-and-killswitch.md) |
+| 11 | Substrate-invariant-search (MCG reformed) with toolkit authority rewrite | May 22-26 | Pursue a substrate-derived K_G for G/C/M closure / L3 Gate 2; mid-arc the user recognizes the goal was scoped with the wrong toolkit ("three-wheeled race car") and restarts | pivoted | **on-vector** — Q1 via curvature (most literal attempt yet at the OBJECT); Q5 at methodology level (the arc demonstrated instrument-object entanglement ON ITSELF and corrected it) | **both STAND** (high on core; medium on forward trajectory); Path A failed / Path B is the eval-layer imported canonical K_G (substrate untouched, goal kept open) → "pivoted" correct; one body superlative ("strongest Q5 engagement yet") contestable vs prior Theorem-3 work but not in the field-4 claim text | [11](11_substrate-invariant-search-and-authority-rewrite.md) |
+| 12 | Vera-unification extraction, test ledger & archive | May 24-25 | Carry vera-unification from setup to extraction depth: comprehensive V4-native replication test ledger (F1-F17), onboarding + narrative docs, archive Vera out of the live workspace | delivered | **on-vector** — Q5 at methodology/instrument-trust (independent agent re-derivation = cleanest instrument-independence check), disciplined via strip-and-replicate; serves Q6/Obs1-4-5 indirectly | **both STAND** (deliver high; north-star high, medium hedge on Q5-vs-Q6 attribution + forward-deferral); zero replications run by design → "delivered against cataloguing goal" correct; F1-F17 vs F1-F16 a cosmetic count slack; naming collisions are a soft-smuggling risk surface, not a leak | [12](12_vera-unification-extraction-and-test-ledger.md) |
+| 13 | Sweep-signature probe & alpha-probe companion primitives (Tasks 035-036) | May 25-26 | Deliberate RETURN to L1 primitive construction: new sweep_signature_probe (low-sensitivity screen) + optional companion hook on directional_alpha_probe | delivered (see adversarial) | **on-vector** — Q6 (tooling wall) at the instrument layer + Q2; advances toolkit ORGANIZATION/coverage, NOT Q6's resolve-finer-than-the-floor goal | deliver **WEAKENED** (medium-high) — substrate artifacts genuinely delivered, but the phrase "against their pre-registered scope" does not survive: codex_task036 AC8(d) was relaxed post-hoc after the predicted joint pattern failed to reproduce (6 of 16 alpha verdicts diverge; the headline disambiguation surface has 0 instances). **north-star STANDS** (high); the finding reinforces its "not needle-moving / payoff deferred" half | [13](13_sweep-signature-and-alpha-probe-companion-primitives.md) |
+| 14 | V4 substrate-layer audit (Task 050) — gap & drift inventory | May 26 | Read-and-report audit of the whole substrate (5 deliverables): module-layer map, parent-primitive gaps, drift inventory, transplant readiness, summary; orders the first transplants | delivered | **on-vector** — Q6 at the substrate-construction / instrument-foundation level; the MAP that directs where the finer instrument is built; moves no Q-needle itself | **both STAND** (high; medium on Q6-vs-Q5 attribution); cited source lines verified verbatim; supersede-not-erase (May-28 banners) documented not backdated; one cosmetic 10-vs-11-primitives slip; post-window observers/ relocation is the downstream resolution of the audit's own GAP-009 flag (strengthens the framing) | [14](14_substrate-layer-audit-task050.md) |
+| 15 | Substrate-construction transplant arc (GAP-003 typed_ulp lift) | May 27 | Close the 12 audited GAPs by transplanting V3/scratch into the substrate; Transplant 1 = typed_ulp, the IEEE-754 lattice-geometry primitive (genuine substrate-touching work) | delivered | **on-vector** — Q6 (tooling wall) at substrate-construction/foundation; secondary Q5; sits at the on-vector/advancing boundary (real primitive grown, real defect removed) but moves no frozen Q-result | **both STAND** (high on classification/no-divergence; medium on Q6-vs-Q5 primacy); 45/45 tests run live, primitive exercised, bug-fixes reproduce; one stale-bookkeeping caveat — "65→80 exports" is correct for the arc snapshot but the live tree shows 43 after a later out-of-scope observers/ relocation | [15](15_substrate-construction-transplant-arc.md) |
+
+**Legend — north-star distance values used by the arc reports:**
+- **on-vector** — work serves the frozen north star (a Q1-Q6 / Obs1-7 axis or the foundation/method-trust those rest on) but does not itself move a frozen-question needle.
+- **advancing** — work moves a frozen-question needle (attacks or closes a Q / Obs).
+- **pivoted** — the arc's session-defining outcome is a change of organizing method, not a delivered campaign result, but the change is on the frozen-question axis.
+
+**Legend — adversarial outcome:** every arc carries an independent refutation attempt appended to its
+report. **STANDS** = the refutation failed and the verdict holds. **WEAKENED / does-not-stand** = the
+refutation landed on a load-bearing worded element (only arcs 3 north-star, 9 north-star, 13
+deliver). In all three weakened cases the *coarse direction* of the verdict survives; the *specific
+wording* was contradicted by evidence and is flagged for narrowing.
+
+---
+
+## 3. North-star-distance trend — reading the column top-to-bottom
+
+This section reads the **north-star distance** column (and the adversarial outcomes that qualify it)
+straight down the 15 rows, and states where the trend holds steady toward the frozen north star and
+where it trends away. It cites arcs by number. It reports the record; it does not assert the
+project's true intent.
+
+### 3.1 The dominant pattern: steady on-vector, with the needle moved only at two points
+
+Reading top to bottom, the column is **overwhelmingly `on-vector`** (arcs 1, 2, 4, 6, 7, 8, 10, 12,
+13, 14, 15 — eleven of fifteen), with **two `pivoted`** rows (arcs 5, 11) and **two `advancing`**
+rows (arcs 3, 9). The record's own framing is internally consistent: the frozen north star splits
+into "the foundation I built" vs "the METHOD I lack," and the great majority of arcs are explicitly
+**foundation / instrument-trust / method-discipline work** rather than phenomenon measurement. On
+that reading the steady `on-vector` run is the expected shape, not drift — the project spends most of
+its energy building and disciplining the instrument the frozen Q5/Q6 demand, and only twice claims to
+have moved a frozen-question needle.
+
+The **two `advancing` rows are the only points where the record claims a frozen-question needle
+moved**, and both are exactly where the audit's adversarial layer pushed hardest:
+- **Arc 3** (advancing on the phenomenon, Obs1/Obs4) — adversarial check found the north-star
+  *framing* wrong on a load-bearing point: Task 017b's in-window float32/float64 precision-ratio hit
+  is a genuine **Obs7** down-payment that the arc miscalled "banked." The *direction* (advancing,
+  not arrived) survives; the "Obs7 untouched in-window" wording does not. Net effect on the trend:
+  the phenomenon axis was touched **earlier and more** than Arc 3's own field-3 text admits.
+- **Arc 9** (advancing, Q3 answered outright via BACL) — the substantive Q3 closure stands, but the
+  **superlative** "first arc to close a frozen open question" does not: the May-13 transfer-law /
+  Theorem 3 / Task 017c work (Arc 3-4-5 lineage) already closed Obs7 and answered Q4 per the ledger.
+  Net effect: needle-movement is spread across **more arcs** than the two `advancing` labels suggest.
+
+So the trend reading holds **steady on-vector**, and the audit's adversarial layer makes the
+needle-movement story *broader, not narrower* — it does not surface drift away from the north star;
+it surfaces that progress on the phenomenon (especially **Obs7**, the observation the user singled
+out as "the single fact that convinced me there is something real") is **under-credited** in the
+arc-by-arc labels.
+
+### 3.2 Where the trend holds steady toward the north star
+
+- **The early run (arcs 1-2)** is foundation-and-honesty: build the typed kernel, then make the
+  AlphaProbe refuse to over-claim. On-vector by construction (the frozen text calls this the
+  foundation), adversarially clean.
+- **The phenomenon-contact run (arcs 3-5)** turns the honest instrument onto Will's actual GR/SR
+  two-form pair, recovers the route-matters phenomenon (Obs1/Obs4) and a partial Obs7, and ends with
+  the **curvature pivot** (arc 5) that restates the frozen Q1/Q5 framing almost word-for-word
+  ("curvature is the object; the arithmetic signature is the shadow"). The pivot is on the frozen
+  axis, not a departure from it.
+- **The instrument-trust run (arcs 6-8)** is Q5/Q6 discipline: 15 honest "no"s to a doubled-comb
+  finer instrument (arc 6), the dual-arm "is ARM-N reading new data" reframe with a highest-grade
+  self-downgrade (arc 7), and the workshop/Vera cross-validation discipline (arc 8). All on-vector at
+  the method/trust level.
+- **The substrate-derivation run (arcs 9-11)** is the deepest contact with the frozen questions: Q3
+  answered from IEEE 754 (arc 9), a disciplined Gate-3 HALT that engages Q5 in the negative (arc 10),
+  and the most literal attempt yet at the OBJECT via curvature/K_G (arc 11), which corrects its own
+  instrument-object entanglement and restarts. On-vector throughout; the K_G/MCG framing is the most
+  V3-shaped the project gets, but the record holds V3 isolation and refuses to promote the imported
+  Path-B K_G as a substrate result.
+- **The consolidation-and-construction run (arcs 12-15)** returns to building: Vera extraction
+  (arc 12), the return to L1 primitive construction (arc 13), the substrate-layer audit (arc 14),
+  and the first genuine substrate-construction transplant since the May-11 buildout (arc 15,
+  typed_ulp — the substrate's first-class hold on the arithmetic noise floor Q6 names). On-vector at
+  the foundation level; the Arc-13/14 "deferral risk" watch did **not** materialize — the map became
+  motion within a day.
+
+### 3.3 Where the trend trends away (watches, not divergences)
+
+No arc is classified as diverging from the frozen north star, and the adversarial layer did not
+promote any watch to a divergence. The trend reading does surface **three recurring directional
+tensions** that the arc reports log as field-4 trajectory-watches (medium confidence, forward reads
+of organizing intent — not executed actions, not north-star distance):
+
+1. **Arithmetic-organized momentum vs the curvature pivot (arcs 6, 7, 8, 9, partially 10).** Arc 5's
+   curvature-pivot handoff named the arithmetic/route/arm axis for replacement, yet arcs 6-9 continue
+   along it (route enumeration, dual-arm, BACL/binade/ulp lattice). Each report flags this as
+   instrument-momentum, not divergence, and the record shows it feeding forward: the offset guard,
+   the hardened probe, and BACL all carry into later arcs, and arcs 10-11 turn the program back
+   toward curvature/Q1. The trend here trends *sideways relative to the pivot* while staying *toward
+   the frozen questions* — the frozen north star is the Q1-Q6 set, which is itself arithmetic-path /
+   residual-structure framed, so continuing that axis is on-vector to the frozen reference even where
+   it runs counter to a later proposed method.
+2. **V3-shaped scaffolding (arcs 10-11).** The R=M+C+G / master-invariant / K_G framing is the most
+   V3-analogue the project adopts. The record contains it: V3 isolation held, the V3-equivalence is
+   carried as contrast not import, and the flagship G/K_G probe is either HALTed (arc 10) or kept
+   eval-layer-only with the goal held open (arc 11). The watch is real (energy spent building a
+   V3-analogue scaffold) but the discipline held.
+3. **Deferral, not divergence (arcs 12-14).** Large designed-but-unrun backlogs (Vera Track A/B,
+   tasks 037-040, the 12 transplants). The forward risk on these days is *deferral* — consolidating
+   and re-scoping more than measuring. Consistent with a project whose north star is a trustworthy
+   METHOD; arc 15 shows the deferral risk did not stick (typed_ulp executed within a day of the
+   arc-14 map). The one adversarial *deliver* weakening (arc 13, AC8(d) relaxed post-hoc) lives in
+   this run and is a pre-registration-discipline slip on a predicted joint pattern, not a north-star
+   drift — the north-star call for arc 13 stands.
+
+### 3.4 Net trend statement
+
+Read top-to-bottom, the north-star-distance column **holds steady on-vector** across all 15 arcs,
+with needle-movement claimed at arcs 3 and 9 and method-pivots at arcs 5 and 11. The record shows
+**no arc diverging from the frozen north star**; the only directional tensions are
+trajectory-watches (arithmetic-momentum-vs-pivot, V3-shaped scaffolding, deferral) that each report
+contains and the adversarial layer declined to escalate. The adversarial layer's net effect on the
+trend is to **broaden the needle-movement story** (Obs7 touched earlier than Arc 3 admits per the
+017b finding; frozen-question closure spread across more arcs than the Arc-9 superlative implies) and
+to flag **one pre-registration-discipline slip** (Arc 13 AC8(d)) — neither of which moves any arc off
+the on-vector trend. Where the record diverges from a *later proposed method* (the curvature pivot of
+arc 5), that is a project-internal organizing-principle question, not distance from the FROZEN north
+star, which is the Q1-Q6 / Obs1-7 reference fixed at the top of this file.
+
+---
+
+*Flipbook cover only. Full evidence, confidence levels, and the independent refutation for each arc
+live in the linked `NN_<arc>.md` reports under this directory. This file asserts no project intent
+beyond the frozen north star and certifies no scientific correctness.*

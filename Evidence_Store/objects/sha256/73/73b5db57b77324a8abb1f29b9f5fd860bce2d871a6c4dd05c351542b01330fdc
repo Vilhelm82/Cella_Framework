@@ -1,0 +1,190 @@
+#!/usr/bin/env python3
+"""
+Fresh re-test of the payload path behaviors across the Sterbenz boundary.
+
+Focus: Early F2, Late F2, P_compound_split, P_sign_c.
+
+No reliance on previous validation scripts or old artifacts.
+Pure re-implementation for current verification.
+
+Measures:
+- Fraction of points landing on integer lattice (ulp-normalized residual)
+- Max |j| (integer lattice level)
+- Separate stats inside vs outside Sterbenz region per fixture.
+
+Fixtures: pure_algebraic (primary for simplicity and direct comparison), schwarzschild.
+
+Run:
+    PYTHONPATH=src python scratch/revalidate_payload_sterbenz_2026-05-31.py
+"""
+
+from __future__ import annotations
+import numpy as np
+from typing import Dict, List, Tuple
+
+# =============================================================================
+# Association strategies (the four paths under test)
+# =============================================================================
+
+def early_f2(power: float, x_term: float, direct: float) -> float:
+    """Standard early cancellation form used as F2 in current four-forms."""
+    return (power - 1.0) + x_term
+
+def late_f2(power: float, x_term: float, direct: float) -> float:
+    """Explicit late reassociation."""
+    return power + (x_term - 1.0)
+
+def p_compound_split(power: float, x_term: float, direct: float) -> float:
+    """P_compound_split as defined in precision_bound_fixtures."""
+    return (power - 1.0) + (1.0 - direct)
+
+def p_sign_c(power: float, x_term: float, direct: float) -> float:
+    """P_sign_c as defined in precision_bound_fixtures."""
+    return (power - 1.0) - (-1.0 + direct)
+
+PATHS = {
+    "early_f2": early_f2,
+    "late_f2": late_f2,
+    "p_compound_split": p_compound_split,
+    "p_sign_c": p_sign_c,
+}
+
+# =============================================================================
+# Fixtures (minimal re-implementation for transparency)
+# =============================================================================
+
+def pure_algebraic_values(x: float) -> Dict[str, float]:
+    """Pure algebraic: direct = 1 - x, x_term = x, power = sqrt(1-x)^2"""
+    direct = 1.0 - x
+    x_term = x
+    r = np.sqrt(direct)
+    power = r * r
+    return {"power": power, "x_term": x_term, "direct": direct}
+
+def schwarzschild_values(r: float) -> Dict[str, float]:
+    """Schwarzschild: direct = 1 - 2/r, x_term = 2/r"""
+    direct = 1.0 - 2.0 / r
+    x_term = 2.0 / r
+    sqrt_direct = np.sqrt(direct)
+    power = sqrt_direct * sqrt_direct
+    return {"power": power, "x_term": x_term, "direct": direct}
+
+def sr_values(beta: float) -> Dict[str, float]:
+    """SR: direct = 1 - beta^2, x_term = beta^2"""
+    direct = 1.0 - beta**2
+    x_term = beta**2
+    eta = np.sqrt(direct)
+    power = eta * eta
+    return {"power": power, "x_term": x_term, "direct": direct}
+
+def cbrt_values(x: float) -> Dict[str, float]:
+    """Cbrt chain: direct = 1 - x, x_term = x, power = cbrt(1-x)^3"""
+    direct = 1.0 - x
+    x_term = x
+    r = np.cbrt(direct)
+    power = r * r * r
+    return {"power": power, "x_term": x_term, "direct": direct}
+
+FIXTURES = {
+    "pure_algebraic": {
+        "func": pure_algebraic_values,
+        "sterbenz_boundary": 0.5,
+        "inside_label": "x <= 0.5",
+        "outside_label": "x > 0.5",
+        "grid_inside": np.linspace(0.01, 0.5, 2000),
+        "grid_outside": np.linspace(0.5001, 0.99, 2000),
+    },
+    "schwarzschild": {
+        "func": schwarzschild_values,
+        "sterbenz_boundary": 4.0,
+        "inside_label": "r >= 4.0",
+        "outside_label": "r < 4.0",
+        "grid_inside": np.linspace(4.0, 100.0, 2000),
+        "grid_outside": np.linspace(2.01, 3.99, 2000),
+    },
+    "sr": {
+        "func": sr_values,
+        "sterbenz_boundary": 1/np.sqrt(2),
+        "inside_label": "beta <= 1/sqrt(2)",
+        "outside_label": "beta > 1/sqrt(2)",
+        "grid_inside": np.linspace(0.01, 1/np.sqrt(2), 2000),
+        "grid_outside": np.linspace(1/np.sqrt(2) + 0.0001, 0.99, 2000),
+    },
+    "cbrt": {
+        "func": cbrt_values,
+        "sterbenz_boundary": 0.5,
+        "inside_label": "x <= 0.5",
+        "outside_label": "x > 0.5",
+        "grid_inside": np.linspace(0.01, 0.5, 2000),
+        "grid_outside": np.linspace(0.5001, 0.99, 2000),
+    },
+}
+
+ULP = 2.0 ** -52   # for float64 lattice analysis (normalized residual)
+
+def compute_stats(values_list: List[Dict[str, float]], path_fn) -> Dict[str, float]:
+    """Compute on-lattice fraction and max |j| for a given path."""
+    residuals = []
+    for v in values_list:
+        res = path_fn(v["power"], v["x_term"], v["direct"])
+        # Normalize by machine ulp at scale ~1 (standard for these analyses)
+        norm_j = res / ULP
+        residuals.append(norm_j)
+
+    arr = np.array(residuals)
+    # Round to nearest integer for lattice check (standard definition)
+    rounded = np.round(arr)
+    on_lattice = np.isclose(arr, rounded, atol=1e-9)
+    frac_on_lattice = float(np.mean(on_lattice))
+    max_abs_j = float(np.max(np.abs(arr - rounded))) if len(arr) > 0 else 0.0
+
+    return {
+        "n": len(arr),
+        "frac_on_lattice": frac_on_lattice,
+        "max_abs_j": max_abs_j,
+    }
+
+def run_for_fixture(name: str, cfg: Dict) -> Dict:
+    results = {"fixture": name}
+
+    for region, grid, label in [
+        ("inside", cfg["grid_inside"], cfg["inside_label"]),
+        ("outside", cfg["grid_outside"], cfg["outside_label"]),
+    ]:
+        values_list = [cfg["func"](x) for x in grid]
+        region_stats = {}
+        for path_name, path_fn in PATHS.items():
+            stats = compute_stats(values_list, path_fn)
+            region_stats[path_name] = stats
+        results[region] = {
+            "label": label,
+            "n_points": len(grid),
+            "paths": region_stats,
+        }
+    return results
+
+def main():
+    print("Fresh re-test of payload paths across Sterbenz boundary")
+    print("=" * 70)
+    print("Date: 2026-05-31")
+    print("No use of previous validation artifacts.")
+    print()
+
+    all_results = {}
+    for name, cfg in FIXTURES.items():
+        res = run_for_fixture(name, cfg)
+        all_results[name] = res
+
+        print(f"\n=== {name.upper()} ===")
+        for region in ["inside", "outside"]:
+            r = res[region]
+            print(f"  {r['label']} (n={r['n_points']})")
+            for p, s in r["paths"].items():
+                print(f"    {p:18}: on_lattice={s['frac_on_lattice']:.4f}  max|j|={s['max_abs_j']:.4f}")
+
+    print("\n" + "=" * 70)
+    print("Raw results available in all_results if imported.")
+    return all_results
+
+if __name__ == "__main__":
+    main()

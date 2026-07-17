@@ -1,0 +1,179 @@
+"""
+gate_mvp.py — minimal runnable demonstrator of the gate / substrate design.
+
+Design language  ->  mechanism
+  claim = inheritance edge   : you claim a primitive by SUBCLASSING it. Bases ARE your parents.
+  scream at the earliest pt  : structural demands fire in __init_subclass__ (definition/import time).
+  constructive, not banned   : nothing is blacklisted. A thing fails because it cannot complete the
+                               only move the room allows. No floor under it -> "catches air".
+  parent must already exist  : Python enforces this for free -- you cannot subclass a name that isn't
+                               defined (NameError). The language IS the gate; we add almost nothing.
+  founders (L0)              : roots are legitimately parentless ONLY if they say so (founder=True).
+                               A conscious decision, never a default. This is all that separates a
+                               real root from pi, which is merely an orphan.
+  one-directional flow       : every node declares what it `produces` for a future child, or marks
+                               itself `terminal`. "Why are you here?" is an acceptance criterion.
+  "no parent" is a FORK      : if a needed parent isn't on the substrate yet, build it from existing
+                               bedrock and seat -- every child above then inherits it for free.
+  legible failure            : every CatchesAir message names the located fix, never "because".
+
+Names like MetricTensor/KG are illustrative placeholders for the SHAPE, not V4's real layer tree.
+
+REFERENCE STATUS (promoted from scratch/gate_mvp.py, 2026-06-05): pedagogical demonstrator of the
+gate DESIGN LANGUAGE only. The PRODUCTION gate is `src/lloyd_v4/core/binding.py` (PrimitiveBinding)
++ `src/lloyd_v4/harness/autorouter.py` (Mode-3 authoring-time gate) — see HR110 and
+SUBSTRATE_CONSTRUCTION.md §10. This file is runnable reference, not substrate; do not import it.
+"""
+
+from __future__ import annotations
+from fractions import Fraction
+from typing import Callable
+
+
+class CatchesAir(Exception):
+    """The only failure type. Its message is the correction, not a verdict."""
+
+
+class Substrate:
+    """The accepted primitives. The only door in is __init_subclass__ below;
+    to be registered IS to have borne the contract."""
+    _citizens: dict[str, type] = {}
+
+    @classmethod
+    def register(cls, prim: type) -> None:
+        cls._citizens[prim.__name__] = prim
+
+    @classmethod
+    def citizens(cls) -> list[str]:
+        return sorted(cls._citizens)
+
+
+class Primitive:
+    """Subclass this (through a parent) to claim a place on the substrate.
+    The placement op runs at DEFINITION time, so a malformed claim never imports."""
+    founder: bool = False
+    produces: str | None = None
+    terminal: bool = False
+
+    def __init_subclass__(cls, founder: bool = False, **kw):
+        super().__init_subclass__(**kw)
+        cls.founder = founder
+
+        # parents = the bases that are themselves Primitives. The inheritance edge IS the claim.
+        parents = [b for b in cls.__bases__
+                   if b is not Primitive and isinstance(b, type) and issubclass(b, Primitive)]
+
+        # (1) "Why are you here?" -- declare your own output for a future child, or be terminal.
+        #     Check the class's OWN declaration, not an inherited one.
+        own_produces = cls.__dict__.get("produces")
+        own_terminal = cls.__dict__.get("terminal", False)
+        if own_produces is None and not own_terminal:
+            raise CatchesAir(
+                f"{cls.__name__}: declares no `produces` and is not `terminal`. "
+                f"Either name what a child consumes off you, or mark terminal=True (a final value). "
+                f"An undeclared dead-end is the one illegitimate node."
+            )
+
+        # (2) Placement: land on a parent, or be a declared founder. Otherwise catch air.
+        if founder:
+            if parents:
+                raise CatchesAir(
+                    f"{cls.__name__}: marked founder but inherits {[p.__name__ for p in parents]}. "
+                    f"A founder is a root -- it consumes nothing."
+                )
+        elif not parents:
+            raise CatchesAir(
+                f"{cls.__name__}: no parent to consume from, and not a registered founder. "
+                f"Orphan -- nowhere to land. Declare a parent, or, if this truly is a root, "
+                f"mark founder=True (a conscious decision, never a default)."
+            )
+        # "the parent must already exist" needs no check here: Python gives it for free.
+        # `class X(NotYetDefined)` -> NameError. The language is the gate. See demo 5.
+
+        Substrate.register(cls)
+
+
+class Proven:
+    """A different gate, a later lifecycle stage: closure is checked at CONSTRUCTION time.
+    You cannot BUILD a Proven without the derivation closing exactly. Reproduction is not closure."""
+
+    def __init__(self, claim: str, identity: Fraction, derivation: Callable[[], object]):
+        result = derivation()                      # the gate RUNS the derivation itself
+        if not isinstance(result, Fraction):
+            raise CatchesAir(
+                f"{claim}: derivation returned {type(result).__name__}, not an exact Fraction. "
+                f"A float measurement reproduces but cannot close -- it tops out at eval-layer."
+            )
+        residual = result - identity
+        if residual != 0:
+            raise CatchesAir(
+                f"{claim}: derivation did not close. residual = {residual} (must be exactly 0)."
+            )
+        self.claim, self.identity = claim, identity
+
+    def __repr__(self):
+        return f"<PROVEN {self.claim} = {self.identity}>"
+
+
+# ===========================================================================
+# DEMO  (small set)
+# ===========================================================================
+def hdr(s): print("\n=== " + s)
+
+if __name__ == "__main__":
+    hdr("1. A founder seats (a conscious root)")
+    class MetricTensor(Primitive, founder=True):
+        produces = "metric"
+    print("   citizens:", Substrate.citizens())
+
+    hdr("2. Primitives seat by consuming a parent (inheritance edge = the claim)")
+    class RiemannCurvature(MetricTensor):
+        produces = "riemann"
+    class KG(RiemannCurvature):                 # K_G curvature, built up from bedrock
+        produces = "gauss_curvature"
+    print("   citizens:", Substrate.citizens())
+
+    hdr("3. pi tries to seat -> catches air (orphan: no parent, not a founder)")
+    try:
+        class Pi(Primitive):
+            produces = "ratio"
+        print("   pi seated?!")
+    except CatchesAir as e:
+        print("   CATCHES AIR:", e)
+
+    hdr("4. An undeclared dead-end -> catches air ('why are you here?')")
+    try:
+        class MysteryNode(MetricTensor):        # inherits a parent, but declares nothing of its own
+            pass
+        print("   seated?!")
+    except CatchesAir as e:
+        print("   CATCHES AIR:", e)
+
+    hdr("5. The FORK: a needed parent isn't on the substrate yet")
+    try:
+        class GeodesicDev(RicciScalar):         # RicciScalar undefined -> Python itself screams
+            produces = "deviation"
+    except NameError as e:
+        print("   CATCHES AIR (free, from Python):", e)
+    print("   ...so build the missing parent from existing bedrock, then it seats:")
+    class RicciScalar(RiemannCurvature):
+        produces = "ricci"
+    class GeodesicDev(RicciScalar):
+        produces = "deviation"
+    print("   citizens:", Substrate.citizens())
+    print("   (every child above RicciScalar now inherits it for free.)")
+
+    hdr("6. An artifact CLAIMS K_G by subclassing it, declared as a final value")
+    class CurvatureFinding(KG):
+        terminal = True
+    print("   CurvatureFinding seated:", "CurvatureFinding" in Substrate.citizens())
+
+    hdr("7. PROVEN gate: closure, not reproducibility (construction-time)")
+    third = Fraction(1, 3)
+    proven = Proven("c2_identity", third, lambda: Fraction(2, 6))     # exact -> closes
+    print("   ", proven)
+    try:
+        Proven("c2_identity", third, lambda: 1 / 3)                  # float -> reproduces, can't close
+        print("   measurement seated?!")
+    except CatchesAir as e:
+        print("   CATCHES AIR:", e)

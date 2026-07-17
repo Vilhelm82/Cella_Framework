@@ -1,0 +1,49 @@
+{
+  "campaign": "bigraded_jet",
+  "stage": "B",
+  "object": "J^(2,1) - fusion: epsilon-jet lanes each carrying their upsilon-damage account; mixed lanes compute claim-conditioning (naming covenant: placeholder notation)",
+  "manifest_version": "stage-b-v1",
+  "frozen": true,
+  "date_approved": "2026-06-10 (Will: Stage A ACCEPTED, GO for Stage B with the B-P2 resolution-floor pre-freeze condition)",
+  "authority": "Build_Docs/Agent_tasks/CAMPAIGN_BIGRADED_JET.md",
+  "driver": "HR131 section-5 gap verbatim: claim-conditioning = operand damage x quantity sensitivity; the jet's own gradient supplies the sensitivity. Stage B computes that product per-op, end to end - computed, not classified.",
+  "branch": "campaign/bigraded-jet",
+
+  "fusion_law": {
+    "carrier": "damage-tracked scalar (v, d_exact, d_bound): v is the IDENTICAL float the closed epsilon-algebra computes (same formulas, same op order - B-P1 is structural before it is graded); d_exact is the first-order accumulated rounding damage with EXACT per-op residues (Stage-A EFT laws: TwoSum / FMA TwoProd / div r/b / sqrt r/(2s)); d_bound is the accumulated bound channel for UNKNOWN-residue ops.",
+    "chaining": "per scalar op c = f(a, b): d_exact(c) = (df/da)*d_exact(a) + (df/db)*d_exact(b) + e_op; d_bound(c) = |df/da|*d_bound(a) + |df/db|*d_bound(b) + beta_op. The local derivatives ARE the jet's own per-op sensitivities (HR131 resolution-shape note, applied at op granularity). Delta arithmetic in float64; second-order terms negligible by construction and declared.",
+    "epsilon_lanes": "the (v, g, H) jet composition runs on damage-tracked scalars: every lane arithmetic op (products, sums of the chain/product rules) posts residues and chains damage exactly like value ops. The float CONTENT of (v, g, H) is unchanged - EFTs never alter the primary results.",
+    "unknown_residue_ops": "log / exp / pow (libm, uncertified): value-lane residue enters d_bound at 1.0 * ulp(result) per op - a DECLARED ASSUMPTION (typical libm <= 1 ulp), labeled, never silently claimed exact; div/sqrt scalarized residues (r/b, r/(2s)) carry one extra rounding - second-order, declared negligible, exact channel.",
+    "claim_prediction": "predicted claim error = |d_exact(claim)| + d_bound(claim) at the root node - the mixed-lane output. No thresholds anywhere in the computation path."
+  },
+
+  "predictions_verbatim_from_brief": {
+    "B-P1": "the epsilon-content of J^(2,1) on the full F1a ladder is byte-identical to the closed J^(2,0) records (HR131 pins verified) - fusion adds lanes, never perturbs them.",
+    "B-P2": "mixed-lane claim-error prediction for kappa at rungs k=8..15 falls within a frozen factor band [1/8, 8] of the measured |kappa_jet - arbiter| per rung - reproducing HR131 section-3's forgiveness (28-51 binades of operand damage, ~zero claim error) from the lanes alone, no thresholds anywhere in the path.",
+    "B-P3": "computed claim-conditioning, passed through the declared display strata, reproduces the HR131 stratification within +/-1 rung (WELL->WARNING k=8+/-1; ->ILL k=12+/-1)."
+  },
+
+  "b_p2_resolution_floor_will_condition": {
+    "declared_floor": "floor_k = 2 * ulp(|kappa_arbiter_k|) per rung",
+    "rationale_executor_choice_recorded": "the MEASURED side |kappa_jet - arbiter| is quantized by (a) the arbiter's float64-ization (<= 0.5 ulp), (b) kappa_jet's own final-op rounding (<= 0.5 ulp), (c) float subtraction of the two (<= 1 ulp combined): 2 ulp is the smallest defensible resolution of the measured difference - ulp-scale of the arbiter's resolution per Will's options.",
+    "grading": "rungs with measured error > floor_k: band test prediction/measured in [1/8, 8]. Rungs with measured error <= floor_k: both-below test - prediction <= floor_k = PASS, prediction > floor_k = FAIL (split). Declared pre-freeze, never invented at grading time."
+  },
+
+  "prediction_grading_mechanical": {
+    "B-P1": "verify the Quiet pin (9a1d7ec6...) and the exact-jet stage manifest pin (0a80bc05...); load results/exact_jet_f1a_rerun/records/F1a_jet.jsonl (HR131); per rung k=0..15: fused (S0, S1, S2, kappa) floats must equal the recorded s_jet/kappa values BIT-FOR-BIT (json float repr equality). PASS iff every rung matches or both refuse identically (k=16 horizon refusal).",
+    "B-P2": "per rung k=8..15: predicted = |d_exact| + d_bound at the kappa node; measured = |kappa_jet - arbiter_value| (arbiter values from the HR131 records, pin-protected). Apply the floor rule above. PASS iff every rung passes its applicable test.",
+    "B-P3": "display metric per rung = max over computation nodes of binades_lost(node) = max(0, 53 + log2((|d_exact| + d_bound)/|v|)) (the damage-bits measure; 0 where v = 0 or damage = 0); display strata = the HR131 constants 26/40 AS DISPLAY MAPPING ONLY (nothing triggers on them - Will's ruling). PASS iff the WELL->WARNING transition lands at k = 8 +/- 1 and ->ILL at k = 12 +/- 1."
+  },
+
+  "fixtures": "the HR131 F1a ladder verbatim: r_k = fl64(2 + 10^-k), k = 0..15 (+k=16 refusal); chain F(r) = log2|1 - 2/r| -> (S0,S1,S2) -> HR129 kappa reconstruction, ALL inside the fused membrane end-to-end (the reconstruction consumes the lane components WITH their damage accounts).",
+  "membrane": "Amendment 1 obligations 1-6; ONE TypedResult per evaluation; operation_id 'bigraded_jet_fused' added to the eval-tier ledger citing this brief; events tuple = docking slot (the upsilon entries + damage diagnostics dock there per the law's designated slot).",
+  "strata_demotion": "the 26/40 + 60/150 strata survive as DISPLAY MAPPING ONLY (brief Stage B; Will's GO): conditioning.status is computed from coverage facts (refusals/unknown-presence) exactly as Stage A; the stratified damage display lives in the value's diagnostics; NOTHING triggers on strata anywhere.",
+  "environment_pins": {"python": "3.14.4", "mpmath": "1.3.0"},
+  "determinism_policy": "inherited verbatim; zero RNG; byte-stable re-runs diffed before commit.",
+  "commands": {
+    "green_slice": "PYTHONPATH=src python -m pytest tests/test_bigraded_stage_b.py tests/test_bigraded_stage_a.py",
+    "full_suite": "PYTHONPATH=src python -m pytest",
+    "source_audit": "PYTHONPATH=src python -m pytest tests/test_source_purity.py && frozen-token grep (HR131 list) over the stage-B module"
+  },
+  "non_goals_inherited": "no substrate edits; no transcendental upsilon-exactness (bound channel only); no route work (Stage C); no separator revision; no naming."
+}

@@ -1,0 +1,589 @@
+{
+  "audit_name": "mcg_geometry_first_phase_2d_solve_for_scout",
+  "authority": "Build_Docs/Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md",
+  "campaign": "mcg_geometry_first_discovery",
+  "campaign_level_recommendation": {
+    "campaign_level_decision_point": "Sense (B) restructure: extend to multi-D anchors as the next campaign phase, OR conclude 1D characterization and deliver a V3-diagnostic-bridge artifact. This decision is upstream of any further phase work and requires user buy-in per the campaign discipline.",
+    "candidates_advanced_by_1d_scope": [
+      "C-def-1 (operational extractor validated; E = log2(|base_operand|) is a positively-defined V4-native primitive)",
+      "G-curv-1 (signature-driven hypothesis empirically refuted; reclassification to C_confounded proposed)"
+    ],
+    "candidates_blocked_by_1d_scope": [
+      "G-curv-2 (principal_curvature_ratio is 1D-degenerate)",
+      "G-curv-3 (null-tangent-alignment requires multi-D anchors)",
+      "C-def-2 (spectral spread is 1D-degenerate)"
+    ],
+    "rationale": "Residual structure (after E-fit) or transition-grammar MI is substantial in 1D scope. Before extending to multi-D anchors, investigate whether the residual/grammar structure is a SECOND candidate geometric primitive testable in 1D, or whether it's additional C-covariate dependence.",
+    "recommendation": "investigate_residual_structure_in_1d_before_multi_d",
+    "summary_metrics_across_1d_fixtures": {
+      "continuous_monotone_max_r_squared": 0.47429720997783065,
+      "max_residual_correlation_abs": 0.4159727298279708,
+      "threshold_max_abs_contrast": 0.6731225296442688,
+      "transition_grammar_max_MI_bits": 0.8666381469752638
+    }
+  },
+  "candidate_evidence_emissions": {
+    "C-def-1": {
+      "evidence_paths": [
+        "phase_2b_c_profile.json",
+        "phase_2c_grid_stability.json",
+        "phase_2d_solve_for_scout.json"
+      ],
+      "phase_2d_assessment": "C-def-1 has been operationalized: the endpoint_distance_substrate_image primitive E = log2(|base_operand|) is a positively-defined, grid-stable, cross-fixture-portable, V4-native quantity that organizes the F1_to_F2 readback signal. Phase 2d formalizes E as the candidate geometric primitive and provides relation characterizations (continuous monotone, threshold, residual, transition grammar) against it. The original C-def-1 calibration ladder rungs 1-5 (handoff \u00a711) have NOT been run on a controlled set; the primitive is characterized empirically on the campaign's fixture set rather than on a known-conditioning ladder.",
+      "proposed_ledger_state": "unresolved_candidate",
+      "rationale_for_state_change": "C-def-1 has an operational extractor and is grid-stable on the campaign fixtures. The handoff \u00a711 calibration ladder remains the documented graduation path; state is unresolved_candidate until that ladder runs. The primitive's bridge to V3 diagnostics (K_G, condition number, lifted-singularity machinery) is recommended as the natural follow-up.",
+      "tags": [
+        "phase_2d_operational_extractor_validated"
+      ],
+      "title": "Finite-difference conditioning response"
+    },
+    "C-def-2": {
+      "evidence_paths": [
+        "phase_2d_solve_for_scout.json"
+      ],
+      "phase_2d_assessment": "Spectral content remains 1D-degenerate. Phase 2d does not advance this candidate.",
+      "proposed_ledger_state": "unresolved_candidate",
+      "rationale_for_state_change": "Awaits multi-D anchor extension.",
+      "tags": [
+        "structurally_rate_limited_in_1d_scope"
+      ],
+      "title": "Jacobian/Hessian spectral response"
+    },
+    "C-def-3": {
+      "evidence_paths": [
+        "phase_2d_solve_for_scout.json"
+      ],
+      "phase_2d_assessment": "Parameter-perturbation ladder not exercised. Phase 2d does not advance this candidate.",
+      "proposed_ledger_state": "unresolved_candidate",
+      "rationale_for_state_change": "Awaits perturbation-ladder implementation.",
+      "tags": [
+        "phase_2d_perturbation_ladder_still_pending"
+      ],
+      "title": "Perturbation amplification ladder"
+    },
+    "G-curv-1": {
+      "evidence_paths": [
+        "phase_1_geometry_table.json",
+        "phase_2_joined_readback_table.json",
+        "phase_2b_c_profile.json",
+        "phase_2c_grid_stability.json",
+        "phase_2d_solve_for_scout.json"
+      ],
+      "phase_2d_assessment": "The signature-driven hypothesis (Hessian signature stratum organizes j-selection) was empirically refuted across Phases 1, 2, 2b, 2c: Hessian signature is uniformly negative across all 411 four_form_primary rows, so signature alone cannot stratify j-selection. The readback signal that does exist (F1_to_F2 half_phase fraction) is fully characterized by the endpoint_distance_substrate_image primitive E in 1D scope.",
+      "proposed_ledger_state": "C_confounded",
+      "rationale_for_state_change": "The original mechanism hypothesis (signature stratum organizes selection) has been empirically refuted in 1D scope. The readback variation that exists is C-explained (E-associated). Per handoff \u00a77 allowed states, C_confounded is the correct characterization.",
+      "tags": [
+        "phase_2d_reclassified_to_C_confounded"
+      ],
+      "title": "Hessian/signature stratum vs j-selection"
+    },
+    "G-curv-2": {
+      "evidence_paths": [
+        "phase_1_geometry_table.json",
+        "phase_2_joined_readback_table.json",
+        "phase_2b_c_profile.json",
+        "phase_2c_grid_stability.json",
+        "phase_2d_solve_for_scout.json"
+      ],
+      "phase_2d_assessment": "principal_curvature_ratio is structurally null for 1D fixtures (only one principal curvature exists in 1D). This candidate cannot be tested without multi-D anchor extension (lifted construction of K constraints + X-lift; see Phase 1 geometry_anchor class which currently defers via lifted_construction_pending). The Phase 2d solve-for scout did not produce evidence either way for this candidate.",
+      "proposed_ledger_state": "unresolved_candidate",
+      "rationale_for_state_change": "No allowed ledger state matches 'structurally untestable in current scope'. Per \u00a77, the closest is to keep unresolved_candidate with the explicit structurally_rate_limited_in_1d_scope tag attached. Promotion to multi-D anchors is the only path forward.",
+      "tags": [
+        "structurally_rate_limited_in_1d_scope"
+      ],
+      "title": "Principal-curvature ratio vs route-pair phase"
+    },
+    "G-curv-3": {
+      "evidence_paths": [
+        "phase_1_geometry_table.json",
+        "phase_2_joined_readback_table.json",
+        "phase_2b_c_profile.json",
+        "phase_2c_grid_stability.json",
+        "phase_2d_solve_for_scout.json"
+      ],
+      "phase_2d_assessment": "Transition grammar MI assessed per fixture: sr_four_form: strong_transition_grammar_MI_0.522bits_ratio_0.341 \u2014 transition structure beyond the marginal exists; candidate secondary primitive may live in the j-sequence; schwarzschild_four_form: strong_transition_grammar_MI_0.250bits_ratio_0.375 \u2014 transition structure beyond the marginal exists; candidate secondary primitive may live in the j-sequence; pure_algebraic_four_form: strong_transition_grammar_MI_0.867bits_ratio_0.735 \u2014 transition structure beyond the marginal exists; candidate secondary primitive may live in the j-sequence. Null-tangent-alignment side requires multi-D anchors; cannot be operationalized in 1D.",
+      "proposed_ledger_state": "unresolved_candidate",
+      "rationale_for_state_change": "Transition grammar IS exercised in this pass on the F1_to_F2 phase_class sequence. Mutual information between consecutive states is the operational metric. If the MI ratio is weak in all fixtures, the transition-grammar candidate has no positive support here; if moderate-to-strong, the candidate becomes an unexplained_correlation pending C-vs-G separation. The null-tangent-alignment side requires multi-D anchors to be fully testable.",
+      "tags": [
+        "structurally_rate_limited_in_1d_scope"
+      ],
+      "title": "Null-tangent alignment vs transition grammar"
+    },
+    "G-route-1": {
+      "evidence_paths": [
+        "phase_2_joined_readback_table.json",
+        "phase_2b_c_profile.json",
+        "phase_2c_grid_stability.json",
+        "phase_2d_solve_for_scout.json"
+      ],
+      "phase_2d_assessment": "The route-pair phase observable is fully characterized in 1D scope with zero_operand_offset uniformly (Phase 2/2b/2c). Per handoff \u00a71.4, independent G admissibility requires nonzero operand offset characterization which this campaign has not pursued. The \u00a71.4 rule is orthogonal to the C-vs-G question that Phase 2d's primitive characterization addresses.",
+      "proposed_ledger_state": "unresolved_candidate",
+      "rationale_for_state_change": "Phase 2d does not address the nonzero-operand-offset gap. Status remains gated on a separate path/operand-separation characterization pass.",
+      "tags": [
+        "phase_2d_zero_offset_gap_unchanged"
+      ],
+      "title": "Path/operand-separated F1/F2 route-pair phase"
+    }
+  },
+  "candidate_primitive": {
+    "geometric_interpretation": "Binade-indexed image of distance to the fixture's singular endpoint via the radicand of the natural function sqrt(base_operand).",
+    "id": "endpoint_distance_substrate_image",
+    "label": "E := log2(|base_operand(coord)|)",
+    "per_fixture_formula": {
+      "pure_algebraic_four_form": "E(x) = log2(|1 - x|)",
+      "schwarzschild_four_form": "E(r) = log2(|1 - 2/r|)",
+      "sr_four_form": "E(\u03b2) = log2(|1 - \u03b2\u00b7\u03b2|)"
+    },
+    "substrate_derivation_note": "endpoint_distance_substrate_image E(coord) := log2(|base_operand(coord)|) where base_operand is the radicand 1 - psi(t) of the natural function sqrt(base_operand) for each fixture. Derivation chain from IEEE 754 substrate (sketch; not a formal proof): (i) BACL [proven in bacl_invariant_audit/closeout.md] gives 1 - x_term = j * ulp(x_term) for integer j when ulp(1) >= ulp(x_term); (ii) the lattice unit is ulp(x_term) = 2^(k_x_term - 52) where k_x_term = floor(log2(|x_term|)); (iii) the result base_operand = 1 - x_term then sits in a binade k_b = floor(log2(|base_operand|)), so its float64 intrinsic granularity is 2^(k_b - 52); (iv) the ratio between the BACL lattice unit (~ ulp(x_term)) and the result's intrinsic granularity (~ ulp(base_operand)) governs how the route-pair rounding decisions distribute against the lattice \u2014 and that ratio depends on k_b = floor(E). Empirical observation across P1+P2+P2b+P2c: F1_to_F2 half_phase fraction varies with E systematically. This pass tests four relation families (continuous monotone, threshold, residual, transition grammar) against E and produces an honest characterization. Formal derivation of the ratio-to-phase mapping is a separate deliverable beyond Phase 2d."
+  },
+  "fixture_record_counts": {
+    "pure_algebraic_four_form": 137,
+    "schwarzschild_four_form": 137,
+    "sr_four_form": 137
+  },
+  "fixtures_in_scope": [
+    "sr_four_form",
+    "schwarzschild_four_form",
+    "pure_algebraic_four_form"
+  ],
+  "joined_records_count": 411,
+  "phase": "Phase 2d \u2014 solve-for scout",
+  "relation_families_tested": [
+    "continuous_monotone",
+    "threshold",
+    "per_fixture_residual_after_endpoint_model",
+    "transition_grammar"
+  ],
+  "relation_results": {
+    "continuous_monotone": {
+      "pure_algebraic_four_form": {
+        "bin_edges": [
+          -3.2698395837389085,
+          -2.2894123264828248,
+          -1.7110335301804165,
+          -1.3251140256062102,
+          -1.0,
+          -0.7348455422918369,
+          -0.5258312108744988,
+          -0.33017284887156634,
+          -0.15790852551748966
+        ],
+        "fit_interpretation": "weak_linear_relation_r2_0.114_slope_+0.0789 \u2014 no clean monotone relation; relation family is likely not linear-in-E",
+        "linear_fit": {
+          "intercept": 0.2621661871806723,
+          "n": 10,
+          "r_squared": 0.11363736461101859,
+          "slope": 0.07889485324107864
+        },
+        "n_bins_populated": 10,
+        "n_records": 137,
+        "per_bin": [
+          {
+            "bin_index": 0,
+            "half_phase_fraction": 0.0,
+            "mean_E": -4.488045861905902,
+            "n": 13
+          },
+          {
+            "bin_index": 1,
+            "half_phase_fraction": 0.0,
+            "mean_E": -2.759834948537283,
+            "n": 14
+          },
+          {
+            "bin_index": 2,
+            "half_phase_fraction": 0.0,
+            "mean_E": -2.00170803045826,
+            "n": 14
+          },
+          {
+            "bin_index": 3,
+            "half_phase_fraction": 0.0,
+            "mean_E": -1.524375526514916,
+            "n": 13
+          },
+          {
+            "bin_index": 4,
+            "half_phase_fraction": 0.0,
+            "mean_E": -1.1680992495246338,
+            "n": 14
+          },
+          {
+            "bin_index": 5,
+            "half_phase_fraction": 0.07142857142857142,
+            "mean_E": -0.8728545505429546,
+            "n": 14
+          },
+          {
+            "bin_index": 6,
+            "half_phase_fraction": 1.0,
+            "mean_E": -0.6358697697837683,
+            "n": 13
+          },
+          {
+            "bin_index": 7,
+            "half_phase_fraction": 0.07142857142857142,
+            "mean_E": -0.4327905389699142,
+            "n": 14
+          },
+          {
+            "bin_index": 8,
+            "half_phase_fraction": 0.35714285714285715,
+            "mean_E": -0.24848805229567678,
+            "n": 14
+          },
+          {
+            "bin_index": 9,
+            "half_phase_fraction": 0.0,
+            "mean_E": -0.08510766886669108,
+            "n": 14
+          }
+        ]
+      },
+      "schwarzschild_four_form": {
+        "bin_edges": [
+          -6.895693893926494,
+          -6.090076156922759,
+          -5.581651089064222,
+          -4.774188058122404,
+          -3.8568235983219052,
+          -2.896164189015461,
+          -1.9962769139572822,
+          -1.2319467280496967,
+          -0.49707326814485514
+        ],
+        "fit_interpretation": "moderate_linear_relation_r2_0.474_slope_+0.0673 \u2014 partial monotone trend; non-monotonic structure may dominate",
+        "linear_fit": {
+          "intercept": 0.3733858210838562,
+          "n": 10,
+          "r_squared": 0.47429720997783065,
+          "slope": 0.06730083598535597
+        },
+        "n_bins_populated": 10,
+        "n_records": 137,
+        "per_bin": [
+          {
+            "bin_index": 0,
+            "half_phase_fraction": 0.0,
+            "mean_E": -7.665449506825539,
+            "n": 13
+          },
+          {
+            "bin_index": 1,
+            "half_phase_fraction": 0.0,
+            "mean_E": -6.4837181876698065,
+            "n": 14
+          },
+          {
+            "bin_index": 2,
+            "half_phase_fraction": 0.0,
+            "mean_E": -5.838668127042474,
+            "n": 14
+          },
+          {
+            "bin_index": 3,
+            "half_phase_fraction": 0.0,
+            "mean_E": -5.3358583290307475,
+            "n": 13
+          },
+          {
+            "bin_index": 4,
+            "half_phase_fraction": 0.0,
+            "mean_E": -4.295101005148287,
+            "n": 14
+          },
+          {
+            "bin_index": 5,
+            "half_phase_fraction": 0.0,
+            "mean_E": -3.541535048508178,
+            "n": 14
+          },
+          {
+            "bin_index": 6,
+            "half_phase_fraction": 0.0,
+            "mean_E": -2.413526870113635,
+            "n": 13
+          },
+          {
+            "bin_index": 7,
+            "half_phase_fraction": 0.0,
+            "mean_E": -1.7465282795952228,
+            "n": 14
+          },
+          {
+            "bin_index": 8,
+            "half_phase_fraction": 0.5,
+            "mean_E": -0.7806125327764429,
+            "n": 14
+          },
+          {
+            "bin_index": 9,
+            "half_phase_fraction": 0.6428571428571429,
+            "mean_E": -0.3977968168977693,
+            "n": 14
+          }
+        ]
+      },
+      "sr_four_form": {
+        "bin_edges": [
+          -2.4701436357265942,
+          -1.4957867091562147,
+          -0.9772874559572321,
+          -0.6626170573762642,
+          -0.4246382941617751,
+          -0.25574953256044564,
+          -0.14421187034257726,
+          -0.06288505892307263,
+          -0.01587870053540503
+        ],
+        "fit_interpretation": "weak_linear_relation_r2_0.143_slope_+0.0650 \u2014 no clean monotone relation; relation family is likely not linear-in-E",
+        "linear_fit": {
+          "intercept": 0.274660176890922,
+          "n": 10,
+          "r_squared": 0.1427409642175299,
+          "slope": 0.06495328811950606
+        },
+        "n_bins_populated": 10,
+        "n_records": 137,
+        "per_bin": [
+          {
+            "bin_index": 0,
+            "half_phase_fraction": 0.0,
+            "mean_E": -4.387162137624516,
+            "n": 13
+          },
+          {
+            "bin_index": 1,
+            "half_phase_fraction": 0.0,
+            "mean_E": -1.9541797062876012,
+            "n": 14
+          },
+          {
+            "bin_index": 2,
+            "half_phase_fraction": 0.0,
+            "mean_E": -1.2338573604348924,
+            "n": 14
+          },
+          {
+            "bin_index": 3,
+            "half_phase_fraction": 0.5384615384615384,
+            "mean_E": -0.8226155615170629,
+            "n": 13
+          },
+          {
+            "bin_index": 4,
+            "half_phase_fraction": 0.5714285714285714,
+            "mean_E": -0.5452659272101521,
+            "n": 14
+          },
+          {
+            "bin_index": 5,
+            "half_phase_fraction": 0.5,
+            "mean_E": -0.34144963966760417,
+            "n": 14
+          },
+          {
+            "bin_index": 6,
+            "half_phase_fraction": 0.15384615384615385,
+            "mean_E": -0.2011016782668071,
+            "n": 13
+          },
+          {
+            "bin_index": 7,
+            "half_phase_fraction": 0.14285714285714285,
+            "mean_E": -0.10340764235760509,
+            "n": 14
+          },
+          {
+            "bin_index": 8,
+            "half_phase_fraction": 0.07142857142857142,
+            "mean_E": -0.038383833589657454,
+            "n": 14
+          },
+          {
+            "bin_index": 9,
+            "half_phase_fraction": 0.14285714285714285,
+            "mean_E": -0.006001796747158505,
+            "n": 14
+          }
+        ]
+      }
+    },
+    "per_fixture_residual_after_endpoint_model": {
+      "pure_algebraic_four_form": {
+        "interpretation": "weak_residual_structure_0.098 \u2014 residuals are largely uncorrelated with the tested C-covariates",
+        "max_abs_residual_correlation": 0.09834944499797359,
+        "n_records": 137,
+        "residual_correlations": {
+          "J_condition": 0.09510940144458822,
+          "endpoint_distance": 0.02419569532371051,
+          "hessian_abs": 0.09834944499797359
+        },
+        "residual_stats": {
+          "residual_max_abs": 0.7971825576520265,
+          "residual_mean": -0.005386988275098503
+        }
+      },
+      "schwarzschild_four_form": {
+        "interpretation": "strong_residual_structure_0.416 \u2014 residual after E-fit carries additional substrate-covariate dependence; the candidate primitive E alone does not fully explain the readback",
+        "max_abs_residual_correlation": 0.4159727298279708,
+        "n_records": 137,
+        "residual_correlations": {
+          "J_condition": 0.18102452570564614,
+          "endpoint_distance": 0.4159727298279708,
+          "hessian_abs": 0.17860505996225046
+        },
+        "residual_stats": {
+          "residual_max_abs": 0.6892535798169105,
+          "residual_mean": 0.0006038408829468815
+        }
+      },
+      "sr_four_form": {
+        "interpretation": "weak_residual_structure_0.127 \u2014 residuals are largely uncorrelated with the tested C-covariates",
+        "max_abs_residual_correlation": 0.12668100047433353,
+        "n_records": 137,
+        "residual_correlations": {
+          "J_condition": 0.11179157969414057,
+          "endpoint_distance": -0.12668100047433353,
+          "hessian_abs": 0.11167185706460636
+        },
+        "residual_stats": {
+          "residual_max_abs": 0.7869622050830656,
+          "residual_mean": -0.0016042450278512786
+        }
+      }
+    },
+    "threshold": {
+      "pure_algebraic_four_form": {
+        "best_threshold": {
+          "abs_contrast": 0.35714285714285715,
+          "frac_above": 0.35714285714285715,
+          "frac_below": 0.0,
+          "n_above": 56,
+          "n_below": 81,
+          "threshold_E": -0.7522511595445539
+        },
+        "interpretation": "strong_threshold_contrast_0.357_at_E_-0.752 \u2014 candidate threshold relation supported",
+        "n_records": 137
+      },
+      "schwarzschild_four_form": {
+        "best_threshold": {
+          "abs_contrast": 0.6731225296442688,
+          "frac_above": 0.6818181818181818,
+          "frac_below": 0.008695652173913044,
+          "n_above": 22,
+          "n_below": 115,
+          "threshold_E": -0.7504804006406878
+        },
+        "interpretation": "strong_threshold_contrast_0.673_at_E_-0.750 \u2014 candidate threshold relation supported",
+        "n_records": 137
+      },
+      "sr_four_form": {
+        "best_threshold": {
+          "abs_contrast": 0.30526315789473685,
+          "frac_above": 0.30526315789473685,
+          "frac_below": 0.0,
+          "n_above": 95,
+          "n_below": 42,
+          "threshold_E": -0.9487184368651196
+        },
+        "interpretation": "strong_threshold_contrast_0.305_at_E_-0.949 \u2014 candidate threshold relation supported",
+        "n_records": 137
+      }
+    },
+    "transition_grammar": {
+      "pure_algebraic_four_form": {
+        "H_conditional_bits": 0.31290030207772856,
+        "H_marginal_bits": 1.1795384490529923,
+        "interpretation": "strong_transition_grammar_MI_0.867bits_ratio_0.735 \u2014 transition structure beyond the marginal exists; candidate secondary primitive may live in the j-sequence",
+        "marginal_distribution": {
+          "half_phase_candidate": 20,
+          "phase_drift": 21,
+          "same_phase": 96
+        },
+        "mutual_information_bits": 0.8666381469752638,
+        "n": 137,
+        "transition_matrix_normalized": {
+          "half_phase_candidate": {
+            "half_phase_candidate": 0.9,
+            "phase_drift": 0.05,
+            "same_phase": 0.05
+          },
+          "phase_drift": {
+            "half_phase_candidate": 0.047619047619047616,
+            "phase_drift": 0.8571428571428571,
+            "same_phase": 0.09523809523809523
+          },
+          "same_phase": {
+            "half_phase_candidate": 0.010526315789473684,
+            "phase_drift": 0.010526315789473684,
+            "same_phase": 0.9789473684210527
+          }
+        }
+      },
+      "schwarzschild_four_form": {
+        "H_conditional_bits": 0.41768897097825686,
+        "H_marginal_bits": 0.668055679114828,
+        "interpretation": "strong_transition_grammar_MI_0.250bits_ratio_0.375 \u2014 transition structure beyond the marginal exists; candidate secondary primitive may live in the j-sequence",
+        "marginal_distribution": {
+          "half_phase_candidate": 16,
+          "phase_drift": 3,
+          "same_phase": 118
+        },
+        "mutual_information_bits": 0.25036670813657114,
+        "n": 137,
+        "transition_matrix_normalized": {
+          "half_phase_candidate": {
+            "half_phase_candidate": 0.4666666666666667,
+            "phase_drift": 0.2,
+            "same_phase": 0.3333333333333333
+          },
+          "phase_drift": {
+            "half_phase_candidate": 1.0
+          },
+          "same_phase": {
+            "half_phase_candidate": 0.05084745762711865,
+            "same_phase": 0.9491525423728814
+          }
+        }
+      },
+      "sr_four_form": {
+        "H_conditional_bits": 1.0083117927763507,
+        "H_marginal_bits": 1.5298776591296142,
+        "interpretation": "strong_transition_grammar_MI_0.522bits_ratio_0.341 \u2014 transition structure beyond the marginal exists; candidate secondary primitive may live in the j-sequence",
+        "marginal_distribution": {
+          "half_phase_candidate": 29,
+          "phase_drift": 50,
+          "same_phase": 58
+        },
+        "mutual_information_bits": 0.5215658663532634,
+        "n": 137,
+        "transition_matrix_normalized": {
+          "half_phase_candidate": {
+            "half_phase_candidate": 0.4482758620689655,
+            "phase_drift": 0.2413793103448276,
+            "same_phase": 0.3103448275862069
+          },
+          "phase_drift": {
+            "half_phase_candidate": 0.18,
+            "phase_drift": 0.78,
+            "same_phase": 0.04
+          },
+          "same_phase": {
+            "half_phase_candidate": 0.12280701754385964,
+            "phase_drift": 0.05263157894736842,
+            "same_phase": 0.8245614035087719
+          }
+        }
+      }
+    }
+  },
+  "source_phase_1_artifact": "Build_Docs/Reports/mcg_geometry_first/phase_1_geometry_table.json",
+  "source_phase_1_sha256": "6502e942558f699d24011ae1d78601a07dea835c9ec9441fe42185a9df42df54",
+  "source_phase_2_artifact": "Build_Docs/Reports/mcg_geometry_first/phase_2_joined_readback_table.json",
+  "source_phase_2_sha256": "6a212ee610d80893afd9a2629820006b2a74d34a373f9e7dd334e2042f28cc33",
+  "source_phase_2b_artifact": "Build_Docs/Reports/mcg_geometry_first/phase_2b_c_profile.json",
+  "source_phase_2b_sha256": "e4268f25ebdd743dd9a463d32c53bf470843ba09852df1164e272a68962afd31",
+  "source_phase_2c_artifact": "Build_Docs/Reports/mcg_geometry_first/phase_2c_grid_stability.json",
+  "source_phase_2c_sha256": "62d86e0b081231abd37679b5e393de0f7fb1b16284fdff48d4d996d5b8887b85"
+}

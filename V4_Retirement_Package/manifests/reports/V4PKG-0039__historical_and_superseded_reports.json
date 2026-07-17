@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "authority": "historical V4 retirement reference; not current Cella authority",
+  "package_id": "V4PKG-0039",
+  "family": "reports",
+  "label": "historical_and_superseded_reports",
+  "manifest_path": "manifests/reports/V4PKG-0039__historical_and_superseded_reports.json",
+  "member_count": 2,
+  "logical_bytes": 17561,
+  "evidence_covered_count": 2,
+  "evidence_origin_bound_count": 2,
+  "path_bound_count": 0,
+  "certificate_related_count": 0,
+  "member_tree_sha256": "b69f1fe57773b85567d0a493d90a811198af1d52ecddcfe6c7334b3c8e1eb88d",
+  "members": [
+    {
+      "path": "research/reports/lloyd_v4/mcg_discovery/SUPERSEDED.md",
+      "file_type": "regular",
+      "sha256": "719b64ff3e24302cdb8eeffdb8c52611c275e7e876cc14cd125913ea0c1d685c",
+      "bytes": 4336,
+      "mode": 420,
+      "evidence_id": "EVD-000766",
+      "evidence_origin_bound": true,
+      "path_bound": false,
+      "certificate_related": false,
+      "report_ids": [
+        "RPT-000953"
+      ]
+    },
+    {
+      "path": "research/reports/lloyd_v4/targeted_audit_jetbundle_solver/Archive.zip",
+      "file_type": "regular",
+      "sha256": "8bc2f2c9b49951879552a71ec5a7038b3f859cca2466b220810927fbdb33ad8f",
+      "bytes": 13225,
+      "mode": 420,
+      "evidence_id": "EVD-000937",
+      "evidence_origin_bound": true,
+      "path_bound": false,
+      "certificate_related": false,
+      "report_ids": [
+        "RPT-000954"
+      ]
+    }
+  ]
+}

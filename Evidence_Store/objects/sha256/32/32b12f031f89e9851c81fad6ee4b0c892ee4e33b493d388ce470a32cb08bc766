@@ -1,0 +1,312 @@
+# Dual-Arm Probe Findings from Offset/Comb Campaigns
+
+## Purpose
+
+This report summarizes what the recent route-comb, operand-offset, and controlled-dither campaigns imply for the active dual-arm probe design.
+
+The campaigns did not support a precision-doubling comb. The final understanding is operational and concerns **how ARM-N has to be set up so it actually reads new data compared to ARM-W**:
+
+```text
+ARM-N is valid as an independent reader only when it is set up to read genuinely new data — not a numerically-collapsed restatement of what ARM-W already saw.
+```
+
+Everything else in this report — path/operand separation requirements, the prohibition on diagnostic-only routes, the ban on target-aware selection, the activation-vs-resolution distinction — is an **operational test** of whether ARM-N has been set up that way. Activation alone is not evidence of independent reading. Independent reading is necessary (but not sufficient) for genuine gap resolution.
+
+## Campaign Chain
+
+The relevant evidence chain is:
+
+- `hard_cell_q_source_exhaustion_search`
+  - Outcome: `hard_cell_resolved_by_natural_companion_pair`.
+  - Native Schwarzschild `f_binade_-1` direct gaps `[113, 117, 121, 135]` were covered by the natural pair `sqrt_ratio_squared + cbrt_power`.
+  - The result reached `20 / 20` only on that native support mask.
+
+- `route_pair_selection_stability_audit`
+  - Outcome: `route_pair_native_grid_only_perturbation_unstable`.
+  - The same route pair failed under one-ULP coordinate perturbations.
+  - `nextafter_up`: `10 / 14`, hard gaps `[129, 130, 133, 136]`.
+  - `nextafter_down`: `12 / 13`, hard gap `[125]`.
+  - Adjacent native masks did not inherit the coverage.
+
+- `route_bank_offset_guard_audit`
+  - Outcome: `offset_guard_exact_for_route_bank_with_zero_offset_hard_cells`.
+  - Route-bank success over tested Schwarzschild `f_binade_-1` variants was exactly predicted by the operand-offset guard.
+  - Guard precision/recall: `1.0 / 1.0`.
+  - Route-bank success: `62 / 64`.
+  - Hard cells were exactly the zero-offset index `130` cases in `nextafter_up` and `alternating_nextafter`.
+
+- `zero_offset_transcendental_q_source_search`
+  - Outcome: `rounded_base_route_resolves_zero_offset_cell`.
+  - `pow(math.e, math.log(q_direct))` closed the remaining index `130` cells.
+  - At those cells it equaled `nextafter(q_direct, +inf)` and moved q by `0.25 * ulp(f)`.
+  - This is diagnostic rounded-base behavior, not clean algebraic route evidence.
+
+- `controlled_offset_dither_readback`
+  - Outcome: `controlled_offset_zero_selector_only_not_precision`.
+  - Controlled q offsets improved a target-aware zero selector, but did not improve predeclared readback.
+  - Primary direct zero MAE: `5.440092820663267e-17`.
+  - Primary min-abs zero MAE: `4.829470157119431e-17`.
+  - Primary direct clean-residual MAE: `1.9984014443252817e-17`.
+  - Best predeclared clean-residual MAE: `1.9984014443252817e-17`.
+
+## Main Finding
+
+The route-comb behavior is governed by operand/path separation, not by the existence of many algebraically equivalent forms. **The campaigns reframe the dual-arm question:** the right question is not "does ARM-N produce a valid read?" but **"is ARM-N set up to read new data compared to ARM-W?"**
+
+When a companion route creates a real float64 operand offset from the direct route, it can produce a different phase read — it is reading new data. When the companion route collapses to the same operand value as direct, it has no independent lever — it is reading the same data ARM-W already had, just labeled differently. In that case it should not be allowed to resolve a dual-arm gap.
+
+This is directly relevant to ARM-W and ARM-N:
+
+```text
+ARM-N valid read + ARM-N active != ARM-N reading new data
+ARM-N valid read + ARM-N active + real separation + stable handoff == ARM-N reading new data
+ARM-N reading new data == possible gap resolution
+```
+
+## What "set up to read new data" means operationally
+
+ARM-N is set up to actually read new data compared to ARM-W when **all** of the following hold:
+
+1. **Real float64 operand/path separation between the two arms.** The arms must not numerically collapse to the same operand value. Telemetered via `operand_offset`, `operand_offset_level`, `path_separation_class`.
+2. **ARM-N has its own instrument law.** Validity of ARM-N's read is judged by ARM-N's own pre-declared law, not by reference to ARM-W's output.
+3. **ARM-N's route is not a diagnostic perturbation of ARM-W.** Rounded transcendental nudges (e.g., `pow(math.e, math.log(q_direct))` behaving as `nextafter(+inf)`) move data, but they don't constitute genuine independent reads — they're parameter-shifts of ARM-W's route, not algebraically independent routes.
+4. **The handoff decision must not be target-aware.** Choosing the arm with the smaller residual, closer to expected zero, or matching the desired phase introduces a post-hoc bias that defeats independence. The arm priority must be pre-declared.
+5. **Activation telemetry must be ARM-W-derived, not ARM-N-derived.** ARM-N is activated by ARM-W's falloff status. ARM-N does not self-activate based on its own confidence.
+
+The five conditions above are necessary; the six-condition resolution rule (§"Recommended Dual-Arm Resolution Rule") adds the sixth (stability under declared partition/guard) to move from "reading new data" to "resolving the gap."
+
+## Dual-Arm Implications
+
+### 1. ARM-N Needs Separation Telemetry
+
+The active dual-arm probe should record route/path separation whenever ARM-N is evaluated.
+
+Recommended telemetry:
+
+```text
+armW_route_id
+armN_route_id
+armW_operand_value
+armN_operand_value
+operand_equal
+operand_offset
+operand_offset_level
+path_separation_class
+```
+
+For this family, the useful scalar was:
+
+```text
+q_offset_level = (q_armN - q_armW) / ulp(f)
+```
+
+General dual-arm code should name this more broadly as operand/path offset, not only q offset.
+
+### 2. Zero-Offset ARM-N Reads Are Underpowered
+
+If ARM-W declares a gap and ARM-N evaluates with no real operand/path separation, ARM-N should be classified as underpowered for gap resolution.
+
+Recommended classification:
+
+```text
+armN_underpowered_zero_separation
+```
+
+This should be distinct from:
+
+```text
+armN_invalid
+armN_valid_overlap_only
+armN_valid_gap_resolved
+```
+
+### 3. ARM-N Activation Is Not Resolution
+
+The active dual-arm probe already separates activation from resolution. The offset campaigns strengthen that rule.
+
+Resolution should require:
+
+```text
+ARM-W declares falloff/core gap
+ARM-N activates from ARM-W telemetry
+ARM-N has a valid read under ARM-N's own law
+ARM-N has nonzero path/operand separation from ARM-W
+ARM-N read lies inside the ARM-W gap interval
+handoff remains stable under declared guard/partition checks
+```
+
+Missing any one of these should block a gap-resolved label.
+
+### 4. Target-Aware Selection Must Stay Banned
+
+The controlled dither campaign showed that choosing the sample closest to zero can improve calibration-zero residuals without improving readback of the clean substrate residual.
+
+That means dual-arm logic must not choose between ARM-W and ARM-N after seeing which output is closer to zero, smoother, smaller, or more convenient.
+
+Allowed:
+
+```text
+predeclared ARM-N activation from ARM-W falloff telemetry
+predeclared route/arm priority inside a declared gap
+predeclared validity law per arm
+```
+
+Not allowed:
+
+```text
+choose the arm with smaller residual
+choose the arm closer to expected zero
+choose the arm that creates the desired phase
+promote post-hoc nearest-read selection
+```
+
+### 5. Diagnostic Routes Must Not Promote Production Claims
+
+`pow(math.e, math.log(q_direct))` closed the zero-offset cell, but it did so by behaving like a rounded `nextafter(+inf)` nudge.
+
+That is useful diagnostic evidence:
+
+```text
+the hard cell can be moved if a nonzero operand offset is introduced
+```
+
+It is not production evidence:
+
+```text
+the route is not a clean algebraic ARM-N
+the route depends on rounded transcendental-base behavior
+it should not justify precision or gap-resolution promotion
+```
+
+The dual-arm probe should preserve this distinction through route provenance metadata.
+
+## Recommended Dual-Arm Resolution Rule
+
+Use the following rule for future active dual-arm reports:
+
+```text
+An ARM-W gap is resolved by ARM-N only if:
+
+1. ARM-W declares a warning/below-floor/core-gap interval.
+2. ARM-N is activated by ARM-W falloff telemetry.
+3. ARM-N produces valid reads inside that interval by ARM-N's own instrument law.
+4. ARM-N has nonzero path/operand separation from ARM-W at those reads.
+5. The ARM-N read is not selected by target-aware residual minimization.
+6. The handoff result is stable under the declared partition and guard checks.
+```
+
+If ARM-N is valid but separation is zero:
+
+```text
+active_handoff_gap_unresolved_zero_separation
+```
+
+If ARM-N is valid only outside the core gap:
+
+```text
+active_handoff_boundary_only
+```
+
+If ARM-N uses diagnostic or manufactured perturbation routes:
+
+```text
+active_handoff_diagnostic_only
+```
+
+If partition or guard checks fail:
+
+```text
+active_handoff_partition_unstable
+active_handoff_guard_unstable
+```
+
+## Suggested Schema Additions
+
+For each dual-arm cell or interval:
+
+```json
+{
+  "armW": {
+    "valid": true,
+    "route_id": "armW_route",
+    "falloff_status": "below_floor"
+  },
+  "armN": {
+    "active": true,
+    "valid": true,
+    "route_id": "armN_route",
+    "activation_reason": "armW_falloff",
+    "path_separation": {
+      "operand_equal": false,
+      "offset": 0.0,
+      "offset_level": 0.5,
+      "separation_class": "nonzero_operand_offset"
+    }
+  },
+  "handoff": {
+    "inside_armW_gap": true,
+    "target_aware_selection": false,
+    "diagnostic_route": false,
+    "gap_resolution_status": "resolved"
+  }
+}
+```
+
+For zero-separation underpromotion:
+
+```json
+{
+  "handoff": {
+    "inside_armW_gap": true,
+    "gap_resolution_status": "unresolved",
+    "underpromotion_reason": "armN_zero_path_separation"
+  }
+}
+```
+
+## Practical Takeaway
+
+The offset-comb work should not be used as a precision claim. It should be used to harden the dual-arm probe by enforcing the question: **is ARM-N set up to read new data compared to ARM-W?**
+
+The useful design principle is:
+
+```text
+ARM-N is independent only when it actually reads new data.
+Reading new data requires (and is operationally tested by):
+  measurable path separation + own instrument law + non-diagnostic route +
+  pre-declared selection + ARM-W-derived activation.
+```
+
+For future ARM-W/ARM-N campaigns, gap resolution should be considered invalid or underpowered unless the artifact proves ARM-N satisfies all five operational tests for reading new data — not just produces a valid output, not just activates from telemetry, not just lands near the expected gap value.
+
+## Amendment 2026-05-17 — Verification narrowing
+
+Behavior verification ([`Build_Docs/Reports/dual_arm_behavior_verification/`](../dual_arm_behavior_verification/)) confirmed the framework's machinery is implemented correctly but narrowed the scope of operational evidence. Key findings:
+
+- **The classification machinery for path separation works** (the conditional logic correctly maps `operand_delta != 0.0` to `"nonzero_operand_offset"`).
+- **On the only operational fixture (SR), `arm_n_operand = arm_w_operand` is hardcoded** (literal at `scratch/run_foldreadback_probe0_v10_active_dualarm.py:702-703`). Non-zero path separation has **never been reached** by any fixture as currently coded.
+- **ARM-N validity is genuinely independent** of ARM-W's verdict (verified).
+- **ARM-W-derived activation is the only activation path** (verified).
+- **Pre-declared selection is honored, not enforced** — no defensive assertion guards future violations.
+- **Diagnostic-vs-production route distinction is absent from arms code** — the concept exists in the eval-layer offset-comb files but is not lifted into the arms framework.
+
+The principle "ARM-N must be set up to actually read new data compared to ARM-W" is correctly framed as design intent, but has not been put to empirical test on a non-trivial fixture. Of the five operational conditions named in this report, two are strongly verified (#2 own instrument law, #5 ARM-W-derived activation), one is weakly verified (#1 machinery works but no fixture exercises it), one is honored-not-enforced (#4 pre-declaration), and one is absent at arms level (#3 diagnostic-vs-production).
+
+The negative-control evidence is solid: `active_handoff_gap_unresolved_zero_separation` correctly fires on the SR fixture, demonstrating the framework correctly identifies zero-separation as underpowered. The positive case — what ARM-N reads when separation is non-zero — remains untested in production. **Closing that gap requires constructing at least one non-trivial fixture where `arm_n_operand` differs from `arm_w_operand` by construction.**
+
+See `Build_Docs/Reports/dual_arm_behavior_verification/closeout.md` for full audit trail.
+
+---
+
+## Source Artifacts
+
+- `Build_Docs/Reports/hard_cell_q_source_exhaustion_search/artifact_hard_cell_q_source_exhaustion_search.json`
+- `Build_Docs/Reports/hard_cell_q_source_exhaustion_search/hard_cell_q_source_exhaustion_search_report.md`
+- `Build_Docs/Reports/route_pair_selection_stability_audit/artifact_route_pair_selection_stability_audit.json`
+- `Build_Docs/Reports/route_pair_selection_stability_audit/route_pair_selection_stability_audit_report.md`
+- `Build_Docs/Reports/route_bank_offset_guard_audit/artifact_route_bank_offset_guard_audit.json`
+- `Build_Docs/Reports/route_bank_offset_guard_audit/route_bank_offset_guard_audit_report.md`
+- `Build_Docs/Reports/zero_offset_transcendental_q_source_search/artifact_zero_offset_transcendental_q_source_search.json`
+- `Build_Docs/Reports/zero_offset_transcendental_q_source_search/zero_offset_transcendental_q_source_search_report.md`
+- `Build_Docs/Reports/controlled_offset_dither_readback/artifact_controlled_offset_dither_readback.json`
+- `Build_Docs/Reports/controlled_offset_dither_readback/controlled_offset_dither_readback_report.md`

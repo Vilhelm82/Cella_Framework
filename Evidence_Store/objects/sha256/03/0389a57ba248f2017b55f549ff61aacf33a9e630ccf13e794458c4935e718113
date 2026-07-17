@@ -1,0 +1,75 @@
+{
+ "amendment_2": "2026-06-12 (machine date), blessed by Will at the chat-side checkpoint (pre-execution, zero emissions): PC.2's parenthetical corrected to set-attributed, record-faithful numbers \u2014 the original attributed the all-four-instrument count (51 of 127) to the pinned-pair context (true count 17 of 56) and quoted FXB2's implied half-width as +-3e-16 (eps*1.5) where the pinned rule gives ~1.33e-15 (4eps*1.5). Scribe set-attribution + half-width slip; both numbers independently recomputed at amendment. GRADER_CLAUSES updated in the same commit (trial law forces parity). Grading thresholds untouched: PC.2 passes under either set \u2014 integrity, not goalposts.",
+ "annex_battery": [
+  "FXJ1",
+  "FXJ2",
+  "FXJ3",
+  "FXK3a",
+  "FXK3b"
+ ],
+ "authority": "campaign brief ladder (Facet C: stopping-as-theorem vs tolerance stopping; CL-3) + Will's Facet-C GO (Facet-B acceptance message; TRIAL clause-embedding law active, strikeable, decision reserved for close)",
+ "campaign_id": "root_closure_atlas",
+ "classical_for_comparison": [
+  "I1a_bisection",
+  "I1b_newton"
+ ],
+ "date_stamped_from_machine": "2026-06-11",
+ "depends_on": {
+  "facet_a_organ": "instruments/probe_facet_a.py (certified-cell emitter consumed as the stopping criterion)",
+  "manifest_v1_pin": "ce2e5352419cf7e1f996aafd9b4329d32836de160aa2a244408791036c540138",
+  "stage0_records_sha256": "ac3ab40dea296b569d2dbcb2558cc5fa4e5a7e49b7b6f11c669206cd8c933499"
+ },
+ "facet": "C",
+ "frozen": true,
+ "implied_interval_rule": "the textbook reading of a converged stop: [value - X, value + X] with X = the instrument's own declared xtol (xtol_abs for bisection; xtol_rel * max(1,|value|) for newton). Pinned here; graded contains_cell by exact comparison against the certified walls.",
+ "organ": "I3c_theorem_stop_v1 (role=probe): stop == the Facet-A certified cell; stop kinds {theorem, no_theorem, budget_refusal}; NO tolerance parameter exists in the stopping call chain (asserted at source level by test).",
+ "pc2_contrast_derivation": "51 false-certainty converged stops present in the committed Stage-0 records (sha ac3ab40dea296b56...) under the pinned implied-interval rule",
+ "predictions": {
+  "PC.1": "theorem-stop totality: on every rational battery fixture the organ stops-with-certificate exactly when the arbiter certifies a cell (sign_change_cell or exact_zero), the stop cell equals the arbiter cell (certificate AND walls), and the organ's call chain carries NO tolerance parameter (source-asserted). Units: fixtures.",
+  "PC.2": "tolerance-stop false certainty: re-running the pinned classical instruments (bisection, newton) on cell-bearing rational fixtures, >= 1 converged stop's implied interval (value +- its own declared xtol, the textbook reading of 'converged') EXCLUDES the certified cell; every classical converged stop is graded contains_cell true/false and the stopped-short distance (lattice steps from cell) is recorded observationally. Derived achievable from the committed Stage-0 records at authoring (set-attributed: 51 false-certainty stops of 127 across ALL FOUR I1 instruments; 17 of 56 within the pinned pair I1a+I1b; FXB2 exhibit: Newton ftol stop ~1e-6 from an exact_zero with implied half-width ~1.33e-15 = 4eps*1.5). Units: converged stops.",
+  "PC.3": "no-theorem honesty: on fixtures where the arbiter certifies none (ghosts FXE1/FXE2, even-multiplicity FXB2 has exact_zero so NOT here, FXB4 none) the organ does NOT stop-with-certificate and emits no tolerance fallback; the classical converged-anyway count on the same fixtures is the recorded contrast column. Units: fixtures.",
+  "PC.4": "annex leg: theorem-stop via certified enclosures \u2014 stops with the M-matching cell where the enclosure decides (FXJ1-3, FXK3b exact point); honest budget refusal where it cannot (FXK3a pattern is Facet-A certified; here the STOP must be the refusal, never a tolerance fallback). Units: fixtures.",
+  "PC.5": "determinism: battery byte-stable x2 (sha256 over records)."
+ },
+ "rational_battery": [
+  "FXA1",
+  "FXA2",
+  "FXD1",
+  "FXD3",
+  "FXE1",
+  "FXE2",
+  "FXB2",
+  "FXB4",
+  "FXF1",
+  "FXF2",
+  "FXG1",
+  "FXG2",
+  "FXK1a",
+  "FXK1b"
+ ],
+ "referee_expectations_pinned_at_dry_run": {
+  "FXA1": "theorem",
+  "FXA2": "theorem",
+  "FXB2": "theorem",
+  "FXB4": "no_theorem",
+  "FXD1": "theorem",
+  "FXD3": "theorem",
+  "FXE1": "no_theorem",
+  "FXE2": "no_theorem",
+  "FXF1": "theorem",
+  "FXF2": "budget_refusal",
+  "FXG1": "theorem",
+  "FXG2": "theorem",
+  "FXJ1": "theorem",
+  "FXJ2": "theorem",
+  "FXJ3": "theorem",
+  "FXK1a": "theorem",
+  "FXK1b": "theorem",
+  "FXK3a": "theorem",
+  "FXK3b": "theorem"
+ },
+ "status_move_rules": "CL-3 -> DEMONSTRATED iff PC.1 AND PC.2 AND PC.3 AND PC.4 PASS (arbiter-graded). CL-7: evidence appended (stopping-layer refusals), stays PARTIAL. Any PC-FAIL: chain preserved verbatim, STOP, route to Will.",
+ "telemetry": "permanently non-verdict-bearing (covenant 3); iteration counts in the stopping map are telemetry, never verdicts.",
+ "trial_law": "each PC grader embeds its governing clause verbatim (GRADER_CLAUSES in run_facet_c.py); the gate string-compares every embedded clause against this frozen prereg at runtime and REFUSES on drift. Strikeable; standing-law decision reserved for the campaign close.",
+ "version": 1
+}

@@ -1,0 +1,256 @@
+{
+  "schema_id": "cella.dbp.native_relative_period_evaluator.contracts",
+  "schema_version": "1.0",
+  "date": "2026-07-12",
+  "status": "build_contract",
+  "authorities": [
+    {
+      "file": "DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md",
+      "role": "corrected trace, anti-splitting, path, pole, residue, and channel formulas"
+    },
+    {
+      "file": "verify_dbp_landen_trace_theorem_v1_1.py",
+      "role": "75 exact theorem gates"
+    },
+    {
+      "file": "DBP_NATIVE_RELATIVE_PERIOD_ROUTE_THEOREM_v1.0.md",
+      "role": "pole-free compact-interval compilation"
+    },
+    {
+      "file": "verify_dbp_native_relative_period_route.py",
+      "role": "exact route-algebra gates"
+    }
+  ],
+  "exact_scalar_encoding": {
+    "rational": {
+      "type": "Q",
+      "fields": ["numerator", "denominator"]
+    },
+    "quadratic": {
+      "type": "QS2",
+      "meaning": "a + b*sqrt(2)",
+      "fields": ["a", "b"]
+    },
+    "dyadic": {
+      "type": "Dyadic",
+      "meaning": "numerator / 2^exponent",
+      "fields": ["numerator", "exponent"]
+    },
+    "complex_quadratic": {
+      "type": "QIS2",
+      "meaning": "real + i*imag with real,imag in Q(sqrt(2))",
+      "fields": ["real", "imag"]
+    }
+  },
+  "source_problem": {
+    "curve": {
+      "id": "E128",
+      "model": "weierstrass_long",
+      "coefficients": {
+        "a1": "0",
+        "a2": "-1",
+        "a3": "0",
+        "a4": "1",
+        "a6": "-1"
+      },
+      "equation": "Y^2 = X^3 - X^2 + X - 1",
+      "factorization": "(X - 1)*(X^2 + 1)",
+      "discriminant": "-256",
+      "j_invariant": "128"
+    },
+    "differential": {
+      "id": "Theta",
+      "kind": "third_kind",
+      "expression": "8*(X - 3)/(X + 7) * dX/Y",
+      "poles": [
+        {
+          "point": ["-7", "20*i"],
+          "residue": "4*i"
+        },
+        {
+          "point": ["-7", "-20*i"],
+          "residue": "-4*i"
+        }
+      ],
+      "pole_divisor": "non_torsion"
+    }
+  },
+  "routes": {
+    "dbp_theta_primary_v1": {
+      "source_path": {
+        "start": "X=1",
+        "end": "X=+infinity",
+        "orientation": "increasing_X",
+        "sheet": "Y>0 for X>1",
+        "prescription": "ordinary"
+      },
+      "changes_of_variable": [
+        "X = 1 + z^2",
+        "z = t/(1-t)",
+        "w = 1-t"
+      ],
+      "compiled_kernel": {
+        "id": "g_plus_v1",
+        "domain": ["0", "1"],
+        "w": "1-t",
+        "radicand": "P_plus = t^4 + 2*t^2*w^2 + 2*w^4",
+        "expression": "16*(t^2 - 2*w^2)/(t^2 + 8*w^2)/sqrt(P_plus)",
+        "endpoint_values": {
+          "t=0": "-2*sqrt(2)",
+          "t=1": "16"
+        },
+        "domain_witnesses": [
+          "P_plus >= 1/8",
+          "t^2 + 8*w^2 >= 8/9"
+        ]
+      },
+      "trace_formula": "J_plus = integral_0^1 g_plus_v1(t) dt",
+      "channel_formula": "I_primary = J_plus/2 - 2*pi"
+    },
+    "dbp_theta_dual_cpv_v1": {
+      "source_path": {
+        "start": "X=1",
+        "end": "X=-infinity",
+        "orientation": "decreasing_X",
+        "sheet": "Y=+i*sqrt(-(X-1)*(X^2+1)) for X<1",
+        "prescription": "real_cauchy_principal_value"
+      },
+      "source_pole_ledger": {
+        "X": "-7",
+        "Y": "20*i",
+        "residue_of_minus_i_Theta": "4",
+        "z_pole": "2*sqrt(2)",
+        "polar_kernel": "16*sqrt(2)/(z^2-8)",
+        "polar_primitive": "4*log(abs((z-2*sqrt(2))/(z+2*sqrt(2))))",
+        "polar_kernel_cpv": "0"
+      },
+      "changes_of_variable": [
+        "X = 1 - z^2",
+        "subtract exact zero-CPV polar kernel",
+        "z = t/(1-t)",
+        "rationalize using A^2 - 2*P_minus = -t^2*D"
+      ],
+      "compiled_kernel": {
+        "id": "g_minus_v1",
+        "domain": ["0", "1"],
+        "w": "1-t",
+        "radicand": "P_minus = (t^2-w^2)^2 + w^4",
+        "expression": "-16*t^2/(sqrt(P_minus)*(t^2 + 2*w^2 + sqrt(2)*sqrt(P_minus)))",
+        "forbidden_runtime_factor": "t^2 - 8*w^2",
+        "endpoint_values": {
+          "t=0": "0",
+          "t=1": "16*(1-sqrt(2))"
+        },
+        "former_pole": {
+          "t": "2*sqrt(2)/(1+2*sqrt(2))",
+          "value": "-(128+144*sqrt(2))/25",
+          "status": "ordinary_smooth_point"
+        },
+        "domain_witnesses": [
+          "P_minus >= 1/64",
+          "t^2 + 2*w^2 >= 2/3"
+        ]
+      },
+      "trace_formula": "H_minus = -i*CPV(integral_Gamma_minus Theta) = integral_0^1 g_minus_v1(t) dt",
+      "channel_formula": "I_dual_CPV = H_minus/2"
+    }
+  },
+  "public_api": {
+    "function": "evaluate_dbp_relative_period",
+    "request_fields": {
+      "target": [
+        "trace_primary",
+        "primary",
+        "trace_dual_real_cpv",
+        "dual_cpv"
+      ],
+      "target_bits": "positive integer",
+      "certificate": "required boolean, must default true"
+    },
+    "success_fields": [
+      "target",
+      "dyadic_bracket",
+      "rounded_value",
+      "route_id",
+      "source_ledger",
+      "account_ledger",
+      "remainder_ledger",
+      "certificate_digest"
+    ],
+    "refusal_fields": [
+      "token",
+      "stage",
+      "detail",
+      "first_unclosed_obligation"
+    ]
+  },
+  "dyadic_bracket_contract": {
+    "fields": {
+      "lower_numerator": "integer",
+      "upper_numerator": "integer",
+      "denominator_exponent": "nonnegative integer",
+      "width_bits": "integer"
+    },
+    "invariant": "lower_numerator <= exact_target*2^denominator_exponent <= upper_numerator",
+    "terminal_only": true
+  },
+  "account_contract": {
+    "local_identities": [
+      "two_sum: s + e = a + b",
+      "two_prod: p + e = a*b",
+      "division: a/b = q + (a-q*b)/b",
+      "sqrt: sqrt(a) = q + (a-q^2)/(sqrt(a)+q)"
+    ],
+    "required_ledgers": [
+      "signed_operation_defects",
+      "nonlinear_cross_terms_or_named_remainder",
+      "quadrature_remainder",
+      "terminal_conversion"
+    ],
+    "failure_token": "account_not_closed"
+  },
+  "numerical_regression_fixtures": [
+    {
+      "id": "dbp_primary_50d",
+      "target": "primary",
+      "decimal_prefix": "-5.01049070266041876905002116052677764805699485672160",
+      "trace_decimal_prefix": "2.54538920903833541575053121206445624067468788405722",
+      "use": "regression_oracle_only",
+      "must_not_enter_certificate": true
+    },
+    {
+      "id": "dbp_dual_cpv_54d",
+      "target": "dual_cpv",
+      "decimal_prefix": "-3.988001085974558097719762257539087379694121855552360291",
+      "trace_decimal_prefix": "-7.976002171949116195439524515078174759388243711104720582",
+      "use": "regression_oracle_only",
+      "must_not_enter_certificate": true
+    }
+  ],
+  "refusal_tokens": [
+    "unsupported_curve",
+    "unsupported_differential",
+    "unsupported_relative_path",
+    "sheet_not_declared",
+    "cpv_side_not_declared",
+    "route_identity_failed",
+    "domain_separation_failed",
+    "account_not_closed",
+    "remainder_bound_failed",
+    "precision_budget_exhausted",
+    "oracle_dependency_detected"
+  ],
+  "forbidden_production_dependencies": [
+    "mpmath",
+    "sympy",
+    "scipy",
+    "flint",
+    "arb",
+    "sage",
+    "ellipk",
+    "ellipe",
+    "ellippi",
+    "Carlson elliptic forms",
+    "AGM elliptic evaluator"
+  ]
+}

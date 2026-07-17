@@ -1,0 +1,43 @@
+{
+  "rank": 22,
+  "lift": 38.84,
+  "count": 2,
+  "families": 1,
+  "a": {
+    "id": "OBJ:conjugate-square-class-module-v-f-2-s-tensor-f2-f-2-i",
+    "label": "Conjugate square-class module V = F_2^s tensor_F2 F_2[I]",
+    "standard_term": "induced/permutation F_2[G]-module on formal radicand generators",
+    "nomenclature": "variant-of",
+    "symbols": [
+      "f_2",
+      "tensor_f2"
+    ]
+  },
+  "b": {
+    "id": "OBJ:valuation-functional-lambda-v",
+    "label": "Valuation functional lambda_v",
+    "standard_term": "valuation-mod-2 homomorphism on a Kummer square-class group",
+    "nomenclature": "special-case-of",
+    "symbols": [
+      "lambda_v"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-1346",
+      "type": "theorem",
+      "claim_status": null,
+      "label": "Inertia interpretation of the valuation functional",
+      "summary": "Assume a discrete valuation `v` of `E` has residue characteristic different from two, and pass to the henselization at `v`. Under the Kummer pairing\n\n```text\nGal(L/E) x W -> F_2,\n```\n\nthe valuation functional `lambda_v` ",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/KUMMER_MODULE_WREATH_LIFT_THEOREM_2026-07-10.md"
+    },
+    {
+      "uid": "U-1430",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Valuation functional lambda_v and parity matrix A",
+      "summary": "Every discrete valuation `v` of `E` defines an `F_2`-linear functional\n\n```text\nlambda_v: W -> F_2,\nlambda_v([x]) = v(x) mod 2.                   (4.1)\n```\n\nThis is well-defined because every square has even valuation.\n\n",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/KUMMER_MODULE_WREATH_LIFT_THEOREM_2026-07-10.md"
+    }
+  ]
+}

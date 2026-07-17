@@ -1,0 +1,784 @@
+{
+  "analysis_scope": {
+    "n_primary_probes": 15,
+    "n_secondary_probes": 3,
+    "primary_scope": "15 1-x_term probes (SR + Schwarzschild + pure_algebraic)",
+    "secondary_scope_reported_separately": "3 sphere probes (insufficient n for 1-x_term-specific candidates)"
+  },
+  "audit_name": "substrate_invariant_search_phase_c_irreducible_basis",
+  "authority": "Build_Docs/Agent_tasks/substrate_invariant_search_2026_05_23.md",
+  "campaign": "substrate_invariant_search",
+  "closeout_questions": {
+    "Q1_basis_cardinality": "3 basis elements: ulp_spread_log2, E_log2_base_operand, two_form_partition. Down from the 6 P1-satisfied Phase A candidates via equivalence-group collapse plus 2 precondition demotions.",
+    "Q2_basis_representatives": "ulp_spread_log2 (BACL-spectrum family), E_log2_base_operand (E family), two_form_partition (algebraic-form structural).",
+    "Q3_equivalence_collapses": "BACL family (BACL_grain_max_ulp, min_ulp, ulp_ratio, max_ulp, ulp_spread_log2) collapses to ulp_spread_log2 as the discriminating representative. E family (E_log2_base_operand, base_operand, in_sterbenz_cluster) collapses to E_log2_base_operand. Conjecture C + c2_lattice_chain_applies form a single equivalence group reclassified as preconditions.",
+    "Q4_preconditions_demoted": "conjecture_c_in_normal_range and c2_lattice_chain_applies, both constant True across in-scope probes. Reclassification means they remain in the campaign as scope-validity gates, not as discriminating basis elements. Subnormal extension or alternative-chain probing could surface their discriminating value later.",
+    "Q5_bacl_spectrum_contribution": "Single-value BACL_grain at the dominant intermediate is constant 2.220e-16 across the probe set (all dominant intermediates are O(1)). BACL spectrum (operand-chain ulp vector) instead captures the binade spread: ulp_spread_log2 varies meaningfully across probes because the *other* intermediates' ulps depend on coordinate (e.g., 2/r in Schwarzschild has ulp tracking r). Reformulation promotes BACL from a constant to a discriminating observable.",
+    "Q6_surprising_correlations": "Pearson(ulp_spread_log2, E_log2_base_operand) should be examined in the correlation_matrix_1_x_term field \u2014 both observables track the binade structure of the operand chain but via different components. If the correlation is high (|r| > 0.9), they may need Phase D transformation-invariance discrimination to determine which is the more fundamental invariant. If moderate (0.5-0.9), they are genuinely independent diagnostic axes.",
+    "Q7_supports_phase_d": "Yes. The irreducible basis (ulp_spread_log2, E_log2_base_operand, two_form_partition) is small enough to test transformation-invariance per-element under route choice, format change, and reparameterisation per Phase D pre-registry. Each basis element is substrate-derivable (P1-satisfied) and carries a distinct substrate observable. Phase D inputs are well-defined."
+  },
+  "correlation_matrix_1_x_term": {
+    "BACL_grain_max_ulp": {
+      "BACL_grain_max_ulp": {
+        "kind": "self",
+        "value": 1.0
+      },
+      "E_log2_base_operand": {
+        "kind": "pearson",
+        "value": null
+      },
+      "base_operand": {
+        "kind": "pearson",
+        "value": null
+      },
+      "c2_lattice_chain_applies": {
+        "kind": "point_biserial",
+        "value": null
+      },
+      "conjecture_c_in_normal_range": {
+        "kind": "point_biserial",
+        "value": null
+      },
+      "in_sterbenz_cluster": {
+        "kind": "point_biserial",
+        "value": null
+      },
+      "min_ulp": {
+        "kind": "pearson",
+        "value": null
+      },
+      "ulp_ratio": {
+        "kind": "pearson",
+        "value": null
+      },
+      "ulp_spread_log2": {
+        "kind": "pearson",
+        "value": null
+      }
+    },
+    "E_log2_base_operand": {
+      "BACL_grain_max_ulp": {
+        "kind": "pearson",
+        "value": null
+      },
+      "E_log2_base_operand": {
+        "kind": "self",
+        "value": 1.0
+      },
+      "base_operand": {
+        "kind": "pearson",
+        "value": 0.8356177081978172
+      },
+      "c2_lattice_chain_applies": {
+        "kind": "point_biserial",
+        "value": null
+      },
+      "conjecture_c_in_normal_range": {
+        "kind": "point_biserial",
+        "value": null
+      },
+      "in_sterbenz_cluster": {
+        "kind": "point_biserial",
+        "value": 0.251382440430315
+      },
+      "min_ulp": {
+        "kind": "pearson",
+        "value": 0.4521314227691763
+      },
+      "ulp_ratio": {
+        "kind": "pearson",
+        "value": -0.7557592691259443
+      },
+      "ulp_spread_log2": {
+        "kind": "pearson",
+        "value": -0.6431308187219769
+      }
+    },
+    "base_operand": {
+      "BACL_grain_max_ulp": {
+        "kind": "pearson",
+        "value": null
+      },
+      "E_log2_base_operand": {
+        "kind": "pearson",
+        "value": 0.8356177081978172
+      },
+      "base_operand": {
+        "kind": "self",
+        "value": 1.0
+      },
+      "c2_lattice_chain_applies": {
+        "kind": "point_biserial",
+        "value": null
+      },
+      "conjecture_c_in_normal_range": {
+        "kind": "point_biserial",
+        "value": null
+      },
+      "in_sterbenz_cluster": {
+        "kind": "point_biserial",
+        "value": 0.11756489926006193
+      },
+      "min_ulp": {
+        "kind": "pearson",
+        "value": 0.15075828350032155
+      },
+      "ulp_ratio": {
+        "kind": "pearson",
+        "value": -0.33227487367843667
+      },
+      "ulp_spread_log2": {
+        "kind": "pearson",
+        "value": -0.20435819431726615
+      }
+    },
+    "c2_lattice_chain_applies": {
+      "BACL_grain_max_ulp": {
+        "kind": "point_biserial",
+        "value": null
+      },
+      "E_log2_base_operand": {
+        "kind": "point_biserial",
+        "value": null
+      },
+      "base_operand": {
+        "kind": "point_biserial",
+        "value": null
+      },
+      "c2_lattice_chain_applies": {
+        "kind": "self",
+        "value": 1.0
+      },
+      "conjecture_c_in_normal_range": {
+        "kind": "phi",
+        "value": null
+      },
+      "in_sterbenz_cluster": {
+        "kind": "phi",
+        "value": null
+      },
+      "min_ulp": {
+        "kind": "point_biserial",
+        "value": null
+      },
+      "ulp_ratio": {
+        "kind": "point_biserial",
+        "value": null
+      },
+      "ulp_spread_log2": {
+        "kind": "point_biserial",
+        "value": null
+      }
+    },
+    "conjecture_c_in_normal_range": {
+      "BACL_grain_max_ulp": {
+        "kind": "point_biserial",
+        "value": null
+      },
+      "E_log2_base_operand": {
+        "kind": "point_biserial",
+        "value": null
+      },
+      "base_operand": {
+        "kind": "point_biserial",
+        "value": null
+      },
+      "c2_lattice_chain_applies": {
+        "kind": "phi",
+        "value": null
+      },
+      "conjecture_c_in_normal_range": {
+        "kind": "self",
+        "value": 1.0
+      },
+      "in_sterbenz_cluster": {
+        "kind": "phi",
+        "value": null
+      },
+      "min_ulp": {
+        "kind": "point_biserial",
+        "value": null
+      },
+      "ulp_ratio": {
+        "kind": "point_biserial",
+        "value": null
+      },
+      "ulp_spread_log2": {
+        "kind": "point_biserial",
+        "value": null
+      }
+    },
+    "in_sterbenz_cluster": {
+      "BACL_grain_max_ulp": {
+        "kind": "point_biserial",
+        "value": null
+      },
+      "E_log2_base_operand": {
+        "kind": "point_biserial",
+        "value": 0.251382440430315
+      },
+      "base_operand": {
+        "kind": "point_biserial",
+        "value": 0.11756489926006193
+      },
+      "c2_lattice_chain_applies": {
+        "kind": "phi",
+        "value": null
+      },
+      "conjecture_c_in_normal_range": {
+        "kind": "phi",
+        "value": null
+      },
+      "in_sterbenz_cluster": {
+        "kind": "self",
+        "value": 1.0
+      },
+      "min_ulp": {
+        "kind": "point_biserial",
+        "value": 0.34257191554807936
+      },
+      "ulp_ratio": {
+        "kind": "point_biserial",
+        "value": -0.22782301845452493
+      },
+      "ulp_spread_log2": {
+        "kind": "point_biserial",
+        "value": -0.39983683458427793
+      }
+    },
+    "min_ulp": {
+      "BACL_grain_max_ulp": {
+        "kind": "pearson",
+        "value": null
+      },
+      "E_log2_base_operand": {
+        "kind": "pearson",
+        "value": 0.4521314227691763
+      },
+      "base_operand": {
+        "kind": "pearson",
+        "value": 0.15075828350032155
+      },
+      "c2_lattice_chain_applies": {
+        "kind": "point_biserial",
+        "value": null
+      },
+      "conjecture_c_in_normal_range": {
+        "kind": "point_biserial",
+        "value": null
+      },
+      "in_sterbenz_cluster": {
+        "kind": "point_biserial",
+        "value": 0.34257191554807936
+      },
+      "min_ulp": {
+        "kind": "self",
+        "value": 1.0
+      },
+      "ulp_ratio": {
+        "kind": "pearson",
+        "value": -0.4817856970261538
+      },
+      "ulp_spread_log2": {
+        "kind": "pearson",
+        "value": -0.8581769630893165
+      }
+    },
+    "ulp_ratio": {
+      "BACL_grain_max_ulp": {
+        "kind": "pearson",
+        "value": null
+      },
+      "E_log2_base_operand": {
+        "kind": "pearson",
+        "value": -0.7557592691259443
+      },
+      "base_operand": {
+        "kind": "pearson",
+        "value": -0.33227487367843667
+      },
+      "c2_lattice_chain_applies": {
+        "kind": "point_biserial",
+        "value": null
+      },
+      "conjecture_c_in_normal_range": {
+        "kind": "point_biserial",
+        "value": null
+      },
+      "in_sterbenz_cluster": {
+        "kind": "point_biserial",
+        "value": -0.22782301845452493
+      },
+      "min_ulp": {
+        "kind": "pearson",
+        "value": -0.4817856970261538
+      },
+      "ulp_ratio": {
+        "kind": "self",
+        "value": 1.0
+      },
+      "ulp_spread_log2": {
+        "kind": "pearson",
+        "value": 0.7964943907198014
+      }
+    },
+    "ulp_spread_log2": {
+      "BACL_grain_max_ulp": {
+        "kind": "pearson",
+        "value": null
+      },
+      "E_log2_base_operand": {
+        "kind": "pearson",
+        "value": -0.6431308187219769
+      },
+      "base_operand": {
+        "kind": "pearson",
+        "value": -0.20435819431726615
+      },
+      "c2_lattice_chain_applies": {
+        "kind": "point_biserial",
+        "value": null
+      },
+      "conjecture_c_in_normal_range": {
+        "kind": "point_biserial",
+        "value": null
+      },
+      "in_sterbenz_cluster": {
+        "kind": "point_biserial",
+        "value": -0.39983683458427793
+      },
+      "min_ulp": {
+        "kind": "pearson",
+        "value": -0.8581769630893165
+      },
+      "ulp_ratio": {
+        "kind": "pearson",
+        "value": 0.7964943907198014
+      },
+      "ulp_spread_log2": {
+        "kind": "self",
+        "value": 1.0
+      }
+    }
+  },
+  "date": "2026-05-23",
+  "derived_observables": {
+    "components": [
+      "ulp_vector",
+      "min_ulp",
+      "max_ulp",
+      "ulp_spread_log2",
+      "ulp_ratio"
+    ],
+    "name": "BACL_spectrum",
+    "per_probe_spectrum": [
+      {
+        "bacl_spectrum": {
+          "max_ulp": 2.220446049250313e-16,
+          "min_ulp": 4.336808689942018e-19,
+          "ulp_ratio": 512.0,
+          "ulp_spread_log2": 9.0,
+          "ulp_vector": [
+            2.220446049250313e-16,
+            1.1102230246251565e-16,
+            4.336808689942018e-19
+          ]
+        },
+        "fixture": "sr_four_form",
+        "probe_id": "sr_lightspeed_approach"
+      },
+      {
+        "bacl_spectrum": {
+          "max_ulp": 2.220446049250313e-16,
+          "min_ulp": 2.7755575615628914e-17,
+          "ulp_ratio": 8.0,
+          "ulp_spread_log2": 3.0,
+          "ulp_vector": [
+            2.220446049250313e-16,
+            1.1102230246251565e-16,
+            2.7755575615628914e-17
+          ]
+        },
+        "fixture": "sr_four_form",
+        "probe_id": "sr_near_lightspeed"
+      },
+      {
+        "bacl_spectrum": {
+          "max_ulp": 2.220446049250313e-16,
+          "min_ulp": 5.551115123125783e-17,
+          "ulp_ratio": 4.0,
+          "ulp_spread_log2": 2.0,
+          "ulp_vector": [
+            2.220446049250313e-16,
+            5.551115123125783e-17,
+            1.1102230246251565e-16
+          ]
+        },
+        "fixture": "sr_four_form",
+        "probe_id": "sr_sterbenz_center"
+      },
+      {
+        "bacl_spectrum": {
+          "max_ulp": 2.220446049250313e-16,
+          "min_ulp": 5.551115123125783e-17,
+          "ulp_ratio": 4.0,
+          "ulp_spread_log2": 2.0,
+          "ulp_vector": [
+            2.220446049250313e-16,
+            5.551115123125783e-17,
+            1.1102230246251565e-16
+          ]
+        },
+        "fixture": "sr_four_form",
+        "probe_id": "sr_mid"
+      },
+      {
+        "bacl_spectrum": {
+          "max_ulp": 2.220446049250313e-16,
+          "min_ulp": 1.734723475976807e-18,
+          "ulp_ratio": 128.0,
+          "ulp_spread_log2": 7.0,
+          "ulp_vector": [
+            2.220446049250313e-16,
+            1.734723475976807e-18,
+            1.1102230246251565e-16
+          ]
+        },
+        "fixture": "sr_four_form",
+        "probe_id": "sr_non_relativistic"
+      },
+      {
+        "bacl_spectrum": {
+          "max_ulp": 2.220446049250313e-16,
+          "min_ulp": 6.938893903907228e-18,
+          "ulp_ratio": 32.0,
+          "ulp_spread_log2": 5.0,
+          "ulp_vector": [
+            2.220446049250313e-16,
+            1.1102230246251565e-16,
+            6.938893903907228e-18
+          ]
+        },
+        "fixture": "schwarzschild_four_form",
+        "probe_id": "schw_horizon_approach"
+      },
+      {
+        "bacl_spectrum": {
+          "max_ulp": 2.220446049250313e-16,
+          "min_ulp": 5.551115123125783e-17,
+          "ulp_ratio": 4.0,
+          "ulp_spread_log2": 2.0,
+          "ulp_vector": [
+            2.220446049250313e-16,
+            1.1102230246251565e-16,
+            5.551115123125783e-17
+          ]
+        },
+        "fixture": "schwarzschild_four_form",
+        "probe_id": "schw_near_horizon"
+      },
+      {
+        "bacl_spectrum": {
+          "max_ulp": 2.220446049250313e-16,
+          "min_ulp": 5.551115123125783e-17,
+          "ulp_ratio": 4.0,
+          "ulp_spread_log2": 2.0,
+          "ulp_vector": [
+            2.220446049250313e-16,
+            5.551115123125783e-17,
+            1.1102230246251565e-16
+          ]
+        },
+        "fixture": "schwarzschild_four_form",
+        "probe_id": "schw_sterbenz_center"
+      },
+      {
+        "bacl_spectrum": {
+          "max_ulp": 2.220446049250313e-16,
+          "min_ulp": 5.551115123125783e-17,
+          "ulp_ratio": 4.0,
+          "ulp_spread_log2": 2.0,
+          "ulp_vector": [
+            2.220446049250313e-16,
+            5.551115123125783e-17,
+            1.1102230246251565e-16
+          ]
+        },
+        "fixture": "schwarzschild_four_form",
+        "probe_id": "schw_mid"
+      },
+      {
+        "bacl_spectrum": {
+          "max_ulp": 2.220446049250313e-16,
+          "min_ulp": 3.469446951953614e-18,
+          "ulp_ratio": 64.0,
+          "ulp_spread_log2": 6.0,
+          "ulp_vector": [
+            2.220446049250313e-16,
+            3.469446951953614e-18,
+            1.1102230246251565e-16
+          ]
+        },
+        "fixture": "schwarzschild_four_form",
+        "probe_id": "schw_far_field"
+      },
+      {
+        "bacl_spectrum": {
+          "max_ulp": 2.220446049250313e-16,
+          "min_ulp": 1.734723475976807e-18,
+          "ulp_ratio": 128.0,
+          "ulp_spread_log2": 7.0,
+          "ulp_vector": [
+            2.220446049250313e-16,
+            1.1102230246251565e-16,
+            1.734723475976807e-18
+          ]
+        },
+        "fixture": "pure_algebraic_four_form",
+        "probe_id": "pa_near_singular"
+      },
+      {
+        "bacl_spectrum": {
+          "max_ulp": 2.220446049250313e-16,
+          "min_ulp": 1.3877787807814457e-17,
+          "ulp_ratio": 16.0,
+          "ulp_spread_log2": 4.0,
+          "ulp_vector": [
+            2.220446049250313e-16,
+            1.1102230246251565e-16,
+            1.3877787807814457e-17
+          ]
+        },
+        "fixture": "pure_algebraic_four_form",
+        "probe_id": "pa_near_singular_mid"
+      },
+      {
+        "bacl_spectrum": {
+          "max_ulp": 2.220446049250313e-16,
+          "min_ulp": 5.551115123125783e-17,
+          "ulp_ratio": 4.0,
+          "ulp_spread_log2": 2.0,
+          "ulp_vector": [
+            2.220446049250313e-16,
+            5.551115123125783e-17,
+            1.1102230246251565e-16
+          ]
+        },
+        "fixture": "pure_algebraic_four_form",
+        "probe_id": "pa_sterbenz_center"
+      },
+      {
+        "bacl_spectrum": {
+          "max_ulp": 2.220446049250313e-16,
+          "min_ulp": 1.1102230246251565e-16,
+          "ulp_ratio": 2.0,
+          "ulp_spread_log2": 1.0,
+          "ulp_vector": [
+            2.220446049250313e-16,
+            1.1102230246251565e-16,
+            1.1102230246251565e-16
+          ]
+        },
+        "fixture": "pure_algebraic_four_form",
+        "probe_id": "pa_mid"
+      },
+      {
+        "bacl_spectrum": {
+          "max_ulp": 2.220446049250313e-16,
+          "min_ulp": 1.3877787807814457e-17,
+          "ulp_ratio": 16.0,
+          "ulp_spread_log2": 4.0,
+          "ulp_vector": [
+            2.220446049250313e-16,
+            1.3877787807814457e-17,
+            1.1102230246251565e-16
+          ]
+        },
+        "fixture": "pure_algebraic_four_form",
+        "probe_id": "pa_far_from_singular"
+      },
+      {
+        "bacl_spectrum": {
+          "max_ulp": 2.220446049250313e-16,
+          "min_ulp": 2.220446049250313e-16,
+          "ulp_ratio": 1.0,
+          "ulp_spread_log2": 0.0,
+          "ulp_vector": [
+            2.220446049250313e-16,
+            2.220446049250313e-16
+          ]
+        },
+        "fixture": "sphere_multi_d",
+        "probe_id": "sphere_axis"
+      },
+      {
+        "bacl_spectrum": {
+          "max_ulp": 2.220446049250313e-16,
+          "min_ulp": 1.1102230246251565e-16,
+          "ulp_ratio": 2.0,
+          "ulp_spread_log2": 1.0,
+          "ulp_vector": [
+            1.1102230246251565e-16,
+            1.1102230246251565e-16,
+            2.220446049250313e-16
+          ]
+        },
+        "fixture": "sphere_multi_d",
+        "probe_id": "sphere_equator_45"
+      },
+      {
+        "bacl_spectrum": {
+          "max_ulp": 2.220446049250313e-16,
+          "min_ulp": 5.551115123125783e-17,
+          "ulp_ratio": 4.0,
+          "ulp_spread_log2": 2.0,
+          "ulp_vector": [
+            5.551115123125783e-17,
+            5.551115123125783e-17,
+            5.551115123125783e-17,
+            2.220446049250313e-16
+          ]
+        },
+        "fixture": "sphere_multi_d",
+        "probe_id": "sphere_diagonal"
+      }
+    ]
+  },
+  "deterministic_relations": [
+    {
+      "candidate_a": "E_log2_base_operand",
+      "candidate_b": "base_operand",
+      "rationale": "E := log2(|base_operand|) by definition"
+    },
+    {
+      "candidate_a": "E_log2_base_operand",
+      "candidate_b": "in_sterbenz_cluster",
+      "rationale": "in_sterbenz_cluster is a boolean interval test on E (E in [-0.949, -0.750])"
+    },
+    {
+      "candidate_a": "conjecture_c_in_normal_range",
+      "candidate_b": "c2_lattice_chain_applies",
+      "rationale": "c2 lattice scope is precisely Conjecture C's normal-range precondition; constant True throughout in-scope probes"
+    },
+    {
+      "candidate_a": "BACL_grain_max_ulp",
+      "candidate_b": "max_ulp",
+      "rationale": "BACL_grain at dominant intermediate = max ulp by Phase B definition"
+    }
+  ],
+  "equivalence_groups": [
+    {
+      "members": [
+        "BACL_grain_max_ulp",
+        "min_ulp",
+        "ulp_spread_log2",
+        "ulp_ratio",
+        "max_ulp"
+      ],
+      "rationale": "All derived from the operand-chain ulp vector; shared substrate derivation under BACL pair invariant. ulp_spread_log2 is the discriminating BACL-spectrum representative (carries binade spread).",
+      "representative": "ulp_spread_log2"
+    },
+    {
+      "members": [
+        "E_log2_base_operand",
+        "base_operand",
+        "in_sterbenz_cluster"
+      ],
+      "rationale": "All derived from the 1-x_term base_operand via deterministic transformations (log2, identity, interval-test). E_log2_base_operand is the discriminating representative (continuous, retains full distance-to-singular information).",
+      "representative": "E_log2_base_operand"
+    },
+    {
+      "members": [
+        "conjecture_c_in_normal_range",
+        "c2_lattice_chain_applies"
+      ],
+      "rationale": "Both are precondition-style booleans, constant True across all in-scope probes in Phase B. Reclassified as preconditions, not discriminating basis elements.",
+      "representative": "conjecture_c_in_normal_range"
+    }
+  ],
+  "irreducible_basis": [
+    {
+      "candidate_id": "ulp_spread_log2",
+      "rationale": "BACL-spectrum representative. Captures the binade spread of the operand chain \u2014 the discriminating substrate observable that single-value BACL_grain misses. Substrate-derived from BACL (proven invariant) via operand-chain ulp vector. P1-satisfied (input-derivable, no F evaluation).",
+      "represented_group": "BACL-spectrum family"
+    },
+    {
+      "candidate_id": "E_log2_base_operand",
+      "rationale": "Endpoint-distance substrate image. Continuous, retains full distance-to-singular information. P1-satisfied. Phase 2g operationally validated as the 1D C-extractor. Substrate-attributed via informal BACL/binade chain (Phase 2d sketch).",
+      "represented_group": "E family (E + base_operand + in_sterbenz_cluster)"
+    },
+    {
+      "candidate_id": "two_form_partition",
+      "rationale": "Algebraic-form-level invariant (silent vs residual_carrying partition). Orthogonal to BACL-spectrum and E by construction (it's a property of the route, not the probe point). P1-satisfied in principle (partition determinable from algebraic form alone).",
+      "represented_group": "Algebraic-form structural invariant"
+    }
+  ],
+  "irreducible_basis_cardinality": 3,
+  "phase": "C",
+  "phase_b_table_sha256": "58574ba766e34bcccaaf4f4fee61545d8382a4a627f560d903e8f38f5965f5e7",
+  "preconditions_demoted": [
+    {
+      "candidate_id": "conjecture_c_in_normal_range",
+      "rationale": "Constant True across all in-scope Phase B probes (all f_float >= 2^-1021 with wide margin). No discriminating variance. Reclassified as a precondition for Conjecture-C-scope basis applicability."
+    },
+    {
+      "candidate_id": "c2_lattice_chain_applies",
+      "rationale": "Same scope as Conjecture C; constant True across in-scope probes. Reclassified as a precondition."
+    }
+  ],
+  "preregistry": "Build_Docs/Agent_tasks/substrate_invariant_search_phase_c_basis.md",
+  "variance_summary_1_x_term": {
+    "BACL_grain_max_ulp": {
+      "kind": "continuous",
+      "n_observed": 15,
+      "variance": 0.0
+    },
+    "E_log2_base_operand": {
+      "kind": "continuous",
+      "n_observed": 15,
+      "variance": 6.982925884095545
+    },
+    "base_operand": {
+      "kind": "continuous",
+      "n_observed": 15,
+      "variance": 0.11950450319457838
+    },
+    "c2_lattice_chain_applies": {
+      "kind": "boolean",
+      "n_observed": 15,
+      "variance": 0.0
+    },
+    "conjecture_c_in_normal_range": {
+      "kind": "boolean",
+      "n_observed": 15,
+      "variance": 0.0
+    },
+    "in_sterbenz_cluster": {
+      "kind": "boolean",
+      "n_observed": 15,
+      "variance": 0.17142857142857146
+    },
+    "min_ulp": {
+      "kind": "continuous",
+      "n_observed": 15,
+      "variance": 1.0307003152432861e-33
+    },
+    "ulp_ratio": {
+      "kind": "continuous",
+      "n_observed": 15,
+      "variance": 17360.571428571428
+    },
+    "ulp_spread_log2": {
+      "kind": "continuous",
+      "n_observed": 15,
+      "variance": 5.838095238095238
+    }
+  },
+  "what_phase_c_does_not_claim": [
+    "Phase C does NOT assess transformation-invariance (Phase D)",
+    "Phase C does NOT add V4-native K_G primitive (Phase E)",
+    "Phase C does NOT synthesise the substrate invariant (Phase F)",
+    "Phase C does NOT modify substrate / architecture / fixture files",
+    "Phase C does NOT run new measurements; analysis derives from Phase B values only"
+  ]
+}

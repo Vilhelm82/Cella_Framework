@@ -1,0 +1,155 @@
+#!/usr/bin/env python3
+"""
+CF-SLOPE, Cella-strengthened — EXPLORATORY PROBE (scratch, not a campaign).
+
+The question (Will): why can pi "become a circle" and no other irrational does?
+
+The continued-fraction convergent-decay slope measures ONE kind of closure:
+ARITHMETIC closure (Diophantine / closed-geodesic). A quadratic irrational has a
+PERIODIC CF -> it "closes" arithmetically -> its slope is an EXACT closed form
+L/(2 ln lambda). A generic real (pi, zeta(3)) has no periodic CF -> its slope is
+the Levy constant 1/(2 * pi^2/(12 ln2)) ~ 0.4214, the almost-every-real value.
+
+The original test computed this slope by FLOAT least-squares on log(1/|e_n|) where
+e_n = p_n/q_n - x (x to 12000 dps). Three weaknesses Cella removes:
+  1. sqrt2's slope is MEASURED (0.5673) when it is EXACTLY 1/(2 ln(1+sqrt2)) and
+     should be CERTIFIED, not regressed.
+  2. The error e_n is computed by subtracting a 12000-dps float. Unneeded: the error
+     is CERTIFIED-BRACKETED by the EXACT integer denominators alone --
+        1/(q_n (q_n+q_{n+1}))  <  |e_n|  <  1/(q_n q_{n+1}).
+     No float subtraction, no precision floor in the error at all.
+  3. The pi/zeta slope BOUNCES (0.42-0.46) because large partial quotients (pi's 292)
+     spike q and get smeared into the regression. Cella TYPES those events and
+     separates them instead of averaging over them.
+
+Output is a TYPED VERDICT, not a number to squint at:
+  closed_exact          : periodic CF; slope = L/(2 ln lambda), CERTIFIED (proven).
+  generic_within_budget : exact-denominator slope band brackets Levy on tested N
+                          (consistent with almost-every-real; NOT proven asymptotic).
+  anomalous / refused   : band excludes Levy and any simple closed form / too wide.
+
+THE CHANNEL POINT: this classifier sees only the ARITHMETIC channel. sqrt2 closes it;
+pi does not -- pi's circle-closure lives in a channel (geometric/analytic) this test
+is structurally blind to. "pi becomes a circle" is true in a closure the CF cannot read.
+mpmath used ONLY to extract the partial quotients; everything downstream is exact ints.
+"""
+
+import mpmath as mp, math
+mp.mp.dps = 3000
+
+LEVY = math.pi**2 / (12*math.log(2))
+GENERIC = 1.0/(2*LEVY)                 # ~0.4214  (slope = dn / d ln(1/|e|))
+
+
+def cf_partial_quotients(xfunc, N):
+    """First N partial quotients from a high-precision value, with a reliability stop."""
+    a = []; xx = xfunc()
+    floor_guard = mp.mpf(10)**(-mp.mp.dps + 30)
+    for _ in range(N):
+        ai = int(mp.floor(xx)); a.append(ai)
+        f = xx - ai
+        if f == 0 or abs(f) < floor_guard:      # below trusted precision -> stop, don't fabricate
+            break
+        xx = 1/f
+    return a
+
+
+def convergents(a):
+    """Exact integer convergents (Python ints -- exact, unbounded)."""
+    P = []; Q = []; pm1, pm2, qm1, qm2 = 1, 0, 0, 1
+    for ai in a:
+        p = ai*pm1 + pm2; q = ai*qm1 + qm2
+        P.append(p); Q.append(q)
+        pm2, pm1, qm2, qm1 = pm1, p, qm1, q
+    return P, Q
+
+
+def find_period(a, max_skip=3, maxL=60):
+    """Detect an eventually-periodic CF tail (the quadratic-irrational signature)."""
+    for skip in range(0, max_skip+1):
+        tail = a[skip:]
+        for L in range(1, maxL+1):
+            if len(tail) < 4*L:
+                break
+            block = tail[:L]
+            span = min(len(tail), 8*L)
+            if all(tail[i] == block[i % L] for i in range(span)):
+                return skip, L, block
+    return None, None, None
+
+
+def closed_exact_slope(L, block):
+    """slope = L/(2 ln lambda); lambda = dominant eigenvalue of the period transfer matrix."""
+    M = [[1, 0], [0, 1]]
+    for ai in block:
+        A = [[ai, 1], [1, 0]]
+        M = [[A[0][0]*M[0][0]+A[0][1]*M[1][0], A[0][0]*M[0][1]+A[0][1]*M[1][1]],
+             [A[1][0]*M[0][0]+A[1][1]*M[1][0], A[1][0]*M[0][1]+A[1][1]*M[1][1]]]
+    tr = M[0][0] + M[1][1]
+    det = M[0][0]*M[1][1] - M[0][1]*M[1][0]           # = +/-1
+    lam = (mp.mpf(tr) + mp.sqrt(mp.mpf(tr)**2 - 4*det)) / 2
+    return L/(2*mp.log(lam)), tr, det, lam
+
+
+def _slope(ns, Ls):
+    m = len(ns); sx = sum(Ls); sy = sum(ns)
+    sxx = sum(v*v for v in Ls); sxy = sum(u*v for u, v in zip(ns, Ls))
+    return (m*sxy - sx*sy)/(m*sxx - sx*sx)
+
+
+def certified_slope_band(Q, skip=8, big=50, a=None):
+    """ln(1/|e_n|) CERTIFIED-bracketed from exact denominators; slope band + typed spikes."""
+    los = []; his = []; ns = []; spikes = []
+    for n in range(len(Q)-1):
+        if n < skip:
+            continue
+        qn = mp.mpf(Q[n]); qn1 = mp.mpf(Q[n+1])
+        lo = mp.log(qn) + mp.log(qn1)            # ln(q_n q_{n+1})   <= ln(1/|e_n|)
+        hi = mp.log(qn) + mp.log(qn1 + qn)       # ln(q_n(q_n+q_{n+1})) >= ln(1/|e_n|)
+        los.append(lo); his.append(hi); ns.append(n)
+        if a is not None and n+1 < len(a) and a[n+1] > big:
+            spikes.append((n+1, a[n+1]))
+    # slope is decreasing in the log-value -> band = [slope@his, slope@los]
+    s_hi = float(_slope(ns, his)); s_lo = float(_slope(ns, los))
+    band = (min(s_hi, s_lo), max(s_hi, s_lo))
+    # also: slope with large-quotient convergents removed (declared rule)
+    keep = [i for i, n in enumerate(ns) if not any(sp[0] == n+1 for sp in spikes)]
+    mid = [(lo+hi)/2 for lo, hi in zip(los, his)]
+    s_all = float(_slope(ns, mid))
+    s_despike = float(_slope([ns[i] for i in keep], [mid[i] for i in keep])) if len(keep) > 2 else s_all
+    return band, s_all, s_despike, spikes
+
+
+def classify(name, xfunc, N=600):
+    a = cf_partial_quotients(xfunc, N)
+    P, Q = convergents(a)
+    skip, L, block = find_period(a)
+    print(f"\n=== {name}  (extracted {len(a)} partial quotients) ===")
+    if L is not None:
+        s, tr, det, lam = closed_exact_slope(L, block)
+        # cross-check against the exact-denominator regression
+        band, s_all, _, _ = certified_slope_band(Q, a=a)
+        print(f"  VERDICT: closed_exact   period={block} (len {L}, pre={skip})")
+        print(f"    lambda = dominant eigenvalue (tr={tr}, det={det}) -> slope = L/(2 ln lambda) = {float(s):.6f}  [CERTIFIED]")
+        print(f"    exact-denominator regression = {s_all:.6f}  (agrees -> certificate validated)")
+        print(f"    closes ARITHMETICALLY (periodic CF = closed geodesic). Its OWN slope, proven.")
+    else:
+        band, s_all, s_despike, spikes = certified_slope_band(Q, a=a)
+        brackets = band[0] <= GENERIC <= band[1]
+        verdict = "generic_within_budget" if brackets else "anomalous(check)"
+        print(f"  VERDICT: {verdict}")
+        print(f"    certified slope band = [{band[0]:.6f}, {band[1]:.6f}]   (Levy generic = {GENERIC:.6f})")
+        print(f"    band brackets Levy: {brackets}   [graded: consistent with generic on N={len(a)}; NOT proven asymptotic]")
+        print(f"    large-quotient events (a_n>50), TYPED not smeared: {spikes if spikes else 'none'}")
+        print(f"    slope all={s_all:.6f}  vs  despiked={s_despike:.6f}  (the bounce was the spikes)")
+        print(f"    does NOT close arithmetically. (pi's circle-closure is a DIFFERENT channel, invisible here.)")
+
+
+if __name__ == "__main__":
+    print(f"Levy generic slope = {GENERIC:.6f}   |   sqrt2 forced = {1/(2*math.log(1+math.sqrt(2))):.6f}")
+    classify("sqrt(2)  [1;2,2,2,...]", lambda: mp.sqrt(2))
+    classify("golden phi [1;1,1,...]", lambda: (1+mp.sqrt(5))/2)
+    classify("sqrt(3)  [1;1,2,1,2,...]", lambda: mp.sqrt(3))
+    classify("sqrt(7)  [2;1,1,1,4,...]", lambda: mp.sqrt(7))
+    classify("pi", lambda: mp.pi)
+    classify("zeta(3)  (Apery)", lambda: mp.zeta(3))

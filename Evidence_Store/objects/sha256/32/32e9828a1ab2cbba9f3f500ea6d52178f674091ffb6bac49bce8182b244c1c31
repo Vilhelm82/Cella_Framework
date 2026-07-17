@@ -1,0 +1,91 @@
+# Test A — Cross-Fixture Refinery Audit — Preregistry
+
+> **Status: FROZEN 2026-05-17 (pre-measurement).** Per `CAMPAIGN_DISCIPLINE.md` Rule 1.1, predictions below are binding. Versioned amendments only; no quiet rewrites.
+
+## 1. Purpose
+
+Strengthens Observation 2 (sub-lattice alignment as a separate optimization criterion from operation-level exactness) by testing whether c₂'s dominance over c₁ in the pure-algebraic fixture (Task 031) is fixture-specific or universal across the V4 four-fixture battery.
+
+## 2. Source
+
+- Original audit: `Build_Docs/Reports/task031_sterbenz_audit/` (pure-algebraic only).
+- Original report: `Docs/transfer_function_exponent_family_v4.tex` §7 (Observation 2).
+- Discussion: 2026-05-17 conversation, "what additional tests can I run to strengthen Observation 2."
+
+## 3. Test design
+
+For each of the 4 fixtures (Schwarzschild, SR, pure-algebraic, cube-root), construct candidates c₁ and c₂ that represent algebraically-equivalent rewrites of the fixture-specific constraint identity `R^n - 1 + x_term ≡ 0`:
+
+| Fixture | Native variable | x_term | R | n |
+|---|---|---|---|---|
+| Schwarzschild | r | 2/r | √(1 − 2/r) | 2 |
+| SR | β | β² | √(1 − β²) | 2 |
+| Pure algebraic | x | x | √(1 − x) | 2 |
+| Cube-root | x | x | ∛(1 − x) | 3 |
+
+Candidates per fixture:
+
+- **c₁ (reference, Sterbenz-blessed):** `(R^n) − 1 + x_term`
+- **c₂ (reassociated):** `(R^n) + (x_term − 1)`
+
+Both algebraically zero everywhere. Differences in their float64 residuals encode the sub-lattice alignment behavior we are testing.
+
+The candidates are computed at float64 over each fixture's Sterbenz-applicable region (where R^n ≥ 1/2):
+
+- Schwarzschild: r ≥ 4 (Sterbenz protects `R² − 1`)
+- SR: β ≤ 1/√2
+- Pure algebraic: x ≤ 0.5
+- Cube-root: x ≤ 0.5 (because R³ = 1 − x ≥ 0.5 ⟺ x ≤ 0.5)
+
+## 4. Measurement
+
+For each (fixture, candidate, x_value):
+- Compute residual ρ = candidate(x_value)
+- Compute lattice level L = ρ / ulp(f) where f = 1 − x_term value
+- Classify lattice character:
+  - **integer**: all non-zero L values have fractional part 0
+  - **half-integer**: fractional parts include 0.5 but not 0.25 or 0.75
+  - **quarter-integer**: fractional parts include 0.25 or 0.75
+  - **irregular**: other fractional patterns
+
+Aggregate per (fixture, candidate):
+- Non-zero count
+- Max |L| (lattice levels)
+- Unique L values
+- Lattice class (per above)
+- Fractional-part distribution
+
+## 5. Predicted outcomes (FROZEN)
+
+**Strong prediction (universal dominance):**
+> In all 4 fixtures, c₂ has **integer lattice character** AND c₁ has **non-integer lattice character** (half-integer or quarter-integer). Therefore c₂ strictly dominates c₁ on the `lattice_class` dimension in every fixture.
+
+**Weak prediction (partial dominance, fixture-shifted):**
+> c₂ dominates c₁ on lattice class only in fixtures where the boundary aligns naturally (pure-algebraic and cube-root, both with boundary at x = 0.5). In SR and Schwarzschild (where the boundary is at fixture-shifted locations β = 1/√2 and r = 4), c₂ may or may not show integer lattice.
+
+**Null/disconfirming outcome:**
+> c₂ does NOT show integer lattice in some or all fixtures, OR c₁ shows integer lattice in some fixtures. Either falsifies the universal-dominance reading of Observation 2.
+
+**Pre-registered hypothesis: STRONG.** I predict the strong outcome.
+
+## 6. Audit framework note
+
+This test does NOT compute the full multi-precision b_k or the 8-dimensional burden vector from Task 031. It tests the *core* dimension of Observation 2's dominance claim: lattice class. If c₂ has integer lattice and c₁ does not, that alone is sufficient to dominate on the lattice-class burden dimension. The other 7 burden dimensions (operation chain depth, polarity coupling, etc.) are predicted to tie or favor c₂ per Task 031.
+
+A full b_k multi-precision audit per fixture is a deeper extension (Test C in the strengthening list) and is deferred.
+
+## 7. Closeout criteria
+
+Test A closes when:
+1. Per-fixture residual data captured at float64 across Sterbenz-applicable region
+2. Lattice class assigned per (fixture, candidate)
+3. Verdict per fixture: c₂ dominates c₁ on lattice class — yes/no
+4. Aggregate verdict: strong / weak / disconfirming
+
+## 8. Out of scope
+
+- Multi-precision b_k linear-fit on lattice class (Test C)
+- Expanded candidate space beyond c₁ and c₂ (Test D)
+- Dual-arm verification (Test B)
+- Sterbenz-non-applicable region (Test H)
+- Burden vector sensitivity (Test E)

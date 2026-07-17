@@ -1,0 +1,210 @@
+# MCG Gate 3 — Kill-Switch — Preregistry
+
+> **Status: FROZEN 2026-05-19 pre-measurement.** Per `CAMPAIGN_DISCIPLINE.md` Rule 1.1, binding. No amendments are permitted post-measurement; pre-measurement amendments are permitted only if flagged explicitly and made before any computation is admitted.
+
+## 0. Strategic role
+
+Gate 3 is the **cheap global kill-switch** of the MCG (M ⊕ C ⊕ G) gate campaign, pulled to the front (out of dependency order) deliberately. A negative result here makes Gates 0/1/2/4 and the entire unification campaign moot. Highest expected-value single experiment available pre-campaign.
+
+The hypothesis Gate 3 tests is structural, not numerical: **does the G-candidate observable (σ1 exponent) carry a signal that survives subtraction of the substrate-mandated component M, or is σ1 = 1.000 substrate-universality masquerade?**
+
+A HALT here means the architecture's G term was an artifact of substrate structure (BACL-mandated lattice content) for this fixture, and the architecture must be reassessed before any further gates are funded. A GREEN means G is plausibly real post-decomposition and Gate 0 proceeds.
+
+## 1. Source and isolation
+
+- V4-native. No V3 imports, no V3 vocabulary. The c2 lattice theorem and BACL are V4-derived primitives carried in from the prior arc (proven; see references §10).
+- This Gate uses the Schwarzschild radial fixture `f(r) = 1 − 2/r` near the gravitational horizon `r_h = 2`, evaluated under IEEE 754 binary64 round-to-nearest-ties-to-even. No physics interpretation overreach: this is a numerical-substrate experiment using Schwarzschild's algebraic form because the c2 lattice theorem is sharpest on subtractions of the form `round(1 − x_term)`. Axiom 11 (epistemic stance) is honored; named theorems are navigation targets, not substrate content.
+
+## 2. Fixture (FROZEN)
+
+The radial function `f(r) = 1 − 2/r` with `r > 2` (i.e., outside the horizon). The relevant cancellation residue is the c2-style observable from the c2 lattice theorem:
+
+```
+x_term  = round(2 / r)                      # binary64
+f_float = round(1 − x_term)                 # binary64 ; exactly representable when BACL applies
+R       = round( sqrt(f_float) )            # binary64 ; correctly-rounded sqrt per IEEE 754-2019 §5.4.1
+V_2     = round(R · R)                      # binary64
+c_schw(r) = round( V_2 + round(x_term − 1) ) # binary64 ; equivalent to round(V_2 − f_float)
+```
+
+The c2 lattice theorem (in-scope for `f_float ≥ 2^(−1021)`) states `c_schw(r) = j(r) · ulp(f_float)` for integer `j(r) ∈ ℤ` whenever the BACL provisos of the load-bearing subtractions are satisfied.
+
+### Sweep parameters
+
+- **r grid**: `r = 2 + (r − 2)` with `(r − 2)` log-spaced over the range `[2^(−40), 2^(−2)]` at 200 points (binary log spacing). This covers ~38 decades of `(r − 2)` magnitude without driving `f_float` below the c2 theorem's `2^(−1021)` floor (the floor is many orders of magnitude further than the experiment reaches; scope gate is satisfied trivially).
+- **Sign**: `r > 2` only. The fixture is one-sided (outside the horizon).
+- **Precision**: binary64 throughout for the experimental quantities; mpmath at 100 dps for the high-precision oracle (`f_exact(r) = 1 − 2/r` evaluated symbolically) and for σ1 fits' truth comparisons.
+
+## 3. The two channels (FROZEN)
+
+Gate 3 runs **two channels**. The **decision arm** is interpretation (3), single-armed and terminal. The **positive-control channel** is interpretation (1), used only to detect harness breakage. Interpretation (2) is excluded from Gate 3 by user direction (it is a Gate 2 / G-characterization instrument and must not function as a fallback).
+
+### 3.1 DECISION ARM (single, terminal) — Interpretation (3)
+
+**Observable**: `c_schw(r) = round(V_2 + round(x_term − 1))` — the c2-style cancellation residue.
+
+**M-subtraction (operational definition, frozen)**: extract the BACL-mandated integer multiple
+```
+j(r) = round( c_schw(r) / ulp(f_float(r)) )
+m_subtracted_residue(r) = c_schw(r) − j(r) · ulp(f_float(r))
+```
+where `ulp(f_float)` is the binary64 ulp of `f_float(r)`, and `j(r)` is the nearest integer (RNE) of the ratio.
+
+**σ1 fits**:
+- **Raw**: `α_raw = slope of log|c_schw(r)| vs log(r − 2)`, fit by ordinary least squares over the r-grid restricted to records where `|c_schw(r)| > 0` (drop exact-zero points; record their count).
+- **M-subtracted**: `α_msub = slope of log|m_subtracted_residue(r)| vs log(r − 2)`, fit over records where `|m_subtracted_residue(r)| > 0` (drop exact-zero points; record their count).
+
+**Pre-registered decision rule (FROZEN, terminal — no fallback)**:
+
+- **GREEN** ⟺ both:
+  - `|α_msub − α_raw| ≤ 0.10` (σ1 survives M-subtraction within ±0.10 of the raw slope), AND
+  - The fraction of non-zero M-subtracted residues is ≥ 0.50 (the M-subtraction does not collapse more than half the records to exact zero).
+- **HALT** ⟺ either:
+  - `|α_msub − α_raw| > 0.10` (σ1 changes substantially under M-subtraction), OR
+  - The fraction of non-zero M-subtracted residues is < 0.50 (M-subtraction collapses the observable).
+
+The HALT verdict is **terminal**. It is NOT routed to any other arm or observable. A HALT means the architecture's G term is artifact for this fixture and the Gate 3 verdict stands.
+
+### 3.2 POSITIVE-CONTROL CHANNEL — Interpretation (1)
+
+**Observable**: `|f_float(r)|` with the BACL-predicted lattice position of `f_float` subtracted.
+
+For `r > 2`, the load-bearing subtraction `1 − x_term` satisfies the BACL hypothesis `ulp(1) ≥ ulp(x_term)` (proviso: `x_term = round(2/r) ∈ (0, 1)` so `ulp(x_term) ≤ ulp(1) = 2^(−52)`). Therefore the subtraction is BACL-exact, and the BACL-predicted lattice value of `f_float` equals `f_float` itself (no rounding error in the subtraction step). Hence:
+```
+f_msub(r) = f_float(r) − (BACL-predicted f_float(r)) = 0   identically.
+```
+
+**Pre-registered requirement (FROZEN)**: the positive-control channel **MUST** report:
+- Fraction of records with `|f_msub(r)| = 0` exactly: 1.000 (all 200 records), AND
+- σ1 fit on `|f_msub|` is undefined (no non-zero records) → reported as `null`.
+
+**VOID condition (FROZEN, terminal)**: if the positive-control channel produces any non-zero `f_msub(r)` record, **Gate 3 result is VOID** (harness broken). The harness must be fixed and the entire Gate 3 rerun. A VOID is NOT a GREEN and NOT a HALT.
+
+## 4. BACL hypothesis coverage audit (FROZEN)
+
+For each r in the sweep, audit the BACL-hypothesis status of the load-bearing subtractions in the c2-style chain:
+
+| Sub-operation | BACL provision required | Audit method |
+|---|---|---|
+| `round(1 − x_term)` | `ulp(1) ≥ ulp(x_term)` | Compute both ulps; record boolean |
+| `round(V_2 − f_float)` (equivalent form of `c_schw`) | `ulp(V_2) ≥ ulp(f_float)` | Compute both ulps; record boolean |
+
+**Coverage metric**: `coverage_fraction = (records where both provisos hold) / (total records)`.
+
+Predicted coverage for this fixture: 1.000 (the proof of the c2 lattice theorem says both provisos hold throughout the in-scope domain, which this sweep does not leave). Empirical coverage is reported alongside the verdict, not used to modify it.
+
+**Reportage rule (FROZEN)**: if coverage < 1.000, the verdict (GREEN/HALT/VOID) is reported with a `scope_limited` flag and the coverage fraction. The decision rule itself is **not** modified by coverage.
+
+## 5. Frozen predictions (informational, not part of the decision rule)
+
+These are pre-registered predictions of what Gate 3 will report, recorded for honest comparison post-measurement. They do not modify the decision rule.
+
+- **EP_1** — Raw σ1: `α_raw ≈ 1.000 ± 0.05`. Reason: `|c_schw| ~ ulp(f_float) ~ 2^(k−52)` where `k = ⌊log_2 f_float⌋`, and `f_float = 1 − 2/r ≈ (r − 2)/r ≈ (r − 2)/2` near `r = 2`, so `|c_schw|` scales linearly with `(r − 2)` modulo binade-step quantization.
+- **EP_2** — M-subtracted residue: `m_subtracted_residue(r) = 0` exactly for ≥ 90% of records, by the c2 lattice theorem. The remaining ≤ 10% of records would only arise from r-values where the integer-j extraction misses by a ulp due to RNE tie-breaking or near-binade-boundary behaviour.
+- **EP_3** — α_msub: undefined or effectively zero (no power-law fit possible if fewer than ~30 non-zero records).
+- **EP_4** — Verdict: **HALT** (terminal). The c2 lattice theorem foreordains that c_schw is captured by the BACL-mandated integer-ulp lattice in-scope; M-subtraction therefore collapses |c_schw| to zero by construction. This is the **predicted, informative HALT**: σ1 = 1.000 on raw `c_schw` was substrate-universality masquerade, exactly what Gate 3 is designed to detect.
+- **EP_5** — BACL coverage: 1.000.
+- **EP_6** — Positive control: trivial-zero in all 200 records (not VOID).
+
+An EP_4 HALT verdict is the **predicted** Gate 3 outcome. The pre-registration is binding regardless of the prediction.
+
+**Note on the meaning of a predicted HALT**: a HALT is not a campaign failure; it is the kill-switch correctly firing. It says the architecture's *G term as currently conceived* is substrate-mandated for this fixture and must be reformulated (e.g., G must live in a quantity that is provably not on the BACL lattice). The user's overarching campaign continues, but the Gate 0–4 sequence as currently formulated does not proceed without a reformulation of G.
+
+## 6. V4 typed outputs (FROZEN schema)
+
+Each r-grid point emits one record:
+
+```json
+{
+  "r": float,
+  "r_minus_horizon": float,
+  "x_term": float,
+  "f_float": float,
+  "R": float,
+  "V_2": float,
+  "c_schw": float,
+  "ulp_f_float": float,
+  "j_BACL_integer": int,
+  "m_subtracted_residue": float,
+  "f_msub_positive_control": float,
+  "bacl_proviso_1_subtraction_holds": bool,
+  "bacl_proviso_c_schw_subtraction_holds": bool,
+  "v4_validity": {
+    "defined": bool,
+    "finite": bool,
+    "selectable": bool,
+    "advanceable": bool,
+    "observable": bool,
+    "policy_accepted": bool
+  }
+}
+```
+
+Aggregator emits:
+
+```json
+{
+  "fixture": "schwarzschild_horizon_approach_f_eq_1_minus_2_over_r",
+  "r_grid_points": int,
+  "r_minus_horizon_range": [float, float],
+  "alpha_raw": float,
+  "alpha_msub": float | null,
+  "alpha_raw_minus_alpha_msub": float | null,
+  "fraction_nonzero_c_schw": float,
+  "fraction_nonzero_m_subtracted_residue": float,
+  "fraction_nonzero_f_msub_positive_control": float,
+  "bacl_coverage_fraction": float,
+  "scope_limited": bool,
+  "verdict": "GREEN" | "HALT" | "VOID",
+  "verdict_reasoning": string,
+  "pre_registered_predictions_audit": { "EP_1": ..., "EP_6": ... }
+}
+```
+
+## 7. Closeout criteria
+
+1. 200 r-grid records emitted.
+2. Aggregator computed.
+3. Decision rule (§3.1) and VOID condition (§3.2) applied as pre-registered, verbatim.
+4. BACL coverage fraction reported.
+5. EP_1–EP_6 audited explicitly (predicted vs measured, no modification of the verdict).
+6. Byte-stable rerun verified.
+7. Verdict + verdict reasoning recorded.
+8. If GREEN: handoff item to draft Gate 0 preregistry. If HALT: handoff item to reformulate G or terminate the MCG campaign. If VOID: harness fix + rerun.
+
+## 8. Out of scope (logged)
+
+- Subnormal-regime behaviour of `f_float` (this fixture stays at `f_float ≥ ~2^(−40)`, far above the `2^(−1021)` c2 floor).
+- Other rounding modes (round-to-nearest-even only).
+- Other formats (binary64 only).
+- Conical compatibility singularity fixture (the alternative Gate 3 fixture; not used here — Schwarzschild chosen because c2 theorem applies most directly).
+- Re-running Gate 3 with a different interpretation of M-subtraction (the decision arm is interpretation (3) only; interpretations (1) and (2) are not eligible substitutes per §3).
+- Any non-decision use of interpretation (2). Per user direction, interpretation (2) is a Gate 2 / G-characterization instrument and is excluded from Gate 3.
+
+## 9. Pre-registered failure modes
+
+| ID | Condition | Action |
+|---|---|---|
+| F_G3_1 | Positive-control channel produces non-zero `f_msub` records | VOID; fix harness; rerun |
+| F_G3_2 | `c_schw` is identically zero across the full sweep (no observable) | Re-examine fixture; this would indicate the cancellation residue is too clean to test, suggesting Schwarzschild is not the right kill-switch fixture |
+| F_G3_3 | BACL coverage < 1.000 | Flag `scope_limited`; verdict stands; report coverage |
+| F_G3_4 | Byte-stable rerun mismatch | Investigate non-determinism; not eligible as a binding measurement |
+| F_G3_5 | `alpha_raw` regression has R² < 0.95 | Verdict still reported; flag fit quality; note in closeout |
+
+## 10. References
+
+- `Lloyd_Engine_V4/Build_Docs/CAMPAIGN_DISCIPLINE.md` Rule 1.1 — pre-registration binding.
+- `Lloyd_Engine_V4/Build_Docs/Reports/conjecture_c_proof_audit/closeout.md` — proven sqrt no-binade-drop, in-scope `f_float` normal range.
+- `Lloyd_Engine_V4/Build_Docs/Reports/bacl_invariant_audit/closeout.md` — proven BACL primitive.
+- `Lloyd_Engine_V4/Build_Docs/Reports/c2_lattice_sharpness_audit/closeout.md` — c2 lattice theorem with scope `f_float ≥ 2^(−1021)`.
+- `Lloyd_Engine_V4/Build_Docs/Reports/blowup_exponent_v4_audit/closeout.md` — σ1 = 1.000 baseline (the candidate G-observable whose substrate-mandate this Gate tests).
+- `Docs/session_handoff_2026_05_19_mcg_gate_campaign_unified.md` §3 (Gate 3 acceptance) and §4 (M-subtraction operational interpretations).
+- IEEE 754-2019 §4.3.1 (round-to-nearest-ties-to-even), §5.4.1 (correctly-rounded sqrt).
+
+---
+
+**FREEZE TIMESTAMP**: 2026-05-19, pre-measurement.
+
+**User-directed operational specification (verbatim, recorded for binding pre-measurement)**:
+
+> single decision arm = (3), c2-style residue c_schw(r)=round(R²+(x_term−1)) with integer-j (M) component subtracted; pre-registered rule unchanged: σ1 survives M-subtraction substantially → GREEN, degrades/vanishes → HALT (terminal — NOT routed to any other arm or observable). Add degenerate interpretation (1) as a positive-control channel only: it MUST return trivial HALT; if it does not, Gate 3 result is VOID (harness broken, fix and rerun), not GREEN/HALT. Exclude (2) from Gate 3 — it is a Gate 2 / G-characterization instrument, not a kill-switch arm, and must not function as a fallback. Freeze all of the above into the preregistry pre-measurement before any computation.

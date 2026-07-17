@@ -1,0 +1,246 @@
+{
+ "amendment_m1_trail": "dependency re-stamped to the amended manifest sha (amendment_m1, Will-blessed); predictions and expectations byte-untouched.",
+ "authority": "brief section 4 Arm M Stage A (lanes + coupling partition; CL-M1) + Will's manifest freeze sign-off + standing rules 1.8/1.9 + the T2 fence (manifest, verbatim: NO G-claims)",
+ "campaign_id": "beyond_the_cradle_arm_m",
+ "date_stamped_from_machine": "2026-06-12",
+ "depends_on": {
+  "manifest_v1_sha256": "add67c301f0f592484d7023a657302296f3b74376167f6fff8911ce670e3719c",
+  "note": "bench code (mexpr/schema/fixtures) pinned inside the frozen manifest, enforced by require_frozen (rule 1.9)."
+ },
+ "expectations": {
+  "route_table": {
+   "FXMB1a|FXMB1b@0": {
+    "readings_equal": true,
+    "true_equal": true
+   },
+   "FXMB1a|FXMB1b@1": {
+    "readings_equal": true,
+    "true_equal": true
+   },
+   "FXMB2a|FXMB2b@0": {
+    "readings_equal": true,
+    "true_equal": true
+   },
+   "FXMB2a|FXMB2b@1": {
+    "readings_equal": false,
+    "true_equal": true
+   }
+  },
+  "rows": {
+   "FXMA1@0": {
+    "deviation": "0",
+    "n_entries": 2,
+    "profile": {},
+    "reading_hex": "0x1.0000000000000p+0",
+    "true": "1"
+   },
+   "FXMA1@1": {
+    "deviation": "-34211/590295810358705651712",
+    "n_entries": 2,
+    "profile": {
+     "TOTAL": "34211/590295810358705651712",
+     "coupling": "34211/590295810358705651712"
+    },
+    "reading_hex": "0x1.1ffff36f0255ep+1",
+    "true": "1328164689027368712797/590295810358705651712"
+   },
+   "FXMA2@0": {
+    "deviation": "0",
+    "n_entries": 2,
+    "profile": {},
+    "reading_hex": "0x1.c000000000000p-1",
+    "true": "7/8"
+   },
+   "FXMA2@1": {
+    "deviation": "-28439/1180591620717411303424",
+    "n_entries": 2,
+    "profile": {
+     "TOTAL": "28439/1180591620717411303424",
+     "coupling": "28439/1180591620717411303424"
+    },
+    "reading_hex": "-0x1.ffffb49a0e033p-1",
+    "true": "-1180588967878254292759/1180591620717411303424"
+   },
+   "FXMA3@0": {
+    "deviation": "0",
+    "n_entries": 4,
+    "profile": {},
+    "reading_hex": "-0x1.8000000000000p-3",
+    "true": "-3/16"
+   },
+   "FXMA3@1": {
+    "deviation": "36744127377873668943300041/348449143727040986586495598010130648530944",
+    "n_entries": 4,
+    "profile": {
+     "TOTAL": "36744127377896318488623671/348449143727040986586495598010130648530944",
+     "coupling": "130541363951/1237940039285380274899124224",
+     "single_y": "11324772661815/348449143727040986586495598010130648530944"
+    },
+    "reading_hex": "-0x1.bffffffffd886p+0",
+    "true": "-609786001521539775904926290327926532291127/348449143727040986586495598010130648530944"
+   },
+   "FXMA4@0": {
+    "deviation": "-1/396316767208603648",
+    "n_entries": 3,
+    "profile": {
+     "TOTAL": "1/396316767208603648",
+     "coupling": "1/396316767208603648"
+    },
+    "reading_hex": "0x1.745d1745d1746p-4",
+    "true": "1/11"
+   },
+   "FXMA4@1": {
+    "deviation": "-69537029204849736891/1993843984898280307204314813383573504",
+    "n_entries": 3,
+    "profile": {
+     "TOTAL": "78911166215071543187/498460996224570057541997846849388544",
+     "coupling": "78911166215071543187/498460996224570057541997846849388544"
+    },
+    "reading_hex": "0x1.ffffbcfabb824p-1",
+    "true": "885442831258339474013/885444599817777481123"
+   },
+   "FXMA5@0": {
+    "deviation": "0",
+    "n_entries": 6,
+    "profile": {},
+    "reading_hex": "0x1.2800000000000p-1",
+    "true": "37/64"
+   },
+   "FXMA5@1": {
+    "deviation": "781950621441006189802102638025/348449143727040986586495598010130648530944",
+    "n_entries": 6,
+    "profile": {
+     "TOTAL": "781950621441006212451647961655/348449143727040986586495598010130648530944",
+     "coupling": "2778046668940015/1237940039285380274899124224",
+     "single_y": "11324772661815/348449143727040986586495598010130648530944"
+    },
+    "reading_hex": "0x1.b8ffe40000000p+20",
+    "true": "629415622697326786006928207600937027218258970057/348449143727040986586495598010130648530944"
+   },
+   "FXMA6@0": {
+    "deviation": "0",
+    "n_entries": 3,
+    "profile": {},
+    "reading_hex": "0x1.4800000000000p-1",
+    "true": "41/64"
+   },
+   "FXMA6@1": {
+    "deviation": "797/18446744073709551616",
+    "n_entries": 3,
+    "profile": {
+     "TOTAL": "803/18446744073709551616",
+     "coupling": "803/18446744073709551616"
+    },
+    "reading_hex": "-0x1.fe7428c990ce4p-1",
+    "true": "-18391034451412327651/18446744073709551616"
+   },
+   "FXMB1a@0": {
+    "deviation": "0",
+    "n_entries": 3,
+    "profile": {},
+    "reading_hex": "0x1.6000000000000p-1",
+    "true": "11/16"
+   },
+   "FXMB1a@1": {
+    "deviation": "-36744127377873668943300041/348449143727040986586495598010130648530944",
+    "n_entries": 3,
+    "profile": {
+     "TOTAL": "280609262736289/1267650600228229401496703205376",
+     "coupling": "280609262736289/1267650600228229401496703205376"
+    },
+    "reading_hex": "0x1.1ffffffffec43p+1",
+    "true": "784010573385060269198174089332991856556599/348449143727040986586495598010130648530944"
+   },
+   "FXMB1b@0": {
+    "deviation": "0",
+    "n_entries": 3,
+    "profile": {},
+    "reading_hex": "0x1.6000000000000p-1",
+    "true": "11/16"
+   },
+   "FXMB1b@1": {
+    "deviation": "-36744127377873668943300041/348449143727040986586495598010130648530944",
+    "n_entries": 3,
+    "profile": {
+     "TOTAL": "36744127377896318488623671/348449143727040986586495598010130648530944",
+     "coupling": "130541363951/1237940039285380274899124224",
+     "single_y": "11324772661815/348449143727040986586495598010130648530944"
+    },
+    "reading_hex": "0x1.1ffffffffec43p+1",
+    "true": "784010573385060269198174089332991856556599/348449143727040986586495598010130648530944"
+   },
+   "FXMB2a@0": {
+    "deviation": "0",
+    "n_entries": 3,
+    "profile": {},
+    "reading_hex": "0x1.a480000000000p+3",
+    "true": "841/64"
+   },
+   "FXMB2a@1": {
+    "deviation": "73920250931146557032278460122569/348449143727040986586495598010130648530944",
+    "n_entries": 3,
+    "profile": {
+     "TOTAL": "357060967747945/19342813113834066795298816",
+     "coupling": "357060967747945/19342813113834066795298816"
+    },
+    "reading_hex": "0x1.b9fc241083034p+20",
+    "true": "630821964846075099853999021778603048971608966601/348449143727040986586495598010130648530944"
+   },
+   "FXMB2b@0": {
+    "deviation": "0",
+    "n_entries": 14,
+    "profile": {},
+    "reading_hex": "0x1.a480000000000p+3",
+    "true": "841/64"
+   },
+   "FXMB2b@1": {
+    "deviation": "-7209387483460124663510545021495/348449143727040986586495598010130648530944",
+    "n_entries": 14,
+    "profile": {
+     "TOTAL": "8773289001419984692921129318967/348449143727040986586495598010130648530944",
+     "coupling": "31168983843414767/1237940039285380274899124224",
+     "single_y": "11324772661815/348449143727040986586495598010130648530944"
+    },
+    "reading_hex": "0x1.b9fc241083035p+20",
+    "true": "630821964846075099853999021778603048971608966601/348449143727040986586495598010130648530944"
+   }
+  }
+ },
+ "frozen": true,
+ "lane_battery": [
+  "FXMA1",
+  "FXMA2",
+  "FXMA3",
+  "FXMA4",
+  "FXMA5",
+  "FXMA6",
+  "FXMB1a",
+  "FXMB1b",
+  "FXMB2a",
+  "FXMB2b"
+ ],
+ "organ": "IM_a_lanes_v1: route-faithful float64 lane walk w/ per-node exact local residues carrying coupling classes; the multivariate deviation fold (Arm I's fold lifted to float lanes, exact incl. cross-terms); the exposure partition by channel.",
+ "predictions": {
+  "PMA.1": "multivariate lane closure: on every (fixture, point) in the lane battery (n=2 AND n=3 scored), reading + D == TRUE exactly in Q, where D is reconstructed by the MULTIVARIATE DEVIATION FOLD (exact incl. cross-terms: add/sub Da+-Db+r; mul va*Db+vb*Da+Da*Db+r; div (va+Da)/(vb+Db) - exact_div(va,vb) + r; pow (va+Da)^n - va^n) from float values and per-node residues alone, and TRUE is recomputed through the INDEPENDENT transformed-tree path (commuted operands + pow expanded to repeated mul - a different exact operation sequence; a lane bug cannot certify itself). Units: (fixture, point).",
+  "PMA.2": "the account gains direction: EXPOSURE = sum|residue| partitions exactly by channel {single_x, single_y, single_z, coupling, const} (sums graded); the pinned profile table reproduces exactly - including BOTH outcomes: balanced points round NOWHERE (empty channels - the protected class) and anisotropic points light the coupling channel. Units: (fixture, point) profiles.",
+  "PMA.3": "route pairs: TRUE side route-invariant on every pair at every point (lane-reconstructed TRUE equal across the pair - measured, not assumed); the reading table == pinned, including the one differing row (the trivariate expanded route at the anisotropic point - the multivariate fingerprint PREVIEW; the law itself is Stage C's). Units: (pair, point) rows.",
+  "PMA.4": "refusal honesty: pole and kink-locus probes refuse TYPED (float div-by-zero; max float-tie; abs at TRUE zero inside the fold); zero refusals on the lawful battery. Units: probes + rows.",
+  "PMA.5": "determinism: battery byte-stable x2 (sha256 over records)."
+ },
+ "referee": "independent transformed-tree exact-Q path (commuted operands + pow-as-repeated-mul), runner-inline; no external executed instrument.",
+ "route_pairs": [
+  [
+   "FXMB1a",
+   "FXMB1b"
+  ],
+  [
+   "FXMB2a",
+   "FXMB2b"
+  ]
+ ],
+ "stage": "A",
+ "status_move_rules": "CL-M1 -> DEMONSTRATED iff PMA.1 AND PMA.2 AND PMA.3 AND PMA.4 PASS. **ANY PMA.1 closure failure = K-M1 FIRES: THE CAMPAIGN HALTS (the foundational claim dies)** - chain preserved verbatim, STOP, route to Will. Any other FAIL: halt-until-fixed.",
+ "t2_fence_ack": "this stage makes NO G-claims and NO cross-fixture-invariant claims (manifest fence, verbatim law).",
+ "telemetry": "permanently non-verdict-bearing (covenant 3).",
+ "version": 1
+}

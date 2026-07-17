@@ -1,0 +1,129 @@
+# Retest C — Four-form common-mode-rejection structure
+
+Eval-layer revalidation. Research-grade. Measurement only; verdict deferred to user.
+
+Scripts (all under `scratch/_revalidation/retestC/`):
+- `retestC_common_mode.py` — main per-fixture harness (137-pt grids, float64 path
+  reconstructed identically to the campaign modules, mpmath dps=60 oracle).
+- `retestC_cancellation_anatomy.py` — separates the two sub-claims of "R**p cancels".
+- `retestC_results.json`, `retestC_cancellation_anatomy.json` — outputs.
+
+Substrate sources (read, not modified):
+`src/lloyd_v4/evals/{schwarzschild,sr,pure_algebraic,cbrt}_four_form.py`.
+
+---
+
+## 0. Prior art re-run
+
+`scratch/common_mode_rejection_test.py` re-ran cleanly. It is a *different,
+higher-level* test (6-channel log2-ULP "substrate signature" of F1 vs F2 across
+22 matched-K_G schw/PA pairs, train/held-out). It reports that the (F1-F2)
+difference signature does NOT beat the single-form cross-fixture ceiling on 5/6
+channels; one channel (`log2_x_term_ulp`) trivially shows 0 because both forms
+share the same x_term ULP. It does NOT test the bit-level R**p cancellation —
+that is what this retest adds.
+
+## 1. Code confirmation: F1 and F2 reuse the SAME root operand R
+
+Direct from the campaign modules:
+
+| fixture | shared root R | F1 | F2 | F4 operand (DIFFERENT) |
+|---|---|---|---|---|
+| schwarzschild | `R=(1-2/r)**0.5` | `R**2 - (1-2/r)` | `R**2 - 1 + 2/r` | `((r-2)/r)**0.5` |
+| sr | `eta=(1-b²)**0.5` | `eta**2 + b² - 1` | `(eta**2 - 1) + b²` | `((1-b)(1+b))**0.5` |
+| pure_algebraic | `root=(1-x)**0.5` | `root**2 - (1-x)` | `root**2 - 1 + x` | `((1-x/2)-x/2)**0.5` |
+| cbrt | `root=cbrt(1-x)` | `root³ - (1-x)` | `root³ - 1 + x` | `cbrt((1-x/2)-x/2)` |
+
+In every fixture F1 and F2 evaluate `R**p` from the **same bound `R` value**
+(schw recomputes the same pure function `R_of_r`; sr/pa/cbrt bind `root`/`eta`
+once). Sub-claim A — `R**p` fed to F1 and F2 is **bit-identical** (verified via
+`.hex()` equality at representative points): **CONFIRMED, all fixtures.**
+F4 always roots a *different operand* `f_alt` (verified below). Note the SR
+rendering: `f_direct = 1-b²`, `x_term = b²`, so `F1 = R²-f_direct` and
+`F2 = R²-1+x_term` hold under that identification.
+
+## 2. Retrodiction gate — F3 silence
+
+**PASS on all four fixtures.** `F3 = R - root(f_direct) = 0` exactly at every one
+of the 137 points (max|F3| = 0.000e+00), F3 being `R` minus a re-root of the
+*identical* operand. Additionally, the schwarzschild reconstruction was checked
+against the **recorded campaign CSV** (`task024b.../v3_reference_overlay.csv`):
+reconstructed F1/F2/F3/F4 match the recorded values **bit-for-bit** (max abs diff
+= 0.0 for all four forms across 137 r-points). The fixture reconstruction is
+faithful to the substrate.
+
+## 3. F1 − F2 closed form and R-dependence — the precise result
+
+The closed form is, in all four fixtures,
+
+> **F1 − F2 = (1 − x_term) − f_direct**   (R**p cancels algebraically)
+
+Two distinct sub-claims, measured separately:
+
+- **(A) Same R**p bits / algebraic cancellation in exact reals:** CONFIRMED.
+  In exact arithmetic `(R**p − f_direct) − (R**p − 1 + x_term)` cancels `R**p`
+  exactly → `(1 − x_term) − f_direct`, independent of R. `rp_cancels_in_exact_reals
+  = True` at all probed points.
+
+- **(B) Float64 `F1 − F2` equals the closed form to the BIT:** NOT exactly, in
+  general. Because F1 and F2 are each already rounded before the subtraction, the
+  float difference `fl(F1) − fl(F2)` leaves a small residual:
+
+  | fixture | float `F1−F2 == closed` | max \|cancellation residual\| | max change in F1−F2 under ±1 ULP perturb of R |
+  |---|---|---|---|
+  | schwarzschild | 58/137 pts | 5.551e-17 | 1.110e-16 |
+  | sr | 45/137 pts | 1.110e-16 | 1.665e-16 |
+  | pure_algebraic | 56/137 pts | 5.551e-17 | 1.110e-16 |
+  | cbrt | 51/137 pts | 5.551e-17 | 1.110e-16 |
+
+  So `R**p`'s **value** is common-mode (identical bits in F1 and F2) and its
+  contribution cancels **algebraically**; but its **round-off is not bit-erased**
+  by the float subtraction. Perturbing R by ±1 ULP changes `F1−F2` by at most
+  ~1–2 ULP (≤1.665e-16), i.e. R-independence holds only up to that floor, not
+  to the bit. The residual is bounded by ~1 ULP of the F-magnitude.
+
+**Honest framing for the paper:** the strong statement "F1−F2 cancels R**p
+exactly and is R-independent" is true in *exact reals* and the operand bits are
+provably shared, but in float64 the cancellation is exact at ~40–45% of grid
+points and leaves a ≤1.1e-16 (sub-ULP-of-R**p) residual at the rest; ±1 ULP of R
+moves F1−F2 by ≤1.7e-16. R**p is common-mode; the sqrt/cbrt *round-off* is
+common-mode to F1/F2/F3 but only first-order-cancelled in F1−F2.
+
+## 4. F4 operand differs → its round-off is form-specific
+
+F4 roots `f_alt ≠ f_direct`. Per-fixture point counts where `f_alt` differs in
+bits from the shared operand `f_direct`:
+
+| fixture | f_alt bits ≠ f_direct | f_alt bits == f_direct | max\|f_alt−f_direct\| |
+|---|---|---|---|
+| schwarzschild | 108/137 | 29 | 1.110e-16 |
+| sr | 55/137 | 82 | 1.110e-16 |
+| pure_algebraic | 57/137 | 80 | 1.110e-16 |
+| cbrt | 57/137 | 80 | 1.110e-16 |
+
+Where the operand bits differ, F4 roots a different float64 value, so its
+sqrt/cbrt round-off `e_alt = root_exact(f_alt) − fl(root(f_alt))` is **NOT
+common-mode** with F1/F2/F3 (which share `root(f_direct)`). F4's round-off is
+therefore **form-specific** at those points (108/55/57/57 of 137).
+
+Important subtlety (measured, not assumed): at the *other* points the split/
+factored routing rounds back to the **same** float64 operand (`f_alt == f_direct`),
+and because sqrt/cbrt are correctly rounded the roots then bit-match exactly —
+verified `root(f_alt) == R` at **all** such points (29/29, 82/82, 80/80, 80/80).
+At those points F4's round-off IS common-mode. So F4's form-specificity is
+*operand-conditioned*: it is form-specific exactly when its routing produces a
+distinct float64 operand, which it does at the majority (schw) or large minority
+(sr/pa/cbrt) of grid points.
+
+## 5. Summary of measured facts
+
+- Retrodiction gate (F3≡0): **PASS, 4/4 fixtures**; schw also bit-matches the
+  recorded campaign CSV.
+- F1/F2 share the same `R**p` operand bits: **CONFIRMED from code AND numerically,
+  4/4.**
+- F1−F2 closed form `(1−x_term)−f_direct`: exact in reals (R**p cancels);
+  float64 residual ≤ **1.110e-16**, exact at ~40–45% of points; R-perturbation
+  sensitivity ≤ **1.665e-16** (not bit-invariant).
+- F4 roots a **different operand** (`f_alt`), bit-distinct at 108/55/57/57 of 137
+  points → round-off **form-specific** there; common-mode only where the routing
+  happens to round to the same operand (roots then bit-match, verified).

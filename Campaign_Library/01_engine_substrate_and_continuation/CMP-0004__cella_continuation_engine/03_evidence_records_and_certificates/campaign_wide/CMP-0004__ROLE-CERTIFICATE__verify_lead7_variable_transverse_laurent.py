@@ -1,0 +1,1 @@
+../../../../../Papers_Library/07_certificates_data_and_reproducibility/local_curvature_and_black_hole_metrics/verify_lead7_variable_transverse_laurent.py

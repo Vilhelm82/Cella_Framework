@@ -1,0 +1,53 @@
+{
+  "rank": 46,
+  "lift": 19.95,
+  "count": 25,
+  "families": 6,
+  "a": {
+    "id": "OBJ:alpha-beta-gamma-crown-invariants-e-4-w-u-e-2-w-u-2-e-3-w-u-",
+    "label": "alpha, beta, gamma crown invariants (e_4(w)+u e_2(w)+u^2, e_3(w)+u e_1(w), 2(alp",
+    "standard_term": "auxiliary symmetric-function combinations (elementary symmetric polynomials in the root data, mixed with the mass parameter u) defining the crown square-class data",
+    "nomenclature": "novel",
+    "symbols": [
+      "e_1",
+      "e_2",
+      "e_3",
+      "e_4"
+    ]
+  },
+  "b": {
+    "id": "OBJ:e-2-a",
+    "label": "e_2(A)",
+    "standard_term": "second elementary symmetric polynomial of the eigenvalues of A, computed via the trace identity (tr(A)²−tr(A²))/2",
+    "nomenclature": "identical-to",
+    "symbols": [
+      "e_2"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-1601",
+      "type": "theorem",
+      "claim_status": "machine-verified",
+      "label": "Collapse of the radical tower; static case (lem:collapse)",
+      "summary": "Let $w_i=\\sqrt{m^2+N_i^2}$ and $u=m^2$. Then, exactly: (i) the branch-compatible signed radicals lie in the quintic field --- there exist $g_i\\in\\Q[u]/(\\mathcal N)$ with $g_i^2\\equiv u+N_i^2$ and $\\sum_i g_i\\equiv 4M$ (c",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/galois_horizon_cover_v1_0.tex"
+    },
+    {
+      "uid": "U-0115",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Coupling form Δ_c^(n)(h)",
+      "summary": "q = g·g, P = I − ggᵀ/q, M = H_c (symmetric, zero diagonal), pair module coordinates h = (h_e)_{e={i,j}} with M_ij = h_e. The coupling form (PREREG_v2 DF-B2, certified successor of Strong-Spec §4 Δ_c):\n```\nΔ_c^(n)(h) := −",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/09_historical_and_superseded_versions/cross_program_and_unclassified/SHADOW_LAW_THEOREM.md"
+    },
+    {
+      "uid": "U-0168",
+      "type": "theorem",
+      "claim_status": null,
+      "label": "Edge-vector shifts under pure e1 and e2 gauges",
+      "summary": "A pure \\(e_1\\)-gauge gives \\[\\delta\\nu=(0,2u,2u).\\] A pure \\(e_2\\)-gauge gives \\[\\delta\\nu=(6v,0,6v).\\]",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_role_channel_and_orbit_geometry/Gauge_Channel_Transport_Law.md"
+    }
+  ]
+}

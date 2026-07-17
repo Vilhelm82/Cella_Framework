@@ -1,0 +1,763 @@
+{
+  "audit_name": "task032_cross_fixture_refinery_audit",
+  "frozen_prediction": "strong: c2 integer lattice in all 4 fixtures, c1 non-integer in all 4, c2 dominates c1 on lattice class everywhere",
+  "per_fixture_results": [
+    {
+      "c1_classification": {
+        "class": "quarter_integer",
+        "fractional_parts": [
+          0.0,
+          0.5,
+          0.75
+        ],
+        "max_abs_level": 1.5,
+        "nonzero_count": 22,
+        "unique_levels": [
+          -1.5,
+          -1.25,
+          -1.0,
+          -0.5,
+          -0.25,
+          0.5,
+          1.0
+        ]
+      },
+      "c2_classification": {
+        "class": "integer",
+        "fractional_parts": [
+          0.0
+        ],
+        "max_abs_level": 1.0,
+        "nonzero_count": 10,
+        "unique_levels": [
+          -1.0,
+          1.0
+        ]
+      },
+      "dominance_verdict": "c2_dominates_c1_on_lattice",
+      "fixture_name": "schwarzschild",
+      "n_radical": 2,
+      "native_var": "r",
+      "records_sample": [
+        {
+          "c1_lattice_level": 0.5,
+          "c1_residual": 5.551115123125783e-17,
+          "c2_lattice_level": 1.0,
+          "c2_residual": 1.1102230246251565e-16,
+          "f": 0.5245901639344261,
+          "native_value": 4.206896551724138,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": 1.0,
+          "c1_residual": 1.1102230246251565e-16,
+          "c2_lattice_level": 1.0,
+          "c2_residual": 1.1102230246251565e-16,
+          "f": 0.5503875968992248,
+          "native_value": 4.448275862068965,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": 0.0,
+          "c1_residual": 0.0,
+          "c2_lattice_level": 0.0,
+          "c2_residual": 0.0,
+          "f": 0.573529411764706,
+          "native_value": 4.689655172413794,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": 0.5,
+          "c1_residual": 5.551115123125783e-17,
+          "c2_lattice_level": 1.0,
+          "c2_residual": 1.1102230246251565e-16,
+          "f": 0.5944055944055944,
+          "native_value": 4.931034482758621,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": -0.5,
+          "c1_residual": -5.551115123125783e-17,
+          "c2_lattice_level": 0.0,
+          "c2_residual": 0.0,
+          "f": 0.6133333333333333,
+          "native_value": 5.172413793103448,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": -1.5,
+          "c1_residual": -1.6653345369377348e-16,
+          "c2_lattice_level": -1.0,
+          "c2_residual": -1.1102230246251565e-16,
+          "f": 0.7786259541984732,
+          "native_value": 9.03448275862069,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": -0.25,
+          "c1_residual": -2.7755575615628914e-17,
+          "c2_lattice_level": 0.0,
+          "c2_residual": 0.0,
+          "f": 0.7843866171003717,
+          "native_value": 9.275862068965518,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": -0.5,
+          "c1_residual": -5.551115123125783e-17,
+          "c2_lattice_level": 0.0,
+          "c2_residual": 0.0,
+          "f": 0.7898550724637681,
+          "native_value": 9.517241379310345,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": -1.25,
+          "c1_residual": -1.3877787807814457e-16,
+          "c2_lattice_level": -1.0,
+          "c2_residual": -1.1102230246251565e-16,
+          "f": 0.7950530035335689,
+          "native_value": 9.758620689655173,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": -0.5,
+          "c1_residual": -5.551115123125783e-17,
+          "c2_lattice_level": -1.0,
+          "c2_residual": -1.1102230246251565e-16,
+          "f": 0.8,
+          "native_value": 10.0,
+          "ulp_f": 1.1102230246251565e-16
+        }
+      ],
+      "sterbenz_region_grid_size": 25,
+      "sterbenz_region_predicate": "r >= 4 (Sterbenz: R^2 = 1 - 2/r >= 1/2)"
+    },
+    {
+      "c1_classification": {
+        "class": "irregular",
+        "fractional_parts": [
+          0.0,
+          0.0478515625,
+          0.0625,
+          0.09375,
+          0.0992431640625,
+          0.125,
+          0.1796875,
+          0.1875,
+          0.2421875,
+          0.25,
+          0.296875,
+          0.3125,
+          0.375,
+          0.40625,
+          0.41748046875,
+          0.46875,
+          0.5,
+          0.515625,
+          0.53125,
+          0.5625,
+          0.578125,
+          0.625,
+          0.68359375,
+          0.6875,
+          0.71875,
+          0.75,
+          0.80859375,
+          0.8125,
+          0.875,
+          0.90625,
+          0.990234375
+        ],
+        "max_abs_level": 1.5,
+        "nonzero_count": 86,
+        "unique_levels": [
+          -1.5,
+          -1.46875,
+          -1.4375,
+          -1.375,
+          -1.25,
+          -1.19140625,
+          -1.1875,
+          -1.125,
+          -1.0,
+          -0.9521484375,
+          -0.8125,
+          -0.75,
+          -0.6875,
+          -0.625,
+          -0.53125,
+          -0.5,
+          -0.421875,
+          -0.375,
+          -0.3125,
+          -0.25,
+          -0.125,
+          -0.09375,
+          -0.009765625,
+          0.0625,
+          0.0992431640625,
+          0.125,
+          0.1796875,
+          0.25,
+          0.296875,
+          0.375,
+          0.40625,
+          0.41748046875,
+          0.5,
+          0.515625,
+          0.68359375,
+          0.71875,
+          0.75,
+          0.8125,
+          0.875,
+          0.90625,
+          1.0,
+          1.09375,
+          1.2421875,
+          1.25,
+          1.5
+        ]
+      },
+      "c2_classification": {
+        "class": "integer",
+        "fractional_parts": [
+          0.0
+        ],
+        "max_abs_level": 1.0,
+        "nonzero_count": 46,
+        "unique_levels": [
+          -1.0,
+          1.0
+        ]
+      },
+      "dominance_verdict": "c2_dominates_c1_on_lattice",
+      "fixture_name": "sr",
+      "n_radical": 2,
+      "native_var": "beta",
+      "records_sample": [
+        {
+          "c1_lattice_level": 0.0992431640625,
+          "c1_residual": 1.1018204577883939e-17,
+          "c2_lattice_level": 0.0,
+          "c2_residual": 0.0,
+          "f": 0.9999,
+          "native_value": 0.01,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": 0.41748046875,
+          "c1_residual": 4.6349642873755315e-17,
+          "c2_lattice_level": 0.0,
+          "c2_residual": 0.0,
+          "f": 0.9997014473394248,
+          "native_value": 0.017278676470588235,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": -0.9521484375,
+          "c1_residual": -1.0570971181733668e-16,
+          "c2_lattice_level": -1.0,
+          "c2_residual": -1.1102230246251565e-16,
+          "f": 0.9993969364165225,
+          "native_value": 0.02455735294117647,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": -0.009765625,
+          "c1_residual": -1.0842021724855044e-18,
+          "c2_lattice_level": 0.0,
+          "c2_residual": 0.0,
+          "f": 0.9989864672312933,
+          "native_value": 0.03183602941176471,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": 1.2421875,
+          "c1_residual": 1.3791051634015616e-16,
+          "c2_lattice_level": 1.0,
+          "c2_residual": 1.1102230246251565e-16,
+          "f": 0.998470039783737,
+          "native_value": 0.03911470588235294,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": 1.5,
+          "c1_residual": 1.6653345369377348e-16,
+          "c2_lattice_level": 1.0,
+          "c2_residual": 1.1102230246251565e-16,
+          "f": 0.5479326236586288,
+          "native_value": 0.6723595588235295,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": 0.0,
+          "c1_residual": 0.0,
+          "c2_lattice_level": 0.0,
+          "c2_residual": 0.0,
+          "f": 0.5380918691262975,
+          "native_value": 0.6796382352941177,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": -0.5,
+          "c1_residual": -5.551115123125783e-17,
+          "c2_lattice_level": -1.0,
+          "c2_residual": -1.1102230246251565e-16,
+          "f": 0.5281451563316393,
+          "native_value": 0.6869169117647059,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": 0.5,
+          "c1_residual": 5.551115123125783e-17,
+          "c2_lattice_level": 0.0,
+          "c2_residual": 0.0,
+          "f": 0.518092485274654,
+          "native_value": 0.6941955882352941,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": 0.0,
+          "c1_residual": 0.0,
+          "c2_lattice_level": 0.0,
+          "c2_residual": 0.0,
+          "f": 0.5079338559553417,
+          "native_value": 0.7014742647058824,
+          "ulp_f": 1.1102230246251565e-16
+        }
+      ],
+      "sterbenz_region_grid_size": 96,
+      "sterbenz_region_predicate": "beta <= 1/sqrt(2) (Sterbenz: R^2 = 1 - beta^2 >= 1/2)"
+    },
+    {
+      "c1_classification": {
+        "class": "irregular",
+        "fractional_parts": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.375,
+          0.5,
+          0.75,
+          0.921875,
+          0.9375
+        ],
+        "max_abs_level": 1.5,
+        "nonzero_count": 55,
+        "unique_levels": [
+          -1.0,
+          -0.75,
+          -0.5,
+          -0.25,
+          -0.078125,
+          0.0625,
+          0.125,
+          0.375,
+          0.5,
+          0.9375,
+          1.0,
+          1.0625,
+          1.125,
+          1.1875,
+          1.375,
+          1.5
+        ]
+      },
+      "c2_classification": {
+        "class": "integer",
+        "fractional_parts": [
+          0.0
+        ],
+        "max_abs_level": 1.0,
+        "nonzero_count": 30,
+        "unique_levels": [
+          -1.0,
+          1.0
+        ]
+      },
+      "dominance_verdict": "c2_dominates_c1_on_lattice",
+      "fixture_name": "pure_algebraic",
+      "n_radical": 2,
+      "native_var": "x",
+      "records_sample": [
+        {
+          "c1_lattice_level": -0.078125,
+          "c1_residual": -8.673617379884035e-18,
+          "c2_lattice_level": 0.0,
+          "c2_residual": 0.0,
+          "f": 0.99,
+          "native_value": 0.01,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": 0.9375,
+          "c1_residual": 1.0408340855860843e-16,
+          "c2_lattice_level": 1.0,
+          "c2_residual": 1.1102230246251565e-16,
+          "f": 0.9827941176470588,
+          "native_value": 0.017205882352941175,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": 0.0,
+          "c1_residual": 0.0,
+          "c2_lattice_level": 0.0,
+          "c2_residual": 0.0,
+          "f": 0.9755882352941176,
+          "native_value": 0.024411764705882355,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": 1.0,
+          "c1_residual": 1.1102230246251565e-16,
+          "c2_lattice_level": 1.0,
+          "c2_residual": 1.1102230246251565e-16,
+          "f": 0.9683823529411765,
+          "native_value": 0.03161764705882353,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": 1.0625,
+          "c1_residual": 1.1796119636642288e-16,
+          "c2_lattice_level": 1.0,
+          "c2_residual": 1.1102230246251565e-16,
+          "f": 0.9611764705882353,
+          "native_value": 0.03882352941176471,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": 0.0,
+          "c1_residual": 0.0,
+          "c2_lattice_level": 0.0,
+          "c2_residual": 0.0,
+          "f": 0.5288235294117647,
+          "native_value": 0.4711764705882353,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": 0.0,
+          "c1_residual": 0.0,
+          "c2_lattice_level": 0.0,
+          "c2_residual": 0.0,
+          "f": 0.5216176470588235,
+          "native_value": 0.4783823529411765,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": 0.0,
+          "c1_residual": 0.0,
+          "c2_lattice_level": 0.0,
+          "c2_residual": 0.0,
+          "f": 0.5144117647058823,
+          "native_value": 0.48558823529411765,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": 0.0,
+          "c1_residual": 0.0,
+          "c2_lattice_level": 0.0,
+          "c2_residual": 0.0,
+          "f": 0.5072058823529412,
+          "native_value": 0.4927941176470588,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": 1.0,
+          "c1_residual": 1.1102230246251565e-16,
+          "c2_lattice_level": 1.0,
+          "c2_residual": 1.1102230246251565e-16,
+          "f": 0.5,
+          "native_value": 0.5,
+          "ulp_f": 1.1102230246251565e-16
+        }
+      ],
+      "sterbenz_region_grid_size": 69,
+      "sterbenz_region_predicate": "x <= 0.5 (Sterbenz: R^2 = 1 - x >= 1/2)"
+    },
+    {
+      "c1_classification": {
+        "class": "irregular",
+        "fractional_parts": [
+          0.0,
+          0.0625,
+          0.125,
+          0.1875,
+          0.25,
+          0.375,
+          0.5,
+          0.75,
+          0.921875,
+          0.9375
+        ],
+        "max_abs_level": 4.0625,
+        "nonzero_count": 65,
+        "unique_levels": [
+          -4.0,
+          -3.875,
+          -3.0,
+          -2.5,
+          -2.0,
+          -1.875,
+          -1.75,
+          -1.625,
+          -1.5,
+          -1.25,
+          -1.0,
+          -0.875,
+          -0.5,
+          -0.25,
+          -0.0625,
+          0.25,
+          0.5,
+          0.75,
+          0.921875,
+          1.0,
+          1.5,
+          2.0,
+          2.1875,
+          2.5,
+          2.75,
+          3.0,
+          3.0625,
+          3.25,
+          3.375,
+          3.75,
+          4.0625
+        ]
+      },
+      "c2_classification": {
+        "class": "integer",
+        "fractional_parts": [
+          0.0
+        ],
+        "max_abs_level": 4.0,
+        "nonzero_count": 58,
+        "unique_levels": [
+          -4.0,
+          -3.0,
+          -2.0,
+          -1.0,
+          1.0,
+          2.0,
+          3.0,
+          4.0
+        ]
+      },
+      "dominance_verdict": "c2_dominates_c1_on_lattice",
+      "fixture_name": "cube_root",
+      "n_radical": 3,
+      "native_var": "x",
+      "records_sample": [
+        {
+          "c1_lattice_level": 0.921875,
+          "c1_residual": 1.0234868508263162e-16,
+          "c2_lattice_level": 1.0,
+          "c2_residual": 1.1102230246251565e-16,
+          "f": 0.99,
+          "native_value": 0.01,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": -0.0625,
+          "c1_residual": -6.938893903907228e-18,
+          "c2_lattice_level": 0.0,
+          "c2_residual": 0.0,
+          "f": 0.9827941176470588,
+          "native_value": 0.017205882352941175,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": -2.0,
+          "c1_residual": -2.220446049250313e-16,
+          "c2_lattice_level": -2.0,
+          "c2_residual": -2.220446049250313e-16,
+          "f": 0.9755882352941176,
+          "native_value": 0.024411764705882355,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": -2.0,
+          "c1_residual": -2.220446049250313e-16,
+          "c2_lattice_level": -2.0,
+          "c2_residual": -2.220446049250313e-16,
+          "f": 0.9683823529411765,
+          "native_value": 0.03161764705882353,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": 4.0625,
+          "c1_residual": 4.510281037539698e-16,
+          "c2_lattice_level": 4.0,
+          "c2_residual": 4.440892098500626e-16,
+          "f": 0.9611764705882353,
+          "native_value": 0.03882352941176471,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": -1.0,
+          "c1_residual": -1.1102230246251565e-16,
+          "c2_lattice_level": -1.0,
+          "c2_residual": -1.1102230246251565e-16,
+          "f": 0.5288235294117647,
+          "native_value": 0.4711764705882353,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": 0.0,
+          "c1_residual": 0.0,
+          "c2_lattice_level": 0.0,
+          "c2_residual": 0.0,
+          "f": 0.5216176470588235,
+          "native_value": 0.4783823529411765,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": -1.0,
+          "c1_residual": -1.1102230246251565e-16,
+          "c2_lattice_level": -1.0,
+          "c2_residual": -1.1102230246251565e-16,
+          "f": 0.5144117647058823,
+          "native_value": 0.48558823529411765,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": 1.0,
+          "c1_residual": 1.1102230246251565e-16,
+          "c2_lattice_level": 1.0,
+          "c2_residual": 1.1102230246251565e-16,
+          "f": 0.5072058823529412,
+          "native_value": 0.4927941176470588,
+          "ulp_f": 1.1102230246251565e-16
+        },
+        {
+          "c1_lattice_level": 1.0,
+          "c1_residual": 1.1102230246251565e-16,
+          "c2_lattice_level": 1.0,
+          "c2_residual": 1.1102230246251565e-16,
+          "f": 0.5,
+          "native_value": 0.5,
+          "ulp_f": 1.1102230246251565e-16
+        }
+      ],
+      "sterbenz_region_grid_size": 69,
+      "sterbenz_region_predicate": "x <= 0.5 (Sterbenz: R^3 = 1 - x >= 1/2)"
+    }
+  ],
+  "preregistry": "Build_Docs/Reports/task032_cross_fixture_refinery_audit/preregistry.md",
+  "strong_prediction_held": false,
+  "summary_table": [
+    {
+      "c1_fracs": [
+        0.0,
+        0.5,
+        0.75
+      ],
+      "c1_lattice_class": "quarter_integer",
+      "c1_nonzero_count": 22,
+      "c2_fracs": [
+        0.0
+      ],
+      "c2_lattice_class": "integer",
+      "c2_nonzero_count": 10,
+      "fixture": "schwarzschild",
+      "n_grid": 25,
+      "verdict": "c2_dominates_c1_on_lattice"
+    },
+    {
+      "c1_fracs": [
+        0.0,
+        0.0478515625,
+        0.0625,
+        0.09375,
+        0.0992431640625,
+        0.125,
+        0.1796875,
+        0.1875,
+        0.2421875,
+        0.25,
+        0.296875,
+        0.3125,
+        0.375,
+        0.40625,
+        0.41748046875,
+        0.46875,
+        0.5,
+        0.515625,
+        0.53125,
+        0.5625,
+        0.578125,
+        0.625,
+        0.68359375,
+        0.6875,
+        0.71875,
+        0.75,
+        0.80859375,
+        0.8125,
+        0.875,
+        0.90625,
+        0.990234375
+      ],
+      "c1_lattice_class": "irregular",
+      "c1_nonzero_count": 86,
+      "c2_fracs": [
+        0.0
+      ],
+      "c2_lattice_class": "integer",
+      "c2_nonzero_count": 46,
+      "fixture": "sr",
+      "n_grid": 96,
+      "verdict": "c2_dominates_c1_on_lattice"
+    },
+    {
+      "c1_fracs": [
+        0.0,
+        0.0625,
+        0.125,
+        0.1875,
+        0.25,
+        0.375,
+        0.5,
+        0.75,
+        0.921875,
+        0.9375
+      ],
+      "c1_lattice_class": "irregular",
+      "c1_nonzero_count": 55,
+      "c2_fracs": [
+        0.0
+      ],
+      "c2_lattice_class": "integer",
+      "c2_nonzero_count": 30,
+      "fixture": "pure_algebraic",
+      "n_grid": 69,
+      "verdict": "c2_dominates_c1_on_lattice"
+    },
+    {
+      "c1_fracs": [
+        0.0,
+        0.0625,
+        0.125,
+        0.1875,
+        0.25,
+        0.375,
+        0.5,
+        0.75,
+        0.921875,
+        0.9375
+      ],
+      "c1_lattice_class": "irregular",
+      "c1_nonzero_count": 65,
+      "c2_fracs": [
+        0.0
+      ],
+      "c2_lattice_class": "integer",
+      "c2_nonzero_count": 58,
+      "fixture": "cube_root",
+      "n_grid": 69,
+      "verdict": "c2_dominates_c1_on_lattice"
+    }
+  ]
+}

@@ -1,0 +1,297 @@
+{
+ "authority": "brief section 4 Arm M Stage B (mixed tower + Taylor tensor, keystone; CL-M2/CL-M3) + Will's Stage-B GO (Stage A ACCEPTED, #M1 chain pin-consistent)",
+ "campaign_id": "beyond_the_cradle_arm_m",
+ "date_stamped_from_machine": "2026-06-12",
+ "depends_on": {
+  "manifest_v1_sha256": "add67c301f0f592484d7023a657302296f3b74376167f6fff8911ce670e3719c",
+  "note": "bench code pinned in the frozen (post-M1) manifest, enforced by require_frozen (rule 1.9)."
+ },
+ "expectations": {
+  "fxma6_handpin_ok": true,
+  "n_orderings": {
+   "FXMA1": 3,
+   "FXMA2": 2,
+   "FXMA3": 6,
+   "FXMA5": 90,
+   "FXMA6": 6,
+   "FXMB2b": 90
+  },
+  "tensors": {
+   "FXMA1": {
+    "0,0": "1",
+    "0,1": "-1",
+    "1,0": "3",
+    "2,0": "1"
+   },
+   "FXMA2": {
+    "0,0": "7/8",
+    "0,1": "3/2",
+    "1,0": "5/4",
+    "1,1": "1"
+   },
+   "FXMA3": {
+    "0,0": "-3/16",
+    "0,1": "5/2",
+    "0,2": "1",
+    "1,0": "3",
+    "2,0": "1"
+   },
+   "FXMA5": {
+    "0,0,0": "37/64",
+    "0,0,1": "7/4",
+    "0,0,2": "1",
+    "0,1,0": "5/2",
+    "0,2,0": "1",
+    "1,0,0": "3",
+    "2,0,0": "1"
+   },
+   "FXMA6": {
+    "0,0,0": "41/64",
+    "0,0,1": "15/8",
+    "0,1,0": "21/16",
+    "0,1,1": "3/2",
+    "1,0,0": "35/32",
+    "1,0,1": "5/4",
+    "1,1,0": "7/8",
+    "1,1,1": "1"
+   },
+   "FXMB2b": {
+    "0,0,0": "841/64",
+    "0,0,1": "29/4",
+    "0,0,2": "1",
+    "0,1,0": "29/4",
+    "0,1,1": "2",
+    "0,2,0": "1",
+    "1,0,0": "29/4",
+    "1,0,1": "2",
+    "1,1,0": "2",
+    "2,0,0": "1"
+   }
+  }
+ },
+ "frozen": true,
+ "organ": "IM_b_mixed_tower_v1: lane-certified samples (Stage A composed); exact mixed differences; commutator via ALL distinct axis orderings; Newton tensor inversion (falling factorials expanded exactly per axis).",
+ "plan": {
+  "FXMA1": {
+   "at_degree": [
+    2,
+    0
+   ],
+   "base": "P_BAL",
+   "degs": {
+    "x": 2,
+    "y": 1
+   },
+   "steps": {
+    "x": "1/8",
+    "y": "1/32"
+   },
+   "steps2": {
+    "x": "1/16",
+    "y": "1/64"
+   },
+   "super_degree": [
+    [
+     3,
+     0
+    ],
+    [
+     1,
+     2
+    ]
+   ]
+  },
+  "FXMA2": {
+   "at_degree": [
+    1,
+    1
+   ],
+   "base": "P_BAL",
+   "degs": {
+    "x": 1,
+    "y": 1
+   },
+   "steps": {
+    "x": "1/8",
+    "y": "1/32"
+   },
+   "steps2": {
+    "x": "1/16",
+    "y": "1/64"
+   },
+   "super_degree": [
+    [
+     2,
+     1
+    ],
+    [
+     1,
+     2
+    ]
+   ]
+  },
+  "FXMA3": {
+   "at_degree": [
+    2,
+    0
+   ],
+   "base": "P_BAL",
+   "degs": {
+    "x": 2,
+    "y": 2
+   },
+   "steps": {
+    "x": "1/8",
+    "y": "1/32"
+   },
+   "steps2": {
+    "x": "1/16",
+    "y": "1/64"
+   },
+   "super_degree": [
+    [
+     3,
+     0
+    ],
+    [
+     1,
+     2
+    ]
+   ]
+  },
+  "FXMA5": {
+   "at_degree": [
+    0,
+    0,
+    2
+   ],
+   "base": "P3_BAL",
+   "degs": {
+    "x": 2,
+    "y": 2,
+    "z": 2
+   },
+   "steps": {
+    "x": "1/8",
+    "y": "1/32",
+    "z": "1/128"
+   },
+   "steps2": {
+    "x": "1/16",
+    "y": "1/64",
+    "z": "1/256"
+   },
+   "super_degree": [
+    [
+     3,
+     0,
+     0
+    ],
+    [
+     1,
+     1,
+     1
+    ]
+   ]
+  },
+  "FXMA6": {
+   "at_degree": [
+    1,
+    1,
+    1
+   ],
+   "base": "P3_BAL",
+   "degs": {
+    "x": 1,
+    "y": 1,
+    "z": 1
+   },
+   "steps": {
+    "x": "1/8",
+    "y": "1/32",
+    "z": "1/128"
+   },
+   "steps2": {
+    "x": "1/16",
+    "y": "1/64",
+    "z": "1/256"
+   },
+   "super_degree": [
+    [
+     2,
+     1,
+     1
+    ],
+    [
+     0,
+     2,
+     2
+    ]
+   ]
+  },
+  "FXMB2b": {
+   "at_degree": [
+    1,
+    1,
+    0
+   ],
+   "base": "P3_BAL",
+   "degs": {
+    "x": 2,
+    "y": 2,
+    "z": 2
+   },
+   "steps": {
+    "x": "1/8",
+    "y": "1/32",
+    "z": "1/128"
+   },
+   "steps2": {
+    "x": "1/16",
+    "y": "1/64",
+    "z": "1/256"
+   },
+   "super_degree": [
+    [
+     1,
+     1,
+     1
+    ],
+    [
+     3,
+     0,
+     0
+    ]
+   ]
+  }
+ },
+ "predictions": {
+  "PMB.1": "mixed tower exactness: every lane-certified sample (reading + D, Stage A's organ composed) equals the independent transformed-tree referee sample exactly in Q, and every mixed difference built from them is exact - on every (fixture, multi-index) of the pinned grids (n=2 AND n=3 scored; anisotropic dyadic steps). Units: (fixture, multi-index).",
+  "PMB.2": "the lane-side commutator (K-M2's halt-arm): on every fixture's top mixed order, ALL distinct axis orderings of the iterated difference agree exactly in Q (3 to 90 orderings per fixture incl. the full trivariate (2,2,2) sets); ANY disagreement = K-M2 FIRES (broken lift, the ARM HALTS). Units: cells x orderings.",
+  "PMB.3": "THE KEYSTONE - tensor recovery: for every polynomial fixture the Newton tensor inversion recovers the full shifted-monomial coefficient tensor - hence EVERY mixed partial at the base point - exactly in Q, verified three independent ways: (a) step-invariance (a second pinned step ladder recovers the IDENTICAL tensor), (b) the first-order slice equals the independent dual-eval instrument exactly, (c) the hand-pinned tensors (FXMA1, FXMA6) match entry-for-entry. n=2 AND n=3 scored. Units: tensor entries.",
+  "PMB.4": "total-degree termination, two-sided at the class boundary: on every polynomial fixture all pinned super-degree mixed differences vanish identically; the pinned at-degree entries are nonzero; and the RATIONAL contrast fixture (FXMA4) does NOT terminate (pinned super-degree diff nonzero) - the certificate withholds correctly outside the polynomial class. Units: multi-indices.",
+  "PMB.5": "determinism: battery byte-stable x2 (sha256 over records)."
+ },
+ "rational_contrast": {
+  "base": "P_BAL",
+  "degs": {
+   "x": 3,
+   "y": 3
+  },
+  "fixture_id": "FXMA4",
+  "nonzero_index": [
+   3,
+   0
+  ],
+  "steps": {
+   "x": "1/8",
+   "y": "1/32"
+  }
+ },
+ "referee": "independent transformed-tree exact-Q samples; the dual-eval instrument for the first-order slice; hand-pinned tensors on FXMA1/FXMA6.",
+ "stage": "B",
+ "status_move_rules": "CL-M2 -> DEMONSTRATED iff PMB.1 AND PMB.2 AND PMB.4 PASS. CL-M3 -> DEMONSTRATED iff PMB.3 PASS. **ANY PMB.2 disagreement = K-M2 FIRES: broken lift, the ARM HALTS** - chain preserved verbatim, STOP, route to Will. Any other FAIL: halt-until-fixed.",
+ "t2_fence_ack": "this stage makes NO G-claims and NO cross-fixture-invariant claims (manifest fence).",
+ "telemetry": "permanently non-verdict-bearing (covenant 3).",
+ "version": 1
+}

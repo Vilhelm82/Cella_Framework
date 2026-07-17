@@ -1,0 +1,221 @@
+#!/usr/bin/env python3
+"""
+Investigation of Conjecture C (No-Binade-Drop) specifically for square root
+in the subnormal regime.
+
+This script leverages V4's existing strengths:
+- BACL as an analytical lens (via exact Fraction arithmetic)
+- Raw IEEE 754 hex recording
+- mpmath as exact reference generator
+- Careful subnormal power-of-two handling (from prior bacl_subnormal work)
+
+Goal:
+- Characterize exactly where and how Conjecture C breaks (or holds in weakened form)
+  when f < 2^{-1022}.
+- Look for the precise boundary behavior around the smallest normal.
+- Use BACL to understand the structure (or lack thereof) of the residuals.
+
+All work remains in scratch/. Instruments only.
+"""
+
+from __future__ import annotations
+
+import json
+import math
+import struct
+from fractions import Fraction
+from pathlib import Path
+from typing import Any
+
+import numpy as np
+
+try:
+    import mpmath as mp
+    HAVE_MPMATH = True
+except ImportError:
+    HAVE_MPMATH = False
+
+# =============================================================================
+# Constants (format definition, not mathematical substrate)
+# =============================================================================
+EMIN_NORMAL = -1022
+SUBNORMAL_ULP_EXP = -1074
+P53 = 53
+
+SMALLEST_NORMAL = math.ldexp(1.0, EMIN_NORMAL)
+SMALLEST_SUBNORMAL = math.ldexp(1.0, SUBNORMAL_ULP_EXP)
+SUBNORMAL_ULP = Fraction(1, 1 << 1074)
+
+def f64_to_hex(x: float) -> str:
+    return "0x" + struct.pack(">d", float(x)).hex()
+
+def decompose_f64(x: float) -> dict[str, Any]:
+    bits = struct.unpack(">Q", struct.pack(">d", float(x)))[0]
+    sign = (bits >> 63) & 0x1
+    biased_exp = (bits >> 52) & 0x7FF
+    mantissa = bits & 0xFFFFFFFFFFFFF
+    is_subnormal = (biased_exp == 0) and (mantissa != 0)
+    return {
+        "hex": f64_to_hex(x),
+        "sign": sign,
+        "biased_exp": biased_exp,
+        "mantissa": mantissa,
+        "is_subnormal": is_subnormal,
+    }
+
+def binade_floor(x: float) -> float:
+    """Return 2^k such that 2^k <= x < 2^{k+1} (for x > 0)."""
+    if x == 0:
+        return 0.0
+    return math.ldexp(1.0, math.frexp(x)[1] - 1)
+
+# =============================================================================
+# Core Investigation
+# =============================================================================
+
+def investigate_sqrt_subnormal_transition() -> dict[str, Any]:
+    """
+    Focused investigation of Conjecture C for square root in subnormals.
+    Includes:
+    - Extremely dense + systematic sampling in the first subnormals after 2^{-1022}
+    - Strong information loss quantification (residual size vs original ~2^{-52} precision)
+    - Deeper subnormal behavior
+    - Direct comparison with cbrt (n=3)
+    """
+    results = {
+        "metadata": {
+            "smallest_normal": f64_to_hex(SMALLEST_NORMAL),
+            "smallest_subnormal": f64_to_hex(SMALLEST_SUBNORMAL),
+            "subnormal_ulp": str(SUBNORMAL_ULP),
+            "original_precision_scale": 2.0 ** -52,
+        },
+        "first_10000_subnormals": [],   # Systematic first 10k subnormals after smallest normal
+        "deep_subnormal_samples": [],   # Broader deeper sampling
+        "cbrt_comparison": [],
+        "summary": {},
+    }
+
+    # 1. Systematic generation of the first N subnormals after 2^{-1022}
+    # This is more "exhaustive" than pure nextafter walking for the leading mantissas.
+    FIRST_N = 10000
+    first_subnormals = []
+    for m in range(1, FIRST_N + 1):
+        val = m * float(SUBNORMAL_ULP)   # exact construction via float conversion
+        if val >= SMALLEST_NORMAL:
+            break
+        first_subnormals.append(val)
+
+    # 2. Additional log-spaced deeper subnormals for trend analysis
+    deep_values = []
+    for k in range(0, 52, 2):
+        val = math.ldexp(1.0, SUBNORMAL_ULP_EXP + k)
+        if val > 0 and val < SMALLEST_NORMAL:
+            deep_values.append(val)
+
+    all_test_values = list(dict.fromkeys(transition_values + deep_values))
+
+    for x in all_test_values:
+        if x <= 0:
+            continue
+
+        x64 = np.float64(x)
+        is_sub = decompose_f64(x64)["is_subnormal"]
+
+        # Square root round-trip in float64
+        R = math.sqrt(x64)
+        V = R * R
+
+        # Ground truth
+        if HAVE_MPMATH:
+            with mp.workdps(80):
+                true_v = float(mp.sqrt(mp.mpf(x)) ** 2)
+        else:
+            true_v = x
+
+        orig_floor = binade_floor(x)
+        v_floor = binade_floor(V)
+        drops_binade = v_floor < orig_floor
+
+        # Exact residual analysis
+        try:
+            residual = Fraction(V) - Fraction(x)
+            residual_over_ulp = float(residual / SUBNORMAL_ULP)
+            is_integer_multiple = (residual.denominator == 1)
+        except Exception:
+            residual_over_ulp = (V - x) / float(SUBNORMAL_ULP)
+            is_integer_multiple = False
+
+        # Information loss relative to original precision (~2^{-52} at scale 1)
+        # How large is the residual compared to the precision we started with?
+        original_precision_scale = 2.0 ** -52
+        relative_residual_size = abs(V - x) / original_precision_scale if original_precision_scale > 0 else 0
+
+        record = {
+            "f_hex": f64_to_hex(x64),
+            "f_is_subnormal": is_sub,
+            "R_hex": f64_to_hex(R),
+            "V_hex": f64_to_hex(V),
+            "orig_binade_floor_hex": f64_to_hex(orig_floor),
+            "V_binade_floor_hex": f64_to_hex(v_floor),
+            "drops_binade": drops_binade,
+            "residual_over_subnormal_ulp": residual_over_ulp,
+            "is_integer_multiple_of_ulp": is_integer_multiple,
+            "relative_residual_size_vs_2m52": relative_residual_size,
+        }
+
+        if is_sub:
+            results["deep_subnormal_samples"].append(record)
+        else:
+            results["transition_samples"].append(record)
+
+    # --- Parallel cbrt (n=3) comparison ---
+    for x in transition_values[:200]:  # smaller set for speed
+        if x <= 0:
+            continue
+        x64 = np.float64(x)
+        R = np.cbrt(x64)
+        V = R * R * R
+
+        try:
+            residual = Fraction(V) - Fraction(x)
+            residual_over_ulp = float(residual / SUBNORMAL_ULP)
+            is_integer_multiple = (residual.denominator == 1)
+        except Exception:
+            residual_over_ulp = (V - x) / float(SUBNORMAL_ULP)
+            is_integer_multiple = False
+
+        results["cbrt_comparison_samples"].append({
+            "f_hex": f64_to_hex(x64),
+            "V_hex": f64_to_hex(V),
+            "residual_over_subnormal_ulp": residual_over_ulp,
+            "is_integer_multiple_of_ulp": is_integer_multiple,
+        })
+
+    # Summary
+    all_sub = results["deep_subnormal_samples"]
+    drops = [r for r in all_sub if r.get("drops_binade")]
+    results["summary"] = {
+        "total_transition_tested": len(results["transition_samples"]),
+        "total_deep_subnormal_tested": len(all_sub),
+        "cases_dropping_binade": len(drops),
+        "fraction_dropping_binade": len(drops) / len(all_sub) if all_sub else 0,
+        "max_residual_over_ulp_in_subnormals": max((abs(r["residual_over_subnormal_ulp"]) for r in all_sub), default=0),
+        "cbrt_samples_compared": len(results["cbrt_comparison_samples"]),
+    }
+
+    return results
+
+def main():
+    print("=== Investigation: Conjecture C for Square Root in Subnormals ===\n")
+
+    data = investigate_sqrt_subnormal_transition()
+
+    out_path = Path("scratch/conjecture_c_subnormal_sqrt_investigation.json")
+    out_path.write_text(json.dumps(data, indent=2, sort_keys=True))
+
+    print(f"Results written to {out_path}")
+    print("\nSummary:")
+    print(json.dumps(data["summary"], indent=2))
+
+if __name__ == "__main__":
+    main()

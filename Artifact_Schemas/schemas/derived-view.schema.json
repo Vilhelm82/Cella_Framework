@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cella.local/schemas/derived-view-v1.json",
+  "title": "Cella revision-bound derived graph view",
+  "type": "object",
+  "required": ["schema_version", "view_id", "graph_id", "graph_revision", "created_at", "selection", "compute", "geometry", "styles", "provenance", "content_digest", "extensions"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "view_id": {"type": "string"},
+    "graph_id": {"type": "string"},
+    "graph_revision": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "created_at": {"type": "string"},
+    "selection": {
+      "type": "object",
+      "required": ["filters", "node_ids", "edge_ids"],
+      "properties": {
+        "filters": {"type": "object"},
+        "node_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "edge_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}
+      },
+      "additionalProperties": false
+    },
+    "compute": {
+      "type": "object",
+      "required": ["algorithm", "backend_requested", "backend_resolved", "parameters", "implementation", "device"],
+      "properties": {
+        "algorithm": {"type": "string"},
+        "backend_requested": {"enum": ["auto", "cpu", "cuda"]},
+        "backend_resolved": {"enum": ["cpu", "cuda"]},
+        "parameters": {"type": "object"},
+        "implementation": {"type": "string"},
+        "device": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
+    "geometry": {
+      "type": "object",
+      "required": ["dimensions", "coordinate_space", "node_positions", "edge_routes"],
+      "properties": {
+        "dimensions": {"enum": [2, 3]},
+        "coordinate_space": {"type": "string"},
+        "node_positions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "x", "y"],
+            "properties": {
+              "id": {"type": "string"},
+              "x": {"type": "number"},
+              "y": {"type": "number"},
+              "z": {"type": "number"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "edge_routes": {"type": "array"}
+      },
+      "additionalProperties": false
+    },
+    "styles": {"type": "object"},
+    "provenance": {"type": "object"},
+    "content_digest": {"type": "string", "pattern": "^sha256:[0-9a-f]{64}$"},
+    "extensions": {"type": "object"}
+  },
+  "additionalProperties": false
+}

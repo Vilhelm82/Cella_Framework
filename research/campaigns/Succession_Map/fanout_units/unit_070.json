@@ -1,0 +1,38 @@
+{
+  "seq": 70,
+  "uid": "U-1217",
+  "type": "theorem",
+  "claim_status": "conjectured",
+  "label": "Self-confinement",
+  "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/geometric_fault_localization_and_decomposition/Dual Confinement.md",
+  "already_linked_objects": [
+    {
+      "id": "OBJ:channel-barycentric-coordinates-r-c-r-s-r-int",
+      "label": "Channel barycentric coordinates R_c, R_s, R_int"
+    },
+    {
+      "id": "OBJ:decorated-sheet-field-h-k-sqrt-r-1-sqrt-r-s",
+      "label": "Decorated sheet field H = K(sqrt(r_1),...,sqrt(r_s))"
+    },
+    {
+      "id": "OBJ:self-coupling-hessian-split-h-h-c-h-s",
+      "label": "Self/coupling Hessian split H = H_c + H_s"
+    }
+  ],
+  "priority_candidate_pairs": [
+    {
+      "a": "OBJ:channel-barycentric-coordinates-r-c-r-s-r-int",
+      "b": "OBJ:decorated-sheet-field-h-k-sqrt-r-1-sqrt-r-s",
+      "la": "Channel barycentric coordinates R_c, R_s, R_int",
+      "lb": "Decorated sheet field H = K(sqrt(r_1),...,sqrt(r_s))",
+      "lift": 41.0
+    },
+    {
+      "a": "OBJ:channel-barycentric-coordinates-r-c-r-s-r-int",
+      "b": "OBJ:self-coupling-hessian-split-h-h-c-h-s",
+      "la": "Channel barycentric coordinates R_c, R_s, R_int",
+      "lb": "Self/coupling Hessian split H = H_c + H_s",
+      "lift": 4.21
+    }
+  ]
+}

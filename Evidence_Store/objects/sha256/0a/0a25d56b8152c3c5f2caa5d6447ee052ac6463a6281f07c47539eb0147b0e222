@@ -1,0 +1,219 @@
+# MCG Geometry-First — Phase 2e — E-reducibility of Transition Grammar
+
+**Status:** Phase 2e discovery characterization. Conditional MI of transition grammar within E-bins computed per fixture with permutation null; Schwarzschild residual tested under grid balancing. G-curv-3 reclassified to `unexplained_correlation` per user direction following an E-resistant result in pure_algebraic. Schwarzschild residual classified as `schwarzschild_residual_grid_driven` (the user's suspicion confirmed). No G promotion.
+
+**Authority:** [`Build_Docs/Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md`](../../Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md) + user-imposed Phase 2e direction (2026-05-19).
+
+**Audit pin (log base):** `E := log2(|base_operand(coord)|)` — **log base TWO** throughout this pass. Phase 2b's `log_radicand_magnitude` is `log10` and is a **separate primitive**; do not conflate. All Phase 2e bins, thresholds, and entropy calculations are in bits.
+
+**Deliverables landed:**
+- [`phase_2e_e_reducibility.json`](phase_2e_e_reducibility.json) — sha256 `549f0a…ba28489ca`; byte-stable; references all five prior artifacts (P1/P2/P2b/P2c/P2d).
+- [`src/lloyd_v4/evals/mcg_geometry_first_e_reducibility.py`](../../../src/lloyd_v4/evals/mcg_geometry_first_e_reducibility.py) — V4-native module.
+- [`tests/test_mcg_geometry_first_e_reducibility.py`](../../../tests/test_mcg_geometry_first_e_reducibility.py) — 11 focused tests, all pass.
+
+---
+
+## 1. Test design
+
+### 1.1 Primary test: conditional MI within E-bins
+
+For each fixture:
+1. Sort records by `coordinate_value`.
+2. Bin by **quintile of E (log2(|base_operand|))** — 5 bins per fixture; edges recorded.
+3. Within each E-bin, compute the transition grammar of the `phase_separation_class` sequence: marginal entropy `H(X)`, conditional entropy `H(X_{t+1}|X_t)`, mutual information `MI = H(X) − H(X_{t+1}|X_t)`.
+4. **Permutation null** (200 permutations per bin via deterministic LCG; preserves the within-bin marginal exactly): compute MI for each shuffled sequence; record `null_MI_p95`.
+5. **Bin classification:** `actual_MI_exceeds_null_p95` if `fraction_null_MI ≥ actual_MI < 0.05`; else `actual_MI_within_null`.
+6. **Fixture classification:**
+   - `grammar_E_resistant_candidate`: ≥ 1 bin exceeds the null p95.
+   - `grammar_E_reducible`: 0 bins exceed; all bins are within-null.
+   - `grammar_underpowered`: < 2 bins with n ≥ 10.
+
+### 1.2 Secondary test: Schwarzschild residual with grid balancing
+
+1. **Raw partial correlation** of `(half_phase_indicator, endpoint_distance)` given the E-threshold indicator (E > −0.750 = 1).
+2. **Stratified downsample** of the 89 `horizon_approach` records to match the 48 non-horizon-approach records (LCG-shuffled selection, byte-stable).
+3. **Balanced partial correlation** on the balanced sample.
+4. **Permutation null** (200 permutations; shuffle `endpoint_distance` under fixed E-threshold).
+5. **Classification:**
+   - `schwarzschild_residual_second_axis_candidate`: balanced |partial| > null `|partial| p95` AND > 0.20.
+   - `schwarzschild_residual_grid_driven`: balanced |partial| ≤ null p95.
+   - `schwarzschild_residual_underpowered`: balancing impossible (target_n < 10).
+
+### 1.3 Permutation method
+
+Fisher-Yates shuffle via LCG with seed 12345, multiplier 1103515245, increment 12345, mask `0x7FFFFFFF` — **same convention as Phase 2c jitter**, byte-stable.
+
+---
+
+## 2. Results
+
+### 2.1 Primary test: conditional MI within E-bins
+
+| Fixture | Unconditional MI (Phase 2d) | Mean within-bin MI | Bins above null p95 | Fixture classification |
+|---|---|---|---|---|
+| `sr_four_form` | 0.522 bits | **0.065 bits** | **0 / 5** | **`grammar_E_reducible`** |
+| `schwarzschild_four_form` | 0.250 bits | **0.038 bits** | **0 / 5** | **`grammar_E_reducible`** |
+| `pure_algebraic_four_form` | 0.867 bits | **0.285 bits** | **2 / 5** | **`grammar_E_resistant_candidate`** |
+
+**Pooled status: `grammar_E_resistant_in_at_least_one_fixture`.**
+
+The fixture-by-fixture differentiation is sharp:
+
+- **SR and Schwarzschild: grammar collapses inside E-bins.** Within-bin MI is 12.5% and 15% of the unconditional MI respectively. Within-bin actual MI is consistent with the permutation null in every bin (0 / 5 bins exceed the null 95th percentile). **The transition-grammar structure in these two fixtures is fully captured by E-conditioning** — it is reducible to the endpoint_distance_substrate_image primitive.
+
+- **pure_algebraic: grammar persists inside E-bins.** Within-bin mean MI is 0.285 bits (33% of the unconditional). Two of five E-bins show actual MI exceeding the null p95. **The transition-grammar structure carries information not predicted by E.**
+
+### 2.2 Secondary test: Schwarzschild residual
+
+| Quantity | Value |
+|---|---|
+| Raw (unbalanced) partial correlation `corr(half_phase, endpoint_distance | E>thr)` | **0.150** |
+| Stratum balance target | 48 horizon_approach + 48 other (out of 89 / 48 raw) |
+| Balanced partial correlation | **0.142** |
+| Permutation null |partial| p95 (balanced sample) | **0.239** |
+| Classification | **`schwarzschild_residual_grid_driven`** |
+
+The balanced partial correlation (0.142) is **below** the permutation null p95 (0.239). After grid balancing, `endpoint_distance` does NOT add explanatory power beyond E-threshold. The Phase 2d apparent residual in Schwarzschild was driven by horizon_approach grid concentration (65% of records), not by a second axis. **The user's suspicion was correct.**
+
+### 2.3 Grid-jitter cross-check
+
+For each fixture × E-bin, the jittered-grid replay (using Phase 2c's deterministic-jitter coordinates) produces within-bin MI values. Recorded in the artifact's `grid_jitter_comparison` field. The MI values match the canonical-grid within-bin MI to within reasonable variation; pure_algebraic's E-resistant bins remain E-resistant on the jittered grid.
+
+---
+
+## 3. Answers to the Phase 2e primary questions
+
+| Question | Answer |
+|---|---|
+| Is transition grammar E-reducible? | **Per fixture: yes for SR and Schwarzschild; NO for pure_algebraic.** The grammar in two fixtures is fully captured by E; the third carries information not predicted by E. |
+| Is Schwarzschild's endpoint_distance residual structure grid-driven or a second primitive? | **Grid-driven.** Balanced partial 0.142 < null p95 0.239. The 65% horizon_approach grid concentration generated the apparent residual; balanced characterization removes it. |
+| Is the grid-jitter cross-check consistent? | Within-bin MI values on the jittered grid match the canonical pattern; E-resistance in pure_algebraic persists. |
+
+---
+
+## 4. Reclassifications (per user direction)
+
+### G-curv-3 (Null-tangent alignment vs transition grammar) — **proposed: `unexplained_correlation`**
+
+Phase 2e finds that the transition-grammar structure in pure_algebraic is **not** reducible to E in at least 2 of 5 E-bins (actual MI exceeds the null p95). The user pre-authorized: "If MI persists inside E bins, then you have a second symbolic primitive ... mark G-curv-3 as `unexplained_correlation`, not `geometry_candidate` yet, but definitely no longer just a vague unresolved candidate."
+
+State change: `unresolved_candidate` → **`unexplained_correlation`**.
+
+Tags: `phase_2e_evaluated`, `phase_2e_grammar_E_resistant`.
+
+**This is a meaningful state advance.** `unexplained_correlation` is a discovery-allowed state per handoff §7, and it accurately reflects what the evidence shows: the transition-grammar signal in pure_algebraic carries information that the E primitive does not explain. It is NOT a promotion to `geometry_candidate` (which would require a named mechanism for why the grammar should be geometric).
+
+### Other candidates (unchanged ledger state)
+
+| Candidate | State | Phase 2e tag |
+|---|---|---|
+| `G-curv-1` | `C_confounded` (from Phase 2d) | `phase_2e_no_new_evidence` |
+| `G-curv-2` | `unresolved_candidate` | `structurally_rate_limited_in_1d_scope` |
+| `G-route-1` | `unresolved_candidate` | `phase_2e_zero_offset_gap_unchanged` |
+| `C-def-1` | `unresolved_candidate` | `phase_2e_evaluated`, `phase_2e_schwarzschild_residual_tested` |
+| `C-def-2` | `unresolved_candidate` | `structurally_rate_limited_in_1d_scope` |
+| `C-def-3` | `unresolved_candidate` | `phase_2e_perturbation_ladder_still_pending` |
+
+**C-def-1 implication:** the Schwarzschild residual being grid-driven (not a second axis) means **C-def-1 remains a clean 1D extractor with E as the dominant axis**. No need to extend to a 2D (E, endpoint_distance) extractor for Schwarzschild; the apparent need was grid artifact.
+
+---
+
+## 5. What this pass does *not* claim
+
+- Phase 2e does **not** claim G is discovered, confirmed, or supported. `unexplained_correlation` is a discovery-state classification, not G.
+- Phase 2e does **not** claim precision doubling or any precision-resolution gain.
+- Phase 2e does **not** claim a named mechanism for *why* the pure_algebraic transition grammar resists E. That's a separate question.
+- Phase 2e does **not** promote any candidate to `geometry_candidate` or `ready_for_phase3`.
+- Phase 2e does **not** address the §1.4 zero-operand-offset gap (G-route-1).
+
+What Phase 2e **does** establish, descriptively:
+- Two of three fixtures' transition grammars are E-reducible.
+- One fixture (pure_algebraic) carries an E-resistant transition-grammar signal in at least 2 of 5 E-bins.
+- Schwarzschild's Phase 2d residual finding is sampling-artifact, not a second axis.
+- The log base of E is locked at 2 throughout this pass.
+
+---
+
+## 6. Methodology notes
+
+- **The fixture-by-fixture differentiation is the most interesting result.** SR and Schwarzschild's grammars collapse cleanly inside E-bins; pure_algebraic does not. Why pure_algebraic specifically? Pure_algebraic is the simplest of the three — `1 − x` is exactly linear in x. The other two have curvature in `base_operand(coord)` (β² and 2/r are nonlinear). The conjecture: the *linearity* of `base_operand` vs `coord` in pure_algebraic makes the within-bin coordinate sub-sequence carry information about *fine sub-binade structure* that is dropped when E is the binning axis. This is a candidate mechanism but unverified.
+- **The grid-balancing approach worked cleanly** for the Schwarzschild residual. Without it, the Phase 2d artifact would have left an open question; with it, the question resolves to "grid-driven, not a second axis." Cheap discovery technique worth reusing.
+- **The audit-pin discipline matters.** Phase 2b uses log10 for binning; Phase 2d introduced log2 for E; Phase 2c uses Phase 2b's log10 edges as cuts; Phase 2e operates entirely in log2. The artifact's explicit `log_base_declaration` field prevents any future writeup from conflating these primitives.
+- **The within-bin permutation null is conservative.** It preserves the marginal exactly; the only thing it shuffles is the order. If actual MI exceeds the null p95, the *order* of the sequence carries information beyond the marginal — that is the precise meaning of "E-resistant grammar."
+
+---
+
+## 7. Tests and exact commands
+
+11 focused tests in [`tests/test_mcg_geometry_first_e_reducibility.py`](../../../tests/test_mcg_geometry_first_e_reducibility.py):
+
+| # | Assertion |
+|---|---|
+| 1 | E-reducibility artifact generation — required top-level keys present |
+| 2 | All five source sha256 hashes recorded (P1/P2/P2b/P2c/P2d) |
+| 3 | Log base locked at 2 per audit pin; declaration mentions both log2 and log10 |
+| 4 | Conditional MI within E-bins computed per fixture with permutation null + per-bin classification |
+| 5 | Schwarzschild residual test with grid balancing has required fields |
+| 6 | Declared outcomes list contains the five Phase 2e outcomes |
+| 7 | Candidate evidence emissions for all 7 candidates with allowed proposed ledger states |
+| 8 | G-curv-3 reclassification follows the E-resistant logic |
+| 9 | No promotion to `geometry_candidate` or `ready_for_phase3` (emissions or ledger) |
+| 10 | No forbidden G/precision claim language in this characterization |
+| 11 | JSON artifact byte-stable across reruns + main()-to-disk identity |
+
+### Exact commands and results
+
+```bash
+# 11 focused tests (Phase 2e)
+$ PYTHONPATH=src python -m pytest tests/test_mcg_geometry_first_e_reducibility.py -v
+… 11 passed in <1s
+
+# Smallest reasonable existing subset (P1 + P2 + P2b + P2c + P2d + P2e + four-form-adjacent)
+$ PYTHONPATH=src python -m pytest \
+    tests/test_mcg_geometry_first_geometry.py \
+    tests/test_mcg_geometry_first_readback.py \
+    tests/test_mcg_geometry_first_c_profile.py \
+    tests/test_mcg_geometry_first_grid_stability.py \
+    tests/test_mcg_geometry_first_solve_for_scout.py \
+    tests/test_mcg_geometry_first_e_reducibility.py \
+    tests/test_f1_f2_natural_phase.py \
+    tests/test_f4_route_comb_search.py
+… (results recorded after run)
+
+# Byte-stability of Phase 2e artifact
+$ cp Build_Docs/Reports/mcg_geometry_first/phase_2e_e_reducibility.json /tmp/er_run1.json
+$ PYTHONPATH=src python -m lloyd_v4.evals.mcg_geometry_first_e_reducibility --output /tmp/er_run2.json
+$ diff -q /tmp/er_run1.json /tmp/er_run2.json
+# (silent — identical)
+$ sha256sum /tmp/er_run1.json
+# 549f0a9b0b811f078a4b64ccb0d9c11ca9d61fa36e4bac8905d0019ba28489ca
+```
+
+No manifest, status family, primitive, fixture definition, architecture document, or protocol was modified.
+
+---
+
+## 8. What this pass did *not* attempt (logged honestly)
+
+- **Naming a mechanism** for pure_algebraic's E-resistant grammar. The signal is observed; the explanation is open.
+- **Cross-fixture pooled within-bin analysis.** Per-fixture analysis only; pooling across fixtures with non-identical E-quintile edges would mix incomparable bins.
+- **Schwarzschild grid alternatives.** The grid is the V3 reference CSV; a Schwarzschild-specific re-grid would let us test whether the residual reappears under different sampling, but that's a separate sub-pass.
+- **Multi-D anchor extension.** Per Phase 2d recommendation, the 1D scope still has discovery juice; multi-D remains a sense-B decision point.
+- **V3 lv3 oracle cross-check** of E against K_G / condition number. Deferred per CLAUDE.md §4 to a separate non-primary artifact.
+- **Formal derivation** of why pure_algebraic's grammar is E-resistant. The §6 conjecture about base_operand linearity is speculative.
+
+---
+
+## 9. References
+
+- [`Build_Docs/Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md`](../../Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md) §13, §16, §17
+- [`phase_0_m_contract.md`](phase_0_m_contract.md)
+- [`phase_1_geometry_table.json`](phase_1_geometry_table.json) (sha256 recorded)
+- [`phase_2_joined_readback_table.json`](phase_2_joined_readback_table.json) (sha256 recorded)
+- [`phase_2b_c_profile.json`](phase_2b_c_profile.json) (sha256 recorded; **log10** primitive, separate from this pass's log2 E)
+- [`phase_2c_grid_stability.json`](phase_2c_grid_stability.json) (sha256 recorded)
+- [`phase_2d_solve_for_scout.json`](phase_2d_solve_for_scout.json) (sha256 recorded; introduced E := log2)
+- [`phase_2e_e_reducibility.json`](phase_2e_e_reducibility.json) — Phase 2e artifact
+- [`candidate_ledger.json`](candidate_ledger.json) — to be updated with G-curv-3 → unexplained_correlation
+- [`../../../src/lloyd_v4/evals/mcg_geometry_first_e_reducibility.py`](../../../src/lloyd_v4/evals/mcg_geometry_first_e_reducibility.py)
+- [`../../../tests/test_mcg_geometry_first_e_reducibility.py`](../../../tests/test_mcg_geometry_first_e_reducibility.py)

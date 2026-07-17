@@ -1,0 +1,80 @@
+"""REGULAR_INTEGER mechanism verification — declared_alpha_band variant.
+
+Hypothesis (from reading _classify_alpha in directional_alpha_probe.py):
+  REGULAR_INTEGER fires ONLY when the caller provides either
+  declared_alpha_models or declared_alpha_band. The agnostic default
+  (both empty/None) routes everything positive to FRACTIONAL_BRANCH.
+
+Test: same three observables as the previous probe, but pass
+      declared_alpha_band = 0.01 (a band that comfortably covers the
+      ~1e-12 distance-from-integer the V4 chain produces).
+
+Prediction:
+  - All three should now emit SINGULAR_JET_REGULAR_INTEGER_ALPHA
+  - observed_alpha unchanged (mechanism is post-recovery classification only)
+
+Falsifiability:
+  - If REGULAR_INTEGER still doesn't fire, there's another gating
+    condition I haven't found.
+"""
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+ROOT = Path("/home/william_lloydlt/projects/V4/Lloyd_Engine_V4")
+sys.path.insert(0, str(ROOT / "src"))
+
+from lloyd_v4.primitives.singular_alpha_jet_bundle import singular_alpha_jet_bundle
+
+
+def make_sweep() -> list[float]:
+    return [10.0 ** (-2.0 - (7.0 / 11.0) * i) for i in range(12)]
+
+
+OBSERVABLES = [
+    ("I1_linear",    lambda x: x,           1.0),
+    ("I2_quadratic", lambda x: x * x,       2.0),
+    ("I3_cubic",     lambda x: x * x * x,   3.0),
+]
+
+
+def main() -> None:
+    h_values = make_sweep()
+    eta = 1e-6
+    x0 = 0.0
+    band = 0.01
+
+    print("=" * 130)
+    print(f"REGULAR_INTEGER verification — same observables, declared_alpha_band = {band}")
+    print("=" * 130)
+
+    fired = 0
+    for label, func, alpha_true in OBSERVABLES:
+        result = singular_alpha_jet_bundle(
+            func=func,
+            x0=x0,
+            h_values=h_values,
+            probe_id=f"regular_integer_band_{label}_001",
+            function_label=label,
+            eta=eta,
+            declared_alpha_band=band,
+        )
+        inner = result.value.alpha_status.value if result.value.alpha_status is not None else "n/a"
+        outer = result.status.value
+        obs = result.value.observed_alpha
+        print(f"  {label:<14}  alpha_true={alpha_true:>4.1f}  obs_alpha={obs!r:>22}  "
+              f"outer={outer:<42}  inner={inner}")
+        if inner == "alpha_regular_integer":
+            fired += 1
+
+    print()
+    print(f"REGULAR_INTEGER fired in {fired}/{len(OBSERVABLES)} cases.")
+    if fired == len(OBSERVABLES):
+        print("MECHANISM CONFIRMED — declared_alpha_band gates the integer cell.")
+    else:
+        print("UNEXPECTED — there is another gating condition we haven't found.")
+
+
+if __name__ == "__main__":
+    main()

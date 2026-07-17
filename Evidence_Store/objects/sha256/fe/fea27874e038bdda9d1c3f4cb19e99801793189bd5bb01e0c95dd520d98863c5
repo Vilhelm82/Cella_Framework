@@ -1,0 +1,139 @@
+{
+  "input_table": "Build_Docs/Reports/mcg_geometry_first/phase_1_geometry_table.json",
+  "method_agreement": {
+    "10": {
+      "pa_method_gap": 0.0,
+      "pa_raw": 1.0,
+      "pa_typed": 1.0,
+      "raw_abs_delta": 0.004984,
+      "schw_method_gap": 0.000756,
+      "schw_raw": 0.995016,
+      "schw_typed": 0.995772,
+      "typed_abs_delta": 0.004228,
+      "within_tol": true
+    },
+    "20": {
+      "pa_method_gap": 0.0,
+      "pa_raw": 1.0,
+      "pa_typed": 1.0,
+      "raw_abs_delta": 0.00725,
+      "schw_method_gap": 0.001356,
+      "schw_raw": 0.99275,
+      "schw_typed": 0.994106,
+      "typed_abs_delta": 0.005894,
+      "within_tol": true
+    },
+    "5": {
+      "pa_method_gap": 0.0,
+      "pa_raw": 1.0,
+      "pa_typed": 1.0,
+      "raw_abs_delta": 0.003843,
+      "schw_method_gap": 0.000529,
+      "schw_raw": 0.996157,
+      "schw_typed": 0.996686,
+      "typed_abs_delta": 0.003314,
+      "within_tol": true
+    }
+  },
+  "n_probes": {
+    "pure_algebraic": 137,
+    "schwarzschild": 137
+  },
+  "notes": [
+    "Typed instrument: typed_log_log_slope (OLS of log|base| vs log(sd)) over nearest-N probes.",
+    "Raw instrument: mean of central-difference local slopes of log2(base) vs log2(sd) over the same nearest-N probes.",
+    "Log base cancels in the slope (ratio of log-differences); natural-log OLS is directly comparable to log2 central-difference.",
+    "Difference between instruments is estimator-level (OLS-over-window vs mean-of-central-differences), not data-level."
+  ],
+  "raw_math_baseline": {
+    "10": {
+      "abs_delta": 0.004984,
+      "pa": 1.0,
+      "schw": 0.995016
+    },
+    "100": {
+      "abs_delta": 0.068357,
+      "pa": 1.0,
+      "schw": 0.931643
+    },
+    "20": {
+      "abs_delta": 0.00725,
+      "pa": 1.0,
+      "schw": 0.99275
+    },
+    "5": {
+      "abs_delta": 0.003843,
+      "pa": 1.0,
+      "schw": 0.996157
+    },
+    "50": {
+      "abs_delta": 0.01402,
+      "pa": 1.0,
+      "schw": 0.98598
+    }
+  },
+  "retest": "retestB_typed_slope",
+  "retrodiction_gate": {
+    "PASS": true,
+    "expected_abs_delta_N5": 0.0038,
+    "expected_pa_N5": 1.0,
+    "expected_schw_N5": 0.9962,
+    "observed_abs_delta_N5": 0.003843,
+    "observed_pa_N5": 1.0,
+    "observed_schw_N5": 0.996157
+  },
+  "tolerance": 0.05,
+  "typed_primitive": {
+    "10": {
+      "abs_delta": 0.0042281383524200855,
+      "pa": {
+        "n_used": 10,
+        "r_squared": 1.0,
+        "slope": 1.0,
+        "standard_error": 0.0,
+        "status": "slope_observed"
+      },
+      "schw": {
+        "n_used": 10,
+        "r_squared": 0.9999996643800487,
+        "slope": 0.9957718616475799,
+        "standard_error": 0.0002039570934303142,
+        "status": "slope_observed"
+      }
+    },
+    "20": {
+      "abs_delta": 0.0058939909184807515,
+      "pa": {
+        "n_used": 20,
+        "r_squared": 1.0,
+        "slope": 1.0,
+        "standard_error": 0.0,
+        "status": "slope_observed"
+      },
+      "schw": {
+        "n_used": 20,
+        "r_squared": 0.9999986000345972,
+        "slope": 0.9941060090815192,
+        "standard_error": 0.0002772396883677804,
+        "status": "slope_observed"
+      }
+    },
+    "5": {
+      "abs_delta": 0.003313638385676332,
+      "pa": {
+        "n_used": 5,
+        "r_squared": 1.0,
+        "slope": 1.0,
+        "standard_error": 0.0,
+        "status": "slope_observed"
+      },
+      "schw": {
+        "n_used": 5,
+        "r_squared": 0.9999999272027692,
+        "slope": 0.9966863616143237,
+        "standard_error": 0.0001552584812602118,
+        "status": "slope_observed"
+      }
+    }
+  }
+}

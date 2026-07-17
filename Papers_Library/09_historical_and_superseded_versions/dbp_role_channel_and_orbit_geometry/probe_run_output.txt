@@ -1,0 +1,34 @@
+
+====================================================================
+  (A) Worked example (negative control): role-labelled φ is frame-dependent
+====================================================================
+  P=D·S² at (3,4):  φ=D·∂_D P = 48   swap S·∂_S P = 96
+  frame-dependent (not T-invariant): True   [exact ℚ, not float]
+  value-symmetric (e1,e2,e3) = (55, 348, 576)  invariant over all 6 value-perms: True
+
+====================================================================
+  (B) K_hol = mixed-2nd-difference holonomy — exact ℚ (geometry-arm K1/K3 on 8.1's couplings)
+====================================================================
+  additive   P=D+S      (separable):  holonomy = 0   predicted = 0   exact match: True
+  bilinear   P=D·S      (pure cross):  holonomy = 1/77   predicted = 1/77   exact match: True
+  asymmetric P=D·S²     (worked ex.):  holonomy = 89/847   closed-form h(2S₀k+k²) = 89/847   exact match: True
+  → K1 null is a HARD zero in ℚ (separable ⇒ 0); K3 accountability is bit-exact. ok=True
+
+====================================================================
+  (C) Corollary 1: unique φ = φ_K + φ_sym decomposition — exact ℚ
+====================================================================
+  pt ('3', '4', '48'): φ=215  φ_sym=690  φ_K=-475  [sym✓=True K_sym0✓=True recon✓=True]
+  pt ('1/2', '5', '-7/3'): φ=16  φ_sym=-98/9  φ_K=242/9  [sym✓=True K_sym0✓=True recon✓=True]
+  pt ('9', '-2', '11/4'): φ=-307/4  φ_sym=259/12  φ_K=-295/3  [sym✓=True K_sym0✓=True recon✓=True]
+  → φ_sym value-symmetric, φ_K has zero symmetric part, φ=φ_K+φ_sym — exact, no third category. ok=True
+
+====================================================================
+  PROBE SUMMARY
+====================================================================
+  (A) negative control frame-dependence (exact ℚ): PASS
+  (B) K_hol holonomy K1/K3 exact in ℚ:             PASS
+  (C) φ_K+φ_sym decomposition exact in ℚ:          PASS
+
+  ALL PASS: True
+  Probe only — hardens K_hol + the decomposition to exact ℚ. Does NOT compute K_G
+  (needs Arm-M instrument) and does NOT discharge the exhaustiveness lemma (logical).

@@ -1,0 +1,474 @@
+{
+ "amendment_m1": "2026-06-12 (machine date), blessed by Will at the Stage-A checkpoint (pre-emission, zero records): pow arity hardened to n >= 1 at parse (pow-0 was accepted and lane_walk would mishandle it; no battery fixture uses it). The hardening was first written POST-freeze, correctly refused by the rule-1.9 code-pin gate, reverted, flagged at the checkpoint, and applied only on this blessing. mexpr.py code pin re-stamped; freeze pins re-stamped; Stage-A prereg dependency re-stamped same commit; clause text untouched.",
+ "authority": "CAMPAIGN_BRIEF_BEYOND_THE_CRADLE.md Arm M + Will's rulings 2026-06-12 (n=3 SCORED, cap-at-2 rejected; Arm I first - CLOSED, HR136; no names; T1 stretch IN; T3 kappa measurement IN) + Stage -1 prior-wins audit + Arm I successor notes (ARM_CLOSE_DRAFT.md sec 5, ratified)",
+ "campaign_id": "beyond_the_cradle_arm_m",
+ "code_pins_sha256": {
+  "fixtures.py": "705b79f0a61657824519245dfbcae21653530a35a130c34d12dbfee54ccc4f48",
+  "mexpr.py": "42aedbad9a9cb52841b9954354c35a665bcbf30eaf0e145d94f067cddd2b2ef5",
+  "schema.py": "f71320c125422697770b37bc1a8e227ab49de1b28551c4c9ff5ab654c242cb0e"
+ },
+ "date_stamped_from_machine": "2026-06-12",
+ "economics_pins_measured": {
+  "k_m4_descope_schedule": "if Q^n trajectory bits exceed 2^22 before K=6 steps at any Stage-E start, horizons shorten per-start to the largest K within budget - declared here, never silently",
+  "plaquette_cost_ops": 8,
+  "q2_max_growth_ratio": 2.5714285714285716,
+  "q2_newton_bits_per_step": [
+   3,
+   7,
+   18,
+   44,
+   98,
+   206,
+   425
+  ],
+  "q3_max_growth_ratio": 2.7058823529411766,
+  "q3_newton_bits_per_step": [
+   3,
+   7,
+   17,
+   46,
+   117,
+   273,
+   646
+  ],
+  "tower_cell_budgets": {
+   "bivariate_cells_L6": 28,
+   "trivariate_cells_L4": 35
+  }
+ },
+ "fixtures": [
+  {
+   "fixture_id": "FXMA1",
+   "fx_class": "FX-M-A",
+   "n_vars": 2,
+   "notes": "",
+   "pathology": "simplest coupled poly; anisotropic point spans 20 binades of per-variable ulp",
+   "points": [
+    {
+     "x": "0x1.8p+0",
+     "y": "0x1.4p+0"
+    },
+    {
+     "x": "0x1.8p+0",
+     "y": "0x1.921fb54442d18p-20"
+    }
+   ],
+   "sexpr": "(sub (pow x 2) y)"
+  },
+  {
+   "fixture_id": "FXMA2",
+   "fx_class": "FX-M-A",
+   "n_vars": 2,
+   "notes": "",
+   "pathology": "the hyperbola lane; product coupling node",
+   "points": [
+    {
+     "x": "0x1.8p+0",
+     "y": "0x1.4p+0"
+    },
+    {
+     "x": "0x1.8p+0",
+     "y": "0x1.921fb54442d18p-20"
+    }
+   ],
+   "sexpr": "(sub (mul x y) 1/1)"
+  },
+  {
+   "fixture_id": "FXMA3",
+   "fx_class": "FX-M-A",
+   "n_vars": 2,
+   "notes": "",
+   "pathology": "the circle lane (additive coupling)",
+   "points": [
+    {
+     "x": "0x1.8p+0",
+     "y": "0x1.4p+0"
+    },
+    {
+     "x": "0x1.8p+0",
+     "y": "0x1.921fb54442d18p-20"
+    }
+   ],
+   "sexpr": "(sub (add (pow x 2) (pow y 2)) 4/1)"
+  },
+  {
+   "fixture_id": "FXMA4",
+   "fx_class": "FX-M-A",
+   "n_vars": 2,
+   "notes": "",
+   "pathology": "rational function; division lane; pole guarded by point choice",
+   "points": [
+    {
+     "x": "0x1.8p+0",
+     "y": "0x1.4p+0"
+    },
+    {
+     "x": "0x1.8p+0",
+     "y": "0x1.921fb54442d18p-20"
+    }
+   ],
+   "sexpr": "(div (sub x y) (add x y))"
+  },
+  {
+   "fixture_id": "FXMA5",
+   "fx_class": "FX-M-A",
+   "n_vars": 3,
+   "notes": "n=3 first-class",
+   "pathology": "SCORED n=3 (ruling): the sphere lane; 30-binade anisotropy",
+   "points": [
+    {
+     "x": "0x1.8p+0",
+     "y": "0x1.4p+0",
+     "z": "0x1.cp-1"
+    },
+    {
+     "x": "0x1.8p+0",
+     "y": "0x1.921fb54442d18p-20",
+     "z": "0x1.5p+10"
+    }
+   ],
+   "sexpr": "(sub (add (add (pow x 2) (pow y 2)) (pow z 2)) 4/1)"
+  },
+  {
+   "fixture_id": "FXMA6",
+   "fx_class": "FX-M-A",
+   "n_vars": 3,
+   "notes": "n=3 first-class",
+   "pathology": "SCORED n=3: triple-product coupling chain",
+   "points": [
+    {
+     "x": "0x1.8p+0",
+     "y": "0x1.4p+0",
+     "z": "0x1.cp-1"
+    },
+    {
+     "x": "0x1.8p+0",
+     "y": "0x1.921fb54442d18p-20",
+     "z": "0x1.5p+10"
+    }
+   ],
+   "sexpr": "(sub (mul (mul x y) z) 1/1)"
+  },
+  {
+   "fixture_id": "FXMB1a",
+   "fx_class": "FX-M-B",
+   "n_vars": 2,
+   "notes": "pair of FXMB1b",
+   "pathology": "factored route of x^2 - y^2; distinguishing ops in the coupling subtree",
+   "points": [
+    {
+     "x": "0x1.8p+0",
+     "y": "0x1.4p+0"
+    },
+    {
+     "x": "0x1.8p+0",
+     "y": "0x1.921fb54442d18p-20"
+    }
+   ],
+   "route_pair": "MB1",
+   "sexpr": "(mul (add x y) (sub x y))"
+  },
+  {
+   "fixture_id": "FXMB1b",
+   "fx_class": "FX-M-B",
+   "n_vars": 2,
+   "notes": "pair of FXMB1a",
+   "pathology": "expanded route of the same f",
+   "points": [
+    {
+     "x": "0x1.8p+0",
+     "y": "0x1.4p+0"
+    },
+    {
+     "x": "0x1.8p+0",
+     "y": "0x1.921fb54442d18p-20"
+    }
+   ],
+   "route_pair": "MB1",
+   "sexpr": "(sub (pow x 2) (pow y 2))"
+  },
+  {
+   "fixture_id": "FXMB2a",
+   "fx_class": "FX-M-B",
+   "n_vars": 3,
+   "notes": "pair of FXMB2b",
+   "pathology": "SCORED n=3: compact route of (x+y+z)^2",
+   "points": [
+    {
+     "x": "0x1.8p+0",
+     "y": "0x1.4p+0",
+     "z": "0x1.cp-1"
+    },
+    {
+     "x": "0x1.8p+0",
+     "y": "0x1.921fb54442d18p-20",
+     "z": "0x1.5p+10"
+    }
+   ],
+   "route_pair": "MB2",
+   "sexpr": "(pow (add (add x y) z) 2)"
+  },
+  {
+   "fixture_id": "FXMB2b",
+   "fx_class": "FX-M-B",
+   "n_vars": 3,
+   "notes": "pair of FXMB2a",
+   "pathology": "fully expanded route of the same f (six coupling nodes vs one)",
+   "points": [
+    {
+     "x": "0x1.8p+0",
+     "y": "0x1.4p+0",
+     "z": "0x1.cp-1"
+    },
+    {
+     "x": "0x1.8p+0",
+     "y": "0x1.921fb54442d18p-20",
+     "z": "0x1.5p+10"
+    }
+   ],
+   "route_pair": "MB2",
+   "sexpr": "(add (add (add (pow x 2) (pow y 2)) (pow z 2)) (add (add (mul (mul 2/1 x) y) (mul (mul 2/1 y) z)) (mul (mul 2/1 z) x)))"
+  },
+  {
+   "base_point": {
+    "x": "0x1.8p+0",
+    "y": "0x1.4p+0"
+   },
+   "fixture_id": "FXMC1",
+   "fx_class": "FX-M-C",
+   "n_vars": 2,
+   "notes": "Stage-C consumer",
+   "pathology": "elementary lattice square on the hyperbola lane; per-axis-ulp steps; residue transport around the loop",
+   "plane": [
+    "x",
+    "y"
+   ],
+   "sexpr": "(sub (mul x y) 1/1)"
+  },
+  {
+   "base_point": {
+    "x": "0x1.8p+0",
+    "y": "0x1.921fb54442d18p-20"
+   },
+   "fixture_id": "FXMC2",
+   "fx_class": "FX-M-C",
+   "n_vars": 2,
+   "notes": "",
+   "pathology": "plaquette at the anisotropic point (ulp_x / ulp_y ratio ~2^20)",
+   "plane": [
+    "x",
+    "y"
+   ],
+   "sexpr": "(sub (pow x 2) y)"
+  },
+  {
+   "base_point": {
+    "x": "0x1.8p+0",
+    "y": "0x1.4p+0",
+    "z": "0x1.cp-1"
+   },
+   "fixture_id": "FXMC3",
+   "fx_class": "FX-M-C",
+   "n_vars": 3,
+   "notes": "n=3 first-class",
+   "pathology": "SCORED n=3: all THREE coordinate-plane plaquettes at one base point (xy, yz, zx faces)",
+   "plane": [
+    "ALL"
+   ],
+   "sexpr": "(sub (mul (mul x y) z) 1/1)"
+  },
+  {
+   "fixture_id": "FXMD1",
+   "fx_class": "FX-M-D",
+   "n_vars": 2,
+   "notes": "economics pin source (Q^2 bits/step)",
+   "pathology": "circle x hyperbola: roots algebraic, cells certifiable; the 2x2 exact-Newton reference system",
+   "starts": [
+    {
+     "x": "0x1.cp+0",
+     "y": "0x1.0p-1"
+    }
+   ],
+   "system": [
+    "(sub (add (pow x 2) (pow y 2)) 4/1)",
+    "(sub (mul x y) 1/1)"
+   ]
+  },
+  {
+   "fixture_id": "FXMD2",
+   "fx_class": "FX-M-D",
+   "n_vars": 2,
+   "notes": "",
+   "pathology": "constructed 2D trap seed (Stage-E grades the orbit structure)",
+   "starts": [
+    {
+     "x": "0x0.0p+0",
+     "y": "0x0.0p+0"
+    }
+   ],
+   "system": [
+    "(sub (pow x 3) (mul 2/1 x))",
+    "(sub y (pow x 2))"
+   ]
+  },
+  {
+   "fixture_id": "FXMD3",
+   "fx_class": "FX-M-D",
+   "n_vars": 2,
+   "notes": "Will's T1 ruling 2026-06-12",
+   "pathology": "T1 STRETCH (ruled IN, one fixture, door stays fenced): z^3 - 1 as an R^2 system; start one ulp-box scale from the basin boundary near the negative real axis",
+   "starts": [
+    {
+     "x": "-0x1.0p-1",
+     "y": "0x1.0p-27"
+    }
+   ],
+   "system": [
+    "(sub (sub (pow x 3) (mul (mul 3/1 x) (pow y 2))) 1/1)",
+    "(sub (mul (mul 3/1 (pow x 2)) y) (pow y 3))"
+   ]
+  },
+  {
+   "fixture_id": "FXMD4",
+   "fx_class": "FX-M-D",
+   "n_vars": 3,
+   "notes": "n=3 first-class",
+   "pathology": "SCORED n=3: sphere x hyperbola x plane; 3x3 exact Newton (economics pin source, Q^3 bits/step)",
+   "starts": [
+    {
+     "x": "0x1.cp+0",
+     "y": "0x1.0p-1",
+     "z": "0x0.0p+0"
+    }
+   ],
+   "system": [
+    "(sub (add (add (pow x 2) (pow y 2)) (pow z 2)) 4/1)",
+    "(sub (mul x y) 1/1)",
+    "(sub (add (add x y) z) 2/1)"
+   ]
+  },
+  {
+   "fixture_id": "FXME1",
+   "fx_class": "FX-M-E",
+   "n_vars": 2,
+   "notes": "refusal-class point pinned on purpose",
+   "pathology": "axis kink loci; second point ON the x-locus (dual eval must refuse, exactly there)",
+   "points": [
+    {
+     "x": "0x1.0p-1",
+     "y": "0x1.0p-2"
+    },
+    {
+     "x": "0x0.0p+0",
+     "y": "0x1.0p-1"
+    }
+   ],
+   "sexpr": "(sub (add (abs x) (abs y)) 1/1)"
+  },
+  {
+   "fixture_id": "FXME2",
+   "fx_class": "FX-M-E",
+   "n_vars": 2,
+   "notes": "",
+   "pathology": "x*|y|: differentiable in x everywhere, kink in y at the axis",
+   "points": [
+    {
+     "x": "0x1.8p+0",
+     "y": "-0x1.0p-3"
+    },
+    {
+     "x": "0x1.8p+0",
+     "y": "0x0.0p+0"
+    }
+   ],
+   "sexpr": "(mul x (abs y))"
+  },
+  {
+   "fixture_id": "FXME3",
+   "fx_class": "FX-M-E",
+   "n_vars": 2,
+   "notes": "",
+   "pathology": "the ReLU fixture; kink locus ON the diagonal x=y (off-axis by design); tie point pinned \u2014 grid-blindness honesty is a pre-registered refusal class, not a hidden weakness",
+   "points": [
+    {
+     "x": "0x1.8p+0",
+     "y": "0x1.4p+0"
+    },
+    {
+     "x": "0x1.4p+0",
+     "y": "0x1.4p+0"
+    }
+   ],
+   "sexpr": "(max x y)"
+  },
+  {
+   "fixture_id": "FXME4",
+   "fx_class": "FX-M-E",
+   "n_vars": 3,
+   "notes": "n=3 first-class",
+   "pathology": "SCORED n=3: max3; tie plane x=y pinned",
+   "points": [
+    {
+     "x": "0x1.8p+0",
+     "y": "0x1.4p+0",
+     "z": "0x1.cp-1"
+    },
+    {
+     "x": "0x1.4p+0",
+     "y": "0x1.4p+0",
+     "z": "0x1.0p-1"
+    }
+   ],
+   "sexpr": "(max x (max y z))"
+  },
+  {
+   "fixture_id": "FXMF1",
+   "fx_class": "FX-M-F",
+   "n_vars": 2,
+   "notes": "TWO-CURVATURES rehearsal fixture; Will's T3 ruling",
+   "pathology": "the circle level curve: curvature by two routes with accounts; T3 RULING: kappa measured as a REGISTERED CLAIM in G2/HR129 vocabulary (the univariate non-recoverability negative does not bind the bivariate jet) \u2014 measure, never search",
+   "points": [
+    {
+     "x": "0x1.8p-1",
+     "y": "0x1.0a3d70a3d70a4p-1"
+    }
+   ],
+   "sexpr": "(sub (add (pow x 2) (pow y 2)) 1/1)"
+  },
+  {
+   "fixture_id": "FXMF2",
+   "fx_class": "FX-M-F",
+   "n_vars": 3,
+   "notes": "n=3 first-class",
+   "pathology": "SCORED n=3: the sphere level surface (mean-curvature route pair at Stage E's discretion)",
+   "points": [
+    {
+     "x": "0x1.0p-1",
+     "y": "0x1.0p-1",
+     "z": "0x1.6a09e667f3bcdp-1"
+    }
+   ],
+   "sexpr": "(sub (add (add (pow x 2) (pow y 2)) (pow z 2)) 1/1)"
+  }
+ ],
+ "freeze_authority": "Will's sign-off, 2026-06-12 (Stage-0 checkpoint)",
+ "frozen": true,
+ "governance": "rules 1.1-1.9 standing (1.8 binds Stage A+ graders; 1.9 enforced from birth via require_frozen); kill conditions K-M1..K-M4 armed per brief sec 4; covenant 3; three-roles via the schema role gate.",
+ "manifest_version": 1,
+ "prior_wins_consumed": "HR132 lanes (bigraded_jet is n-input at the code layer - Stage -1 audit; Stage A grades, does not rebuild); HR131 jet (n-input AD referee column); HR134 tower as the tensor-lift template; Arm I deviation fold (substrate-portability prior).",
+ "stage0_controls": {
+  "coupling_class": "detects coupling; absent where absent",
+  "fixture_sanity": "every expression parses, evaluates exactly, and duals (kink loci refuse typed, only where pinned)",
+  "kink_refusals": "dual refuses AT abs-zero and max-tie, evaluates off them",
+  "route_pairs": "TRUE route-invariance holds on both pairs at rational sample points; corrupted pair differs (can-fail)",
+  "schema_gates": "roundtrip; ad-hoc refused; role gate"
+ },
+ "t2_fence": "T2 FENCE (Will's ruling 2026-06-12, FENCE_REGISTER F8 sharpened): Arm M builds and certifies multivariate accounts. It carries NO G-claims and NO cross-fixture-invariant claims; any G-test consuming this apparatus is its own future brief with a named mechanism. This clause is law in every Arm M prereg.",
+ "t3_note": "T3 (ruled): kappa/K_G-class quantities are IN SCOPE as REGISTERED MEASUREMENTS on FX-M-F (HR129's non-recoverability negative is explicitly univariate; the bivariate jet keeps operand height). Measure against the analytic value with a frozen claim; the hunt-format search stays out (F9).",
+ "thesis": "lane-carried exactness, the difference calculus, the fingerprint law, and the landing decomposition lift from univariate to multivariate (n=2 AND n=3 scored) with the account gaining direction: per-variable attribution, coupling channels, a measurable commutator - every exactness claim staying exact in Q.",
+ "vocabulary": {
+  "coupling_class": "a binary node is COUPLING iff its children carry nonempty differing supports (genuinely mixes variables); record carries the dominant class",
+  "kink_loci": "abs at zero, max at ties: dual eval REFUSES exactly there (HR131 dead-mode stance) - grid-blindness honesty is a pre-registered refusal class",
+  "var_support": "subset of {x,y,z} carried per record"
+ }
+}

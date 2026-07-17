@@ -1,0 +1,1 @@
+../../../../../Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/CCE_7_GAP_LEDGER_v1.0.md

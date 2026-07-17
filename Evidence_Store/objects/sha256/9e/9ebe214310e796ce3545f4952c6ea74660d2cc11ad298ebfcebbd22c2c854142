@@ -1,0 +1,110 @@
+# V3 Calibration Smoke Test — Closeout
+
+**Date:** 2026-05-23
+**Campaign:** v3_calibration_smoke_test
+**Scope:** Lightweight V3 ↔ V4 instrument-vs-phenomenon validation pass over 21 test points across 4 surface families. Purpose: smoke test the joint V3-diagnostic + V4-substrate-flag protocol; surface what each instrument sees that the other doesn't; produce a frozen fixture for the probe readiness scoreboard.
+**V3 isolation discipline:** V4 substrate flags computed from `(equation, values)` alone, never derived from V3 output. V3 outputs are static reference fixtures, not design source.
+
+## Surfaces
+
+| Family | Equation | n_points | Surface character |
+|---|---|---|---|
+| Schwarzschild redshift | `1 - 2/r - z*z` | 9 | 1D constraint in 2D; variable curvature; horizon approach (r → 2) |
+| SR time dilation | `1 - beta**2 - inv_gamma**2` | 8 | 1D constraint in 2D; unit-circle constant curvature |
+| Sphere (umbilic) | `x**2 + y**2 + z**2 - 1` | 3 | 2D constraint in 3D; constant curvature; umbilic everywhere |
+| Ohm's law | `V - I*Z` | 1 | 2D constraint in 3D; linear; clean baseline |
+
+V4 substrate primitives applicable per family: `E := log2(|base_operand|)` for Schwarzschild + SR (where `1 - x_term` form exists), `BACL` grain prediction at every point.
+
+## Headline findings
+
+### 1. F_val sits exactly where BACL predicts at every on-surface point
+
+Predicted BACL grain on float64: ~2.22e-16 (ulp of order-unity intermediates).
+
+Observed F_val across all 21 on-surface points (excluding deliberately off-surface r=4.9 initial probe): 0.0 exact, ±1.11e-16 (one half-grain), 2.78e-17, 3.47e-18, or 2.22e-16. **Every value is at or below BACL grain.**
+
+Attribution: F_val ≠ 0 at machine ε is **substrate-attributed**. This is direct V4 attribution of V3's F_val noise floor across the calibration set. A5 row of the scoreboard (14/14 surfaces at machine ε) is closed for these four families.
+
+### 2. V4 Sterbenz cluster does NOT mark V3 anomalies — informative negative result
+
+Three test points land inside V4's validated Sterbenz cluster (E ∈ [-0.95, -0.75]):
+- Schwarzschild r=4.4 (E=-0.874), r=4.9 (E=-0.757)
+- SR β=0.671 (E=-0.863)
+
+V3's K_G, principal_curvatures, gradient_magnitude, and trust at these points are indistinguishable from neighbouring non-Sterbenz points. K_G interpolates smoothly across the cluster.
+
+**Interpretation:** V4's Sterbenz-cluster finding (MCG Phase 2g) is about V4's *own* pipeline's F1_to_F2 dual-arm phase behaviour, not about V3's K_G computation. The discriminator is V4-pipeline-specific. To attribute V3's K_G results requires building V4-native K_G (the heavier substrate adapter, deferred).
+
+This is the key learning for the scoping decision: the lightweight adapter validates substrate primitives where they apply, but V3's diagnostic surface is not in scope until V4 reproduces it natively. **Phase 2h V3 diagnostic bridge is necessary infrastructure** for cross-pipeline attribution.
+
+### 3. Schwarzschild K_G(r) is real geometry, smoothly decaying
+
+K_G decays from ~1.98 at r=2.1 to 2.03e-6 at r=100 — five orders of magnitude across the sweep. The decay is monotonic and matches the expected behaviour for a Schwarzschild-like constraint. Variable curvature is **phenomenon-attributed** for this family. A6 row (319-point GR universal −2 eigenvalue) is not directly tested here — that requires the GR fixture with M as a third variable — but the geometric-content signature is healthy.
+
+### 4. SR's constant K_G = 1.0 is also real geometry
+
+The constraint `1 - β² - inv_gamma² = 0` is a unit circle in (β, inv_gamma) space. Constant curvature K_G = 1 is correct geometry. V3 reports K_G = 1.0 ± 1 ulp across all eight β values from 0.1 to 0.999. Both Sterbenz-cluster (β=0.671) and far-from-cluster (β=0.1) points return identical K_G. **Phenomenon-attributed.**
+
+### 5. Sphere umbilic detection works (A8 row)
+
+All three sphere points:
+- `principal_curvatures` ≈ [-1.0, -1.0] (sphere is constant curvature, both principal curvatures equal)
+- `trust` = 0.5 (V3's umbilic ambiguity flag fires)
+- `lv3_singularity` returns `near_umbilic = True` on the two probed (axis + diagonal)
+
+V3's near-umbilic detection mechanism (trust degradation + singularity flag) **works correctly** on the textbook umbilic case. Triangulation also works: three independent sphere points return K_G = 1.0 ± 2 ulp. **A8 (near-umbilic) attribution: phenomenon, confirmed.** A11 (triangulation) partially confirmed at smoke-test depth.
+
+### 6. OE-4 envelope is marginal at near-horizon Schwarzschild
+
+V3's documented OE-4 caveat: K_G accuracy degrades when `|∇F| < 0.5` (bordered-determinant amplification).
+
+Observed `|∇F|` at horizon-approach:
+- r=2.1: |∇F| = 0.629 (just above threshold)
+- r=2.5: |∇F| = 0.950 (well above)
+
+V3 reports trust=1.0 at both points despite r=2.1 being OE-4 marginal. Per V3's own help doc: "engine does NOT auto-degrade trust based on |∇F| alone — that's a diagnostic the consumer must apply." V4 substrate flags should capture this. Recommend adding `oe4_marginal` flag (boolean: |∇F| < 1.0) to V4 substrate-flag set for next iteration.
+
+### 7. Off-surface point demonstrates OE-2
+
+Initial pass had a hand-typing error: Schwarzschild r=4.9 with wrong z (off-surface by ~5e-4). V3 returned trust=1.0 with K_G=0.0258 — virtually identical to the on-surface K_G=0.0258 after correction. F_val=5e-4 was the only signal of off-surface state. Confirms V3's OE-2 caveat: "no off-surface warning; F_val must be checked manually." V4 substrate flags should add `f_val_above_bacl_grain` boolean to surface this automatically.
+
+## Initial attribution status for scoreboard rows touched
+
+| Scoreboard row | Smoke-test status | Notes |
+|---|---|---|
+| **A5** — 14/14 surfaces at machine ε | substrate-attributed for tested families | F_val ≤ BACL grain at every on-surface point across SR / Schwarzschild / Sphere / Ohm |
+| **A6** — 319-point GR universal −2 eigenvalue | not directly tested | Schwarzschild K_G(r) decays smoothly; geometric content healthy. Full A6 test needs GR fixture with M variable. |
+| **A8** — near-umbilic via bordered-Hessian | phenomenon-attributed | Sphere triangulation: three points all K_G=1±2ulp, trust=0.5 ambiguity fires, `near_umbilic=True` confirmed. |
+| **A11** — triangulation | partially confirmed | Three independent sphere points converge on K_G=1.0. Heavier test needed (different K_G computation methods on same surface). |
+
+Scoreboard rows **not** touched by this smoke test (still `not_attempted`): A4 ambiguity resolution, A7 Bell Morse-index, A9/A10 Kerr cases.
+
+## What V4 substrate flags need next
+
+The lightweight adapter was useful but limited. Two extensions warranted before scaling up:
+
+1. **`oe4_marginal` flag** — boolean: `|∇F| < 1.0` (or a configurable margin above V3's documented 0.5 threshold). Surfaces the case in finding #6.
+2. **`f_val_above_bacl_grain` flag** — boolean: detects off-surface drift. Catches finding #7.
+
+Both are computable from `(equation, values)` + the V3 response without violating isolation (V4 has its own gradient computation; F_val check is post-hoc against V4's own grain prediction).
+
+Larger gap: V4 has no native K_G primitive. The Sterbenz-cluster finding doesn't surface in V3's K_G because that's the wrong pipeline to look at. **Phase 2h V3 diagnostic bridge** is the natural next move — it maps V4's E primitive to V3's K_G/condition_number vocabulary, which is the prerequisite for cross-pipeline attribution.
+
+## Files
+
+| Path | Content |
+|---|---|
+| `v4_substrate_flags_smoke.json` | V4 flags computed at each test point (input to V3 calls) |
+| `smoke_test_fixture.json` | Full merged fixture: input + V4 flags + V3 diagnose + V3 singularity + initial attribution |
+| `closeout.md` | This document |
+
+## Cumulative test points
+
+21 (9 Schwarzschild + 8 SR + 3 sphere + 1 Ohm). 21 `lv3_diagnose` calls + 4 `lv3_singularity` calls. Byte-stable: V3 produces deterministic output; re-running this fixture should reproduce identical bytes.
+
+## Recommendation for next campaign
+
+Phase 2h V3 diagnostic bridge artefact (pre-scoped in `Docs/session_handoff_2026_05_19_mcg_geometry_first_phase_2h_v3_bridge.md`). It's the natural lateral move: maps E primitive to V3 K_G/condition_number vocabulary descriptively. Until that lands, V4 substrate flags can validate V4's own pipeline and predict F_val noise floor, but cannot attribute V3's K_G output directly. Phase 2h closes that gap.
+
+After Phase 2h: A6 (Schwarzschild full GR fixture with M variable, near-extremal limit), A7 (Bell Morse-index — needs surface scoping from Will), and A4 (blowup-exponent ambiguity resolution) are the loudest unfilled rows.

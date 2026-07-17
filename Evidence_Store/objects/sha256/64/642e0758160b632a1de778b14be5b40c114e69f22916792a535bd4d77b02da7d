@@ -1,0 +1,98 @@
+# Dual-Arm Behavior Verification — Closeout
+
+Date: 2026-05-17.
+Preregistry: `preregistry.md` (frozen 2026-05-17).
+Test file: `tests/test_dual_arm_v10_behavior_verification.py` (10 tests, all passing).
+V3 audit: `test_v3_diagnostic_route_audit.md`.
+
+## 1. Aggregate result
+
+| Test | Subject | Outcome | Notes |
+|---|---|---|---|
+| **V1a** | SR fixture produces zero separation (negative control) | `passes_as_predicted` | `separation_class = "zero_operand_offset"` on synthetic SR-shaped record. |
+| **V1b** | Classification logic handles non-zero branch (source) | `passes_as_predicted` | Source contains `if operand_delta != 0.0: separation_class = "nonzero_operand_offset"`. |
+| **V1c** | `arm_n_operand` is hardcoded copy of `arm_w_operand` | `passes_as_predicted` | Literal `arm_n_operand = arm_w_operand` confirmed at v10:703. **The SR fixture as written cannot exercise the nonzero branch.** |
+| **V2** | ARM-N validity independent of ARM-W data | `passes_as_predicted` | Predicate signature itself confirms: no ARM-W parameter. Existing test `test_armN_validity_independent_of_armW_validity` (in `test_foldreadback_probe0_v10_active_dualarm.py`) also covers this. |
+| **V3** | Diagnostic-route detection | `not_applicable` for (a); design sketch for (b) | Zero matches for `diagnostic`/`route_kind`/`rounded_base` in arms code. Concept is wholly absent from arms framework. See V3 audit doc. |
+| **V4a** | ARM_W/N_FUNCS are module-level literals | `passes_as_predicted` | `ARM_W_FUNCS == ["sign_pattern"]`, `ARM_N_FUNCS == [...]` at v10:65-66. |
+| **V4b** | No runtime reassignment or mutation | `passes_as_predicted` | Single source-level assignment each; no `.append`/`.remove`/`.extend` mutations. **Honored, not enforced** — no assertion guards future violations. |
+| **V5a** | No falloff → no activation | `passes_as_predicted` | Confirmed for `["readable"]*5` and `["readable","warning","recovered"]`. |
+| **V5b** | Falloff → activation interval with guard | `passes_as_predicted` | One below-floor: `[0,2]` window around index 1; two: `[0,3]` window around 1-2. |
+| **V5c** | Activation reason classifies core/guard/none | `passes_as_predicted` | Core, guard, and outside-window all classified correctly. |
+| **V5d** | Multiple non-adjacent falloff regions are distinct intervals | `passes_as_predicted` | Two separate intervals when `["readable","below_floor","readable","readable","below_floor","readable"]`. |
+
+**Summary:** 10/10 pytest assertions pass; V3 is `not_applicable` as predicted (design-sketch produced as fallback).
+
+## 2. Verification verdict on the synthesis doc
+
+The verification produces a **nuanced, partially-confirming, partially-narrowing verdict** on the synthesis doc (`dual_arm_probe_offset_comb_findings.md`):
+
+### What the synthesis got right (machinery)
+
+- **The classification machinery for path separation is correctly implemented.** The conditional logic correctly distinguishes `nonzero_operand_offset` from `zero_operand_offset` and `path_distinct_operand_equal` (V1b).
+- **ARM-N validity is genuinely decided by ARM-N's own predicate.** No data leak from ARM-W's verdict (V2).
+- **ARM-W-derived activation is genuinely enforced.** ARM-N can only activate when ARM-W declared falloff. The chain is the only activation path (V5a, V5b, V5c, V5d).
+- **Pre-declaration is honored by the code.** ARM_W_FUNCS and ARM_N_FUNCS are module-level literals; no runtime mutation (V4a, V4b).
+
+### What the synthesis got wrong (scope and operational reality)
+
+- **The SR fixture — the only operational fixture for arms — cannot exercise path separation.** `arm_n_operand = arm_w_operand` is a hardcoded literal copy (V1c). The "nonzero separation" branch of the classification logic has **never been reached in production** because no fixture as currently coded can drive it.
+- **Diagnostic-vs-production route distinction is wholly absent from arms code.** It exists in the eval-layer offset-comb code, but is not lifted into the arms framework (V3). Any claim that the arms framework distinguishes diagnostic from production routes is currently false at the code level.
+- **Pre-declaration is honored, not enforced.** No assertion or runtime check prevents a future refactor from violating it (V4b).
+
+### Specifically:
+
+The synthesis-doc claim "*ARM-N must be set up so it actually reads new data compared to ARM-W*" is structurally correct as a principle, and the machinery for testing it (path separation classification, own-instrument-law validity, ARM-W-derived activation) is correctly implemented. But on the only fixture that exists, **ARM-N reads the same data as ARM-W by construction**, so the "reads new data" question has never actually been put to an empirical test in production. The synthesis describes a framework that works in principle and has been negatively-validated (`active_handoff_gap_unresolved_zero_separation` correctly fires) but has not been positively-validated (no test case exists where ARM-N has non-zero separation and we observe what its independent read says).
+
+## 3. Implications for the 5 operational conditions
+
+| Condition | Status post-verification |
+|---|---|
+| #1 Real float64 path/operand separation | Classification logic verified; **but no operational fixture exercises non-zero separation** |
+| #2 Own instrument law | **Verified** — ARM-N validity uses own predicate only |
+| #3 Non-diagnostic route | **Concept absent from arms code** — not enforced or observed at arms level |
+| #4 Pre-declared selection | Verified as honored; **not enforced** (no defensive assertion) |
+| #5 ARM-W-derived activation | **Verified** — only activation path |
+| #6 Stability under partition/guard (from resolution rule, not from offset-comb) | Out of scope of this verification |
+
+Of the 5 conditions framed as "what makes ARM-N actually read new data":
+- 2 verified strongly (#2, #5)
+- 1 verified weakly: machinery works, fixture doesn't exercise it (#1)
+- 1 honored but not enforced (#4)
+- 1 absent at the relevant code level (#3)
+
+## 4. Implications for Phase 3B
+
+Phase 3B was blocked on dual-arm probe completion. The verification reveals:
+
+- **The dual-arm probe is more mature than feared.** Machinery is sound; activation chain works; validity is independent; pre-declaration is honored.
+- **The dual-arm probe is less mature than the synthesis implied.** No operational fixture exercises non-zero path separation; the diagnostic-route discipline is absent from arms code; pre-declaration is unenforced.
+- **Phase 3B's hard ceiling is real, but specific.** The ceiling is "arms cannot empirically demonstrate independent reading because separation is structurally zero on the operational fixture." Phase 3B's near-family-trap and composite-branch fixtures need this empirical demonstration before the dual-arm probe can give them a discrimination floor.
+
+**Recommended path to unblock Phase 3B:** construct at least one non-trivial fixture where `arm_n_operand` differs from `arm_w_operand` by construction (a different operand transform, a route-bank-sourced pair, or a synthetic comparison fixture). Run the v10 arms machinery on it. Observe whether ARM-N's independent read yields new information compared to ARM-W. **This is one focused fixture-construction task, not a full probe overhaul.**
+
+## 5. Recommended versioned amendments
+
+The synthesis doc and principles doc both need versioned amendments per Rule 1.1. Draft amendments:
+
+### To `dual_arm_probe_offset_comb_findings.md`
+
+Add a `## Amendment 2026-05-17` section at end:
+
+> *Behavior verification (Build_Docs/Reports/dual_arm_behavior_verification/) confirmed the framework's machinery is implemented correctly but narrowed the scope of operational evidence. On the only operational fixture (SR), `arm_n_operand = arm_w_operand` is hardcoded — non-zero path separation has never been reached. The "ARM-N reads new data" principle is correctly framed but has not been put to empirical test on a non-trivial fixture. The five operational conditions reduce, post-verification, to: 2 strongly verified (#2 own instrument law, #5 ARM-W-derived activation), 1 weakly verified (#1 machinery works but fixture doesn't exercise it), 1 honored-not-enforced (#4 pre-declaration), 1 absent at arms level (#3 diagnostic-vs-production distinction).*
+
+### To `DUAL_ARM_PROBE_PRINCIPLES.md`
+
+Update the epistemic-status banner at top:
+
+> Add: *"Post-verification 2026-05-17: of the 5 operational tests for 'ARM-N reads new data,' #2 (own instrument law) and #5 (ARM-W-derived activation) are verified in code; #1 (path separation) has correct machinery but no operational fixture has exercised non-zero separation; #4 (pre-declared selection) is honored but not enforced; #3 (non-diagnostic route) is not implemented in arms code. The principles remain correct as design intent; their empirical-evidence base is narrower than the original synthesis suggested. See `Build_Docs/Reports/dual_arm_behavior_verification/closeout.md`."*
+
+## 6. Closeout criteria
+
+Per preregistry §7, this verification closes when:
+1. ✓ Each of V1–V5 has produced one of the four outcomes (V3 has its own).
+2. ✓ Aggregate results recorded above.
+3. (Pending) Versioned amendments to synthesis + principles docs drafted in §5; placement requires user nod.
+4. (Pending) Phase 3B preregistry's "blocked on dual-arm" status reassessment — see §4 above. Recommendation: amend Phase 3B's parked status to read "blocked on at least one non-trivial fixture exercising non-zero path separation, not on full probe rebuild."
+
+This closeout is **complete except for the two pending items**, which are doc-edit decisions for the user.

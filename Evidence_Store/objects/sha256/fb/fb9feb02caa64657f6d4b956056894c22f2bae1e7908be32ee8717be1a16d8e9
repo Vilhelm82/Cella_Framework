@@ -1,0 +1,51 @@
+{
+  "task": "grok_f1_f2_common_mode_rejection_sterbenz_dense",
+  "phase": "dense_sterbenz_probe",
+  "retrodiction_gate": "PASSED (see retrodiction.json)",
+  "results": {
+    "schwarzschild": {
+      "fixture": "schwarzschild",
+      "n_points": 8001,
+      "window": "sterbenz_dense",
+      "max_deviation_f1f2_from_closed": 1.3877787807814457e-17,
+      "median_residual_f1f2": 0.0,
+      "sawtooth_proxy_std_first_diff": 9.652741372985409e-18,
+      "max_deviation_f1f4_negative_control": 4.0158848468863084e-16,
+      "f1f2_appears_flat_to_1ulp": true,
+      "negative_control_shows_structure": false
+    },
+    "sr": {
+      "fixture": "sr",
+      "n_points": 8001,
+      "window": "sterbenz_dense",
+      "max_deviation_f1f2_from_closed": 1.1102230246251565e-16,
+      "median_residual_f1f2": 9.410190460314789e-19,
+      "sawtooth_proxy_std_first_diff": 5.697132023842849e-17,
+      "max_deviation_f1f4_negative_control": 2.220446049250313e-16,
+      "f1f2_appears_flat_to_1ulp": true,
+      "negative_control_shows_structure": false
+    },
+    "pure_algebraic": {
+      "fixture": "pure_algebraic",
+      "n_points": 8001,
+      "window": "sterbenz_dense",
+      "max_deviation_f1f2_from_closed": 5.551115123125783e-17,
+      "median_residual_f1f2": -1.7618285302889447e-19,
+      "sawtooth_proxy_std_first_diff": 4.530049080834273e-17,
+      "max_deviation_f1f4_negative_control": 1.1102230246251565e-16,
+      "f1f2_appears_flat_to_1ulp": true,
+      "negative_control_shows_structure": false
+    },
+    "cbrt": {
+      "fixture": "cbrt",
+      "n_points": 8001,
+      "window": "sterbenz_dense",
+      "max_deviation_f1f2_from_closed": 5.551115123125783e-17,
+      "median_residual_f1f2": -1.7618285302889447e-19,
+      "sawtooth_proxy_std_first_diff": 4.530049080834273e-17,
+      "max_deviation_f1f4_negative_control": 8.881784197001252e-16,
+      "f1f2_appears_flat_to_1ulp": true,
+      "negative_control_shows_structure": false
+    }
+  }
+}

@@ -1,0 +1,653 @@
+{
+  "all_pass": true,
+  "campaign_id": "three_channel_kg",
+  "cycle_id": "c001",
+  "defect_chain_count": 0,
+  "eval_tier_only": true,
+  "failing_predictions": [],
+  "halt": false,
+  "halt_reason": null,
+  "kills_fired": [],
+  "n_pass": 13,
+  "n_predictions": 13,
+  "no_tolerance": true,
+  "preconditions": {
+    "P-frame": true,
+    "P-self-cert": true,
+    "run_void": false
+  },
+  "predictions": {
+    "P10_preconditions": {
+      "detail": {
+        "P_frame": {
+          "missing_frame": [],
+          "ok": true
+        },
+        "P_self_cert": {
+          "ABBprime_imports_of_oracle": {
+            "probe": [],
+            "referee_channel": [],
+            "referee_total": []
+          },
+          "ok": true,
+          "oracle_imports_of_ABBprime_fixtures": []
+        },
+        "pass": true
+      },
+      "pass": true,
+      "units": "boolean (import-graph disjointness; frame-present on every channel fixture)"
+    },
+    "P11_both_sign_witnesses_CLc1_signed": {
+      "detail": {
+        "F10_kappa_int": "frac:-1/9",
+        "F11_kappa_int": "frac:2/9",
+        "F6_KG": "frac:1/1",
+        "F8_KG": "frac:-3/49",
+        "detail": {
+          "F10_kappa_int_negative": true,
+          "F11_kappa_int_positive": true,
+          "F6_KG_positive": true,
+          "F8_KG_negative": true
+        },
+        "pass": true
+      },
+      "pass": true,
+      "units": "exact Q (Fraction); sign of each witness"
+    },
+    "P12_symbolic_identity_CLc1_universal": {
+      "detail": {
+        "pass": true,
+        "proof": {
+          "delta_c_monomials": 6,
+          "delta_m_monomials": 3,
+          "delta_s_monomials": 3,
+          "det_monomials": 12,
+          "identity_holds": true,
+          "indeterminates": [
+            "g1",
+            "g2",
+            "g3",
+            "h11",
+            "h12",
+            "h13",
+            "h22",
+            "h23",
+            "h33"
+          ],
+          "partition_monomials": 12,
+          "residual_monomials": 0,
+          "support_union_eq_det_support": true,
+          "supports_pairwise_disjoint": true
+        }
+      },
+      "pass": true,
+      "units": "count of residual monomials (must be 0); count of det / partition monomials (12 each); boolean disjoint-supports; boolean support-union==det-support"
+    },
+    "P13_F13_parity_contrast": {
+      "detail": {
+        "C1_hat": "frac:-24/1",
+        "detail": {
+          "C1_hat_eq_m24": true,
+          "sigma_1_field_label": "Q(sqrt14)",
+          "sigma_1_not_emitted_numerically": true,
+          "sigma_2_eq_F8_KG": true,
+          "sigma_2_eq_m3_49": true
+        },
+        "pass": true,
+        "sigma_1_field": "Q(sqrt14)",
+        "sigma_2": "frac:-3/49"
+      },
+      "pass": true,
+      "units": "exact Q (Fraction) for sigma_2/C1_hat; field-label for sigma_1"
+    },
+    "P1_row_pass_all": {
+      "detail": {
+        "detail": {
+          "F1": {
+            "c1_tuple_eq_expected": true,
+            "c2_KG_eq_sum_channels": true,
+            "c3_KG_eq_pathB_total": true,
+            "c4_channels_eq_pathBprime": true,
+            "c5_det_eq_partition": true,
+            "c_oracle_eq": true,
+            "row_pass": true
+          },
+          "F10": {
+            "c1_tuple_eq_expected": true,
+            "c2_KG_eq_sum_channels": true,
+            "c3_KG_eq_pathB_total": true,
+            "c4_channels_eq_pathBprime": true,
+            "c5_det_eq_partition": true,
+            "c_oracle_eq": true,
+            "row_pass": true
+          },
+          "F11": {
+            "c1_tuple_eq_expected": true,
+            "c2_KG_eq_sum_channels": true,
+            "c3_KG_eq_pathB_total": true,
+            "c4_channels_eq_pathBprime": true,
+            "c5_det_eq_partition": true,
+            "c_oracle_eq": true,
+            "row_pass": true
+          },
+          "F2": {
+            "c1_tuple_eq_expected": true,
+            "c2_KG_eq_sum_channels": true,
+            "c3_KG_eq_pathB_total": true,
+            "c4_channels_eq_pathBprime": true,
+            "c5_det_eq_partition": true,
+            "c_oracle_eq": true,
+            "row_pass": true
+          },
+          "F3": {
+            "c1_tuple_eq_expected": true,
+            "c2_KG_eq_sum_channels": true,
+            "c3_KG_eq_pathB_total": true,
+            "c4_channels_eq_pathBprime": true,
+            "c5_det_eq_partition": true,
+            "c_oracle_eq": true,
+            "row_pass": true
+          },
+          "F4": {
+            "c1_tuple_eq_expected": true,
+            "c2_KG_eq_sum_channels": true,
+            "c3_KG_eq_pathB_total": true,
+            "c4_channels_eq_pathBprime": true,
+            "c5_det_eq_partition": true,
+            "c_oracle_eq": true,
+            "row_pass": true
+          },
+          "F5": {
+            "c1_tuple_eq_expected": true,
+            "c2_KG_eq_sum_channels": true,
+            "c3_KG_eq_pathB_total": true,
+            "c4_channels_eq_pathBprime": true,
+            "c5_det_eq_partition": true,
+            "c_oracle_eq": true,
+            "row_pass": true
+          },
+          "F6": {
+            "c1_tuple_eq_expected": true,
+            "c2_KG_eq_sum_channels": true,
+            "c3_KG_eq_pathB_total": true,
+            "c4_channels_eq_pathBprime": true,
+            "c5_det_eq_partition": true,
+            "c_oracle_eq": true,
+            "row_pass": true
+          },
+          "F7": {
+            "c1_tuple_eq_expected": true,
+            "c2_KG_eq_sum_channels": true,
+            "c3_KG_eq_pathB_total": true,
+            "c4_channels_eq_pathBprime": true,
+            "c5_det_eq_partition": true,
+            "c_oracle_eq": true,
+            "row_pass": true
+          },
+          "F8": {
+            "c1_tuple_eq_expected": true,
+            "c2_KG_eq_sum_channels": true,
+            "c3_KG_eq_pathB_total": true,
+            "c4_channels_eq_pathBprime": true,
+            "c5_det_eq_partition": true,
+            "c_oracle_eq": true,
+            "row_pass": true
+          },
+          "F9": {
+            "c1_tuple_eq_expected": true,
+            "c2_KG_eq_sum_channels": true,
+            "c3_KG_eq_pathB_total": true,
+            "c4_channels_eq_pathBprime": true,
+            "c5_det_eq_partition": true,
+            "c_oracle_eq": true,
+            "row_pass": true
+          }
+        },
+        "pass": true,
+        "rows_passing": 11,
+        "rows_total": 11,
+        "units": "rows passing all five closure identities out of 11"
+      },
+      "pass": true,
+      "units": "boolean per row (exact-Q equality); count of passing rows out of 11"
+    },
+    "P2_keystone_F8": {
+      "detail": {
+        "detail": {
+          "K_G_eq_m3_49": true,
+          "K_G_eq_sum_channels": true,
+          "K_G_negative_signed": true,
+          "det_hb_eq_12": true,
+          "expected_anchor": {
+            "K_G": "-3/49",
+            "det_hb": "12/1",
+            "kappa_c": "-1/49",
+            "kappa_int": "-3/49",
+            "kappa_s": "1/49",
+            "q": "14/1"
+          },
+          "kappa_c_eq_m1_49": true,
+          "kappa_int_eq_m3_49": true,
+          "kappa_s_eq_1_49": true,
+          "pathB_total_agrees": true,
+          "pathBprime_tuple_agrees": true,
+          "pathC_oracle_agrees": true,
+          "q_eq_14": true
+        },
+        "pass": true
+      },
+      "pass": true,
+      "units": "exact Q (Fraction) per component"
+    },
+    "P3_partition_K2": {
+      "detail": {
+        "K2_fires": false,
+        "detail": {
+          "F1": {
+            "pathA_det_eq_pathB_det": true,
+            "residual": "frac:0/1",
+            "residual_zero": true
+          },
+          "F10": {
+            "pathA_det_eq_pathB_det": true,
+            "residual": "frac:0/1",
+            "residual_zero": true
+          },
+          "F11": {
+            "pathA_det_eq_pathB_det": true,
+            "residual": "frac:0/1",
+            "residual_zero": true
+          },
+          "F2": {
+            "pathA_det_eq_pathB_det": true,
+            "residual": "frac:0/1",
+            "residual_zero": true
+          },
+          "F3": {
+            "pathA_det_eq_pathB_det": true,
+            "residual": "frac:0/1",
+            "residual_zero": true
+          },
+          "F4": {
+            "pathA_det_eq_pathB_det": true,
+            "residual": "frac:0/1",
+            "residual_zero": true
+          },
+          "F5": {
+            "pathA_det_eq_pathB_det": true,
+            "residual": "frac:0/1",
+            "residual_zero": true
+          },
+          "F6": {
+            "pathA_det_eq_pathB_det": true,
+            "residual": "frac:0/1",
+            "residual_zero": true
+          },
+          "F7": {
+            "pathA_det_eq_pathB_det": true,
+            "residual": "frac:0/1",
+            "residual_zero": true
+          },
+          "F8": {
+            "pathA_det_eq_pathB_det": true,
+            "residual": "frac:0/1",
+            "residual_zero": true
+          },
+          "F9": {
+            "pathA_det_eq_pathB_det": true,
+            "residual": "frac:0/1",
+            "residual_zero": true
+          }
+        },
+        "pass": true
+      },
+      "pass": true,
+      "units": "exact Q (Fraction); residual must be exactly 0/1"
+    },
+    "P4_two_derivation_K3": {
+      "detail": {
+        "A_eq_Bprime_all": true,
+        "K3_fires_on_truth": false,
+        "detail": {
+          "F1": {
+            "A_channels": [
+              "frac:0/1",
+              "frac:0/1",
+              "frac:0/1"
+            ],
+            "A_eq_Bprime": true,
+            "Bprime_channels": [
+              "frac:0/1",
+              "frac:0/1",
+              "frac:0/1"
+            ]
+          },
+          "F10": {
+            "A_channels": [
+              "frac:1/3",
+              "frac:0/1",
+              "frac:-1/9"
+            ],
+            "A_eq_Bprime": true,
+            "Bprime_channels": [
+              "frac:1/3",
+              "frac:0/1",
+              "frac:-1/9"
+            ]
+          },
+          "F11": {
+            "A_channels": [
+              "frac:-1/9",
+              "frac:-1/9",
+              "frac:2/9"
+            ],
+            "A_eq_Bprime": true,
+            "Bprime_channels": [
+              "frac:-1/9",
+              "frac:-1/9",
+              "frac:2/9"
+            ]
+          },
+          "F2": {
+            "A_channels": [
+              "frac:0/1",
+              "frac:0/1",
+              "frac:0/1"
+            ],
+            "A_eq_Bprime": true,
+            "Bprime_channels": [
+              "frac:0/1",
+              "frac:0/1",
+              "frac:0/1"
+            ]
+          },
+          "F3": {
+            "A_channels": [
+              "frac:1/12",
+              "frac:0/1",
+              "frac:0/1"
+            ],
+            "A_eq_Bprime": true,
+            "Bprime_channels": [
+              "frac:1/12",
+              "frac:0/1",
+              "frac:0/1"
+            ]
+          },
+          "F4": {
+            "A_channels": [
+              "frac:1/3",
+              "frac:0/1",
+              "frac:0/1"
+            ],
+            "A_eq_Bprime": true,
+            "Bprime_channels": [
+              "frac:1/3",
+              "frac:0/1",
+              "frac:0/1"
+            ]
+          },
+          "F5": {
+            "A_channels": [
+              "frac:0/1",
+              "frac:4/81",
+              "frac:0/1"
+            ],
+            "A_eq_Bprime": true,
+            "Bprime_channels": [
+              "frac:0/1",
+              "frac:4/81",
+              "frac:0/1"
+            ]
+          },
+          "F6": {
+            "A_channels": [
+              "frac:0/1",
+              "frac:1/1",
+              "frac:0/1"
+            ],
+            "A_eq_Bprime": true,
+            "Bprime_channels": [
+              "frac:0/1",
+              "frac:1/1",
+              "frac:0/1"
+            ]
+          },
+          "F7": {
+            "A_channels": [
+              "frac:-1/9",
+              "frac:0/1",
+              "frac:0/1"
+            ],
+            "A_eq_Bprime": true,
+            "Bprime_channels": [
+              "frac:-1/9",
+              "frac:0/1",
+              "frac:0/1"
+            ]
+          },
+          "F8": {
+            "A_channels": [
+              "frac:-1/49",
+              "frac:1/49",
+              "frac:-3/49"
+            ],
+            "A_eq_Bprime": true,
+            "Bprime_channels": [
+              "frac:-1/49",
+              "frac:1/49",
+              "frac:-3/49"
+            ]
+          },
+          "F9": {
+            "A_channels": [
+              "frac:0/1",
+              "frac:0/1",
+              "frac:0/1"
+            ],
+            "A_eq_Bprime": true,
+            "Bprime_channels": [
+              "frac:0/1",
+              "frac:0/1",
+              "frac:0/1"
+            ]
+          }
+        },
+        "mirror_mutant_distinguished_on_trap": true,
+        "mutant_detail": {
+          "F5": {
+            "differs_so_K3_would_fire": true,
+            "mirror_mutant_kappa_s": "frac:4/9",
+            "truth_kappa_s": "frac:4/81"
+          },
+          "F6": {
+            "differs_so_K3_would_fire": true,
+            "mirror_mutant_kappa_s": "frac:3/1",
+            "truth_kappa_s": "frac:1/1"
+          },
+          "F8": {
+            "differs_so_K3_would_fire": true,
+            "mirror_mutant_kappa_s": "frac:2/7",
+            "truth_kappa_s": "frac:1/49"
+          }
+        },
+        "pass": true
+      },
+      "pass": true,
+      "units": "exact Q (Fraction); per-fixture boolean A==B' and mutant!=truth on the trap set"
+    },
+    "P5_wrong_sign_K5": {
+      "detail": {
+        "K5_catches_flip": true,
+        "detail": {
+          "F3": {
+            "flip_K_G": "frac:-1/12",
+            "flip_inverts_sign": true,
+            "oracle_K_G": "frac:1/12",
+            "true_K_G": "frac:1/12",
+            "true_sign_matches_oracle": true
+          },
+          "F7": {
+            "flip_K_G": "frac:1/9",
+            "flip_inverts_sign": true,
+            "oracle_K_G": "frac:-1/9",
+            "true_K_G": "frac:-1/9",
+            "true_sign_matches_oracle": true
+          },
+          "F8": {
+            "flip_K_G": "frac:3/49",
+            "flip_inverts_sign": true,
+            "oracle_K_G": "frac:-3/49",
+            "true_K_G": "frac:-3/49",
+            "true_sign_matches_oracle": true
+          }
+        },
+        "pass": true
+      },
+      "pass": true,
+      "units": "exact Q (Fraction); sign comparison"
+    },
+    "P6_rank_heuristic_K6": {
+      "detail": {
+        "K6_fires": false,
+        "detail": {
+          "never_nonzero": true,
+          "pathA_KG_zero": true,
+          "pathB_KG_zero": true,
+          "pathBprime_KG_zero": true,
+          "pathC_KG_zero": true
+        },
+        "pass": true
+      },
+      "pass": true,
+      "units": "exact Q (Fraction); must be exactly 0/1"
+    },
+    "P7_sqrt_q_leak_K8": {
+      "detail": {
+        "all_emitted_are_Fraction": true,
+        "detail": {
+          "F1": true,
+          "F10": true,
+          "F11": true,
+          "F2": true,
+          "F3": true,
+          "F4": true,
+          "F5": true,
+          "F6": true,
+          "F7": true,
+          "F8": true,
+          "F9": true
+        },
+        "float_operand_raises_TypeError": true,
+        "pass": true
+      },
+      "pass": true,
+      "units": "type predicate (isinstance Fraction); boolean refusal-on-float"
+    },
+    "P8_tolerance_leak_K9": {
+      "detail": {
+        "injected_eps": "frac:1/1000000000",
+        "near_miss_rowpass_must_be_False": false,
+        "note": "exact equality rejects a +1e-9 near-miss (no tolerance band)",
+        "pass": true
+      },
+      "pass": true,
+      "units": "boolean (row-pass under injected near-miss must be FALSE)"
+    },
+    "P9_singular_lie_K11": {
+      "detail": {
+        "F6_K_G": "frac:1/1",
+        "F6_single_gi0_not_refused_and_KG_1": true,
+        "pass": true,
+        "q0_all_paths_refused": true,
+        "q0_refusals": {
+          "pathA": {
+            "kind": "g_i_zero",
+            "refused": true
+          },
+          "pathB": {
+            "refused": true
+          },
+          "pathBprime": {
+            "refused": true
+          }
+        }
+      },
+      "pass": true,
+      "units": "typed-exception predicate; boolean (no numeric value on q=0)"
+    }
+  },
+  "prereg_pin": "ecced952d202c140b54a69d9042f78120326dfbee4090dd3a17574dcb4dad628",
+  "records_byte_stable": true,
+  "records_sha256": "53321e5c53dcd43294539120f1c5f1625b68b9e5489c023260b5b416bc917376",
+  "records_sha256_on_disk": "53321e5c53dcd43294539120f1c5f1625b68b9e5489c023260b5b416bc917376",
+  "scope": {
+    "armed_kills": [
+      "K2",
+      "K3",
+      "K5",
+      "K6",
+      "K8",
+      "K9",
+      "K11"
+    ],
+    "claims": [
+      "CL-c1",
+      "CL-c2"
+    ],
+    "fixtures": [
+      "F1",
+      "F2",
+      "F3",
+      "F4",
+      "F5",
+      "F6",
+      "F7",
+      "F8",
+      "F9",
+      "F10",
+      "F11",
+      "F13"
+    ],
+    "preconditions": [
+      "P-self-cert",
+      "P-frame"
+    ]
+  },
+  "stage": "stage_a",
+  "status_moves_proposed": [
+    {
+      "R1_note": "universal warrant satisfied via the symbolic identity over Q[g,H] (P12), NOT finite-fixture agreement alone.",
+      "R1_universal": true,
+      "all_gates_pass": true,
+      "claim": "CL-c1",
+      "from": "NOT_YET_PROBED",
+      "gating_predictions": [
+        "P1_row_pass_all",
+        "P2_keystone_F8",
+        "P3_partition_K2",
+        "P11_both_sign_witnesses_CLc1_signed",
+        "P12_symbolic_identity_CLc1_universal",
+        "P13_F13_parity_contrast"
+      ],
+      "to": "DEMONSTRATED",
+      "warrant_scope": "universal warrant: symbolic identity over Q[g,H] established (P12), exhaustive & disjoint partition proven, corroborated finitely (P1/P2/P3/P11/P13). Eval-tier; no substrate promotion; canonical only on Will's sign-off."
+    },
+    {
+      "R1_note": "CL-c2 not an R1 universal claim; warrant scope is the frozen Stage-A family {F1..F11}, the non-mirror kappa_s established (mirror mutant rejected by K3).",
+      "R1_universal": false,
+      "all_gates_pass": true,
+      "claim": "CL-c2",
+      "from": "NOT_YET_PROBED",
+      "gating_predictions": [
+        "P1_row_pass_all",
+        "P2_keystone_F8",
+        "P4_two_derivation_K3"
+      ],
+      "to": "DEMONSTRATED",
+      "warrant_scope": "the two disjoint channel derivations agree channel-for-channel across the frozen Stage-A family {F1..F11} (finite family, exact Q); the non-mirror kappa_s is established as the correct split-shape form (the mirror mutant is rejected by K3 on the trap set). Warrant scope: the frozen family, NOT a symbolic-over-Q[g,H] universal (CL-c2 is not an R1 universal claim). Eval-tier; canonical only on Will's sign-off."
+    }
+  ],
+  "substrate_promotion": false,
+  "version": "stage_a_prediction_verdicts_v1"
+}

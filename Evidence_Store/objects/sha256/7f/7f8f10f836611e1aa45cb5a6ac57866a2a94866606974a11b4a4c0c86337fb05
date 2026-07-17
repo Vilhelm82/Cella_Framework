@@ -1,0 +1,64 @@
+# Early-Rounding Comb Utilization Campaign
+
+Accepted outcome: `early_alignment_global_clean_only`
+Headline classification: `early_noise_globally_cleans_without_comb`
+
+## Test Design
+
+This eval-layer campaign tests the Task 031 mechanism against the current comb objective.
+It separates two questions: whether early operand rounding globally cleans a residual lattice, and whether a second natural route supplies stable pointwise half-phase separation.
+
+Primary candidate:
+
+```text
+(R * R) + (q_route - 1.0)
+```
+
+Reference candidate:
+
+```text
+((R * R) - 1.0) + q_direct
+```
+
+Each candidate records node-level rounding telemetry, final residual phase against `ulp(f)`, same-route controls, exact-zero controls, synthetic destination half-shift controls, and coordinate-shuffle controls.
+
+## Required Answers
+
+1. Early noisy operand routing globally cleans at least one chain: `True`.
+   Best alignment: fixture `schwarzschild`, candidate `early_reassociated_direct_2_over_r`, integer-or-zero fraction `1.0`, early-rounding nonzero fraction `1.0`.
+2. A natural or mixed pointwise half-comb was found: `False`.
+   Best natural/mixed pair: fixture `schwarzschild`, pair `reference_F1_vs_late_F2`, mask `f_binade_-1`, relation `half_phase_near_miss`, half fraction `0.7272727272727273`.
+3. Same-route controls stay clean: `True`.
+4. Exact-zero controls stay silent: `True`.
+5. Synthetic destination half-shift detector fires: `True`.
+6. Natural route coordinate-shuffle controls reject promoted pairing: `True`.
+   Synthetic destination shifts can survive shuffling inside constant-binade regions: `True`.
+7. Double precision language justified: `False`.
+
+## Fixture Findings
+
+- `schwarzschild`: outcome `early_alignment_global_clean_only`; best alignment `early_reassociated_direct_2_over_r` clean `True` with early signature `True`; best pair `reference_F1_vs_late_F2` on `f_binade_-1` relation `half_phase_near_miss` half fraction `0.7272727272727273`.
+- `sr`: outcome `early_alignment_global_clean_only`; best alignment `early_reassociated_beta_square` clean `True` with early signature `True`; best pair `direct_early_vs_early_reassociated_complement_factored` on `full_support` relation `same_phase_stable` half fraction `0.0`.
+- `pure_affine_control`: outcome `early_alignment_global_clean_only`; best alignment `early_reassociated_x_direct` clean `True` with early signature `True`; best pair `direct_early_vs_early_reassociated_sqrt_roundtrip` on `full_support` relation `same_phase_stable` half fraction `0.0`.
+
+## Interpretation
+
+The campaign confirms the Task 031 mechanism as a real chain-level alignment lever: early reassociation can make the final residual lattice globally integer-clean while involving a nonzero early rounding site.
+
+That cleanup is not yet a usable doubled comb. The strongest natural/mixed pair remains a near-miss or drifted relation rather than stable pointwise half-phase separation. The synthetic destination shift is detected as expected, but it is a detector calibration rather than a candidate route; synthetic shifts can survive constant-binade shuffles by construction.
+
+The useful next direction is to search for early operand routes whose `q_route - 1.0` rounding both globally cleans the route and locks the paired delta phase to `0.5` on a predeclared region. The present result supports early-arm alignment as the lever, not destination shifting as the method.
+
+## Verification
+
+- `PYTHONPATH=src python -m lloyd_v4.evals.early_rounding_comb_utilization`
+  Result: passed; generated artifact_early_rounding_comb_utilization.json and early_rounding_comb_utilization_report.md.
+- `PYTHONPATH=src python -m pytest tests/test_early_rounding_comb_utilization.py -q`
+  Result: passed; focused campaign tests.
+- `PYTHONPATH=src python -m pytest tests/test_early_rounding_comb_utilization.py tests/test_f2_operand_route_search.py tests/test_f2_phase_drift_diagnostics.py tests/test_task031_sterbenz_audit.py::test_sterbenz_audit_headline_and_frontier -q`
+  Result: passed; focused compatibility subset.
+
+## Artifacts
+
+- `Build_Docs/Reports/early_rounding_comb_utilization/artifact_early_rounding_comb_utilization.json`
+- `Build_Docs/Reports/early_rounding_comb_utilization/early_rounding_comb_utilization_report.md`

@@ -1,0 +1,151 @@
+# MCG Gate 3 — Kill-Switch — Closeout
+
+Date: 2026-05-19.
+Preregistry: [`preregistry.md`](preregistry.md) (FROZEN 2026-05-19 pre-measurement).
+Code: [`scratch/mcg_gate_3_killswitch.py`](../../../scratch/mcg_gate_3_killswitch.py).
+Artifact: [`artifact.json`](artifact.json).
+
+## 1. Headline verdict
+
+**`HALT` (terminal)**. The candidate G observable (σ1 = 1.000) on raw `c_schw(r)` was substrate-universality masquerade for the Schwarzschild horizon-approach fixture. M-subtraction (interpretation (3): integer-j extraction at the BACL-mandated lattice spacing `ulp(f_float)`) collapsed the residue to **literal float64 zero in 200 / 200 records**. The decision-arm slope α_msub is therefore unfittable, and the pre-registered HALT branch fires.
+
+The HALT is the **predicted, informative outcome** (EP_4) — Gate 3 was constructed precisely to detect this case. The c2 lattice theorem foreordains that `c_schw = j · ulp(f_float)` for integer `j ∈ ℤ` in-scope, and the experimental sweep is in-scope throughout (BACL coverage = 1.000). The kill-switch correctly identifies that the σ1 = 1 baseline signature, for *this fixture in this candidate form*, is captured entirely by the substrate-mandated M term.
+
+**Consequence for the MCG campaign**: Gates 0, 1, 2, 4 are **not greenlit as currently formulated**. The G term as currently embodied in the σ1 exponent on c2-style residues is substrate-mandated, not geometric signal. The architecture needs reformulation before further gate investment — see §6.
+
+The positive-control channel (interpretation (1)) returned trivial zero in all 200 records, so the verdict is HALT and not VOID. The harness is sound.
+
+## 2. Pre-registered predictions: outcomes
+
+All six pre-registered predictions PASS. Pre-registration was binding pre-measurement (§3.1 + §3.2 of the preregistry).
+
+| # | Prediction | Measured | Pass |
+|---|---|---|---|
+| EP_1 | α_raw ≈ 1.000 ± 0.05 | **0.99829** (R² = 0.99936) | ✓ |
+| EP_2 | ≥ 90% records have m_subtracted_residue = 0 | **100.0%** | ✓ |
+| EP_3 | α_msub undefined or effectively zero | **undefined** (zero non-zero records) | ✓ |
+| EP_4 | Verdict = HALT | **HALT** | ✓ |
+| EP_5 | BACL coverage = 1.000 | **1.000** | ✓ |
+| EP_6 | f_msub positive control = 0 in all records | **0 / 200 non-zero** | ✓ |
+
+## 3. Detailed substrate behaviour
+
+The j_BACL distribution across 200 records:
+
+| j_BACL | Count | Meaning |
+|---|---|---|
+| **−1** | 48 | V_2 = f_float − ulp(f_float) (sqrt rounded down then squared, landed one ulp below f) |
+| **0**  | 100 | V_2 = f_float exactly (sqrt squared cleanly back to f) |
+| **+1** | 52 | V_2 = f_float + ulp(f_float) (sqrt rounded up then squared, landed one ulp above f) |
+
+The integer-j distribution is bounded `|j| ≤ 1`, a direct consequence of correctly-rounded sqrt: the rounding error |R − √f| ≤ ½·ulp(R), so |R² − f| ≤ ulp(f) (modulo binade boundary effects which never crossed here). This is **tighter than the c2 lattice theorem requires** — the theorem allows arbitrary integer j; the sqrt-specific bound restricts to `j ∈ {−1, 0, +1}`. Conjecture C is honoured: V_2 ≥ 2^k for f ∈ [2^k, 2^(k+1)) in all 200 records (the j = −1 cases stay above the binade floor by many ulps since f ≫ ulp).
+
+**The substrate fingerprint of this fixture is: c_schw is on the integer-ulp lattice, with three-valued mantissa pattern {−1, 0, +1}.** Nothing else is there. The σ1 = 1.000 baseline reflects the linear scaling `ulp(f_float) ~ const · f_float ~ const · (r − 2)` near the horizon, *not* a geometric blow-up exponent.
+
+## 4. The σ1 raw fit
+
+Ordinary least squares on `log|c_schw(r)|` vs `log(r − 2)`, over the 100 records where `c_schw ≠ 0`:
+
+```
+α_raw   = 0.99829
+intercept = (recoverable from artifact)
+R²        = 0.99936  (effectively unity)
+n_nonzero = 100
+```
+
+The 0.16% departure from 1.000 is a regression artifact of the discrete j-quantization (the slope is fit to `log|j · ulp(f)|`; when j jumps between {−1, +1}, the log-residual is constant but the ulp doubles at binade boundaries, producing tiny systematic curvature). The structural prediction "α = 1 by linearization" is satisfied within fit noise.
+
+## 5. The σ1 M-subtracted "fit"
+
+Every one of the 200 records produced `m_subtracted_residue = c_schw − j_BACL · ulp(f_float) = 0.0` exactly (Python float equality, bit-identical to positive zero). This is the c2 lattice theorem in action: `c_schw` is on the lattice, so subtracting the lattice integer multiple yields zero in real arithmetic; because the lattice spacing `ulp(f_float)` is exactly representable and the integer multiplication `j · ulp(f_float)` is float-exact (no rounding for integer-times-power-of-two ulp), the subtraction in float64 also yields exact zero.
+
+There is no power law to fit. `α_msub = undefined`.
+
+The pre-registered decision rule §3.1 specifies HALT in this case (`fraction_nonzero(m_sub) = 0.0 < 0.50`). HALT fires; no fallback (terminal per §3.1 and user direction).
+
+## 6. Strategic consequence — what HALT means here
+
+**This is not a campaign failure; this is the kill-switch performing its function.** Gate 3 was pulled to the front specifically because a falsifier this cheap is the highest expected-value experiment available pre-campaign. The HALT outcome saves Gates 0, 1, 2, 4 from being executed on an architecture whose G term is artifact for the chosen kill-switch fixture.
+
+What this verdict says, precisely:
+- **The σ1 exponent on c2-style cancellation residues is not a G observable.** It is captured by the substrate-mandated lattice content M.
+- **The Schwarzschild horizon-approach fixture, as parameterised, has nothing in c_schw beyond M.** Any geometric content G of Schwarzschild near r_h is either (a) in a different observable, or (b) in c_schw at sub-ulp magnitudes that the BACL/c2 framework cannot resolve.
+- **The MCG decomposition's separability assertion ⊕ is consistent so far**: M and G are not entangled in this fixture, but only because G is absent (not because M and G are co-present-and-separable). Gate 4 cannot be evaluated until G is reformulated.
+
+What this verdict does **not** say:
+- It does not refute BACL, the c2 lattice theorem, or Conjecture C. All three were corroborated.
+- It does not refute the σ1 = 1.000 universality observed across ζ / J₀ / Ai zeros in [`blowup_exponent_v4_audit/`](../blowup_exponent_v4_audit/). That audit's σ1 is on `|f(x_0 + δ)|`, a different observable from this Gate's c2-style residue. The substrate-universality interpretation (σ1 reflects the linearization order, not function-specific geometry) is consistent with both audits, but each audit is its own measurement.
+- It does not invalidate the broader MCG architecture as a research program. It invalidates the specific operationalisation of G as "σ1 on c2-style residue", which was the operationalisation Gate 3 chose to falsify.
+
+## 7. Required reformulation before MCG campaign can proceed
+
+Gate 3 GREEN was the gate condition for proceeding to Gate 0. With HALT, the prerequisites for further gate work are:
+
+1. **Reformulate G as a sub-ulp / off-lattice observable.** The current G candidate (σ1 on c_schw) lives entirely on the BACL lattice. A genuine G must live in a quantity that is **provably not** on the M lattice. Candidates worth considering, none yet preregistered:
+   - **Distributional structure of j_BACL across an ensemble of fixtures**: the integer-j sequence may carry route-fingerprint information even when the magnitude lies on the lattice. (This is the fingerprint-atlas barcode direction, applied to j-sequences.)
+   - **Off-lattice residue from non-BACL-conforming operations** elsewhere in a computation chain.
+   - **Cross-binade transitions** where ulp doubles, producing a different operational definition of the M lattice on either side.
+2. **A re-run of Gate 3 against the reformulated G**, with a new preregistry pre-measurement. The current preregistry is closed; it bound this specific operationalisation and produced HALT for it.
+3. **Reconsidered Gate 2 (C extraction).** Even with a reformulated G, Gate 2 remains the crux: C must be positively defined with a named mechanism. This gate is unaffected by the Gate 3 HALT and may be drafted independently of any G reformulation.
+
+### 7.A Standalone methodology finding — *c2-style cancellation residue is substrate-dominated by construction → poor flagship G probe*
+
+(Not a numerical result; a methodology finding recorded for citation.)
+
+The c2 lattice theorem (in-scope `f_float ≥ 2^(−1021)`) says: any algebraic chain whose subtractions satisfy the BACL hypothesis produces a residue captured exactly by the integer-ulp lattice of `f_float`. **BACL is precisely the law of cancellation residues.** Aiming a kill-switch's M-subtraction at a cancellation residue therefore aims it at the single most substrate-saturated observable available — the residue is *defined* to live on the M lattice for any algebraic chain that obeys the BACL provisos.
+
+This makes a c2-style residue the worst case for testing whether a candidate G observable carries information independent of M. The HALT outcome on this fixture is a structural consequence of the choice of observable, not a finding about the fixture-specific geometry. Routing through "let's pick a *different* c2-style residue" repeats the same error — every BACL-conformant cancellation residue inherits the HALT.
+
+**Discipline consequence for future kill-switch design.** A legitimate G-falsification test must:
+
+1. Choose an observable for which the substrate's prediction of *which integer-ulp lattice it lives on* is **non-trivial** (or not on any such lattice). c2-style residues fail this criterion by construction.
+
+2. State a **named mechanism** by which the proposed G observable would carry geometric content that *cannot* be captured by an M-style lattice subtraction. Without a named mechanism, the test is a fishing expedition and a HALT verdict is uninformative — there is no posterior update because there was no prior.
+
+3. Have at least one well-conditioned control fixture where the named mechanism predicts a specific σ-survival outcome, so the kill-switch is calibrated rather than absolute.
+
+(Per methodology lesson #2 from the prior arc: "When freezing a sub-result as open, name the mechanism that fails." The same discipline applies to kill-switch design: name the mechanism that would carry G, *before* drafting a preregistry. If the mechanism cannot be named, the kill-switch is not ready to be designed.)
+
+This finding is also a steelman / counter-steelman of the present audit: the present audit was honest pre-measurement (the preregistry was binding, the experiment was clean, the verdict is well-founded), and *at the same time* the choice of c2-style residue as the G probe was substrate-dominated by construction. Both can be true. The first does not retroactively justify the second. The next G-falsification attempt — should one ever be drafted — must satisfy the discipline above before any preregistry is written.
+
+### 7.B Out-of-bounds for this closeout
+
+This closeout does **not** propose a specific reformulated G observable. Per §6, the architecture's G term is artifact for this fixture. Any reformulation requires (per §7.A.2) a named mechanism, not enumerated by this audit. The list of three candidates in §7.1 is recorded as research direction only and is **explicitly not** a backlog for the next kill-switch — each candidate would need a named mechanism before becoming a real proposal.
+
+## 8. Out-of-scope items (per preregistry §8)
+
+Logged unchanged. No items in §8 of the preregistry were violated. Subnormal regime not reached (smallest `f_float ≈ 2^(−41)`, ulp ≈ `2^(−93)`, both far above the `2^(−1021)` c2 floor). Other rounding modes not exercised. Conical-singularity alternative fixture not used.
+
+## 9. Failure modes (per preregistry §9)
+
+| ID | Triggered | Notes |
+|---|---|---|
+| F_G3_1 | No | Positive control returned 0 in all 200 records |
+| F_G3_2 | No | c_schw is non-zero in 100 of 200 records — observable is present |
+| F_G3_3 | No | BACL coverage = 1.000 (no `scope_limited` flag set) |
+| F_G3_4 | No | sha256 byte-stable on rerun: `3de34557e8d37cbd4166b7aeceb612ccc5a2f89b88f3d0d06e9ef98827041738` (two independent runs identical) |
+| F_G3_5 | No | α_raw fit R² = 0.99936 (well above 0.95) |
+
+## 10. Closeout checklist
+
+- [x] 200 r-grid records emitted
+- [x] Aggregator computed (`aggregator` key in `artifact.json`)
+- [x] Decision rule applied verbatim from preregistry §3.1 (no post-hoc modification)
+- [x] VOID condition checked (no positive-control non-zero records → not VOID)
+- [x] BACL coverage fraction reported (= 1.000)
+- [x] EP_1–EP_6 audited explicitly (all PASS)
+- [x] Byte-stable rerun verified (sha256 identical)
+- [x] Verdict + verdict reasoning recorded
+- [x] HALT consequences and required reformulation documented (§6, §7)
+
+## 11. References
+
+- [`preregistry.md`](preregistry.md) — frozen pre-measurement specification (binding).
+- [`artifact.json`](artifact.json) — 200-record sweep + aggregator + EP audit.
+- [`scratch/mcg_gate_3_killswitch.py`](../../../scratch/mcg_gate_3_killswitch.py) — harness, byte-stable.
+- [`Docs/session_handoff_2026_05_19_mcg_gate_campaign_unified.md`](../../../../Docs/session_handoff_2026_05_19_mcg_gate_campaign_unified.md) §3 (Gate 3 acceptance), §4 (M-subtraction interpretations), §8 (session start checklist).
+- [`Lloyd_Engine_V4/Build_Docs/Reports/c2_lattice_sharpness_audit/closeout.md`](../c2_lattice_sharpness_audit/closeout.md) — c2 lattice theorem (in-scope `f_float ≥ 2^(−1021)`).
+- [`Lloyd_Engine_V4/Build_Docs/Reports/conjecture_c_proof_audit/closeout.md`](../conjecture_c_proof_audit/closeout.md) — Conjecture C (sqrt no-binade-drop).
+- [`Lloyd_Engine_V4/Build_Docs/Reports/bacl_invariant_audit/closeout.md`](../bacl_invariant_audit/closeout.md) — BACL primitive.
+- [`Lloyd_Engine_V4/Build_Docs/Reports/blowup_exponent_v4_audit/closeout.md`](../blowup_exponent_v4_audit/closeout.md) — σ1 = 1.000 baseline on a *different observable* (`|f(x_0 + δ)|`, not c2-residue) which Gate 3 does not refute.
+- IEEE 754-2019 §4.3.1 (RNE), §5.4.1 (correctly-rounded sqrt).

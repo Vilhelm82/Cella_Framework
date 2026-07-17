@@ -1,0 +1,43 @@
+{
+  "rank": 95,
+  "lift": 3.21,
+  "count": 2,
+  "families": 1,
+  "a": {
+    "id": "OBJ:rotating-ordered-horizon-field-h-j-k-j-sqrt-gamma-sqrt-delta",
+    "label": "Rotating ordered-horizon field H_J = K_J(sqrt(gamma),sqrt(delta_J))",
+    "standard_term": "multiquadratic Kummer extension parametrized by a transcendental J",
+    "nomenclature": "variant-of",
+    "symbols": [
+      "delta_j"
+    ]
+  },
+  "b": {
+    "id": "OBJ:v-4-wr-s-5-headline-theorem-closure-group-notation",
+    "label": "V_4 wr S_5 (headline-theorem closure-group notation)",
+    "standard_term": "Klein four-group wreath product, i.e. C_2^2 wr S_5 (V_4 is isomorphic to C_2 x C_2)",
+    "nomenclature": "identical-to",
+    "symbols": [
+      "s_5",
+      "v_4"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-1394",
+      "type": "theorem",
+      "claim_status": "proved",
+      "label": "Rotating three-channel template",
+      "summary": "For the augmented rotating cover, the anticipated three families are\n\n```text\nr_1=u,\nr_2=gamma,\nr_3=delta_J=gamma-4P-16J^2.\n```\n\nThe valuation types are expected to have the matrix\n\n```text\nB_rot = [1 0 0]     even signe",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/KUMMER_MODULE_WREATH_LIFT_THEOREM_2026-07-10.md"
+    },
+    {
+      "uid": "U-1371",
+      "type": "theorem",
+      "claim_status": "conjectured",
+      "label": "Predicted rank-15 rotating closure kernel and augmented wrea",
+      "summary": "The next closure problem is rotating: W_rot = span_F2 { [u_i], [gamma_i], [delta_{J,i}] : i=1,...,5 }. The private-prime argument for delta_J suggests dim_F2 W_rot = 15, which would give the augmented rotating closure ca",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/R9_STATIC_CLOSURE_OPENING_DERIVATION_2026-07-10.md"
+    }
+  ]
+}

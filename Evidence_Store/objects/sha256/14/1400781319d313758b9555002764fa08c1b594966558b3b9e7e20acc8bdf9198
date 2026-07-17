@@ -1,0 +1,967 @@
+{
+  "burden_gates": {
+    "gate_i_fixture_E_rejected_as_algebraic_branch": {
+      "evidence": "classification=non_algebraic_drift, algebraic_rejected=True, AIC winner=M_E_essential, BIC winner=M_E_essential",
+      "fixture": "E",
+      "met": true
+    },
+    "gate_ii_fixture_C_s_inf_isolated_from_bias": {
+      "evidence": "classification=algebraic_branch, s_inf_truth=1.25, s_inf_estimate=1.25, abs_error=0.0, B*f^rho (+B2*f^rho2) separated",
+      "fixture": "C",
+      "met": true,
+      "tolerance": 1e-06
+    }
+  },
+  "grid": {
+    "f_max": 0.25,
+    "f_min_binary64": 1.862645149230957e-09,
+    "f_min_hex": "3e20000000000000",
+    "n_scales": 28,
+    "ratio": 0.5
+  },
+  "harness": "phase2C_nested_window_harness.py",
+  "k_drift_gate": 2.0,
+  "results": [
+    {
+      "fixture_description": "Leading power law plus sub-leading power correction: s(f)=s_inf + B*f^rho + B2*f^rho2. Pure algebraic branch; s converges to s_inf as f->0 with a clean finite-window bias.",
+      "fixture_key": "C",
+      "fixture_name": "Fixture C (slow algebraic drift)",
+      "fixture_truth_kind": "algebraic",
+      "model_fits": {
+        "M_A_algebraic": {
+          "aic": -2040.2240279100524,
+          "bic": -2033.5630053591765,
+          "k_params": 5,
+          "n": 28,
+          "note": "s_inf + B*f^rho + B2*f^rho2 ; (rho<rho2) scanned on [0.05,3.0] step 0.05",
+          "params": {
+            "B": 0.4999999999999991,
+            "B2": 0.12500000000000444,
+            "rho": 0.5,
+            "rho2": 1.0,
+            "s_inf": 1.25
+          },
+          "rss": 4.437342591868191e-31
+        },
+        "M_E_essential": {
+          "aic": -162.88811152922003,
+          "bic": -160.22370250886962,
+          "k_params": 2,
+          "n": 28,
+          "note": "s_inf + D*log(f)*log(log(1/f))  (iterated-log)",
+          "params": {
+            "D": 0.0022591552593562657,
+            "s_inf": 1.344008434416401
+          },
+          "rss": 0.0722166112163762
+        },
+        "M_L_logarithmic": {
+          "aic": -166.68303367099085,
+          "bic": -164.01862465064045,
+          "k_params": 2,
+          "n": 28,
+          "note": "s_inf + C*log(f)",
+          "params": {
+            "C": 0.008089548633609764,
+            "s_inf": 1.3696266732386704
+          },
+          "rss": 0.06306318485847673
+        }
+      },
+      "observation_metadata": {
+        "backend": "numpy.linalg.lstsq",
+        "exact_reference": "mpmath.mpf dps=80",
+        "expression_path": "exact_mpf_generator -> binary64_realization -> lstsq_fits -> AIC/BIC",
+        "instrument_caveat": "numpy used as least-squares apparatus only; mpmath.mpf is the exact high-precision anchor; binary64 raw hex recorded per sample.",
+        "n_samples": 28,
+        "precision_tier": "binary64"
+      },
+      "payload": {
+        "algebraic_rejected_as_branch": false,
+        "classification": "algebraic_branch",
+        "delta_aic_over_runnerup": 1873.5409942390615,
+        "delta_bic_over_runnerup": 1869.544380708536,
+        "k_drift_gate": 2.0,
+        "nested_window_drift_ratio": 0.0596432995629153,
+        "nested_window_materiality": "immaterial",
+        "nested_window_slope_spread": 0.029914164541385402,
+        "nested_window_slope_variance": 0.00015782135035716975,
+        "nested_window_stability_status": "STABLE",
+        "nested_window_window_slopes": [
+          0.5299517414723998,
+          0.502801817188763,
+          0.5003004511500353,
+          0.5000375769310144
+        ],
+        "s_inf_abs_error": 0.0,
+        "s_inf_estimate": 1.25,
+        "s_inf_truth": 1.25,
+        "winning_ic_model_aic": "M_A_algebraic",
+        "winning_ic_model_bic": "M_A_algebraic"
+      },
+      "samples": [
+        {
+          "f_binary64": 0.25,
+          "f_hex": "3fd0000000000000",
+          "s_binary64": 1.53125,
+          "s_exact_mpf_str": "1.53125",
+          "s_hex": "3ff8800000000000",
+          "s_realization_abs_error": "0.0"
+        },
+        {
+          "f_binary64": 0.125,
+          "f_hex": "3fc0000000000000",
+          "s_binary64": 1.442401695296637,
+          "s_exact_mpf_str": "1.442401695296636881100211090526212259821",
+          "s_hex": "3ff71413cccfe77a",
+          "s_realization_abs_error": "9.53508e-17"
+        },
+        {
+          "f_binary64": 0.0625,
+          "f_hex": "3fb0000000000000",
+          "s_binary64": 1.3828125,
+          "s_exact_mpf_str": "1.3828125",
+          "s_hex": "3ff6200000000000",
+          "s_realization_abs_error": "0.0"
+        },
+        {
+          "f_binary64": 0.03125,
+          "f_hex": "3fa0000000000000",
+          "s_binary64": 1.3422945976483185,
+          "s_exact_mpf_str": "1.342294597648318440550105545263106129911",
+          "s_hex": "3ff57a09e667f3bd",
+          "s_realization_abs_error": "4.76754e-17"
+        },
+        {
+          "f_binary64": 0.015625,
+          "f_hex": "3f90000000000000",
+          "s_binary64": 1.314453125,
+          "s_exact_mpf_str": "1.314453125",
+          "s_hex": "3ff5080000000000",
+          "s_realization_abs_error": "0.0"
+        },
+        {
+          "f_binary64": 0.0078125,
+          "f_hex": "3f80000000000000",
+          "s_binary64": 1.2951707363241591,
+          "s_exact_mpf_str": "1.295170736324159220275052772631553064955",
+          "s_hex": "3ff4b904f333f9de",
+          "s_realization_abs_error": "8.71846e-17"
+        },
+        {
+          "f_binary64": 0.00390625,
+          "f_hex": "3f70000000000000",
+          "s_binary64": 1.28173828125,
+          "s_exact_mpf_str": "1.28173828125",
+          "s_hex": "3ff4820000000000",
+          "s_realization_abs_error": "0.0"
+        },
+        {
+          "f_binary64": 0.001953125,
+          "f_hex": "3f60000000000000",
+          "s_binary64": 1.2723412275370796,
+          "s_exact_mpf_str": "1.272341227537079610137526386315776532478",
+          "s_hex": "3ff45b827999fcef",
+          "s_realization_abs_error": "4.35923e-17"
+        },
+        {
+          "f_binary64": 0.0009765625,
+          "f_hex": "3f50000000000000",
+          "s_binary64": 1.2657470703125,
+          "s_exact_mpf_str": "1.2657470703125",
+          "s_hex": "3ff4408000000000",
+          "s_realization_abs_error": "0.0"
+        },
+        {
+          "f_binary64": 0.00048828125,
+          "f_hex": "3f40000000000000",
+          "s_binary64": 1.26110957861229,
+          "s_exact_mpf_str": "1.261109578612289805068763193157888266239",
+          "s_hex": "3ff42d813cccfe78",
+          "s_realization_abs_error": "8.92262e-17"
+        },
+        {
+          "f_binary64": 0.000244140625,
+          "f_hex": "3f30000000000000",
+          "s_binary64": 1.257843017578125,
+          "s_exact_mpf_str": "1.257843017578125",
+          "s_hex": "3ff4202000000000",
+          "s_realization_abs_error": "0.0"
+        },
+        {
+          "f_binary64": 0.0001220703125,
+          "f_hex": "3f20000000000000",
+          "s_binary64": 1.2555395305170824,
+          "s_exact_mpf_str": "1.255539530517082402534381596578944133119",
+          "s_hex": "3ff416b09e667f3c",
+          "s_realization_abs_error": "4.46131e-17"
+        },
+        {
+          "f_binary64": 6.103515625e-05,
+          "f_hex": "3f10000000000000",
+          "s_binary64": 1.2539138793945312,
+          "s_exact_mpf_str": "1.25391387939453125",
+          "s_hex": "3ff4100800000000",
+          "s_realization_abs_error": "0.0"
+        },
+        {
+          "f_binary64": 3.0517578125e-05,
+          "f_hex": "3f00000000000000",
+          "s_binary64": 1.2527659505612756,
+          "s_exact_mpf_str": "1.25276595056127557626719079828947206656",
+          "s_hex": "3ff40b544f333f9e",
+          "s_realization_abs_error": "2.23065e-17"
+        },
+        {
+          "f_binary64": 1.52587890625e-05,
+          "f_hex": "3ef0000000000000",
+          "s_binary64": 1.2519550323486328,
+          "s_exact_mpf_str": "1.2519550323486328125",
+          "s_hex": "3ff4080200000000",
+          "s_realization_abs_error": "0.0"
+        },
+        {
+          "f_binary64": 7.62939453125e-06,
+          "f_hex": "3ee0000000000000",
+          "s_binary64": 1.2513820216063214,
+          "s_exact_mpf_str": "1.25138202160632138188359539914473603328",
+          "s_hex": "3ff405a927999fcf",
+          "s_realization_abs_error": "1.11533e-17"
+        },
+        {
+          "f_binary64": 3.814697265625e-06,
+          "f_hex": "3ed0000000000000",
+          "s_binary64": 1.2509770393371582,
+          "s_exact_mpf_str": "1.250977039337158203125",
+          "s_hex": "3ff4040080000000",
+          "s_realization_abs_error": "0.0"
+        },
+        {
+          "f_binary64": 1.9073486328125e-06,
+          "f_hex": "3ec0000000000000",
+          "s_binary64": 1.2506907723845815,
+          "s_exact_mpf_str": "1.25069077238458158937929769957236801664",
+          "s_hex": "3ff402d453cccfe7",
+          "s_realization_abs_error": "1.05446e-16"
+        },
+        {
+          "f_binary64": 9.5367431640625e-07,
+          "f_hex": "3eb0000000000000",
+          "s_binary64": 1.2504884004592896,
+          "s_exact_mpf_str": "1.25048840045928955078125",
+          "s_hex": "3ff4020020000000",
+          "s_realization_abs_error": "0.0"
+        },
+        {
+          "f_binary64": 4.76837158203125e-07,
+          "f_hex": "3ea0000000000000",
+          "s_binary64": 1.250345326587646,
+          "s_exact_mpf_str": "1.25034532658764601929902384978618400832",
+          "s_hex": "3ff4016a19e667f4",
+          "s_realization_abs_error": "5.82995e-17"
+        },
+        {
+          "f_binary64": 2.384185791015625e-07,
+          "f_hex": "3e90000000000000",
+          "s_binary64": 1.2502441704273224,
+          "s_exact_mpf_str": "1.2502441704273223876953125",
+          "s_hex": "3ff4010008000000",
+          "s_realization_abs_error": "0.0"
+        },
+        {
+          "f_binary64": 1.1920928955078125e-07,
+          "f_hex": "3e80000000000000",
+          "s_binary64": 1.2501726483926618,
+          "s_exact_mpf_str": "1.25017264839266181580185567489309200416",
+          "s_hex": "3ff400b508f333fa",
+          "s_realization_abs_error": "2.91497e-17"
+        },
+        {
+          "f_binary64": 5.960464477539063e-08,
+          "f_hex": "3e70000000000000",
+          "s_binary64": 1.2501220777630806,
+          "s_exact_mpf_str": "1.250122077763080596923828125",
+          "s_hex": "3ff4008002000000",
+          "s_realization_abs_error": "0.0"
+        },
+        {
+          "f_binary64": 2.9802322387695312e-08,
+          "f_hex": "3e60000000000000",
+          "s_binary64": 1.2500863204710406,
+          "s_exact_mpf_str": "1.25008632047104060943901377494654600208",
+          "s_hex": "3ff4005a837999fd",
+          "s_realization_abs_error": "1.45749e-17"
+        },
+        {
+          "f_binary64": 1.4901161193847656e-08,
+          "f_hex": "3e50000000000000",
+          "s_binary64": 1.2500610370188951,
+          "s_exact_mpf_str": "1.25006103701889514923095703125",
+          "s_hex": "3ff4004000800000",
+          "s_realization_abs_error": "0.0"
+        },
+        {
+          "f_binary64": 7.450580596923828e-09,
+          "f_hex": "3e40000000000000",
+          "s_binary64": 1.2500431593041976,
+          "s_exact_mpf_str": "1.25004315930419773010402837184827300104",
+          "s_hex": "3ff4002d417cccfe",
+          "s_realization_abs_error": "1.03735e-16"
+        },
+        {
+          "f_binary64": 3.725290298461914e-09,
+          "f_hex": "3e30000000000000",
+          "s_binary64": 1.2500305180437863,
+          "s_exact_mpf_str": "1.2500305180437862873077392578125",
+          "s_hex": "3ff4002000200000",
+          "s_realization_abs_error": "0.0"
+        },
+        {
+          "f_binary64": 1.862645149230957e-09,
+          "f_hex": "3e20000000000000",
+          "s_binary64": 1.2500215794192682,
+          "s_exact_mpf_str": "1.25002157941926822139814455701788650052",
+          "s_hex": "3ff40016a0ae667f",
+          "s_realization_abs_error": "5.18674e-17"
+        }
+      ],
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "policy_accepted": true,
+        "selectable": true
+      },
+      "verdict_note": "AIC winner=M_A_algebraic (margin 1873.541), BIC winner=M_A_algebraic (margin 1869.544), nested-window=STABLE/immaterial -> algebraic_branch"
+    },
+    {
+      "fixture_description": "Single logarithm slow variation: s(f)=s_inf + C*log(f). Not algebraic: a forced power-law slope in log-log collapses toward zero rather than a fixed fractional exponent.",
+      "fixture_key": "D",
+      "fixture_name": "Fixture D (logarithmic divergence)",
+      "fixture_truth_kind": "logarithmic",
+      "model_fits": {
+        "M_A_algebraic": {
+          "aic": -180.43143593682314,
+          "bic": -173.7704133859471,
+          "k_params": 5,
+          "n": 28,
+          "note": "s_inf + B*f^rho + B2*f^rho2 ; (rho<rho2) scanned on [0.05,3.0] step 0.05",
+          "params": {
+            "B": -20.057596498871344,
+            "B2": 8.008780506931343,
+            "rho": 0.05,
+            "rho2": 0.1,
+            "s_inf": 12.974935980213328
+          },
+          "rss": 0.031150711221632328
+        },
+        "M_E_essential": {
+          "aic": -105.3718551246973,
+          "bic": -102.7074461043469,
+          "k_params": 2,
+          "n": 28,
+          "note": "s_inf + D*log(f)*log(log(1/f))  (iterated-log)",
+          "params": {
+            "D": -0.09105020729384888,
+            "s_inf": 1.5028124780802308
+          },
+          "rss": 0.5633054979653863
+        },
+        "M_L_logarithmic": {
+          "aic": -1891.5982443761982,
+          "bic": -1888.9338353558478,
+          "k_params": 2,
+          "n": 28,
+          "note": "s_inf + C*log(f)",
+          "params": {
+            "C": -0.2999999999999998,
+            "s_inf": 0.7500000000000003
+          },
+          "rss": 1.1103217240985741e-28
+        }
+      },
+      "observation_metadata": {
+        "backend": "numpy.linalg.lstsq",
+        "exact_reference": "mpmath.mpf dps=80",
+        "expression_path": "exact_mpf_generator -> binary64_realization -> lstsq_fits -> AIC/BIC",
+        "instrument_caveat": "numpy used as least-squares apparatus only; mpmath.mpf is the exact high-precision anchor; binary64 raw hex recorded per sample.",
+        "n_samples": 28,
+        "precision_tier": "binary64"
+      },
+      "payload": {
+        "algebraic_rejected_as_branch": false,
+        "classification": "non_algebraic_drift",
+        "delta_aic_over_runnerup": 1711.166808439375,
+        "delta_bic_over_runnerup": 1715.1634219699008,
+        "k_drift_gate": 2.0,
+        "nested_window_drift_ratio": 0.0,
+        "nested_window_materiality": "immaterial",
+        "nested_window_slope_spread": 0.0,
+        "nested_window_slope_variance": 0.0,
+        "nested_window_stability_status": "STABLE",
+        "nested_window_window_slopes": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "s_inf_abs_error": null,
+        "s_inf_estimate": null,
+        "s_inf_truth": 0.75,
+        "winning_ic_model_aic": "M_L_logarithmic",
+        "winning_ic_model_bic": "M_L_logarithmic"
+      },
+      "samples": [
+        {
+          "f_binary64": 0.25,
+          "f_hex": "3fd0000000000000",
+          "s_binary64": 1.1658883083359672,
+          "s_exact_mpf_str": "1.165888308335967170259380086641666178864",
+          "s_hex": "3ff2a77a7fb177c8",
+          "s_realization_abs_error": "6.80901e-17"
+        },
+        {
+          "f_binary64": 0.125,
+          "f_hex": "3fc0000000000000",
+          "s_binary64": 1.3738324625039509,
+          "s_exact_mpf_str": "1.373832462503950755389070129962499268296",
+          "s_hex": "3ff5fb37bf8a33ac",
+          "s_realization_abs_error": "1.02135e-16"
+        },
+        {
+          "f_binary64": 0.0625,
+          "f_hex": "3fb0000000000000",
+          "s_binary64": 1.5817766166719343,
+          "s_exact_mpf_str": "1.581776616671934340518760173283332357728",
+          "s_hex": "3ff94ef4ff62ef8f",
+          "s_realization_abs_error": "8.58645e-17"
+        },
+        {
+          "f_binary64": 0.03125,
+          "f_hex": "3fa0000000000000",
+          "s_binary64": 1.7897207708399179,
+          "s_exact_mpf_str": "1.78972077083991792564845021660416544716",
+          "s_hex": "3ffca2b23f3bab73",
+          "s_realization_abs_error": "5.18195e-17"
+        },
+        {
+          "f_binary64": 0.015625,
+          "f_hex": "3f90000000000000",
+          "s_binary64": 1.9976649250079015,
+          "s_exact_mpf_str": "1.997664925007901510778140259924998536592",
+          "s_hex": "3ffff66f7f146757",
+          "s_realization_abs_error": "1.77744e-17"
+        },
+        {
+          "f_binary64": 0.0078125,
+          "f_hex": "3f80000000000000",
+          "s_binary64": 2.205609079175885,
+          "s_exact_mpf_str": "2.205609079175885095907830303245831626024",
+          "s_hex": "4001a5165f76919d",
+          "s_realization_abs_error": "2.05774e-16"
+        },
+        {
+          "f_binary64": 0.00390625,
+          "f_hex": "3f70000000000000",
+          "s_binary64": 2.4135532333438685,
+          "s_exact_mpf_str": "2.413553233343868681037520346566664715456",
+          "s_hex": "40034ef4ff62ef8f",
+          "s_realization_abs_error": "1.71729e-16"
+        },
+        {
+          "f_binary64": 0.001953125,
+          "f_hex": "3f60000000000000",
+          "s_binary64": 2.621497387511852,
+          "s_exact_mpf_str": "2.621497387511852266167210389887497804888",
+          "s_hex": "4004f8d39f4f4d81",
+          "s_realization_abs_error": "1.37684e-16"
+        },
+        {
+          "f_binary64": 0.0009765625,
+          "f_hex": "3f50000000000000",
+          "s_binary64": 2.8294415416798357,
+          "s_exact_mpf_str": "2.82944154167983585129690043320833089432",
+          "s_hex": "4006a2b23f3bab73",
+          "s_realization_abs_error": "1.03639e-16"
+        },
+        {
+          "f_binary64": 0.00048828125,
+          "f_hex": "3f40000000000000",
+          "s_binary64": 3.0373856958478194,
+          "s_exact_mpf_str": "3.037385695847819436426590476529163983752",
+          "s_hex": "40084c90df280965",
+          "s_realization_abs_error": "6.95939e-17"
+        },
+        {
+          "f_binary64": 0.000244140625,
+          "f_hex": "3f30000000000000",
+          "s_binary64": 3.245329850015803,
+          "s_exact_mpf_str": "3.245329850015803021556280519849997073184",
+          "s_hex": "4009f66f7f146757",
+          "s_realization_abs_error": "3.55489e-17"
+        },
+        {
+          "f_binary64": 0.0001220703125,
+          "f_hex": "3f20000000000000",
+          "s_binary64": 3.4532740041837866,
+          "s_exact_mpf_str": "3.453274004183786606685970563170830162616",
+          "s_hex": "400ba04e1f00c549",
+          "s_realization_abs_error": "1.50382e-18"
+        },
+        {
+          "f_binary64": 6.103515625e-05,
+          "f_hex": "3f10000000000000",
+          "s_binary64": 3.6612181583517702,
+          "s_exact_mpf_str": "3.661218158351770191815660606491663252048",
+          "s_hex": "400d4a2cbeed233b",
+          "s_realization_abs_error": "3.25412e-17"
+        },
+        {
+          "f_binary64": 3.0517578125e-05,
+          "f_hex": "3f00000000000000",
+          "s_binary64": 3.869162312519754,
+          "s_exact_mpf_str": "3.86916231251975377694535064981249634148",
+          "s_hex": "400ef40b5ed9812d",
+          "s_realization_abs_error": "6.65862e-17"
+        },
+        {
+          "f_binary64": 1.52587890625e-05,
+          "f_hex": "3ef0000000000000",
+          "s_binary64": 4.077106466687737,
+          "s_exact_mpf_str": "4.077106466687737362075040693133329430912",
+          "s_hex": "40104ef4ff62ef8f",
+          "s_realization_abs_error": "3.43458e-16"
+        },
+        {
+          "f_binary64": 7.62939453125e-06,
+          "f_hex": "3ee0000000000000",
+          "s_binary64": 4.285050620855721,
+          "s_exact_mpf_str": "4.285050620855720947204730736454162520344",
+          "s_hex": "401123e44f591e88",
+          "s_realization_abs_error": "3.09413e-16"
+        },
+        {
+          "f_binary64": 3.814697265625e-06,
+          "f_hex": "3ed0000000000000",
+          "s_binary64": 4.492994775023704,
+          "s_exact_mpf_str": "4.492994775023704532334420779774995609776",
+          "s_hex": "4011f8d39f4f4d81",
+          "s_realization_abs_error": "2.75368e-16"
+        },
+        {
+          "f_binary64": 1.9073486328125e-06,
+          "f_hex": "3ec0000000000000",
+          "s_binary64": 4.700938929191688,
+          "s_exact_mpf_str": "4.700938929191688117464110823095828699208",
+          "s_hex": "4012cdc2ef457c7a",
+          "s_realization_abs_error": "2.41323e-16"
+        },
+        {
+          "f_binary64": 9.5367431640625e-07,
+          "f_hex": "3eb0000000000000",
+          "s_binary64": 4.9088830833596715,
+          "s_exact_mpf_str": "4.90888308335967170259380086641666178864",
+          "s_hex": "4013a2b23f3bab73",
+          "s_realization_abs_error": "2.07278e-16"
+        },
+        {
+          "f_binary64": 4.76837158203125e-07,
+          "f_hex": "3ea0000000000000",
+          "s_binary64": 5.116827237527655,
+          "s_exact_mpf_str": "5.116827237527655287723490909737494878072",
+          "s_hex": "401477a18f31da6c",
+          "s_realization_abs_error": "1.73233e-16"
+        },
+        {
+          "f_binary64": 2.384185791015625e-07,
+          "f_hex": "3e90000000000000",
+          "s_binary64": 5.324771391695639,
+          "s_exact_mpf_str": "5.324771391695638872853180953058327967504",
+          "s_hex": "40154c90df280965",
+          "s_realization_abs_error": "1.39188e-16"
+        },
+        {
+          "f_binary64": 1.1920928955078125e-07,
+          "f_hex": "3e80000000000000",
+          "s_binary64": 5.532715545863622,
+          "s_exact_mpf_str": "5.532715545863622457982870996379161056936",
+          "s_hex": "401621802f1e385e",
+          "s_realization_abs_error": "1.05143e-16"
+        },
+        {
+          "f_binary64": 5.960464477539063e-08,
+          "f_hex": "3e70000000000000",
+          "s_binary64": 5.740659700031606,
+          "s_exact_mpf_str": "5.740659700031606043112561039699994146368",
+          "s_hex": "4016f66f7f146757",
+          "s_realization_abs_error": "7.10977e-17"
+        },
+        {
+          "f_binary64": 2.9802322387695312e-08,
+          "f_hex": "3e60000000000000",
+          "s_binary64": 5.94860385419959,
+          "s_exact_mpf_str": "5.9486038541995896282422510830208272358",
+          "s_hex": "4017cb5ecf0a9650",
+          "s_realization_abs_error": "3.70527e-17"
+        },
+        {
+          "f_binary64": 1.4901161193847656e-08,
+          "f_hex": "3e50000000000000",
+          "s_binary64": 6.156548008367573,
+          "s_exact_mpf_str": "6.156548008367573213371941126341660325232",
+          "s_hex": "4018a04e1f00c549",
+          "s_realization_abs_error": "3.00764e-18"
+        },
+        {
+          "f_binary64": 7.450580596923828e-09,
+          "f_hex": "3e40000000000000",
+          "s_binary64": 6.364492162535557,
+          "s_exact_mpf_str": "6.364492162535556798501631169662493414664",
+          "s_hex": "4019753d6ef6f442",
+          "s_realization_abs_error": "3.10374e-17"
+        },
+        {
+          "f_binary64": 3.725290298461914e-09,
+          "f_hex": "3e30000000000000",
+          "s_binary64": 6.5724363167035404,
+          "s_exact_mpf_str": "6.572436316703540383631321212983326504096",
+          "s_hex": "401a4a2cbeed233b",
+          "s_realization_abs_error": "6.50824e-17"
+        },
+        {
+          "f_binary64": 1.862645149230957e-09,
+          "f_hex": "3e20000000000000",
+          "s_binary64": 6.780380470871524,
+          "s_exact_mpf_str": "6.780380470871523968761011256304159593528",
+          "s_hex": "401b1f1c0ee35234",
+          "s_realization_abs_error": "9.91274e-17"
+        }
+      ],
+      "validity": {
+        "advanceable": false,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "policy_accepted": true,
+        "selectable": true
+      },
+      "verdict_note": "AIC winner=M_L_logarithmic (margin 1711.167), BIC winner=M_L_logarithmic (margin 1715.163), nested-window=STABLE/immaterial -> non_algebraic_drift"
+    },
+    {
+      "fixture_description": "Compounded-log drift s(f)=s_inf + D*log(f)*log(log(1/f)). The x*log(x)-style case a single forced power law misreads as a stable fractional alpha (~0.90). Must be REJECTED as an algebraic branch.",
+      "fixture_key": "E",
+      "fixture_name": "Fixture E (iterated-log / essential drift)",
+      "fixture_truth_kind": "iterated_log",
+      "model_fits": {
+        "M_A_algebraic": {
+          "aic": -142.2524553462476,
+          "bic": -135.59143279537156,
+          "k_params": 5,
+          "n": 28,
+          "note": "s_inf + B*f^rho + B2*f^rho2 ; (rho<rho2) scanned on [0.05,3.0] step 0.05",
+          "params": {
+            "B": -44.10172913210115,
+            "B2": 22.117079931187845,
+            "rho": 0.05,
+            "rho2": 0.1,
+            "s_inf": 24.07013948961686
+          },
+          "rss": 0.12179899429474718
+        },
+        "M_E_essential": {
+          "aic": -1891.3014218085723,
+          "bic": -1888.637012788222,
+          "k_params": 2,
+          "n": 28,
+          "note": "s_inf + D*log(f)*log(log(1/f))  (iterated-log)",
+          "params": {
+            "D": -0.15000000000000008,
+            "s_inf": 1.999999999999999
+          },
+          "rss": 1.1221546376768893e-28
+        },
+        "M_L_logarithmic": {
+          "aic": -77.61566482297613,
+          "bic": -74.95125580262572,
+          "k_params": 2,
+          "n": 28,
+          "note": "s_inf + C*log(f)",
+          "params": {
+            "C": -0.4907087498058037,
+            "s_inf": 0.7976463284414861
+          },
+          "rss": 1.5179478711851588
+        }
+      },
+      "observation_metadata": {
+        "backend": "numpy.linalg.lstsq",
+        "exact_reference": "mpmath.mpf dps=80",
+        "expression_path": "exact_mpf_generator -> binary64_realization -> lstsq_fits -> AIC/BIC",
+        "instrument_caveat": "numpy used as least-squares apparatus only; mpmath.mpf is the exact high-precision anchor; binary64 raw hex recorded per sample.",
+        "n_samples": 28,
+        "precision_tier": "binary64"
+      },
+      "payload": {
+        "algebraic_rejected_as_branch": true,
+        "classification": "non_algebraic_drift",
+        "delta_aic_over_runnerup": 1749.0489664623246,
+        "delta_bic_over_runnerup": 1753.0455799928504,
+        "k_drift_gate": 2.0,
+        "nested_window_drift_ratio": 3.0816920955980756,
+        "nested_window_materiality": "material",
+        "nested_window_slope_spread": 0.08521630250424356,
+        "nested_window_slope_variance": 0.0011516116839076222,
+        "nested_window_stability_status": "UNSTABLE",
+        "nested_window_window_slopes": [
+          -0.09984034517041451,
+          -0.034743832483382524,
+          -0.02056104539586278,
+          -0.014624042666170962
+        ],
+        "s_inf_abs_error": null,
+        "s_inf_estimate": null,
+        "s_inf_truth": 2.0,
+        "winning_ic_model_aic": "M_E_essential",
+        "winning_ic_model_bic": "M_E_essential"
+      },
+      "samples": [
+        {
+          "f_binary64": 0.25,
+          "f_hex": "3fd0000000000000",
+          "s_binary64": 2.0679216849134687,
+          "s_exact_mpf_str": "2.067921684913468891277788431171411746407",
+          "s_hex": "40008b1a863b23f9",
+          "s_realization_abs_error": "1.64004e-16"
+        },
+        {
+          "f_binary64": 0.125,
+          "f_hex": "3fc0000000000000",
+          "s_binary64": 2.2283536757954767,
+          "s_exact_mpf_str": "2.228353675795476735029219034735740434588",
+          "s_hex": "4001d3ab178bb424",
+          "s_realization_abs_error": "1.67937e-17"
+        },
+        {
+          "f_binary64": 0.0625,
+          "f_hex": "3fb0000000000000",
+          "s_binary64": 2.4241151781778587,
+          "s_exact_mpf_str": "2.424115178177858626687638412088062108807",
+          "s_hex": "400364967fa016c4",
+          "s_realization_abs_error": "8.26309e-17"
+        },
+        {
+          "f_binary64": 0.03125,
+          "f_hex": "3fa0000000000000",
+          "s_binary64": 2.6461474653125068,
+          "s_exact_mpf_str": "2.646147465312506757333799933412910660543",
+          "s_hex": "40052b4f5cbf48ba",
+          "s_realization_abs_error": "1.73035e-17"
+        },
+        {
+          "f_binary64": 0.015625,
+          "f_hex": "3f90000000000000",
+          "s_binary64": 2.889115064117335,
+          "s_exact_mpf_str": "2.889115064117334736256530394089338793167",
+          "s_hex": "40071ce85bd61e82",
+          "s_realization_abs_error": "1.38282e-16"
+        },
+        {
+          "f_binary64": 0.0078125,
+          "f_hex": "3f80000000000000",
+          "s_binary64": 3.1494924726957367,
+          "s_exact_mpf_str": "3.149492472695736598888883120287121326909",
+          "s_hex": "400932291c09cf97",
+          "s_realization_abs_error": "1.34468e-16"
+        },
+        {
+          "f_binary64": 0.00390625,
+          "f_hex": "3f70000000000000",
+          "s_binary64": 3.424773973057559,
+          "s_exact_mpf_str": "3.424773973057558941639399923666601449601",
+          "s_hex": "400b65efe593cb2a",
+          "s_realization_abs_error": "9.83614e-17"
+        },
+        {
+          "f_binary64": 0.001953125,
+          "f_hex": "3f60000000000000",
+          "s_binary64": 3.713086041451822,
+          "s_exact_mpf_str": "3.713086041451822298722404755069876634685",
+          "s_hex": "400db466745a284c",
+          "s_realization_abs_error": "2.15163e-16"
+        },
+        {
+          "f_binary64": 0.0009765625,
+          "f_hex": "3f50000000000000",
+          "s_binary64": 4.012974451502315,
+          "s_exact_mpf_str": "4.01297445150231562499775374118891786107",
+          "s_hex": "40100d492cb38b3f",
+          "s_realization_abs_error": "2.71063e-16"
+        },
+        {
+          "f_binary64": 0.00048828125,
+          "f_hex": "3f40000000000000",
+          "s_binary64": 4.3232774676290955,
+          "s_exact_mpf_str": "4.323277467629095390959945548448483751334",
+          "s_hex": "40114b093f9c00ae",
+          "s_realization_abs_error": "9.19883e-17"
+        },
+        {
+          "f_binary64": 0.000244140625,
+          "f_hex": "3f30000000000000",
+          "s_binary64": 4.643045553287432,
+          "s_exact_mpf_str": "4.643045553287432004909245437414393434315",
+          "s_hex": "4012927a8894d4bb",
+          "s_realization_abs_error": "2.67876e-16"
+        },
+        {
+          "f_binary64": 0.0001220703125,
+          "f_hex": "3f20000000000000",
+          "s_binary64": 4.971488034833895,
+          "s_exact_mpf_str": "4.971488034833894563473234026857217082267",
+          "s_hex": "4013e2cdc268447e",
+          "s_realization_abs_error": "2.23384e-16"
+        },
+        {
+          "f_binary64": 6.103515625e-05,
+          "f_hex": "3f10000000000000",
+          "s_binary64": 5.3079362746196965,
+          "s_exact_mpf_str": "5.307936274619696152239981664682577809796",
+          "s_hex": "40153b53a592f985",
+          "s_realization_abs_error": "3.73905e-16"
+        },
+        {
+          "f_binary64": 3.0517578125e-05,
+          "f_hex": "3f00000000000000",
+          "s_binary64": 5.6518174193798405,
+          "s_exact_mpf_str": "5.651817419379840428059312551676490866496",
+          "s_hex": "40169b76068ccc52",
+          "s_realization_abs_error": "7.33329e-17"
+        },
+        {
+          "f_binary64": 1.52587890625e-05,
+          "f_hex": "3ef0000000000000",
+          "s_binary64": 6.002635179518801,
+          "s_exact_mpf_str": "6.002635179518801259807046046314157363177",
+          "s_hex": "401802b2cbe768cc",
+          "s_realization_abs_error": "6.29219e-17"
+        },
+        {
+          "f_binary64": 7.62939453125e-06,
+          "f_hex": "3ee0000000000000",
+          "s_binary64": 6.359955431734392,
+          "s_exact_mpf_str": "6.359955431734391976174417581295739954971",
+          "s_hex": "40197098281d4460",
+          "s_realization_abs_error": "3.80719e-16"
+        },
+        {
+          "f_binary64": 3.814697265625e-06,
+          "f_hex": "3ed0000000000000",
+          "s_binary64": 6.7233952204827885,
+          "s_exact_mpf_str": "6.723395220482788396039086483993327041341",
+          "s_hex": "401ae4c1b77839a3",
+          "s_realization_abs_error": "8.52808e-17"
+        },
+        {
+          "f_binary64": 1.9073486328125e-06,
+          "f_hex": "3ec0000000000000",
+          "s_binary64": 7.092614210720142,
+          "s_exact_mpf_str": "7.092614210720142231869046420649897698435",
+          "s_hex": "401c5ed64278c05f",
+          "s_realization_abs_error": "2.55673e-16"
+        },
+        {
+          "f_binary64": 9.5367431640625e-07,
+          "f_hex": "3eb0000000000000",
+          "s_binary64": 7.467307944759235,
+          "s_exact_mpf_str": "7.467307944759235470655815231104028802109",
+          "s_hex": "401dde85f94f9b89",
+          "s_realization_abs_error": "2.65288e-16"
+        },
+        {
+          "f_binary64": 4.76837158203125e-07,
+          "f_hex": "3ea0000000000000",
+          "s_binary64": 7.847202450906458,
+          "s_exact_mpf_str": "7.847202450906458015147727212874226419541",
+          "s_hex": "401f63890a0eefe8",
+          "s_realization_abs_error": "1.66942e-16"
+        },
+        {
+          "f_binary64": 2.384185791015625e-07,
+          "f_hex": "3e90000000000000",
+          "s_binary64": 8.232049881188255,
+          "s_exact_mpf_str": "8.232049881188255424646229620495779890633",
+          "s_hex": "402076cf3df57d0d",
+          "s_realization_abs_error": "6.66133e-16"
+        },
+        {
+          "f_binary64": 1.1920928955078125e-07,
+          "f_hex": "3e80000000000000",
+          "s_binary64": 8.621624943732005,
+          "s_exact_mpf_str": "8.621624943732004429237816786295159732179",
+          "s_hex": "40213e459fe769e2",
+          "s_realization_abs_error": "7.34828e-16"
+        },
+        {
+          "f_binary64": 5.960464477539063e-08,
+          "f_hex": "3e70000000000000",
+          "s_binary64": 9.01572195668039,
+          "s_exact_mpf_str": "9.015721956680389074610860173300218564592",
+          "s_hex": "4022080cb5538af5",
+          "s_realization_abs_error": "1.51724e-16"
+        },
+        {
+          "f_binary64": 2.9802322387695312e-08,
+          "f_hex": "3e60000000000000",
+          "s_binary64": 9.414152393899961,
+          "s_exact_mpf_str": "9.414152393899961708191028630394201125307",
+          "s_hex": "4022d40bc856b88c",
+          "s_realization_abs_error": "5.39492e-16"
+        },
+        {
+          "f_binary64": 1.4901161193847656e-08,
+          "f_hex": "3e50000000000000",
+          "s_binary64": 9.816742823948774,
+          "s_exact_mpf_str": "9.816742823948774613804868127058485168494",
+          "s_hex": "4023a22c1d8c3491",
+          "s_realization_abs_error": "8.80882e-16"
+        },
+        {
+          "f_binary64": 7.450580596923828e-09,
+          "f_hex": "3e40000000000000",
+          "s_binary64": 10.223333166551644,
+          "s_exact_mpf_str": "10.22333316655164317707145721779759589682",
+          "s_hex": "40247258b98ce722",
+          "s_realization_abs_error": "6.3652e-16"
+        },
+        {
+          "f_binary64": 3.725290298461914e-09,
+          "f_hex": "3e30000000000000",
+          "s_binary64": 10.633775207695837,
+          "s_exact_mpf_str": "10.63377520769583821340439417758182593155",
+          "s_hex": "4025447e2f1c2372",
+          "s_realization_abs_error": "8.1861e-16"
+        },
+        {
+          "f_binary64": 1.862645149230957e-09,
+          "f_hex": "3e20000000000000",
+          "s_binary64": 11.0479313270999,
+          "s_exact_mpf_str": "11.04793132709989898528572003387146496488",
+          "s_hex": "4026188a7474b226",
+          "s_realization_abs_error": "3.49313e-16"
+        }
+      ],
+      "validity": {
+        "advanceable": false,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "policy_accepted": true,
+        "selectable": true
+      },
+      "verdict_note": "AIC winner=M_E_essential (margin 1749.049), BIC winner=M_E_essential (margin 1753.046), nested-window=UNSTABLE/material -> non_algebraic_drift"
+    }
+  ],
+  "summary": "3-model nested-window diagnostic (M_A algebraic / M_L logarithmic / M_E essential-iterated-log) ranked by AIC and BIC, with mirrored K_DRIFT=2.0 nested-window stability gate, applied to V4-native synthetic stress fixtures C/D/E.",
+  "task": "Phase 2 Task C -- Nested-Window Bias Harness (Task 023b fulfillment)"
+}

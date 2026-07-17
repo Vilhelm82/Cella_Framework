@@ -1,0 +1,21 @@
+# Form Generator v5 — Closeout (split family reached + basis cleaned)
+
+**Date:** 2026-06-05 · research-grade, eval-layer, PoC. Code: `scratch/form_generator_v5.py`.
+
+## What v5 added
+- **Detour filter:** reject forms containing a non-atom sub-expression that is a structural constant (e.g. `(R+1)−R = 1`). Collapses the gratuitous-`1` dressings.
+- **Split-routing building block** `fs = (1−c/2)−c/2` (algebraically `1−c`, but the split float path), so the operand assembly the catalogued F5+ live in is *reachable* (it was depth-4-deep otherwise).
+
+## Result
+- **Basis collapse:** members 221 → irreducible+detour-filtered 33 → **distinct 17** (v4 was 67). Much closer to minimal.
+- **Split-routing forms derived: 9.** The clean one:
+
+  **`F5_split = R² − fs`** — the split-routing analog of F1: same constraint, split operand assembly, **distinct float residual** (verified ≠ F1, integer lattice). This is the natural **compound-split-family** form, derived once `fs` was available as a building block.
+
+## Honest caveats (the real edges)
+1. **`fs` was injected, not derived.** The generator reached the split family because I gave it the split assembly as an atom. Deriving the split *assembly* `(1−c/2)−c/2` from primitive `½`/`÷2` ops is depth-4 — beyond the depth-3 enumeration. So this is "derive split-family forms *given* the split routing," not "derive the split routing from scratch." Honest bound.
+2. **Not confirmed == P_compound_split.** `R²−fs` is *a* split-routing form (the F1-with-split). Whether it matches the catalogued `P_compound_split`/`P_sign_c` (task029) needs the task029 residual signatures to compare — not done.
+3. **17 still isn't truly minimal.** Disguised rewrites survive — e.g. `((R+R)*R)−((R*R)+(1−c))` = `2R²−R²−(1−c)` = F1, which my R/c-divisibility + detour filters don't catch (it's `2R²−R²=R²`, an algebraic identity neither filter normalizes). **True minimality needs CAS-level algebraic canonicalization** (sympy), not point-evaluation filters.
+
+## Verdict
+Derive-don't-select now: enumerates → membership → algebraic irreducibility + detour filter → **17-form basis**, derives both direct (F1, c1/F2, `(R²+c)−1`) and **split-routing** (`R²−fs`) forms. The pipeline is real and reaches the split family. The remaining step to a *canonical minimal basis* is algebraic normalization (CAS), and to *confirm the named F5+* is a residual-signature match against task029.

@@ -1,0 +1,51 @@
+{
+  "rank": 2,
+  "lift": 138.38,
+  "count": 3,
+  "families": 2,
+  "a": {
+    "id": "OBJ:channel-isotropic-stratum-channel-isotropic-role-chart-unava",
+    "label": "Channel-isotropic stratum / CHANNEL_ISOTROPIC, ROLE_CHART_UNAVAILABLE tokens",
+    "standard_term": "named sentinel/token for the degeneracy locus where the invariant (fingerprint) map's rank drops or a chart fails to exist",
+    "nomenclature": "novel",
+    "symbols": [
+      "channel_isotropic",
+      "role_chart"
+    ]
+  },
+  "b": {
+    "id": "OBJ:role-singular-stratum-role-chart-unavailable-tokens",
+    "label": "Role-singular stratum / ROLE_CHART_UNAVAILABLE tokens",
+    "standard_term": "coordinate-chart failure locus where a jet-role denominator vanishes",
+    "nomenclature": "variant-of",
+    "symbols": [
+      "role_chart"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-0151",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Degeneration strata typing for RoleChSpec fingerprint",
+      "summary": "Degeneration strata now two, both witnessed: `ROLE_CHART_UNAVAILABLE` (a=0 / b=0) and `CHANNEL_ISOTROPIC` (Λ_ρ=0, rank drop).",
+      "path": "/home/wlloyd/Cella Framework/archive/pre-canon/LEVER_AUDIT.md"
+    },
+    {
+      "uid": "U-0561",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Refusal tokens for role-chart failure",
+      "summary": "Tokens such as `ROLE_CHART_UNAVAILABLE` and `CHANNEL_ISOTROPIC` are named and witnessed",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/DBP_RnD_Directions_Updated_With_Citations.md"
+    },
+    {
+      "uid": "U-1538",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Role-singular stratum / ROLE_CHART_UNAVAILABLE tokens",
+      "summary": "At order 2 for a local graph `P = f(D,S)` with jet `(a,b,A,B,C) = (f_D, f_S, f_DD, f_DS, f_SS)`, the active role transpositions use denominators `a` or `b`. Define: `ROLE_CHART_UNAVAILABLE_D : a = 0`, `ROLE_CHART_UNAVAIL",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/04_drafts_and_incomplete_papers/dbp_role_channel_and_orbit_geometry/Lead_C_Role_Singularity_Valuation_Theorem_Brief.md"
+    }
+  ]
+}

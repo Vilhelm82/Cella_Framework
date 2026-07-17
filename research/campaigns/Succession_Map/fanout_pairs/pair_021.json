@@ -1,0 +1,53 @@
+{
+  "rank": 21,
+  "lift": 41.0,
+  "count": 4,
+  "families": 2,
+  "a": {
+    "id": "OBJ:channel-barycentric-coordinates-r-c-r-s-r-int",
+    "label": "Channel barycentric coordinates R_c, R_s, R_int",
+    "standard_term": "normalized (barycentric-style) ratios of channel curvatures to total curvature",
+    "nomenclature": "novel",
+    "symbols": [
+      "r_c",
+      "r_int",
+      "r_s"
+    ]
+  },
+  "b": {
+    "id": "OBJ:decorated-sheet-field-h-k-sqrt-r-1-sqrt-r-s",
+    "label": "Decorated sheet field H = K(sqrt(r_1),...,sqrt(r_s))",
+    "standard_term": "multiquadratic Kummer extension of a base field K",
+    "nomenclature": "special-case-of",
+    "symbols": [
+      "r_1",
+      "r_s"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-0052",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Channel barycentric coordinates R_c,R_s,R_int",
+      "summary": "When K_G\\ne0, define the normalized channel barycentric coordinates R_c=\\frac{\\kappa_c}{K_G}, \\qquad R_s=\\frac{\\kappa_s}{K_G}, \\qquad R_{int}=\\frac{\\kappa_{int}}{K_G}.",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/Three_Channel_KG_New_Math_Extension.md"
+    },
+    {
+      "uid": "U-1217",
+      "type": "theorem",
+      "claim_status": "conjectured",
+      "label": "Self-confinement",
+      "summary": "**Self-confinement:** If rank(H_s) = r_s, then e_k(Ŝ_s) = 0 identically for all k > r_s.",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/geometric_fault_localization_and_decomposition/Dual Confinement.md"
+    },
+    {
+      "uid": "U-1313",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Decorated sheet field H",
+      "summary": "Define the decorated sheet field\n\n```text\nH = K(sqrt(r_1),...,sqrt(r_s))                (1.2)\n```",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/KUMMER_MODULE_WREATH_LIFT_THEOREM_2026-07-10.md"
+    }
+  ]
+}

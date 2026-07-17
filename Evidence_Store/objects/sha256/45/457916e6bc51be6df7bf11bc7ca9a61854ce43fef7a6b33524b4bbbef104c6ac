@@ -1,0 +1,27 @@
+# Obs 2 (fractal / self-similar residuals) — Characterised — Closeout
+
+**Date:** 2026-06-05 · **Status:** CHARACTERISED (R6 closed). Eval-layer evidence; ties to PROVEN BACL (HR72) / Obs 3.
+**Origin:** `where_i_got_stuck.md` Observation 2 — the founding gut observation ("the residuals... looked structured and self-similar in a way that random rounding error does not... the thing that made me keep going"). The only one of the seven original observations that was never operationalised (TASKS_TO_REVISIT R6).
+**Evidence:** the user's original report `schwarzschild_residual_overlay.html` (135-pt Schwarzschild grid r_e ∈ [2.005, 10]), residuals **recomputed exactly** in float64 (the HTML's displayed `sq` values are 4-sig-fig chart roundings; the recomputation uses exact float64 + Fraction).
+
+## Finding
+
+The squared-form residual `F1 = R² − f` (f = 1 − 2M/r_e, R = round(√f)) on the original grid:
+- **Every nonzero residual is an exact integer multiple of ulp(f)** — 66/66 on the BACL lattice, **j ∈ {−1, +1}** only (the residual is always ±1 ulp).
+- **9 distinct magnitude levels, every consecutive ratio exactly 2.0**, spanning **2⁻⁶¹ … 2⁻⁵³** (½-ULP-near-horizon up to ½ε). A perfect doubling ladder — the report's own "IEEE 754 Quantization Ladder".
+- The sqrt form is identically zero (F3 silence / Obs 4).
+
+## Characterisation
+
+**Obs 2 = the BACL ulp doubling ladder, viewed across binades.** The residual unit cell is the *same* `{−1, 0, +1}·ulp(f)` at every point; `ulp(f)` **doubles binade-to-binade** as f leaves the horizon. So the sweep shows ~9 octaves of one self-similar cell, each octave a 2× scaled copy of the previous. That is genuine **scale-invariance** — structured, not random — which is exactly the founding impression.
+
+**Obs 2 and Obs 3 are the same phenomenon:** Obs 3 (the doubling ladder) is the *mechanism* (BACL, proven HR72, now regression-tested 2026-06-05); Obs 2 is its *visual self-similar signature*. The founding gut was reading the lattice correctly.
+
+## Scope (honest bounds)
+
+- **Self-similar over a finite band** (~9 octaves, ½-ULP-near-horizon to ½ε), via binade-doubling. This is *scale-invariance of a discrete lattice*, **not a strict fractal** — there is no non-trivial fractal dimension and no structure at *all* scales: below the ulp there is nothing (W(k) / the noise floor erases sub-ulp content).
+- The signature is M (substrate-mandated lattice). It carries no separate geometric (G) content — consistent with this session's G forward-decomposition (`Reports/g_forward_decomposition/`).
+
+## Verdict
+
+Obs 2 is **characterised, not retired**: the founding self-similarity observation is the BACL binade-doubling ulp ladder (= Obs 3), validated on the original data, scoped as finite-band scale-invariance rather than strict fractality. The last unaccounted-for original observation is now closed.

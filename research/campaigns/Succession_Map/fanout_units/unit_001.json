@@ -1,0 +1,96 @@
+{
+  "seq": 1,
+  "uid": "U-1012",
+  "type": "formula",
+  "claim_status": null,
+  "label": "F_epsilon(b/u) under the complementary substitution",
+  "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md",
+  "already_linked_objects": [
+    {
+      "id": "OBJ:bar-m-epsilon",
+      "label": "bar m_epsilon"
+    },
+    {
+      "id": "OBJ:c-epsilon",
+      "label": "c_epsilon"
+    },
+    {
+      "id": "OBJ:c-epsilon-genus-1-curve",
+      "label": "C_epsilon (genus-1 curve)"
+    },
+    {
+      "id": "OBJ:f-epsilon",
+      "label": "f_epsilon"
+    },
+    {
+      "id": "OBJ:f-epsilon-x",
+      "label": "F_epsilon(x)"
+    },
+    {
+      "id": "OBJ:m-epsilon-n-epsilon-a-epsilon-b-epsilon",
+      "label": "m_epsilon, n_epsilon, A_epsilon, B_epsilon"
+    },
+    {
+      "id": "OBJ:u-a-epsilon-b-weierstrass-model-coordinates",
+      "label": "u, a_epsilon, b (Weierstrass-model coordinates)"
+    }
+  ],
+  "priority_candidate_pairs": [
+    {
+      "a": "OBJ:c-epsilon",
+      "b": "OBJ:c-epsilon-genus-1-curve",
+      "la": "c_epsilon",
+      "lb": "C_epsilon (genus-1 curve)",
+      "lift": 123.0
+    },
+    {
+      "a": "OBJ:c-epsilon",
+      "b": "OBJ:m-epsilon-n-epsilon-a-epsilon-b-epsilon",
+      "la": "c_epsilon",
+      "lb": "m_epsilon, n_epsilon, A_epsilon, B_epsilon",
+      "lift": 27.95
+    },
+    {
+      "a": "OBJ:c-epsilon-genus-1-curve",
+      "b": "OBJ:m-epsilon-n-epsilon-a-epsilon-b-epsilon",
+      "la": "C_epsilon (genus-1 curve)",
+      "lb": "m_epsilon, n_epsilon, A_epsilon, B_epsilon",
+      "lift": 27.95
+    },
+    {
+      "a": "OBJ:f-epsilon",
+      "b": "OBJ:m-epsilon-n-epsilon-a-epsilon-b-epsilon",
+      "la": "f_epsilon",
+      "lb": "m_epsilon, n_epsilon, A_epsilon, B_epsilon",
+      "lift": 18.06
+    },
+    {
+      "a": "OBJ:f-epsilon",
+      "b": "OBJ:u-a-epsilon-b-weierstrass-model-coordinates",
+      "la": "f_epsilon",
+      "lb": "u, a_epsilon, b (Weierstrass-model coordinates)",
+      "lift": 21.83
+    },
+    {
+      "a": "OBJ:f-epsilon-x",
+      "b": "OBJ:u-a-epsilon-b-weierstrass-model-coordinates",
+      "la": "F_epsilon(x)",
+      "lb": "u, a_epsilon, b (Weierstrass-model coordinates)",
+      "lift": 21.83
+    },
+    {
+      "a": "OBJ:bar-m-epsilon",
+      "b": "OBJ:f-epsilon",
+      "la": "bar m_epsilon",
+      "lb": "f_epsilon",
+      "lift": 22.08
+    },
+    {
+      "a": "OBJ:bar-m-epsilon",
+      "b": "OBJ:f-epsilon-x",
+      "la": "bar m_epsilon",
+      "lb": "F_epsilon(x)",
+      "lift": 22.08
+    }
+  ]
+}

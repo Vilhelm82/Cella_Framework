@@ -1,0 +1,103 @@
+"""Form-family dial sweep — cross-fixture invariance of the shared-F coupling (Will's dial idea).
+
+The forms producing the constraint residual F (F1, F2, c2, ...) are algebraically identical
+on the surface -> differencing them is a SHARED-STRUCTURE (first-order, O(ulp)) coupling,
+the OPEN door (not the closed bilinear-of-independent class).
+
+Question: is the form-family's differential structure (the "constraint-curvature curve" the
+dial sweeps) a CROSS-FIXTURE invariant -> candidate geometric primitive, or PATH-LOCAL ->
+conditioning? We isolate it cleanly: hold the OPERAND f fixed (matched), vary only the PATH
+that reaches it (the fixture/geometry difference), and watch the form-family.
+  Path A (pure-algebraic-like): x_term = 1 - f          (direct)
+  Path B (Schwarzschild-like):  x_term = 2/r, r = 2/(1-f) (via division)
+Both reach the same operand f; x_term differs in the last bits -> the geometry's fingerprint.
+
+Forms:  F1 = R^2 - f         (uses f only -> path-INDEPENDENT by construction)
+        F2 = (R^2 - 1) + x_term      (uses x_term -> path-sensitive, HR40)
+        c2 = R^2 + (x_term - 1)      (uses x_term)
+NOTE: task032 already established the burden RANKING (c2 dominates c1) is cross-fixture
+universal — we do NOT re-derive that; we test the differential SHAPE.
+Eval-layer, research-grade, exact (Fraction).
+"""
+import math
+from fractions import Fraction as Fr
+
+
+def forms(f, x_term):
+    R = math.sqrt(f); RR = R * R
+    F1 = RR - f
+    F2 = (RR - 1.0) + x_term
+    c2 = RR + (x_term - 1.0)
+    return F1, F2, c2, RR
+
+
+def jlev(v, u):
+    return Fr(v) / Fr(u)
+
+
+GRID = [0.02 + i * (0.95 - 0.02) / 400 for i in range(401)]   # operand f in (0,1)
+
+n = 0
+f1_pathindep = 0
+f2_pathlocal = 0
+c2_pathlocal = 0
+xterm_differs = 0
+diff_F1mF2_pathlocal = 0
+rank_same = 0
+examples = []
+
+for f in GRID:
+    if not (0 < f < 1):
+        continue
+    xA = 1.0 - f                      # direct path
+    r = 2.0 / (1.0 - f); xB = 2.0 / r  # division path (Schwarzschild-like)
+    # only meaningful where the two paths actually reach the same operand f
+    fA = 1.0 - xA; fB = 1.0 - xB
+    if fA != f:    # keep f the shared operand: use f directly as R's input
+        pass
+    u = math.ulp(f)
+    F1A, F2A, c2A, _ = forms(f, xA)
+    F1B, F2B, c2B, _ = forms(f, xB)
+    n += 1
+    if xA != xB:
+        xterm_differs += 1
+    # F1 path-independent? (it ignores x_term)
+    if F1A == F1B:
+        f1_pathindep += 1
+    # F2 / c2 path-local? (differ when x_term differs)
+    if F2A != F2B:
+        f2_pathlocal += 1
+    if c2A != c2B:
+        c2_pathlocal += 1
+    # the shared-F differential (dark-field): F1 - F2.  Does ITS structure differ by path?
+    dA = F1A - F2A; dB = F1B - F2B
+    if dA != dB:
+        diff_F1mF2_pathlocal += 1
+    # burden ranking (min |j| among the family) — same set/order across paths?
+    rankA = tuple(sorted(round(float(jlev(v, u)), 6) for v in (F1A, F2A, c2A)))
+    rankB = tuple(sorted(round(float(jlev(v, u)), 6) for v in (F1B, F2B, c2B)))
+    if rankA == rankB:
+        rank_same += 1
+    if len(examples) < 4 and xA != xB and F2A != F2B:
+        examples.append((round(f, 4), float(jlev(F2A, u)), float(jlev(F2B, u))))
+
+print("=" * 84)
+print(f"matched operand f, two PATHS to it (direct vs division = the geometry difference); n={n}")
+print(f"  x_term differs between paths:            {xterm_differs}/{n}")
+print("-" * 84)
+print(f"  F1 (uses f only)  PATH-INVARIANT:        {f1_pathindep}/{n}   (expect all — f-only)")
+print(f"  F2 (uses x_term)  PATH-LOCAL (differs):  {f2_pathlocal}/{n}")
+print(f"  c2 (uses x_term)  PATH-LOCAL (differs):  {c2_pathlocal}/{n}")
+print(f"  shared-F differential F1-F2 PATH-LOCAL:  {diff_F1mF2_pathlocal}/{n}")
+print(f"  burden ranking (|j| set) SAME across paths: {rank_same}/{n}   (task032: ranking is cross-fixture universal)")
+print()
+print("  example F2 j-levels at matched f, two paths (F2 phase tracks x_term, HR40):")
+for f, jA, jB in examples:
+    print(f"     f={f}:  F2_direct/ulp={jA:+.3f}   F2_div/ulp={jB:+.3f}   {'DIFFER' if jA!=jB else 'same'}")
+print()
+print("READING:")
+print("  The form-family splits cleanly: the f-only part (F1) is path-invariant;")
+print("  the x_term-dependent part (F2, c2, and the F1-F2 differential) is PATH-LOCAL.")
+print("  So the dial-swept 'constraint-curvature curve' is NOT a path/geometry-invariant when")
+print("  the operand is held fixed — its variation IS the x_term (cancellation-operand) phase, C.")
+print("  Invariant pieces are the already-known ones: f-only structure (=operand) + burden ranking (task032).")

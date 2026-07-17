@@ -1,0 +1,364 @@
+{
+  "all_predictions_pass": true,
+  "campaign_id": "three_channel_kg",
+  "cycle_id": "c001",
+  "date": "2026-06-23",
+  "defect_chain_count": 0,
+  "halt_reason": null,
+  "no_substrate_promotion": "eval-tier only; nothing canonical until Will signs off",
+  "predictions_passing": 10,
+  "predictions_total": 10,
+  "prereg_pin": "6602b9e9511bc40d9ef6d8f08928dadd628e9c9b671f334ff4027a79461a467d",
+  "records_byte_stable_two_runs": true,
+  "records_sha256": "b26a3eb9ee6bbef2d732592b2d603643ec9194374ae9273655c47c44b4e0c1f2",
+  "stage": "stage_b",
+  "stage_title": "non-negativity impossibility (fan-out; parallel with C/D/E)",
+  "status_moves_proposed": {
+    "CL-c3": {
+      "all_gates_pass": true,
+      "disposition": "R1 logic-forced (impossibility/existence): a verified finite exact-Q negative witness (K_G(F8)=-3/49<0) refutes every non-negative representor; positive witness F6(+1) confirms two-signedness. K1 silent on true object, fired by all sign-blind proxies.",
+      "from": "NOT_YET_PROBED",
+      "gating_predictions": [
+        "P1_K1_sign_blindness_F8",
+        "P2_K1_proxies_all_fire_F8",
+        "P3_CLc3_nonneg_impossible_witness",
+        "P7_both_sign_witnesses_present"
+      ],
+      "move_to": "DEMONSTRATED",
+      "warrant_label": "[PROVEN]"
+    },
+    "CL-c3b": {
+      "all_gates_pass": true,
+      "disposition": "R1 UNIVERSAL: the symbolic identity over Q[g,H] is established (det(H_b) indefinite; K_G(t)=+t nonconstant on a regular family, both signs), NOT downgraded to finite-only; q^2>0 regular-jet premise underwritten by K11 refusal.",
+      "from": "NOT_YET_PROBED",
+      "gating_predictions": [
+        "P4_CLc3b_symbolic_indefinite_universal",
+        "P8_K11_singular_refusal"
+      ],
+      "move_to": "DEMONSTRATED",
+      "warrant_label": "[PROVEN]"
+    },
+    "CL-c3c-i": {
+      "all_gates_pass": true,
+      "disposition": "exact-Q linear algebra: Sigma=[[1,1,1]] rank 1 => nullity 2 (rank-nullity); (1,-1,0),(1,0,-1) independent kernel vectors.",
+      "from": "NOT_YET_PROBED",
+      "gating_predictions": [
+        "P5_CLc3c_i_sigma_kernel_2dim"
+      ],
+      "move_to": "DEMONSTRATED",
+      "warrant_label": "[PROVEN]"
+    },
+    "CL-c6": {
+      "all_gates_pass": true,
+      "disposition": "finite both-sign witnesses on the family: F10 kappa_int=-1/9<0, F11 kappa_int=+2/9>0, agreeing across Path A/B'/C.",
+      "from": "NOT_YET_PROBED",
+      "gating_predictions": [
+        "P6_CLc6_kappa_int_both_signs",
+        "P7_both_sign_witnesses_present"
+      ],
+      "move_to": "DEMONSTRATED",
+      "warrant_label": null,
+      "warrant_scope": "frozen family (finite, exact Q), NOT a symbolic-over-Q[g,H] universal"
+    }
+  },
+  "suite_exit_0": true,
+  "verdicts": {
+    "P10_preconditions": {
+      "claims": [
+        "CL-c3",
+        "CL-c3b",
+        "CL-c3c-i",
+        "CL-c6"
+      ],
+      "expected": "oracle imports none of A/B/B'/fixtures and vice-versa; F6/F8/F10/F11 each carry a frame string",
+      "kills_relevant": [],
+      "pass": true,
+      "result": {
+        "P_frame": {
+          "missing_frame": [],
+          "ok": true
+        },
+        "P_self_cert": {
+          "ABBprime_imports_of_oracle": {
+            "probe": [],
+            "referee_channel": [],
+            "referee_total": []
+          },
+          "ok": true,
+          "oracle_imports_of_ABBprime_fixtures": []
+        }
+      },
+      "units": "boolean (import-graph disjointness; frame-present on every Stage-B channel fixture)"
+    },
+    "P1_K1_sign_blindness_F8": {
+      "claims": [
+        "CL-c3"
+      ],
+      "expected": "K_G<0 True; K_G==sum True; kappa_int present (=-3/49); Delta_m=12 not dropped => K1 does NOT fire on true object",
+      "kills_relevant": [
+        "K1"
+      ],
+      "pass": true,
+      "result": {
+        "K1_fires_on_true_object": false,
+        "detail": {
+          "Delta_m": "frac:12/1",
+          "Delta_m_nonzero": true,
+          "K1_fires_on_true_object": false,
+          "K_G": "frac:-3/49",
+          "K_G_lt_0": true,
+          "cond_i_KG_ge_0": false,
+          "cond_ii_KG_ne_sum": false,
+          "cond_iii_kappa_int_absent": false,
+          "cond_iv_Delta_m_dropped": false,
+          "kappa_int": "frac:-3/49"
+        }
+      },
+      "units": "boolean per K1 sub-condition (exact-Q); K1_fires must be False on the true F8 object"
+    },
+    "P2_K1_proxies_all_fire_F8": {
+      "claims": [
+        "CL-c3"
+      ],
+      "expected": "all of {K_G^2=9/2401, H^2=18/343, p>=0, kappa_c+kappa_s=0, omit-tuple} are >=0 and != -3/49 => all FIRE K1",
+      "kills_relevant": [
+        "K1"
+      ],
+      "pass": true,
+      "result": {
+        "detail": {
+          "K_G_for_reference": "frac:-3/49",
+          "K_G_is_negative": true,
+          "all_proxies_fire_K1": true,
+          "channel_norm_11_2401_REFERENCE_ONLY": "frac:11/2401",
+          "channel_norm_eq_11_2401": true,
+          "each_proxy_nonneg_and_ne_KG": {
+            "H_squared": true,
+            "K_G_squared": true,
+            "drop_Delta_m_kappa_c_plus_kappa_s": true,
+            "p_nonneg_boundary_0": true
+          },
+          "omit_tuple_fires": true,
+          "pinned_note": "manifest kappa^2=9/2401 is K_G^2 (squared TOTAL), NOT the channel-norm 11/2401",
+          "proxies_firing_count": 5,
+          "proxy_H_squared": "frac:18/343",
+          "proxy_K_G_squared": "frac:9/2401",
+          "proxy_K_G_squared_is_manifest_kappa2_9_2401": true,
+          "proxy_drop_Delta_m": "frac:0/1",
+          "proxy_p_nonneg_boundary": "frac:0/1"
+        }
+      },
+      "units": "exact Q per proxy; boolean (proxy>=0 AND proxy != K_G) per proxy; count of proxies firing == 5"
+    },
+    "P3_CLc3_nonneg_impossible_witness": {
+      "claims": [
+        "CL-c3"
+      ],
+      "expected": "F8 K_G=-3/49<0 (negative witness) AND F6 K_G=+1>0 (positive witness) both verified exact-Q => no p>=0 represents signed K_G",
+      "kills_relevant": [
+        "K1"
+      ],
+      "pass": true,
+      "result": {
+        "detail": {
+          "F6_KG": "frac:1/1",
+          "F6_KG_positive": true,
+          "F8_KG": "frac:-3/49",
+          "F8_KG_negative": true,
+          "negative_witness_refutes_all_nonneg": true,
+          "no_nonneg_scalar_represents_signed_KG": true,
+          "positive_witness_two_signed": true
+        }
+      },
+      "units": "exact Q (Fraction); sign of each witness; boolean (negative witness exists AND positive witness exists)"
+    },
+    "P4_CLc3b_symbolic_indefinite_universal": {
+      "claims": [
+        "CL-c3b"
+      ],
+      "expected": "det(H_b) along family == -t (degree 1, lead -1); K_G(t)==+t (degree 1, lead +1, nonconstant); K_G(1)=+1>0; K_G(-1)=-1<0 => numerator indefinite over Q[g,H]",
+      "kills_relevant": [],
+      "pass": true,
+      "result": {
+        "proof": {
+          "K_G_at_t_eq_1": "frac:1/1",
+          "K_G_at_t_eq_minus_1": "frac:-1/1",
+          "K_G_t_degree": 1,
+          "K_G_t_leading_coeff": "frac:1/1",
+          "K_G_t_nonconstant": true,
+          "K_G_t_polynomial": {
+            "1": "frac:1/1"
+          },
+          "det_monomials": 12,
+          "det_t_polynomial": {
+            "1": "frac:-1/1"
+          },
+          "family": "g=(1,0,0) (q=1, regular for all t), H=[[0,0,0],[0,t,0],[0,0,1]]",
+          "indeterminates": [
+            "g1",
+            "g2",
+            "g3",
+            "h11",
+            "h12",
+            "h13",
+            "h22",
+            "h23",
+            "h33"
+          ],
+          "numerator_indefinite_over_Q_g_H": true,
+          "q_on_family": "frac:1/1",
+          "q_squared_on_family": "frac:1/1",
+          "q_squared_strictly_positive": true
+        }
+      },
+      "units": "symbolic t-polynomial coefficients (exact Q); degree==1; leading_coeff; booleans (nonconstant, indefinite); q^2>0 on regular family"
+    },
+    "P5_CLc3c_i_sigma_kernel_2dim": {
+      "claims": [
+        "CL-c3c-i"
+      ],
+      "expected": "rank([[1,1,1]])==1; nullity==2; Sigma(1,-1,0)==0 and Sigma(1,0,-1)==0; the two kernel vectors independent",
+      "kills_relevant": [],
+      "pass": true,
+      "result": {
+        "proof": {
+          "Sigma_matrix": "[[1,1,1]]",
+          "Sigma_v1": "frac:0/1",
+          "Sigma_v2": "frac:0/1",
+          "both_in_kernel": true,
+          "domain_dim": 3,
+          "kernel_vec_1": [
+            "frac:1/1",
+            "frac:-1/1",
+            "frac:0/1"
+          ],
+          "kernel_vec_2": [
+            "frac:1/1",
+            "frac:0/1",
+            "frac:-1/1"
+          ],
+          "kernel_vecs_independent": true,
+          "nullity_dim": 2,
+          "rank_over_Q": 1,
+          "rank_plus_nullity_eq_domain": true
+        }
+      },
+      "units": "exact Q linear algebra; integer rank/nullity (rank==1, nullity==2); boolean independence + Sigma(v)==0"
+    },
+    "P6_CLc6_kappa_int_both_signs": {
+      "claims": [
+        "CL-c6"
+      ],
+      "expected": "F10 kappa_int=-1/9<0 AND F11 kappa_int=+2/9>0 on Path A/B'/C (exact Q) => both signs of kappa_int present",
+      "kills_relevant": [],
+      "pass": true,
+      "result": {
+        "detail": {
+          "F10_kappa_int_A": "frac:-1/9",
+          "F10_kappa_int_Bprime": "frac:-1/9",
+          "F10_kappa_int_C": "frac:-1/9",
+          "F10_negative": true,
+          "F10_paths_agree": true,
+          "F11_kappa_int_A": "frac:2/9",
+          "F11_kappa_int_Bprime": "frac:2/9",
+          "F11_kappa_int_C": "frac:2/9",
+          "F11_paths_agree": true,
+          "F11_positive": true,
+          "both_signs_of_kappa_int": true
+        }
+      },
+      "units": "exact Q (Fraction); sign of kappa_int on F10 and F11; agreement across A/B'/C"
+    },
+    "P7_both_sign_witnesses_present": {
+      "claims": [
+        "CL-c3",
+        "CL-c6"
+      ],
+      "expected": "F6 K_G=+1; F8 K_G=-3/49; F10 tuple=(2/9,1/3,0,-1/9); F11 tuple=(0,-1/9,-1/9,2/9); all agree A/B/B'/C exact-Q",
+      "kills_relevant": [
+        "K1"
+      ],
+      "pass": true,
+      "result": {
+        "detail": {
+          "F10_expected": true,
+          "F10_paths_agree": true,
+          "F10_tuple": [
+            "frac:2/9",
+            "frac:1/3",
+            "frac:0/1",
+            "frac:-1/9"
+          ],
+          "F11_expected": true,
+          "F11_paths_agree": true,
+          "F11_tuple": [
+            "frac:0/1",
+            "frac:-1/9",
+            "frac:-1/9",
+            "frac:2/9"
+          ],
+          "F6_KG": "frac:1/1",
+          "F6_eq_plus1": true,
+          "F6_paths_agree": true,
+          "F8_KG": "frac:-3/49",
+          "F8_eq_m3_49": true,
+          "F8_paths_agree": true,
+          "both_signs_KG": true,
+          "both_signs_kappa_int": true
+        }
+      },
+      "units": "exact Q (Fraction) per witness component; cross-path agreement boolean"
+    },
+    "P8_K11_singular_refusal": {
+      "claims": [
+        "CL-c3b"
+      ],
+      "expected": "Path A/B/B' all raise typed refusals on g=(0,0,0); F6 (q=4) returns K_G=+1 with no refusal",
+      "kills_relevant": [
+        "K11"
+      ],
+      "pass": true,
+      "result": {
+        "F6_K_G": "frac:1/1",
+        "F6_single_gi0_not_refused_and_KG_1": true,
+        "q0_all_paths_refused": true,
+        "q0_refusals": {
+          "pathA": {
+            "kind": "g_i_zero",
+            "refused": true
+          },
+          "pathB": {
+            "refused": true
+          },
+          "pathBprime": {
+            "refused": true
+          }
+        }
+      },
+      "units": "typed-exception predicate; boolean (no numeric value on q=0); F6 K_G==+1 with no refusal"
+    },
+    "P9_type_gate_sqrt_q_leak": {
+      "claims": [
+        "CL-c3",
+        "CL-c3b",
+        "CL-c6"
+      ],
+      "expected": "all emitted K_G/channels/det_hb/q on {F6,F8,F10,F11} are Fraction; a float operand raises TypeError at the door",
+      "kills_relevant": [
+        "K8"
+      ],
+      "pass": true,
+      "result": {
+        "all_emitted_are_Fraction": true,
+        "detail": {
+          "F10": true,
+          "F11": true,
+          "F6": true,
+          "F8": true
+        },
+        "float_operand_raises_TypeError": true
+      },
+      "units": "type predicate (isinstance Fraction); boolean refusal-on-float"
+    }
+  }
+}

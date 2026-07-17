@@ -1,0 +1,15 @@
+{
+  "campaign": "bigraded_jet", "stage": "B-prime (addendum)", "frozen": true,
+  "date_approved": "2026-06-10 (Will's Stage-B ruling b: certified-transcendental option as ADDENDUM, not a B-P2 remedy)",
+  "authority": "CAMPAIGN_BIGRADED_JET.md + Will's Stage-B/Stage-C rulings",
+  "prediction_text_note": "predictions state 'lanes + certified substrate transcendentals' - the 'alone' claim retired with its measured boundary (Stage B finding iii).",
+  "fence_note": "CONSUMES proven substrate (HR126-128 typed_log/typed_pow via observers; refine-kernel correctly-rounded), builds nothing - fence-lawful per the ruling.",
+  "predictions": {
+    "Bp-P1": "envelope soundness retained - the prediction bounds measured |kappa_jet - arbiter| at every rung, never violated.",
+    "Bp-P2": "the FULL prediction (lanes + certified transcendental residues) falls within the SAME [1/8, 8] band of measured at ALL 16 rungs; floor rule unchanged (floor = 2*ulp(|kappa_arbiter|); at/below floor: both-below = PASS, split = FAIL).",
+    "Bp-P3": "the UNKNOWN-class residue share collapses to certified <=0.5-ulp entries - measured and reported per rung."
+  },
+  "mechanism": "per libm op (log, 2**x, x**1.5): e_measured = certified_value - libm_value (one exact Sterbenz subtraction, both floats within an ulp) -> signed measured-exact entry into d_exact; remaining unknown = certified function's own <=0.5 ulp -> d_bound. Replaces the Stage-B 1-ulp assumption channel.",
+  "fixtures": "the HR131 F1a ladder verbatim; epsilon float content unchanged (libm values still computed; certified values only feed the residue lanes).",
+  "environment_pins": {"python": "3.14.4"}
+}

@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "graph_id": "cella-campaign-openings-v1",
+  "authority_policy": "Campaign openings are admitted only after the rebuild-and-diff gate proves source persistence.",
+  "generator": "cella.start_campaign",
+  "nodes": [
+    {
+      "id": "DBP:campaign:tssc",
+      "label": "Three-Way Selected-Skeleton Coherence",
+      "type": "campaign",
+      "claim_status": null,
+      "lifecycle_status": "active",
+      "reachability": null,
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "CORRECTED 2026-07-16: global three-arm natural isomorphism at C_2 REFUTED by the wall-isotropy/stabilizer obstruction; forks into C2a chamber coherence (open) and C2b wall-isotropy comparison theorem (proved). Lorentzian gauge-selection branch refuted by divisibility of ker(Sigma). Remaining: two typed functors on the regular chamber + precision two-cover resolution.",
+      "source_refs": [
+        {
+          "pointer": "cella:Campaign_Library/02_residue_role_channel_and_coupling/CMP-0040__threeway_selected_skeleton_coherence/CMP-0040__threeway_selected_skeleton_coherence.artifact.json",
+          "sha256": "cb83f57828af6b02e5c2a36c5010299baf3465ac4593653382d80bf5dbfd3021"
+        }
+      ],
+      "external_ids": {
+        "encyclopedia": [],
+        "paper_artifacts": [],
+        "campaigns": [
+          "CMP-0040"
+        ],
+        "campaign_artifacts": [
+          "CMA-000953"
+        ],
+        "reports": [],
+        "evidence": [],
+        "retirement_packages": [],
+        "artifacts": [
+          "CMA-000953"
+        ]
+      },
+      "facets": {
+        "subject_family": "cella_residue_and_coupling_theory",
+        "campaign_family": "02_residue_role_channel_and_coupling",
+        "source_id": "campaign-openings-v1"
+      },
+      "visual_hints": {},
+      "retrieval": {
+        "key_terms": [
+          "wall isotropy",
+          "fixed-point wall",
+          "free-orbit wall",
+          "stabilizer obstruction",
+          "one convention bit",
+          "double rounding",
+          "chamber coherence"
+        ],
+        "retrieval_questions": [
+          "Why is the global three-arm isomorphism impossible?",
+          "Which arms have fixed-point vs free-orbit walls?",
+          "Why does IEEE-754 need a tie convention when GR does not?"
+        ],
+        "context_priority": "high",
+        "context_role": "frontier"
+      },
+      "extensions": {
+        "opened_by": "cella-start-campaign-v1"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e::DBP:campaign:tssc::depends_on::DBP:thm:r3_acfold",
+      "from": "DBP:campaign:tssc",
+      "to": "DBP:thm:r3_acfold",
+      "relation": "depends_on",
+      "label": "DBP:campaign:tssc depends_on DBP:thm:r3_acfold",
+      "basis": "AC-fold R3 supplies the typed selected skeleton; its wall is fixed-point type per the isotropy theorem.",
+      "source_refs": [],
+      "facets": {
+        "source_id": "campaign-openings-v1",
+        "campaign_id": "CMP-0040"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:campaign:tssc::depends_on::DBP:wall:V_faithful",
+      "from": "DBP:campaign:tssc",
+      "to": "DBP:wall:V_faithful",
+      "relation": "depends_on",
+      "label": "DBP:campaign:tssc depends_on DBP:wall:V_faithful",
+      "basis": "Kernel-2Z non-faithfulness is the common C_2 floor for the chamber-level comparison; walls excluded by the isotropy obstruction.",
+      "source_refs": [],
+      "facets": {
+        "source_id": "campaign-openings-v1",
+        "campaign_id": "CMP-0040"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:campaign:tssc::depends_on::PFT:draft:rf_pred006",
+      "from": "DBP:campaign:tssc",
+      "to": "PFT:draft:rf_pred006",
+      "relation": "depends_on",
+      "label": "DBP:campaign:tssc depends_on PFT:draft:rf_pred006",
+      "basis": "P4's free-orbit obstruction is located in the precision output bundle; the wall-isotropy classification depends on PRED-006's two-cover split.",
+      "source_refs": [],
+      "facets": {
+        "source_id": "campaign-openings-v1",
+        "campaign_id": "CMP-0040"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:campaign:tssc::opens_gap::U-1918",
+      "from": "DBP:campaign:tssc",
+      "to": "U-1918",
+      "relation": "opens_gap",
+      "label": "DBP:campaign:tssc opens_gap U-1918",
+      "basis": "U-1918 is the headline open claim: two DBP-arm functors into the shared skeleton plus componentwise coherence diagrams.",
+      "source_refs": [],
+      "facets": {
+        "source_id": "campaign-openings-v1",
+        "campaign_id": "CMP-0040"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:campaign:tssc::proves::U-1918",
+      "from": "DBP:campaign:tssc",
+      "to": "U-1918",
+      "relation": "proves",
+      "label": "DBP:campaign:tssc proves U-1918",
+      "basis": "The wall-isotropy theorem is the proved fork C2b of the campaign's headline claim; source doc WALL_ISOTROPY_COMPARISON_THEOREM_2026-07-16.md, sha256 8d080e07fc1feda079fcd0bcd9f01adfb1596368e690d4874b89163b24fdfae7.",
+      "source_refs": [],
+      "facets": {
+        "source_id": "campaign-openings-v1",
+        "campaign_id": "CMP-0040"
+      },
+      "extensions": {}
+    },
+    {
+      "id": "e::U-1918::depends_on::DBP:wall:V_faithful",
+      "from": "U-1918",
+      "to": "DBP:wall:V_faithful",
+      "relation": "depends_on",
+      "label": "U-1918 depends_on DBP:wall:V_faithful",
+      "basis": "Coherence is stated at C_2 after mod-2 reduction; the kernel-2Z non-faithfulness is the common floor rather than an obstruction.",
+      "source_refs": [],
+      "facets": {
+        "source_id": "campaign-openings-v1",
+        "campaign_id": "CMP-0040"
+      },
+      "extensions": {}
+    }
+  ],
+  "node_patches": [
+    {
+      "id": "U-1918",
+      "set": {
+        "tracked": true,
+        "layer": "frontier"
+      },
+      "merge": {
+        "retrieval": {
+          "context_role": "frontier"
+        },
+        "extensions": {
+          "promoted_by_campaign": "CMP-0040"
+        }
+      }
+    }
+  ]
+}

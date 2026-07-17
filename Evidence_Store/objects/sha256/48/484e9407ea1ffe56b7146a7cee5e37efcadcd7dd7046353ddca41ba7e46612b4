@@ -1,0 +1,49 @@
+# Rounding-Dial Curve — two roots (√, ∛), two depths — Closeout
+
+**Date:** 2026-06-05 · research-grade, eval-layer, exact rounding (Fraction).
+Code: `scratch/rounding_dial_curve.py` (`python3 rounding_dial_curve.py [depth]`).
+Curves: `scratch/rounding_dial_curve.html` (depth-3) · `scratch/rounding_dial_curve_d4.html` (depth-4).
+**Built to spec (Will's):** forms EMERGE from the constraint (not precomputed); chains compute a
+**nonzero integer target** (1, not 0); the dial spans **two roots**; then **pushed to depth-4.**
+
+## The fixture, per root degree n
+On the surface `x = (1−c)^(1/n)`, so `xⁿ + c = 1`. The chain's answer is the integer **1**; the
+deviation `value − 1` is the identity `xⁿ+c−1 = 0`.
+- **n=2 (sqrt):** `R²+c = 1` — one multiply builds `R²`.
+- **n=3 (cbrt):** `Q³+c = 1` — two multiplies build `Q³`, so cbrt rounds more.
+
+Computing a nonzero integer (Will's call) was the unlock: a chain that reaches the answer cleanly lands
+on `1.0` (nonzero bits) instead of `0.0`, so it no longer collides with the trivial `R−R` zero node and
+gets pruned. Forms are kept by canonical/value enumeration + membership + the constant-g irreducibility
+test (`value−1 = g·D`, `D = xⁿ+c−1`; g constant → genuine incl. padded/scaled chains, g non-constant →
+junk·identity, rejected), then scored by exact total rounding and drawn on one chart.
+
+## Results
+| pass | root | forms | rounding span (ulp) | origin (least rounding) |
+|---|---|---|---|---|
+| **depth-3** | sqrt | 211 | 0.187 → 1.656 | `2(R²+c−½)` 0.187 / direct `R²+c` 0.287 |
+| depth-3 | cbrt | 11 | 0.420 → 0.886 | `Q³+c` 0.420 |
+| **depth-4** | sqrt | 1505 | 0.203 → 2.373 | scaled/padded `R²+c` family |
+| depth-4 | cbrt | 202 | 0.420 → 1.779 | `Q³+c` 0.420 |
+
+## Key results
+- **The dial spans two roots, on one chart.** Cbrt sits **visibly higher** than sqrt — its origin
+  (0.420 ulp) is ~1.5× sqrt's direct origin (0.287 ulp), because cubing costs two roundings vs one.
+  The "won't be as clean" prediction holds: the cbrt curve starts where it does *because* of the cube.
+- **The origin is never zero rounding.** Squaring/cubing `x` is one (two) unavoidable rounding(s); no
+  chain beats `R²+c` / `Q³+c`. That irreducible floor anchors each root's dial.
+- **Depth-4 is the cbrt payoff.** Cbrt needs depth-3 just to *build* the cube, so depth-3 gives it only
+  11 forms; depth-4 opens it to **202** — the first real cbrt variety. Sqrt densifies 211 → 1505.
+- BACL cleanliness (deviation on the integer-ulp(1) lattice) is the point colour; it does **not** track
+  rounding monotonically — the rounding≠cleanliness tension is visible across the whole sweep.
+
+## Scope (honest — methodology differs by depth)
+- **Depth-3:** term set `{R/Q, 1, c, ½}` (½ gives the split-routing family); full terminal layer.
+- **Depth-4:** for tractability (full structural depth-4 explodes), `½` is dropped (`{x,1,c}`), stored
+  building blocks are **value-keyed** (collapses exact dups, keeps rounding siblings), and the terminal
+  layer is `(depth-3 expr) op (simple term, depth≤1)`. So depth-4 trades the ½/split family and some
+  re-association microstructure for **reach** (deeper chains, far more cbrt forms).
+- One fixture per root, one sweep r∈[2.2,9.6] (30 pts), float64 normal range. Not cross-fixture.
+- "Emerge" = constraint-membership + irreducibility over the enumerated chain space, ranked by exact
+  rounding — not a hand list. **Next turns of the dial:** higher roots (4th/5th), depth-4 *with* ½,
+  other integer targets, and the subnormal regime (where cbrt's `j∈{−4..+1}` will make the dial ragged).

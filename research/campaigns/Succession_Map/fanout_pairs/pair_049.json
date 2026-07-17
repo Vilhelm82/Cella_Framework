@@ -1,0 +1,51 @@
+{
+  "rank": 49,
+  "lift": 18.92,
+  "count": 3,
+  "families": 1,
+  "a": {
+    "id": "OBJ:ell-epsilon-r-epsilon",
+    "label": "ell_epsilon, R_epsilon",
+    "standard_term": "auxiliary channel-dependent scaling constants (+/- branch values)",
+    "nomenclature": "novel",
+    "symbols": [
+      "ell_epsilon",
+      "r_epsilon"
+    ]
+  },
+  "b": {
+    "id": "OBJ:f-epsilon",
+    "label": "f_epsilon",
+    "standard_term": "rational uniformizing coordinate (y - ell_epsilon*u)/(y + ell_epsilon*u) used to construct the trace path",
+    "nomenclature": "novel",
+    "symbols": [
+      "f_epsilon"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-1003",
+      "type": "formula",
+      "claim_status": null,
+      "label": "Explicit d log f_epsilon differential",
+      "summary": "d\\log f_\\epsilon = \\ell_\\epsilon \\frac{u^2-b} {y(u-u_{0,\\epsilon})(u-u_{1,\\epsilon})} \\,du. \\tag{5.12}",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md"
+    },
+    {
+      "uid": "U-1186",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Rational function f_epsilon",
+      "summary": "f_\\epsilon = \\frac{y-\\ell_\\epsilon u} {y+\\ell_\\epsilon u}. \\tag{5.7}",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md"
+    },
+    {
+      "uid": "U-1822",
+      "type": "theorem",
+      "claim_status": null,
+      "label": "Theorem 5.1 — Exact logarithmic anti differential (5.8)",
+      "summary": "### Theorem 5.1 — Exact logarithmic anti differential\n\\[\n\\boxed{\n\\alpha_\\epsilon\n=\nR_\\epsilon\\,d\\log f_\\epsilon.\n}\n\\tag{5.8}\n\\]",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md"
+    }
+  ]
+}

@@ -1,0 +1,199 @@
+"""Adversarial independent re-derivation of phase2 Task B subnormal-topology claims.
+
+Eval-layer only. Instruments: fractions.Fraction (exact), mpmath (correctly-rounded
+cbrt reference), numpy (cbrt under test), struct (raw IEEE 754 hex).
+
+Recomputes residual = V - f vs ulp = 2^-1074 with exact Fraction for a sample of
+subnormal f, for n=2 (sqrt) and n=3 (cbrt). Cross-checks numpy.cbrt vs mpmath
+correctly-rounded cbrt. Writes a small JSON to stdout-friendly file.
+"""
+import json
+import math
+import struct
+from fractions import Fraction
+
+import numpy as np
+
+try:
+    import mpmath
+    HAVE_MPMATH = True
+except Exception:
+    HAVE_MPMATH = False
+
+
+def f64_to_hex(x):
+    return "0x" + struct.pack(">d", float(x)).hex()
+
+
+def hex_to_f64(h):
+    return struct.unpack(">d", bytes.fromhex(h[2:] if h.startswith("0x") else h))[0]
+
+
+def f64_to_exact_fraction(x):
+    # Exact rational value of an IEEE float64.
+    return Fraction(float(x))
+
+
+# ulp in the subnormal regime = 2^-1074 (uniform spacing of subnormals)
+ULP_SUB = Fraction(1, 2 ** 1074)
+
+
+def subnormal_from_k(k):
+    """Subnormal float64 with integer mantissa k (1 <= k <= 2^52 - 1): value = k * 2^-1074."""
+    assert 1 <= k <= (2 ** 52 - 1)
+    return math.ldexp(float(k), -1074)
+
+
+def mpmath_cbrt_correctly_rounded(x_frac):
+    """Correctly-rounded-to-nearest float64 cube root of exact rational x_frac, via mpmath."""
+    if not HAVE_MPMATH:
+        return None
+    mpmath.mp.dps = 80
+    xm = mpmath.mpf(x_frac.numerator) / mpmath.mpf(x_frac.denominator)
+    r = mpmath.cbrt(xm)
+    # round to nearest float64
+    return float(r)
+
+
+def mpmath_sqrt_correctly_rounded(x_frac):
+    if not HAVE_MPMATH:
+        return None
+    mpmath.mp.dps = 80
+    xm = mpmath.mpf(x_frac.numerator) / mpmath.mpf(x_frac.denominator)
+    r = mpmath.sqrt(xm)
+    return float(r)
+
+
+def build_sample_ks():
+    """Boundary-dense top mantissas + binary halving down to 1, plus extremes."""
+    ks = set()
+    top = 2 ** 52 - 1
+    for d in range(0, 12):
+        ks.add(top - d)
+    p = 2 ** 51
+    while p >= 1:
+        ks.add(p)
+        p //= 2
+    ks.add(1)
+    ks.add(top)
+    return sorted(ks)
+
+
+def analyze(n, ks):
+    """For each subnormal f = k*2^-1074, compute R = f^(1/n) (float64),
+    V = R**n exactly recomposed, residual = V - f as exact Fraction, residual/ulp."""
+    results = []
+    integer_multiple_count = 0
+    distinct_multiples = set()
+    max_abs_frac_part = Fraction(0)
+    cbrt_divergent = 0
+    for k in ks:
+        f = subnormal_from_k(k)
+        f_frac = f64_to_exact_fraction(f)
+        if n == 2:
+            R = float(np.sqrt(f))
+            R_mp = mpmath_sqrt_correctly_rounded(f_frac)
+        else:
+            R = float(np.cbrt(f))
+            R_mp = mpmath_cbrt_correctly_rounded(f_frac)
+        diverg = (R_mp is not None) and (f64_to_hex(R) != f64_to_hex(R_mp))
+        if diverg:
+            cbrt_divergent += 1
+        # V = R**n recomposed EXACTLY from the float R (no float rounding):
+        R_frac = f64_to_exact_fraction(R)
+        V_frac = R_frac ** n
+        # NOTE: the residual the build agent reports is V - f where V is the
+        # float64 result of squaring/cubing. We compute BOTH:
+        #   (a) exact recompose residual: R_frac**n - f_frac
+        #   (b) float-recompose residual: float64(R*...*R) - f  as exact fraction
+        # The lattice claim should be checked on the FLOAT recompose (what the
+        # machine actually produces). Compute float V too.
+        if n == 2:
+            V_float = float(R * R)
+        else:
+            V_float = float(R * R * R)
+        V_float_frac = f64_to_exact_fraction(V_float)
+        resid_float = V_float_frac - f_frac
+        resid_over_ulp_float = resid_float / ULP_SUB
+        # integer-multiple test on the FLOAT recompose
+        is_int = (resid_over_ulp_float.denominator == 1)
+        frac_part = abs(resid_over_ulp_float - round(resid_over_ulp_float))
+        if frac_part > max_abs_frac_part:
+            max_abs_frac_part = frac_part
+        if is_int:
+            integer_multiple_count += 1
+            distinct_multiples.add(int(resid_over_ulp_float))
+        results.append({
+            "k": k,
+            "f_hex": f64_to_hex(f),
+            "R_hex": f64_to_hex(R),
+            "R_mp_hex": f64_to_hex(R_mp) if R_mp is not None else None,
+            "cbrt_divergent": bool(diverg),
+            "V_float_hex": f64_to_hex(V_float),
+            "resid_over_ulp_float": str(resid_over_ulp_float),
+            "resid_over_ulp_is_integer": is_int,
+        })
+    return {
+        "n": n,
+        "sample_count": len(ks),
+        "integer_multiple_count": integer_multiple_count,
+        "integer_multiple_fraction": integer_multiple_count / len(ks),
+        "distinct_integer_multiples": sorted(distinct_multiples),
+        "max_abs_frac_part": str(max_abs_frac_part),
+        "all_on_lattice": (integer_multiple_count == len(ks)),
+        "divergent_samples": cbrt_divergent,
+        "traces": results,
+    }
+
+
+def main():
+    ks = build_sample_ks()
+    out = {
+        "schema": "phase2B_adversarial_verify.v1",
+        "ulp_sub": "2^-1074",
+        "have_mpmath": HAVE_MPMATH,
+        "numpy_version": np.__version__,
+        "sample_ks_count": len(ks),
+        "n2_sqrt": analyze(2, ks),
+        "n3_cbrt": analyze(3, ks),
+    }
+    # Boundary transition pairs
+    transitions = {}
+    # smallest normal 2^-1022
+    sn = math.ldexp(1.0, -1022)
+    # largest subnormal = (2^52-1)*2^-1074
+    ls = subnormal_from_k(2 ** 52 - 1)
+    # smallest subnormal 2^-1074
+    ss = subnormal_from_k(1)
+    transitions["smallest_normal_2^-1022_hex"] = f64_to_hex(sn)
+    transitions["largest_subnormal_hex"] = f64_to_hex(ls)
+    transitions["smallest_subnormal_2^-1074_hex"] = f64_to_hex(ss)
+    out["transitions"] = transitions
+    # Boundary chain floor: f = 1 - x for largest x < 1
+    x = hex_to_f64("0x3fefffffffffffff")
+    f_floor = 1.0 - x
+    out["boundary_chain"] = {
+        "largest_x_below_1_hex": f64_to_hex(x),
+        "f_floor": repr(f_floor),
+        "f_floor_hex": f64_to_hex(f_floor),
+        "f_floor_eq_2^-53": (f64_to_exact_fraction(f_floor) == Fraction(1, 2 ** 53)),
+        "log2_gap_to_2^-1022": 1022 - 53,
+    }
+    with open("/home/william_lloydlt/projects/V4/Lloyd_Engine_V4/scratch/phase2B_adversarial_verify.json", "w") as fh:
+        json.dump(out, fh, indent=2, sort_keys=True)
+    # compact summary to stdout
+    print("SUMMARY_BEGIN")
+    print("n2 all_on_lattice:", out["n2_sqrt"]["all_on_lattice"],
+          "distinct:", out["n2_sqrt"]["distinct_integer_multiples"],
+          "maxfrac:", out["n2_sqrt"]["max_abs_frac_part"])
+    print("n3 all_on_lattice:", out["n3_cbrt"]["all_on_lattice"],
+          "distinct:", out["n3_cbrt"]["distinct_integer_multiples"],
+          "maxfrac:", out["n3_cbrt"]["max_abs_frac_part"],
+          "cbrt_divergent:", out["n3_cbrt"]["divergent_samples"], "/", len(ks))
+    print("boundary f_floor==2^-53:", out["boundary_chain"]["f_floor_eq_2^-53"],
+          "log2gap:", out["boundary_chain"]["log2_gap_to_2^-1022"])
+    print("SUMMARY_END")
+
+
+if __name__ == "__main__":
+    main()

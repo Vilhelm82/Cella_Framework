@@ -1,0 +1,81 @@
+{
+  "seq": 9,
+  "uid": "U-0720",
+  "type": "theorem",
+  "claim_status": null,
+  "label": "Complete-interval K/Pi reduction of the anti-period",
+  "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md",
+  "already_linked_objects": [
+    {
+      "id": "OBJ:bar-m-epsilon",
+      "label": "bar m_epsilon"
+    },
+    {
+      "id": "OBJ:c-epsilon",
+      "label": "c_epsilon"
+    },
+    {
+      "id": "OBJ:c-epsilon-genus-1-curve",
+      "label": "C_epsilon (genus-1 curve)"
+    },
+    {
+      "id": "OBJ:i-epsilon",
+      "label": "I_epsilon"
+    },
+    {
+      "id": "OBJ:m-epsilon-n-epsilon-a-epsilon-b-epsilon",
+      "label": "m_epsilon, n_epsilon, A_epsilon, B_epsilon"
+    }
+  ],
+  "priority_candidate_pairs": [
+    {
+      "a": "OBJ:bar-m-epsilon",
+      "b": "OBJ:m-epsilon-n-epsilon-a-epsilon-b-epsilon",
+      "la": "bar m_epsilon",
+      "lb": "m_epsilon, n_epsilon, A_epsilon, B_epsilon",
+      "lift": 33.55
+    },
+    {
+      "a": "OBJ:c-epsilon",
+      "b": "OBJ:c-epsilon-genus-1-curve",
+      "la": "c_epsilon",
+      "lb": "C_epsilon (genus-1 curve)",
+      "lift": 123.0
+    },
+    {
+      "a": "OBJ:c-epsilon",
+      "b": "OBJ:m-epsilon-n-epsilon-a-epsilon-b-epsilon",
+      "la": "c_epsilon",
+      "lb": "m_epsilon, n_epsilon, A_epsilon, B_epsilon",
+      "lift": 27.95
+    },
+    {
+      "a": "OBJ:c-epsilon-genus-1-curve",
+      "b": "OBJ:m-epsilon-n-epsilon-a-epsilon-b-epsilon",
+      "la": "C_epsilon (genus-1 curve)",
+      "lb": "m_epsilon, n_epsilon, A_epsilon, B_epsilon",
+      "lift": 27.95
+    },
+    {
+      "a": "OBJ:bar-m-epsilon",
+      "b": "OBJ:i-epsilon",
+      "la": "bar m_epsilon",
+      "lb": "I_epsilon",
+      "lift": 32.8
+    },
+    {
+      "a": "OBJ:bar-m-epsilon",
+      "b": "OBJ:c-epsilon",
+      "la": "bar m_epsilon",
+      "lb": "c_epsilon",
+      "lift": 27.33
+    },
+    {
+      "a": "OBJ:bar-m-epsilon",
+      "b": "OBJ:c-epsilon-genus-1-curve",
+      "la": "bar m_epsilon",
+      "lb": "C_epsilon (genus-1 curve)",
+      "lift": 27.33
+    }
+  ]
+}

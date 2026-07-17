@@ -1,0 +1,45 @@
+{
+  "seq": 44,
+  "uid": "U-1473",
+  "type": "theorem",
+  "claim_status": "proved",
+  "label": "Expected deliverable: Theorem (Role-Singularity Valuation Law, n=2 seed)",
+  "path": "/home/wlloyd/Cella Framework/Papers_Library/04_drafts_and_incomplete_papers/dbp_role_channel_and_orbit_geometry/Lead_C_Role_Singularity_Valuation_Theorem_Brief.md",
+  "already_linked_objects": [
+    {
+      "id": "OBJ:constraint-surface",
+      "label": "Constraint Surface"
+    },
+    {
+      "id": "OBJ:poleorder-r-g-dbp-at-role-boundaries",
+      "label": "PoleOrder(R[g_DBP]) at role boundaries"
+    },
+    {
+      "id": "OBJ:role-singularity-valuation-law",
+      "label": "Role-Singularity Valuation Law"
+    }
+  ],
+  "priority_candidate_pairs": [
+    {
+      "a": "OBJ:poleorder-r-g-dbp-at-role-boundaries",
+      "b": "OBJ:role-singularity-valuation-law",
+      "la": "PoleOrder(R[g_DBP]) at role boundaries",
+      "lb": "Role-Singularity Valuation Law",
+      "lift": 36.9
+    },
+    {
+      "a": "OBJ:constraint-surface",
+      "b": "OBJ:role-singularity-valuation-law",
+      "la": "Constraint Surface",
+      "lb": "Role-Singularity Valuation Law",
+      "lift": 7.38
+    },
+    {
+      "a": "OBJ:constraint-surface",
+      "b": "OBJ:poleorder-r-g-dbp-at-role-boundaries",
+      "la": "Constraint Surface",
+      "lb": "PoleOrder(R[g_DBP]) at role boundaries",
+      "lift": 2.31
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "probe": "foldreadback_probe0",
+  "preregistry": "v6",
+  "mb": 24,
+  "region": {
+    "region_n_A1": 16,
+    "region_n_A2": 16,
+    "nz_A1": 16,
+    "nz_A2": 16,
+    "ols_design_ok": true,
+    "occupancy_ok": true,
+    "per_slope_resid_ok": true,
+    "nondegenerate_functionals": [
+      "sign_pattern"
+    ],
+    "binades_spanned": [
+      -50,
+      -47,
+      -44,
+      -40,
+      -37,
+      -34,
+      -30,
+      -27,
+      -24,
+      -20,
+      -17,
+      -14,
+      -10,
+      -7,
+      -4,
+      -2
+    ]
+  },
+  "gate0": {
+    "passed": true,
+    "n_A1": 16,
+    "n_A2": 16,
+    "binades_spanned": [
+      -50,
+      -47,
+      -44,
+      -40,
+      -37,
+      -34,
+      -30,
+      -27,
+      -24,
+      -20,
+      -17,
+      -14,
+      -10,
+      -7,
+      -4,
+      -2
+    ]
+  },
+  "gate1": {
+    "sep": 0.004525947875941627,
+    "pooled_iqr": 0.00389268488020994,
+    "separates": true,
+    "n_win_A1": 8,
+    "n_win_A2": 8,
+    "med_A1": -0.5001770389411574,
+    "med_A2": -0.49565109106521577
+  },
+  "gate2_nullband": {},
+  "gate3": {},
+  "gate4": {},
+  "gate5": {},
+  "outcome": "probe_void_toothless",
+  "interpretation": null,
+  "runtime_s": 0.07
+}

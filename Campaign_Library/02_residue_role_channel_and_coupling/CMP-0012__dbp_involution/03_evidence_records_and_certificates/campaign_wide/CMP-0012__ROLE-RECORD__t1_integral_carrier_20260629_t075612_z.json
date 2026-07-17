@@ -1,0 +1,283 @@
+{
+  "console_log": "DBP prime-2 T1 integral carrier\nn_range = [4, 5, 6, 7, 8]\ngate_passed = True\nn=4: rank=6/6, torsion=[], odd_torsion=[]\nn=5: rank=10/10, torsion=[], odd_torsion=[]\nn=6: rank=15/15, torsion=[], odd_torsion=[]\nn=7: rank=21/21, torsion=[], odd_torsion=[]\nn=8: rank=28/28, torsion=[], odd_torsion=[]\nodd_primes_seen = []\nverdict = The full-L cokernel is torsion-free for the tested n=4..8 range; it neither matches the gauge-only Z/2 phantom nor shows an n=4 V4 torsion spike, so the phantom and V4 accident are distinct 2-phenomena.\n",
+  "gate_passed": true,
+  "json_path": "results/dbp_involution/dbp_prime2_structure/T1_integral_carrier_20260629T075612Z.json",
+  "markdown_path": "results/dbp_involution/dbp_prime2_structure/DBP_PRIME2_REPORT.md",
+  "n_range": [
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "results": {
+    "all_rank_retrodicted": true,
+    "all_torsion_vanishes_after_inverting_2": true,
+    "gate": {
+      "passed": true,
+      "per_n": [
+        {
+          "expected_invariant_factors": [
+            1,
+            1,
+            1,
+            2
+          ],
+          "ggt_in_image_over_Z": false,
+          "invariant_factors": [
+            1,
+            1,
+            1,
+            2
+          ],
+          "n": 4,
+          "passed": true,
+          "single_factor_two": true,
+          "tier": "[computer-verified]",
+          "two_ggt_in_image": true
+        },
+        {
+          "expected_invariant_factors": [
+            1,
+            1,
+            1,
+            1,
+            2
+          ],
+          "ggt_in_image_over_Z": false,
+          "invariant_factors": [
+            1,
+            1,
+            1,
+            1,
+            2
+          ],
+          "n": 5,
+          "passed": true,
+          "single_factor_two": true,
+          "tier": "[computer-verified]",
+          "two_ggt_in_image": true
+        },
+        {
+          "expected_invariant_factors": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            2
+          ],
+          "ggt_in_image_over_Z": false,
+          "invariant_factors": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            2
+          ],
+          "n": 6,
+          "passed": true,
+          "single_factor_two": true,
+          "tier": "[computer-verified]",
+          "two_ggt_in_image": true
+        },
+        {
+          "expected_invariant_factors": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2
+          ],
+          "ggt_in_image_over_Z": false,
+          "invariant_factors": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            2
+          ],
+          "n": 7,
+          "passed": true,
+          "single_factor_two": true,
+          "tier": "[computer-verified]",
+          "two_ggt_in_image": true
+        }
+      ],
+      "tier": "[computer-verified]"
+    },
+    "gate_passed": true,
+    "odd_primes_seen": [],
+    "per_n": [
+      {
+        "codomain_rank": 12,
+        "domain_rank": 10,
+        "expected_rank": 6,
+        "free_cokernel_rank": 6,
+        "invariant_factors": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "n": 4,
+        "odd_torsion_factors": [],
+        "rank": 6,
+        "rank_equals_pair_count": true,
+        "tier": "[computer-verified]",
+        "torsion_factors": [],
+        "torsion_prime_factorizations": [],
+        "torsion_vanishes_after_inverting_2": true
+      },
+      {
+        "codomain_rank": 30,
+        "domain_rank": 15,
+        "expected_rank": 10,
+        "free_cokernel_rank": 20,
+        "invariant_factors": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "n": 5,
+        "odd_torsion_factors": [],
+        "rank": 10,
+        "rank_equals_pair_count": true,
+        "tier": "[computer-verified]",
+        "torsion_factors": [],
+        "torsion_prime_factorizations": [],
+        "torsion_vanishes_after_inverting_2": true
+      },
+      {
+        "codomain_rank": 60,
+        "domain_rank": 21,
+        "expected_rank": 15,
+        "free_cokernel_rank": 45,
+        "invariant_factors": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "n": 6,
+        "odd_torsion_factors": [],
+        "rank": 15,
+        "rank_equals_pair_count": true,
+        "tier": "[computer-verified]",
+        "torsion_factors": [],
+        "torsion_prime_factorizations": [],
+        "torsion_vanishes_after_inverting_2": true
+      },
+      {
+        "codomain_rank": 105,
+        "domain_rank": 28,
+        "expected_rank": 21,
+        "free_cokernel_rank": 84,
+        "invariant_factors": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "n": 7,
+        "odd_torsion_factors": [],
+        "rank": 21,
+        "rank_equals_pair_count": true,
+        "tier": "[computer-verified]",
+        "torsion_factors": [],
+        "torsion_prime_factorizations": [],
+        "torsion_vanishes_after_inverting_2": true
+      },
+      {
+        "codomain_rank": 168,
+        "domain_rank": 36,
+        "expected_rank": 28,
+        "free_cokernel_rank": 140,
+        "invariant_factors": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "n": 8,
+        "odd_torsion_factors": [],
+        "rank": 28,
+        "rank_equals_pair_count": true,
+        "tier": "[computer-verified]",
+        "torsion_factors": [],
+        "torsion_prime_factorizations": [],
+        "torsion_vanishes_after_inverting_2": true
+      }
+    ],
+    "tier": "[computer-verified]",
+    "verdict": "The full-L cokernel is torsion-free for the tested n=4..8 range; it neither matches the gauge-only Z/2 phantom nor shows an n=4 V4 torsion spike, so the phantom and V4 accident are distinct 2-phenomena."
+  },
+  "task": "T1",
+  "timestamp": "20260629T075612Z"
+}

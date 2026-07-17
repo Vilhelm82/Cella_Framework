@@ -1,0 +1,53 @@
+{
+  "task_id": "grok_f1_f2_common_mode_ulp_lattice_geometry",
+  "campaign": "paper-hardening",
+  "producer": "grok-cli",
+  "retrodiction_gate": {
+    "description": "Layer 1: Retest C (137-pt grids). Layer 2: Prior dense Sterbenz absolute residual results (8001-pt). Both reproduced byte-stably.",
+    "passed": true,
+    "evidence_path": "scratch/f1_f2_common_mode_ulp_lattice_geometry/retrodiction.json"
+  },
+  "claims": [
+    {
+      "claim_id": "j_lattice_quantization_sterbenz",
+      "statement": "On 30,001-point log-dense grids tightly clustered at the Sterbenz boundary, the ULP-normalized F1-F2 residual (j) exhibits low variance and substantial quantization. Schwarzschild shows j_variance \u2248 0.50 with 100% of points within 0.1 of the discrete lattice {-1, -0.5, 0, 0.5, 1}. Other fixtures show j_variance 0.08-0.14 with ~40% near the lattice.",
+      "kind": "measured",
+      "status": "PARTIAL",
+      "confidence": "med",
+      "value": "schw: j_var=0.501, frac=1.0; sr: j_var=0.136, frac=0.446; pa/cbrt: j_var=0.084, frac=0.400",
+      "generating_script": "scratch/f1_f2_common_mode_ulp_lattice_geometry/dense_ulp_log_lattice.py",
+      "raw_output": "scratch/f1_f2_common_mode_ulp_lattice_geometry/ulp_lattice_results.json",
+      "byte_stable": true,
+      "derivation": "scratch/f1_f2_common_mode_ulp_lattice_geometry/derivation_ulp_lattice.md",
+      "falsifier": "j_variance significantly exceeds 1.0 across the log-dense boundary grid, or fraction within 0.1 of discrete lattice drops below 0.25 on multiple fixtures.",
+      "axiom_smuggling_check": "derived from spec+axioms only"
+    },
+    {
+      "claim_id": "negative_control_non_quantized",
+      "statement": "On the identical log-dense grids, the ULP-normalized F1-F4 residuals exhibit materially higher variance or less discrete structure than F1-F2 in the Schwarzschild case (negative control variance ~9e7 vs 0.5).",
+      "kind": "measured",
+      "status": "PARTIAL",
+      "confidence": "med",
+      "value": "Strong contrast observed on Schwarzschild; weaker/mixed on other fixtures under current window",
+      "generating_script": "scratch/f1_f2_common_mode_ulp_lattice_geometry/dense_ulp_log_lattice.py",
+      "raw_output": "scratch/f1_f2_common_mode_ulp_lattice_geometry/ulp_lattice_results.json",
+      "byte_stable": true,
+      "derivation": "scratch/f1_f2_common_mode_ulp_lattice_geometry/derivation_ulp_lattice.md",
+      "falsifier": "F1-F4 j distribution shows equal or lower variance + equal or higher discrete lattice membership than F1-F2 on the same grids.",
+      "axiom_smuggling_check": "derived from spec+axioms only"
+    }
+  ],
+  "scope_compliance": {
+    "touched_substrate": false,
+    "touched_normative_docs": false,
+    "wrote_canonical_record": false
+  },
+  "not_established": [
+    "Whether the observed j quantization (especially strong on Schwarzschild) constitutes a substrate-derived topological property or an eval-layer regularity that may depend on specific fixture geometry or window choice.",
+    "The exact mechanism producing the half-integer and integer locking in j (if it survives tighter scrutiny).",
+    "Reproducibility of the strong Schwarzschild result under even denser or differently-centered log sampling.",
+    "Extension to the full range of the prior 137-point grids or other radical degrees.",
+    "Whether variance < 1.0 with high discrete membership is sufficient to claim 'proven lattice geometry'."
+  ],
+  "calibration_notes": "Two-layer retrodiction gate passed 2026-06-01. 30,001 log-dense points per fixture focused on Sterbenz boundary. ULP normalization used math.ulp(f_direct) as reference. This is research-grade / eval-layer measurement only. Strongest quantization signal appeared on Schwarzschild; other fixtures showed partial quantization."
+}

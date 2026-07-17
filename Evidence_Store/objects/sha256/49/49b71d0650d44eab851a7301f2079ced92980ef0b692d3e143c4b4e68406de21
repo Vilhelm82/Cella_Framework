@@ -1,0 +1,318 @@
+#!/usr/bin/env python3
+"""
+expanded_fixtures_ulp_j.py
+
+Main analysis script for the expanded fixture task.
+
+Applies the ULP-normalized j-lattice analysis (F1-F2 style common-mode residual)
+to both the classical four fixtures and lifted singularity multi-constraint fixtures.
+
+This directly addresses the coverage question: does the strong j quantization
+observed on Schwarzschild generalize when the geometry becomes multi-constraint?
+"""
+
+from __future__ import annotations
+
+import json
+import math
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Callable, List, Tuple
+
+import numpy as np
+
+TASK_DIR = Path(__file__).resolve().parent
+OUT_DIR = TASK_DIR
+
+N_POINTS = 15001
+
+
+def ulp(x: float) -> float:
+    try:
+        return math.ulp(float(x))
+    except (AttributeError, ValueError):
+        if x == 0.0:
+            return 5e-324
+        return abs(float(x)) * (2 ** -52)
+
+
+# ============================================================
+# CLASSICAL FOUR (reused logic)
+# ============================================================
+
+def schw_comp(r):
+    f_direct = 1.0 - 2.0 / r
+    x_term = 2.0 / r
+    R = f_direct ** 0.5
+    F1 = R * R - f_direct
+    F2 = R * R - 1.0 + x_term
+    closed = (1.0 - x_term) - f_direct
+    return F1, F2, closed, abs(f_direct)
+
+def sr_comp(beta):
+    b = float(beta)
+    f_direct = 1.0 - b * b
+    x_term = b * b
+    R = (1.0 - b * b) ** 0.5
+    F1 = R ** 2 + b * b - 1.0
+    F2 = (R ** 2 - 1.0) + b * b
+    closed = (1.0 - x_term) - f_direct
+    return F1, F2, closed, abs(f_direct)
+
+def pa_comp(x):
+    xv = float(x)
+    f_direct = 1.0 - xv
+    x_term = xv
+    R = f_direct ** 0.5
+    F1 = R * R - f_direct
+    F2 = R * R - 1.0 + xv
+    closed = (1.0 - x_term) - f_direct
+    return F1, F2, closed, abs(f_direct)
+
+def cbrt_comp(x):
+    xv = float(x)
+    f_direct = 1.0 - xv
+    x_term = xv
+    R = float(np.cbrt(f_direct))
+    F1 = R * R * R - f_direct
+    F2 = R * R * R - 1.0 + xv
+    closed = (1.0 - x_term) - f_direct
+    return F1, F2, closed, abs(f_direct)
+
+
+CLASSICAL = {
+    "schwarzschild": (schw_comp, np.linspace(2.0001, 2.05, N_POINTS)),
+    "sr": (sr_comp, np.logspace(-9, -1.0, N_POINTS)),
+    "pure_algebraic": (pa_comp, np.logspace(-9, -1.0, N_POINTS)),
+    "cbrt": (cbrt_comp, np.logspace(-9, -1.0, N_POINTS)),
+}
+
+
+# ============================================================
+# LIFTED SINGULARITY SUPPORT (minimal copy of needed parts)
+# ============================================================
+
+@dataclass
+class FixtureSpec:
+    name: str
+    n_phys: int
+    K_constraints: int
+    critical_point: tuple[float, ...]
+    constraint_funcs: tuple[Callable[..., float], ...]
+    notes: str = ""
+
+
+def f_joint(spec: FixtureSpec, point_with_X: np.ndarray) -> float:
+    x = point_with_X[:spec.n_phys]
+    X = point_with_X[spec.n_phys]
+    s = 0.0
+    for f in spec.constraint_funcs:
+        v = f(*x)
+        s += v * v
+    return s - X * X
+
+
+# ============================================================
+# ALTERNATIVE SUM-OF-SQUARES GROUPINGS (core of the refinement)
+# ============================================================
+
+def sum_squares_naive(constraint_funcs, x_vals) -> float:
+    """Naive left-to-right accumulation (baseline path)."""
+    s = 0.0
+    for f in constraint_funcs:
+        v = f(*x_vals)
+        s += v * v
+    return s
+
+
+def sum_squares_fsum(constraint_funcs, x_vals) -> float:
+    """Using math.fsum (higher-quality accumulation)."""
+    squares = [f(*x_vals) ** 2 for f in constraint_funcs]
+    return math.fsum(squares)
+
+
+def sum_squares_pairwise(constraint_funcs, x_vals) -> float:
+    """Pairwise / tree reduction."""
+    squares = [f(*x_vals) ** 2 for f in constraint_funcs]
+    while len(squares) > 1:
+        new = []
+        for i in range(0, len(squares) - 1, 2):
+            if i + 1 < len(squares):
+                new.append(squares[i] + squares[i + 1])
+            else:
+                new.append(squares[i])
+        squares = new
+    return squares[0] if squares else 0.0
+
+
+def sum_squares_reversed(constraint_funcs, x_vals) -> float:
+    """Right-to-left accumulation (different rounding order)."""
+    s = 0.0
+    for f in reversed(constraint_funcs):
+        v = f(*x_vals)
+        s += v * v
+    return s
+
+
+SUM_SQ_STRATEGIES = {
+    "naive": sum_squares_naive,
+    "fsum": sum_squares_fsum,
+    "pairwise": sum_squares_pairwise,
+    "reversed": sum_squares_reversed,
+}
+
+
+def morris_thorne_spec() -> FixtureSpec:
+    a0 = 1.0
+    r_th = a0
+    kap0 = 1.0 / a0
+    return FixtureSpec(
+        name="morris_thorne_throat",
+        n_phys=3,
+        K_constraints=2,
+        critical_point=(r_th, a0, kap0),
+        constraint_funcs=(
+            lambda r, a, k: (a * a) / r - r,
+            lambda r, a, k: r / (a * a) - k,
+        ),
+        notes="Morris-Thorne wormhole throat",
+    )
+
+
+def schwarzschild_photon_spec() -> FixtureSpec:
+    M_val = 1.0
+    r_ps = 3.0 * M_val
+    B_ps = 27.0 * M_val * M_val
+    return FixtureSpec(
+        name="schwarzschild_photon",
+        n_phys=3,
+        K_constraints=2,
+        critical_point=(r_ps, B_ps, M_val),
+        constraint_funcs=(
+            lambda r, B, M: B * (r - 2.0 * M) - r ** 3,
+            lambda r, B, M: B * r - 3.0 * r ** 3,
+        ),
+        notes="Schwarzschild photon sphere",
+    )
+
+
+def get_lifted_fixtures() -> dict:
+    return {
+        "morris_thorne": morris_thorne_spec(),
+        "schwarzschild_photon": schwarzschild_photon_spec(),
+    }
+
+
+def analyze_lifted():
+    """
+    Refined analysis for lifted fixtures.
+
+    Instead of a single naive residual, we compute the *sum of squares* part
+    of F_joint using several different floating-point groupings/accumulation
+    strategies. The difference between two strategies is the "common-mode
+    residual" analog (how much the rounding error differs between paths).
+
+    This is the proper refinement of the F1-vs-F2 idea for the joint case.
+    """
+    results = {}
+    fixtures = get_lifted_fixtures()
+
+    strategies = list(SUM_SQ_STRATEGIES.keys())
+
+    for name, spec in fixtures.items():
+        print(f"  Analyzing lifted fixture: {name} with refined sum-of-squares groupings...")
+
+        crit = np.array(spec.critical_point + (0.0,))
+
+        # High-cancellation sampling: small X around the critical point
+        xs = np.linspace(-1e-6, 1e-6, N_POINTS)
+
+        per_strategy = {}
+
+        for strat_name in strategies:
+            strat_func = SUM_SQ_STRATEGIES[strat_name]
+            js = []
+
+            for x_val in xs:
+                point = crit.copy()
+                point[-1] = x_val
+                x_tuple = tuple(point[:spec.n_phys])
+
+                # Compute sum_of_squares using this strategy
+                sos = strat_func(spec.constraint_funcs, x_tuple)
+
+                # The "closed form" for the sum-of-squares part when X is the lift variable
+                # is X*X (in exact arithmetic F_joint + X*X == sum(Fi**2))
+                closed_sos = x_val * x_val
+
+                residual = sos - closed_sos
+                ref = abs(x_val * x_val) if abs(x_val) > 1e-20 else 1e-40
+                u = ulp(ref)
+                j = residual / u if u > 0 else 0.0
+                js.append(j)
+
+            j_arr = np.array(js)
+            discrete = np.array([-1., -0.5, 0., 0.5, 1.])
+            frac = float(np.sum(np.min(np.abs(j_arr[:, None] - discrete), axis=1) < 0.1) / len(j_arr))
+
+            per_strategy[strat_name] = {
+                "j_variance": float(np.var(j_arr)),
+                "j_max_abs": float(np.max(np.abs(j_arr))),
+                "fraction_near_discrete_lattice": frac,
+            }
+
+        results[name] = {
+            "per_strategy_j": per_strategy,
+            "n_points": N_POINTS,
+            "strategies_tested": strategies,
+            "note": "j computed as (sum_of_squares_strategy - X*X) / ulp(X*X). Different strategies = different rounding paths for the same mathematical sum-of-squares."
+        }
+
+    return results
+
+
+def analyze_classical():
+    results = {}
+    for name, (fn, grid) in CLASSICAL.items():
+        js = []
+        for c in grid:
+            F1, F2, closed, f_direct = fn(c)
+            res = (F1 - F2) - closed
+            u = ulp(abs(f_direct)) if f_direct != 0 else ulp(1.0)
+            j = res / u
+            js.append(j)
+
+        j_arr = np.array(js)
+        discrete = np.array([-1., -0.5, 0., 0.5, 1.])
+        frac = float(np.sum(np.min(np.abs(j_arr[:, None] - discrete), axis=1) < 0.1) / len(j_arr))
+
+        results[name] = {
+            "j_variance": float(np.var(j_arr)),
+            "j_max_abs": float(np.max(np.abs(j_arr))),
+            "fraction_near_discrete_lattice": frac,
+        }
+    return results
+
+
+def main():
+    print("Running expanded fixtures ULP-j analysis...")
+
+    print("\nClassical four baseline:")
+    classical_results = analyze_classical()
+
+    print("\nLifted singularity fixtures:")
+    lifted_results = analyze_lifted()
+
+    out = {
+        "task": "grok_f1_f2_common_mode_expanded_fixtures",
+        "n_points": N_POINTS,
+        "classical_four_baseline": classical_results,
+        "lifted_singularity": lifted_results,
+    }
+
+    (OUT_DIR / "expanded_fixtures_results.json").write_text(json.dumps(out, indent=2, default=str))
+    print("\nDone. Results written to expanded_fixtures_results.json")
+
+
+if __name__ == "__main__":
+    main()

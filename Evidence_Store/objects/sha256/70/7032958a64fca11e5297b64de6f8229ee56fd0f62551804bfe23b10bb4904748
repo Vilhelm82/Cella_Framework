@@ -1,0 +1,339 @@
+"""retestC: common-mode-rejection structure of the four-form battery.
+
+Eval-layer revalidation. Tests the claim that F1 and F2 compute the SAME
+sqrt/cbrt operand R, so that F1 - F2 cancels R**2 (or R**3) EXACTLY,
+isolating the pure operand-assembly path difference. The sqrt/cbrt
+round-off e = root_exact(f) - R is then a FORM-INVARIANT common-mode
+carrier across forms that share the root (F1, F2, F3), but FORM-SPECIFIC
+for F4 (which roots a different operand f_alt).
+
+Forms (per src/lloyd_v4/evals/{schwarzschild,sr,pure_algebraic,cbrt}_four_form.py):
+  F1 := R**p - f_direct          (late cancellation)
+  F2 := R**p - 1 + x_term        (early cancellation / split addition)
+  F3 := R - root(f_direct)       (== 0 exactly: identical operand re-rooted)
+  F4 := R - root(f_alt)          (different operand f_alt)
+where R = root(f_direct), p = 2 (sqrt) or 3 (cbrt), constraint R**p - f = 0.
+
+NOTE on SR rendering: SR codes F1 = eta**2 + beta^2 - 1, F2 = (eta**2 - 1)
++ beta^2. Here f_direct = 1 - beta^2, x_term = beta^2. So F1 = R**2 - f_direct
+and F2 = R**2 - 1 + x_term hold with that identification.
+
+This script ONLY measures. It reconstructs the substrate float64 path
+identically to the campaign modules and verifies the algebra.
+"""
+from __future__ import annotations
+
+import json
+import math
+from pathlib import Path
+from typing import Callable, Dict, List
+
+import mpmath as mp
+import numpy as np
+
+mp.mp.dps = 60
+
+OUT_DIR = Path(__file__).resolve().parent
+
+
+# --------------------------------------------------------------------------
+# Fixture definitions. Each returns, per grid coord, the float64 path
+# reconstructed EXACTLY as the campaign module computes it.
+# --------------------------------------------------------------------------
+
+_SCHW_CSV = (Path(__file__).resolve().parents[3]
+             / "Build_Docs/Reports/task024b_schwarzschild_four_form"
+               "/v3_reference_overlay.csv")
+
+
+def _schw_grid() -> List[float]:
+    # Canonical r-grid: the campaign reads r ('re' column) from the V3
+    # reference overlay CSV. Use the actual campaign grid for fidelity.
+    import csv
+    with _SCHW_CSV.open(newline="", encoding="utf-8") as fh:
+        return [float(row["re"]) for row in csv.DictReader(fh)]
+
+
+def _schw_csv_recorded() -> Dict[float, Dict[str, float]]:
+    """Recorded F1..F4 from the campaign CSV, keyed by r, for cross-check."""
+    import csv
+    out = {}
+    with _SCHW_CSV.open(newline="", encoding="utf-8") as fh:
+        for row in csv.DictReader(fh):
+            out[float(row["re"])] = {
+                "F1": float(row["F1"]), "F2": float(row["F2"]),
+                "F3": float(row["F3"]), "F4": float(row["F4"]),
+            }
+    return out
+
+
+def _beta_grid() -> List[float]:
+    n = 137
+    b_min, b_max = 0.01, 0.9999
+    step = (b_max - b_min) / (n - 1)
+    return [b_min + step * i for i in range(n)]
+
+
+def _x_grid() -> List[float]:
+    n = 137
+    x_min, x_max = 0.01, 0.99
+    step = (x_max - x_min) / (n - 1)
+    return [x_min + step * i for i in range(n)]
+
+
+def schwarzschild(r: float) -> Dict[str, float]:
+    f_direct = 1.0 - 2.0 / r
+    x_term = 2.0 / r
+    f_alt = (r - 2.0) / r
+    R = f_direct ** 0.5
+    F1 = R * R - f_direct
+    F2 = R * R - 1.0 + x_term
+    F3 = R - f_direct ** 0.5
+    F4 = R - f_alt ** 0.5
+    root_exact = mp.sqrt(mp.mpf(f_direct))
+    return dict(coord=r, p=2, f_direct=f_direct, x_term=x_term, f_alt=f_alt,
+                R=R, F1=F1, F2=F2, F3=F3, F4=F4,
+                f_alt_root=f_alt ** 0.5, root_exact=root_exact)
+
+
+def sr(beta: float) -> Dict[str, float]:
+    b = float(beta)
+    f_direct = 1.0 - b * b          # implicit f_direct
+    x_term = b * b                  # implicit x_term (added back)
+    f_alt = (1.0 - b) * (1.0 + b)
+    R = (1.0 - b * b) ** 0.5        # eta_of_beta
+    F1 = R ** 2 + b * b - 1.0       # == R*R - f_direct
+    F2 = (R ** 2 - 1.0) + b * b     # == R*R - 1 + x_term
+    F3 = R - (1.0 - b * b) ** 0.5
+    F4 = R - f_alt ** 0.5
+    root_exact = mp.sqrt(mp.mpf(1) - mp.mpf(b) * mp.mpf(b))
+    return dict(coord=b, p=2, f_direct=f_direct, x_term=x_term, f_alt=f_alt,
+                R=R, F1=F1, F2=F2, F3=F3, F4=F4,
+                f_alt_root=f_alt ** 0.5, root_exact=root_exact)
+
+
+def pure_algebraic(x: float) -> Dict[str, float]:
+    xv = float(x)
+    f_direct = 1.0 - xv
+    x_term = xv
+    f_alt = (1.0 - xv / 2.0) - xv / 2.0   # split routing
+    R = f_direct ** 0.5
+    F1 = R ** 2 - f_direct
+    F2 = R ** 2 - 1.0 + xv
+    F3 = R - R
+    F4 = R - f_alt ** 0.5
+    root_exact = mp.sqrt(mp.mpf(1) - mp.mpf(xv))
+    return dict(coord=xv, p=2, f_direct=f_direct, x_term=x_term, f_alt=f_alt,
+                R=R, F1=F1, F2=F2, F3=F3, F4=F4,
+                f_alt_root=f_alt ** 0.5, root_exact=root_exact)
+
+
+def cbrt(x: float) -> Dict[str, float]:
+    xv = float(x)
+    f_direct = 1.0 - xv
+    x_term = xv
+    f_alt = (1.0 - xv / 2.0) - xv / 2.0
+    R = float(np.cbrt(f_direct))
+    F1 = R * R * R - f_direct
+    F2 = R * R * R - 1.0 + xv
+    F3 = R - float(np.cbrt(f_direct))
+    F4 = R - float(np.cbrt(f_alt))
+    root_exact = mp.cbrt(mp.mpf(1) - mp.mpf(xv))
+    return dict(coord=xv, p=3, f_direct=f_direct, x_term=x_term, f_alt=f_alt,
+                R=R, F1=F1, F2=F2, F3=F3, F4=F4,
+                f_alt_root=float(np.cbrt(f_alt)), root_exact=root_exact)
+
+
+FIXTURES: Dict[str, tuple] = {
+    "schwarzschild": (schwarzschild, _schw_grid()),
+    "sr": (sr, _beta_grid()),
+    "pure_algebraic": (pure_algebraic, _x_grid()),
+    "cbrt": (cbrt, _cbrt_grid := _x_grid()),
+}
+
+
+def _next_after(v: float, direction: float) -> float:
+    return math.nextafter(v, direction)
+
+
+def analyze_fixture(name: str, fn: Callable, grid: List[float],
+                    recorded: Dict[float, Dict[str, float]] | None = None
+                    ) -> Dict:
+    """Per-fixture measurement of the common-mode structure."""
+    p = fn(grid[0])["p"]
+    recon_vs_csv_max = {"F1": 0.0, "F2": 0.0, "F3": 0.0, "F4": 0.0}
+
+    max_cancel_resid = 0.0          # |(F1-F2) - closed_form|
+    max_pert_change = 0.0           # change in (F1-F2) under +-1 ULP perturb of R
+    f4_operand_diff_count = 0
+    f4_operand_equal_count = 0
+    max_abs_operand_diff = 0.0
+    e_F1F2_same_count = 0           # round-off e identical for F1 and F2 path
+    e_vs_F4_diff_count = 0          # F4 root operand bits differ -> form-specific
+    f4_root_eq_when_operand_eq = 0  # roots bit-match where operand bits match
+    f4_operand_eq_total = 0
+    f3_max_abs = 0.0
+    rows = []
+
+    for coord in grid:
+        d = fn(coord)
+        R = d["R"]
+        f_direct = d["f_direct"]
+        x_term = d["x_term"]
+        f_alt = d["f_alt"]
+        F1, F2, F3, F4 = d["F1"], d["F2"], d["F3"], d["F4"]
+
+        # --- F1 - F2 closed form: R**p cancels, leaving
+        #     F1 = R**p - f_direct, F2 = R**p - 1 + x_term
+        #     F1 - F2 = (-f_direct) - (-1 + x_term) = (1 - x_term) - f_direct
+        # computed WITHOUT R, in float64, in the same op order.
+        closed = (1.0 - x_term) - f_direct
+        observed = F1 - F2
+        cancel_resid = abs(observed - closed)
+        max_cancel_resid = max(max_cancel_resid, cancel_resid)
+
+        # --- R-independence: perturb R by +-1 ULP, recompute F1-F2.
+        # If R**p truly cancels, F1-F2 must be UNCHANGED to the bit.
+        for direction in (math.inf, -math.inf):
+            R_pert = _next_after(R, direction)
+            if p == 2:
+                Rp = R_pert * R_pert
+            else:
+                Rp = R_pert * R_pert * R_pert
+            F1_pert = Rp - f_direct
+            F2_pert = Rp - 1.0 + x_term
+            pert_diff = (F1_pert - F2_pert)
+            max_pert_change = max(max_pert_change, abs(pert_diff - observed))
+
+        # --- F4 operand differs from F1/F2 operand (f_direct)
+        operand_diff = abs(f_alt - f_direct)
+        max_abs_operand_diff = max(max_abs_operand_diff, operand_diff)
+        if f_alt != f_direct:
+            f4_operand_diff_count += 1
+        else:
+            f4_operand_equal_count += 1
+
+        # --- round-off carrier e = root_exact - R (F1/F2/F3 share R operand)
+        root_exact = d["root_exact"]
+        e_shared = float(root_exact - mp.mpf(R))   # round-off of the shared root
+        # F4's operand is f_alt; its root has its own exact value & round-off
+        f_alt_root = d["f_alt_root"]
+        if p == 2:
+            root_alt_exact = mp.sqrt(mp.mpf(f_alt))
+        else:
+            root_alt_exact = mp.cbrt(mp.mpf(f_alt))
+        e_alt = float(root_alt_exact - mp.mpf(f_alt_root))
+
+        # F1 and F2 reuse the SAME R bits, so their root round-off e_shared is
+        # IDENTICAL -> common-mode (trivially, one bound value). Count it.
+        e_F1F2_same_count += 1
+        # F4's round-off is FORM-SPECIFIC exactly when its root operand BITS
+        # differ from the shared root operand. The clean criterion is operand
+        # inequality (a different float64 -> generally different round-off).
+        # Where f_alt == f_direct, sqrt/cbrt is correctly rounded so the roots
+        # match bit-for-bit and F4's round-off is *also* common-mode there.
+        if f_alt != f_direct:
+            e_vs_F4_diff_count += 1
+        else:
+            f4_operand_eq_total += 1
+            if f_alt_root == R:   # correctly-rounded root -> bit-match
+                f4_root_eq_when_operand_eq += 1
+
+        f3_max_abs = max(f3_max_abs, abs(F3))
+
+        # cross-check reconstruction against recorded campaign output
+        if recorded is not None and coord in recorded:
+            rec = recorded[coord]
+            for k, v in (("F1", F1), ("F2", F2), ("F3", F3), ("F4", F4)):
+                recon_vs_csv_max[k] = max(recon_vs_csv_max[k],
+                                          abs(v - rec[k]))
+
+        rows.append(dict(
+            coord=coord,
+            R=R, f_direct=f_direct, x_term=x_term, f_alt=f_alt,
+            F1=F1, F2=F2, F3=F3, F4=F4,
+            F1_minus_F2=observed, closed_form=closed,
+            cancel_resid=cancel_resid,
+            f4_operand=f_alt, f4_root=f_alt_root, shared_root=R,
+            f4_operand_neq_fdirect=(f_alt != f_direct),
+            e_shared=e_shared, e_alt=e_alt,
+        ))
+
+    n = len(grid)
+    return dict(
+        fixture=name, p=p, n_points=n,
+        retrodiction_F3_max_abs=f3_max_abs,
+        retrodiction_F3_all_zero=(f3_max_abs == 0.0),
+        closed_form="(1 - x_term) - f_direct",
+        max_cancel_residual=max_cancel_resid,
+        cancellation_exact=(max_cancel_resid == 0.0),
+        max_F1F2_change_under_1ulp_R_perturb=max_pert_change,
+        F1F2_R_independent=(max_pert_change == 0.0),
+        f4_operand_differs_count=f4_operand_diff_count,
+        f4_operand_equal_count=f4_operand_equal_count,
+        f4_operand_max_abs_diff_vs_fdirect=max_abs_operand_diff,
+        f4_roundoff_form_specific_count=e_vs_F4_diff_count,
+        f4_roundoff_common_mode_count=(n - e_vs_F4_diff_count),
+        f4_operand_equal_total=f4_operand_eq_total,
+        f4_root_bitmatch_when_operand_equal=f4_root_eq_when_operand_eq,
+        e_F1F2_common_mode_count=e_F1F2_same_count,
+        recon_vs_campaign_csv_max_abs=(recon_vs_csv_max
+                                       if recorded is not None else None),
+        recon_matches_campaign=(
+            all(v == 0.0 for v in recon_vs_csv_max.values())
+            if recorded is not None else None),
+        sample_rows=rows[:5] + rows[-5:],
+        all_rows=rows,
+    )
+
+
+def main() -> None:
+    results = {}
+    schw_recorded = _schw_csv_recorded()
+    for name, (fn, grid) in FIXTURES.items():
+        rec = schw_recorded if name == "schwarzschild" else None
+        results[name] = analyze_fixture(name, fn, grid, rec)
+
+    # Strip all_rows for the compact JSON; keep summary + samples.
+    compact = {}
+    for name, r in results.items():
+        rr = dict(r)
+        rr.pop("all_rows")
+        compact[name] = rr
+
+    (OUT_DIR / "retestC_results.json").write_text(
+        json.dumps(compact, indent=2, default=str))
+
+    # Console summary
+    print("=" * 78)
+    print("retestC: four-form common-mode-rejection structure")
+    print("=" * 78)
+    for name, r in results.items():
+        print(f"\n--- {name} (root power p={r['p']}, {r['n_points']} pts) ---")
+        print(f"  RETRODICTION GATE F3 == 0 exactly : "
+              f"{'PASS' if r['retrodiction_F3_all_zero'] else 'FAIL'} "
+              f"(max|F3|={r['retrodiction_F3_max_abs']:.3e})")
+        print(f"  F1-F2 closed form                  : "
+              f"(1 - x_term) - f_direct")
+        print(f"  max |cancellation residual|        : "
+              f"{r['max_cancel_residual']:.3e}  "
+              f"(R**{r['p']} cancels exactly: {r['cancellation_exact']})")
+        print(f"  max change in (F1-F2) under +-1 ULP perturb of R: "
+              f"{r['max_F1F2_change_under_1ulp_R_perturb']:.3e}  "
+              f"(R-independent: {r['F1F2_R_independent']})")
+        print(f"  F4 operand differs from f_direct   : "
+              f"{r['f4_operand_differs_count']}/{r['n_points']} pts "
+              f"(equal: {r['f4_operand_equal_count']}; "
+              f"max|f_alt-f_direct|={r['f4_operand_max_abs_diff_vs_fdirect']:.3e})")
+        print(f"  F4 round-off form-specific (operand bits differ): "
+              f"{r['f4_roundoff_form_specific_count']}/{r['n_points']} pts; "
+              f"common-mode where operand bits coincide: "
+              f"{r['f4_roundoff_common_mode_count']}/{r['n_points']}")
+        print(f"  (sanity) roots bit-match where operand bits match: "
+              f"{r['f4_root_bitmatch_when_operand_equal']}/"
+              f"{r['f4_operand_equal_total']}")
+    print("\nWrote retestC_results.json")
+
+
+if __name__ == "__main__":
+    main()

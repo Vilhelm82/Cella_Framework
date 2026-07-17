@@ -1,0 +1,121 @@
+#!/usr/bin/env python3
+"""
+Investigation 1: Probing the Parity Trap (The 2^{-54} Guard Bit) - V2
+
+Corrected measurement.
+
+Key insight: When we compute Late_F2 = power + (x - 1) inside Sterbenz,
+the mathematical result is exactly 0. Therefore the float64 value *is* the absolute error.
+
+We look at:
+- The absolute size of that error on each side of V_n = 1.0
+- The error expressed in units of ulp(1.0) = 2^{-52}
+- Whether a systematic 0.5 ulp (relative to the cancellation at 1.0) bias appears on one parity.
+
+This version uses proper scaling for the guard-bit / Sterbenz analysis.
+"""
+
+from __future__ import annotations
+import numpy as np
+import mpmath as mp
+
+mp.mp.dps = 80
+
+def pure_algebraic_late_f2(x: float) -> float:
+    direct = 1.0 - x
+    r = np.sqrt(direct)
+    power = r * r
+    return power + (x - 1.0)
+
+def pure_algebraic_early_f2(x: float) -> float:
+    direct = 1.0 - x
+    r = np.sqrt(direct)
+    power = r * r
+    return (power - 1.0) + x
+
+def main():
+    print("Investigation 1: Probing the Parity Trap (Corrected V2)")
+    print("=" * 72)
+    print("Sweep x across 0 inside Sterbenz (x <= 0.5)")
+    print("Late F2 residual == absolute error (math truth = 0)")
+    print()
+
+    # Very dense sweep around the critical point
+    x_values = np.linspace(-0.005, 0.005, 20001)
+
+    late_errors = []
+    early_errors = []
+    v_n_lt_1 = []
+    x_list = []
+
+    for x in x_values:
+        late = pure_algebraic_late_f2(x)
+        early = pure_algebraic_early_f2(x)
+
+        direct = 1.0 - x
+        r = np.sqrt(direct)
+        v_n = r * r
+
+        late_errors.append(late)
+        early_errors.append(early)
+        v_n_lt_1.append(v_n < 1.0)
+        x_list.append(x)
+
+    late_errors = np.array(late_errors)
+    early_errors = np.array(early_errors)
+    v_n_lt_1 = np.array(v_n_lt_1)
+    x_arr = np.array(x_list)
+
+    # Error in units of ulp(1.0)
+    ULP1 = 2.0 ** -52
+
+    late_in_ulp1 = late_errors / ULP1
+    early_in_ulp1 = early_errors / ULP1
+
+    pos_mask = v_n_lt_1          # V_n < 1.0  (x > 0)
+    neg_mask = ~v_n_lt_1         # V_n > 1.0  (x < 0)
+
+    print("Late F2 absolute error (in ulp(1.0)):")
+    print(f"  V_n < 1 (x>0):  mean |err| = {np.mean(np.abs(late_in_ulp1[pos_mask])):.6f} ulp(1)")
+    print(f"  V_n > 1 (x<0):  mean |err| = {np.mean(np.abs(late_in_ulp1[neg_mask])):.6f} ulp(1)")
+
+    print("\nEarly F2 absolute error (in ulp(1.0)):")
+    print(f"  V_n < 1 (x>0):  mean |err| = {np.mean(np.abs(early_in_ulp1[pos_mask])):.6f} ulp(1)")
+    print(f"  V_n > 1 (x<0):  mean |err| = {np.mean(np.abs(early_in_ulp1[neg_mask])):.6f} ulp(1)")
+
+    # Look for clustering around ±0.5 ulp(1)
+    def count_near(val, arr, tol=0.05):
+        return np.sum(np.abs(np.abs(arr) - val) < tol)
+
+    print("\nLate F2: points with |error| ≈ 0.5 ulp(1):")
+    print(f"  V_n < 1 side: {count_near(0.5, late_in_ulp1[pos_mask])}")
+    print(f"  V_n > 1 side: {count_near(0.5, late_in_ulp1[neg_mask])}")
+
+    print("\nEarly F2: points with |error| ≈ 0.5 ulp(1):")
+    print(f"  V_n < 1 side: {count_near(0.5, early_in_ulp1[pos_mask])}")
+    print(f"  V_n > 1 side: {count_near(0.5, early_in_ulp1[neg_mask])}")
+
+    # Save for further inspection
+    np.savez_compressed(
+        "scratch/investigation1_parity_trap_v2.npz",
+        x=x_arr,
+        late_error_ulp1=late_in_ulp1,
+        early_error_ulp1=early_in_ulp1,
+        v_n_lt_1=v_n_lt_1,
+    )
+    print("\nSaved: scratch/investigation1_parity_trap_v2.npz")
+
+    # Simple verdict
+    late_pos_mean = np.mean(np.abs(late_in_ulp1[pos_mask]))
+    late_neg_mean = np.mean(np.abs(late_in_ulp1[neg_mask]))
+
+    print("\n" + "=" * 72)
+    if abs(late_pos_mean - late_neg_mean) < 0.1:
+        print("VERDICT: No clear parity-dependent bias in Late F2 error (in ulp(1)) in this sweep.")
+    elif late_pos_mean > late_neg_mean * 1.5:
+        print("VERDICT: Late F2 shows larger average error on V_n < 1 side.")
+    else:
+        print("VERDICT: Late F2 shows larger average error on V_n > 1 side.")
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,373 @@
+{
+ "authority": "campaign brief ladder (Facet D: refinement-flow zero taxonomy; CL-4; FX-B/C/D incl. Kerr-Delta serving A9) + Will's Facet-D GO (Facet-C acceptance message; TRIAL law carries as TRIAL; A9 scoreboard application reserved to Will per the stricter clause)",
+ "campaign_id": "root_closure_atlas",
+ "cluster_battery": [
+  "FXC_e10",
+  "FXC_e26",
+  "FXC_e40",
+  "FXC_e52",
+  "FXC_kerr0",
+  "FXC_kerr1"
+ ],
+ "date_stamped_from_machine": "2026-06-12",
+ "depends_on": {
+  "facet_a_organ": "instruments/probe_facet_a.py (certified-cell emitter consumed for anchors)",
+  "hr133_instruments": "lloyd_v4/evals/precision_flow.py \u2014 Phen + rn IMPORTED, never rebuilt (V4-internal consumption; lineage note in the organ docstring, EFT-lift precedent)",
+  "manifest_v1_pin": "ce2e5352419cf7e1f996aafd9b4329d32836de160aa2a244408791036c540138",
+  "precision_flow_stage_a_manifest_sha256": "89e7ffbdf59eeca521b156ac7d5d54f520699a617b8edf05871519eb4df72918",
+  "precision_flow_stage_b_manifest_sha256": "0609a0364dc8ee9031d85f1045914487a848dfd35c57dd586ecb7cc7aa883a67",
+  "stage0_records_sha256": "ac3ab40dea296b569d2dbcb2558cc5fa4e5a7e49b7b6f11c669206cd8c933499"
+ },
+ "facet": "D",
+ "fences": "B7 stays frozen: orbit arithmetic is consumed as an instrument; nothing here tests residual self-similarity or cites B7. No K_G search. One harness. Manifest_v1 FROZEN \u2014 no fixture changes.",
+ "fixture_plan": {
+  "FXB2": {
+   "expected_anchor_kind": "exact_zero_point",
+   "expected_deaths": {
+    "3/2": {
+     "L": 2,
+     "kind": "dies_dyadic",
+     "period": null
+    }
+   },
+   "expected_m_reads": [
+    2,
+    2
+   ],
+   "expected_q_star": null,
+   "expected_refusals": [],
+   "h_exps": [
+    16,
+    20
+   ]
+  },
+  "FXB3": {
+   "expected_anchor_kind": "cell_lo_wall",
+   "expected_deaths": {
+    "1/3": {
+     "L": null,
+     "kind": "periodic_never_dies",
+     "period": 2
+    }
+   },
+   "expected_m_reads": [
+    3,
+    3
+   ],
+   "expected_q_star": null,
+   "expected_refusals": [],
+   "h_exps": [
+    16,
+    20
+   ]
+  },
+  "FXB4": {
+   "expected_anchor_kind": "pinned_root_rn53",
+   "expected_deaths": {
+    "1/3": {
+     "L": null,
+     "kind": "periodic_never_dies",
+     "period": 2
+    }
+   },
+   "expected_m_reads": [
+    4,
+    4
+   ],
+   "expected_q_star": null,
+   "expected_refusals": [],
+   "h_exps": [
+    16,
+    20
+   ]
+  },
+  "FXB5": {
+   "expected_anchor_kind": "exact_zero_point",
+   "expected_deaths": {
+    "5/4": {
+     "L": 3,
+     "kind": "dies_dyadic",
+     "period": null
+    }
+   },
+   "expected_m_reads": [
+    5,
+    5
+   ],
+   "expected_q_star": null,
+   "expected_refusals": [],
+   "h_exps": [
+    16,
+    20
+   ]
+  },
+  "FXC_e10": {
+   "expected_anchor_kind": "exact_zero_point",
+   "expected_deaths": {
+    "1/1": {
+     "L": 1,
+     "kind": "dies_dyadic",
+     "period": null
+    },
+    "1023/1024": {
+     "L": 10,
+     "kind": "dies_dyadic",
+     "period": null
+    },
+    "1025/1024": {
+     "L": 11,
+     "kind": "dies_dyadic",
+     "period": null
+    }
+   },
+   "expected_m_reads": [
+    3,
+    1
+   ],
+   "expected_q_star": 11,
+   "expected_refusals": [],
+   "h_exps": [
+    4,
+    16
+   ]
+  },
+  "FXC_e26": {
+   "expected_anchor_kind": "exact_zero_point",
+   "expected_deaths": {
+    "1/1": {
+     "L": 1,
+     "kind": "dies_dyadic",
+     "period": null
+    },
+    "67108863/67108864": {
+     "L": 26,
+     "kind": "dies_dyadic",
+     "period": null
+    },
+    "67108865/67108864": {
+     "L": 27,
+     "kind": "dies_dyadic",
+     "period": null
+    }
+   },
+   "expected_m_reads": [
+    3,
+    1
+   ],
+   "expected_q_star": 27,
+   "expected_refusals": [],
+   "h_exps": [
+    20,
+    32
+   ]
+  },
+  "FXC_e40": {
+   "expected_anchor_kind": "exact_zero_point",
+   "expected_deaths": {
+    "1/1": {
+     "L": 1,
+     "kind": "dies_dyadic",
+     "period": null
+    },
+    "1099511627775/1099511627776": {
+     "L": 40,
+     "kind": "dies_dyadic",
+     "period": null
+    },
+    "1099511627777/1099511627776": {
+     "L": 41,
+     "kind": "dies_dyadic",
+     "period": null
+    }
+   },
+   "expected_m_reads": [
+    3,
+    1
+   ],
+   "expected_q_star": 41,
+   "expected_refusals": [],
+   "h_exps": [
+    34,
+    46
+   ]
+  },
+  "FXC_e52": {
+   "expected_anchor_kind": "exact_zero_point",
+   "expected_deaths": {
+    "1/1": {
+     "L": 1,
+     "kind": "dies_dyadic",
+     "period": null
+    },
+    "4503599627370495/4503599627370496": {
+     "L": 52,
+     "kind": "dies_dyadic",
+     "period": null
+    },
+    "4503599627370497/4503599627370496": {
+     "L": 53,
+     "kind": "dies_dyadic",
+     "period": null
+    }
+   },
+   "expected_m_reads": [
+    3,
+    null
+   ],
+   "expected_q_star": 53,
+   "expected_refusals": [
+    "lattice_floor_sub_ulp"
+   ],
+   "h_exps": [
+    46,
+    58
+   ]
+  },
+  "FXC_kerr0": {
+   "expected_anchor_kind": "cell_lo_wall",
+   "expected_deaths": {
+    "r_minus": {
+     "L": null,
+     "kind": "irrational_never_dies",
+     "period": null
+    },
+    "r_plus": {
+     "L": null,
+     "kind": "irrational_never_dies",
+     "period": null
+    }
+   },
+   "expected_m_reads": [
+    2,
+    1
+   ],
+   "expected_q_star": 4,
+   "expected_refusals": [],
+   "h_exps": [
+    1,
+    10
+   ]
+  },
+  "FXC_kerr1": {
+   "expected_anchor_kind": "cell_lo_wall",
+   "expected_deaths": {
+    "r_minus": {
+     "L": null,
+     "kind": "irrational_never_dies",
+     "period": null
+    },
+    "r_plus": {
+     "L": null,
+     "kind": "irrational_never_dies",
+     "period": null
+    }
+   },
+   "expected_m_reads": [
+    2,
+    1
+   ],
+   "expected_q_star": 12,
+   "expected_refusals": [],
+   "h_exps": [
+    5,
+    18
+   ]
+  },
+  "FXC_kerr2": {
+   "expected_anchor_kind": "exact_zero_point",
+   "expected_deaths": {
+    "1/1": {
+     "L": 1,
+     "kind": "dies_dyadic",
+     "period": null
+    }
+   },
+   "expected_m_reads": [
+    2,
+    2
+   ],
+   "expected_q_star": null,
+   "expected_refusals": [],
+   "h_exps": [
+    16,
+    20
+   ]
+  },
+  "FXD1": {
+   "expected_anchor_kind": "exact_zero_point",
+   "expected_deaths": {
+    "3/2": {
+     "L": 2,
+     "kind": "dies_dyadic",
+     "period": null
+    }
+   },
+   "expected_m_reads": [
+    1,
+    1
+   ],
+   "expected_q_star": null,
+   "expected_refusals": [],
+   "h_exps": [
+    16,
+    20
+   ]
+  },
+  "FXD3": {
+   "expected_anchor_kind": "exact_zero_point",
+   "expected_deaths": {
+    "2/1": {
+     "L": 1,
+     "kind": "dies_dyadic",
+     "period": null
+    }
+   },
+   "expected_m_reads": [
+    1,
+    1
+   ],
+   "expected_q_star": null,
+   "expected_refusals": [],
+   "h_exps": [
+    16,
+    20
+   ]
+  }
+ },
+ "frozen": true,
+ "independence_seams": "organ flow facts via the imported HR133 rounder vs grader recomputation through fresh arithmetic (rational rounding: floor + exact midpoint + ties-to-even, fully independent path; dyadic death: L = binade - val2 + 1 integer arithmetic; period: multiplicative order of 2; the irrational path shares the squaring-comparison technique \u2014 the only exact one \u2014 but is a fresh code path, disclosed). Multiplicity referee: eval_exact at the organ's recorded lattice points (the referee evaluator the probe never calls; AST-asserted in tests).",
+ "m_max": 8,
+ "mult_battery": [
+  "FXB2",
+  "FXB3",
+  "FXB4",
+  "FXB5",
+  "FXC_kerr2"
+ ],
+ "organ": "I3d_flow_taxonomy_v1 (role=probe): refinement-flow zero taxonomy \u2014 doubling-ratio multiplicity certificate (lane account, exact-Q ratio bounds, M_MAX=8 declared search ceiling), split flow and death flow over the pinned q-grid via the IMPORTED HR133 rounder; Kerr's irrational roots ride a protocol-conforming shifted-sqrt phenomenon (plumbing; every decision an exact comparison). Anchors from the organ's own certified cell; the sign-blind FXB4 (even multiplicity x non-dyadic root, certificate none) anchors at the lattice's image of the pinned root (rn at q=53) \u2014 declared, not a fallback tolerance.",
+ "predictions": {
+  "PD.1": "multiplicity certificates: on every multiplicity-battery fixture (FXB2/FXB3/FXB4/FXB5/FXC_kerr2) the organ's doubling-ratio certificate reads the pinned manifest multiplicity at BOTH pinned h-exponents (stable m), via the exact-Q bounds 2^(2m-1) < R^2 < 2^(2m+1) with R read through the lane account (never the referee); the referee recomputes R^2 at the organ's recorded lattice points via eval_exact and must certify the same m. The SAME instrument on the cluster battery reads the pinned total count at the coarse h and 1 at the fine h (the cluster/multiple discrimination), with FXC_e52's fine read REFUSING at the declared lattice floor (anchor + 2^-58 is sub-ulp at binade 0: no float64 point stands inside the cluster) - a typed refusal, never a number. Simple-root contrast: FXD1/FXD3 read m=1 stable. Units: fixtures.",
+  "PD.2": "cluster split-at-predictable-q: on every cluster-battery fixture the organ's split flow (pairwise distinctness of the pinned root phenomena's roundings under the IMPORTED HR133 rounder, each at its own binade, per q over the pinned grid) measures q*_stable equal to the prereg-pinned value derived at dry-run by INDEPENDENT rounding arithmetic (floor + exact midpoint comparison + ties-to-even, fresh code path), with no remerge after first split anywhere, both ladders strictly monotone (e10 < e26 < e40 < e52; kerr0 < kerr1), the e-ladder obeying the closed form q* = e + 1 (the {1, 1+2^-e} pair is the last to separate: at q = e the half-lattice tie resolves to even = merged, at q = e+1 both on-lattice = split), and the multiple-root contrast FXC_kerr2 reporting not applicable (one root phenomenon - nothing to split; the structure lives in PD.1's m=2). Units: cluster fixtures + ladder laws.",
+  "PD.3": "dyadic death sharp: for every pinned root phenomenon - dyadic roots die at exactly L = binade - val2 + 1 (independent integer arithmetic) with the biconditional sharp BOTH directions over the grid (no death below L, death at every q >= L), including the binade-boundary root 2 (L=1) and the cluster-wall asymmetry ((2^e-1)/2^e dies at e; (2^e+1)/2^e at e+1); the rational non-dyadic root 1/3 (FXB3/FXB4) never dies on the grid and its measured orbit period equals the multiplicative order of 2 modulo the odd denominator (= 2; HR133 B-P1 consumed); the Kerr irrational roots are certified irrational (integer perfect-square refusal on the radicand) with residual nonzero at every grid q. Units: root phenomena.",
+  "PD.4": "the A9 ladder + the S3/classical contrast: (a) the Kerr a->M ladder grades as a TYPED transition - kerr0 and kerr1 each carry two certified-irrational horizon roots with q*_stable(kerr0) < q*_stable(kerr1) (the split precision diverges as a -> M), and the extremal member kerr2 carries ONE dyadic root with multiplicity certificate m=2, death L=1, split not-applicable: the merger completes with a vocabulary change, not a tolerance; (b) the classical/V3 contrast is derived from the COMMITTED Stage-0 records at the pinned sha (zero new emissions): all 22 oracle records across the eleven mult+cluster fixtures carry the single bucket residual_ok_coordinate_indeterminate (the S3 collapse: double root, triple, quartic, quintic, four clusters and all three Kerr members - one verdict word), and all 16 classical judge rows on the FXC_e cluster ladder grade converged WITH verdict_vs_certified_cell inside (count-blindness: every instrument sits at the one float-representable middle root while two roots within 2^-e go unexpressed). Re-derived at runtime from the pinned records; counts must equal the pinned 22/22 and 16/16. Units: ladder members + derived record counts.",
+  "PD.5": "determinism: battery byte-stable x2 (sha256 over records)."
+ },
+ "q_grid": [
+  1,
+  60
+ ],
+ "simple_contrast": [
+  "FXD1",
+  "FXD3"
+ ],
+ "stage0_contrast_pinned": {
+  "n_e_converged_inside": 16,
+  "n_e_judge": 16,
+  "n_oracle": 22,
+  "n_s3_bucket": 22
+ },
+ "status_move_rules": "CL-4 -> DEMONSTRATED iff PD.1 AND PD.2 AND PD.3 AND PD.4 PASS (arbiter-graded). CL-7: evidence appended (the lattice-floor refusal surface), stays PARTIAL. A9: presentation only \u2014 scoreboard application reserved to Will (stricter clause). Any PD-FAIL: chain preserved verbatim, STOP, route to Will.",
+ "telemetry": "permanently non-verdict-bearing (covenant 3); grid sweep counts and eval counts are telemetry, never verdicts.",
+ "trial_law": "each PD grader embeds its governing clause verbatim (GRADER_CLAUSES in run_facet_d.py); the gate string-compares every embedded clause against this frozen prereg at runtime and REFUSES on drift. Carried as TRIAL per the Facet-D GO; standing-law decision reserved for the campaign close.",
+ "version": 1
+}

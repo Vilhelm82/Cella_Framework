@@ -1,0 +1,325 @@
+{
+  "audit_name": "substrate_invariant_search_phase_i_focused_probe_sweep",
+  "authority": "Build_Docs/Agent_tasks/substrate_invariant_search_2026_05_23.md",
+  "campaign": "substrate_invariant_search",
+  "closeout_questions": {
+    "Q1_triangulation_result": "Fitted (\u03b1=0.0, \u03b2=1.0). Train mean residual: 0.7333. Held-out mean residual: 1.4285714285714286. Baseline E-only: 1.1201073256189864. Breaks ceiling: False.",
+    "Q2_focal_candidate": "Focal config: route=F2, scale=2^0. Train mean delta: 0.7548.",
+    "Q3_held_out_validation": "Held-out mean delta: 1.4749565004098766. Baseline: 1.6152559828412598. Validates: False. Improvement: 0.14029948243138324.",
+    "Q4_verdict": "partial_sharpening",
+    "Q5_strongest_closure": "Verdict is partial_sharpening; see Q3 for details.",
+    "Q6_fixture_specific_or_shared": "Focal config is fixture-shared (same route/scale applied to both fixtures at matched K_G).",
+    "Q7_new_candidates": "Grid explored 484 configurations across 22 pairs. Per-channel breakdown available in sweep_grid_results."
+  },
+  "date": "2026-05-24",
+  "focal_candidate": {
+    "all_config_scores": {
+      "F2_scale_-1": 0.888111234029461,
+      "F2_scale_-12": 0.8436667895850165,
+      "F2_scale_-2": 0.8658890118072388,
+      "F2_scale_-4": 0.8658890118072388,
+      "F2_scale_-8": 0.8436667895850165,
+      "F2_scale_0": 0.7547779006961277,
+      "F2_scale_1": 0.7547779006961277,
+      "F2_scale_12": 0.7658890118072388,
+      "F2_scale_2": 0.7547779006961277,
+      "F2_scale_4": 0.7547779006961277,
+      "F2_scale_8": 0.7658890118072388,
+      "default_scale_-1": 1.0257540451275993,
+      "default_scale_-12": 1.0479762673498216,
+      "default_scale_-2": 1.0257540451275995,
+      "default_scale_-4": 1.0479762673498216,
+      "default_scale_-8": 1.0479762673498216,
+      "default_scale_0": 1.0257540451275993,
+      "default_scale_1": 1.1590873784609326,
+      "default_scale_12": 1.2479762673498214,
+      "default_scale_2": 1.2257540451275992,
+      "default_scale_4": 1.2590873784609327,
+      "default_scale_8": 1.2479762673498216
+    },
+    "focal_route": "F2",
+    "focal_scale_exp": 0,
+    "train_mean_delta": 0.7547779006961277
+  },
+  "held_out_validation": {
+    "baseline_deltas": [
+      3.593320604757542,
+      2.250860646058738,
+      2.247989607343247,
+      1.5679300215791416,
+      0.8956387658950465,
+      0.014277432038385976,
+      0.7367748022167168
+    ],
+    "baseline_mean_delta": 1.6152559828412598,
+    "held_out_deltas": [
+      3.879331968453419,
+      2.154597192527304,
+      2.089576348400456,
+      1.2813509164627028,
+      0.5804091589253194,
+      0.0014755010923288199,
+      0.33795441700760614
+    ],
+    "held_out_mean_delta": 1.4749565004098766,
+    "improvement_over_baseline": 0.14029948243138324,
+    "validates": false
+  },
+  "phase": "I",
+  "phase_1_table_sha256": "6502e942558f699d24011ae1d78601a07dea835c9ec9441fe42185a9df42df54",
+  "phase_h_sha256": "e5540003e41596d706218015fbb0106f6d081e7ad808758f410680313f548924",
+  "preregistry": "Build_Docs/Agent_tasks/substrate_invariant_search_phase_i_focused_probe_sweep.md",
+  "probe_set": {
+    "kg_match_tolerance": 0.005,
+    "n_total_matched_pairs": 22,
+    "n_used": 22,
+    "pairs": [
+      {
+        "kg_rel_diff": 0.002239570035570113,
+        "pa_id": "pure_algebraic_four_form__x_idx_0001",
+        "pa_kg": 0.18264335324708872,
+        "schw_id": "schwarzschild_four_form__r_idx_0107",
+        "schw_kg": 0.1822343106659605
+      },
+      {
+        "kg_rel_diff": 0.0033106511979114884,
+        "pa_id": "pure_algebraic_four_form__x_idx_0006",
+        "pa_kg": 0.1909532722418621,
+        "schw_id": "schwarzschild_four_form__r_idx_0106",
+        "schw_kg": 0.19032109256236945
+      },
+      {
+        "kg_rel_diff": 0.004373574625777301,
+        "pa_id": "pure_algebraic_four_form__x_idx_0010",
+        "pa_kg": 0.19806629003803683,
+        "schw_id": "schwarzschild_four_form__r_idx_0105",
+        "schw_kg": 0.19893635302376625
+      },
+      {
+        "kg_rel_diff": 0.0048813562545030305,
+        "pa_id": "pure_algebraic_four_form__x_idx_0011",
+        "pa_kg": 0.19991219567045365,
+        "schw_id": "schwarzschild_four_form__r_idx_0105",
+        "schw_kg": 0.19893635302376625
+      },
+      {
+        "kg_rel_diff": 0.0025233879462813603,
+        "pa_id": "pure_algebraic_four_form__x_idx_0015",
+        "pa_kg": 0.20759759021610036,
+        "schw_id": "schwarzschild_four_form__r_idx_0104",
+        "schw_kg": 0.20812276469187058
+      },
+      {
+        "kg_rel_diff": 7.488686195837668e-05,
+        "pa_id": "pure_algebraic_four_form__x_idx_0020",
+        "pa_kg": 0.21791911590238344,
+        "schw_id": "schwarzschild_four_form__r_idx_0103",
+        "schw_kg": 0.21793543640332522
+      },
+      {
+        "kg_rel_diff": 0.003018915555337442,
+        "pa_id": "pure_algebraic_four_form__x_idx_0025",
+        "pa_kg": 0.2291245321274668,
+        "schw_id": "schwarzschild_four_form__r_idx_0102",
+        "schw_kg": 0.22843282451331778
+      },
+      {
+        "kg_rel_diff": 0.003646918494149449,
+        "pa_id": "pure_algebraic_four_form__x_idx_0029",
+        "pa_kg": 0.23879979649544386,
+        "schw_id": "schwarzschild_four_form__r_idx_0101",
+        "schw_kg": 0.2396738675555967
+      },
+      {
+        "kg_rel_diff": 0.0005715394079603953,
+        "pa_id": "pure_algebraic_four_form__x_idx_0034",
+        "pa_kg": 0.2518866072544315,
+        "schw_id": "schwarzschild_four_form__r_idx_0100",
+        "schw_kg": 0.25174264413204817
+      },
+      {
+        "kg_rel_diff": 2.4987133340800634e-05,
+        "pa_id": "pure_algebraic_four_form__x_idx_0043",
+        "pa_kg": 0.27868398494781044,
+        "schw_id": "schwarzschild_four_form__r_idx_0098",
+        "schw_kg": 0.27869094863570487
+      },
+      {
+        "kg_rel_diff": 0.001643089526544945,
+        "pa_id": "pure_algebraic_four_form__x_idx_0052",
+        "pa_kg": 0.31059494850327124,
+        "schw_id": "schwarzschild_four_form__r_idx_0096",
+        "schw_kg": 0.31008461319638775
+      },
+      {
+        "kg_rel_diff": 0.002986180650269466,
+        "pa_id": "pure_algebraic_four_form__x_idx_0056",
+        "pa_kg": 0.3267855036702102,
+        "schw_id": "schwarzschild_four_form__r_idx_0095",
+        "schw_kg": 0.32776426698212197
+      },
+      {
+        "kg_rel_diff": 0.002514949668484352,
+        "pa_id": "pure_algebraic_four_form__x_idx_0065",
+        "pa_kg": 0.3688390008549272,
+        "schw_id": "schwarzschild_four_form__r_idx_0093",
+        "schw_kg": 0.367911389332003
+      },
+      {
+        "kg_rel_diff": 0.000691329905716417,
+        "pa_id": "pure_algebraic_four_form__x_idx_0069",
+        "pa_kg": 0.390514746056744,
+        "schw_id": "schwarzschild_four_form__r_idx_0092",
+        "schw_kg": 0.3907849073498976
+      },
+      {
+        "kg_rel_diff": 0.003478920135482151,
+        "pa_id": "pure_algebraic_four_form__x_idx_0073",
+        "pa_kg": 0.4144008661415878,
+        "schw_id": "schwarzschild_four_form__r_idx_0091",
+        "schw_kg": 0.4158475666143738
+      },
+      {
+        "kg_rel_diff": 0.003966993508990061,
+        "pa_id": "pure_algebraic_four_form__x_idx_0105",
+        "pa_kg": 0.7438814169635907,
+        "schw_id": "schwarzschild_four_form__r_idx_0083",
+        "schw_kg": 0.7468441428304262
+      },
+      {
+        "kg_rel_diff": 8.475353543514871e-05,
+        "pa_id": "pure_algebraic_four_form__x_idx_0109",
+        "pa_kg": 0.8157458631232519,
+        "schw_id": "schwarzschild_four_form__r_idx_0082",
+        "schw_kg": 0.8156767257773356
+      },
+      {
+        "kg_rel_diff": 0.0016120386169488443,
+        "pa_id": "pure_algebraic_four_form__x_idx_0124",
+        "pa_kg": 1.225858726154737,
+        "schw_id": "schwarzschild_four_form__r_idx_0078",
+        "schw_kg": 1.2238825945492517
+      },
+      {
+        "kg_rel_diff": 0.00047649046261546117,
+        "pa_id": "pure_algebraic_four_form__x_idx_0126",
+        "pa_kg": 1.3065242864268478,
+        "schw_id": "schwarzschild_four_form__r_idx_0075",
+        "schw_kg": 1.3071471295673218
+      },
+      {
+        "kg_rel_diff": 0.0025016715471834652,
+        "pa_id": "pure_algebraic_four_form__x_idx_0128",
+        "pa_kg": 1.396441477450994,
+        "schw_id": "schwarzschild_four_form__r_idx_0072",
+        "schw_kg": 1.3999436767146904
+      },
+      {
+        "kg_rel_diff": 0.004474081733261916,
+        "pa_id": "pure_algebraic_four_form__x_idx_0130",
+        "pa_kg": 1.4971674908719175,
+        "schw_id": "schwarzschild_four_form__r_idx_0069",
+        "schw_kg": 1.5038960446942087
+      },
+      {
+        "kg_rel_diff": 0.004395020466842072,
+        "pa_id": "pure_algebraic_four_form__x_idx_0135",
+        "pa_kg": 1.8099683512302094,
+        "schw_id": "schwarzschild_four_form__r_idx_0062",
+        "schw_kg": 1.8020135032822162
+      }
+    ]
+  },
+  "route_set": [
+    "default",
+    "F2"
+  ],
+  "scale_grid": [
+    -12,
+    -8,
+    -4,
+    -2,
+    -1,
+    0,
+    1,
+    2,
+    4,
+    8,
+    12
+  ],
+  "scaling_exactness_verified": true,
+  "sweep_grid_size": 484,
+  "train_held_out_split": {
+    "held_out_pair_indices": [
+      0,
+      3,
+      4,
+      7,
+      8,
+      17,
+      20
+    ],
+    "n_held_out": 7,
+    "n_train": 15,
+    "seed": 42,
+    "train_pair_indices": [
+      1,
+      2,
+      5,
+      6,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      18,
+      19,
+      21
+    ]
+  },
+  "triangulation_results": {
+    "baseline_E_only_deltas": [
+      1.5599236285452531,
+      1.5051638763524264,
+      1.4879376440594798,
+      1.4075801294748493,
+      1.3738325953702795,
+      0.08566459223031586,
+      0.4206488133003008
+    ],
+    "baseline_E_only_mean_delta": 1.1201073256189864,
+    "breaks_ceiling": false,
+    "fitted_alpha": 0.0,
+    "fitted_beta": 1.0,
+    "held_out_mean_residual": 1.4285714285714286,
+    "held_out_residuals": [
+      4.0,
+      2.0,
+      2.0,
+      1.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "n_held_out": 7,
+    "n_train": 15,
+    "train_mean_residual": 0.7333333333333333
+  },
+  "verdict": "partial_sharpening",
+  "what_phase_i_does_not_claim": [
+    "Phase I does NOT modify substrate, primitives, or projection",
+    "Phase I does NOT call lv3 / V3 substrate",
+    "Phase I does NOT revise Phase F decision rule",
+    "Phase I does NOT propose new fixtures",
+    "Phase I does NOT extend the scale grid post-hoc"
+  ],
+  "wrong_clean_emit_audit": {
+    "directional_bias": false,
+    "mean_signed_delta_schw_to_pa": 0.9974457145981797,
+    "scaling_exactness_verified": true,
+    "train_improvement_replicates_on_held_out": false
+  }
+}

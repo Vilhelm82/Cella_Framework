@@ -1,0 +1,450 @@
+"""Spectral stack test — multi-channel substrate reconstruction with density.
+
+Architecture (Will's spec):
+  - Front view: composite reconstruction (joint multi-form readout per probe)
+  - Side view: each form isolated as its own layer
+  - Density layer: per-channel count of forms that produced non-degenerate
+    signal at this probe (the "did multiple forms fire here?" map)
+
+Cross-fixture analysis:
+  - Build per-probe spectral stack
+  - Fit a fixture-vs-K_G subspace decomposition on TRAIN pairs (LDA-style)
+  - Validate cross-fixture K_G recovery on HELD-OUT
+  - Stratify results by density (does multi-form coverage matter?)
+
+This is NOT subtraction. NOT regression of one channel against another.
+It's joint multi-channel reading treated as a spectral fingerprint.
+"""
+from __future__ import annotations
+
+import json
+import math
+import random
+from pathlib import Path
+from typing import Dict, List, Tuple, Optional, Any
+
+
+# ---------------------------------------------------------------------------
+# Route definitions (F1, F2, F4 — F3 excluded as silent/integrity-only)
+# ---------------------------------------------------------------------------
+
+def _route_chain(fixture: str, coord: float, route: str
+                 ) -> Optional[Tuple[Tuple[float, ...], float, float]]:
+    """Returns (intermediates, base_operand, x_term) or None if unavailable."""
+    if fixture == "schwarzschild_four_form":
+        r = coord
+        x_term = 2.0 / r
+        base = 1.0 - x_term
+        R = base ** 0.5
+        R_sq = R * R
+        if route == "F1":
+            residual = R_sq - base
+            return (R, R_sq, base, residual), base, x_term
+        elif route == "F2":
+            r_sq_m1 = R_sq - 1.0
+            residual = r_sq_m1 + x_term
+            return (R, R_sq, 1.0, r_sq_m1, x_term, residual), r_sq_m1, x_term
+        elif route == "F4":
+            r_m2 = r - 2.0
+            factored = r_m2 / r
+            factored_R = factored ** 0.5
+            residual = R - factored_R
+            return (R, factored, factored_R, residual), factored, x_term
+        return None
+    elif fixture == "pure_algebraic_four_form":
+        x = coord
+        x_term = x
+        base = 1.0 - x
+        R = base ** 0.5
+        R_sq = R * R
+        if route == "F1":
+            residual = R_sq - base
+            return (R, R_sq, base, residual), base, x_term
+        elif route == "F2":
+            r_sq_m1 = R_sq - 1.0
+            residual = r_sq_m1 + x_term
+            return (R, R_sq, 1.0, r_sq_m1, x_term, residual), r_sq_m1, x_term
+        elif route == "F4":
+            return None  # F4 not defined for pure_algebraic
+        return None
+    return None
+
+
+def _signature(intermediates: Tuple[float, ...],
+               base_operand: float,
+               x_term: float) -> Dict[str, Optional[float]]:
+    nonzero = [abs(v) for v in intermediates if v != 0.0]
+    ulps = [math.ulp(v) for v in nonzero] if nonzero else []
+    channels = ("ulp_spread_log2", "log2_min_ulp", "log2_base_operand_ulp",
+                "log2_x_term_ulp", "signed_asymmetry", "E_log2_base_operand")
+    if not ulps:
+        return {k: None for k in channels}
+    min_ulp = min(ulps)
+    max_ulp = max(ulps)
+    ulp_spread = math.log2(max_ulp / min_ulp) if min_ulp > 0 else None
+    base_ulp = math.ulp(abs(base_operand)) if base_operand != 0 else None
+    x_ulp = math.ulp(abs(x_term)) if x_term != 0 else None
+    log2_min = math.log2(min_ulp) if min_ulp > 0 else None
+    log2_base = math.log2(base_ulp) if base_ulp and base_ulp > 0 else None
+    log2_x = math.log2(x_ulp) if x_ulp and x_ulp > 0 else None
+    signed_asym = (math.log2(base_ulp / x_ulp)
+                   if base_ulp and x_ulp and base_ulp > 0 and x_ulp > 0
+                   else None)
+    E = (math.log2(abs(base_operand))
+         if base_operand and abs(base_operand) > 0 else None)
+    return {
+        "ulp_spread_log2": ulp_spread,
+        "log2_min_ulp": log2_min,
+        "log2_base_operand_ulp": log2_base,
+        "log2_x_term_ulp": log2_x,
+        "signed_asymmetry": signed_asym,
+        "E_log2_base_operand": E,
+    }
+
+
+CHANNELS = ("ulp_spread_log2", "log2_min_ulp", "log2_base_operand_ulp",
+            "log2_x_term_ulp", "signed_asymmetry", "E_log2_base_operand")
+ROUTES = ("F1", "F2", "F4")
+
+
+# ---------------------------------------------------------------------------
+# Spectral stack: front view + side view + density layer
+# ---------------------------------------------------------------------------
+
+def spectral_stack(fixture: str, coord: float) -> Dict[str, Any]:
+    """Build the layered representation per Will's spec."""
+    # Side view: each form's signature as its own layer
+    side_view = {}
+    for route in ROUTES:
+        chain = _route_chain(fixture, coord, route)
+        if chain is None:
+            side_view[route] = None  # Form unavailable for this fixture
+        else:
+            side_view[route] = _signature(*chain)
+
+    # Density layer: per channel, count of forms with non-None readings
+    density = {}
+    diversity = {}  # variance across forms (when >1 fires)
+    for ch in CHANNELS:
+        vals = []
+        for route in ROUTES:
+            sig = side_view[route]
+            if sig is not None and sig.get(ch) is not None:
+                vals.append(sig[ch])
+        density[ch] = len(vals)
+        if len(vals) >= 2:
+            mean = sum(vals) / len(vals)
+            diversity[ch] = math.sqrt(
+                sum((v - mean) ** 2 for v in vals) / len(vals))
+        else:
+            diversity[ch] = 0.0
+
+    # Front view: composite — for now, mean across firing forms per channel
+    # This is a placeholder; the actual learned reconstruction comes later
+    front_view = {}
+    for ch in CHANNELS:
+        vals = []
+        for route in ROUTES:
+            sig = side_view[route]
+            if sig is not None and sig.get(ch) is not None:
+                vals.append(sig[ch])
+        if vals:
+            front_view[ch] = sum(vals) / len(vals)
+        else:
+            front_view[ch] = None
+
+    return {
+        "side_view": side_view,
+        "front_view": front_view,
+        "density_layer": density,
+        "diversity_layer": diversity,
+    }
+
+
+# ---------------------------------------------------------------------------
+# Joint feature vector for cross-fixture analysis
+# ---------------------------------------------------------------------------
+
+def joint_feature_vector(stack: Dict[str, Any],
+                          forms: Tuple[str, ...] = ("F1", "F2")
+                          ) -> Optional[List[float]]:
+    """Flatten the spectral stack into a feature vector using only
+    forms available in both fixtures (F1, F2 by default for cross-fixture).
+
+    Returns None if any required form is missing or any channel is None.
+    """
+    features = []
+    for route in forms:
+        sig = stack["side_view"][route]
+        if sig is None:
+            return None
+        for ch in CHANNELS:
+            v = sig.get(ch)
+            if v is None:
+                return None
+            features.append(v)
+    return features
+
+
+# ---------------------------------------------------------------------------
+# Cross-fixture analysis with LDA-style projection
+# ---------------------------------------------------------------------------
+
+def mean_vector(vecs: List[List[float]]) -> List[float]:
+    n = len(vecs)
+    d = len(vecs[0])
+    return [sum(v[i] for v in vecs) / n for i in range(d)]
+
+
+def vector_sub(a: List[float], b: List[float]) -> List[float]:
+    return [ai - bi for ai, bi in zip(a, b)]
+
+
+def vector_dot(a: List[float], b: List[float]) -> float:
+    return sum(ai * bi for ai, bi in zip(a, b))
+
+
+def vector_norm(v: List[float]) -> float:
+    return math.sqrt(sum(x * x for x in v))
+
+
+def normalise(v: List[float]) -> List[float]:
+    n = vector_norm(v)
+    if n == 0:
+        return v
+    return [x / n for x in v]
+
+
+def find_kg_axis_train(schw_vecs: List[List[float]],
+                        pa_vecs: List[List[float]],
+                        kgs: List[float]) -> List[float]:
+    """Find the direction in joint feature space that best correlates
+    with K_G and is minimally fixture-discriminating.
+
+    Approach: subtract fixture-mean from each vector, then find direction
+    most correlated with K_G in the residual.
+    """
+    schw_mean = mean_vector(schw_vecs)
+    pa_mean = mean_vector(pa_vecs)
+    schw_centered = [vector_sub(v, schw_mean) for v in schw_vecs]
+    pa_centered = [vector_sub(v, pa_mean) for v in pa_vecs]
+    all_centered = schw_centered + pa_centered
+    all_kg = kgs + kgs  # K_G matches across pairs
+
+    # K_G-axis: direction most correlated with K_G in centered space
+    d = len(all_centered[0])
+    kg_mean = sum(all_kg) / len(all_kg)
+    axis = [0.0] * d
+    for vec, kg in zip(all_centered, all_kg):
+        weight = kg - kg_mean
+        for i in range(d):
+            axis[i] += weight * vec[i]
+    return normalise(axis)
+
+
+def project(vec: List[float], axis: List[float]) -> float:
+    return vector_dot(vec, axis)
+
+
+# ---------------------------------------------------------------------------
+# Main test runner
+# ---------------------------------------------------------------------------
+
+def run_test() -> Dict[str, Any]:
+    ROOT = Path("/home/william_lloydlt/projects/V4/Lloyd_Engine_V4")
+    phase_1 = json.loads(
+        (ROOT / "Build_Docs/Reports/mcg_geometry_first"
+                "/phase_1_geometry_table.json").read_text())
+    rows = phase_1["rows"]
+
+    schw = [r for r in rows if r.get("fixture") == "schwarzschild_four_form"
+            and r.get("principal_curvature") and r["principal_curvature"] > 0]
+    pa = [r for r in rows if r.get("fixture") == "pure_algebraic_four_form"
+          and r.get("principal_curvature") and r["principal_curvature"] > 0]
+
+    pairs = []
+    for s in schw:
+        for p in pa:
+            kg_s = s["principal_curvature"]
+            kg_p = p["principal_curvature"]
+            rel_diff = abs(kg_s - kg_p) / max(abs(kg_s), abs(kg_p))
+            if rel_diff < 0.005:
+                pairs.append({
+                    "schw_coord": s["coordinate_value"],
+                    "schw_kg": kg_s,
+                    "pa_coord": p["coordinate_value"],
+                    "pa_kg": kg_p,
+                    "kg_mean": (kg_s + kg_p) / 2.0,
+                })
+    pairs.sort(key=lambda p: p["kg_mean"])
+    pairs = pairs[:22]
+
+    indices = list(range(len(pairs)))
+    rng = random.Random(42)
+    rng.shuffle(indices)
+    train_idx = set(sorted(indices[:15]))
+    held_idx = set(sorted(indices[15:22]))
+
+    # Build spectral stacks for every probe in every pair
+    stacks_schw = {}
+    stacks_pa = {}
+    for i, pair in enumerate(pairs):
+        stacks_schw[i] = spectral_stack(
+            "schwarzschild_four_form", pair["schw_coord"])
+        stacks_pa[i] = spectral_stack(
+            "pure_algebraic_four_form", pair["pa_coord"])
+
+    # Density audit: for each pair, what density did we get?
+    density_audit = []
+    for i in range(len(pairs)):
+        s_density = stacks_schw[i]["density_layer"]
+        p_density = stacks_pa[i]["density_layer"]
+        density_audit.append({
+            "pair_index": i,
+            "kg_mean": pairs[i]["kg_mean"],
+            "schw_density": s_density,
+            "pa_density": p_density,
+            "schw_min_density": min(s_density.values()),
+            "pa_min_density": min(p_density.values()),
+        })
+
+    # Build joint feature vectors (F1+F2 only — common to both fixtures)
+    train_schw_vecs = []
+    train_pa_vecs = []
+    train_kgs = []
+    held_schw_vecs = []
+    held_pa_vecs = []
+    held_kgs = []
+    for i, pair in enumerate(pairs):
+        v_schw = joint_feature_vector(stacks_schw[i])
+        v_pa = joint_feature_vector(stacks_pa[i])
+        if v_schw is None or v_pa is None:
+            continue
+        if i in train_idx:
+            train_schw_vecs.append(v_schw)
+            train_pa_vecs.append(v_pa)
+            train_kgs.append(pair["kg_mean"])
+        else:
+            held_schw_vecs.append(v_schw)
+            held_pa_vecs.append(v_pa)
+            held_kgs.append(pair["kg_mean"])
+
+    # Fit K_G axis on TRAIN
+    kg_axis = find_kg_axis_train(train_schw_vecs, train_pa_vecs, train_kgs)
+
+    # Compute fixture means
+    schw_mean = mean_vector(train_schw_vecs)
+    pa_mean = mean_vector(train_pa_vecs)
+
+    # Project held-out vectors and compute cross-fixture delta of projections
+    def project_with_centering(vec, fixture_mean):
+        centered = vector_sub(vec, fixture_mean)
+        return project(centered, kg_axis)
+
+    held_deltas = []
+    for v_s, v_p, kg in zip(held_schw_vecs, held_pa_vecs, held_kgs):
+        proj_s = project_with_centering(v_s, schw_mean)
+        proj_p = project_with_centering(v_p, pa_mean)
+        held_deltas.append({
+            "kg_mean": kg,
+            "schw_projection": proj_s,
+            "pa_projection": proj_p,
+            "cross_fixture_delta": abs(proj_s - proj_p),
+        })
+
+    # Baseline: single-form E-only cross-fixture delta (Phase F amendment value)
+    baseline_E_only_held_out = []
+    for i, pair in enumerate(pairs):
+        if i not in held_idx:
+            continue
+        s_E = stacks_schw[i]["side_view"]["F1"]["E_log2_base_operand"] if stacks_schw[i]["side_view"]["F1"] else None
+        p_E = stacks_pa[i]["side_view"]["F1"]["E_log2_base_operand"] if stacks_pa[i]["side_view"]["F1"] else None
+        if s_E is not None and p_E is not None:
+            baseline_E_only_held_out.append(abs(s_E - p_E))
+
+    # Spearman correlation of projected joint vs K_G on held-out
+    def spearman(xs, ys):
+        n = len(xs)
+        if n < 3:
+            return None
+        rank_x = sorted(range(n), key=lambda i: xs[i])
+        rank_y = sorted(range(n), key=lambda i: ys[i])
+        rx = [0] * n
+        ry = [0] * n
+        for r, idx in enumerate(rank_x):
+            rx[idx] = r + 1
+        for r, idx in enumerate(rank_y):
+            ry[idx] = r + 1
+        mx = sum(rx) / n
+        my = sum(ry) / n
+        num = sum((rx[i] - mx) * (ry[i] - my) for i in range(n))
+        dx = sum((r - mx) ** 2 for r in rx)
+        dy = sum((r - my) ** 2 for r in ry)
+        if dx == 0 or dy == 0:
+            return None
+        return num / math.sqrt(dx * dy)
+
+    held_schw_projs = [d["schw_projection"] for d in held_deltas]
+    held_pa_projs = [d["pa_projection"] for d in held_deltas]
+    rho_schw = spearman(held_schw_projs, held_kgs)
+    rho_pa = spearman(held_pa_projs, held_kgs)
+    pooled_projs = held_schw_projs + held_pa_projs
+    pooled_kgs = held_kgs + held_kgs
+    rho_pooled = spearman(pooled_projs, pooled_kgs)
+
+    return {
+        "n_pairs": len(pairs),
+        "train_size": len(train_schw_vecs),
+        "held_size": len(held_schw_vecs),
+        "feature_vector_dimension": len(train_schw_vecs[0]) if train_schw_vecs else 0,
+        "density_audit_summary": {
+            "min_density_observed_schw": min(d["schw_min_density"] for d in density_audit),
+            "min_density_observed_pa": min(d["pa_min_density"] for d in density_audit),
+            "all_probes_have_full_density": all(
+                d["schw_min_density"] >= 2 and d["pa_min_density"] >= 2
+                for d in density_audit),
+        },
+        "kg_axis": kg_axis,
+        "kg_axis_norm": vector_norm(kg_axis),
+        "held_out_cross_fixture_deltas": held_deltas,
+        "held_out_mean_delta_joint_projection": (
+            sum(d["cross_fixture_delta"] for d in held_deltas) / len(held_deltas)
+            if held_deltas else None),
+        "baseline_E_only_mean_delta": (
+            sum(baseline_E_only_held_out) / len(baseline_E_only_held_out)
+            if baseline_E_only_held_out else None),
+        "rho_schw_only": rho_schw,
+        "rho_pa_only": rho_pa,
+        "rho_pooled_cross_fixture": rho_pooled,
+        "previous_ceiling_rho": -0.94,
+    }
+
+
+if __name__ == "__main__":
+    out = run_test()
+    print(f"Pairs: {out['n_pairs']} ({out['train_size']} train, {out['held_size']} held-out)")
+    print(f"Feature vector dim: {out['feature_vector_dimension']}")
+    print(f"Density audit: min observed = schw {out['density_audit_summary']['min_density_observed_schw']}, "
+          f"pa {out['density_audit_summary']['min_density_observed_pa']}")
+    print(f"All probes full density: {out['density_audit_summary']['all_probes_have_full_density']}")
+    print()
+    print("=== Cross-fixture K_G projection (joint F1+F2 spectral) ===")
+    print()
+    mean_delta = out['held_out_mean_delta_joint_projection']
+    baseline = out['baseline_E_only_mean_delta']
+    print(f"Held-out mean |cross-fixture delta|: {mean_delta:.4f}" if mean_delta else "N/A")
+    print(f"Baseline E-only mean |delta|:        {baseline:.4f}" if baseline else "N/A")
+    if mean_delta and baseline:
+        improvement = (baseline - mean_delta) / baseline * 100
+        print(f"Improvement over baseline:           {improvement:.1f}%")
+    print()
+    print("=== Within-fixture K_G rank correlation (held-out, joint projection) ===")
+    print(f"Schwarzschild ρ:   {out['rho_schw_only']:.4f}" if out['rho_schw_only'] else "N/A")
+    print(f"pure_algebraic ρ:  {out['rho_pa_only']:.4f}" if out['rho_pa_only'] else "N/A")
+    print(f"Pooled cross-fix:  {out['rho_pooled_cross_fixture']:.4f}" if out['rho_pooled_cross_fixture'] else "N/A")
+    print(f"Previous ceiling:  {out['previous_ceiling_rho']:.4f}")
+    print()
+    print("=== Per-pair projections (held-out) ===")
+    for d in out['held_out_cross_fixture_deltas']:
+        print(f"  K_G={d['kg_mean']:.4f}  schw_proj={d['schw_projection']:+.4f}  "
+              f"pa_proj={d['pa_projection']:+.4f}  |Δ|={d['cross_fixture_delta']:.4f}")

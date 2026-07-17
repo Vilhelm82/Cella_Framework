@@ -1,0 +1,111 @@
+{
+  "any_false_accept": true,
+  "false_accept_probes": {
+    "P1_sqrt+small_iterlog": {
+      "FALSE_ACCEPT": false,
+      "classification": "non_algebraic_drift",
+      "delta_aic": 80.269,
+      "delta_bic": 76.2724,
+      "nw_drift": 5.896729,
+      "nw_status": "UNSTABLE",
+      "winner_aic": "M_A_algebraic",
+      "winner_bic": "M_A_algebraic"
+    },
+    "P2_log_squared": {
+      "FALSE_ACCEPT": true,
+      "classification": "algebraic_branch",
+      "delta_aic": 32.5195,
+      "delta_bic": 28.5229,
+      "nw_drift": 1.992675,
+      "nw_status": "STABLE",
+      "winner_aic": "M_A_algebraic",
+      "winner_bic": "M_A_algebraic"
+    },
+    "P3_sqrt*log": {
+      "FALSE_ACCEPT": true,
+      "classification": "algebraic_branch",
+      "delta_aic": 262.964,
+      "delta_bic": 258.9674,
+      "nw_drift": 1.059482,
+      "nw_status": "STABLE",
+      "winner_aic": "M_A_algebraic",
+      "winner_bic": "M_A_algebraic"
+    },
+    "P4_sqrt_of_loginv": {
+      "FALSE_ACCEPT": false,
+      "classification": "non_algebraic_drift",
+      "delta_aic": 141.7108,
+      "delta_bic": 137.7142,
+      "nw_drift": 2.000599,
+      "nw_status": "UNSTABLE",
+      "winner_aic": "M_A_algebraic",
+      "winner_bic": "M_A_algebraic"
+    },
+    "P5_large_iterlog": {
+      "FALSE_ACCEPT": false,
+      "classification": "non_algebraic_drift",
+      "delta_aic": 1743.2524,
+      "delta_bic": 1747.249,
+      "nw_drift": 3.081692,
+      "nw_status": "UNSTABLE",
+      "winner_aic": "M_E_essential",
+      "winner_bic": "M_E_essential"
+    },
+    "P6_strong_sqrt+tiny_iterlog": {
+      "FALSE_ACCEPT": false,
+      "classification": "non_algebraic_drift",
+      "delta_aic": 149.4758,
+      "delta_bic": 145.4792,
+      "nw_drift": 36.365015,
+      "nw_status": "UNSTABLE",
+      "winner_aic": "M_A_algebraic",
+      "winner_bic": "M_A_algebraic"
+    },
+    "P7_sqrt+logf": {
+      "FALSE_ACCEPT": false,
+      "classification": "non_algebraic_drift",
+      "delta_aic": 60.584,
+      "delta_bic": 56.5874,
+      "nw_drift": 13.147009,
+      "nw_status": "UNSTABLE",
+      "winner_aic": "M_A_algebraic",
+      "winner_bic": "M_A_algebraic"
+    },
+    "P8_microscopic_iterlog_under_sqrt": {
+      "FALSE_ACCEPT": false,
+      "classification": "non_algebraic_drift",
+      "delta_aic": 231.3732,
+      "delta_bic": 227.3765,
+      "nw_drift": 3.705252,
+      "nw_status": "UNSTABLE",
+      "winner_aic": "M_A_algebraic",
+      "winner_bic": "M_A_algebraic"
+    },
+    "P9_sqrt+microscopic_logf": {
+      "FALSE_ACCEPT": false,
+      "classification": "non_algebraic_drift",
+      "delta_aic": 293.5737,
+      "delta_bic": 289.5771,
+      "nw_drift": 3.539944,
+      "nw_status": "UNSTABLE",
+      "winner_aic": "M_A_algebraic",
+      "winner_bic": "M_A_algebraic"
+    }
+  },
+  "false_accepts_found": [
+    "P2_log_squared",
+    "P3_sqrt*log"
+  ],
+  "genuine_iterated_log_false_accepts": [],
+  "n_borderline_probes": 9,
+  "true_accept_control": {
+    "classification": "algebraic_branch",
+    "correct": true,
+    "delta_aic": 1770.9421,
+    "delta_bic": 1766.9454,
+    "nw_drift": 0.007518,
+    "nw_status": "STABLE",
+    "winner_aic": "M_A_algebraic",
+    "winner_bic": "M_A_algebraic"
+  }
+}

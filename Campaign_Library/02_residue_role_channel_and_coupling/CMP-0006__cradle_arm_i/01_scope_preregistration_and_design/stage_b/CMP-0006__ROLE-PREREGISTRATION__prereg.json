@@ -1,0 +1,292 @@
+{
+ "authority": "brief section 7 Arm I Stage B + Will's Stage-B GO (Stage A ACCEPTED; ruling #6 applied to HR133)",
+ "campaign_id": "beyond_the_cradle_arm_i",
+ "date_stamped_from_machine": "2026-06-12",
+ "depends_on": {
+  "manifest_v1_sha256": "9b92fad78fd850a3fcf1d079e031258524e9119aceeb3f0aa5e747fb2e12a534",
+  "note": "bench code pinned inside the frozen manifest and enforced by require_frozen (rule 1.9); no external executed instrument this stage (native-Z referee is runner-inline)."
+ },
+ "expectations": {
+  "n_any_split": 9,
+  "n_exact_division": 5,
+  "pairs": {
+   "-12/-3@32": {
+    "r_nonzero": false,
+    "splits": {
+     "floor_vs_euclid": false,
+     "trunc_vs_euclid": false,
+     "trunc_vs_floor": false
+    },
+    "values": {
+     "euclid": "4",
+     "floor": "4",
+     "trunc": "4"
+    },
+    "wrap_fired": false
+   },
+   "-12/3@32": {
+    "r_nonzero": false,
+    "splits": {
+     "floor_vs_euclid": false,
+     "trunc_vs_euclid": false,
+     "trunc_vs_floor": false
+    },
+    "values": {
+     "euclid": "-4",
+     "floor": "-4",
+     "trunc": "-4"
+    },
+    "wrap_fired": false
+   },
+   "-13/-3@32": {
+    "r_nonzero": true,
+    "splits": {
+     "floor_vs_euclid": true,
+     "trunc_vs_euclid": true,
+     "trunc_vs_floor": false
+    },
+    "values": {
+     "euclid": "5",
+     "floor": "4",
+     "trunc": "4"
+    },
+    "wrap_fired": false
+   },
+   "-13/3@32": {
+    "r_nonzero": true,
+    "splits": {
+     "floor_vs_euclid": false,
+     "trunc_vs_euclid": true,
+     "trunc_vs_floor": true
+    },
+    "values": {
+     "euclid": "-5",
+     "floor": "-5",
+     "trunc": "-4"
+    },
+    "wrap_fired": false
+   },
+   "-2147483648/-1@32": {
+    "r_nonzero": false,
+    "splits": {
+     "floor_vs_euclid": false,
+     "trunc_vs_euclid": false,
+     "trunc_vs_floor": false
+    },
+    "values": {
+     "euclid": "-2147483648",
+     "floor": "-2147483648",
+     "trunc": "-2147483648"
+    },
+    "wrap_fired": true
+   },
+   "-4611686018427387907/-5@64": {
+    "r_nonzero": true,
+    "splits": {
+     "floor_vs_euclid": true,
+     "trunc_vs_euclid": true,
+     "trunc_vs_floor": false
+    },
+    "values": {
+     "euclid": "922337203685477582",
+     "floor": "922337203685477581",
+     "trunc": "922337203685477581"
+    },
+    "wrap_fired": false
+   },
+   "-4611686018427387907/5@64": {
+    "r_nonzero": true,
+    "splits": {
+     "floor_vs_euclid": false,
+     "trunc_vs_euclid": true,
+     "trunc_vs_floor": true
+    },
+    "values": {
+     "euclid": "-922337203685477582",
+     "floor": "-922337203685477582",
+     "trunc": "-922337203685477581"
+    },
+    "wrap_fired": false
+   },
+   "-7/-2@32": {
+    "r_nonzero": true,
+    "splits": {
+     "floor_vs_euclid": true,
+     "trunc_vs_euclid": true,
+     "trunc_vs_floor": false
+    },
+    "values": {
+     "euclid": "4",
+     "floor": "3",
+     "trunc": "3"
+    },
+    "wrap_fired": false
+   },
+   "-7/2@32": {
+    "r_nonzero": true,
+    "splits": {
+     "floor_vs_euclid": false,
+     "trunc_vs_euclid": true,
+     "trunc_vs_floor": true
+    },
+    "values": {
+     "euclid": "-4",
+     "floor": "-4",
+     "trunc": "-3"
+    },
+    "wrap_fired": false
+   },
+   "12/-3@32": {
+    "r_nonzero": false,
+    "splits": {
+     "floor_vs_euclid": false,
+     "trunc_vs_euclid": false,
+     "trunc_vs_floor": false
+    },
+    "values": {
+     "euclid": "-4",
+     "floor": "-4",
+     "trunc": "-4"
+    },
+    "wrap_fired": false
+   },
+   "12/3@32": {
+    "r_nonzero": false,
+    "splits": {
+     "floor_vs_euclid": false,
+     "trunc_vs_euclid": false,
+     "trunc_vs_floor": false
+    },
+    "values": {
+     "euclid": "4",
+     "floor": "4",
+     "trunc": "4"
+    },
+    "wrap_fired": false
+   },
+   "13/-3@32": {
+    "r_nonzero": true,
+    "splits": {
+     "floor_vs_euclid": true,
+     "trunc_vs_euclid": false,
+     "trunc_vs_floor": true
+    },
+    "values": {
+     "euclid": "-4",
+     "floor": "-5",
+     "trunc": "-4"
+    },
+    "wrap_fired": false
+   },
+   "13/3@32": {
+    "r_nonzero": true,
+    "splits": {
+     "floor_vs_euclid": false,
+     "trunc_vs_euclid": false,
+     "trunc_vs_floor": false
+    },
+    "values": {
+     "euclid": "4",
+     "floor": "4",
+     "trunc": "4"
+    },
+    "wrap_fired": false
+   },
+   "4611686018427387907/-5@64": {
+    "r_nonzero": true,
+    "splits": {
+     "floor_vs_euclid": true,
+     "trunc_vs_euclid": false,
+     "trunc_vs_floor": true
+    },
+    "values": {
+     "euclid": "-922337203685477581",
+     "floor": "-922337203685477582",
+     "trunc": "-922337203685477581"
+    },
+    "wrap_fired": false
+   },
+   "7/-2@32": {
+    "r_nonzero": true,
+    "splits": {
+     "floor_vs_euclid": true,
+     "trunc_vs_euclid": false,
+     "trunc_vs_floor": true
+    },
+    "values": {
+     "euclid": "-3",
+     "floor": "-4",
+     "trunc": "-3"
+    },
+    "wrap_fired": false
+   },
+   "7/2@32": {
+    "r_nonzero": true,
+    "splits": {
+     "floor_vs_euclid": false,
+     "trunc_vs_euclid": false,
+     "trunc_vs_floor": false
+    },
+    "values": {
+     "euclid": "3",
+     "floor": "3",
+     "trunc": "3"
+    },
+    "wrap_fired": false
+   }
+  }
+ },
+ "frozen": true,
+ "organ": "II_b_semantics_fingerprint_v1: three division semantics as three rounding modes on one lattice; measured pairwise splits vs the derived sign-configuration predicates; the wrap channel flagged separately (width events are not rounding-mode events).",
+ "pair_fixtures": [
+  "FXIB1",
+  "FXIB2",
+  "FXIB3"
+ ],
+ "predictions": {
+  "PIB.1": "semantics closure: on every (pair, semantics) row q*b + r == a exactly AND the per-semantics remainder law holds (trunc: sign(r) == sign(a) or 0; floor: sign(r) == sign(b) or 0; euclid: 0 <= r < |b|); width-wrap entries close where the quotient wraps. Units: (pair, semantics) rows.",
+  "PIB.2": "the fingerprint law, two-sided: on every pinned pair (8 FX-I-B + 8 derived sign-grid), measured pairwise splits == the derived predicates (trunc != floor iff r != 0 and sign(a) != sign(b); floor != euclid iff r != 0 and b < 0; trunc != euclid iff r != 0 and a < 0) - and the reverse direction: zero splits anywhere r == 0 (no fingerprint without a distinguishing discard). Either direction failing anywhere = K-I2 refute-row. Grid informativeness: every pairwise comparison shows BOTH outcomes across the battery. Units: pairs x 3 comparisons.",
+  "PIB.3": "discard-channel taxonomy exhibits: INT_MIN // -1 - exact division (r == 0): all three semantics identical in Z AND identically wrapped; the quotient-WRAP entry fires and closes the account while the semantics fingerprint stays zero (wrap is a WIDTH event, not a rounding-mode event); AND 13 // 3 (positive pair, r != 0): a discard WITHOUT a distinguisher - zero splits (a fingerprint needs a discard the modes disagree about, not just a discard). Units: 2 exhibits.",
+  "PIB.4": "refusal honesty: division by zero and unknown semantics refuse TYPED; zero refusals on the lawful battery. Units: probes + rows.",
+  "PIB.5": "determinism: battery byte-stable x2 (sha256 over records)."
+ },
+ "referee": "native Z: independent quotient/remainder recomputation + per-semantics remainder laws, runner-inline.",
+ "sign_grid": [
+  [
+   12,
+   3
+  ],
+  [
+   13,
+   3
+  ],
+  [
+   -12,
+   3
+  ],
+  [
+   -13,
+   3
+  ],
+  [
+   12,
+   -3
+  ],
+  [
+   13,
+   -3
+  ],
+  [
+   -12,
+   -3
+  ],
+  [
+   -13,
+   -3
+  ]
+ ],
+ "stage": "B",
+ "status_move_rules": "CL-I3 -> DEMONSTRATED iff PIB.1 AND PIB.2 AND PIB.3 AND PIB.4 PASS. PIB.2 FAIL = K-I2: CL-I3 REFUTED, chain preserved, continue per brief. Any other FAIL: K-I1 halt-until-fixed, STOP, route to Will.",
+ "telemetry": "permanently non-verdict-bearing (covenant 3).",
+ "version": 1
+}

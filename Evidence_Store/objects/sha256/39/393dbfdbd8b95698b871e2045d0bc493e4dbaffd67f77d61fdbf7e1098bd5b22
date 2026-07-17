@@ -1,0 +1,139 @@
+"""The rounding-amount dial (Will's actual idea — built literally).
+
+Dial value = the TOTAL ROUNDING a chain incurs to reach the answer (the constraint residual,
+algebraically 0 on the surface). The chains are operand-combinations (AST forms over the
+fixture operands). For each chain we compute, EXACTLY (Fraction), the round-off of every
+operation in it; the dial coordinate is how much rounding the chain burns:
+  - rounding_events: count of ops whose float result != exact result (0 = a fully-exact chain)
+  - rounding_magnitude: sum of |exact_op - float_op| in ulp(f) units
+
+Notch 0 = chain(s) reaching the answer with zero / minimum rounding. Dialing up admits chains
+that spend more rounding -> incrementally enumerates every operand-combination by rounding cost.
+
+This is NOT cross-fixture and NOT form-comparison. One fixture, one operand: the spectrum of
+forms ordered by the rounding they incur. Eval-layer, exact.
+"""
+import math, struct
+from fractions import Fraction as Fr
+
+ATOMS = [('R',), ('one',), ('c',)]
+OPS = ('+', '-', '*')
+# Schwarzschild regular-region operand (clean, away from boundary)
+R_VAL = 6.0
+def cof(r): return 2.0 / r
+
+
+def ev(node, r):
+    c = cof(r); R = math.sqrt(1.0 - c)
+    def go(m):
+        k = m[0]
+        if k == 'R': return R
+        if k == 'one': return 1.0
+        if k == 'c': return c
+        a, b = go(m[1]), go(m[2])
+        return a + b if k == '+' else a - b if k == '-' else a * b
+    return go(node)
+
+
+def evfree(node, Rv, cv):
+    def go(m):
+        k = m[0]
+        if k == 'R': return Rv
+        if k == 'one': return 1.0
+        if k == 'c': return cv
+        a, b = go(m[1]), go(m[2])
+        return a + b if k == '+' else a - b if k == '-' else a * b
+    return go(node)
+
+
+def vv(node):
+    return struct.pack('>d', ev(node, R_VAL)).hex()
+
+
+def s(node):
+    if len(node) == 1: return {'R': 'R', 'one': '1', 'c': 'c'}[node[0]]
+    return f"({s(node[1])} {node[0]} {s(node[2])})"
+
+
+def on_surface(node):
+    # algebraically 0 when R^2 = 1-c (membership) -- include trivial/structural zeros (notch-0)
+    import mpmath as mp
+    for cv in (mp.mpf('.2'), mp.mpf('.4'), mp.mpf('.49')):
+        if abs(evfree(node, mp.sqrt(1 - cv), cv)) > mp.mpf('1e-30'):
+            return False
+    return True
+
+
+def total_rounding(node, r):
+    """Exact total rounding the chain incurs at operand r: (events, magnitude_in_ulp)."""
+    c = cof(r); R = math.sqrt(1.0 - c); u = math.ulp(1.0 - c)
+    events = 0; mag = Fr(0)
+    def go(m):
+        nonlocal events, mag
+        k = m[0]
+        if k == 'R': return R
+        if k == 'one': return 1.0
+        if k == 'c': return c
+        a, b = go(m[1]), go(m[2])
+        fl = a + b if k == '+' else a - b if k == '-' else a * b
+        ex = (Fr(a) + Fr(b)) if k == '+' else (Fr(a) - Fr(b)) if k == '-' else (Fr(a) * Fr(b))
+        ro = ex - Fr(fl)
+        if ro != 0:
+            events += 1; mag += abs(ro) / Fr(u)
+        return fl
+    go(node)
+    return events, float(mag)
+
+
+def main():
+    # enumerate operand-chains
+    seen = {}; bd = {0: []}
+    for a in ATOMS: seen[vv(a)] = a; bd[0].append(a)
+    CAP = 60000
+    for d in range(1, 4):
+        bd[d] = []; shallow = [x for dd in range(0, d) for x in bd[dd]]
+        for a in bd[d - 1]:
+            for b in shallow:
+                for (x, y) in ((a, b), (b, a)):
+                    for op in OPS:
+                        if len(seen) >= CAP: break
+                        nd = (op, x, y); k = vv(nd)
+                        if k not in seen: seen[k] = nd; bd[d].append(nd)
+        if len(seen) >= CAP: break
+
+    members = [n for n in seen.values() if len(n) > 1 and on_surface(n)]   # chains that reach the answer (=0)
+    # the DIAL: order members by total rounding incurred
+    rows = []
+    for n in members:
+        ev_, mag = total_rounding(n, R_VAL)
+        rows.append((ev_, round(mag, 4), n))
+    rows.sort(key=lambda t: (t[0], t[1], len(s(t[2]))))
+
+    # build the notches (binned by rounding-event count)
+    from collections import defaultdict
+    notch = defaultdict(list)
+    for ev_, mag, n in rows:
+        notch[ev_].append((mag, n))
+
+    print("=" * 88)
+    print(f"THE ROUNDING-AMOUNT DIAL — operand-chains reaching the constraint (=0), ordered by total rounding")
+    print(f"  fixture Schwarzschild, operand r={R_VAL} (f={1-cof(R_VAL):.4f}); {len(members)} chains on the surface")
+    print(f"  dial coordinate = rounding events (ops that actually rounded); magnitude in ulp(f)")
+    print("-" * 88)
+    for k in sorted(notch):
+        forms = notch[k]
+        forms.sort(key=lambda t: (t[0], len(s(t[1]))))
+        ex = "; ".join(s(n) for _, n in forms[:3])
+        mags = sorted(set(m for m, _ in forms))
+        print(f"  NOTCH {k:>2} rounding-event(s):  {len(forms):4} chains   |  mag(ulp) in {mags[:6]}{'...' if len(mags)>6 else ''}")
+        print(f"             e.g.: {ex}")
+    print("-" * 88)
+    # the anchor: notch 0 = chains that reach the answer with ZERO rounding (fully exact)
+    z = notch.get(0, [])
+    print(f"NOTCH 0 (zero rounding — the minimal anchor): {len(z)} fully-exact chains.")
+    print(f"   examples: {', '.join(s(n) for _, n in z[:6])}")
+    print(f"   (these reach the constraint with NO operation rounding at this operand — the dial's origin.)")
+
+
+if __name__ == "__main__":
+    main()

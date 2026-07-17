@@ -1,0 +1,285 @@
+{
+  "E_threshold_summary": {
+    "near_sterbenz_boundary_note": "All three fixture-best E thresholds cluster in [-0.949, -0.750] log2, corresponding to |base_operand| in [0.518, 0.594] \u2014 near the Sterbenz boundary at |base_operand| ~ 0.5 where BACL's hypothesis transitions from always-satisfied to potentially marginal for cancellation operands.",
+    "pure_algebraic_four_form": {
+      "abs_contrast": 0.35714285714285715,
+      "best_E_threshold_log2": -0.7522511595445539,
+      "frac_above": 0.35714285714285715,
+      "frac_below": 0.0,
+      "n_above": 56,
+      "n_below": 81
+    },
+    "schwarzschild_four_form": {
+      "abs_contrast": 0.6731225296442688,
+      "best_E_threshold_log2": -0.7504804006406878,
+      "frac_above": 0.6818181818181818,
+      "frac_below": 0.008695652173913044,
+      "n_above": 22,
+      "n_below": 115
+    },
+    "sr_four_form": {
+      "abs_contrast": 0.30526315789473685,
+      "best_E_threshold_log2": -0.9487184368651196,
+      "frac_above": 0.30526315789473685,
+      "frac_below": 0.0,
+      "n_above": 95,
+      "n_below": 42
+    },
+    "threshold_range_base_operand_absolute": [
+      0.518092485274654,
+      0.5944055944055944
+    ],
+    "threshold_range_log2": [
+      -0.9487184368651196,
+      -0.7504804006406878
+    ],
+    "threshold_spread_log2": 0.1982380362244318
+  },
+  "audit_name": "mcg_geometry_first_phase_2h_v3_bridge",
+  "authority": "Build_Docs/Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md \u00a711; Docs/session_handoff_2026_05_19_mcg_geometry_first_phase_2h_v3_bridge.md \u00a76",
+  "bacl_sterbenz_boundary_explanation": "Sterbenz lemma (informal, IEEE 754 round-to-nearest-even): for a, b in F+ with a/2 <= b <= 2a, a - b is exact. BACL (proven in bacl_invariant_audit/) is a stronger structural statement: for any a, b in F+ with ulp(a) >= ulp(b), a - b = j * ulp(b) for integer j in Z. As |base_operand| approaches 0.5 the operand chain crosses the binade boundary at 2^(-1); the relative ulp scaling between operands transitions through this point. Phase 2d/2g find the fixture-best E thresholds in the cluster [-0.949, -0.750] log2 (|base_operand| in [0.518, 0.595]) \u2014 adjacent to but not exactly on the Sterbenz line. The phase organization transitions over a binade-spaced neighbourhood of the boundary rather than at the boundary itself. The substrate-derived threshold is the cluster, not a single binade edge.",
+  "campaign": "mcg_geometry_first_discovery",
+  "candidate_ledger_update_summary": {
+    "C-def-1": {
+      "current_ledger_state": "unresolved_candidate",
+      "proposed_state_after_phase_2h": "unresolved_candidate",
+      "proposed_tags": [
+        "phase_2h_v3_bridge_built",
+        "phase_2h_v3_bridge_candidate_mapped"
+      ],
+      "rationale_no_state_change": "Phase 2h does not change candidate states. Adds tags phase_2h_v3_bridge_built and phase_2h_v3_bridge_candidate_mapped to C-def-1."
+    },
+    "G-curv-2": {
+      "current_ledger_state": "unresolved_candidate",
+      "proposed_state_after_phase_2h": "unresolved_candidate",
+      "rationale": "Unchanged \u2014 structurally rate-limited in 1D scope. Surfaced as multi-D question MD_Q3."
+    },
+    "G-curv-3": {
+      "current_ledger_state": "unresolved_candidate",
+      "proposed_state_after_phase_2h": "unresolved_candidate",
+      "rationale": "Unchanged from Phase 2f demotion."
+    },
+    "G-route-1": {
+      "current_ledger_state": "unresolved_candidate",
+      "proposed_state_after_phase_2h": "unresolved_candidate",
+      "rationale": "Unchanged \u2014 \u00a71.4 zero-operand-offset gap still binds. Surfaced as multi-D question MD_Q4."
+    },
+    "no_G_candidate_promoted": true,
+    "other_candidates_unchanged": [
+      "G-curv-1",
+      "C-def-2",
+      "C-def-3"
+    ],
+    "phase_2h_multid_question_surfaced_tag": true
+  },
+  "closeout_questions": {
+    "Q1_what_is_E": "E := log2(|base_operand(coord)|), log base TWO, audit-locked since Phase 2e. Per-fixture base_operand: SR = 1 - beta*beta; Schwarzschild = 1 - 2/r; pure_algebraic = 1 - x. E is the campaign's operationally-validated 1D C-extractor (Phase 2g classification: cdef1_operational_extractor_validated_1d).",
+    "Q2_why_substrate_derived": "E is the V4 substrate image of distance-to-singular-surface under IEEE 754 binade/ulp structure. Chain (informal): BACL (a, b in F+ with ulp(a) >= ulp(b) implies a - b = j * ulp(b)) -> ulp(x_term) = 2^(k_x_term - 52) -> base_operand sits in binade floor(E) -> F1_to_F2 phase distribution depends on floor(E). Threshold clusters near the Sterbenz boundary at |base_operand| ~ 0.5. A formal derivation of the ratio-to-phase mapping is out of scope for Phase 2h.",
+    "Q3_what_phase_2g_validated": "Phase 2g validated C-def-1 / E in 1D scope via a five-condition calibration ladder (all met): (1) E computable across all three 1D primary fixtures; (2) E organizes F1_to_F2 phase behaviour (per-fixture E-quintile spread > 0.10); (3) same-route controls 100% same_phase (1644/1644); (4) F3 calibration 411/411 exactly 0.0; (5) known grid artifacts accounted for (Phase 2e Schwarzschild residual + Phase 2f pure_algebraic apparent grammar).",
+    "Q4_what_the_1d_campaign_refuted": "Three refutations: (a) G-curv-1 signature-driven hypothesis empirically refuted (Phase 2d; reclassified C_confounded); (b) Schwarzschild apparent second axis classified grid-driven (Phase 2e secondary test; balanced partial 0.142 < null p95 0.239 after horizon_approach downsample); (c) pure_algebraic apparent E-resistant transition grammar classified sampling artifact (Phase 2f; 0/5 bins above null p95 under E-uniform alternative grid; G-curv-3 demoted back to unresolved_candidate). No G candidate is positively supported in 1D scope.",
+    "Q5_v3_diagnostic_vocabulary_E_maps_to": "Five V3-side candidates examined: K_G, condition_number, near_umbilic_label, lifted_singularity_null_direction, hessian_eigenvalue_diagnostics. Classifications: K_G, condition_number, and hessian_eigenvalue_diagnostics are diagnostic_neighbour (E shares mechanism scope via substrate-derivation, not curvature-tensor); near_umbilic_label and lifted_singularity_null_direction are not_applicable_in_1d (require multi-D structure).",
+    "Q6_classification_per_pair": "Per-fixture x per-V3-quantity classifications recorded in v3_diagnostic_mapping_table.per_fixture_mapping. The five-quantity classification is identical across SR / Schwarzschild / pure_algebraic because the 1D scope is structurally equivalent across the three. Per-fixture differences would emerge only under multi-D anchor extension.",
+    "Q7_oracle_agreement": "The optional lv3 oracle cross-check artifact (phase_2h_v3_oracle_crosscheck.json) reports agreement/disagreement on the diagnostic_neighbour claims for K_G and condition_number at representative E points if built. The primary bridge artifact does not depend on the oracle (v3_runtime_dependency_required_for_primary_artifact = False).",
+    "Q8_multi_d_question_surfaced": "Four multi-D questions surfaced (MD_Q1-MD_Q4 in multi_d_questions_surfaced): persistence of the Sterbenz threshold under multi-D, cross-pipeline diagnostic_neighbour behaviour under multi-D coupling, G-curv-2 multi-D test, and G-route-1 nonzero-operand-offset bridge to V3 null-direction events.",
+    "Q9_next_step_recommendation": "Three options surface for user decision: (a) Multi-D anchor extension \u2014 primary path to testing G-curv-2 and the diagnostic_neighbour multi-D claims (sense (B) restructure); (b) Campaign closeout \u2014 the 1D campaign has delivered an operationally-validated C-extractor + V3 diagnostic bridge artifact + characterised refutations; pause is justifiable; (c) Targeted oracle follow-up \u2014 small lv3 cross-check artifact at selected E points to strengthen the diagnostic_neighbour claims without multi-D investment. The bridge artifact supports (a), (b), or (c) without preference. Threshold cluster: log2 in [-0.949, -0.750], spread 0.198."
+  },
+  "declared_classifications": [
+    "phase_2h_v3_bridge_built",
+    "phase_2h_v3_bridge_candidate_mapped",
+    "phase_2h_oracle_crosscheck_available",
+    "phase_2h_oracle_crosscheck_unavailable",
+    "phase_2h_multid_question_surfaced"
+  ],
+  "fixtures_in_scope": [
+    "sr_four_form",
+    "schwarzschild_four_form",
+    "pure_algebraic_four_form"
+  ],
+  "log_base": 2,
+  "multi_d_questions_surfaced": [
+    {
+      "candidate_id": "C-def-1",
+      "question": "Does the Sterbenz-boundary threshold cluster in E persist under multi-D anchor extension, where base_operand generalises beyond 1 - x_term to vector-valued constraints?",
+      "question_id": "MD_Q1",
+      "scope_blocker": "Requires lifted-construction extension to geometry_anchor fixtures (currently null in 1D). Sense (B) restructure."
+    },
+    {
+      "candidate_id": "C-def-1; cross-pipeline diagnostic_neighbour",
+      "question": "Does V3's K_G show a Sterbenz-cluster discrimination signature under multi-D coupling, or does the diagnostic_neighbour relation hold across all V3 pipelines regardless of dimensionality?",
+      "question_id": "MD_Q2",
+      "scope_blocker": "Requires V4-native K_G primitive (separate substrate work) or oracle cross-check at multi-D points (separate non-primary artifact). Neither is in Phase 2h scope."
+    },
+    {
+      "candidate_id": "G-curv-2",
+      "question": "Does G-curv-2 (principal-curvature ratio vs route-pair phase) produce a non-zero signal under multi-D anchor extension that is independent of E?",
+      "question_id": "MD_Q3",
+      "scope_blocker": "G-curv-2 is structurally rate-limited in 1D; requires multi-D lifted construction. Sense (B) restructure."
+    },
+    {
+      "candidate_id": "G-route-1",
+      "question": "Does G-route-1 nonzero-operand-offset characterization (\u00a71.4 of the campaign authority) produce a route-pair phase observable independent of the zero-offset readback, and does that observable bridge to V3's lifted-singularity null-direction events?",
+      "question_id": "MD_Q4",
+      "scope_blocker": "Independent of multi-D scope; the \u00a71.4 gap binds regardless. Separate small deliverable."
+    }
+  ],
+  "phase": "2h",
+  "primitive_definition": {
+    "audit_pin": "log base TWO; pinned in Phase 2e and carried unchanged through Phases 2f, 2g, 2h.",
+    "expression": "log2(|base_operand(coord)|)",
+    "labels_forbidden_in_phase_2h": [
+      "G discovered",
+      "G confirmed",
+      "MCG decomposed"
+    ],
+    "log_base": 2,
+    "name": "E",
+    "non_canonical_labels_allowed_in_phase_2h": [
+      "validated 1D C-extractor",
+      "V4 substrate diagnostic bridge candidate",
+      "endpoint-distance substrate image"
+    ],
+    "per_fixture_formula": {
+      "pure_algebraic_four_form": "base_operand(x) = 1 - x",
+      "schwarzschild_four_form": "base_operand(r) = 1 - 2/r",
+      "sr_four_form": "base_operand(beta) = 1 - beta*beta"
+    },
+    "substrate_derivation_sketch": "E is the V4 substrate image of distance-to-singular-surface under IEEE 754 binade/ulp structure. Chain (informal; formal derivation out of scope for Phase 2h): (1) BACL proven invariant \u2014 for a, b in F+ with ulp(a) >= ulp(b), a - b = j * ulp(b) for integer j in Z (bacl_invariant_audit/closeout.md); (2) ulp(x_term) = 2^(k_x_term - 52) where k_x_term = floor(log2(|x_term|)); (3) base_operand = 1 - x_term sits in binade k_b = floor(E); (4) the ratio between the BACL lattice unit and the result's intrinsic granularity governs how route-pair rounding decisions distribute against the lattice, and depends on floor(E); (5) empirically the F1_to_F2 half_phase_fraction varies with E in a threshold-shaped pattern clustering near the Sterbenz boundary at |base_operand| ~ 0.5."
+  },
+  "source_artifact_hashes": {
+    "candidate_ledger.json": "fecc6a71a748b18d83b259e587b52e89e4e6ac85c7ddbdd3b9e6158bb1c12f17",
+    "phase_1_geometry_table.json": "6502e942558f699d24011ae1d78601a07dea835c9ec9441fe42185a9df42df54",
+    "phase_2_joined_readback_table.json": "6a212ee610d80893afd9a2629820006b2a74d34a373f9e7dd334e2042f28cc33",
+    "phase_2b_c_profile.json": "e4268f25ebdd743dd9a463d32c53bf470843ba09852df1164e272a68962afd31",
+    "phase_2c_grid_stability.json": "62d86e0b081231abd37679b5e393de0f7fb1b16284fdff48d4d996d5b8887b85",
+    "phase_2d_solve_for_scout.json": "ea4f29798a14484a17f06273673871b53ce7900520c16083c65ffd312ce43942",
+    "phase_2e_e_reducibility.json": "549f0a9b0b811f078a4b64ccb0d9c11ca9d61fa36e4bac8905d0019ba28489ca",
+    "phase_2f_pa_e_resistance_disambig.json": "286e8b62eeb610a6849169371dabe0070227c637d780d96fc2f9d5dbc798a7ed",
+    "phase_2g_cdef1_calibration.json": "8089f02638face50161ea65e684fdb75bb8c58142a9e0db97efc6189b1bb4730"
+  },
+  "source_filename_mapping": {
+    "phase_2e_transition_e_reducibility.json": "phase_2e_e_reducibility.json"
+  },
+  "v3_diagnostic_mapping_table": {
+    "allowed_relation_classifications": [
+      "direct_analogue",
+      "diagnostic_neighbour",
+      "oracle_crosscheck_only",
+      "not_supported",
+      "not_applicable_in_1d"
+    ],
+    "note": "Per-fixture classifications are identical across the three 1D primary fixtures because 1D scope is structurally equivalent. Per-fixture differences would require multi-D anchor extension.",
+    "per_fixture_mapping": {
+      "pure_algebraic_four_form": {
+        "K_G": {
+          "rationale": "V3's K_G is the Gaussian curvature of the constraint surface in n+1-dimensional ambient space (bordered-determinant formula; OE-4 envelope |grad F| > 0.5 for trustworthy K_G). V4's E is a substrate image of distance-to-singular-surface under IEEE 754 binade/ulp structure. Both are scalar diagnostics of how close the operating point is to a singular feature, but they measure different things: K_G is intrinsic geometry (curvature tensor); E is the substrate's view of the relevant operand magnitude. Diagnostic neighbours \u2014 monotonically related in some regimes, decoupled in others. Not direct_analogue: units, mechanisms, and behaviour at endpoint differ.",
+          "relation": "diagnostic_neighbour",
+          "v4_pipeline_specific": "E was operationally validated for V4's F1_to_F2 dual-arm phase readback pipeline; V3's K_G is a separate diagnostic pipeline. Cross-pipeline comparison at smoke-test depth (v3_calibration_fixtures/, 2026-05-23) showed V3 K_G interpolates smoothly across V4's Sterbenz cluster \u2014 i.e., V4's E discriminator does not appear in V3's K_G output. Consistent with diagnostic_neighbour classification."
+        },
+        "condition_number": {
+          "rationale": "V3's condition number (Jacobian conditioning kappa = sigma_max / sigma_min, or analogues) tracks numerical-analysis sensitivity to perturbation. V4's E is monotonically correlated with conditioning covariates per Phase 2g (Pearson correlations of E versus J_condition and hessian_abs are documented per fixture). Both blow up as |base_operand| approaches 0 (the singular endpoint). Diagnostic neighbour \u2014 they co-vary across the campaign's C-profile, but E is substrate-derived (binade/ulp structure) while condition number is matrix-spectral (continuous-math).",
+          "relation": "diagnostic_neighbour",
+          "v4_pipeline_specific": "Phase 2b/2g record per-row hessian_abs and J_condition as C-covariates monotonically related to E. E is the operationally-validated 1D C-extractor; condition number is the V3 vocabulary's nearest analogue."
+        },
+        "hessian_eigenvalue_diagnostics": {
+          "rationale": "V3 reports Hessian eigenvalue spectra and the derived shape_label decomposition (sign kappa_c, sign kappa_s, sign K_G). V4's Phase 1 geometry table records hessian_eigenvalue_summary per row (1D fixtures: single eigenvalue; multi-D anchors: spectral spread once lifted). In 1D scope the V4-V3 relation is diagnostic-neighbour through the single eigenvalue per row (hessian_abs is the C-covariate). Full spectral C-vector comparison awaits multi-D anchor extension (C-def-2).",
+          "relation": "diagnostic_neighbour",
+          "v4_pipeline_specific": "Phase 1 hessian_signature was uniformly negative across all 411 four_form_primary rows; signature alone cannot discriminate within-stratum behaviour. Phase 2d demoted the signature-driven G hypothesis (G-curv-1 -> C_confounded) on this evidence."
+        },
+        "lifted_singularity_null_direction": {
+          "rationale": "V3's lifted-singularity null-direction detection requires a geometry anchor with sufficient dimensionality to define a null tangent independent of the sweep direction. In 1D scope the campaign records null_tangent_alignment as 1/sqrt(1+J^2) per row (Phase 1) \u2014 a derived per-row scalar that is structurally degenerate compared to V3's multi-D null-direction events. G-curv-3 (null-tangent alignment vs transition grammar) was tagged structurally_rate_limited_in_1d_scope; the transition-grammar side was demoted to unresolved_candidate in Phase 2f (sampling artifact).",
+          "relation": "not_applicable_in_1d",
+          "v4_pipeline_specific": "The blowup_exponent_v4_audit reported |cos theta| = 1.0000 universal across 18 cases \u2014 a related but separate observation. Phase 2h does not extend that audit."
+        },
+        "near_umbilic_label": {
+          "rationale": "Near-umbilic is a 2D-or-higher classification (two coincident principal curvatures, principal directions undetermined). In 1D scope the principal_curvature_ratio is structurally undefined \u2014 only one principal curvature exists per row. V3's umbilic detection requires multi-D constraint surfaces; the campaign's three 1D primary fixtures cannot exercise this label in scope. Multi-D anchor extension would be required to test.",
+          "relation": "not_applicable_in_1d",
+          "v4_pipeline_specific": "G-curv-2 (principal-curvature ratio vs route-pair phase) is the 1D-degenerate ledger candidate that would map here. Tagged structurally_rate_limited_in_1d_scope throughout Phases 2b through 2g."
+        }
+      },
+      "schwarzschild_four_form": {
+        "K_G": {
+          "rationale": "V3's K_G is the Gaussian curvature of the constraint surface in n+1-dimensional ambient space (bordered-determinant formula; OE-4 envelope |grad F| > 0.5 for trustworthy K_G). V4's E is a substrate image of distance-to-singular-surface under IEEE 754 binade/ulp structure. Both are scalar diagnostics of how close the operating point is to a singular feature, but they measure different things: K_G is intrinsic geometry (curvature tensor); E is the substrate's view of the relevant operand magnitude. Diagnostic neighbours \u2014 monotonically related in some regimes, decoupled in others. Not direct_analogue: units, mechanisms, and behaviour at endpoint differ.",
+          "relation": "diagnostic_neighbour",
+          "v4_pipeline_specific": "E was operationally validated for V4's F1_to_F2 dual-arm phase readback pipeline; V3's K_G is a separate diagnostic pipeline. Cross-pipeline comparison at smoke-test depth (v3_calibration_fixtures/, 2026-05-23) showed V3 K_G interpolates smoothly across V4's Sterbenz cluster \u2014 i.e., V4's E discriminator does not appear in V3's K_G output. Consistent with diagnostic_neighbour classification."
+        },
+        "condition_number": {
+          "rationale": "V3's condition number (Jacobian conditioning kappa = sigma_max / sigma_min, or analogues) tracks numerical-analysis sensitivity to perturbation. V4's E is monotonically correlated with conditioning covariates per Phase 2g (Pearson correlations of E versus J_condition and hessian_abs are documented per fixture). Both blow up as |base_operand| approaches 0 (the singular endpoint). Diagnostic neighbour \u2014 they co-vary across the campaign's C-profile, but E is substrate-derived (binade/ulp structure) while condition number is matrix-spectral (continuous-math).",
+          "relation": "diagnostic_neighbour",
+          "v4_pipeline_specific": "Phase 2b/2g record per-row hessian_abs and J_condition as C-covariates monotonically related to E. E is the operationally-validated 1D C-extractor; condition number is the V3 vocabulary's nearest analogue."
+        },
+        "hessian_eigenvalue_diagnostics": {
+          "rationale": "V3 reports Hessian eigenvalue spectra and the derived shape_label decomposition (sign kappa_c, sign kappa_s, sign K_G). V4's Phase 1 geometry table records hessian_eigenvalue_summary per row (1D fixtures: single eigenvalue; multi-D anchors: spectral spread once lifted). In 1D scope the V4-V3 relation is diagnostic-neighbour through the single eigenvalue per row (hessian_abs is the C-covariate). Full spectral C-vector comparison awaits multi-D anchor extension (C-def-2).",
+          "relation": "diagnostic_neighbour",
+          "v4_pipeline_specific": "Phase 1 hessian_signature was uniformly negative across all 411 four_form_primary rows; signature alone cannot discriminate within-stratum behaviour. Phase 2d demoted the signature-driven G hypothesis (G-curv-1 -> C_confounded) on this evidence."
+        },
+        "lifted_singularity_null_direction": {
+          "rationale": "V3's lifted-singularity null-direction detection requires a geometry anchor with sufficient dimensionality to define a null tangent independent of the sweep direction. In 1D scope the campaign records null_tangent_alignment as 1/sqrt(1+J^2) per row (Phase 1) \u2014 a derived per-row scalar that is structurally degenerate compared to V3's multi-D null-direction events. G-curv-3 (null-tangent alignment vs transition grammar) was tagged structurally_rate_limited_in_1d_scope; the transition-grammar side was demoted to unresolved_candidate in Phase 2f (sampling artifact).",
+          "relation": "not_applicable_in_1d",
+          "v4_pipeline_specific": "The blowup_exponent_v4_audit reported |cos theta| = 1.0000 universal across 18 cases \u2014 a related but separate observation. Phase 2h does not extend that audit."
+        },
+        "near_umbilic_label": {
+          "rationale": "Near-umbilic is a 2D-or-higher classification (two coincident principal curvatures, principal directions undetermined). In 1D scope the principal_curvature_ratio is structurally undefined \u2014 only one principal curvature exists per row. V3's umbilic detection requires multi-D constraint surfaces; the campaign's three 1D primary fixtures cannot exercise this label in scope. Multi-D anchor extension would be required to test.",
+          "relation": "not_applicable_in_1d",
+          "v4_pipeline_specific": "G-curv-2 (principal-curvature ratio vs route-pair phase) is the 1D-degenerate ledger candidate that would map here. Tagged structurally_rate_limited_in_1d_scope throughout Phases 2b through 2g."
+        }
+      },
+      "sr_four_form": {
+        "K_G": {
+          "rationale": "V3's K_G is the Gaussian curvature of the constraint surface in n+1-dimensional ambient space (bordered-determinant formula; OE-4 envelope |grad F| > 0.5 for trustworthy K_G). V4's E is a substrate image of distance-to-singular-surface under IEEE 754 binade/ulp structure. Both are scalar diagnostics of how close the operating point is to a singular feature, but they measure different things: K_G is intrinsic geometry (curvature tensor); E is the substrate's view of the relevant operand magnitude. Diagnostic neighbours \u2014 monotonically related in some regimes, decoupled in others. Not direct_analogue: units, mechanisms, and behaviour at endpoint differ.",
+          "relation": "diagnostic_neighbour",
+          "v4_pipeline_specific": "E was operationally validated for V4's F1_to_F2 dual-arm phase readback pipeline; V3's K_G is a separate diagnostic pipeline. Cross-pipeline comparison at smoke-test depth (v3_calibration_fixtures/, 2026-05-23) showed V3 K_G interpolates smoothly across V4's Sterbenz cluster \u2014 i.e., V4's E discriminator does not appear in V3's K_G output. Consistent with diagnostic_neighbour classification."
+        },
+        "condition_number": {
+          "rationale": "V3's condition number (Jacobian conditioning kappa = sigma_max / sigma_min, or analogues) tracks numerical-analysis sensitivity to perturbation. V4's E is monotonically correlated with conditioning covariates per Phase 2g (Pearson correlations of E versus J_condition and hessian_abs are documented per fixture). Both blow up as |base_operand| approaches 0 (the singular endpoint). Diagnostic neighbour \u2014 they co-vary across the campaign's C-profile, but E is substrate-derived (binade/ulp structure) while condition number is matrix-spectral (continuous-math).",
+          "relation": "diagnostic_neighbour",
+          "v4_pipeline_specific": "Phase 2b/2g record per-row hessian_abs and J_condition as C-covariates monotonically related to E. E is the operationally-validated 1D C-extractor; condition number is the V3 vocabulary's nearest analogue."
+        },
+        "hessian_eigenvalue_diagnostics": {
+          "rationale": "V3 reports Hessian eigenvalue spectra and the derived shape_label decomposition (sign kappa_c, sign kappa_s, sign K_G). V4's Phase 1 geometry table records hessian_eigenvalue_summary per row (1D fixtures: single eigenvalue; multi-D anchors: spectral spread once lifted). In 1D scope the V4-V3 relation is diagnostic-neighbour through the single eigenvalue per row (hessian_abs is the C-covariate). Full spectral C-vector comparison awaits multi-D anchor extension (C-def-2).",
+          "relation": "diagnostic_neighbour",
+          "v4_pipeline_specific": "Phase 1 hessian_signature was uniformly negative across all 411 four_form_primary rows; signature alone cannot discriminate within-stratum behaviour. Phase 2d demoted the signature-driven G hypothesis (G-curv-1 -> C_confounded) on this evidence."
+        },
+        "lifted_singularity_null_direction": {
+          "rationale": "V3's lifted-singularity null-direction detection requires a geometry anchor with sufficient dimensionality to define a null tangent independent of the sweep direction. In 1D scope the campaign records null_tangent_alignment as 1/sqrt(1+J^2) per row (Phase 1) \u2014 a derived per-row scalar that is structurally degenerate compared to V3's multi-D null-direction events. G-curv-3 (null-tangent alignment vs transition grammar) was tagged structurally_rate_limited_in_1d_scope; the transition-grammar side was demoted to unresolved_candidate in Phase 2f (sampling artifact).",
+          "relation": "not_applicable_in_1d",
+          "v4_pipeline_specific": "The blowup_exponent_v4_audit reported |cos theta| = 1.0000 universal across 18 cases \u2014 a related but separate observation. Phase 2h does not extend that audit."
+        },
+        "near_umbilic_label": {
+          "rationale": "Near-umbilic is a 2D-or-higher classification (two coincident principal curvatures, principal directions undetermined). In 1D scope the principal_curvature_ratio is structurally undefined \u2014 only one principal curvature exists per row. V3's umbilic detection requires multi-D constraint surfaces; the campaign's three 1D primary fixtures cannot exercise this label in scope. Multi-D anchor extension would be required to test.",
+          "relation": "not_applicable_in_1d",
+          "v4_pipeline_specific": "G-curv-2 (principal-curvature ratio vs route-pair phase) is the 1D-degenerate ledger candidate that would map here. Tagged structurally_rate_limited_in_1d_scope throughout Phases 2b through 2g."
+        }
+      }
+    },
+    "summary_by_relation": {
+      "diagnostic_neighbour": [
+        "K_G",
+        "condition_number",
+        "hessian_eigenvalue_diagnostics"
+      ],
+      "not_applicable_in_1d": [
+        "near_umbilic_label",
+        "lifted_singularity_null_direction"
+      ]
+    },
+    "v3_side_candidates": [
+      "K_G",
+      "condition_number",
+      "near_umbilic_label",
+      "lifted_singularity_null_direction",
+      "hessian_eigenvalue_diagnostics"
+    ]
+  },
+  "v3_oracle_crosscheck_note": "Per CLAUDE.md \u00a74, lv3 is a confirmation oracle only, never a design source. If a cross-check artifact is built (phase_2h_v3_oracle_crosscheck.json), it is a separate non-primary deliverable reporting agreement/disagreement only. The primary bridge artifact stands without V3 runtime.",
+  "v3_oracle_crosscheck_status": "available_separate_artifact",
+  "v3_runtime_dependency_required_for_primary_artifact": false,
+  "v4_readback_behavior_summary": {
+    "F1_to_F2_phase_organization_by_E": "Per-fixture E-quintile binning of F1_to_F2 phase shows half_phase_fraction varying substantially across bins (per-fixture spreads > 0.10 in every fixture; condition 2 criterion). Small-radicand bin (lowest E) consistently has the lowest half_phase_fraction; large-radicand bin has higher activation. Above-threshold half-phase rates: SR ~30%, pure_algebraic ~36%, Schwarzschild ~68% per Phase 2g.",
+    "F3_calibration_clean": "F3_to_F3 readback value = 0.0 exactly in every record (411/411 across the three primary fixtures). F3 is the V4 zero-calibration channel; cleanly zero confirms the readback pipeline does not manufacture residue.",
+    "F4_stressor_activation_E_correlated": "F4_to_F4 stressor activation rate is itself E-bin-correlated, firing more in small-E records. Per Phase 2g per-fixture rates: SR 27/137 active (~20%), pure_algebraic 40/137 active (~29%), Schwarzschild 92/137 active (~67%).",
+    "all_five_conditions_met": true,
+    "grid_stability_status": "Phase 2c classification: pure_algebraic = grid_stable (max |delta half_phase_fraction| 0.044); SR and Schwarzschild = grid_modestly_unstable (max |delta| 0.085, concentrated in the T3 large-radicand bin). The threshold direction (small-radicand suppression) is preserved exactly under deterministic jitter. Phase 2e (Schwarzschild residual) and Phase 2f (pure_algebraic apparent grammar) confirm two known grid artifacts are accounted for rather than mistaken for primitive behaviour.",
+    "phase_2g_calibration_classification": "cdef1_operational_extractor_validated_1d",
+    "same_route_control_clean": "Same-route control rows are same_phase in every record (1644/1644 across the campaign). No manufactured half-phase."
+  }
+}

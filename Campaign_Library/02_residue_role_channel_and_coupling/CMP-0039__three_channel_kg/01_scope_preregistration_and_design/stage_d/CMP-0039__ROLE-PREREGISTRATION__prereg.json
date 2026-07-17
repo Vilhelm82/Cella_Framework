@@ -1,0 +1,301 @@
+{
+  "authority": "Frozen objects under results/three_channel_kg/ (manifest_v1.json, SCHEMA.md, FIXTURES.md, CLAIM_LEDGER.md) verified vs freeze_pins_sha256.json; built+frozen bench under src/lloyd_v4/evals/three_channel_kg/ imported READ-ONLY from the stable main path and pinned in depends_on. Covenant loop; R2/R3 dispositions. ORCHESTRATOR OVERRIDE: no v4-campaign-discipline skill loaded this session \u2014 frozen objects + embedded covenant are the sole binding authority.",
+  "campaign_id": "three_channel_kg",
+  "cycle_id": "c001",
+  "depends_on": {
+    "results/three_channel_kg/manifest_v1.json": "a28042d96a3588407a610f649388d93364c9be2b9294810cd666f3a7369b318b",
+    "src/lloyd_v4/evals/three_channel_kg/fixtures.py": "3d415011b7f4c81c38d70d94847cbdbacb9d02b7543cfe7e0d2f9e48b11f8b8c",
+    "src/lloyd_v4/evals/three_channel_kg/oracle.py": "b8af9397710490a8d548b653aa301cf0eb2bd37ca50579fc26c1b58a5c1c7798",
+    "src/lloyd_v4/evals/three_channel_kg/probe.py": "1f99965824afd3548841ca5360c56dc44250c858018f18349bf2a2c3b9e098d8",
+    "src/lloyd_v4/evals/three_channel_kg/referee_channel.py": "28eff76c9eceef94d9927845a9fca33ce01f4cd3f452635607cf42a806921175",
+    "src/lloyd_v4/evals/three_channel_kg/referee_total.py": "993ffd21f9eac6c13eb015eacc5f3ed9bfb00cded0648fc963a83cead51feb29",
+    "src/lloyd_v4/evals/three_channel_kg/schema.py": "40335dc1501e3d737fedbf236c4e66a7c7641c1b1b6e4d840499fe23260ca085"
+  },
+  "expectations": {
+    "F12a_generic_rotation": {
+      "K_G": "-3/49",
+      "K_G_invariant": true,
+      "channels": [
+        "-961/30625",
+        "2713/30625",
+        "-3627/30625"
+      ],
+      "channels_move": true,
+      "frame_required": true,
+      "g_prime": [
+        "13/5",
+        "-9/5",
+        "2"
+      ],
+      "q_prime": "14",
+      "rechart": "R=(1/5)[[3,-4,0],[4,3,0],[0,0,5]] in SO(3) (conv. x=Ry; g'=R^T g, H'=R^T H R)"
+    },
+    "F12b_signed_permutation": {
+      "K_G": "-3/49",
+      "K_G_invariant": true,
+      "channels": [
+        "-1/49",
+        "1/49",
+        "-3/49"
+      ],
+      "channels_fixed": true,
+      "frame_required": true,
+      "q_prime": "14",
+      "rechart": "signed permutation swap axes 1<->2; P=[[0,1,0],[1,0,0],[0,0,1]]"
+    },
+    "K7_disposition": {
+      "F12a_is_legitimate_rechart": "R^T R == I and det R == +1 (genuine SO(3) frame change)",
+      "F12b_is_legitimate_rechart": "P^T P == I (signed permutation, |det P| == 1)",
+      "fires_when": "a legitimate rechart reported as a curvature error, OR sigma_2(=K_G) not held invariant under F12",
+      "must_not_fire": true
+    },
+    "base_F8_declared_frame": {
+      "K_G": "-3/49",
+      "channels": [
+        "-1/49",
+        "1/49",
+        "-3/49"
+      ],
+      "frame": "declared DBP frame",
+      "note": "keystone F8 base jet g=(3,1,2), H=[[2,1,0],[1,0,0],[0,0,2]], q=14"
+    },
+    "completeness_disposition": {
+      "CL_c3c_ii": "OPEN (blocked on {sigma_r}-completeness / L1); NOT closed by Stage D",
+      "CL_c7_move": "PARTIAL (provable core graded; completeness left OPEN; NOT DEMONSTRATED)",
+      "K_soft": "non-refuting FLAG; no in-scope refuting witness manufactured; does NOT fail a prediction"
+    }
+  },
+  "frozen": true,
+  "frozen_authority_pins": {
+    "results/three_channel_kg/CLAIM_LEDGER.md": "d6e395fe82a09e743edc85658ab887445f299f793524b198d67f2bb336554958",
+    "results/three_channel_kg/FIXTURES.md": "3d933e39fd03ef968ef943ff24df5292318fdac47a3ec1774b81deaea4f902f2",
+    "results/three_channel_kg/SCHEMA.md": "fe0eb353ea6147c9d290fdfa2bf4ee2fb8d612a45a31b5d62bfce986a2d37b98",
+    "results/three_channel_kg/freeze_pins_sha256.json": "c893a1e9758954c2ebeef9cd022cda170fa51d61a850c238ef0f76800d18ee16"
+  },
+  "grader_clauses": {
+    "CL_c3c_ii_open": "NOT_YET_PROBED (OPEN \u2014 blocked on `{\u03c3_r}`-completeness / L1)",
+    "CL_c3c_ii_statement": "no **invariant** scalar (factoring through `\u03a3`) recovers the channel representative",
+    "CL_c7_statement": "frame honesty \u2014 sum intrinsic; channels frame-relative, `S\u2083`+signs invariants (n=3); completeness OPEN",
+    "K7_frame_undeclared": "a legitimate rechart reported as a curvature error, or `\u03c3\u2082` not held invariant under F12. *(CL-c7)*",
+    "K_soft_completeness": "two surfaces, identical `{\u03c3_r}`+orientation, not gauge+permutation related. *(L1; CL-c3c-ii / CL-c7 completeness)*",
+    "R2_supplied_frame": "disposition: the channels are frame-relative in the supplied DBP frame; only the sum `K_G` is intrinsic",
+    "R3_F12_pin": "CLOSED. `R\u2208SO(3)`, rotated jet, and tuples pinned in `FIXTURES.md` (exact \u211a).",
+    "precondition_P_frame": "every channel fixture must carry its frame annotation, or it is rejected.",
+    "precondition_P_self_cert": "the oracle (Path C) must be external to A/B/B', or the run is void.",
+    "semantics_K_G": "kappa_c + kappa_s + kappa_int (exact in Q)",
+    "semantics_channel_referee": "channels == split-shape-operator det2 channels (Path B', disjoint source)",
+    "semantics_total_referee": "K_G == -det(H_b)/q^2 (Path B, sqrt-q-free)",
+    "type_gate_sqrt_q_leak": "a total/channel referee returning a radical/float instead of Fraction -> hard fail (K8)."
+  },
+  "no_tolerance_note": "Exact Q only; no tolerance band anywhere; a near-miss is a FAIL. No substrate promotion (eval-tier only). Nothing canonical until Will signs off.",
+  "organ": {
+    "module": "lloyd_v4.evals.three_channel_kg.probe",
+    "path": "A",
+    "probe_id": "three_channel_kg_probe_A_v1",
+    "probe_source_verbatim": "\"\"\"c001 `three_channel_kg` \u2014 the PROBE (Path A, `role=probe`).\n\nThe monomial channel read-off. From the bordered Hessian\n\n        H_b = [[ 0 , g\u1d40 ],\n               [ g ,  H ]]      (4\u00d74, H symmetric 3\u00d73, q = g\u1d40g \u2260 0)\n\nwe form det(H_b) as an exact polynomial in (g, H) and partition it into the\nexhaustive, disjoint monomial classes pinned in `manifest_v1.json` \u2192\n`semantics_pinned` and `results/three_channel_kg/SCHEMA.md`:\n\n  * \u0394_c \u2014 monomials carrying an OFF-DIAGONAL H-entry only (coupling),\n  * \u0394_s \u2014 monomials carrying a DIAGONAL H-entry only (self),\n  * \u0394_m \u2014 MIXED monomials (one diagonal \u00d7 one off-diagonal),\n\nwith  det(H_b) == \u0394_c + \u0394_s + \u0394_m  (closure identity #5). Then\n\n        \u03ba_X = \u2212\u0394_X / q\u00b2        and        K_G = \u03ba_c + \u03ba_s + \u03ba_int.\n\n(\u03ba_int is the channel read off from the mixed partition \u0394_m.)\n\nTHE LINE (covenant): this is the HYPOTHESIS path. The probe NEVER imports the\nreferee \u2014 truth (Path B total, Path B\u2032 channels, Path C oracle) is computed on\nan independent code path this module never sees. Exact \u211a ONLY: every operand\nand result is a `fractions.Fraction`; there is no float, no radical, and no\ntolerance anywhere below. The singular stratum (a VANISHING gradient: q=0,\nthe cone-apex / critical point, equivalently every g\u1d62=0) is REFUSED with a\ntyped exception, never returned as 0 / NaN / a placeholder (refuse-not-lie).\nA regular jet that merely has one zero gradient component (q\u22600) is NOT\nsingular and computes normally \u2014 see the frozen fixture F6.\n\nThe det(H_b) used here is the read-off's OWN exact-\u211a expansion of the\nbordered determinant (cofactor expansion along the border, in `Fraction`); it\nis hypothesis input on Path A, independently re-derived by the referee on\nPath B before any row is graded \u2014 the probe does not consult that path.\n\"\"\"\n\nfrom __future__ import annotations\n\nfrom fractions import Fraction\nfrom typing import Dict, List, Sequence, Tuple\n\nPROBE_ID = \"three_channel_kg_probe_A_v1\"\nROLE = \"probe\"\n\n\nclass ThreeChannelRefusal(Exception):\n    \"\"\"Typed refusal on a singular stratum (refuse-not-lie). `kind` is one of\n    the `schema.SINGULAR_STRATA` labels.\"\"\"\n\n    def __init__(self, kind: str) -> None:\n        super().__init__(kind)\n        self.kind = kind\n\n\nVec3 = Sequence[Fraction]\nMat3 = Sequence[Sequence[Fraction]]\n\n\n# --------------------------------------------------------------------------\n# exact-Q guards\n# --------------------------------------------------------------------------\n\ndef _as_fraction(x: object, where: str) -> Fraction:\n    \"\"\"Admit only exact rationals onto the probe path. A float or any\n    non-exact type is a \u221aq-leak at the door and is refused as a type error \u2014\n    never silently coerced.\"\"\"\n    if isinstance(x, Fraction):\n        return x\n    if isinstance(x, int) and not isinstance(x, bool):\n        return Fraction(x)\n    raise TypeError(\n        f\"{where}: probe path is exact \u211a only; got \"\n        f\"{type(x).__name__} ({x!r}) \u2014 no float/radical admitted\")\n\n\ndef _coerce_jet(g: Vec3, H: Mat3) -> Tuple[List[Fraction], List[List[Fraction]]]:\n    if len(g) != 3:\n        raise ValueError(f\"g must have length 3, got {len(g)}\")\n    if len(H) != 3 or any(len(row) != 3 for row in H):\n        raise ValueError(\"H must be 3x3\")\n    gg = [_as_fraction(g[i], f\"g[{i}]\") for i in range(3)]\n    HH = [[_as_fraction(H[i][j], f\"H[{i}][{j}]\") for j in range(3)]\n          for i in range(3)]\n    # H is the Hessian: symmetric. Enforce it (an asymmetric H would make the\n    # off/diagonal monomial classes ill-defined).\n    for i in range(3):\n        for j in range(i + 1, 3):\n            if HH[i][j] != HH[j][i]:\n                raise ValueError(\n                    f\"H not symmetric at ({i},{j}): \"\n                    f\"{HH[i][j]} != {HH[j][i]}\")\n    return gg, HH\n\n\n# --------------------------------------------------------------------------\n# q = g^T g, with the singular-stratum refusals (refuse-not-lie)\n# --------------------------------------------------------------------------\n\ndef q_of(g: Vec3) -> Fraction:\n    \"\"\"q = g\u1d40g in exact \u211a. Refuses the singular stratum (refuse-not-lie):\n    when the gradient VANISHES (q=0) there is no regular level surface \u2014 the\n    cone-apex / critical point \u2014 and the read-off is a TYPED `q_zero` refusal,\n    never 0 / NaN / a placeholder.\n\n    A single zero gradient COMPONENT (some g\u1d62=0 with q\u22600) is NOT singular: it\n    is a regular rational jet in the supplied frame (e.g. the frozen fixture\n    F6, sphere at (3/5,4/5,0) with g=(6/5,8/5,0), q=4, K_G=1). The spec's\n    `g\u1d62=0` singular stratum is the genuine degeneracy where the gradient drops\n    rank to zero (q=0 \u27fa every g\u1d62=0 over \u211d), reported as `g_i_zero`; it does\n    NOT include regular points that merely lie on a coordinate hyperplane.\n    Over-refusing F6 would contradict the freeze, so the gate is strictly q=0.\n    \"\"\"\n    gg = [_as_fraction(g[i], f\"g[{i}]\") for i in range(3)]\n    q = gg[0] * gg[0] + gg[1] * gg[1] + gg[2] * gg[2]\n    if q == 0:\n        # gradient vanishes: cone apex / critical point. Over \u211d this is\n        # exactly \"every g\u1d62=0\", so name both the apex and the g\u1d62=0 stratum.\n        kind = \"g_i_zero\" if all(gi == 0 for gi in gg) else \"q_zero\"\n        raise ThreeChannelRefusal(kind)\n    return q\n\n\n# --------------------------------------------------------------------------\n# the bordered-Hessian determinant, partitioned by monomial class (Path A)\n# --------------------------------------------------------------------------\n\ndef partition(g: Vec3, H: Mat3\n              ) -> Dict[str, Fraction]:\n    \"\"\"Return {'Delta_c','Delta_s','Delta_m','det_hb'} \u2014 the exact-\u211a\n    monomial partition of det(H_b).\n\n    det(H_b) for H_b = [[0, g\u1d40],[g, H]] expands (exactly, in \u211a) to the twelve\n    additive terms\n\n        det = g1\u00b2(h23\u00b2 \u2212 h22\u00b7h33)            \u2190 s: \u2212g1\u00b2h22h33, c: +g1\u00b2h23\u00b2\n            + g2\u00b2(h13\u00b2 \u2212 h11\u00b7h33)            \u2190 s: \u2212g2\u00b2h11h33, c: +g2\u00b2h13\u00b2\n            + g3\u00b2(h12\u00b2 \u2212 h11\u00b7h22)            \u2190 s: \u2212g3\u00b2h11h22, c: +g3\u00b2h12\u00b2\n            + 2g1g2(h12\u00b7h33 \u2212 h13\u00b7h23)       \u2190 m: +2g1g2h12h33, c: \u22122g1g2h13h23\n            + 2g1g3(h13\u00b7h22 \u2212 h12\u00b7h23)       \u2190 m: +2g1g3h13h22, c: \u22122g1g3h12h23\n            + 2g2g3(h11\u00b7h23 \u2212 h12\u00b7h13)       \u2190 m: +2g2g3h11h23, c: \u22122g2g3h12h13\n\n    classified by the H-entries each monomial carries:\n      diagonal-only  (h11,h22,h33)               -> \u0394_s,\n      off-diagonal-only (h12,h13,h23)            -> \u0394_c,\n      one diagonal \u00d7 one off-diagonal            -> \u0394_m.\n    The bordered determinant has no H-free term, so the three classes are\n    exhaustive and disjoint and \u0394_c+\u0394_s+\u0394_m == det(H_b) identically.\n    \"\"\"\n    gg, HH = _coerce_jet(g, H)\n    g1, g2, g3 = gg\n    h11, h12, h13 = HH[0][0], HH[0][1], HH[0][2]\n    h22, h23, h33 = HH[1][1], HH[1][2], HH[2][2]\n\n    # \u0394_c \u2014 off-diagonal-H monomials only\n    delta_c = (g1 * g1 * h23 * h23\n               - 2 * g1 * g2 * h13 * h23\n               - 2 * g1 * g3 * h12 * h23\n               + g2 * g2 * h13 * h13\n               - 2 * g2 * g3 * h12 * h13\n               + g3 * g3 * h12 * h12)\n\n    # \u0394_s \u2014 diagonal-H monomials only\n    delta_s = (- g1 * g1 * h22 * h33\n               - g2 * g2 * h11 * h33\n               - g3 * g3 * h11 * h22)\n\n    # \u0394_m \u2014 mixed monomials (one diagonal \u00d7 one off-diagonal)\n    delta_m = (2 * g1 * g2 * h12 * h33\n               + 2 * g1 * g3 * h13 * h22\n               + 2 * g2 * g3 * h11 * h23)\n\n    det_hb = _det_bordered(gg, HH)\n\n    # closure identity #5, asserted on the probe's own arithmetic: the\n    # partition must reconstruct the cofactor-expanded determinant exactly.\n    # (This is an internal self-consistency guard on Path A only \u2014 NOT the\n    # referee's Path-B determinant, which the probe never imports.)\n    if delta_c + delta_s + delta_m != det_hb:\n        raise AssertionError(\n            \"Path-A partition broke det(H_b)=\u0394_c+\u0394_s+\u0394_m: \"\n            f\"{delta_c}+{delta_s}+{delta_m} != {det_hb}\")\n\n    return {\"Delta_c\": delta_c, \"Delta_s\": delta_s,\n            \"Delta_m\": delta_m, \"det_hb\": det_hb}\n\n\ndef _det_bordered(g: List[Fraction], H: List[List[Fraction]]) -> Fraction:\n    \"\"\"det of the 4\u00d74 bordered Hessian [[0, g\u1d40],[g, H]], by cofactor\n    expansion along the first (border) row, in exact \u211a. Independent of the\n    monomial split above \u2014 it is the read-off's own determinant so the\n    closure-#5 guard is meaningful.\"\"\"\n    hb = [[Fraction(0), g[0], g[1], g[2]],\n          [g[0], H[0][0], H[0][1], H[0][2]],\n          [g[1], H[1][0], H[1][1], H[1][2]],\n          [g[2], H[2][0], H[2][1], H[2][2]]]\n    return _det4(hb)\n\n\ndef _det4(m: List[List[Fraction]]) -> Fraction:\n    \"\"\"Exact 4\u00d74 determinant via Laplace expansion along row 0 (3\u00d73 minors by\n    the rule of Sarrus). Pure Fraction; no pivoting/division, so nothing can\n    go non-exact.\"\"\"\n    acc = Fraction(0)\n    sign = Fraction(1)\n    for c in range(4):\n        if m[0][c] != 0:\n            minor = [[m[r][cc] for cc in range(4) if cc != c]\n                     for r in range(1, 4)]\n            acc += sign * m[0][c] * _det3(minor)\n        sign = -sign\n    return acc\n\n\ndef _det3(m: List[List[Fraction]]) -> Fraction:\n    return (m[0][0] * (m[1][1] * m[2][2] - m[1][2] * m[2][1])\n            - m[0][1] * (m[1][0] * m[2][2] - m[1][2] * m[2][0])\n            + m[0][2] * (m[1][0] * m[2][1] - m[1][1] * m[2][0]))\n\n\n# --------------------------------------------------------------------------\n# the channel read-off: kappa_X = -Delta_X / q^2, K_G = kappa_c+kappa_s+kappa_int\n# --------------------------------------------------------------------------\n\ndef read_off(g: Vec3, H: Mat3) -> Dict[str, Fraction]:\n    \"\"\"Path A. Returns the exact-\u211a dict\n\n        {'K_G','kappa_c','kappa_s','kappa_int',\n         'q','Delta_c','Delta_s','Delta_m','det_hb'}\n\n    Raises `ThreeChannelRefusal` on a singular stratum (q=0 / g\u1d62=0). No\n    float, radical, or tolerance is used; the bordered determinant is \u221aq-free\n    (q enters only as q\u00b2, never \u221aq).\"\"\"\n    q = q_of(g)                      # refuses g\u1d62=0 / q=0\n    q2 = q * q\n    part = partition(g, H)\n    kappa_c = -part[\"Delta_c\"] / q2\n    kappa_s = -part[\"Delta_s\"] / q2\n    kappa_int = -part[\"Delta_m\"] / q2\n    K_G = kappa_c + kappa_s + kappa_int\n    return {\"K_G\": K_G, \"kappa_c\": kappa_c, \"kappa_s\": kappa_s,\n            \"kappa_int\": kappa_int, \"q\": q,\n            \"Delta_c\": part[\"Delta_c\"], \"Delta_s\": part[\"Delta_s\"],\n            \"Delta_m\": part[\"Delta_m\"], \"det_hb\": part[\"det_hb\"]}\n\n\ndef channels(g: Vec3, H: Mat3\n             ) -> Tuple[Fraction, Fraction, Fraction, Fraction]:\n    \"\"\"Convenience: the graded tuple (K_G, \u03ba_c, \u03ba_s, \u03ba_int) in exact \u211a.\"\"\"\n    r = read_off(g, H)\n    return r[\"K_G\"], r[\"kappa_c\"], r[\"kappa_s\"], r[\"kappa_int\"]\n\n\n__all__ = [\n    \"PROBE_ID\", \"ROLE\", \"ThreeChannelRefusal\",\n    \"q_of\", \"partition\", \"read_off\", \"channels\",\n]\n",
+    "reconstruction_law": "Bordered Hessian H_b = [[0, g^T],[g, H]] (4x4, H symmetric 3x3, q = g^T g != 0). det(H_b) is expanded EXACTLY in Q and partitioned into the exhaustive disjoint monomial classes Delta_c (off-diagonal-H only), Delta_s (diagonal-H only), Delta_m (one diagonal x one off-diagonal), with det(H_b) == Delta_c + Delta_s + Delta_m. Then kappa_X = -Delta_X/q^2 and K_G = kappa_c + kappa_s + kappa_int. FRAME HONESTY (CL-c7): under a generic rotation R in SO(3) (F12a, conv. x=Ry, g'=R^T g, H'=R^T H R) the channel triple (kappa_c,kappa_s,kappa_int) MOVES while the sum K_G = sigma_2 = -det(H_b)/q^2 is INVARIANT (the sum is the intrinsic invariant; the channels are a frame-relative representative \u2014 R2). Under a signed permutation P (F12b, swap axes 1<->2) the channel triple is FIXED (the S3 x {+/-} stabilizer of the monomial decomposition at n=3) and K_G is again invariant. Exact Q only; sqrt-q-free (q enters only as q^2). Completeness \u2014 whether {sigma_r}+orientation determines the gauge+permutation class (CL-c3c-ii / L1) \u2014 is OPEN and NOT established here (PARTIAL by design).",
+    "role": "probe",
+    "sha256": "1f99965824afd3548841ca5360c56dc44250c858018f18349bf2a2c3b9e098d8"
+  },
+  "predictions": [
+    {
+      "claims": [
+        "CL-c7"
+      ],
+      "expected": "channels_F12a == (-961/30625,2713/30625,-3627/30625) != base (-1/49,1/49,-3/49) on A/B'/C",
+      "id": "P1_F12a_channels_move",
+      "kills_relevant": [
+        "K7"
+      ],
+      "statement": "Frame-relativity core (R2): under F12a (generic rotation R in SO(3), conv. x=Ry), the channel triple MOVES off the declared-frame triple. Exact Q: (kappa_c,kappa_s,kappa_int)_F12a == (-961/30625, 2713/30625, -3627/30625) and this != the base triple (-1/49, 1/49, -3/49). The moved triple agrees across Path A (probe), Path B' (split shape operator) and Path C (oracle).",
+      "units": "exact Q (Fraction) per channel; boolean moved!=base; boolean A==B'==C"
+    },
+    {
+      "claims": [
+        "CL-c7"
+      ],
+      "expected": "K_G_F12a == -3/49 == K_G_base on A/B/B'/C; q'_F12a == 14",
+      "id": "P2_F12a_KG_invariant",
+      "kills_relevant": [
+        "K7"
+      ],
+      "statement": "Intrinsic-sum core: under F12a, sigma_2 = K_G is INVARIANT. Exact Q: K_G_F12a == -3/49 == K_G_base, on Path A total, Path B total (-det(H_b)/q^2), Path B' sum, and Path C. (K7 fires if sigma_2 is not held invariant under F12 \u2014 here it MUST remain invariant.)",
+      "units": "exact Q (Fraction); boolean invariance across paths"
+    },
+    {
+      "claims": [
+        "CL-c7"
+      ],
+      "expected": "channels_F12b == (-1/49,1/49,-3/49) == base on A/B'/C",
+      "id": "P3_F12b_channels_fixed",
+      "kills_relevant": [
+        "K7"
+      ],
+      "statement": "S3 x {+/-} invariance core (n=3): under F12b (signed permutation P, swap axes 1<->2), the channel triple is FIXED at the declared-frame triple. Exact Q: (kappa_c,kappa_s,kappa_int)_F12b == (-1/49, 1/49, -3/49) == base, on Path A, Path B' and Path C. The signed permutation is a symmetry of the monomial channel decomposition (the S3 x {+/-} stabilizer at n=3), so the channels do not move under it.",
+      "units": "exact Q (Fraction) per channel; boolean fixed==base; boolean A==B'==C"
+    },
+    {
+      "claims": [
+        "CL-c7"
+      ],
+      "expected": "K_G_F12b == -3/49 == K_G_base on A/B/B'/C; q'_F12b == 14",
+      "id": "P4_F12b_KG_invariant",
+      "kills_relevant": [
+        "K7"
+      ],
+      "statement": "Under F12b, sigma_2 = K_G is INVARIANT. Exact Q: K_G_F12b == -3/49 == K_G_base, on Path A total, Path B total, Path B' sum, Path C; q'_F12b == 14. (K7 must NOT fire under the signed permutation.)",
+      "units": "exact Q (Fraction); boolean invariance across paths"
+    },
+    {
+      "claims": [
+        "CL-c7"
+      ],
+      "expected": "K7 not fired: recharts legitimate (orthogonal) AND K_G invariant under both F12a,F12b",
+      "id": "P5_K7_not_fired",
+      "kills_relevant": [
+        "K7"
+      ],
+      "statement": "K7 (frame-undeclared, refute) does NOT fire on either F12 rechart. Neither trigger is met: (a) the recharts are LEGITIMATE frame changes \u2014 F12a R with R^T R == I and det R == +1 (genuine SO(3)); F12b P a signed permutation with P^T P == I and |det P| == 1 \u2014 and the curvature K_G is preserved exactly (NOT reported as a curvature error); AND (b) sigma_2 (= K_G) is held invariant under BOTH F12a and F12b. So a stage that flagged either legitimate rechart as a curvature error, or let sigma_2 drift, would fire K7 \u2014 and neither happens.",
+      "units": "boolean (rechart orthogonality) AND boolean (K_G invariance) per fixture"
+    },
+    {
+      "claims": [
+        "CL-c7"
+      ],
+      "expected": "F12a: channels move & K_G fixed; F12b: channels fixed & K_G fixed (R2 contrast holds)",
+      "id": "P6_frame_relativity_contrast_R2",
+      "kills_relevant": [
+        "K7"
+      ],
+      "statement": "R2 disposition (channels frame-relative, only the sum intrinsic): the two recharts CONTRAST exactly as R2/CL-c7 predict. Under the generic rotation F12a the channel representative MOVES (channels_F12a != channels_base) while the invariant sum is FIXED (K_G_F12a == K_G_base); under the discrete signed permutation F12b the channels are FIXED (channels_F12b == channels_base) and the sum is again FIXED. So: a generic frame change moves the representative but not the invariant (frame-relativity); the S3 x {+/-} subgroup fixes the representative (n=3 invariance); the sum K_G is intrinsic under both. This is the provable PARTIAL core \u2014 nothing claims completeness.",
+      "units": "boolean per fixture (channels-move flag, K_G-fixed flag)"
+    },
+    {
+      "claims": [
+        "CL-c7",
+        "CL-c3c-ii"
+      ],
+      "expected": "CL-c3c-ii OPEN recorded; K-soft non-refuting flag raised; CL-c7 move == PARTIAL (not DEMONSTRATED)",
+      "id": "P7_completeness_OPEN_Ksoft_flag",
+      "kills_relevant": [
+        "K-soft"
+      ],
+      "statement": "PARTIAL-by-design honesty: CL-c3c-ii (no invariant scalar factoring through Sigma recovers the channel representative) is recorded OPEN \u2014 blocked on {sigma_r}-completeness / L1 \u2014 and is NOT closed by Stage D. K-soft (completeness) is a NON-REFUTING FLAG: no in-scope witness of two surfaces with identical {sigma_r}+orientation that are not gauge+permutation related is manufactured (manufacturing one would reach into closing CL-c3c-ii, which Stage D must not do), so the FLAG is raised as 'completeness unestablished' and does NOT refute and does NOT fail this prediction. This prediction PASSES iff the stage records CL-c3c-ii as OPEN, raises K-soft as a non-refuting flag, and proposes CL-c7 -> PARTIAL (NOT DEMONSTRATED). The exact-Q near-miss of K-soft (F12a and F8-base share sigma_2 = -3/49 and orientation but have different channel triples) is recorded as evidence that identical sigma_2 + different channels arises precisely under a frame change \u2014 the converse of the open K-soft question, not a closure of it.",
+      "units": "boolean (OPEN recorded) AND boolean (flag is non-refuting) AND (proposed move == PARTIAL)"
+    },
+    {
+      "claims": [
+        "CL-c7"
+      ],
+      "expected": "F12a,F12b carry frame on fixture and oracle; oracle import-disjoint from A/B/B'",
+      "id": "P8_F12_preconditions",
+      "kills_relevant": [],
+      "preconditions": [
+        "P-self-cert",
+        "P-frame"
+      ],
+      "statement": "Preconditions hold in F12 scope (run not void): P-frame \u2014 each F12 fixture (F12a, F12b) carries a non-empty frame annotation on BOTH the generated fixture and the Path C oracle (channels are frame-relative, so the frame is mandatory); P-self-cert \u2014 the Path C oracle does NOT import probe / referee_total / referee_channel / fixtures and they do not import oracle.",
+      "units": "boolean (frame-present per F12 fixture) AND boolean (import-graph disjoint)"
+    },
+    {
+      "claims": [
+        "CL-c7"
+      ],
+      "expected": "all F12 emissions are Fraction on A/B/B'; float operand at door raises TypeError",
+      "id": "P9_F12_type_gate_sqrt_q",
+      "kills_relevant": [
+        "K8"
+      ],
+      "statement": "Type gate in F12 scope (sqrt-q-leak): every value emitted for F12a and F12b on Path A (probe), Path B (total) and Path B' (channels) is an exact fractions.Fraction (no float, no radical); AND a float operand offered at the F12 probe door is REFUSED with a TypeError (never silently coerced). The rotation/permutation arithmetic stays in Q throughout \u2014 q enters only as q^2, never as sqrt(q).",
+      "units": "type predicate (isinstance Fraction); boolean refusal-on-float"
+    }
+  ],
+  "referee": {
+    "Path_A": "monomial channel read-off (the probe; role=probe).",
+    "Path_B": "independent TOTAL referee referee_total.referee_total: K_G = -det(H_b)/q^2 via fraction-free Bareiss (generic determinant; no DBP channel formulas; sqrt-q-free); refuses q==0 with RefereeRefusal. Used to confirm K_G invariance under F12a/F12b on an independent path.",
+    "Path_Bprime": "independent CHANNEL referee referee_channel.referee_channel: channels from the split shape operator P H_X P (P = I - g g^T/q) + trace identities; disjoint source; refuses q==0. Used to confirm the moved (F12a) and fixed (F12b) channel triples on an independent path.",
+    "Path_C": "frozen external fixture oracle oracle.oracle: exact-Q F12a/F12b expectations transcribed from FIXTURES.md (R3 pin). P-self-cert: the oracle does NOT import A/B/B' and they do not import it.",
+    "separation_note": "The probe never imports the referee. Path B, Path B', Path C are code-disjoint sources. All grading is mechanical exact-Q equality (no tolerance)."
+  },
+  "scope": {
+    "armed_kills": [
+      "K7",
+      "K-soft"
+    ],
+    "claims": [
+      "CL-c7"
+    ],
+    "claims_open_recorded": [
+      "CL-c3c-ii"
+    ],
+    "fixtures": [
+      "F12a",
+      "F12b"
+    ],
+    "out_of_scope": {
+      "note": "CL-c1..c6 and K1..K6/K8..K11 type gates belong to other stages (Stage A grades CL-c1/CL-c2; B/C/E grade their own). Stage D touches only the F12 frame-honesty fixtures. CL-c3c-ii is recorded OPEN, not closed \u2014 its closure (L1 / {sigma_r}-completeness) is out of Stage-D scope."
+    },
+    "partial_by_design": true,
+    "preconditions": [
+      "P-self-cert",
+      "P-frame"
+    ]
+  },
+  "stage": "stage_d",
+  "stage_title": "frame honesty (CL-c7, PARTIAL by design)",
+  "status_move_rules": {
+    "CL-c3c-ii": {
+      "disposition": "OPEN \u2014 blocked on {sigma_r}-completeness / L1. Stage D records this OPEN and does NOT attempt to close it. No status move is proposed.",
+      "ledger_statement": "no invariant scalar (factoring through Sigma) recovers the channel representative",
+      "no_move": true,
+      "status": "OPEN"
+    },
+    "CL-c7": {
+      "R2_disposition": "channels frame-relative in the supplied DBP frame; only the sum K_G is intrinsic. Graded accordingly: F12a moves the channels (sum fixed); F12b (signed permutation) fixes the channels (S3 x {+/-} at n=3).",
+      "R3_disposition": "F12 pin CLOSED \u2014 R in SO(3), rotated jet, and exact-Q tuples used verbatim from FIXTURES.md.",
+      "ledger_statement": "frame honesty \u2014 sum intrinsic; channels frame-relative, S3+signs invariants (n=3); completeness OPEN",
+      "on_fail": {
+        "default": "any FAIL -> HALT, preserve chain verbatim, route to Will; no move.",
+        "if_K7_trigger": "P2/P4 (sigma_2 not invariant under F12) or P5 (a legitimate rechart reported as a curvature error) FAIL -> K7 fires (refute) -> REFUTED candidate; HALT, route to Will.",
+        "if_core_fails": "P1/P3/P6 (frame-relativity / S3-invariance core) FAIL -> the PARTIAL core is broken -> HALT, route to Will; do NOT soften to a weaker warrant."
+      },
+      "on_pass": {
+        "condition": "P1 AND P2 AND P3 AND P4 AND P5 AND P6 AND P7 AND P8 AND P9 all PASS \u2014 the provable PARTIAL core: F12a channels MOVE while K_G is invariant (frame-relativity / R2), F12b channels FIXED and K_G invariant (S3 x {+/-} at n=3), K7 not fired, and completeness left OPEN (CL-c3c-ii) with K-soft a non-refuting flag.",
+        "explicitly_not": "DEMONSTRATED",
+        "move_to": "PARTIAL",
+        "warrant_scope": "PARTIAL by design: the intrinsic-sum / frame-relativity / S3 x {+/-}-invariance core is graded on the frozen F12 pin (R3, exact Q); completeness (whether {sigma_r}+orientation determines the gauge+permutation class \u2014 CL-c3c-ii / L1) is left OPEN and is NOT established here. Eval-tier; no substrate promotion; canonical only on Will's sign-off."
+      },
+      "partial_by_design": true,
+      "universal_claim": false
+    },
+    "halt_rule": "On ANY prediction FAIL: HALT. Preserve the chain verbatim. Do NOT fix, redesign, soften, or widen. Write what is held and route to Will. No status move is proposed for a claim whose gating predictions did not all PASS. CL-c7's move is PARTIAL (by design) and is NEVER DEMONSTRATED in this stage. CL-c3c-ii stays OPEN; K-soft is a non-refuting flag.",
+    "kills": {
+      "K-soft": {
+        "claim": "CL-c3c-ii / CL-c7 completeness",
+        "fires_on": "two surfaces, identical {sigma_r}+orientation, not gauge+permutation related (L1).",
+        "non_refuting": true,
+        "on_fire": "record as a FLAG only; does NOT refute and does NOT fail a prediction. In Stage-D scope no such in-scope witness is manufactured (manufacturing one would reach into closing CL-c3c-ii); the FLAG is raised as 'completeness unestablished'.",
+        "type": "flag (non-refuting)"
+      },
+      "K7": {
+        "claim": "CL-c7",
+        "fires_on": "P5 FAIL (a legitimate rechart reported as a curvature error) OR P2/P4 FAIL (sigma_2 = K_G not held invariant under F12).",
+        "on_fire": "REFUTED candidate -> HALT, preserve chain, route to Will.",
+        "type": "refute"
+      }
+    },
+    "preconditions": {
+      "P-frame": {
+        "checked_by": "P8",
+        "on_fail": "F12 fixture rejected; run VOID"
+      },
+      "P-self-cert": {
+        "checked_by": "P8",
+        "on_fail": "run VOID"
+      }
+    },
+    "scope_note": "Stage D grades CL-c7 (frame honesty, PARTIAL by design) and arms K7 (refute) + K-soft (non-refuting flag) with P-frame/P-self-cert, on the F12 fixtures (F12a, F12b) under the R3 pin and the R2 disposition. CL-c3c-ii is recorded OPEN, not closed. No substrate promotion: eval-tier only; nothing canonical until Will signs off."
+  },
+  "two_run_byte_stability_note": "The battery is run TWICE; the records jsonl from both runs MUST be byte-identical (sorted-keys serialisation, exact-Q frac:n/d strings, no float/time/random).",
+  "version": "stage_d_prereg_v1"
+}

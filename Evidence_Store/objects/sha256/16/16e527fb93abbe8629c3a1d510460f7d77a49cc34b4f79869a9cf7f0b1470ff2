@@ -1,0 +1,190 @@
+{
+  "audit_name": "bacl_multi_format_audit",
+  "failure_modes_observed": [],
+  "float128_caveat": "numpy.float128 on x86_64 Linux is 80-bit extended precision (64-bit explicit mantissa, 15-bit exponent), NOT IEEE binary128 (113-bit mantissa, 15-bit exponent). Its subnormal range (2^(-16445)) is far below float64's smallest representable value, so the fractions.Fraction-based exact verification used in this audit cannot directly handle float128 subnormal pairs. Proper float128 testing requires either: (a) numpy.float128-aware exact arithmetic (custom bit-pattern extraction), or (b) extending the audit to use mpmath for exact rational computation across formats. Both are Phase next items. BACL's proof structure is format-agnostic \u2014 the binade-spacing argument applies to any binary float lattice \u2014 but explicit empirical verification at float128 is deferred.",
+  "format_specs": {
+    "float16": {
+      "emax": 15,
+      "emin": -14,
+      "mantissa_bits": 10,
+      "smallest_normal": 6.103515625e-05,
+      "subnormal_ulp": 5.960464477539063e-08
+    },
+    "float32": {
+      "emax": 127,
+      "emin": -126,
+      "mantissa_bits": 23,
+      "smallest_normal": 1.1754943508222875e-38,
+      "subnormal_ulp": 1.401298464324817e-45
+    }
+  },
+  "formats_deferred": [
+    "float128"
+  ],
+  "formats_tested": [
+    "float16",
+    "float32"
+  ],
+  "predictions": {
+    "P_MF_1_float32_BACL_holds": true,
+    "P_MF_2_float16_BACL_holds": true,
+    "P_MF_3_float128_BACL_holds": "deferred_requires_float128_aware_exact_arithmetic",
+    "P_MF_4_float32_sharpness": true,
+    "P_MF_5_float16_sharpness": true,
+    "P_MF_6_proof_format_agnostic": true
+  },
+  "preregistry_path": "Build_Docs/Reports/bacl_multi_format_audit/preregistry.md",
+  "results": {
+    "float16": {
+      "NormSub": {
+        "BACL_S_holds": true,
+        "BACL_S_violations": 0,
+        "class": "NormSub",
+        "first_sharpness_examples": [],
+        "first_violations": [],
+        "format": "float16",
+        "hypothesis_holds_count": 2000,
+        "n_pairs": 2000,
+        "proviso_violated_integer_count": 0,
+        "sharpness_count": 0
+      },
+      "SubNormHigherBinade": {
+        "BACL_S_holds": true,
+        "BACL_S_violations": 0,
+        "class": "SubNormHigherBinade",
+        "first_sharpness_examples": [
+          {
+            "a": 5.638599395751953e-05,
+            "a_subnormal": true,
+            "b": 0.432861328125,
+            "b_subnormal": false,
+            "ulp_a": 5.960464477539063e-08,
+            "ulp_b": 0.000244140625
+          },
+          {
+            "a": 3.224611282348633e-05,
+            "a_subnormal": true,
+            "b": 0.2203369140625,
+            "b_subnormal": false,
+            "ulp_a": 5.960464477539063e-08,
+            "ulp_b": 0.0001220703125
+          },
+          {
+            "a": 4.309415817260742e-05,
+            "a_subnormal": true,
+            "b": 6.25,
+            "b_subnormal": false,
+            "ulp_a": 5.960464477539063e-08,
+            "ulp_b": 0.00390625
+          }
+        ],
+        "first_violations": [],
+        "format": "float16",
+        "hypothesis_holds_count": 0,
+        "n_pairs": 2000,
+        "proviso_violated_integer_count": 72,
+        "sharpness_count": 1928
+      },
+      "SubNormSameUlp": {
+        "BACL_S_holds": true,
+        "BACL_S_violations": 0,
+        "class": "SubNormSameUlp",
+        "first_sharpness_examples": [],
+        "first_violations": [],
+        "format": "float16",
+        "hypothesis_holds_count": 2000,
+        "n_pairs": 2000,
+        "proviso_violated_integer_count": 0,
+        "sharpness_count": 0
+      },
+      "SubSub": {
+        "BACL_S_holds": true,
+        "BACL_S_violations": 0,
+        "class": "SubSub",
+        "first_sharpness_examples": [],
+        "first_violations": [],
+        "format": "float16",
+        "hypothesis_holds_count": 2000,
+        "n_pairs": 2000,
+        "proviso_violated_integer_count": 0,
+        "sharpness_count": 0
+      }
+    },
+    "float32": {
+      "NormSub": {
+        "BACL_S_holds": true,
+        "BACL_S_violations": 0,
+        "class": "NormSub",
+        "first_sharpness_examples": [],
+        "first_violations": [],
+        "format": "float32",
+        "hypothesis_holds_count": 2000,
+        "n_pairs": 2000,
+        "proviso_violated_integer_count": 0,
+        "sharpness_count": 0
+      },
+      "SubNormHigherBinade": {
+        "BACL_S_holds": true,
+        "BACL_S_violations": 0,
+        "class": "SubNormHigherBinade",
+        "first_sharpness_examples": [
+          {
+            "a": 1.0867822088114299e-38,
+            "a_subnormal": true,
+            "b": 8.337396295270473e-35,
+            "b_subnormal": false,
+            "ulp_a": 1.401298464324817e-45,
+            "ulp_b": 5.739718509874451e-42
+          },
+          {
+            "a": 6.212383488383533e-39,
+            "a_subnormal": true,
+            "b": 4.2458333637316626e-35,
+            "b_subnormal": false,
+            "ulp_a": 1.401298464324817e-45,
+            "ulp_b": 2.8698592549372254e-42
+          },
+          {
+            "a": 8.29910607705587e-39,
+            "a_subnormal": true,
+            "b": 1.2038048465648961e-33,
+            "b_subnormal": false,
+            "ulp_a": 1.401298464324817e-45,
+            "ulp_b": 9.183549615799121e-41
+          }
+        ],
+        "first_violations": [],
+        "format": "float32",
+        "hypothesis_holds_count": 0,
+        "n_pairs": 2000,
+        "proviso_violated_integer_count": 53,
+        "sharpness_count": 1947
+      },
+      "SubNormSameUlp": {
+        "BACL_S_holds": true,
+        "BACL_S_violations": 0,
+        "class": "SubNormSameUlp",
+        "first_sharpness_examples": [],
+        "first_violations": [],
+        "format": "float32",
+        "hypothesis_holds_count": 2000,
+        "n_pairs": 2000,
+        "proviso_violated_integer_count": 0,
+        "sharpness_count": 0
+      },
+      "SubSub": {
+        "BACL_S_holds": true,
+        "BACL_S_violations": 0,
+        "class": "SubSub",
+        "first_sharpness_examples": [],
+        "first_violations": [],
+        "format": "float32",
+        "hypothesis_holds_count": 2000,
+        "n_pairs": 2000,
+        "proviso_violated_integer_count": 0,
+        "sharpness_count": 0
+      }
+    }
+  },
+  "verdict": "BACL_extends_to_IEEE_binary16_and_binary32_float128_deferred"
+}

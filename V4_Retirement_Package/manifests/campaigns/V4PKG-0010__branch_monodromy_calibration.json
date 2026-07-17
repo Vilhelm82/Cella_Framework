@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "authority": "historical V4 retirement reference; not current Cella authority",
+  "package_id": "V4PKG-0010",
+  "family": "campaigns",
+  "label": "branch_monodromy_calibration",
+  "manifest_path": "manifests/campaigns/V4PKG-0010__branch_monodromy_calibration.json",
+  "member_count": 3,
+  "logical_bytes": 37325,
+  "evidence_covered_count": 3,
+  "evidence_origin_bound_count": 3,
+  "path_bound_count": 3,
+  "certificate_related_count": 0,
+  "member_tree_sha256": "e92496d2cd2a622b2f1a3894a26935a6987e4be723963ce35c47d4f790a4bf5d",
+  "members": [
+    {
+      "path": "research/campaigns/branch_monodromy_calibration/PREREG.md",
+      "file_type": "regular",
+      "sha256": "2a329db9cb53ad621a47f819c9c9f7db16132749172078c228a901a096f1c8dd",
+      "bytes": 868,
+      "mode": 420,
+      "evidence_id": "EVD-000273",
+      "evidence_origin_bound": true,
+      "path_bound": true,
+      "certificate_related": false,
+      "report_ids": []
+    },
+    {
+      "path": "research/campaigns/branch_monodromy_calibration/calibration_report.json",
+      "file_type": "regular",
+      "sha256": "4c78f6dac885e191288c7575348492ff6fc2014111b720e35ce661a139a747ed",
+      "bytes": 12983,
+      "mode": 420,
+      "evidence_id": "EVD-000488",
+      "evidence_origin_bound": true,
+      "path_bound": true,
+      "certificate_related": false,
+      "report_ids": []
+    },
+    {
+      "path": "research/campaigns/branch_monodromy_calibration/calibration_script.py",
+      "file_type": "regular",
+      "sha256": "edae5ad259d68a8ae649077fb1bec473bc927bfa8769844223030e6b99b2f625",
+      "bytes": 23474,
+      "mode": 420,
+      "evidence_id": "EVD-001596",
+      "evidence_origin_bound": true,
+      "path_bound": true,
+      "certificate_related": false,
+      "report_ids": []
+    }
+  ]
+}

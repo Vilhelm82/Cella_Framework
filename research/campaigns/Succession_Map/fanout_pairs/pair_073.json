@@ -1,0 +1,40 @@
+{
+  "rank": 73,
+  "lift": 7.77,
+  "count": 2,
+  "families": 2,
+  "a": {
+    "id": "OBJ:carrier-o",
+    "label": "carrier O",
+    "standard_term": "carrier/pullback map through which the metric construction must factor (directional normal-curvature object), as opposed to the raw Hessian",
+    "nomenclature": "novel",
+    "symbols": []
+  },
+  "b": {
+    "id": "OBJ:coupling-anisotropy-a-c",
+    "label": "coupling anisotropy A_c",
+    "standard_term": "squared norm of the standard-irrep projection of a 3-vector; equals 9x the sample variance (sum-of-squared-differences identity)",
+    "nomenclature": "special-case-of",
+    "symbols": [
+      "a_c"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-0507",
+      "type": "theorem",
+      "claim_status": "proved",
+      "label": "Part VIII — Parity law",
+      "summary": "```\nσ_even ∈ ℚ ,   σ_odd ∈ ℚ(√q)      (= Lovelock parity)\n```\nThe even scalar curvature is rational; the mean-curvature / odd orders carry one factor `√q` (the unit normal). It is the `q^((r+2)/2)` normalization, not a d",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/07_certificates_data_and_reproducibility/dbp_role_channel_and_orbit_geometry/DBP_STANDING_RESULTS_v1.1.md"
+    },
+    {
+      "uid": "U-0242",
+      "type": "theorem",
+      "claim_status": "conjectured",
+      "label": "Frontier item F1 — order axis r: parity mapped, deeper order",
+      "summary": "F1 -- Order axis r (largest blank by area)... PARTIALLY MAPPED in CALC-15: the channel bipolynomial generalised to all r (gated on keystone + A_c); parity law confirmed and explained ... The live order-axis target is now",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/dbp_four_role_calc_log_v8.md"
+    }
+  ]
+}

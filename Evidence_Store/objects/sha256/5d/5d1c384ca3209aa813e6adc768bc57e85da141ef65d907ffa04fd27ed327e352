@@ -1,0 +1,144 @@
+# Substrate Invariant Search — Phase D — Transformation-Invariance Audit
+
+**Status:** Phase D complete. 3 basis elements × 3 transformations × 6 test points = 54 evaluated cells. **2/3 basis elements survive all three transformations cleanly. The third (E) survives at Sterbenz-cluster coordinates but fails T2 format-invariance at near-singular coordinates — a substantive scope finding, not a fundamental rejection.**
+
+**Date:** 2026-05-23
+**Authority:** [`Build_Docs/Agent_tasks/substrate_invariant_search_2026_05_23.md`](../../Agent_tasks/substrate_invariant_search_2026_05_23.md)
+**Pre-registry:** [`Build_Docs/Agent_tasks/substrate_invariant_search_phase_d_transformations.md`](../../Agent_tasks/substrate_invariant_search_phase_d_transformations.md)
+**Source chain:** Phase C basis sha256 prefix `fbddb9fbe9889f87...`
+
+---
+
+## 1. Survival summary
+
+| Basis element | T1 route | T2 format | T3 reparam | Verdict |
+|---|---|---|---|---|
+| `ulp_spread_log2` | 6/6 dependent_by_design | 6/6 invariant_within_ulp | 6/6 invariant_within_ulp | **SURVIVES ALL** |
+| `E_log2_base_operand` | 6/6 invariant_strict | **3/6 invariant_within_ulp, 3/6 dependent_unexpected** | 6/6 invariant_strict | **FAILS T2 at near-singular** |
+| `two_form_partition` | 6/6 dependent_by_design | 6/6 invariant_strict | 6/6 invariant_strict | **SURVIVES ALL** |
+
+---
+
+## 2. The E format-invariance finding
+
+E_log2_base_operand was predicted to be `invariant_within_ulp` under format change (float32 vs float64). Empirical result:
+
+- **Pass at Sterbenz-cluster coordinates** (3 of 6 test points):
+  - sr_sterbenz_center (β=0.671, base_operand≈0.55)
+  - schw_sterbenz_center (r=4.4, base_operand≈0.545)
+  - pa_sterbenz_center (x=0.45, base_operand=0.55)
+
+- **Fail at near-singular coordinates** (3 of 6 test points):
+  - sr_lightspeed_approach (β=0.999, base_operand≈0.002)
+  - schw_horizon_approach (r=2.1, base_operand≈0.0476)
+  - pa_near_singular (x=0.99, base_operand=0.01)
+
+**Mechanism**: float32 precision is ~2.2e-7 (24-bit mantissa). When `|base_operand|` approaches that precision floor, float32 rounding of `1 - x_term` introduces relative errors that propagate to `log2(|base_operand|)` as ulp-level deltas at log-magnitude. At Sterbenz cluster (base_operand ≈ 0.55), float32 has plenty of headroom and E is stable. At near-singular (base_operand ≈ 0.002), float32 rounding is substantial relative to base_operand and E drifts.
+
+**This is exactly what the substrate-as-probe thesis would predict**: substrate observables degrade near singular boundaries when format precision approaches the relevant scale. Phase D surfaces this empirically rather than letting it slide undocumented.
+
+**Scope verdict**: E remains a basis element with **explicit scope caveat**:
+
+> `E_log2_base_operand` is format-invariant when `|base_operand|` is comfortably above format precision floor. Specifically: for float32 input, E is format-stable for `|base_operand| > ~10^-4` (well above float32's ~10^-7 floor with margin for log-amplification). Below that, format-precision artefacts dominate.
+
+E is **not demoted from the basis**. It is annotated with the scope and **flagged for Phase F to handle as a precision-conditional ingredient**, not an unconditional one.
+
+---
+
+## 3. Element-by-element breakdown
+
+### `ulp_spread_log2` — SURVIVES ALL three transformations
+
+- **T1 route**: `dependent_by_design` (6/6). Variation across F1/F2/F4 IS the observable — it reads the operand-chain binade arrangement, which differs by route construction. Not a failure; it's the diagnostic content.
+- **T2 format**: `invariant_within_ulp` (6/6). ulp_spread is a *ratio* in log2 space; format precision affects both numerator and denominator equally, ratio survives. Empirical delta within float32 ulp tolerance at every test point.
+- **T3 reparam**: `invariant_within_ulp` (6/6). Schwarzschild r→1/r and pure_algebraic x→1-y produce different operand chains, but the binade spread comes out invariant within tolerance. The substrate observable is reparameterisation-stable.
+
+**Strongest ingredient for the synthesis target.** Substrate-derived from BACL (proven), route-discriminating by design, format-stable, reparam-stable.
+
+### `E_log2_base_operand` — SURVIVES T1 + T3, FAILS T2 at near-singular
+
+- **T1 route**: `invariant_strict` (6/6). E depends only on coordinate, not algebraic route. Route-invariant by construction.
+- **T2 format**: split (3/6 pass, 3/6 fail). Sterbenz cluster passes; near-singular fails. Scope caveat noted in §2.
+- **T3 reparam**: `invariant_strict` (6/6). Same physical point in different coordinates gives identical base_operand (1 - 2/R ≡ 1 - 2u when u = 1/R). E is exactly reparameterisation-invariant.
+
+**Retained with scope caveat.** Synthesis target must handle E as a precision-conditional ingredient.
+
+### `two_form_partition` — SURVIVES ALL three transformations
+
+- **T1 route**: `dependent_by_design` (6/6). Partition IS the route distinction by construction.
+- **T2 format**: `invariant_strict` (6/6). F3's exact cancellation `R - sqrt(base)` where `R = sqrt(base)` is bit-deterministic in any binary IEEE 754 format.
+- **T3 reparam**: `invariant_strict` (6/6). The F3 route structure (sqrt followed by identity subtraction) preserves its silent partition under reparameterisation. Tested directly: F3 of the reparameterised form still produces 0.0 exact at every test point.
+
+**Strong ingredient.** Substrate-derived from IEEE 754 exact-cancellation guarantee. Route-discriminating by design, format-stable, reparam-stable.
+
+---
+
+## 4. Synthesis ingredient list (Phase F input)
+
+| Ingredient | Status | Scope/caveat |
+|---|---|---|
+| `ulp_spread_log2` | Unconditional | Survives all transformations |
+| `two_form_partition` | Unconditional | Survives all transformations |
+| `E_log2_base_operand` | Conditional | Format-stable for `|base_operand| > ~10^-4` (float32 floor); at smaller magnitudes, format precision dominates |
+
+The synthesis target `I(F, x)` has **2 unconditional substrate axes plus 1 precision-conditional axis from the Phase C basis**. Phase E will add a fourth axis (V4-native K_G), and Phase F will synthesise.
+
+---
+
+## 5. Closeout answers
+
+### Q1 — Which elements survived all three transformations?
+**2 of 3**: `ulp_spread_log2` and `two_form_partition`. `E_log2_base_operand` survives T1 and T3 but fails T2 at near-singular coordinates.
+
+### Q2 — Per-element per-transformation summary?
+See §1 table. Detailed per-test-point classifications in `results` field of the JSON artefact.
+
+### Q3 — Refuted predictions?
+- `E_log2_base_operand` × T2 prediction was `invariant_within_ulp` (unconditional). **Refuted at 3/6 test points** — the prediction holds in the Sterbenz cluster but fails at near-singular coordinates. This is a substantive empirical refinement.
+- All other 8 cells: predictions confirmed.
+
+### Q4 — `dependent_by_design` pattern usefulness?
+Yes — `two_form_partition`'s pattern is exemplary: route-varying (the diagnostic content) + format-invariant + reparam-invariant. This is the signature of a clean route-discriminator substrate observable. `ulp_spread_log2` shows the same pattern. Both are useful synthesis ingredients with route-variation as the *feature*, not the *bug*.
+
+### Q5 — Synthesis ingredient list for Phase F?
+See §4 table. Three ingredients from Phase C basis (`ulp_spread_log2` and `two_form_partition` unconditional, `E_log2_base_operand` precision-conditional), to be joined by Phase E's V4-native K_G primitive.
+
+### Q6 — Unexpected substrate behaviour?
+**The E precision-conditional finding.** Predicted-unconditional invariance, observed-conditional invariance. Mechanism understood (float32 precision near singular boundaries). This is exactly the kind of finding the substrate-as-probe thesis would predict — substrate observables degrade in informative ways near pathologies — but it wasn't pre-registered as a prediction. Surfaced and documented.
+
+### Q7 — Supports Phase E?
+Yes. Phase D's role was to validate that the substrate axes are well-behaved under transformations. **2 axes are unconditionally well-behaved; the third has a known scope.** Phase E adds V4-native K_G as a fourth axis under plan-mode + axiom-check discipline. The synthesis foundation is solid.
+
+---
+
+## 6. What Phase D does *not* claim
+
+- Phase D does **not** propose adding new basis elements.
+- Phase D does **not** propose demoting `E_log2_base_operand` from the basis — it is retained with explicit scope caveat.
+- Phase D does **not** add the V4-native K_G primitive (Phase E).
+- Phase D does **not** synthesise the invariant (Phase F).
+- Phase D does **not** modify substrate or architecture files.
+- Phase D does **not** test sphere reparameterisation (no canonical reparam in scope).
+
+---
+
+## 7. Source artefact chain
+
+| Artefact | sha256 prefix |
+|---|---|
+| `phase_c_irreducible_basis.json` | `fbddb9fbe9889f87` |
+| `phase_b_invariant_vector_table.json` | `58574ba766e34bcc` |
+| `phase_a_candidate_catalogue.json` | `18bd80e6fc395df0` |
+| `phase_d_transformation_invariance_audit.json` | (recorded live post-build) |
+
+---
+
+## 8. References
+
+- Campaign authority: [`Build_Docs/Agent_tasks/substrate_invariant_search_2026_05_23.md`](../../Agent_tasks/substrate_invariant_search_2026_05_23.md)
+- Phase D pre-registry: [`Build_Docs/Agent_tasks/substrate_invariant_search_phase_d_transformations.md`](../../Agent_tasks/substrate_invariant_search_phase_d_transformations.md)
+- Phase A catalogue: [`phase_a_candidate_catalogue.json`](phase_a_candidate_catalogue.json), [`phase_a_candidate_catalogue.md`](phase_a_candidate_catalogue.md)
+- Phase B vector table: [`phase_b_invariant_vector_table.json`](phase_b_invariant_vector_table.json), [`phase_b_invariant_vector_table.md`](phase_b_invariant_vector_table.md)
+- Phase C basis: [`phase_c_irreducible_basis.json`](phase_c_irreducible_basis.json), [`phase_c_irreducible_basis.md`](phase_c_irreducible_basis.md)
+- BACL invariant: `Build_Docs/Reports/bacl_invariant_audit/closeout.md`
+- IEEE 754 standard (referenced via Conjecture C definition-grounded proof methodology)

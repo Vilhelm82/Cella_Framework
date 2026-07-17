@@ -1,0 +1,44 @@
+{
+  "rank": 66,
+  "lift": 9.97,
+  "count": 2,
+  "families": 1,
+  "a": {
+    "id": "OBJ:active-chart-group-g-act-s-3",
+    "label": "active chart group G_act = S_3",
+    "standard_term": "local chart-permutation group S_3 acting on the three surface roles",
+    "nomenclature": "special-case-of",
+    "symbols": [
+      "g_act",
+      "s_3"
+    ]
+  },
+  "b": {
+    "id": "OBJ:active-chart-jet-carrier-jet-carrier-o-r-r-r",
+    "label": "active chart-jet carrier / jet carrier (O_r, R_r)",
+    "standard_term": "G-orbit of the r-jet of a function under a finite group action (jet-space group orbit, cf. Boardman/Thom-Levine orbits in singularity theory)",
+    "nomenclature": "generalization-of",
+    "symbols": [
+      "o_r",
+      "r_r"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-0009",
+      "type": "theorem",
+      "claim_status": "proved",
+      "label": "Active Role-Jet Orbit Theorem (thm:orbit)",
+      "summary": "On the regular active-role locus, let $G=S_3$ act on $X_r$ by the active finite-jet recharting maps of §3, and let $\\pi:X_r\\to X_r/G$ be the orbit quotient. Then $\\phi:X_r\\to Y$ is a local order-$r$ DBP invariant if and ",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex"
+    },
+    {
+      "uid": "U-1582",
+      "type": "definition",
+      "claim_status": null,
+      "label": "active chart-jet carrier",
+      "summary": "The group $G_{\\mathrm{act}}=S_3$ acts by re-solving the same relation in each output coordinate and transporting the jet by the finite inverse-function theorem. The carrier is \\[ \\mathcal O_r(x)=G_{\\mathrm{act}}\\cdot J_r",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/04_drafts_and_incomplete_papers/dbp_role_channel_and_orbit_geometry/DBP_UNIFIED_THEOREM_SPINE_DRAFT_v0_1.tex"
+    }
+  ]
+}

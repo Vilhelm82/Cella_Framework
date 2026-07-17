@@ -1,0 +1,68 @@
+# retestB — Typed-primitive reproduction of cross-fixture log-log slope convergence
+
+**Goal:** Convert the demoted "open lead" (cross-fixture local log-log slope of
+the C-extractor `E = log2(|base_operand|)` converging to `alpha = 1` at the
+branch point) into a citable **typed** result, by re-deriving it through the V4
+typed primitive `typed_log_log_slope` instead of raw `math.log2` + hand-rolled
+central-difference + linear regression.
+
+Eval-layer, research-grade. No existing files modified. numpy 2.4.4, mpmath 1.3.0.
+
+## Method
+
+- **Raw baseline** (`scratch/local_slope_field.py`, also re-derived in-script):
+  per probe `E = log2(|base|)` and `log2(sd)`; local slope = central difference
+  of `E` vs `log2(sd)`; report mean over the nearest-N probes to the branch.
+- **Typed path** (`typed_slope_retest.py`): build, per probe, a
+  `TransferObservationResult` carrying `value.transfer = |base_operand|` (y) and
+  `provenance.inputs[0] = singular_distance` (x), exactly mirroring the canonical
+  `schwarzschild_four_form_campaign._f_axis_view` re-stamping idiom. Feed the
+  nearest-N probes as a `typed_collection` into `typed_log_log_slope`, which runs
+  **OLS of `log(|base|)` vs `log(sd)`**. The log base cancels in a slope (ratio of
+  log-differences), so the typed natural-log OLS is directly comparable to the raw
+  log2 central-difference slope.
+- Same input table for both: `Build_Docs/Reports/mcg_geometry_first/phase_1_geometry_table.json`
+  (137 usable probes each for `schwarzschild_four_form` and `pure_algebraic_four_form`).
+
+## Retrodiction gate — PASS
+
+Raw N=5: Schwarzschild **0.9962**, pure_algebraic **1.0000**, |Δ| **0.0038** —
+matches the expected baseline exactly.
+
+## Results
+
+| N | Schw raw | Schw typed | PA raw | PA typed | raw \|Δ\| | typed \|Δ\| | Schw method-gap |
+|--:|---------:|-----------:|-------:|---------:|----------:|------------:|----------------:|
+| 5 | +0.9962 | **+0.996686** | +1.0000 | **+1.000000** | 0.0038 | **0.003314** | 0.0005 |
+| 10 | +0.9950 | **+0.995772** | +1.0000 | **+1.000000** | 0.0050 | **0.004228** | 0.0008 |
+| 20 | +0.9928 | **+0.994106** | +1.0000 | **+1.000000** | 0.0073 | **0.005894** | 0.0014 |
+
+Typed fits: `R^2 = 1.000000` at N=5/10 (0.999999 at N=20 for Schw); all
+`SLOPE_OBSERVED`. The pure_algebraic fixture is exactly linear (`E = log2(1-x)`
+vs `log2(1-x)`), so its slope is identically 1.0 in both instruments.
+
+## Verdict
+
+- **Retrodiction gate: PASS.**
+- **Typed instrument agrees with raw** within a stated tolerance of 0.05; actual
+  method-gap is at most **0.0014** (Schw, N=20) and 0.0000 for PA at every N.
+- The slight, structured gap (typed slope marginally higher) is **estimator-level,
+  not data-level**: OLS over the whole window vs the mean of per-probe central
+  differences. It does not change the convergence conclusion.
+- **The cross-fixture `alpha -> 1` convergence survives the typed instrument.**
+  As N shrinks toward the branch, both fixtures' typed slopes converge and the
+  typed `|Δ|` shrinks monotonically (0.005894 -> 0.004228 -> 0.003314 for
+  N=20 -> 10 -> 5), the same trend as raw. This is now reproducible through V4
+  typed primitives and citable as **substrate-invariant-search Phase A**.
+
+## Scope / caveats (no over-claim)
+
+- This is a **measurement** result: the typed instrument reproduces the raw
+  convergence. It does not by itself assert that `alpha = 1` is a substrate
+  invariant — only that the previously-demoted observation is instrument-robust.
+- Only two fixtures here (`schwarzschild`, `pure_algebraic`); `sr_four_form`
+  (137 probes) is present in the table but was not part of the original lead and
+  is left for a wider Phase A sweep.
+- Byte-stable: re-run produced identical JSON.
+
+Artifacts: `typed_slope_retest.py`, `typed_slope_retest.json` (this directory).

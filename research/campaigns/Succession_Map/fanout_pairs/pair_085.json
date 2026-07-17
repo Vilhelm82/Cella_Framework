@@ -1,0 +1,45 @@
+{
+  "rank": 85,
+  "lift": 4.21,
+  "count": 2,
+  "families": 1,
+  "a": {
+    "id": "OBJ:channel-barycentric-coordinates-r-c-r-s-r-int",
+    "label": "Channel barycentric coordinates R_c, R_s, R_int",
+    "standard_term": "normalized (barycentric-style) ratios of channel curvatures to total curvature",
+    "nomenclature": "novel",
+    "symbols": [
+      "r_c",
+      "r_int",
+      "r_s"
+    ]
+  },
+  "b": {
+    "id": "OBJ:self-coupling-hessian-split-h-h-c-h-s",
+    "label": "Self/coupling Hessian split H = H_c + H_s",
+    "standard_term": "diagonal-plus-hollow (diagonal / zero-diagonal) matrix decomposition of the Hessian",
+    "nomenclature": "variant-of",
+    "symbols": [
+      "h_c",
+      "h_s"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-0122",
+      "type": "theorem",
+      "claim_status": "conjectured",
+      "label": "Coupling-confinement",
+      "summary": "**Coupling-confinement:** If rank(H_c) = r_c, then e_k(Ŝ_c) = 0 identically for all k > r_c.",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/geometric_fault_localization_and_decomposition/Dual Confinement.md"
+    },
+    {
+      "uid": "U-1217",
+      "type": "theorem",
+      "claim_status": "conjectured",
+      "label": "Self-confinement",
+      "summary": "**Self-confinement:** If rank(H_s) = r_s, then e_k(Ŝ_s) = 0 identically for all k > r_s.",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/geometric_fault_localization_and_decomposition/Dual Confinement.md"
+    }
+  ]
+}

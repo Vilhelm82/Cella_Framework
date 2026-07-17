@@ -1,0 +1,138 @@
+"""F2-gate resolution (reproduce HR40) + Experiment 2 (multi-D lifted G test).
+
+Eval-layer, research-grade, oracles only (Fraction exact, mpmath sqrt). No float128.
+
+PART A — F2-grain gate (Tier 3.1 resolution):
+  Reproduce HR40 cancellation_operand_phase_inheritance: phase(F2/ulp(f)) equals the
+  cancellation-operand phase (x_term), because (R^2-1)/ulp(f) is integer-phase. The
+  "F2 half-integer grain" is a snap-convention label; the real phase tracks x_term.
+
+PART B — Experiment 2 (the multi-D G point):
+  Apply the exact forward M⊕C decomposition to the corrected lifted/multi-constraint
+  fixtures. Residual = sos - X*X with X = sqrt(sos): test whether this is the SAME
+  sqrt round-trip structure as 1D (=> inherits G=0 and only the sos-distribution is
+  fixture-dependent), or whether the joint accumulation leaves an irreducible remainder.
+"""
+import json, math, struct
+from fractions import Fraction as Fr
+import mpmath as mp
+mp.mp.dps = 80
+
+
+def fracmod1(num_float, u):
+    q = Fr(num_float) / Fr(u)
+    return q - (q.numerator // q.denominator)        # exact fractional part in [0,1)
+
+
+# ---------------- PART A: F2 gate ----------------
+A_FIX = {
+    "schwarzschild": dict(grid=[2.005 + i * (10.0 - 2.005) / 136 for i in range(137)],
+                          f=lambda r: 1.0 - 2.0 / r, xterm=lambda r: 2.0 / r, opname="2/r"),
+    "sr": dict(grid=[0.01 + i * (0.9999 - 0.01) / 136 for i in range(137)],
+               f=lambda b: 1.0 - b * b, xterm=lambda b: b * b, opname="beta^2"),
+    "pure_algebraic": dict(grid=[0.01 + i * (0.99 - 0.01) / 136 for i in range(137)],
+                           f=lambda x: 1.0 - x, xterm=lambda x: x, opname="x"),
+}
+
+
+def part_a():
+    print("=" * 78 + "\nPART A — F2 gate (reproduce HR40 cancellation_operand_phase_inheritance)\n")
+    for name, s in A_FIX.items():
+        n = inter_int = phase_match = 0
+        for t in s["grid"]:
+            f = s["f"](t)
+            if f <= 0:
+                continue
+            R = math.sqrt(f); RRf = R * R; xt = s["xterm"](t)
+            F2 = (RRf - 1.0) + xt
+            if F2 == 0.0:
+                continue
+            n += 1
+            u = math.ulp(f)
+            if fracmod1(RRf - 1.0, u) == 0:                       # (R^2-1)/ulp integer-phase?
+                inter_int += 1
+            if fracmod1(F2, u) == fracmod1(xt, u):               # phase(F2) == phase(x_term)?
+                phase_match += 1
+        print(f"  [{name:15}] n={n:3}  (R^2-1)/ulp integer-phase: {inter_int}/{n}   "
+              f"phase(F2/ulp) == phase({s['opname']}/ulp): {phase_match}/{n}")
+    print("\n  => F2 'spread' is the proven cancellation-operand-phase inheritance, not a gate failure.")
+    print("     F2 = non_integer_lattice (canonical); the 0.5-vs-0.25 'grain' is the snap convention (glossary 13).")
+
+
+# ---------------- PART B: Experiment 2 ----------------
+def morris_thorne():
+    a0 = 1.0
+    return ("morris_thorne", [a0, a0, 1.0 / a0],
+            (lambda r, a, k: (a * a) / r - r, lambda r, a, k: r / (a * a) - k), 0)
+
+
+def schwarzschild_photon():
+    M = 1.0
+    return ("schwarzschild_photon", [3.0 * M, 27.0 * M * M, M],
+            (lambda r, B, M: B * (r - 2.0 * M) - r ** 3, lambda r, B, M: B * r - 3.0 * r ** 3), 0)
+
+
+def part_b(n_points=4000):
+    print("\n" + "=" * 78 + "\nPART B — Experiment 2: exact M⊕C on the lifted multi-constraint fixtures\n")
+    discrete = [-1., -0.5, 0., 0.5, 1.]
+    results = {}
+    for name, crit, funcs, pidx in (morris_thorne(), schwarzschild_photon()):
+        base = crit[pidx]
+        half = n_points // 2
+        exps = [-(10 ** (-9 + 6 * i / (half - 1))) for i in range(half)] + \
+               [(10 ** (-9 + 6 * i / (half - 1))) for i in range(n_points - half)]
+        js = []
+        G_max = Fr(0); cond_relerr = mp.mpf(0); sub_exact = 0; n = 0
+        for ex in exps:
+            e = base * ex
+            pt = list(crit); pt[pidx] = base + e
+            fi = [f(*pt) for f in funcs]
+            sq = [v * v for v in fi]
+            sos = 0.0
+            for v in sq:
+                sos += v                                   # float accumulation (naive)
+            if sos <= 0:
+                continue
+            n += 1
+            X = math.sqrt(sos)                             # lift var closes constraint
+            XX = X * X                                      # fl(X*X)
+            residual = sos - XX                             # float residual
+            u = math.ulp(abs(sos)) if abs(sos) > 1e-300 else 5e-324
+            js.append(residual / u if u > 0 else 0.0)
+            # ---- exact M⊕C decomposition of the residual (it's a sqrt round-trip of sos) ----
+            res_exact = Fr(sos) - Fr(XX)                   # exact residual through rounded XX
+            if Fr(residual) == res_exact:                  # final subtraction exact? (Sterbenz)
+                sub_exact += 1
+            jM = round(float(res_exact / Fr(u)))           # M: lattice cell
+            G = res_exact - jM * Fr(u)                      # remainder after lattice
+            G_max = max(G_max, abs(G))
+            # ---- C: sqrt round-off of sos drives it (same model as 1D) ----
+            e_sos = mp.mpf(X) - mp.sqrt(mp.mpf(sos))
+            preround = Fr(X) * Fr(X) - Fr(sos)             # exact X^2 - sos
+            model = 2 * mp.sqrt(mp.mpf(sos)) * e_sos + e_sos * e_sos
+            den = abs(mp.mpf(preround.numerator) / preround.denominator)
+            if den > 0:
+                cond_relerr = max(cond_relerr, abs(mp.mpf(preround.numerator) / preround.denominator - model) / den)
+        import statistics as st
+        var = st.pvariance(js); mx = max(abs(v) for v in js)
+        latt = sum(1 for v in js if min(abs(v - d) for d in discrete) < 0.1) / len(js)
+        results[name] = dict(n=n, j_variance=var, j_max_abs=mx, lattice_frac=latt,
+                             G_max=float(G_max), cond_relerr=mp.nstr(cond_relerr, 3),
+                             final_sub_exact=f"{sub_exact}/{n}")
+        print(f"  [{name:20}] n={n}")
+        print(f"     j_variance={var:.4f}  j_max_abs={mx:.3f}  lattice_frac={latt:.4f}   (fixtures distinguish on variance)")
+        print(f"     residual = sqrt-round-trip of sos:  G remainder max={float(G_max):.3e}   "
+              f"C-model rel-err={mp.nstr(cond_relerr,3)}   final-sub exact {sub_exact}/{n}")
+    print("\n  READ: residual is EXACTLY M⊕C (G=0, floorless) — same sqrt-round-trip mechanism as 1D.")
+    print("        X=sqrt(sos) collapses the joint state to a scalar sqrt; geometry enters only via the")
+    print("        sos DISTRIBUTION (=> fixtures distinguish in C, not in a joint-state G remainder).")
+    return results
+
+
+if __name__ == "__main__":
+    part_a()
+    res = part_b()
+    with open("scratch/g_forward_decomposition_exp2_results.json", "w") as fh:
+        json.dump(res, fh, indent=2, sort_keys=True, default=str)
+    import hashlib
+    print("\nartifact sha256:", hashlib.sha256(open("scratch/g_forward_decomposition_exp2_results.json", "rb").read()).hexdigest())

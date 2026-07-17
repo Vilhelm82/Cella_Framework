@@ -1,0 +1,36 @@
+{
+ "battery": "PA.6",
+ "byte_stable_x2": true,
+ "env": {
+  "numpy": "2.4.4",
+  "python": "3.12.3",
+  "sympy": "1.14.0"
+ },
+ "expected_records_sha": "99fd1859a6e04214",
+ "predecl_pin": "44a2c8019b2929b2",
+ "runs": [
+  {
+   "last_line": "ALL_PASS",
+   "rc": 0,
+   "records_sha": "99fd1859a6e04214",
+   "run": 1,
+   "stderr_tail": "",
+   "stdout_sha16": "3debcc9086db7c9a",
+   "terminal_ok": true,
+   "wall_s": 0.86
+  },
+  {
+   "last_line": "ALL_PASS",
+   "rc": 0,
+   "records_sha": "99fd1859a6e04214",
+   "run": 2,
+   "stderr_tail": "",
+   "stdout_sha16": "3debcc9086db7c9a",
+   "terminal_ok": true,
+   "wall_s": 0.85
+  }
+ ],
+ "script": "portfolio/campaigns/deficit_engine/realfiber_path_cert.py",
+ "terminal_required": "ALL_PASS",
+ "verdict": "PASS"
+}

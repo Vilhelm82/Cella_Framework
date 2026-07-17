@@ -1,0 +1,29 @@
+# Information Loss Function W(k) at the Sterbenz Node — Closeout
+
+**Date promoted:** 2026-06-05 (derivation 2026-05-31; independently confirmed paper-revalidation cluster Fb). **Status:** derived analytical result, **eval-layer / domain-articulation** (Axiom 11: a named mechanism, not substrate content). Promoted from `scratch/Information_Loss_Function_Sterbenz_Node.md`.
+
+## Statement
+
+For the F2-class Sterbenz form `temp = V_n − 1` with `V_n = R^n`, `R = round((1+f)^{1/n})`, the leading branch behaviour is `V_n − 1 ∼ c·f^α`. With input `f` in binade `2^k` (`k = ⌊log₂ f⌋`), the number of leading significand bits cancelled (the backward-reconstruction blind-spot width) is
+
+> **W(k) = min(53, −⌊ α·k + log₂|c| ⌋)**   *(graded-floor form; float64 53-bit cap).*
+
+For the standard F2 paths (`α = 1`, `|c| = 1`): **W(k) = min(53, −k)** — loss grows linearly as `f → 0`, capped at the 53-bit precision limit.
+
+## Verification (2026-06-05, this promotion)
+
+- The exponent `⌊α·k + log₂|c|⌋` matches the empirical binary exponent of `c·(2^k)^α` for **all** tested `(α∈{0.5,1,1.5,2,3}, c∈{±1,0.5,2}, k∈[−1,−39])` — 0 mismatches.
+- F2 specialization `W(k)=min(53,−k)` and the 53-cap confirmed: `W(−10)=10`, `W(−53)=53`, `W(−80)=53`.
+- Independent prior confirmation: paper-revalidation **cluster Fb** (2026-05-31) recomputed the graded-floor form and **withdrew two earlier variant forms** (`min(53, 53+αk+C)` wrong sign on k; `min(53, 53−k)` flat-pinned) — they are genuinely unequal for k<0 (at α=1,c=1,k=−10: 10 vs 43 vs 53).
+
+## Why it matters
+
+- Turns "severe loss of significand at the Sterbenz node" into a **strict, computable function** of the input binade and the branch exponent α — a **positive named mechanism**, exactly the kind §7.A.2 of the MCG kill-switch closeout demanded.
+- It is the conditioning spine the G forward-decomposition (`Reports/g_forward_decomposition/`) rests on: W(k) quantifies the irreversible loss at the rounding step, and is *backward-only* — forward, `e = √f − R` is exactly computable (J2), which is why the M⊕C decomposition is exact.
+- Architecture use: at input binade k, backward navigation across the Sterbenz node carries irreducible uncertainty ≥ W(k) bits; relative preimage uncertainty `Δf/f` scales by `2^{W(k)}`.
+
+## Scope / caveats
+
+- Derived for the F2-class single-cancellation node; `|c|=1, α=1` is the load-bearing F2 case.
+- Eval-layer / domain articulation — **not substrate** (Axiom 11). A V5-theorem version would add: exact float exponent of `V_n−1` incl. mantissa + binade-crossing; monotonicity proof; the subsequent `+x_term` and final rounding.
+- This is a *forward* loss-accounting at a node; it does not extend the observable region below the noise floor (Q6 unchanged).

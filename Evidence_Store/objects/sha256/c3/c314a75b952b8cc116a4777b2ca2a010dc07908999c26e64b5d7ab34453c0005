@@ -1,0 +1,195 @@
+"""Hard-case singular probe — V4-disciplined exploratory test.
+
+Pre-registration (binding before measurement):
+
+Four non-power-law observables at x0=0, probed via singular_alpha_jet_bundle.
+Each is tagged with the V4 status cell I predict will fire, with my reasoning:
+
+  H1 log_recip          : f(x) = log(1/x)
+      Analytic: g(h) = -log(h); transfer = -1/h; slope of log|transfer| vs log h = -1.
+                Therefore observed_alpha = 0.
+      Predicted status: ALPHA_REGULAR_INTEGER (alpha=0) OR ALPHA_ZERO_BOUNDARY
+                        depending on whether the calculus has special handling for
+                        the alpha=0 boundary (the case where g is non-constant but
+                        not power-law in the leading order).
+
+  H2 sin_over_x         : f(x) = sin(x)/x
+      Analytic: g(h) = 1 - h^2/6 + O(h^4). g(h) -> 1, so log|g| -> 0.
+                But transfer = dg/dh = -h/3 + O(h^3); log|transfer| = log(h) - log(3).
+                Slope = 1, so observed_alpha = 2.
+      Predicted status: ALPHA_REGULAR_INTEGER (alpha=2). This is a removable
+                        singularity that the calculus should read as a smooth
+                        function with a vanishing first derivative.
+
+  H3 x_log_x            : f(x) = x * log(x)
+      Analytic: g(h) = h*log(h); transfer = log(h) + 1.
+                log|transfer| ~ log|log(h)| for small h.
+                d(log|log(h)|)/d(log h) = 1/log(h) -> 0.
+                So slope -> 0 but very slowly; observed_alpha -> 1 with strong
+                log-modulated curvature in the log-log fit.
+      Predicted status: ALPHA_REGULAR_INTEGER (alpha=1) IF the OLS fit averages
+                        through the log corrections, OR ALPHA_UNSTABLE_WINDOW if
+                        the curvature breaks the nested-window stability check.
+                        Honest uncertainty: 50/50.
+
+  H4 exp_neg_recip      : f(x) = exp(-1/x)
+      Analytic: g(h) = exp(-1/h). For h <= ~1.4e-3, exp(-1/h) underflows to 0
+                in float64. Only h=1e-2 yields a finite value (~3.7e-44).
+                Even with no underflow, slope = (1/h - 2) -> infinity.
+      Predicted status: ALPHA_DOMAIN_REFUSED or ALPHA_NONFINITE or
+                        ALPHA_INSUFFICIENT_DATA (underflow zeros break log|.|).
+                        Possibly ALPHA_UNSTABLE_WINDOW if it survives long enough.
+
+x0 = 0, h_values = same 12-point sweep, eta = 1e-6, declared_alpha_models = ().
+
+This test is binary per observable:
+  - Either V4 emits the predicted status (calculus correctly classifies hard case)
+  - Or V4 emits a different status (informative refusal we should understand)
+Either outcome is structural content.
+"""
+from __future__ import annotations
+
+import math
+import sys
+from pathlib import Path
+
+ROOT = Path("/home/william_lloydlt/projects/V4/Lloyd_Engine_V4")
+sys.path.insert(0, str(ROOT / "src"))
+
+from lloyd_v4.primitives.singular_alpha_jet_bundle import singular_alpha_jet_bundle
+
+
+def make_sweep() -> list[float]:
+    return [10.0 ** (-2.0 - (7.0 / 11.0) * i) for i in range(12)]
+
+
+def safe_log_recip(x: float) -> float:
+    # log(1/x) = -log(x); raises if x <= 0
+    return math.log(1.0 / x)
+
+
+def safe_sin_over_x(x: float) -> float:
+    # sin(x)/x; well-defined for x > 0
+    return math.sin(x) / x
+
+
+def safe_x_log_x(x: float) -> float:
+    # x * log(x); well-defined for x > 0
+    return x * math.log(x)
+
+
+def safe_exp_neg_recip(x: float) -> float:
+    # exp(-1/x); for very small x, underflows to 0
+    return math.exp(-1.0 / x)
+
+
+OBSERVABLES = [
+    ("H1_log_recip",     safe_log_recip,      "ALPHA_REGULAR_INTEGER(0) or ALPHA_ZERO_BOUNDARY"),
+    ("H2_sin_over_x",    safe_sin_over_x,     "ALPHA_REGULAR_INTEGER(2)"),
+    ("H3_x_log_x",       safe_x_log_x,        "ALPHA_REGULAR_INTEGER(1) or ALPHA_UNSTABLE_WINDOW"),
+    ("H4_exp_neg_recip", safe_exp_neg_recip,  "ALPHA_DOMAIN_REFUSED or NONFINITE or INSUFFICIENT_DATA"),
+]
+
+
+def main() -> None:
+    h_values = make_sweep()
+    eta = 1e-6
+    x0 = 0.0
+
+    print("=" * 130)
+    print("Hard-case singular probe — non-power-law observables via singular_alpha_jet_bundle")
+    print("=" * 130)
+    print(f"x0 = {x0}, h sweep: 12 points log-spaced from 1e-2 to 1e-9, eta = {eta}")
+    print()
+
+    # --- Sanity preview: print g(h) at the 12 sweep points for each observable ---
+    print("Per-point g(h) preview (sanity check before V4 run):")
+    print(f"{'h':>14}  " + "  ".join(f"{name[:18]:>22}" for name, _, _ in OBSERVABLES))
+    print("-" * 130)
+    for h in h_values:
+        cells = []
+        for _, func, _ in OBSERVABLES:
+            try:
+                v = func(h)
+                cells.append(f"{v:>22.6e}")
+            except Exception as exc:
+                cells.append(f"{('ERR:'+type(exc).__name__):>22}")
+        print(f"{h:14.6e}  " + "  ".join(cells))
+
+    # --- V4 runs ---
+    print()
+    print("=" * 130)
+    print("V4 emissions:")
+    print("=" * 130)
+
+    results = []
+    for label, func, predicted in OBSERVABLES:
+        try:
+            result = singular_alpha_jet_bundle(
+                func=func,
+                x0=x0,
+                h_values=h_values,
+                probe_id=f"hard_case_{label}_001",
+                function_label=label,
+                eta=eta,
+            )
+            obs = result.value.observed_alpha
+            underlying = result.value.alpha_probe_observation
+            std_err = underlying.standard_error if underlying is not None else None
+            stability = underlying.alpha_stability_status.value if underlying is not None else "n/a"
+            window_span = underlying.alpha_window_span if underlying is not None else None
+            n_obs = underlying.n_observed if underlying is not None else 0
+            n_in = underlying.n_input_observations if underlying is not None else 0
+            inner_status = result.value.alpha_status.value if result.value.alpha_status is not None else "n/a"
+            outer_status = result.status.value
+            validity = result.validity
+            exception = None
+        except Exception as exc:
+            obs = None
+            std_err = None
+            stability = "n/a"
+            window_span = None
+            n_obs = 0
+            n_in = 0
+            inner_status = "RAISED:" + type(exc).__name__
+            outer_status = "EXCEPTION"
+            validity = None
+            exception = repr(exc)
+
+        results.append({
+            "label": label,
+            "predicted": predicted,
+            "obs_alpha": obs,
+            "std_err": std_err,
+            "stability": stability,
+            "window_span": window_span,
+            "n_obs": n_obs,
+            "n_in": n_in,
+            "inner_status": inner_status,
+            "outer_status": outer_status,
+            "validity": validity,
+            "exception": exception,
+        })
+
+    for r in results:
+        print()
+        print(f"--- {r['label']} ---")
+        print(f"  predicted              : {r['predicted']}")
+        print(f"  V4 outer status        : {r['outer_status']}")
+        print(f"  V4 inner alpha status  : {r['inner_status']}")
+        print(f"  V4 observed_alpha      : {r['obs_alpha']!r}")
+        print(f"  std_err                : {r['std_err']!r}")
+        print(f"  stability              : {r['stability']}")
+        print(f"  window_span            : {r['window_span']!r}")
+        print(f"  n_observed / n_input   : {r['n_obs']} / {r['n_in']}")
+        if r['validity'] is not None:
+            print(f"  validity.defined       : {r['validity'].defined}")
+            print(f"  validity.finite        : {r['validity'].finite}")
+            print(f"  validity.selectable    : {r['validity'].selectable}")
+            print(f"  validity.advanceable   : {r['validity'].advanceable}")
+        if r['exception']:
+            print(f"  EXCEPTION              : {r['exception']}")
+
+
+if __name__ == "__main__":
+    main()

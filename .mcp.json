@@ -1,15 +1,16 @@
 {
   "mcpServers": {
-    "cella": {
+    "cella-router": {
       "type": "stdio",
-      "command": "python3",
+      "command": "/home/williaml/Cella Framework/.venv/bin/python",
       "args": ["-m", "cella.mcp_server", "--router", "--profile", "core"],
-      "env": { "PYTHONPATH": "engine/src" }
+      "env": { "PYTHONPATH": "/home/williaml/Cella Framework/engine/src" }
     },
-    "wreath-engine": {
+    "cella-dag": {
       "type": "stdio",
-      "command": "uv",
-      "args": ["--directory", "engine/tools/wreath_engine", "run", "wreath-engine-mcp"]
+      "command": "/home/williaml/Cella Framework/.venv/bin/python",
+      "args": ["-m", "cella.dag_mcp_server", "--transport", "stdio"],
+      "env": { "PYTHONPATH": "/home/williaml/Cella Framework/engine/src" }
     }
   }
 }

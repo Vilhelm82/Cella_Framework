@@ -1,0 +1,451 @@
+{
+  "K1_proxy_disposition": "PINNED PREREG NOTE (carried from Stage A finding #2): the manifest stage0_controls kappa^2=9/2401 is K_G^2 = (-3/49)^2 -- the squared TOTAL, a legitimate sign-blind proxy -- NOT the channel-norm kappa_c^2+kappa_s^2+kappa_int^2 = 11/2401. This battery treats 9/2401 strictly as the K_G^2 proxy and does NOT transcribe it as a channel-norm. The other proxies (H^2=18/343, any p>=0, drop-Delta_m kappa_c+kappa_s=0, omit-tuple) are each >=0/sign-blind and cannot represent signed K_G=-3/49<0; all FIRE K1. The TRUE signed object (-3/49,-1/49,1/49,-3/49) PASSES (no false positive).",
+  "authority": "Frozen objects under results/three_channel_kg/ (manifest_v1.json, SCHEMA.md, FIXTURES.md, CLAIM_LEDGER.md) verified vs freeze_pins_sha256.json (the three pinned objects); built+frozen bench under src/lloyd_v4/evals/three_channel_kg/ imported READ-ONLY by exact file path and pinned in depends_on. Covenant loop; R1/R2/R3 dispositions. ORCHESTRATOR OVERRIDE: no v4-campaign-discipline skill this session -- frozen objects + embedded covenant are the sole binding authority.",
+  "campaign_id": "three_channel_kg",
+  "cycle_id": "c001",
+  "depends_on": {
+    "results/three_channel_kg/manifest_v1.json": "a28042d96a3588407a610f649388d93364c9be2b9294810cd666f3a7369b318b",
+    "src/lloyd_v4/evals/three_channel_kg/fixtures.py": "3d415011b7f4c81c38d70d94847cbdbacb9d02b7543cfe7e0d2f9e48b11f8b8c",
+    "src/lloyd_v4/evals/three_channel_kg/oracle.py": "b8af9397710490a8d548b653aa301cf0eb2bd37ca50579fc26c1b58a5c1c7798",
+    "src/lloyd_v4/evals/three_channel_kg/probe.py": "1f99965824afd3548841ca5360c56dc44250c858018f18349bf2a2c3b9e098d8",
+    "src/lloyd_v4/evals/three_channel_kg/referee_channel.py": "28eff76c9eceef94d9927845a9fca33ce01f4cd3f452635607cf42a806921175",
+    "src/lloyd_v4/evals/three_channel_kg/referee_total.py": "993ffd21f9eac6c13eb015eacc5f3ed9bfb00cded0648fc963a83cead51feb29",
+    "src/lloyd_v4/evals/three_channel_kg/schema.py": "40335dc1501e3d737fedbf236c4e66a7c7641c1b1b6e4d840499fe23260ca085"
+  },
+  "expectations": {
+    "CLc3b_symbolic_indefinite_over_Q_g_H": {
+      "K_G_along_family_t_polynomial": {
+        "degree": 1,
+        "leading_coeff": "1",
+        "value": "+t"
+      },
+      "K_G_at_t_eq_1": "1/1",
+      "K_G_at_t_eq_minus_1": "-1/1",
+      "K_G_nonconstant": true,
+      "claim": "det(H_b) is indefinite as a polynomial in Q[g1,g2,g3,h11,h12,h13,h22,h23,h33]; K_G = -det(H_b)/q^2 with q^2>0 (regular) therefore attains both signs structurally.",
+      "det_hb_along_family_t_polynomial": {
+        "degree": 1,
+        "leading_coeff": "-1",
+        "value": "-t"
+      },
+      "indeterminates": [
+        "g1",
+        "g2",
+        "g3",
+        "h11",
+        "h12",
+        "h13",
+        "h22",
+        "h23",
+        "h33"
+      ],
+      "numerator_indefinite": true,
+      "q_squared_strictly_positive_on_regular": true,
+      "regular_family": "g=(1,0,0) (q=1, regular for all t), H=[[0,0,0],[0,t,0],[0,0,1]]"
+    },
+    "F10": {
+      "K_G": "2/9",
+      "kappa_c": "1/3",
+      "kappa_int": "-1/9",
+      "kappa_int_sign": "negative",
+      "kappa_s": "0/1"
+    },
+    "F11": {
+      "K_G": "0/1",
+      "kappa_c": "-1/9",
+      "kappa_int": "2/9",
+      "kappa_int_sign": "positive",
+      "kappa_s": "-1/9"
+    },
+    "K1_sign_blind_proxies_on_F8": {
+      "H2_proxy": "18/343",
+      "K_G": "-3/49",
+      "K_G_is_negative": true,
+      "K_G_squared_proxy": "9/2401",
+      "all_proxies_are_nonnegative": true,
+      "all_proxies_fire_cannot_represent_signed_KG": true,
+      "channel_norm_for_reference_only": "11/2401",
+      "drop_Delta_m_proxy_kappa_c_plus_kappa_s": "0/1",
+      "note": "PINNED (Stage-A finding #2): the manifest's kappa^2 = 9/2401 is K_G^2 = (-3/49)^2 (the squared TOTAL, a legitimate sign-blind proxy), NOT the channel-norm kappa_c^2+kappa_s^2+kappa_int^2 = 11/2401. Do NOT transcribe 9/2401 as a channel-norm.",
+      "true_signed_object_passes": "the TRUE signed (K_G,kappa_c,kappa_s,kappa_int)=(-3/49,-1/49,1/49,-3/49) on F8 PASSES (no false positive)"
+    },
+    "both_sign_witnesses": {
+      "F10_kappa_int": "-1/9",
+      "F11_kappa_int": "2/9",
+      "keystone_F8_KG": "-3/49",
+      "sphere_F6_KG": "1/1"
+    },
+    "developable_or_singular": {
+      "expected": "typed REFUSED on all of Path A / Path B / Path B' (never 0/NaN/placeholder)",
+      "note": "q^2>0 always holds away from q=0; the genuine singular stratum q=g^Tg=0 is typed REFUSED (K11).",
+      "singular_jet_g": "g=(0,0,0)"
+    },
+    "keystone_F8": {
+      "Delta_m_present_and_nonzero": "12/1",
+      "K_G": "-3/49",
+      "K_G_eq_sum_channels": true,
+      "K_G_sign": "negative",
+      "det_hb": "12/1",
+      "kappa_c": "-1/49",
+      "kappa_int": "-3/49",
+      "kappa_s": "1/49",
+      "q": "14/1"
+    },
+    "sigma_kernel_CLc3c_i": {
+      "Sigma_matrix": "[[1,1,1]]",
+      "domain_dim": 3,
+      "nullity_dim": 2,
+      "rank_over_Q": 1,
+      "rank_plus_nullity_eq_domain": true,
+      "two_basis_kernel_vectors": [
+        [
+          "1",
+          "-1",
+          "0"
+        ],
+        [
+          "1",
+          "0",
+          "-1"
+        ]
+      ]
+    },
+    "sphere_F6": {
+      "K_G": "1/1",
+      "K_G_sign": "positive",
+      "kappa_int": "0/1"
+    }
+  },
+  "frozen": true,
+  "frozen_authority_pins": {
+    "results/three_channel_kg/CLAIM_LEDGER.md": "d6e395fe82a09e743edc85658ab887445f299f793524b198d67f2bb336554958",
+    "results/three_channel_kg/FIXTURES.md": "3d933e39fd03ef968ef943ff24df5292318fdac47a3ec1774b81deaea4f902f2",
+    "results/three_channel_kg/SCHEMA.md": "fe0eb353ea6147c9d290fdfa2bf4ee2fb8d612a45a31b5d62bfce986a2d37b98",
+    "results/three_channel_kg/freeze_pins_sha256.json": "c893a1e9758954c2ebeef9cd022cda170fa51d61a850c238ef0f76800d18ee16"
+  },
+  "grader_clauses": {
+    "CLc3_nonneg_impossible": "No non-negative scalar p>=0 can equal the signed K_G: at the keystone F8, K_G = -3/49 < 0, so any candidate p>=0 has p != K_G there. A single exact-Q negative witness refutes every non-negative representor; F6 (K_G=+1>0) shows the object is genuinely two-signed (not vacuously sign-fixed).",
+    "CLc3b_indefinite_numerator": "K_G = -det(H_b)/q^2 with q^2 > 0 for every regular jet (q != 0), so sign(K_G) = -sign(det(H_b)); det(H_b) is INDEFINITE as a polynomial over Q[g,H] (it attains strictly positive and strictly negative values at regular rational jets), hence K_G attains both signs structurally.",
+    "CLc3c_i_sigma_kernel": "Sigma:Q^3->Q, Sigma(kappa_c,kappa_s,kappa_int)=kappa_c+kappa_s+kappa_int, is the 1x3 matrix [[1,1,1]] of rank 1 over Q; by rank-nullity its kernel has dimension 3-1 = 2.",
+    "CLc6_noncollapsible": "The channel tuple is non-collapsible on the family: kappa_int attains both signs (F10 kappa_int = -1/9 < 0; F11 kappa_int = +2/9 > 0), so no single sign-fixed surrogate for kappa_int represents the family.",
+    "K11_singular_lie": "q=0 / cone-apex / g_i=0 -> typed REFUSED, never 0/NaN/placeholder (K11).",
+    "K1_sign_blindness": "on F8: K_G>=0, or K_G!=Sumchannels, or kappa_int absent, or Delta_m dropped. (meta-thesis; CL-c3)",
+    "K8_sqrt_q_leak": "radical/float instead of Fraction -> hard fail (K8).",
+    "R1_proven_warrant": "logic-forced, not discretionary. A verified finite exact-Q both-sign witness earns [PROVEN] for an impossibility / existence claim (CL-c3); universal claims (CL-c1, CL-c3b) require the symbolic identity over Q[g,H]. The stage prereg encodes this in status_move_rules.",
+    "R2_supplied_frame": "the channels are frame-relative in the supplied DBP frame; only the sum K_G is intrinsic. CL-c7 graded accordingly.",
+    "closure_1_tuple_eq_expected": "got.(K_G, kappa_c, kappa_s, kappa_int) == expected",
+    "closure_2_K_G_eq_sum_channels": "got.K_G == sum(channels)  (kappa_c + kappa_s + kappa_int)",
+    "closure_3_K_G_eq_pathB_total": "got.K_G == Path-B total  (-det(H_b)/q^2, sqrt-q-free)",
+    "closure_4_channels_eq_pathBprime": "got.channels == Path-B' channels  (split shape-operator det2, code-disjoint)",
+    "closure_5_det_hb_eq_partition_sum": "det(H_b) == Delta_c + Delta_s + Delta_m",
+    "precondition_P_frame": "every channel fixture must carry its frame annotation, or it is rejected.",
+    "precondition_P_self_cert": "the oracle (Path C) must be external to A/B/B', or the run is void.",
+    "row_pass": "got.(K_G,kappa_c,kappa_s,kappa_int)==expected AND got.K_G==sum(channels) AND got.K_G==PathB_total AND got.channels==PathBprime_channels AND det(H_b)==Delta_c+Delta_s+Delta_m",
+    "semantics_K_G": "kappa_c + kappa_s + kappa_int (exact in Q)",
+    "semantics_channel_referee": "channels == split-shape-operator det2 channels (Path B', disjoint source)",
+    "semantics_kappa_X": "-Delta_X / q^2, with det(H_b) = Delta_c + Delta_s + Delta_m (off-diagonal -> Delta_c, diagonal -> Delta_s, mixed -> Delta_m)",
+    "semantics_total_referee": "K_G == -det(H_b)/q^2 (Path B, sqrt-q-free)",
+    "type_gate_sqrt_q_leak": "a total/channel referee returning a radical/float instead of Fraction -> hard fail (K8)."
+  },
+  "no_tolerance_note": "Exact Q only; no tolerance band anywhere; a near-miss is a FAIL. No substrate promotion (eval-tier only). Nothing canonical until Will signs off.",
+  "organ": {
+    "module": "lloyd_v4.evals.three_channel_kg.probe",
+    "path": "A",
+    "probe_id": "three_channel_kg_probe_A_v1",
+    "probe_source_verbatim": "\"\"\"c001 `three_channel_kg` \u2014 the PROBE (Path A, `role=probe`).\n\nThe monomial channel read-off. From the bordered Hessian\n\n        H_b = [[ 0 , g\u1d40 ],\n               [ g ,  H ]]      (4\u00d74, H symmetric 3\u00d73, q = g\u1d40g \u2260 0)\n\nwe form det(H_b) as an exact polynomial in (g, H) and partition it into the\nexhaustive, disjoint monomial classes pinned in `manifest_v1.json` \u2192\n`semantics_pinned` and `results/three_channel_kg/SCHEMA.md`:\n\n  * \u0394_c \u2014 monomials carrying an OFF-DIAGONAL H-entry only (coupling),\n  * \u0394_s \u2014 monomials carrying a DIAGONAL H-entry only (self),\n  * \u0394_m \u2014 MIXED monomials (one diagonal \u00d7 one off-diagonal),\n\nwith  det(H_b) == \u0394_c + \u0394_s + \u0394_m  (closure identity #5). Then\n\n        \u03ba_X = \u2212\u0394_X / q\u00b2        and        K_G = \u03ba_c + \u03ba_s + \u03ba_int.\n\n(\u03ba_int is the channel read off from the mixed partition \u0394_m.)\n\nTHE LINE (covenant): this is the HYPOTHESIS path. The probe NEVER imports the\nreferee \u2014 truth (Path B total, Path B\u2032 channels, Path C oracle) is computed on\nan independent code path this module never sees. Exact \u211a ONLY: every operand\nand result is a `fractions.Fraction`; there is no float, no radical, and no\ntolerance anywhere below. The singular stratum (a VANISHING gradient: q=0,\nthe cone-apex / critical point, equivalently every g\u1d62=0) is REFUSED with a\ntyped exception, never returned as 0 / NaN / a placeholder (refuse-not-lie).\nA regular jet that merely has one zero gradient component (q\u22600) is NOT\nsingular and computes normally \u2014 see the frozen fixture F6.\n\nThe det(H_b) used here is the read-off's OWN exact-\u211a expansion of the\nbordered determinant (cofactor expansion along the border, in `Fraction`); it\nis hypothesis input on Path A, independently re-derived by the referee on\nPath B before any row is graded \u2014 the probe does not consult that path.\n\"\"\"\n\nfrom __future__ import annotations\n\nfrom fractions import Fraction\nfrom typing import Dict, List, Sequence, Tuple\n\nPROBE_ID = \"three_channel_kg_probe_A_v1\"\nROLE = \"probe\"\n\n\nclass ThreeChannelRefusal(Exception):\n    \"\"\"Typed refusal on a singular stratum (refuse-not-lie). `kind` is one of\n    the `schema.SINGULAR_STRATA` labels.\"\"\"\n\n    def __init__(self, kind: str) -> None:\n        super().__init__(kind)\n        self.kind = kind\n\n\nVec3 = Sequence[Fraction]\nMat3 = Sequence[Sequence[Fraction]]\n\n\n# --------------------------------------------------------------------------\n# exact-Q guards\n# --------------------------------------------------------------------------\n\ndef _as_fraction(x: object, where: str) -> Fraction:\n    \"\"\"Admit only exact rationals onto the probe path. A float or any\n    non-exact type is a \u221aq-leak at the door and is refused as a type error \u2014\n    never silently coerced.\"\"\"\n    if isinstance(x, Fraction):\n        return x\n    if isinstance(x, int) and not isinstance(x, bool):\n        return Fraction(x)\n    raise TypeError(\n        f\"{where}: probe path is exact \u211a only; got \"\n        f\"{type(x).__name__} ({x!r}) \u2014 no float/radical admitted\")\n\n\ndef _coerce_jet(g: Vec3, H: Mat3) -> Tuple[List[Fraction], List[List[Fraction]]]:\n    if len(g) != 3:\n        raise ValueError(f\"g must have length 3, got {len(g)}\")\n    if len(H) != 3 or any(len(row) != 3 for row in H):\n        raise ValueError(\"H must be 3x3\")\n    gg = [_as_fraction(g[i], f\"g[{i}]\") for i in range(3)]\n    HH = [[_as_fraction(H[i][j], f\"H[{i}][{j}]\") for j in range(3)]\n          for i in range(3)]\n    # H is the Hessian: symmetric. Enforce it (an asymmetric H would make the\n    # off/diagonal monomial classes ill-defined).\n    for i in range(3):\n        for j in range(i + 1, 3):\n            if HH[i][j] != HH[j][i]:\n                raise ValueError(\n                    f\"H not symmetric at ({i},{j}): \"\n                    f\"{HH[i][j]} != {HH[j][i]}\")\n    return gg, HH\n\n\n# --------------------------------------------------------------------------\n# q = g^T g, with the singular-stratum refusals (refuse-not-lie)\n# --------------------------------------------------------------------------\n\ndef q_of(g: Vec3) -> Fraction:\n    \"\"\"q = g\u1d40g in exact \u211a. Refuses the singular stratum (refuse-not-lie):\n    when the gradient VANISHES (q=0) there is no regular level surface \u2014 the\n    cone-apex / critical point \u2014 and the read-off is a TYPED `q_zero` refusal,\n    never 0 / NaN / a placeholder.\n\n    A single zero gradient COMPONENT (some g\u1d62=0 with q\u22600) is NOT singular: it\n    is a regular rational jet in the supplied frame (e.g. the frozen fixture\n    F6, sphere at (3/5,4/5,0) with g=(6/5,8/5,0), q=4, K_G=1). The spec's\n    `g\u1d62=0` singular stratum is the genuine degeneracy where the gradient drops\n    rank to zero (q=0 \u27fa every g\u1d62=0 over \u211d), reported as `g_i_zero`; it does\n    NOT include regular points that merely lie on a coordinate hyperplane.\n    Over-refusing F6 would contradict the freeze, so the gate is strictly q=0.\n    \"\"\"\n    gg = [_as_fraction(g[i], f\"g[{i}]\") for i in range(3)]\n    q = gg[0] * gg[0] + gg[1] * gg[1] + gg[2] * gg[2]\n    if q == 0:\n        # gradient vanishes: cone apex / critical point. Over \u211d this is\n        # exactly \"every g\u1d62=0\", so name both the apex and the g\u1d62=0 stratum.\n        kind = \"g_i_zero\" if all(gi == 0 for gi in gg) else \"q_zero\"\n        raise ThreeChannelRefusal(kind)\n    return q\n\n\n# --------------------------------------------------------------------------\n# the bordered-Hessian determinant, partitioned by monomial class (Path A)\n# --------------------------------------------------------------------------\n\ndef partition(g: Vec3, H: Mat3\n              ) -> Dict[str, Fraction]:\n    \"\"\"Return {'Delta_c','Delta_s','Delta_m','det_hb'} \u2014 the exact-\u211a\n    monomial partition of det(H_b).\n\n    det(H_b) for H_b = [[0, g\u1d40],[g, H]] expands (exactly, in \u211a) to the twelve\n    additive terms\n\n        det = g1\u00b2(h23\u00b2 \u2212 h22\u00b7h33)            \u2190 s: \u2212g1\u00b2h22h33, c: +g1\u00b2h23\u00b2\n            + g2\u00b2(h13\u00b2 \u2212 h11\u00b7h33)            \u2190 s: \u2212g2\u00b2h11h33, c: +g2\u00b2h13\u00b2\n            + g3\u00b2(h12\u00b2 \u2212 h11\u00b7h22)            \u2190 s: \u2212g3\u00b2h11h22, c: +g3\u00b2h12\u00b2\n            + 2g1g2(h12\u00b7h33 \u2212 h13\u00b7h23)       \u2190 m: +2g1g2h12h33, c: \u22122g1g2h13h23\n            + 2g1g3(h13\u00b7h22 \u2212 h12\u00b7h23)       \u2190 m: +2g1g3h13h22, c: \u22122g1g3h12h23\n            + 2g2g3(h11\u00b7h23 \u2212 h12\u00b7h13)       \u2190 m: +2g2g3h11h23, c: \u22122g2g3h12h13\n\n    classified by the H-entries each monomial carries:\n      diagonal-only  (h11,h22,h33)               -> \u0394_s,\n      off-diagonal-only (h12,h13,h23)            -> \u0394_c,\n      one diagonal \u00d7 one off-diagonal            -> \u0394_m.\n    The bordered determinant has no H-free term, so the three classes are\n    exhaustive and disjoint and \u0394_c+\u0394_s+\u0394_m == det(H_b) identically.\n    \"\"\"\n    gg, HH = _coerce_jet(g, H)\n    g1, g2, g3 = gg\n    h11, h12, h13 = HH[0][0], HH[0][1], HH[0][2]\n    h22, h23, h33 = HH[1][1], HH[1][2], HH[2][2]\n\n    # \u0394_c \u2014 off-diagonal-H monomials only\n    delta_c = (g1 * g1 * h23 * h23\n               - 2 * g1 * g2 * h13 * h23\n               - 2 * g1 * g3 * h12 * h23\n               + g2 * g2 * h13 * h13\n               - 2 * g2 * g3 * h12 * h13\n               + g3 * g3 * h12 * h12)\n\n    # \u0394_s \u2014 diagonal-H monomials only\n    delta_s = (- g1 * g1 * h22 * h33\n               - g2 * g2 * h11 * h33\n               - g3 * g3 * h11 * h22)\n\n    # \u0394_m \u2014 mixed monomials (one diagonal \u00d7 one off-diagonal)\n    delta_m = (2 * g1 * g2 * h12 * h33\n               + 2 * g1 * g3 * h13 * h22\n               + 2 * g2 * g3 * h11 * h23)\n\n    det_hb = _det_bordered(gg, HH)\n\n    # closure identity #5, asserted on the probe's own arithmetic: the\n    # partition must reconstruct the cofactor-expanded determinant exactly.\n    # (This is an internal self-consistency guard on Path A only \u2014 NOT the\n    # referee's Path-B determinant, which the probe never imports.)\n    if delta_c + delta_s + delta_m != det_hb:\n        raise AssertionError(\n            \"Path-A partition broke det(H_b)=\u0394_c+\u0394_s+\u0394_m: \"\n            f\"{delta_c}+{delta_s}+{delta_m} != {det_hb}\")\n\n    return {\"Delta_c\": delta_c, \"Delta_s\": delta_s,\n            \"Delta_m\": delta_m, \"det_hb\": det_hb}\n\n\ndef _det_bordered(g: List[Fraction], H: List[List[Fraction]]) -> Fraction:\n    \"\"\"det of the 4\u00d74 bordered Hessian [[0, g\u1d40],[g, H]], by cofactor\n    expansion along the first (border) row, in exact \u211a. Independent of the\n    monomial split above \u2014 it is the read-off's own determinant so the\n    closure-#5 guard is meaningful.\"\"\"\n    hb = [[Fraction(0), g[0], g[1], g[2]],\n          [g[0], H[0][0], H[0][1], H[0][2]],\n          [g[1], H[1][0], H[1][1], H[1][2]],\n          [g[2], H[2][0], H[2][1], H[2][2]]]\n    return _det4(hb)\n\n\ndef _det4(m: List[List[Fraction]]) -> Fraction:\n    \"\"\"Exact 4\u00d74 determinant via Laplace expansion along row 0 (3\u00d73 minors by\n    the rule of Sarrus). Pure Fraction; no pivoting/division, so nothing can\n    go non-exact.\"\"\"\n    acc = Fraction(0)\n    sign = Fraction(1)\n    for c in range(4):\n        if m[0][c] != 0:\n            minor = [[m[r][cc] for cc in range(4) if cc != c]\n                     for r in range(1, 4)]\n            acc += sign * m[0][c] * _det3(minor)\n        sign = -sign\n    return acc\n\n\ndef _det3(m: List[List[Fraction]]) -> Fraction:\n    return (m[0][0] * (m[1][1] * m[2][2] - m[1][2] * m[2][1])\n            - m[0][1] * (m[1][0] * m[2][2] - m[1][2] * m[2][0])\n            + m[0][2] * (m[1][0] * m[2][1] - m[1][1] * m[2][0]))\n\n\n# --------------------------------------------------------------------------\n# the channel read-off: kappa_X = -Delta_X / q^2, K_G = kappa_c+kappa_s+kappa_int\n# --------------------------------------------------------------------------\n\ndef read_off(g: Vec3, H: Mat3) -> Dict[str, Fraction]:\n    \"\"\"Path A. Returns the exact-\u211a dict\n\n        {'K_G','kappa_c','kappa_s','kappa_int',\n         'q','Delta_c','Delta_s','Delta_m','det_hb'}\n\n    Raises `ThreeChannelRefusal` on a singular stratum (q=0 / g\u1d62=0). No\n    float, radical, or tolerance is used; the bordered determinant is \u221aq-free\n    (q enters only as q\u00b2, never \u221aq).\"\"\"\n    q = q_of(g)                      # refuses g\u1d62=0 / q=0\n    q2 = q * q\n    part = partition(g, H)\n    kappa_c = -part[\"Delta_c\"] / q2\n    kappa_s = -part[\"Delta_s\"] / q2\n    kappa_int = -part[\"Delta_m\"] / q2\n    K_G = kappa_c + kappa_s + kappa_int\n    return {\"K_G\": K_G, \"kappa_c\": kappa_c, \"kappa_s\": kappa_s,\n            \"kappa_int\": kappa_int, \"q\": q,\n            \"Delta_c\": part[\"Delta_c\"], \"Delta_s\": part[\"Delta_s\"],\n            \"Delta_m\": part[\"Delta_m\"], \"det_hb\": part[\"det_hb\"]}\n\n\ndef channels(g: Vec3, H: Mat3\n             ) -> Tuple[Fraction, Fraction, Fraction, Fraction]:\n    \"\"\"Convenience: the graded tuple (K_G, \u03ba_c, \u03ba_s, \u03ba_int) in exact \u211a.\"\"\"\n    r = read_off(g, H)\n    return r[\"K_G\"], r[\"kappa_c\"], r[\"kappa_s\"], r[\"kappa_int\"]\n\n\n__all__ = [\n    \"PROBE_ID\", \"ROLE\", \"ThreeChannelRefusal\",\n    \"q_of\", \"partition\", \"read_off\", \"channels\",\n]\n",
+    "reconstruction_law": "Bordered Hessian H_b = [[0, g^T],[g, H]] (4x4, H symmetric 3x3, q = g^T g != 0). det(H_b) is expanded EXACTLY in Q and partitioned into the exhaustive disjoint monomial classes Delta_c (off-diagonal-H only), Delta_s (diagonal-H only), Delta_m (one diagonal x one off-diagonal), with det(H_b) == Delta_c + Delta_s + Delta_m. Then kappa_X = -Delta_X / q^2 and K_G = kappa_c + kappa_s + kappa_int (kappa_int read off Delta_m). Exact Q only; sqrt-q-free (q enters only as q^2). The signed K_G = -det(H_b)/q^2: since q^2 > 0 for every regular jet (q != 0), sign(K_G) = -sign(det(H_b)). The singular stratum q = g^T g = 0 (vanishing gradient / cone apex; over R equivalently every g_i = 0) is a TYPED refusal, never 0/NaN/placeholder. A regular jet with a single zero gradient component (some g_i = 0 with q != 0) is NOT singular and computes normally (frozen fixture F6).",
+    "role": "probe",
+    "sha256": "1f99965824afd3548841ca5360c56dc44250c858018f18349bf2a2c3b9e098d8"
+  },
+  "predictions": [
+    {
+      "claims": [
+        "CL-c3"
+      ],
+      "expected": "K_G<0 True; K_G==sum True; kappa_int present (=-3/49); Delta_m=12 not dropped => K1 does NOT fire on true object",
+      "id": "P1_K1_sign_blindness_F8",
+      "kills_relevant": [
+        "K1"
+      ],
+      "statement": "K1 (sign-blindness, MANDATORY refute) does NOT fire on the TRUE signed object at keystone F8: K_G = -3/49 < 0 (so K_G>=0 is FALSE), K_G == sum(channels) (kappa_c+kappa_s+kappa_int), kappa_int is PRESENT (= -3/49, not absent), and Delta_m is NOT dropped (Delta_m = 12 != 0, det(H_b)=Delta_c+Delta_s+Delta_m). The four K1 trip-conditions are all false on the true object => K1 silent (the true signed object passes).",
+      "units": "boolean per K1 sub-condition (exact-Q); K1_fires must be False on the true F8 object"
+    },
+    {
+      "claims": [
+        "CL-c3"
+      ],
+      "expected": "all of {K_G^2=9/2401, H^2=18/343, p>=0, kappa_c+kappa_s=0, omit-tuple} are >=0 and != -3/49 => all FIRE K1",
+      "id": "P2_K1_proxies_all_fire_F8",
+      "kills_relevant": [
+        "K1"
+      ],
+      "statement": "Every sign-blind proxy on F8 FIRES K1 (is caught) because each is >=0 / sign-blind and cannot represent the signed K_G = -3/49 < 0: (a) K_G^2 = 9/2401 >= 0 [the manifest kappa^2 proxy: the squared TOTAL, NOT the channel-norm 11/2401]; (b) H^2 = 18/343 >= 0; (c) any p>=0; (d) drop-Delta_m proxy kappa_c+kappa_s = 0 >= 0; (e) omit-tuple (no kappa_int). Each proxy != -3/49 (a negative value) => each fires K1; the true signed object alone passes.",
+      "units": "exact Q per proxy; boolean (proxy>=0 AND proxy != K_G) per proxy; count of proxies firing == 5"
+    },
+    {
+      "claims": [
+        "CL-c3"
+      ],
+      "expected": "F8 K_G=-3/49<0 (negative witness) AND F6 K_G=+1>0 (positive witness) both verified exact-Q => no p>=0 represents signed K_G",
+      "id": "P3_CLc3_nonneg_impossible_witness",
+      "kills_relevant": [
+        "K1"
+      ],
+      "statement": "CL-c3 impossibility (R1, logic-forced): no non-negative scalar p>=0 equals the signed K_G. Exact-Q both-sign witnesses: keystone F8 K_G = -3/49 < 0 and sphere F6 K_G = +1 > 0. The single negative witness K_G(F8) = -3/49 < 0 refutes EVERY non-negative representor (any p>=0 has p >= 0 > -3/49 = K_G(F8), so p != K_G(F8)); the positive witness F6 shows the object is genuinely two-signed, not vacuously sign-fixed.",
+      "units": "exact Q (Fraction); sign of each witness; boolean (negative witness exists AND positive witness exists)"
+    },
+    {
+      "claims": [
+        "CL-c3b"
+      ],
+      "expected": "det(H_b) along family == -t (degree 1, lead -1); K_G(t)==+t (degree 1, lead +1, nonconstant); K_G(1)=+1>0; K_G(-1)=-1<0 => numerator indefinite over Q[g,H]",
+      "id": "P4_CLc3b_symbolic_indefinite_universal",
+      "kills_relevant": [],
+      "statement": "CL-c3b UNIVERSAL warrant (R1): the numerator det(H_b) is INDEFINITE as a polynomial over Q[g,H] -- established SYMBOLICALLY (not finite-only). Using the exact-Q multivariate engine, the full Q[g1..g3,h11..h33] cofactor-expanded det(H_b) (12 monomials) specialised to the regular family g=(1,0,0) (q=1, regular for all t), H=[[0,0,0],[0,t,0],[0,0,1]] is the univariate polynomial det(H_b)=-t, hence K_G = -det/q^2 = +t. K_G(t) is a degree-1 (nonconstant) polynomial with leading coeff +1, so it attains strictly positive (K_G(1)=+1) and strictly negative (K_G(-1)=-1) values at regular rational jets. Therefore det(H_b) is indefinite over Q[g,H] and K_G attains both signs structurally (universal, not finite).",
+      "units": "symbolic t-polynomial coefficients (exact Q); degree==1; leading_coeff; booleans (nonconstant, indefinite); q^2>0 on regular family"
+    },
+    {
+      "claims": [
+        "CL-c3c-i"
+      ],
+      "expected": "rank([[1,1,1]])==1; nullity==2; Sigma(1,-1,0)==0 and Sigma(1,0,-1)==0; the two kernel vectors independent",
+      "id": "P5_CLc3c_i_sigma_kernel_2dim",
+      "kills_relevant": [],
+      "statement": "CL-c3c-i (exact Q linear algebra): Sigma:Q^3->Q, Sigma(kappa_c,kappa_s,kappa_int)=kappa_c+kappa_s+kappa_int, is the 1x3 matrix [[1,1,1]]. Its rank over Q is 1 (a single nonzero row), so by rank-nullity dim(ker Sigma) = 3 - 1 = 2. Two explicit exact-Q basis vectors of the kernel are (1,-1,0) and (1,0,-1): Sigma maps each to 0, and they are linearly independent. The kernel is exactly 2-dimensional.",
+      "units": "exact Q linear algebra; integer rank/nullity (rank==1, nullity==2); boolean independence + Sigma(v)==0"
+    },
+    {
+      "claims": [
+        "CL-c6"
+      ],
+      "expected": "F10 kappa_int=-1/9<0 AND F11 kappa_int=+2/9>0 on Path A/B'/C (exact Q) => both signs of kappa_int present",
+      "id": "P6_CLc6_kappa_int_both_signs",
+      "kills_relevant": [],
+      "statement": "CL-c6 (channel tuple non-collapsible on the family): kappa_int attains BOTH signs on the frozen family -- F10 kappa_int = -1/9 < 0 and F11 kappa_int = +2/9 > 0 -- verified exact-Q across Path A, Path B' (channels) and Path C (oracle). A single sign-fixed surrogate for kappa_int cannot represent the family => the tuple is non-collapsible.",
+      "units": "exact Q (Fraction); sign of kappa_int on F10 and F11; agreement across A/B'/C"
+    },
+    {
+      "claims": [
+        "CL-c3",
+        "CL-c6"
+      ],
+      "expected": "F6 K_G=+1; F8 K_G=-3/49; F10 tuple=(2/9,1/3,0,-1/9); F11 tuple=(0,-1/9,-1/9,2/9); all agree A/B/B'/C exact-Q",
+      "id": "P7_both_sign_witnesses_present",
+      "kills_relevant": [
+        "K1"
+      ],
+      "statement": "BOTH_SIGN_WITNESSES (frozen named set): the four required witnesses coexist exact-Q -- sphere F6 K_G=+1, keystone F8 K_G=-3/49, F10 (K_G=2/9, kappa_c=1/3, kappa_s=0, kappa_int=-1/9), F11 (K_G=0, kappa_c=-1/9, kappa_s=-1/9, kappa_int=+2/9). F6/F8 witness both signs of K_G; F10/F11 witness both signs of kappa_int. Every value agrees across Path A, Path B (K_G), Path B' (channels), Path C (oracle).",
+      "units": "exact Q (Fraction) per witness component; cross-path agreement boolean"
+    },
+    {
+      "claims": [
+        "CL-c3b"
+      ],
+      "expected": "Path A/B/B' all raise typed refusals on g=(0,0,0); F6 (q=4) returns K_G=+1 with no refusal",
+      "id": "P8_K11_singular_refusal",
+      "kills_relevant": [
+        "K11"
+      ],
+      "statement": "K11 (refuse-not-lie) underwrites the q^2>0 premise of CL-c3b: the genuine singular stratum q=g^Tg=0 (g=(0,0,0), cone apex) is a TYPED refusal on all of Path A (ThreeChannelRefusal), Path B (RefereeRefusal), Path B' (RefereeRefusal) -- never 0/NaN/placeholder. Separately, F6 (g=(6/5,8/5,0), q=4 != 0, single zero gradient component) is NOT refused and evaluates to K_G=+1. So 'regular jet' = q != 0 and q^2 > 0 strictly, which is exactly the domain of the both-sign structural argument.",
+      "units": "typed-exception predicate; boolean (no numeric value on q=0); F6 K_G==+1 with no refusal"
+    },
+    {
+      "claims": [
+        "CL-c3",
+        "CL-c3b",
+        "CL-c6"
+      ],
+      "expected": "all emitted K_G/channels/det_hb/q on {F6,F8,F10,F11} are Fraction; a float operand raises TypeError at the door",
+      "id": "P9_type_gate_sqrt_q_leak",
+      "kills_relevant": [
+        "K8"
+      ],
+      "statement": "K8 (sqrt-q-leak type gate): every value emitted by Path A / Path B / Path B' on the Stage-B fixtures {F6,F8,F10,F11} is an exact fractions.Fraction (no float, no radical); AND a float operand offered at the probe door is REFUSED with a TypeError (never silently coerced). The signed object and its sign are exact-Q -- no radical can disguise a sign.",
+      "units": "type predicate (isinstance Fraction); boolean refusal-on-float"
+    },
+    {
+      "claims": [
+        "CL-c3",
+        "CL-c3b",
+        "CL-c3c-i",
+        "CL-c6"
+      ],
+      "expected": "oracle imports none of A/B/B'/fixtures and vice-versa; F6/F8/F10/F11 each carry a frame string",
+      "id": "P10_preconditions",
+      "kills_relevant": [],
+      "preconditions": [
+        "P-self-cert",
+        "P-frame"
+      ],
+      "statement": "Preconditions hold (run not void): P-self-cert -- the Path C oracle module does NOT import probe / referee_total / referee_channel / fixtures, and they do not import oracle; P-frame -- every Stage-B channel fixture {F6,F8,F10,F11} carries a non-empty frame annotation.",
+      "units": "boolean (import-graph disjointness; frame-present on every Stage-B channel fixture)"
+    }
+  ],
+  "referee": {
+    "Path_A": "monomial channel read-off (the probe; role=probe).",
+    "Path_B": "independent TOTAL referee referee_total.referee_total: K_G = -det(H_b)/q^2 via fraction-free Bareiss (generic determinant; no DBP channel formulas; sqrt-q-free); refuses q==0 with RefereeRefusal.",
+    "Path_Bprime": "independent CHANNEL referee referee_channel.referee_channel: channels from the split shape operator P H_X P (P = I - g g^T/q) + trace identities (genuine non-mirror kappa_s); disjoint source; refuses q==0 with RefereeRefusal.",
+    "Path_C": "frozen external fixture oracle oracle.oracle: exact-Q expectations transcribed from FIXTURES.md. P-self-cert: the oracle does NOT import A/B/B' and they do not import it.",
+    "separation_note": "The probe never imports the referee. Path B, Path B', Path C are code-disjoint sources. All grading is mechanical exact-Q equality (no tolerance)."
+  },
+  "scope": {
+    "armed_kills": [
+      "K1",
+      "K8",
+      "K11"
+    ],
+    "claims": [
+      "CL-c3",
+      "CL-c3b",
+      "CL-c3c-i",
+      "CL-c6"
+    ],
+    "fixtures": [
+      "F6",
+      "F8",
+      "F10",
+      "F11"
+    ],
+    "fixtures_named_set": "BOTH_SIGN_WITNESSES (sphere F6 +1, keystone F8 -3/49, F10/F11 both signs of kappa_int)",
+    "out_of_scope": {
+      "fixtures": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5",
+        "F7",
+        "F9",
+        "F12",
+        "F12a",
+        "F12b",
+        "F13"
+      ],
+      "kills": [
+        "K2",
+        "K3",
+        "K4",
+        "K5",
+        "K6",
+        "K7",
+        "K9",
+        "K10"
+      ],
+      "note": "Stage B is the non-negativity-impossibility fan-out stage. The retrodiction spine (F1..F5,F7,F9,F13), K2/K3/K5/K6/K9 (Stage A) and the F12 family / K4/K7/K10 belong to other stages."
+    },
+    "preconditions": [
+      "P-self-cert",
+      "P-frame"
+    ]
+  },
+  "semantics_pinned_anchor": {
+    "F10": "(K_G,kappa_c,kappa_s,kappa_int)=(2/9,1/3,0,-1/9); kappa_int<0",
+    "F11": "(K_G,kappa_c,kappa_s,kappa_int)=(0,-1/9,-1/9,2/9); kappa_int>0",
+    "K_G": "K_G = -det(H_b)/q^2",
+    "det_Hb": "det(H_b) = Delta_c + Delta_s + Delta_m",
+    "kappa_X": "kappa_X = -Delta_X/q^2",
+    "keystone_F8": "q=14, det(H_b)=12, (K_G,kappa_c,kappa_s,kappa_int)=(-3/49,-1/49,1/49,-3/49); K_G<0",
+    "sign_law": "q^2 > 0 for every regular jet (q != 0) => sign(K_G) = -sign(det(H_b))",
+    "sphere_F6": "K_G=+1 (positive witness)"
+  },
+  "stage": "stage_b",
+  "stage_title": "non-negativity impossibility (fan-out stage; parallel with C/D/E)",
+  "status_move_rules": {
+    "CL-c3": {
+      "R1_disposition": "CL-c3 is an IMPOSSIBILITY / EXISTENCE claim. R1 is logic-forced (not discretionary): a verified finite exact-Q both-sign witness earns DEMONSTRATED [PROVEN]. The single negative witness K_G(F8)=-3/49<0 refutes every non-negative representor.",
+      "kill_on_fail": "K1 (sign-blindness, MANDATORY) -- routes the FAIL to Will, chain preserved verbatim.",
+      "ledger_statement": "no non-negative scalar can represent signed K_G",
+      "on_fail": {
+        "default": "any FAIL -> HALT, preserve chain, route to Will; no move.",
+        "if_P1_fails": "K1 (sign-blindness) FIRES on the true signed object -> the object itself is sign-blind/broken -> REFUTED candidate; HALT, route to Will.",
+        "if_P2_fails": "a sign-blind proxy did NOT fire K1 (a non-negative proxy wrongly admitted as representing signed K_G) -> the K1 control is not exercised -> HALT, route to Will.",
+        "if_P3_or_P7_fails": "the both-sign witnesses are not established exact-Q -> the impossibility warrant is unfounded -> HALT, route to Will."
+      },
+      "on_pass": {
+        "condition": "P1 AND P2 AND P3 AND P7 all PASS -- the true signed object passes K1 (P1), every sign-blind proxy fires K1 (P2), the negative+positive witnesses are verified exact-Q (P3/P7).",
+        "move_to": "DEMONSTRATED",
+        "warrant_label": "[PROVEN]",
+        "warrant_scope": "logic-forced [PROVEN] for the impossibility/existence claim: a verified finite exact-Q negative witness (K_G(F8)=-3/49<0) suffices to refute every non-negative representor, with the positive witness (F6 K_G=+1) confirming genuine two-signedness. K1 silent on the true object, fired by all sign-blind proxies. Eval-tier; no substrate promotion; canonical only on Will's sign-off."
+      },
+      "universal_claim": false
+    },
+    "CL-c3b": {
+      "R1_disposition": "CL-c3b is a UNIVERSAL claim. DEMONSTRATED REQUIRES the symbolic identity over Q[g,H] (the numerator det(H_b) is indefinite as a polynomial); finite witnesses alone are necessary but NOT sufficient. Do NOT downgrade to a finite-only warrant -- if the symbolic argument is not established, HALT-and-surface the gap.",
+      "kill_on_fail": "no armed kill maps to CL-c3b in this stage's scope; a FAIL HALTs and routes to Will (R1 gap surfaced).",
+      "ledger_statement": "numerator indefinite => K_G attains both signs (structural)",
+      "on_fail": {
+        "default": "any FAIL -> HALT, preserve chain, route to Will; no move.",
+        "if_P4_fails": "the symbolic identity over Q[g,H] is NOT established (numerator not shown indefinite, or the t-polynomial is constant/wrong) -> HALT (do NOT downgrade to a finite-only warrant); route to Will -- this is the R1 gap, surfaced.",
+        "if_P8_fails": "the q^2>0 regular-jet premise fails (a singular jet not refused) -> the structural argument's domain is unsound -> HALT, route to Will."
+      },
+      "on_pass": {
+        "condition": "P4 PASS (the SYMBOLIC indefiniteness over Q[g,H]: det(H_b) specialises to -t along a regular family, K_G(t)=+t nonconstant, both signs) AND P8 PASS (the q^2>0 regular-jet premise underwritten by K11 refusal) -- with P3/P7 the finite both-sign corroboration.",
+        "move_to": "DEMONSTRATED",
+        "warrant_label": "[PROVEN]",
+        "warrant_scope": "universal warrant: the numerator det(H_b) is proven INDEFINITE over Q[g,H] symbolically (P4), so with K_G=-det(H_b)/q^2 and q^2>0 on every regular jet (q!=0, P8/K11), K_G attains both signs for infinitely many regular jets -- not finite-only. Corroborated by the frozen finite witnesses F6(+1)/F8(-3/49). Eval-tier; canonical only on Will's sign-off."
+      },
+      "universal_claim": true
+    },
+    "CL-c3c-i": {
+      "R1_disposition": "CL-c3c-i is an EXACT Q linear-algebra fact (rank 1 => nullity 2), proven exactly -- not a finite sample. DEMONSTRATED on the exact rank-nullity computation plus two explicit independent kernel vectors.",
+      "kill_on_fail": "no armed kill maps to CL-c3c-i; a FAIL HALTs and routes to Will.",
+      "ledger_statement": "Sigma:Q^3->Q has 2-dim kernel",
+      "on_fail": {
+        "default": "any FAIL -> HALT, preserve chain, route to Will; no move.",
+        "if_P5_fails": "the rank/nullity computation or kernel witnesses fail -> the 2-dim kernel claim is unfounded -> HALT, route to Will."
+      },
+      "on_pass": {
+        "condition": "P5 PASS (rank([[1,1,1]])==1 over Q; nullity==2 by rank-nullity; Sigma(1,-1,0)==0 and Sigma(1,0,-1)==0; the two vectors linearly independent).",
+        "move_to": "DEMONSTRATED",
+        "warrant_label": "[PROVEN]",
+        "warrant_scope": "exact-Q linear-algebra proof: Sigma=[[1,1,1]] has rank 1, so dim(ker Sigma)=3-1=2 by rank-nullity; (1,-1,0),(1,0,-1) are independent and each in ker Sigma. Exact; canonical only on Will's sign-off."
+      },
+      "universal_claim": true
+    },
+    "CL-c6": {
+      "R1_disposition": "CL-c6 is graded by finite both-sign witnesses on the frozen family (F10 kappa_int<0, F11 kappa_int>0). Warrant scope: the frozen family (finite, exact Q), NOT a symbolic-over-Q[g,H] universal.",
+      "kill_on_fail": "no armed kill maps to CL-c6 directly; a FAIL HALTs and routes to Will.",
+      "ledger_statement": "channel tuple non-collapsible on the family (both signs of kappa_int)",
+      "on_fail": {
+        "default": "any FAIL -> HALT, preserve chain, route to Will; no move.",
+        "if_P6_fails": "kappa_int fails to attain both signs on the family (or paths disagree) -> the non-collapsibility witness is broken -> HALT, route to Will."
+      },
+      "on_pass": {
+        "condition": "P6 PASS (F10 kappa_int=-1/9<0 AND F11 kappa_int=+2/9>0 on Path A/B'/C, exact Q) -- with P7 the both-sign-witness corroboration.",
+        "move_to": "DEMONSTRATED",
+        "warrant_scope": "the channel tuple is non-collapsible on the frozen family: kappa_int attains both signs (F10 -1/9, F11 +2/9), agreeing across Path A / Path B' / Path C. Warrant scope: the frozen family (finite, exact Q). Eval-tier; canonical only on Will's sign-off."
+      },
+      "universal_claim": false
+    },
+    "halt_rule": "On ANY prediction FAIL: HALT. Preserve the chain verbatim. Do NOT fix, redesign, soften, or widen. Write what is held and route to Will. No status move is proposed for a claim whose gating predictions did not all PASS.",
+    "kills": {
+      "K1": {
+        "claim": "CL-c3 (sign-blindness, MANDATORY, refute)",
+        "definition": "on F8: K_G>=0, or K_G!=sum(channels), or kappa_int absent, or Delta_m dropped.",
+        "fires_on": "P1 FAIL (the TRUE signed object trips a K1 sub-condition) OR P2 FAIL (a sign-blind proxy fails to fire when it must)",
+        "note": "MANDATORY meta-thesis kill for CL-c3; a FAIL HALTs the stage and routes to Will, chain preserved verbatim."
+      },
+      "K11": {
+        "claim": "refuse-not-lie",
+        "fires_on": "P8 FAIL (q=0/cone-apex/g_i=0 returning 0/NaN/placeholder instead of typed REFUSED)"
+      },
+      "K8": {
+        "claim": "type gate",
+        "fires_on": "P9 FAIL (radical/float instead of Fraction)"
+      }
+    },
+    "preconditions": {
+      "P-frame": {
+        "checked_by": "P10",
+        "on_fail": "channel fixture rejected; run VOID"
+      },
+      "P-self-cert": {
+        "checked_by": "P10",
+        "on_fail": "run VOID"
+      }
+    },
+    "scope_note": "Stage B grades CL-c3, CL-c3b, CL-c3c-i, CL-c6 and arms K1 (MANDATORY), K8, K11 with P-self-cert/P-frame. CL-c3 is impossibility/existence (R1 finite-witness [PROVEN]); CL-c3b is UNIVERSAL (R1 symbolic-over-Q[g,H] required, no finite-only downgrade); CL-c3c-i is exact-Q linear algebra (rank-nullity); CL-c6 is finite both-sign witnesses on the family. K2/K3/K4/K5/K6/K7/K9/K10 and the F12 family belong to other stages. No substrate promotion: eval-tier only; nothing canonical until Will signs off."
+  },
+  "two_run_byte_stability_note": "The battery is run TWICE; the records jsonl from both runs MUST be byte-identical (sorted-keys serialisation, exact-Q frac:n/d strings, no float/time/random).",
+  "version": "stage_b_prereg_v1"
+}

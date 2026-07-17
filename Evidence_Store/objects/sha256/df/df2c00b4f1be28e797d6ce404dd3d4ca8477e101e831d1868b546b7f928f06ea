@@ -1,0 +1,167 @@
+#!/usr/bin/env python3
+"""
+verify_subnormal_cbrt_lattice.py
+Independent check of the subnormal cbrt round-trip residual integer set.
+
+Usage:
+    PYTHONPATH=src python scratch/verify_subnormal_cbrt_lattice.py
+
+Does NOT claim to reproduce the exact 5.5 M point run. It performs a dense,
+deterministic sweep over a large number of subnormal mantissas (configurable)
+and reports:
+- Observed integer set for (np.cbrt + R*R*R)
+- Percentage outside {-4..+1}
+- Same for a high-dps mpmath "correctly-rounded" reference path (rounded back to float64)
+- Effect of cubing association (left-fold vs **3) for the numpy path.
+
+This is research-grade scratch tooling only. No src/ changes.
+"""
+
+from __future__ import annotations
+
+import math
+import sys
+from pathlib import Path
+from typing import Set, Tuple
+
+import numpy as np
+
+try:
+    import mpmath
+    HAS_MPMATH = True
+except ImportError:
+    HAS_MPMATH = False
+    print("WARNING: mpmath not available — correctly-rounded reference path will be skipped.", file=sys.stderr)
+
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "src"))
+
+# Fixed subnormal ulp
+ULP_SUB = 2.0 ** -1074
+
+def subnormal_grid(n_points: int) -> np.ndarray:
+    """
+    Generate n_points positive subnormals, evenly spaced in their integer mantissa
+    representation (1 .. 2^52-1), mapped back to float64.
+    This is dense and reproducible; not uniform in log space.
+    """
+    max_mant = (1 << 52) - 1
+    # Take every k-th mantissa to hit roughly n_points
+    step = max(1, max_mant // (n_points - 1))
+    mantissas = np.arange(1, max_mant + 1, step, dtype=np.int64)
+    if len(mantissas) < n_points:
+        # pad if needed
+        mantissas = np.unique(np.concatenate([mantissas, np.linspace(1, max_mant, n_points, dtype=np.int64)]))
+    xs = mantissas.astype(np.float64) * ULP_SUB
+    # Ensure they are truly subnormal
+    assert np.all(xs > 0.0)
+    assert np.all(xs < 2.0 ** -1022)
+    return xs
+
+
+def numpy_cbrt_roundtrip_residuals(xs: np.ndarray, use_power: bool = False) -> np.ndarray:
+    """
+    R = np.cbrt(x)  (the actual numpy implementation)
+    if use_power:
+        V = R ** 3
+    else:
+        V = ((R * R) * R)   # left-associated, common in c2 chains
+    residual = V - x
+    normalized = round(residual / ULP_SUB)
+    """
+    R = np.cbrt(xs)
+    if use_power:
+        V = R ** 3
+    else:
+        V = (R * R) * R
+    residual = V - xs
+    normalized = np.round(residual / ULP_SUB).astype(np.int64)
+    return normalized
+
+
+def mpmath_cbrt_roundtrip_residuals(xs: np.ndarray, dps: int = 60) -> np.ndarray:
+    """
+    Reference path: use mpmath.cbrt at high precision, round R to float64 (RN-even),
+    then cube in float64 with left-association.
+    This approximates a "correctly-rounded cbrt" followed by float64 cubing.
+    """
+    if not HAS_MPMATH:
+        return np.array([], dtype=np.int64)
+
+    mpmath.mp.dps = dps
+    results = []
+    for x in xs:
+        # High-precision real cube root
+        r_real = mpmath.cbrt(mpmath.mpf(x))
+        # Round to nearest float64 (mpmath.nstr + float() is not guaranteed RN-even;
+        # use explicit construction via hex or ldexp for safety, but for audit we
+        # use the standard way and accept it as "high-precision reference rounded").
+        R = float(r_real)  # Python float() from mpmath high prec is effectively correctly rounded for this purpose at dps=60
+        V = (R * R) * R
+        residual = V - x
+        norm = round(residual / ULP_SUB)
+        results.append(norm)
+    return np.array(results, dtype=np.int64)
+
+
+def summarize_set(name: str, normalized: np.ndarray) -> Tuple[Set[int], float]:
+    unique = set(int(v) for v in normalized)
+    outside = np.sum((normalized < -4) | (normalized > 1))
+    pct_outside = 100.0 * outside / len(normalized)
+    print(f"\n{name}:")
+    print(f"  Observed integer set: sorted({sorted(unique)})")
+    print(f"  n_samples: {len(normalized)}")
+    print(f"  points outside {{-4..+1}}: {outside} ({pct_outside:.4f}%)")
+    return unique, pct_outside
+
+
+def main(n_points: int = 200_000) -> None:
+    print("=" * 80)
+    print("Independent verification: subnormal cbrt round-trip integer lattice")
+    print(f"Target points: {n_points:,}")
+    print("Environment:", sys.version.split()[0], "numpy", np.__version__)
+    if HAS_MPMATH:
+        print("mpmath available")
+    print("=" * 80)
+
+    xs = subnormal_grid(n_points)
+    print(f"\nGenerated {len(xs):,} positive subnormals (mantissa-strided).")
+    print(f"Range: {xs[0]:.3e} .. {xs[-1]:.3e}")
+
+    # Numpy path — left-associated (most common c2 style)
+    norm_left = numpy_cbrt_roundtrip_residuals(xs, use_power=False)
+    set_left, pct_left = summarize_set("numpy cbrt + ((R*R)*R)  [left-fold]", norm_left)
+
+    # Numpy path — **3
+    norm_pow = numpy_cbrt_roundtrip_residuals(xs, use_power=True)
+    set_pow, pct_pow = summarize_set("numpy cbrt + (R ** 3)", norm_pow)
+
+    # High-precision reference (if available)
+    if HAS_MPMATH:
+        norm_ref = mpmath_cbrt_roundtrip_residuals(xs)
+        set_ref, pct_ref = summarize_set("mpmath cbrt (dps=60) + float64(R) + ((R*R)*R)", norm_ref)
+    else:
+        set_ref = set()
+        pct_ref = float("nan")
+
+    print("\n" + "=" * 80)
+    print("Summary comparison")
+    print(f"  numpy left-fold set: {sorted(set_left)}   outliers: {pct_left:.4f}%")
+    print(f"  numpy **3 set:       {sorted(set_pow)}   outliers: {pct_pow:.4f}%")
+    if HAS_MPMATH:
+        print(f"  mpmath-ref set:      {sorted(set_ref)}   outliers: {pct_ref:.4f}%")
+    print("=" * 80)
+
+    # Exit code for scripting: 0 if the bulk claim directionally matches user's report
+    # (we do not enforce exact 1.3 % here; this is a sanity check on direction)
+    if (set_left == {-4, -3, -2, -1, 0, 1} or len(set_left) <= 6) and pct_left < 5.0:
+        print("\nDirectionally consistent with bulk {-4..+1} + small tails under numpy cbrt.")
+    else:
+        print("\nObserved more structure / larger tails than a pure {-4..+1} claim.")
+
+
+if __name__ == "__main__":
+    n = 200_000
+    if len(sys.argv) > 1:
+        n = int(sys.argv[1])
+    main(n_points=n)

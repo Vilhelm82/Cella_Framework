@@ -1,0 +1,159 @@
+# Dual-Arm Behavior Verification — Preregistry
+
+> **Status: FROZEN 2026-05-17.** Per `CAMPAIGN_DISCIPLINE.md` rule 1.1, this preregistry is now binding. Versioned amendments only; no quiet rewrites. Outcomes will be recorded in `closeout.md` alongside this file.
+
+## 1. Purpose
+
+The dual-arm probe synthesis (`dual_arm_probe_offset_comb_findings.md`) and the principles doc (`Build_Docs/Architecture/DUAL_ARM_PROBE_PRINCIPLES.md`) assert five operational conditions for ARM-N to be a genuinely independent reader. Verification in 2026-05-17 surfaced that:
+
+1. The arms framework lives only in `scratch/run_foldreadback_probe0_v10_active_dualarm.py` — not in V4 eval-layer code.
+2. On the only fixture where arms run (SR), path separation is **structurally zero by construction** (`arm_n_operand = arm_w_operand` literal at `v10:702-703`).
+3. Of the 5 operational conditions, only **#5 (ARM-W-derived activation)** has hard observable enforcement; conditions #1–#4 and #6 are partial-or-extrapolated.
+
+This preregistry defines a minimal verification suite that exercises each of the 5 conditions in code, against constructed scenarios, to produce empirical evidence for or against each. Outcomes will inform versioned corrections to the synthesis and principles docs.
+
+This is **behavior verification, not new science.** Each test asks: "does the dual-arm code do what the synthesis claims it does, on a scenario that actually exercises the claim?" The point is honest confirmation, not framework extension.
+
+## 2. Scope
+
+- **In scope:** the v10 active dual-arm probe code (`scratch/run_foldreadback_probe0_v10_active_dualarm.py`) and its dependencies (`run_foldreadback_probe0_v7.py`, `run_foldreadback_probe0_v9.py`, `foldreadback_probe0_v8_outcomelaw.py`).
+- **Out of scope:** the 5 eval-layer offset-comb reports' code (different vocabulary; verification of those reports has already been completed and was honest within scope).
+- **Out of scope:** designing new arm functionals, new instrument laws, or new fixtures beyond what's necessary for verification.
+- **Out of scope:** Phase 3B or any (α−1) campaign integration — wait until verification completes.
+
+## 3. Tests (FROZEN at freeze-time)
+
+Five tests, one per operational condition. Each test names: the claim, the scenario, the measurement, the predicted result, and the pass criterion.
+
+### Test V1 — Path separation is non-trivially computable
+
+**Claim:** `sr_path_separation_for_record` correctly classifies non-zero operand separation as `"nonzero_operand_offset"`.
+
+**Scenario:** Construct a synthetic record where `arm_w_operand` and `arm_n_operand` are set to distinct float64 values (e.g., `arm_w_operand = 0.5`, `arm_n_operand = nextafter(0.5, 1.0)`). Call `sr_path_separation_for_record` directly with this constructed input.
+
+**Measurement:** The returned `separation_class`, `offset_level`, and `operand_delta`.
+
+**Predicted result:** `separation_class = "nonzero_operand_offset"`, `offset_level != 0.0`, `operand_delta != 0.0`.
+
+**Pass criterion:** Predicted result observed exactly.
+
+**What this test does NOT prove:** It does not prove that the v10 SR fixture *as currently coded* will ever produce non-zero separation. The current SR fixture has `arm_n_operand = arm_w_operand` hardcoded — this test confirms the *plumbing* works on a synthetic input, not the *fixture* exercises it.
+
+### Test V2 — ARM-N validity is decided by its own predicate, not by ARM-W's output
+
+**Claim:** ARM-N's `valid` field depends only on ARM-N's own data (enough_points + any nondegenerate ARM-N functional), not on ARM-W's verdict.
+
+**Scenario:** Construct two cases:
+- Case A: ARM-W is invalid, ARM-N functionals are all nondegenerate.
+- Case B: ARM-W is valid, ARM-N functionals are all degenerate.
+
+**Measurement:** ARM-N's returned `valid` field in each case.
+
+**Predicted result:**
+- Case A: `armN.valid = True` (ARM-N's own predicate is satisfied; ARM-W's invalidity is irrelevant once activation has fired).
+- Case B: `armN.valid = False`.
+
+**Pass criterion:** Both predicted results observed. If Case A returns `armN.valid = False` despite ARM-N's own predicate being satisfied, that indicates ARM-N's validity is contaminated by ARM-W's verdict — a violation of "own instrument law."
+
+**Open caveat:** ARM-N is only activated when ARM-W declares falloff. This test assumes activation has already fired. Test V5 (below) covers the activation chain.
+
+### Test V3 — Diagnostic route detection: design and measurement
+
+**Claim:** The arms framework can distinguish diagnostic routes (rounded-base transcendentals like `pow(math.e, math.log(q_direct))`) from production routes.
+
+**Scenario:** The arms code has no current notion of route_kind. This test is **dual-purpose**: (a) confirm absence in current code (negative finding), (b) propose what a diagnostic-detection check would look like.
+
+**Measurement (a):** Code-inspection: grep `route_kind`, `diagnostic`, `rounded_base` over the v10 scratch files. Expected: zero matches.
+
+**Measurement (b):** Identify the smallest code change that would make diagnostic-route detection observable. Likely candidate: a `route_kind` field added to ARM-N's `inference` dict, populated by the route-bank's existing `_route_kind` classifier.
+
+**Predicted result (a):** Zero matches — the diagnostic distinction is absent from arms code.
+
+**Pass criterion:** (a) confirms the absence; (b) produces a one-paragraph design sketch of the smallest plausible addition.
+
+**Note:** This test does NOT add the feature. It confirms what's missing and scopes what would be needed.
+
+### Test V4 — Pre-declared selection: literal vs runtime
+
+**Claim:** `ARM_W_FUNCS` and `ARM_N_FUNCS` are pre-declared (frozen at source) and not modified at runtime.
+
+**Scenario:** Inspect imports, modifications, and references to `ARM_W_FUNCS` and `ARM_N_FUNCS` across the v10 scratch tree. Run a fresh invocation of the probe and confirm the lists at call-time match the source-declared lists.
+
+**Measurement:** Source-declared values vs runtime values, and absence of any `.append`/`.remove`/`=` reassignment in the codepath.
+
+**Predicted result:** Match exactly. Lists are module-level constants, not modified.
+
+**Pass criterion:** Exact match; no runtime modification path exists.
+
+**What this test does NOT prove:** It does not prove the pre-declaration is *enforced* — only that it's *honored by current code*. A future refactor could violate this without raising. A defensive assertion in the runner would make pre-declaration enforced rather than honored.
+
+### Test V5 — ARM-W-derived activation is the only activation path
+
+**Claim:** ARM-N activates if and only if ARM-W declared `falloff_state = "below_floor"` in an adjacent record (within `DEFAULT_GUARD` distance).
+
+**Scenario:** Two cases:
+- Case A: Run probe with synthetic data where ARM-W returns `falloff_state = "readable"` everywhere. Confirm ARM-N never activates.
+- Case B: Run probe with synthetic data where ARM-W returns `falloff_state = "below_floor"` at a specific index. Confirm ARM-N activates within the guard window around that index.
+
+**Measurement:** Per-record ARM-N `active` field.
+
+**Predicted result:**
+- Case A: `armN.active = False` everywhere.
+- Case B: `armN.active = True` within `[index − guard, index + guard]`; `False` outside.
+
+**Pass criterion:** Both predicted results observed.
+
+## 4. Implementation form
+
+Tests V1, V2, V4, V5 are pytest-shaped — they can live as `tests/test_dual_arm_v10_behavior.py` invoking the v10 scratch functions directly. Test V3 is partly code-inspection (`grep`) and partly design-sketch (markdown).
+
+**Proposed file location:**
+- `tests/test_dual_arm_v10_behavior.py` for V1, V2, V4, V5.
+- `Build_Docs/Reports/dual_arm_behavior_verification/test_v3_diagnostic_route_audit.md` for V3 (code-inspection findings + design sketch).
+
+## 5. Outcomes table (frozen at freeze-time)
+
+Four possible outcomes per test:
+
+- `passes_as_predicted` — claim verified.
+- `fails_against_predicted` — claim disconfirmed; codebase contradicts synthesis-doc claim.
+- `inconclusive` — test scenario doesn't actually exercise the claim.
+- `not_applicable` — the claim was not testable as written (e.g., conditional on feature that's absent).
+
+Test V3 has its own outcomes specific to its dual-purpose nature.
+
+## 6. Predicted aggregate result
+
+Per the verification findings, expected outcome distribution:
+
+| Test | Predicted outcome | Confidence |
+|---|---|---|
+| V1 (path separation plumbing) | `passes_as_predicted` | High — synthetic input bypasses the SR-fixture hardcoded copy |
+| V2 (own instrument law) | `passes_as_predicted` | Medium — code inspection suggests yes, but cross-coupling possible |
+| V3 (diagnostic detection) | `not_applicable` for (a); design sketch for (b) | High |
+| V4 (pre-declared selection) | `passes_as_predicted` | High — source inspection shows literals |
+| V5 (ARM-W-derived activation) | `passes_as_predicted` | High — already enforced per D2 verification |
+
+**If V1–V5 land as predicted**, the synthesis doc's claims are *correct on the substance* but *misleading on scope* — the framework's machinery works as described, but the only fixture that exercises it has trivial path separation, so the most-emphasized condition (#1) has never been observed in production. Correction direction: narrow claims to "framework correctly handles zero-separation as underpowered (negative control); non-zero-separation case has been mechanically demonstrated only on synthetic input, not on the SR or any other operational fixture."
+
+**If any test fails**, the synthesis doc's claims are contradicted by code behavior — a stronger correction is required.
+
+## 7. Closeout criteria
+
+Verification closes when:
+1. Each of V1–V5 has produced one of the four outcomes (V3 has its own).
+2. Aggregate results recorded in `Build_Docs/Reports/dual_arm_behavior_verification/closeout.md`.
+3. Versioned amendments to `dual_arm_probe_offset_comb_findings.md` and `DUAL_ARM_PROBE_PRINCIPLES.md` drafted based on results.
+4. Phase 3B preregistry's "blocked on dual-arm" status reassessed: do the verification results unblock 3B, or do they reveal further dual-arm work needed before 3B can run?
+
+## 8. Not in scope
+
+- Designing new arm functionals.
+- Designing new fixtures with non-trivial path separation.
+- Promoting the dual-arm probe to V4 substrate.
+- Rewriting v10 to use eval-layer offset-comb routes.
+- Any (α−1) campaign work beyond noting Phase 3B's dependency status.
+
+---
+
+*Drafted 2026-05-17. Pre-registration draft pending user review. Freeze date TBD. Per Rule 1.1, versioned amendments only after freeze.*

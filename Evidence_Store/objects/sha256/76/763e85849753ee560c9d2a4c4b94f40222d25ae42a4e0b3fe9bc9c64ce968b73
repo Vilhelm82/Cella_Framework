@@ -1,0 +1,195 @@
+# Task 050 — V4 Substrate Layer Audit — Executive Summary
+
+**Audit date:** 2026-05-26
+**Auditor:** Claude Code (Opus 4.7, 1M context)
+**Repository:** `/home/william_lloydlt/projects/V4/Lloyd_Engine_V4`
+**Task spec:** `Build_Docs/Agent_tasks/codex_task050_substrate_layer_audit.md`
+
+This is a read-and-report audit. **No source files were modified, no tests were added, no architecture documents were modified.**
+
+---
+
+## What was audited
+
+| scope | count | paths |
+|---|---|---|
+| `src/lloyd_v4/` Python modules | 105 + `__init__.py` files | all of `core/`, `primitives/`, `projection/`, `metrology/`, `branch/`, `refinery/`, `history/`, `solver/`, `evals/` |
+| `scratch/` Python prototypes | 69 | all `.py` files under `scratch/` and `scratch/symbolic_analyzer/` |
+| Architecture documents read in full | 13 | `AXIOMS.md`, `SUBSTRATE_CONSTRUCTION.md`, `DESIGN_THESIS.md`, `PROTOCOL_CONTRACTS.md`, `PROVENANCE_MODEL.md`, `STATUS_CALCULUS.md`, `RESULT_TYPES.md`, `METROLOGY_PRINCIPLES.md`, `V3_REFERENCE_LEDGER.md`, `ROADMAP.md`, `LAYER_MANIFEST.md`, `LIVE_CAMPAIGNS_LEDGER.md`, `V4_GLOSSARY.md` |
+| Task summaries read | 4 | tasks 000–003 |
+| Ripgrep audits run | 6 | math/cmath/numpy.special/scipy/sympy/mpmath imports, math.* uses, hardcoded constants, lloyd_v3 references, hidden-guard-rail tokens, helper-function DRY candidates |
+
+---
+
+## Top-level findings (counts at the layer mapping spec uses)
+
+| layer (per task spec) | module count | LAYER_MANIFEST sub-layer | notes |
+|---|---|---|---|
+| L0 — Core substrate | 11 | `core` | clean; only `math.isnan`/`math.isinf` use; substrate-conformant |
+| L1 — Substrate primitives | 11 | `primitives` (10 primitives + `__init__`) | spec said "currently 2"; reality is 10. Substrate has grown substantially since the spec was written. |
+| L2 — Composition layer | 13 | `projection` (3), `metrology` (3), `branch` (3), `refinery` (4), `history` (2) | LAYER_MANIFEST.md subdivides L2 into 5 sub-layers; the task spec collapses these |
+| L3 — Consumer methods | 70+ | `solver` (1) + `evals/*` (~67) | bulk of the codebase |
+| L4+ — Application consumers | 0 | none | solver is the highest authoritative-pending consumer |
+| Unclear | 4 | documented | `slope_flow.py` (borderline L1/L2), `directional_alpha_probe.py` (L1-with-sibling-composition), `scratch/hardened_dual_arm_probe.py` (L3-in-scratch), `scratch/symbolic_analyzer/` (candidate L1+L2 split) |
+| Scratch (not-integrated) | 69 | n/a | grouped into 11 families |
+
+Detailed table: `module_layer_mapping.md`.
+
+---
+
+## Top-level findings (gaps and drift)
+
+**Parent-primitive gaps identified: 12.** Detailed in `parent_primitive_gaps.md`. Distribution by SUBSTRATE_CONSTRUCTION §5.1 failure mode:
+
+- **Mode 1 (primitive not atomic):** 4 gaps (GAP-003 ulp, GAP-005 K_G, GAP-006 four_form, GAP-007 sterbenz_boundary)
+- **Mode 2 (two operations share a name):** 4 gaps (GAP-009 L1 atomicity, GAP-010 symbolic analyzer split, GAP-011 lifecycle vs methodology, GAP-012 conditioning naming collision)
+- **Mode 3 (parent layer incomplete):** 5 gaps (GAP-001 sqrt, GAP-002 log, GAP-003 ulp also touches this, GAP-004 BACL grain, GAP-008 measured-constant)
+
+**Drift inventory: 4 severity-B items, 8 severity-Q items, 11 severity-I items.** Detailed in `drift_inventory.md`.
+
+The four blocking-severity items:
+1. **DRY-003** — 10+ duplicated ULP helpers across scratch + evals; subnormal handling diverges.
+2. **MIS-001** — `scratch/hardened_dual_arm_probe.py` is the production probe but lives in scratch.
+3. **AX11-001** — `math.sqrt` in 4 substrate primitive sites (Axiom 11 strict form).
+4. **AX11-002** — `math.log` in 5 substrate sites.
+
+**Hidden guard rails:** none in `src/` substrate (L0/L1/L2/L3); all matches are declared parameters (`Final`-typed module constants with documented provenance in `METROLOGY_PRINCIPLES.md` and per-phase preregistry comments). One scratch-level local `epsilon = 1e-14` in `blowup_exponent_v4_audit.py:100` (closed audit; logged as GUARD-001).
+
+**Axiom 10 (V3 reference rule) compliance:** clean. The only `lloyd_v3` mentions in `src/` are two explicit *non-use declarations* in `substrate_invariant_search_phase_e.py` (a comment block and a `"lv3_called": False` JSON field). No runtime V3 calls anywhere.
+
+**Axiom 11 (epistemic stance) strict-form violations:**
+- L1 substrate: `math.sqrt`, `math.log` used directly (AX11-001, AX11-002). These are exactly the items SUBSTRATE_CONSTRUCTION §7.1 names as the Axiom 11′ refinement criteria.
+- L3 evals: `math.pi`, `math.e`, `math.cos`, `math.sin`, `math.log2` — declared concessions per task spec line 117 ("`math` stdlib for basic arithmetic is currently permitted").
+- Scratch: 8 `mpmath` imports (AX11-003). All scratch; none on a transplant path.
+
+---
+
+## Recommended next three transplantation tasks
+
+Detailed reasoning in `transplantation_readiness.md`.
+
+### 1. Conditioning / ULP primitive (GAP-003)
+
+**Methodology citation:** `SUBSTRATE_CONSTRUCTION.md §9 step 1` explicitly names the conditioning primitive ("instrument geometry on the IEEE 754 float lattice") as the prerequisite for V3 transplants and most subsequent substrate work.
+
+**Capability spread:** VERY HIGH. Closes DRY-003 (10+ duplicated `ulp_*` helpers); unlocks GAP-004 (BACL grain), GAP-005 (K_G), GAP-006 (four_form), and the entire BACL/c2/Conjecture-C transplant chain.
+
+**Why first:** the substrate construction methodology document tells us so. Its absence forces every downstream transplant to depend on ad-hoc ULP arithmetic.
+
+### 2. Hardened dual-arm probe lift (GAP-011 / MIS-001)
+
+**Why second (and parallelisable with #1):** independent of GAP-001/002/003. The probe is production-operative per `LIVE_CAMPAIGNS_LEDGER` `hardened-dual-arm-probe` V1; the only debt is lifecycle. Self-contained transplant — no new substrate primitives needed.
+
+**Capability spread:** HIGH but localised. Closes an architectural debt; provides a worked example of the §3 methodology applied at the L3 instrument level.
+
+**Note:** LAYER_MANIFEST.md may need a new `probes/` sub-layer to host this. The lift forces the methodology question.
+
+### 3. Typed sqrt + typed log primitive bundle (GAP-001 + GAP-002)
+
+**Why third:** tightly coupled (both required for `typed_log_log_slope` and `directional_alpha_probe` to clear Axiom 11′); naturally lands together; depends on GAP-003 for shared conditioning primitive composition.
+
+**Capability spread:** VERY HIGH. Touches every Axiom-11-strict-form-violating substrate site (4 L1 primitives + 1 L2 module) and sets up the Axiom 11 → Axiom 11′ refinement transition per `SUBSTRATE_CONSTRUCTION.md §7.1`.
+
+**Note:** the substrate-native impl can call `math.sqrt` / `math.log` internally during construction (the IEEE-754-correct rounding is already characterised by BACL + Conjecture C); the gating work is wrapping these in typed envelopes with declared status families.
+
+---
+
+## Key risks discovered
+
+1. **The substrate's own L1 primitives currently violate Axiom 11 strict form.** `stratified_quadratic_roots.py:248`, `typed_log_log_slope.py:104-105,177`, `directional_alpha_probe.py:502,540-541,569`, `sweep_signature_probe.py:302,313`, `branch/slope_flow.py:244-245` all use `math.sqrt` / `math.log` directly. Per task spec line 117 this is a known concession; per Axiom 11 (strict reading from `AXIOMS.md`) it is forbidden. The substrate is mid-refinement on this axis — Axiom 11 → 11′ work is exactly the path the methodology describes.
+
+2. **The production dual-arm probe lives in scratch.** `scratch/hardened_dual_arm_probe.py` is the operative instrument per `LIVE_CAMPAIGNS_LEDGER`, but architecturally it is not-integrated. Anyone reading `src/lloyd_v4/` will not find it; LAYER_MANIFEST.md has no slot for it.
+
+3. **K_G is an eval-layer fallback explicitly documented as "not substrate-derived."** `substrate_invariant_search_phase_e.py:443` writes `"substrate_derivation_status": "not_substrate_derived_path_b_fallback"`. K_G remains a Path-B-Goldman-2005 import in eval code while the substrate-invariant-search Gate 2 stays open. This is honest but loud; downstream consumers should know they are operating on a Path-B result.
+
+4. **ULP subnormal handling diverges across 10+ scratch implementations.** `unified_ulp` (bacl_subnormal_audit.py), `_ulp` (c2_lattice_substrate_derivation.py), and `ulp_f64` (bacl_invariant_audit.py) handle subnormals differently. A typed primitive transplant (GAP-003) MUST audit these against each other before committing a single canonical form.
+
+5. **L1 atomicity is in tension with LAYER_MANIFEST.** The task spec calls L1 "atomic"; LAYER_MANIFEST permits sibling composition within `primitives` (e.g., `directional_alpha_probe` calls `typed_finite_difference`). Resolving this is a methodology decision, not a substrate change. **Recommend resolving GAP-009 before Transplant 3 begins** — it affects which primitives end up at which layer.
+
+---
+
+## Deviations or surprises encountered
+
+### Deviation 1: Task spec / repository-state divergence
+
+The task spec was written from a perspective where "Tasks 000–003 are complete (core M0 substrate, ProjectiveRatio, StratifiedQuadraticRoots, ProjectionResultV4)" and "various scratch prototypes exist for in-flight work (matched-filter primitives, symbolic cancellation analyzer, burden sensor)." Repository reality at audit time: Tasks 000–036+ are complete, the substrate has full L0/L1/L1.5/L2 + partial L3, and there are 67 eval scripts plus 69 scratch prototypes.
+
+The audit was conducted against the **actual repository state**, not the task spec's frame. The layering definitions in the task spec (L0/L1/L2/L3/L4+) are self-contained and applicable; the project's own `LAYER_MANIFEST.md` subdivides L2 into projection/metrology/branch/refinery/history, which is captured in the `module_layer_mapping.md` notes column.
+
+This deviation does not affect audit honesty; it does mean the audit is more *load-bearing* than the spec implies, because the "first real transplantation work" framing in the spec is actually the *first transplantation under a now-mature substrate*. The transplantation queue ordering (`transplantation_readiness.md`) reflects the actual state.
+
+### Deviation 2: Repository path
+
+Task spec says `/mnt/fast/Lloyd_Engine_V4`; audit was done in `/home/william_lloydlt/projects/V4/Lloyd_Engine_V4`. Substantively identical work.
+
+### Deviation 3: SUBSTRATE_CONSTRUCTION.md was placed mid-session
+
+The methodology doc was not in `Build_Docs/Architecture/` at the start of the audit; the user dropped it in after the discrepancy was flagged. The audit proceeded with the document available.
+
+### Surprise 1: The methodology document's `§9 step 1` directly identifies the audit's #1 recommendation
+
+`SUBSTRATE_CONSTRUCTION.md §9` step 1 names the conditioning primitive (instrument geometry on IEEE 754 float lattice) as the prerequisite for V3 transplants. The audit independently arrived at GAP-003 (ulp / conditioning) as Transplant 1 via the §5.1 / §6 capability-spread analysis. **The methodology document and the empirical audit converge on the same first transplant.**
+
+### Surprise 2: The "conditioning" name is overloaded
+
+`src/lloyd_v4/core/conditioning.py` provides the typed `Conditioning` *carrier* (a dataclass with status + diagnostic). `SUBSTRATE_CONSTRUCTION.md §9` refers to a conditioning *primitive* — the IEEE-754 lattice geometry primitive. These are two distinct things sharing the name "conditioning." Logged as GAP-012; should be disambiguated in `V4_GLOSSARY.md §13` ("Things commonly confused").
+
+### Surprise 3: Hidden-guard-rail discipline in `src/` is exemplary
+
+The ripgrep audits (`epsilon`, `tolerance`, `threshold`, `clamp_`, `safe_*`, `denominator_floor`, etc.) returned matches in `src/lloyd_v4/evals/` and `src/lloyd_v4/primitives/` that are **all declared parameters** — `Final`-typed module-level constants with documented provenance in `METROLOGY_PRINCIPLES.md` and per-phase preregistry comments. The substrate L0-L3 is clean of hidden guard rails. The only scratch-level concern is one `epsilon = 1e-14` in a closed audit (`blowup_exponent_v4_audit.py:100`).
+
+### Surprise 4: Axiom 10 is *over*-complied with
+
+The only `lloyd_v3` / `lv3_*` mentions in `src/` are explicit non-use declarations. The compliance discipline (CLAUDE.md §5) has bled into eval-layer documentation; this is the right direction but logged here so the methodology team sees it.
+
+### Surprise 5: `evals/__init__.py` has its docstring written twice
+
+Cosmetic, but the kind of artefact that suggests the file was edited carelessly at some point. Logged as DRY-009.
+
+### Surprise 6: The substrate is genuinely substantial
+
+The task spec's "Tasks 000-003 complete" framing made the audit sound like a small-state inspection. Reality: V4 has 11 L1 primitives, full L2 across 5 sub-layers, and a 67-module eval campaign. The audit therefore reads more like a hygiene inspection of a maturing engine than a foundational layering check. The dissection-gate work ahead is *concentrated* (math.sqrt / math.log / ulp in a few load-bearing primitives) rather than *systemic*.
+
+---
+
+## Acceptance criteria self-check (per task spec §Acceptance Criteria)
+
+1. ✅ Required build docs read before code analysis. (SUBSTRATE_CONSTRUCTION.md placed mid-session; read upon availability.)
+2. ✅ Every Python module under `src/lloyd_v4/` accounted for in `module_layer_mapping.md`.
+3. ✅ Every scratch prototype accounted for in `module_layer_mapping.md`, flagged `not_integrated`.
+4. ✅ Each module's layer placement has explicit evidence (the `evidence` column or grouped purpose).
+5. ✅ Every L2+ module has its parent primitives identified; gaps flagged in `parent_primitive_gaps.md`.
+6. ✅ Each gap entry includes a failure-mode classification per `SUBSTRATE_CONSTRUCTION.md §5.1`.
+7. ✅ `drift_inventory.md` enumerates DRY, misplaced, composition, hidden guard rails, axiom violations.
+8. ✅ Every hidden-guard-rail ripgrep match is categorised (declared parameter or violation) in `drift_inventory.md §D`.
+9. ✅ `transplantation_readiness.md` recommends an ordered list of first three transplants with capability-spread reasoning.
+10. ✅ Executive summary honest about uncertainty (deviations §, unclear classifications §, risks §).
+11. ✅ No source files modified.
+12. ✅ No new tests added.
+13. ✅ No architecture documents modified.
+14. ✅ Five reports present under `Build_Docs/Reports/task050/`: this file + `module_layer_mapping.md` + `parent_primitive_gaps.md` + `drift_inventory.md` + `transplantation_readiness.md`.
+
+---
+
+## Files produced
+
+```
+Build_Docs/Reports/task050/
+├── task050_summary.md              (this file)
+├── module_layer_mapping.md         (per-module layer placement, grouped)
+├── parent_primitive_gaps.md        (12 GAPs, each with §5.1 failure mode)
+├── drift_inventory.md              (DRY / misplaced / guard / Axiom 10/11)
+└── transplantation_readiness.md    (dissection-gate per prototype + first-three ordering)
+```
+
+---
+
+## What this audit does not do (per Non-Goals)
+
+- Does **not** propose specific API designs for missing primitives.
+- Does **not** draft pre-regs for the recommended transplantation tasks.
+- Does **not** run pytest or attempt fixes.
+- Does **not** modify, delete, or refactor any module.
+- Does **not** revise `SUBSTRATE_CONSTRUCTION.md`, `LAYER_MANIFEST.md`, `AXIOMS.md`, or any architecture document — though the audit flags two methodology questions (GAP-009 L1 atomicity policy, GAP-012 conditioning naming collision) that the next architecture review should address.
+
+The successor task is the **first transplantation pre-reg** (GAP-003 conditioning / ULP primitive), which can use this audit's GAP-003 entry + DRY-003 site list + the LAYER_MANIFEST `primitives` declarations as its starting point.

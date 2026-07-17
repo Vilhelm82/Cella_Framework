@@ -1,0 +1,50 @@
+{
+  "rank": 39,
+  "lift": 27.33,
+  "count": 4,
+  "families": 1,
+  "a": {
+    "id": "OBJ:bar-m-epsilon",
+    "label": "bar m_epsilon",
+    "standard_term": "complementary elliptic modulus m' = 1 - m",
+    "nomenclature": "identical-to",
+    "symbols": [
+      "m_epsilon"
+    ]
+  },
+  "b": {
+    "id": "OBJ:c-epsilon-genus-1-curve",
+    "label": "C_epsilon (genus-1 curve)",
+    "standard_term": "epsilon-parametrized Legendre-type genus-1 curve y^2 = x(x-1)(x-m_epsilon)",
+    "nomenclature": "generalization-of",
+    "symbols": [
+      "c_epsilon"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-0090",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Complementary-interval quantities bar m_epsilon, c_epsilon a",
+      "summary": "\\bar m_\\epsilon=1-m_\\epsilon, \\qquad c_\\epsilon=\\frac{m_\\epsilon}{m_\\epsilon-n_\\epsilon}. \\tag{4.5} For the DBP parameters, \\frac{d_\\epsilon}{m_\\epsilon-n_\\epsilon} = \\bar m_\\epsilon. \\tag{4.6}",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md"
+    },
+    {
+      "uid": "U-0720",
+      "type": "theorem",
+      "claim_status": null,
+      "label": "Complete-interval K/Pi reduction of the anti-period",
+      "summary": "I_\\epsilon-I_\\epsilon^T = -t^7A_\\epsilon \\Bigg[ \\Pi(n_\\epsilon;m_\\epsilon) -\\frac{c_\\epsilon}{\\bar m_\\epsilon}K(m_\\epsilon) + \\frac{c_\\epsilon m_\\epsilon}{\\bar m_\\epsilon} \\Pi(\\bar m_\\epsilon;m_\\epsilon) \\Bigg]. \\tag{4.8",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md"
+    },
+    {
+      "uid": "U-1012",
+      "type": "formula",
+      "claim_status": null,
+      "label": "F_epsilon(b/u) under the complementary substitution",
+      "summary": "Under u=m_\\epsilon(r^2-1), F_\\epsilon(b/u) = A_\\epsilon c_\\epsilon \\frac{1-r^2}{1-\\bar m_\\epsilon r^2} -B_\\epsilon. \\tag{4.7}",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md"
+    }
+  ]
+}

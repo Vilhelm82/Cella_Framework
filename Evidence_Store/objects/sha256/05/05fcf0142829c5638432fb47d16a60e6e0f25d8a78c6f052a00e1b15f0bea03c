@@ -1,0 +1,360 @@
+{
+  "atlas_version": "phase_delta_v1",
+  "cheap_distinguishability_matrix": [
+    [
+      0,
+      3,
+      3,
+      5,
+      4,
+      4
+    ],
+    [
+      3,
+      0,
+      4,
+      6,
+      3,
+      3
+    ],
+    [
+      3,
+      4,
+      0,
+      1,
+      2,
+      2
+    ],
+    [
+      5,
+      6,
+      1,
+      0,
+      4,
+      4
+    ],
+    [
+      4,
+      3,
+      2,
+      4,
+      0,
+      3
+    ],
+    [
+      4,
+      3,
+      2,
+      4,
+      3,
+      0
+    ]
+  ],
+  "cheap_distinguishability_row_labels": [
+    "SR",
+    "Schwarzschild",
+    "pure_algebraic",
+    "cube_root",
+    "Morris_Thorne",
+    "Kerr_ISCO_a09"
+  ],
+  "cheap_fingerprints": [
+    {
+      "fingerprint": {
+        "slot_06_observability_ratio": {
+          "status": "defined",
+          "value": 0.29927
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "status": "defined",
+          "value": 0.70073
+        },
+        "slot_13r_critical_curvature_log10": {
+          "status": "defined",
+          "value": -15.9546
+        },
+        "slot_14r_conditioning_index_log10": {
+          "status": "defined",
+          "value": 0.0
+        },
+        "slot_15r_route_variation_signature": {
+          "status": "defined",
+          "value": 1.0
+        },
+        "slot_16d_channel_spread_log10": {
+          "status": "defined",
+          "value": 0.0
+        }
+      },
+      "fixture": "SR",
+      "variant": "A"
+    },
+    {
+      "fingerprint": {
+        "slot_06_observability_ratio": {
+          "status": "defined",
+          "value": 1.0
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "status": "defined",
+          "value": 0.182482
+        },
+        "slot_13r_critical_curvature_log10": {
+          "status": "defined",
+          "value": -15.9546
+        },
+        "slot_14r_conditioning_index_log10": {
+          "status": "defined",
+          "value": 0.0
+        },
+        "slot_15r_route_variation_signature": {
+          "status": "defined",
+          "value": 0.0
+        },
+        "slot_16d_channel_spread_log10": {
+          "status": "defined",
+          "value": 0.0
+        }
+      },
+      "fixture": "Schwarzschild",
+      "variant": "A"
+    },
+    {
+      "fingerprint": {
+        "slot_06_observability_ratio": {
+          "status": "defined",
+          "value": 0.49635
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "status": "defined",
+          "value": 0.50365
+        },
+        "slot_13r_critical_curvature_log10": {
+          "status": "defined",
+          "value": -16.2556
+        },
+        "slot_14r_conditioning_index_log10": {
+          "status": "unobservable",
+          "value": null
+        },
+        "slot_15r_route_variation_signature": {
+          "status": "defined",
+          "value": 1.0
+        },
+        "slot_16d_channel_spread_log10": {
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "fixture": "pure_algebraic",
+      "variant": "A"
+    },
+    {
+      "fingerprint": {
+        "slot_06_observability_ratio": {
+          "status": "defined",
+          "value": 0.49635
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "status": "defined",
+          "value": 0.50365
+        },
+        "slot_13r_critical_curvature_log10": {
+          "status": "defined",
+          "value": -15.6536
+        },
+        "slot_14r_conditioning_index_log10": {
+          "status": "defined",
+          "value": 0.301
+        },
+        "slot_15r_route_variation_signature": {
+          "status": "defined",
+          "value": 1.0
+        },
+        "slot_16d_channel_spread_log10": {
+          "status": "defined",
+          "value": 0.301
+        }
+      },
+      "fixture": "cube_root",
+      "variant": "A"
+    },
+    {
+      "fingerprint": {
+        "slot_06_observability_ratio": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_13r_critical_curvature_log10": {
+          "status": "defined",
+          "value": 1.4177
+        },
+        "slot_14r_conditioning_index_log10": {
+          "status": "defined",
+          "value": 8.0753
+        },
+        "slot_15r_route_variation_signature": {
+          "status": "defined",
+          "value": 0.0
+        },
+        "slot_16d_channel_spread_log10": {
+          "status": "defined",
+          "value": 0.0375
+        }
+      },
+      "fixture": "Morris_Thorne",
+      "variant": "A"
+    },
+    {
+      "fingerprint": {
+        "slot_06_observability_ratio": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_13r_critical_curvature_log10": {
+          "status": "defined",
+          "value": 4.5655
+        },
+        "slot_14r_conditioning_index_log10": {
+          "status": "defined",
+          "value": 8.8286
+        },
+        "slot_15r_route_variation_signature": {
+          "status": "defined",
+          "value": 0.0
+        },
+        "slot_16d_channel_spread_log10": {
+          "status": "defined",
+          "value": 2.6435
+        }
+      },
+      "fixture": "Kerr_ISCO_a09",
+      "variant": "A"
+    }
+  ],
+  "failure_modes_observed": [
+    "F_delta_1",
+    "F_delta_4"
+  ],
+  "fixtures": [
+    "SR",
+    "Schwarzschild",
+    "pure_algebraic",
+    "cube_root",
+    "Morris_Thorne",
+    "Kerr_ISCO_a09"
+  ],
+  "perturbed_sr_distances": {
+    "Kerr_ISCO_a09": 2.4436,
+    "Morris_Thorne": 2.1291,
+    "SR": 0.0,
+    "Schwarzschild": 1.7321,
+    "cube_root": 0.4879,
+    "pure_algebraic": 1.4913
+  },
+  "perturbed_sr_fingerprint": {
+    "fingerprint": {
+      "slot_06_observability_ratio": {
+        "status": "defined",
+        "value": 0.29927
+      },
+      "slot_07_sterbenz_applicable_mass_fraction": {
+        "status": "defined",
+        "value": 0.70073
+      },
+      "slot_13r_critical_curvature_log10": {
+        "status": "defined",
+        "value": -15.9546
+      },
+      "slot_14r_conditioning_index_log10": {
+        "status": "defined",
+        "value": 0.0
+      },
+      "slot_15r_route_variation_signature": {
+        "status": "defined",
+        "value": 1.0
+      },
+      "slot_16d_channel_spread_log10": {
+        "status": "defined",
+        "value": 0.0
+      }
+    },
+    "fixture": "SR_perturbed",
+    "perturbed_window": [
+      0.8,
+      0.82,
+      0.84
+    ],
+    "variant": "A_perturbed_window"
+  },
+  "predictions": {
+    "P_delta_1_all_cheap_fingerprints_unique": true,
+    "P_delta_2_cheap_pairs_distinguishable_geq_12": true,
+    "P_delta_3_slot_16d_orthogonal_to_13": false,
+    "P_delta_4_perturbed_sr_closest_to_canonical_sr": true,
+    "P_delta_5_full_fingerprint_no_regression": true,
+    "P_delta_6_slot_16d_defined_on_every_fixture": false,
+    "diag_cheap_distinguishable_count": 15,
+    "diag_cheap_pair_count": 15,
+    "diag_perturbed_sr_distance_to_canonical_sr": 0.0,
+    "diag_perturbed_sr_distances": {
+      "Kerr_ISCO_a09": 2.4436,
+      "Morris_Thorne": 2.1291,
+      "SR": 0.0,
+      "Schwarzschild": 1.7321,
+      "cube_root": 0.4879,
+      "pure_algebraic": 1.4913
+    },
+    "diag_perturbed_sr_min_distance_to_others": 0.4879,
+    "diag_s16d_defined_count": 5,
+    "diag_s16d_orthogonality": {
+      "is_orthogonal_enough": false,
+      "is_strict_subset_of_13": true,
+      "pairs_disc_by_13_count": 14,
+      "pairs_disc_by_16d_count": 9,
+      "pairs_unique_to_16d_count": 0
+    }
+  },
+  "slot_16d_orthogonality": {
+    "is_orthogonal_enough": false,
+    "is_strict_subset_of_13": true,
+    "pairs_disc_by_13_count": 14,
+    "pairs_disc_by_16d_count": 9,
+    "pairs_unique_to_16d_count": 0
+  },
+  "slot_ranges_used_for_distance": {
+    "slot_06_observability_ratio": [
+      0.2993,
+      1.0
+    ],
+    "slot_07_sterbenz_applicable_mass_fraction": [
+      0.1825,
+      0.7007
+    ],
+    "slot_13r_critical_curvature_log10": [
+      -16.2556,
+      4.5655
+    ],
+    "slot_14r_conditioning_index_log10": [
+      0.0,
+      8.8286
+    ],
+    "slot_15r_route_variation_signature": [
+      0.0,
+      1.0
+    ],
+    "slot_16d_channel_spread_log10": [
+      0.0,
+      2.6435
+    ]
+  },
+  "verdict": "barcode_scan_use_case_validated_with_caveats"
+}

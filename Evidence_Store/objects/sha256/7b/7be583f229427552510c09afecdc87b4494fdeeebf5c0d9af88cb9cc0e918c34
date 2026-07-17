@@ -1,0 +1,131 @@
+#!/usr/bin/env python3
+"""
+EXPLORATORY PROBE — Cella (exact ℚ) hardening of Theorem 8.1.
+
+STATUS: scratch probe, NOT a campaign, NOT canonical, no warrant, no freeze.
+It tests, in exact rational arithmetic, the parts of Theorem 8.1 that Cella's
+DEMONSTRATED machinery can sharpen from float to exact:
+
+  (A) the worked example / negative control (frame-dependence) — exact;
+  (B) K_hol as the mixed-second-difference holonomy of the coupling —
+      exact in ℚ, with the K1 null (additive ⇒ 0, hard zero) and the
+      K3-sharp accountability (bilinear ⇒ exactly h·k), reproducing the
+      geometry-arm result (HR138) on the THEOREM's couplings; and
+  (C) Corollary 1 (the unique φ_K + φ_sym decomposition) — exact in ℚ:
+      φ_sym is the Reynolds average (factors through e1,e2,e3), φ_K = φ−φ_sym
+      has zero symmetrisation, no third category.
+
+OUT OF SCOPE (honest fences — these need more than a probe):
+  - The exact role-invariance of the INTRINSIC curvature K_G (§2.4 D↔S,
+    the 8.66e-15 → exact upgrade) needs the Arm-M curvature instrument
+    (CL-M9, exact κ²/H² in ℚ); NOT reconstructed here to avoid confabulating
+    the K_G formula. Flagged as the next step.
+  - The proof's one soft spot — the asserted EXHAUSTIVENESS of
+    (coupling-data, role-labels) in Part (iii) — is a logical lemma, not a
+    computation; a probe cannot discharge it. Flagged.
+
+Stdlib only (fractions). Author: Cella probe for W. Lloyd's Theorem 8.1.
+"""
+
+from fractions import Fraction as F
+from itertools import permutations
+
+
+def section(t): print("\n" + "=" * 68 + "\n  " + t + "\n" + "=" * 68)
+
+
+# ---------------------------------------------------------------------------
+# (A) Worked example / negative control — exact ℚ
+# ---------------------------------------------------------------------------
+def part_A():
+    section("(A) Worked example (negative control): role-labelled φ is frame-dependent")
+    D, S = F(3), F(4)
+    # P = D * S^2 ; dP/dD = S^2 ; dP/dS = 2 D S   (all exact)
+    dPdD, dPdS = S * S, 2 * D * S
+    phi, phi_swap = D * dPdD, S * dPdS          # φ = D·∂_D P  vs  D↔S swap
+    P = D * S * S
+    e = (D + S + P, D * S + D * P + S * P, D * S * P)
+    print(f"  P=D·S² at (3,4):  φ=D·∂_D P = {phi}   swap S·∂_S P = {phi_swap}")
+    print(f"  frame-dependent (not T-invariant): {phi != phi_swap}   [exact ℚ, not float]")
+    print(f"  value-symmetric (e1,e2,e3) = {tuple(int(x) for x in e)}  "
+          f"invariant over all 6 value-perms: "
+          f"{all((a+b+c, a*b+a*c+b*c, a*b*c) == e for a,b,c in permutations((D,S,P)))}")
+    return phi != phi_swap
+
+
+# ---------------------------------------------------------------------------
+# (B) K_hol as the mixed-second-difference holonomy — exact ℚ, K1/K3
+# ---------------------------------------------------------------------------
+def mixed_holonomy(coupling, D0, S0, h, k):
+    """Loop (D0,S0)->(D0+h,S0)->(D0+h,S0+k)->(D0,S0+k)->: exact mixed 2nd difference of the output."""
+    P = coupling
+    return (P(D0 + h, S0 + k) - P(D0 + h, S0)) - (P(D0, S0 + k) - P(D0, S0))
+
+
+def part_B():
+    section("(B) K_hol = mixed-2nd-difference holonomy — exact ℚ (geometry-arm K1/K3 on 8.1's couplings)")
+    D0, S0, h, k = F(3), F(4), F(1, 7), F(1, 11)   # arbitrary rational base + increments
+    couplings = {
+        "additive   P=D+S      (separable)": (lambda d, s: d + s,          F(0)),
+        "bilinear   P=D·S      (pure cross)": (lambda d, s: d * s,          h * k),
+        "asymmetric P=D·S²     (worked ex.)": (lambda d, s: d * s * s,      None),
+    }
+    ok = True
+    for name, (cpl, predicted) in couplings.items():
+        hol = mixed_holonomy(cpl, D0, S0, h, k)
+        if predicted is not None:
+            match = (hol == predicted)
+            ok &= match
+            print(f"  {name}:  holonomy = {hol}   predicted = {predicted}   exact match: {match}")
+        else:
+            # P=D·S²: closed form  h·(2 S0 k + k²)  — exact, nonzero, accountable
+            closed = h * (2 * S0 * k + k * k)
+            match = (hol == closed)
+            ok &= match
+            print(f"  {name}:  holonomy = {hol}   closed-form h(2S₀k+k²) = {closed}   exact match: {match}")
+    print(f"  → K1 null is a HARD zero in ℚ (separable ⇒ 0); K3 accountability is bit-exact. ok={ok}")
+    return ok
+
+
+# ---------------------------------------------------------------------------
+# (C) Corollary 1: unique φ_K + φ_sym decomposition — exact ℚ, no third category
+# ---------------------------------------------------------------------------
+def reynolds_sym(phi, D, S, P):
+    """φ_sym(D,S,P) = (1/6) Σ_π φ(π(D,S,P)) — the value-symmetric (Reynolds) component."""
+    vals = [phi(a, b, c) for a, b, c in permutations((D, S, P))]
+    return sum(vals, F(0)) / 6
+
+
+def part_C():
+    section("(C) Corollary 1: unique φ = φ_K + φ_sym decomposition — exact ℚ")
+    # a deliberately asymmetric test function (role-labelled, NOT value-symmetric)
+    phi = lambda D, S, P: D + 2 * S + 3 * P + 5 * D * S
+    pts = [(F(3), F(4), F(48)), (F(1, 2), F(5), F(-7, 3)), (F(9), F(-2), F(11, 4))]
+    ok = True
+    for (D, S, P) in pts:
+        sym = reynolds_sym(phi, D, S, P)
+        K = phi(D, S, P) - sym
+        # check 1: φ_sym is value-symmetric (invariant under all 6 value perms)
+        sym_is_symmetric = all(reynolds_sym(phi, a, b, c) == sym for a, b, c in permutations((D, S, P)))
+        # check 2: φ_K has zero symmetrisation (no symmetric component left)
+        K_resym = reynolds_sym(lambda d, s, p: phi(d, s, p) - reynolds_sym(phi, d, s, p), D, S, P)
+        # check 3: φ_sym factors through (e1,e2,e3): equal on any two triples with equal e's (same multiset)
+        # check 4: reconstruction φ = φ_K + φ_sym
+        recon = (K + sym == phi(D, S, P))
+        good = sym_is_symmetric and (K_resym == 0) and recon
+        ok &= good
+        print(f"  pt {(str(D),str(S),str(P))}: φ={phi(D,S,P)}  φ_sym={sym}  φ_K={K}  "
+              f"[sym✓={sym_is_symmetric} K_sym0✓={K_resym==0} recon✓={recon}]")
+    print(f"  → φ_sym value-symmetric, φ_K has zero symmetric part, φ=φ_K+φ_sym — exact, no third category. ok={ok}")
+    return ok
+
+
+if __name__ == "__main__":
+    a, b, c = part_A(), part_B(), part_C()
+    section("PROBE SUMMARY")
+    print(f"  (A) negative control frame-dependence (exact ℚ): {'PASS' if a else 'FAIL'}")
+    print(f"  (B) K_hol holonomy K1/K3 exact in ℚ:             {'PASS' if b else 'FAIL'}")
+    print(f"  (C) φ_K+φ_sym decomposition exact in ℚ:          {'PASS' if c else 'FAIL'}")
+    print(f"\n  ALL PASS: {a and b and c}")
+    print("  Probe only — hardens K_hol + the decomposition to exact ℚ. Does NOT compute K_G")
+    print("  (needs Arm-M instrument) and does NOT discharge the exhaustiveness lemma (logical).")

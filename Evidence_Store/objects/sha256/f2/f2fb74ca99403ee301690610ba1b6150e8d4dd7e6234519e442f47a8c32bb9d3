@@ -1,0 +1,82 @@
+"""R9 — genuine multi-D G test: cross-constraint coupling separability.
+
+The Exp-2 lifted construction collapsed to a scalar sqrt round-trip (X=sqrt(sos)).
+This builds a TWO-constraint construction that couples in the residual mechanism itself,
+and asks the only honest multi-D question left after this session's insight
+(G-as-remainder is structurally 0 in any dimension, residual = closed fn of inputs):
+
+    Does the cross-constraint COUPLING term carry irreducible joint structure,
+    or does it fall below the floor like everything else?
+
+Construction (2 operands a,b; per-constraint roots A=sqrt(a), B=sqrt(b)):
+  per-constraint residuals  eA = A^2 - a,  eB = B^2 - b   (each 1D, on the BACL lattice, M⊕C, G=0)
+  JOINT product residual     rho = (A*B)^2 - a*b          (couples a,b through one shared chain)
+  Algebra: (A*B)^2 = A^2 B^2 = (a+eA)(b+eB) = ab + a*eB + b*eA + eA*eB
+    -> separable (additive) part:   sep   = a*eB + b*eA      (per-constraint, no coupling)
+    -> IRREDUCIBLE coupling term:   bilinear = eA*eB         (the ONLY genuinely-joint object)
+
+Pre-registered H0 (expected): the bilinear coupling is ~2^-52 BELOW ulp(ab) -> rounds away
+-> the joint residual is SEPARABLE to observable precision -> G-as-coupling absent in multi-D.
+H1: bilinear survives above the floor and/or tracks geometry -> candidate multi-D G.
+
+Also: a determinant construction (AD - BC, degenerate) as a second, different coupling.
+Eval-layer, research-grade, exact (Fraction). Oracles only.
+"""
+import math, random
+from fractions import Fraction as Fr
+random.seed(20260605)
+
+
+def ulp(x): return math.ulp(x) if x != 0 else 5e-324
+
+
+def product_trial(a, b):
+    A = math.sqrt(a); B = math.sqrt(b)
+    eA = Fr(A * A) - Fr(a)
+    eB = Fr(B * B) - Fr(b)
+    bilinear = eA * eB                       # the irreducible cross-constraint coupling
+    u_res = Fr(ulp(a * b))                    # scale of the joint residual
+    return float(abs(bilinear) / u_res) if u_res != 0 else 0.0
+
+
+def det_trial(a, b, k):
+    # 2x2 determinant exactly singular on surface: det = sqrt(a)*sqrt(b*k) - sqrt(b)*sqrt(a*k) = 0
+    A = math.sqrt(a); Bk = math.sqrt(b * k); B = math.sqrt(b); Ak = math.sqrt(a * k)
+    P1 = A * Bk; P2 = B * Ak                 # two algebraically-equal products via different paths
+    det = Fr(P1) - Fr(P2)                     # cross-path cancellation residual (joint)
+    # separable: each product's own rounding; coupling = the part needing BOTH paths jointly
+    u = Fr(ulp(math.sqrt(a * b * k)))
+    return float(abs(det) / u) if u != 0 else 0.0, det == 0
+
+
+print("=" * 84)
+print("CONSTRUCTION 1 — product manifold  rho = (A*B)^2 - a*b ;  coupling = eA*eB")
+print("  measuring |bilinear coupling| / ulp(a*b)  across scales (a*b = 2^k):")
+for kexp in (-30, -10, 0, 10, 30):
+    kappa = 2.0 ** kexp
+    vals = []
+    for _ in range(20000):
+        a = math.ldexp(1.0 + random.random(), random.randint(-6, 6))
+        b = kappa / a
+        if not (math.isfinite(a) and math.isfinite(b) and a > 0 and b > 0):
+            continue
+        vals.append(product_trial(a, b))
+    mx = max(vals); med = sorted(vals)[len(vals) // 2]
+    print(f"   a*b=2^{kexp:+3}: max|coupling|/ulp = {mx:.3e}  median = {med:.3e}   (~2^{math.log2(mx) if mx>0 else float('-inf'):.0f})")
+
+print()
+print("CONSTRUCTION 2 — degenerate determinant  AD - BC  (different coupling, two sqrt-product paths)")
+print("  measuring |det residual| / ulp  across geometry knob k:")
+for k in (0.5, 2.0, 16.0, 1000.0):
+    vals = []; exact_zero = 0; n = 0
+    for _ in range(20000):
+        a = math.ldexp(1.0 + random.random(), random.randint(-6, 6))
+        b = math.ldexp(1.0 + random.random(), random.randint(-6, 6))
+        r, ez = det_trial(a, b, k); vals.append(r); exact_zero += ez; n += 1
+    mx = max(vals)
+    print(f"   k={k:7}: max|det|/ulp = {mx:.3f}  exactly-zero(separable): {exact_zero}/{n} ({exact_zero/n:.2f})")
+
+print()
+print("READING (vs pre-registered H0):")
+print("  H0 = coupling below the floor -> joint residual separable -> G-as-coupling absent in multi-D.")
+print("  Construction-1 coupling magnitude vs 2^-52 floor and Construction-2 det residual decide it.")

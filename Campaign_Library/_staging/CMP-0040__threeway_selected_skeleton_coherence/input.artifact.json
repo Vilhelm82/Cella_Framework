@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "artifact_id": "CMP-0040",
+  "artifact_type": "campaign",
+  "title": "Three-Way Selected-Skeleton Coherence",
+  "summary": "Bind the three independent realizations of the CAND-001 tuple (AC-fold R3, precision-flow PRED-006, founding DBP role-channel arm). CORRECTED 2026-07-16: the global three-arm natural isomorphism at C_2 is REFUTED by the wall-isotropy obstruction (founding/AC walls have Stab=C_2; precision output-tie has Stab={1}; equivariant maps preserve isotropy). The claim forks: C2a chamber coherence (open; regular-chamber C_2-torsor equivalence, needs the two typed functors and the precision two-cover resolution) and C2b the wall-isotropy comparison theorem (PROVED: fixed-point vs free-orbit wall classification, one-convention-bit necessity and sufficiency, double-rounding as exact naturality counterexample localized to coarse-tie preimages). Lorentzian gauge-selection branch refuted by divisibility of ker(Sigma).",
+  "subject_families": [
+    "02_residue_role_channel_and_coupling"
+  ],
+  "claim_status": null,
+  "lifecycle_status": "active",
+  "provenance": {
+    "authors": [
+      "William Lloyd"
+    ],
+    "created_utc": "2026-07-16T00:00:00Z",
+    "origin_repository": "Cella Framework",
+    "source_pointer": "cella:Campaign_Library/02_residue_role_channel_and_coupling/CMP-0040__threeway_selected_skeleton_coherence/WALL_ISOTROPY_COMPARISON_THEOREM_2026-07-16.md"
+  },
+  "files": [
+    {
+      "pointer": "cella:Campaign_Library/02_residue_role_channel_and_coupling/CMP-0040__threeway_selected_skeleton_coherence/WALL_ISOTROPY_COMPARISON_THEOREM_2026-07-16.md",
+      "role": "claim",
+      "sha256": "8d080e07fc1feda079fcd0bcd9f01adfb1596368e690d4874b89163b24fdfae7"
+    }
+  ],
+  "claims": [
+    {
+      "claim_id": "CMP-0040-C1",
+      "claim_status": "open",
+      "statement": "The two DBP-arm reduction functors (founding role-channel arm; precision-flow PRED-006 arm) admit construction into the same typed selected skeleton as the AC-fold R3 arm, on the regular chamber."
+    },
+    {
+      "claim_id": "CMP-0040-C2",
+      "claim_status": "refuted",
+      "statement": "REFUTED AS STATED: the three selected-skeleton images are NOT globally naturally isomorphic at C_2. Stabilizer obstruction: founding/AC wall points have Stab=C_2, precision output-tie points have Stab={1}; equivariant isomorphisms preserve isotropy, so no wall-preserving C_2-equivariant isomorphism exists. Forks into C2a and C2b."
+    },
+    {
+      "claim_id": "CMP-0040-C2a",
+      "claim_status": "open",
+      "statement": "Chamber coherence: the three arms' regular-chamber restrictions are equivalent as C_2-torsor bundles with sections (walls excluded, no isotropy obstruction). Requires the two typed functors (C1) plus the precision-flow two-cover resolution (state cover vs output bundle)."
+    },
+    {
+      "claim_id": "CMP-0040-C2b",
+      "claim_status": "proved",
+      "statement": "Wall-isotropy comparison theorem: founding and AC-fold walls are fixed-point type (Stab=C_2, canonical real section extending to the double root); the precision-flow free-orbit obstruction lives in the output bundle only (state/account cover is fixed-point type); one convention bit is necessary and sufficient at a free two-point fibre (round-half-even supplies it via significand parity); refinement is strictly selection-preserving off double-rounding coarse-tie preimages and strictly fails on them; lax naturality is undefined pending a defect-enriched 2-category."
+    },
+    {
+      "claim_id": "CMP-0040-C3",
+      "claim_status": "refuted",
+      "statement": "REFUTED: the Lorentzian gauge-selection branch. The effective gauge group V=ker(Sigma) is divisible (every a=2b), so every homomorphism V->C_2 is trivial; the gauge action cannot produce a two-sheeted quotient. The Lorentzian (2,1) form governs channel allocation (null vs transverse directions), orthogonal to sheet selection."
+    }
+  ],
+  "relations": [
+    {
+      "relation": "depends_on",
+      "target": "DBP:thm:r3_acfold",
+      "basis": "AC-fold R3 supplies the typed selected skeleton and one fully-constructed arm; its wall is fixed-point type per the isotropy theorem."
+    },
+    {
+      "relation": "opens_gap",
+      "target": "U-1918",
+      "basis": "U-1918 is the headline claim, corrected: global iso refuted, forked into chamber coherence (open) and wall-isotropy classification (proved)."
+    },
+    {
+      "relation": "depends_on",
+      "target": "DBP:wall:V_faithful",
+      "basis": "Kernel-2Z non-faithfulness remains the common C_2 floor for chamber-level comparison; walls are excluded from the chamber form by the isotropy obstruction."
+    }
+  ],
+  "external_ids": {
+    "campaigns": [
+      "CMP-0040"
+    ],
+    "encyclopedia": [
+      "E-0163"
+    ]
+  },
+  "declared_impacts": [
+    {
+      "note": "C2 refuted as stated and forked into C2a (open) and C2b (proved). Lorentzian branch banked as refuted claim C3. U-1918 summary corrected. Campaign assessment changes from nearly-closed to corrected fork."
+    }
+  ],
+  "llm": {
+    "one_sentence_purpose": "Classify the three CAND-001 realizations by wall isotropy: global C_2 isomorphism refuted by stabilizer mismatch; chamber coherence open; wall-isotropy comparison theorem proved.",
+    "key_terms": [
+      "wall isotropy",
+      "fixed-point wall",
+      "free-orbit wall",
+      "stabilizer obstruction",
+      "one convention bit",
+      "double rounding",
+      "chamber coherence"
+    ],
+    "retrieval_questions": [
+      "Why is the global three-arm isomorphism impossible?",
+      "Which arms have fixed-point vs free-orbit walls?",
+      "Why does IEEE-754 need a tie convention when GR does not?"
+    ],
+    "context_priority": "high",
+    "context_role": "frontier"
+  },
+  "visual_hints": {},
+  "extensions": {
+    "cma_id": "CMA-000953",
+    "assessed": "global-iso refuted; wall-isotropy classification proved; chamber form open pending functors; lax form pending defect-enriched category",
+    "remaining_work": "C1 typed functors on the regular chamber + precision two-cover resolution; optional: define the defect-enriched 2-category for the lax statement"
+  }
+}

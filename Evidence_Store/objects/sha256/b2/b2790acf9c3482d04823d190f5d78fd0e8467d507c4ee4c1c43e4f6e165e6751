@@ -1,0 +1,128 @@
+{
+ "authority": "brief \u00a73/\u00a74 (CL-W1/W2/W3; D_static vs D_dynamic over FX-W-A/C/D) + \u00a710 RATIFIED 2026-06-14 (Will) + the manifest freeze (sha pinned in depends_on) + standing rules 1.8/1.9 + the manifest SPINE FENCE (verbatim: no spine claim, no G-claim)",
+ "campaign_id": "the_warp_algebra_arm",
+ "date_stamped_from_machine": "2026-06-14",
+ "depends_on": {
+  "manifest_v1_sha256": "a90334be2f95d2c9088e6c83f9b85cff74b32fad34d26ea30d548aa7218984eb",
+  "note": "bench code (mexpr/schema/fixtures/dstatic/ddynamic/carrier/referee) pinned inside the frozen manifest, enforced by require_frozen (rule 1.9)."
+ },
+ "expectations": {
+  "factor_rows": {
+   "FXWA1": {
+    "dynamic": "factors",
+    "float_hex": "0x1.0000000000000p+1",
+    "n_entries": 3,
+    "referee_match": true,
+    "referee_true": "2",
+    "residue": "0",
+    "static": "factors",
+    "true_q": "2"
+   },
+   "FXWA2": {
+    "dynamic": "factors",
+    "float_hex": "0x1.8800000000000p-1",
+    "n_entries": 7,
+    "referee_match": true,
+    "referee_true": "49/64",
+    "residue": "0",
+    "static": "factors",
+    "true_q": "49/64"
+   },
+   "FXWA3": {
+    "dynamic": "factors",
+    "float_hex": "0x1.0000000000000p+0",
+    "n_entries": 5,
+    "referee_match": true,
+    "referee_true": "1",
+    "residue": "0",
+    "static": "factors",
+    "true_q": "1"
+   },
+   "FXWC1": {
+    "dynamic": "factors",
+    "float_hex": "0x0.0p+0",
+    "n_entries": 2,
+    "referee_match": true,
+    "referee_true": "1",
+    "residue": "1",
+    "static": "factors",
+    "true_q": "1"
+   },
+   "FXWC2": {
+    "dynamic": "factors",
+    "float_hex": "0x1.0000000000000p-2",
+    "n_entries": 1,
+    "referee_match": true,
+    "referee_true": "1/4",
+    "residue": "0",
+    "static": "factors",
+    "true_q": "1/4"
+   },
+   "FXWC3": {
+    "dynamic": "factors",
+    "float_hex": "0x1.0000000000000p-51",
+    "n_entries": 10,
+    "referee_match": true,
+    "referee_true": "0",
+    "residue": "-1/2251799813685248",
+    "static": "factors",
+    "true_q": "0"
+   }
+  },
+  "seam": {
+   "checked": "_factor_verdict",
+   "forbidden_hits": [],
+   "reads_forbidden": false,
+   "rogue_calls": []
+  },
+  "underflow_witness": {
+   "float": 0.0,
+   "true_q": "1",
+   "verdict": "factors"
+  },
+  "wall_rows": {
+   "FXWD1": {
+    "dynamic_refusal": "transcendental_uninterpreted",
+    "oracle_recovers": true,
+    "static": "does_not_factor"
+   },
+   "FXWD2": {
+    "dynamic_refusal": "transcendental_uninterpreted",
+    "oracle_recovers": true,
+    "static": "does_not_factor"
+   },
+   "FXWD3": {
+    "dynamic_refusal": "transcendental_uninterpreted",
+    "oracle_recovers": true,
+    "static": "does_not_factor"
+   }
+  }
+ },
+ "factor_battery": [
+  "FXWA1",
+  "FXWA2",
+  "FXWA3",
+  "FXWC1",
+  "FXWC2",
+  "FXWC3"
+ ],
+ "frozen": true,
+ "predictions": {
+  "PMW.1": "decidable core (CL-W1): on every (fixture, point) in the factor battery (FX-W-A and FX-W-C, away from the \u00f70/0^neg locus), D_static.verdict == D_dynamic.verdict == 'factors' \u2014 the biconditional D_static(C) <=> C factors with ZERO false verdicts \u2014 and TRUE is recomputed through the INDEPENDENT commuted-tree referee (a different exact-\u211a operation sequence) matching D_dynamic's true_q exactly in \u211a (the factoring cannot self-certify). K-W1 armed: any factor-battery cell D_dynamic finds does NOT factor HALTS the campaign. K-W2 armed: any D_static != D_dynamic HALTS the arm. Units: (fixture, point).",
+  "PMW.2": "type property (CL-W2): factorability reads the operation TYPE only. The AST-seam over D_static's verdict path is clean (no read of the float-lane value, the realised residue, or the operand-cancellation exposure); D_static's verdict is point-invariant (identical with and without the operand env); and on the UNDERFLOW-WITNESS-ULP (FXWC1) the float lane reads 0.0 while the cell factors (R_exact-by-composition) \u2014 factorability != float-lane exactness. Units: seam + (fixture, point).",
+  "PMW.3": "the Richardson wall, split-graded (CL-W3): on every (fixture, point) in the wall battery (FX-W-D), D_static.verdict == 'does_not_factor' (a transcendental head is not in R_exact) and D_dynamic refuses TYPED (transcendental_uninterpreted), while the ONE declared, Rule-1.9-pinned simplification-oracle call recovers the factoring \u2014 the split {D_static: does_not_factor} / {oracle: factors-after-simplification} coincides with the on-branch expression-equality. The fixture split is graded [MEASURED]; the general semi-decidability is [ANALYTIC] (Richardson 1968) and NEVER claimed measured. K-W4 armed: any wall cell whose split does NOT coincide with expression-equality is a refute-row. Units: (fixture, point).",
+  "PMW.4": "determinism: battery byte-stable x2 (sha256 over records)."
+ },
+ "probe": "D_static (structural op-DAG walker, lifts the AtomKind partition, verdict path AST-sealed) + D_dynamic (exact-\u211a truth + private float lane with a byte-stable EFT-residue event accumulator; one WarpRecord boundary object). role=probe; the probe NEVER imports the referee.",
+ "referee": "independent commuted-tree exact-\u211a path (referee.referee_truth) + the one declared simplification oracle (referee.simplify_to_zero, Rule-1.9-pinned, referee-side only); runner-wired, no external executed instrument (Axiom 10: no V3 import).",
+ "spine_fence_ack": "this stage MEASURES factorability on named fixtures; NO spine claim, NO cross-domain G-claim (manifest SPINE FENCE, verbatim law). [INFERENCE] stays [INFERENCE].",
+ "stage": "A",
+ "status_move_rules": "CL-W1 -> DEMONSTRATED iff PMW.1 PASS; CL-W2 -> DEMONSTRATED iff PMW.2 PASS; CL-W3 -> DEMONSTRATED iff PMW.3 PASS (fixture split [MEASURED]; semi-decidability [ANALYTIC], NOT measured). **ANY PMW.1 factor failure = K-W1 FIRES: THE CAMPAIGN HALTS (decidable-core claim dies).** ANY D_static != D_dynamic = K-W2 FIRES: THE ARM HALTS. Any wall split mismatch = K-W4: CL-W3 REFUTE-ROW. Every FAIL: STOP, preserve the chain verbatim, route to Will; NO status move applied in-campaign.",
+ "telemetry": "permanently non-verdict-bearing (covenant 3).",
+ "version": 1,
+ "wall_battery": [
+  "FXWD1",
+  "FXWD2",
+  "FXWD3"
+ ]
+}

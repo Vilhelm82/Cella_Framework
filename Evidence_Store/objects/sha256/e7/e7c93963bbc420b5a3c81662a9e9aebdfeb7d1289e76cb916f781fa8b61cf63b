@@ -1,0 +1,196 @@
+# BACL_subnormal — Subnormal Extension Audit Closeout
+
+Date: 2026-05-18.
+Preregistry: [`preregistry.md`](preregistry.md) (FROZEN 2026-05-18 pre-measurement).
+Code: [`scratch/bacl_subnormal_audit.py`](../../../scratch/bacl_subnormal_audit.py).
+Artifact: [`artifact.json`](artifact.json).
+
+## 1. Headline verdict
+
+**`BACL_extends_to_subnormal_natively`** — all 6 predictions confirmed; zero violations across 8,000 records; sharpness 97.8% in the crossing case.
+
+The substantive finding: **BACL does not need a separate "BACL_subnormal" theorem.** When the hypothesis is stated as `ulp(a) ≥ ulp(b)` (instead of the parochial `floor_binade(a) ≥ floor_binade(b)`), BACL extends to the entire IEEE 754 binary lattice — normal *and* subnormal — without modification.
+
+The proof's mechanism is **binade spacing of the integer lattice of floats**, which is intact across normal and subnormal. This contrasts with **Conjecture C**, whose proof uses **scaling invariance** (`RN(x·2^m) = RN(x)·2^m`) — that mechanism genuinely dies in subnormal. The two theorems use different mechanisms; only Conjecture C is scope-bound to normal range.
+
+## 2. The unified theorem (proven)
+
+> **BACL (unified, normal + subnormal).** Let `a, b ∈ 𝔽⁺` in any IEEE 754 binary format (including subnormals). If `ulp(a) ≥ ulp(b)`, then
+>
+> ```
+>     a − b  =  j · ulp(b)   for some integer j ∈ ℤ.
+> ```
+>
+> Here `ulp(x)` is the unified IEEE 754 ulp:
+> - For `x` in normal binade `[2^k, 2^(k+1))`: `ulp(x) = 2^(k−52)` (float64).
+> - For `x` subnormal: `ulp(x) = 2^(−1074)` (uniform; float64).
+
+### Proof (6 lines, range-agnostic, axiomatic)
+
+> 1. For any positive IEEE 754 binary float `x` (normal or subnormal): `x = N · ulp(x)` for some positive integer N.
+>    - Normal: `x = (2^52 + m) · 2^(k − 52)` for `k ≥ −1022` and `m ∈ [0, 2^52 − 1]`; `N = 2^52 + m`.
+>    - Subnormal: `x = m · 2^(−1074)` for `m ∈ [1, 2^52 − 1]`; `N = m`.
+> 2. By hypothesis `ulp(a) ≥ ulp(b)`. Both are powers of 2: `ulp(a) = 2^(p_a)`, `ulp(b) = 2^(p_b)` with `p_a ≥ p_b`.
+> 3. `ulp(a) / ulp(b) = 2^(p_a − p_b)` is a non-negative integer power of 2.
+> 4. `a = N_a · ulp(a) = N_a · 2^(p_a − p_b) · ulp(b)` — integer multiple of `ulp(b)`.
+> 5. `b = N_b · ulp(b)` — integer multiple of `ulp(b)`.
+> 6. Therefore `a − b = (N_a · 2^(p_a − p_b) − N_b) · ulp(b)` — integer multiple of `ulp(b)`. **∎**
+
+No scaling-invariance invocation. No range hypothesis other than the one encoded in `ulp(a) ≥ ulp(b)`.
+
+## 3. Why the audit's empirical verification used exact rational arithmetic
+
+For pairs (a, b) where `a` is normal and `b` is subnormal, the ratio `(a − b) / ulp(b)` can be astronomically large (e.g., `1.0 / 2^(−1074) = 2^1074`), exceeding float64's representational range. The original BACL audit used float-precision comparison, which would overflow here.
+
+This audit uses `fractions.Fraction` for exact rational arithmetic:
+
+```python
+def is_integer_multiple_exact(a, b, ulp_b):
+    qa, qb, qu = Fraction(a), Fraction(b), Fraction(ulp_b)
+    quotient = (qa - qb) / qu
+    return quotient.denominator == 1
+```
+
+This makes the check exact regardless of magnitude. All 8,000 verification records use this method.
+
+## 4. Pre-registered predictions — outcomes
+
+| # | Prediction | Result | Detail |
+|---|---|---|---|
+| P_BS_1 | SubSub: BACL holds for both-subnormal pairs | ✓ | 2000/2000 pairs, 0 violations |
+| P_BS_2 | NormSub: BACL holds for normal-a + subnormal-b pairs | ✓ | 2000/2000 pairs, 0 violations |
+| P_BS_3 | Sharpness: ≥ 50% non-integer for subnormal-a + normal-b in higher binade | ✓ | 1955/2000 = **97.8%** sharpness |
+| P_BS_4 | Unified BACL specializes to original normal-range BACL | ✓ | 100/100 samples confirm `ulp(a) ≥ ulp(b) ⟺ floor_binade(a) ≥ floor_binade(b)` in normal range |
+| P_BS_5 | Proof structure extends without modification | ✓ | All 6 proof-sample test cases verify correctly |
+| P_BS_6 | No FTZ or arithmetic interference | ✓ | FTZ_detected: False; gradual underflow conforming |
+
+**6 / 6 strict pass. Zero failure modes triggered.**
+
+## 5. Per pair-class results
+
+| Class | a | b | Hypothesis holds | BACL-S violations | Sharpness cases |
+|---|---|---|---|---|---|
+| **SubSub** | subnormal | subnormal | 2000/2000 | **0** | 0 |
+| **NormSub** | normal | subnormal | 2000/2000 | **0** | 0 |
+| **SubNormSameUlp** | subnormal | normal in `[2^−1022, 2·2^−1022)` (smallest binade) | 2000/2000 | **0** | 0 |
+| **SubNormHigherBinade** | subnormal | normal in `[2^−1020, 2^−1019)` (higher binade) | 0/2000 (by design) | n/a | **1955 / 2000 (97.8%)** |
+
+The high sharpness in `SubNormHigherBinade` is exactly the predicted behavior: when `a` is subnormal (ulp = `2^−1074`) and `b` is in a normal binade above the smallest (ulp = `2^k_b−52 ≫ 2^−1074`), `a` is integer-multiple of `2^−1074` but NOT of `ulp(b) = 2^k_b−52`. The fraction would be integer only when `a`'s integer-position N_a is divisible by `2^(k_b + 1022)`, which is rare for random a.
+
+## 6. The crucial mechanism contrast — BACL vs Conjecture C
+
+The user's earlier critique (on Conjecture C's normal-range scope) identified that **the proof's load-bearing mechanism is scaling invariance**, which dies in subnormal. That critique was correct for Conjecture C.
+
+This audit demonstrates that **BACL's mechanism is different**:
+
+| Theorem | Mechanism | Subnormal behavior |
+|---|---|---|
+| **Conjecture C** | Scaling invariance: `RN(x·2^m) = RN(x)·2^m` exact in normal range. Used to construct `R_above(m) = mantissa_pattern · 2^m` for fixed mantissa, varying m. | **Breaks in subnormal**: subnormal floats have fixed minimum exponent; the "mantissa · 2^m" construction fails when m is below the subnormal threshold. **Conjecture C is scope-bound to normal range.** |
+| **BACL** | Binade spacing: every float is `N · ulp` for integer N. Used directly to show difference of integer multiples is integer multiple. | **Holds in subnormal**: subnormals are also `N · 2^(−1074)` for integer N. The integer-multiple property is intact. **BACL extends to subnormal natively.** |
+
+This is an important distinction. Two related theorems on floating-point lattice structure can have very different scope properties depending on which mechanism their proofs use.
+
+## 7. What this revises in the original BACL closeout
+
+The original BACL audit ([`../bacl_invariant_audit/closeout.md`](../bacl_invariant_audit/closeout.md)) stated:
+
+> **Normal range only.** Subnormal arithmetic breaks the proof's binade-spacing argument because subnormal floats have uniform spacing at `2^(−1074)`, not per-binade. A subnormal analog of BACL would need a different statement [...]. Scope-bound; **frozen as open problem** ("BACL_subnormal" — parallels Conjecture C_subnormal).
+
+**This was over-cautious.** The corrected understanding:
+
+- Subnormal floats have uniform spacing (`2^(−1074)`), but they ARE still integer multiples of that spacing.
+- The "binade-spacing argument" in the BACL proof is more accurately a "lattice-spacing argument" — every float is an integer multiple of its own ulp, whether normal or subnormal.
+- The hypothesis `floor_binade(a) ≥ floor_binade(b)` was the parochial form. The general form `ulp(a) ≥ ulp(b)` works for any pair of positive floats.
+- BACL_subnormal is not a separate theorem — it is the same BACL with the unified hypothesis.
+
+**The original BACL closeout's "BACL_subnormal frozen as open problem" status is hereby retired.** The unified BACL covers normal + subnormal natively.
+
+## 8. The dual sharpness statement extends as well
+
+The original BACL-N (sharpness) for normal range:
+
+> For every pair of binades `(k_a, k_b)` with `k_a < k_b` in normal range, there exist floats with `floor_binade(a) = k_a`, `floor_binade(b) = k_b` such that `a − b` is not integer multiple of `ulp(b)`.
+
+The unified BACL-N (proposed):
+
+> For any pair of ulp scales `(u_a, u_b)` with `u_a < u_b` in IEEE 754 binary representation (whether achievable by normal or subnormal floats), there exist `a, b ∈ 𝔽⁺` with `ulp(a) = u_a`, `ulp(b) = u_b` such that `a − b` is not integer multiple of `u_b`.
+
+The audit's `SubNormHigherBinade` class (subnormal a, normal b in higher binade) is exactly this sharpness case in the subnormal context: 97.8% of random pairs produce non-integer differences. Sharpness holds.
+
+## 9. V4 typed outputs
+
+All 8,000 records emit `validity = {defined, finite, observable, selectable, advanceable}` all True. No FTZ behavior. Byte-stable across reruns.
+
+## 10. Reproducibility
+
+```
+$ PYTHONPATH=src:. python scratch/bacl_subnormal_audit.py
+$ cp Build_Docs/Reports/bacl_subnormal_audit/artifact.json /tmp/run1.json
+$ PYTHONPATH=src:. python scratch/bacl_subnormal_audit.py
+$ diff /tmp/run1.json Build_Docs/Reports/bacl_subnormal_audit/artifact.json
+(empty) — BYTE-IDENTICAL ✓
+```
+
+## 11. Honest reflection — was the original "frozen as open" right?
+
+The user's earlier critique conditioned a methodology discipline: "parentheticals naming a regime / format / range deserve scrutiny by default. If the parenthetical names a hypothesis that the proof's mechanism depends on, it is not parenthetical." The original BACL closeout took that lesson and froze the subnormal case as open — out of caution, not because the mechanism actually breaks.
+
+This audit shows the caution was over-conservative for BACL specifically. **The same discipline that demanded the gate check on Conjecture C correctly identifies that BACL's mechanism doesn't need that gate.** Different theorems, different mechanisms, different scope.
+
+The cleaner lesson: **when freezing a hypothesis as "open," explicitly identify which mechanism dies under the hypothesis violation.** For Conjecture C, the mechanism (scaling invariance) was named. For BACL_subnormal, no specific mechanism was named — and indeed, when this audit went to verify it, the mechanism extended cleanly.
+
+Going forward: when a sub-result is frozen as "open," the freeze note should name the specific mechanism that fails, not just the regime. If no specific mechanism is identified, the freeze may be over-conservative.
+
+## 12. Updates to upstream documents
+
+The following documents should be amended to reflect the unified BACL:
+
+1. **[`../bacl_invariant_audit/closeout.md`](../bacl_invariant_audit/closeout.md)** — drop the "normal range only" caveat in the theorem head; replace `floor_binade(a) ≥ floor_binade(b)` hypothesis with `ulp(a) ≥ ulp(b)`; mark "BACL_subnormal frozen as open" as resolved.
+
+2. **[`../c2_lattice_sharpness_audit/closeout.md`](../c2_lattice_sharpness_audit/closeout.md) Amendment III** — the c2 theorem's `f_float ≥ 2^(−1021)` bound is bound by Conjecture C, NOT by BACL. With Conjecture C limited to normal range and BACL covering normal + subnormal, the c2 theorem's scope is still `f_float ≥ 2^(−1021)` (Conjecture C is the binding constraint). The amendment correctly identifies this.
+
+3. **No changes needed** to Conjecture C proof audit — its normal-range scope is correct (its mechanism does break in subnormal).
+
+A Phase next consolidation pass should fold these updates.
+
+## 13. Phase next
+
+1. **Consolidate amendments** to upstream BACL and c2 closeouts per §12.
+2. **BACL for other binary formats** (float32, float128, bfloat16) — same unified proof should apply with format-specific subnormal floor. Empirical verification per format.
+3. **Sharpness audit at finer granularity** — current 97.8% sharpness is empirical; check whether 100% can be shown for specific subnormal-vs-binade-k_b pairs (theoretical bound: fraction satisfying integer relation is `2^(−k_b−1022)`).
+4. **Non-RN rounding modes** — the integer-multiple-of-real-difference property is rounding-mode-independent; the float-representation-equals-exact property depends on RN. Worth verifying per mode.
+5. **Decimal IEEE 754** — separate theorem with different ulp structure.
+6. **Lean / Coq formalization** of the unified BACL — proof is 6 lines, trivial to formalize.
+
+## 14. Closeout criteria status
+
+| # | Criterion | Status |
+|---|---|---|
+| 1 | Empirical verification of all 4 pair classes | ✓ |
+| 2 | Hardware FTZ check | ✓ (not detected) |
+| 3 | P_BS_1–P_BS_6 audited explicitly | ✓ |
+| 4 | Verdict assigned | ✓ |
+| 5 | Updates to upstream BACL closeout listed | ✓ §12 |
+| 6 | Reproducibility | ✓ |
+| 7 | Phase next | ✓ §13 |
+
+## 15. Honest summary
+
+The investigation yielded a **stronger result than expected**: BACL doesn't need a separate subnormal theorem because the proof's mechanism (binade spacing of the integer lattice) extends cleanly to subnormal. The "BACL_subnormal frozen as open" status from the original BACL closeout was over-cautious — a lesson in the importance of identifying the *specific mechanism* that would fail under a hypothesis violation, not just freezing on regime grounds.
+
+The unified theorem statement:
+
+> **BACL (unified).** For `a, b ∈ 𝔽⁺` in any IEEE 754 binary format, if `ulp(a) ≥ ulp(b)`, then `a − b` is an integer multiple of `ulp(b)`.
+
+is the cleanest form and covers normal + subnormal natively. The c2 lattice theorem's scope is still bound by **Conjecture C** (which IS scope-bound to normal range due to scaling invariance), but BACL itself is not.
+
+## 16. References
+
+- Original BACL audit: [`../bacl_invariant_audit/closeout.md`](../bacl_invariant_audit/closeout.md)
+- Conjecture C proof (mechanism contrast): [`../conjecture_c_proof_audit/closeout.md`](../conjecture_c_proof_audit/closeout.md)
+- c2 lattice sharpness audit Amendment III: [`../c2_lattice_sharpness_audit/closeout.md`](../c2_lattice_sharpness_audit/closeout.md)
+- Preregistry: [`preregistry.md`](preregistry.md)
+- Code: [`../../../scratch/bacl_subnormal_audit.py`](../../../scratch/bacl_subnormal_audit.py)
+- IEEE 754 binary64 subnormal arithmetic specification
+- 2026-05-18 conversation: user direction to investigate BACL_subnormal
+- Discipline: `CAMPAIGN_DISCIPLINE.md` Rule 1.1

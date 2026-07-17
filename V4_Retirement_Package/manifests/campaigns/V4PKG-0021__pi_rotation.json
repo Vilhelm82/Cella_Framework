@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "authority": "historical V4 retirement reference; not current Cella authority",
+  "package_id": "V4PKG-0021",
+  "family": "campaigns",
+  "label": "pi_rotation",
+  "manifest_path": "manifests/campaigns/V4PKG-0021__pi_rotation.json",
+  "member_count": 2,
+  "logical_bytes": 8203,
+  "evidence_covered_count": 2,
+  "evidence_origin_bound_count": 2,
+  "path_bound_count": 2,
+  "certificate_related_count": 0,
+  "member_tree_sha256": "32e5f617a375cfb588b343c761616dcc8f0045f5dce816199edfe961e7cf34b0",
+  "members": [
+    {
+      "path": "research/campaigns/pi_rotation/PI_STAGE0_PREDECL.md",
+      "file_type": "regular",
+      "sha256": "f96fc3689b2297f975feda016db8105615250f399d9df60597593dd4f6c29a35",
+      "bytes": 2788,
+      "mode": 420,
+      "evidence_id": "EVD-001679",
+      "evidence_origin_bound": true,
+      "path_bound": true,
+      "certificate_related": false,
+      "report_ids": []
+    },
+    {
+      "path": "research/campaigns/pi_rotation/pi_stage0.py",
+      "file_type": "regular",
+      "sha256": "11a8f8f3cefb3652af2287e503e1c059c1fa635cd4e76a295d5613df244799e2",
+      "bytes": 5415,
+      "mode": 420,
+      "evidence_id": "EVD-000116",
+      "evidence_origin_bound": true,
+      "path_bound": true,
+      "certificate_related": false,
+      "report_ids": []
+    }
+  ]
+}

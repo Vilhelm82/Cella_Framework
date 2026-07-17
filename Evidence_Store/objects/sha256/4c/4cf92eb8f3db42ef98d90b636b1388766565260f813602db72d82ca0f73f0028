@@ -1,0 +1,69 @@
+#!/usr/bin/env python3
+"""
+INDEPENDENT check of claim 1(d): off-grid algebraic exponents are
+conservatively MIS-REJECTED (i.e., a genuinely algebraic branch whose true
+exponent falls between the 0.05-spaced rho grid nodes gets misclassified as
+non_algebraic_drift, a conservative error -- it errs toward rejecting algebraic,
+never toward false-accepting non-algebraic).
+
+I build a pure two-term algebraic fixture with an OFF-GRID leading exponent
+(e.g. rho=0.527, which is not a multiple of 0.05) and run the harness's own
+classify() on it. Then I do an ON-GRID control (rho=0.50).
+"""
+import sys, os
+import numpy as np
+import mpmath as mp
+
+HARNESS_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HARNESS_DIR)
+import _their_harness as H
+
+mp.mp.dps = 80
+scales = H.geometric_scales(f_max=0.25, ratio=0.5, n=28)
+
+
+def make_alg_observable(s_inf, B, rho, B2, rho2):
+    f_arr, s_arr = [], []
+    for fk in scales:
+        s_exact = mp.mpf(s_inf) + mp.mpf(B) * mp.power(fk, mp.mpf(rho)) \
+                  + mp.mpf(B2) * mp.power(fk, mp.mpf(rho2))
+        f_arr.append(float(fk))
+        s_arr.append(float(s_exact))
+    return np.array(f_arr), np.array(s_arr)
+
+
+# We must route through classify(); classify() pulls truth from FIXTURES[key].
+# To exercise off-grid we temporarily inject a synthetic spec under key 'C'
+# (algebraic truth) but feed off-grid generated data. classify only uses
+# spec.kind and spec.s_inf for gating; s_inf truth we set to match.
+
+import copy
+orig_C = H.FIXTURES["C"]
+
+def run_case(label, s_inf, B, rho, B2, rho2):
+    f_arr, s_arr = make_alg_observable(s_inf, B, rho, B2, rho2)
+    H.FIXTURES["C"] = H.FixtureSpec(
+        name=f"synthetic {label}", kind="algebraic",
+        description="off/on-grid probe", s_inf=s_inf, coeff=B, rho=rho,
+        sub_coeff=B2, sub_rho=rho2)
+    diag = H.classify("C", f_arr, s_arr)
+    fa = diag.fits["M_A_algebraic"]
+    print(f"--- {label} (true rho={rho}) ---")
+    print(f"  classification = {diag.classification}")
+    print(f"  AIC winner={diag.winner_aic} BIC winner={diag.winner_bic}")
+    print(f"  recovered rho={fa.params['rho']} rho2={fa.params['rho2']} s_inf={fa.params['s_inf']:.6f}")
+    print(f"  s_inf truth={s_inf} abs_err={diag.s_inf_abs_error}")
+    print(f"  M_A RSS={fa.rss:.3e} | M_A AIC={fa.aic:.3f}")
+    print(f"  nested_window={diag.nested_window.stability_status} drift={diag.nested_window.drift_ratio:.4f}")
+    print()
+    H.FIXTURES["C"] = orig_C
+
+
+# ON-GRID control: rho exactly 0.50, rho2 exactly 1.00 (both grid nodes)
+run_case("ON-GRID rho=0.50", 1.25, 0.5, 0.50, 0.125, 1.00)
+# OFF-GRID leading exponent 0.527 (between 0.50 and 0.55)
+run_case("OFF-GRID rho=0.527", 1.25, 0.5, 0.527, 0.125, 1.00)
+# OFF-GRID 0.333 (between 0.30 and 0.35)
+run_case("OFF-GRID rho=0.333", 1.25, 0.5, 0.333, 0.125, 1.00)
+# OFF-GRID single-term, small off-grid exponent
+run_case("OFF-GRID rho=0.073 single-ish", 1.25, 0.5, 0.073, 0.0, 2.5)

@@ -1,0 +1,41 @@
+{
+  "rank": 47,
+  "lift": 19.95,
+  "count": 2,
+  "families": 1,
+  "a": {
+    "id": "OBJ:active-chart-group-g-act-s-3",
+    "label": "active chart group G_act = S_3",
+    "standard_term": "local chart-permutation group S_3 acting on the three surface roles",
+    "nomenclature": "special-case-of",
+    "symbols": [
+      "g_act",
+      "s_3"
+    ]
+  },
+  "b": {
+    "id": "OBJ:active-recharting-invariant-local-dbp-invariant",
+    "label": "active-recharting invariant / local DBP invariant",
+    "standard_term": "S3-equivariant scalar (invariant function) on jet space that is constant on group orbits",
+    "nomenclature": "special-case-of",
+    "symbols": []
+  },
+  "evidence": [
+    {
+      "uid": "U-1583",
+      "type": "theorem",
+      "claim_status": null,
+      "label": "Active Recharting Orbit Theorem (thm:orbit)",
+      "summary": "Let $\\pi_r:X_r\\to X_r/S_3$ be the set-orbit map. Then $\\phi:X_r\\to Y$ is an order-$r$ active-recharting invariant if and only if there is a unique $\\bar\\phi:X_r/S_3\\to Y$ satisfying \\[ \\phi=\\bar\\phi\\circ\\pi_r. \\] The sam",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/04_drafts_and_incomplete_papers/dbp_role_channel_and_orbit_geometry/DBP_UNIFIED_THEOREM_SPINE_DRAFT_v0_1.tex"
+    },
+    {
+      "uid": "U-1584",
+      "type": "definition",
+      "claim_status": null,
+      "label": "active-recharting invariant",
+      "summary": "A function $\\phi:X_r\\to Y$ is an order-$r$ active-recharting invariant if \\[ \\phi(\\mathcal T_\\sigma\\xi)=\\phi(\\xi) \\] for every $\\sigma\\in S_3$ wherever both sides are defined.",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/04_drafts_and_incomplete_papers/dbp_role_channel_and_orbit_geometry/DBP_UNIFIED_THEOREM_SPINE_DRAFT_v0_1.tex"
+    }
+  ]
+}

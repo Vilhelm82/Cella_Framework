@@ -1,0 +1,242 @@
+{
+ "authority": "brief section 4 Arm M Stage C (the novel-physics stage: raw commutator / Clairaut defect / plaquettes; CL-M4 + CL-M5) + Will's Stage-C GO",
+ "campaign_id": "beyond_the_cradle_arm_m",
+ "coarse_step": "1/16",
+ "date_stamped_from_machine": "2026-06-12",
+ "depends_on": {
+  "manifest_v1_sha256": "add67c301f0f592484d7023a657302296f3b74376167f6fff8911ce670e3719c",
+  "note": "bench code pinned in the frozen (post-M1) manifest (rule 1.9)."
+ },
+ "expectations": {
+  "cells": {
+   "FXMA1@P_ANISO:xy:ladder": {
+    "c_raw": "1/35184372088832",
+    "class": "witness"
+   },
+   "FXMA1@P_BAL:xy": {
+    "c_raw": "0",
+    "class": "protected"
+   },
+   "FXMA2@P_ANISO:xy:ladder": {
+    "c_raw": "0",
+    "class": "coincidental"
+   },
+   "FXMA3@P_ANISO:xy": {
+    "c_raw": "0",
+    "class": "protected"
+   },
+   "FXMA3@P_ANISO:xy:ladder": {
+    "c_raw": "0",
+    "class": "coincidental"
+   },
+   "FXMA3@P_BAL:xy": {
+    "c_raw": "0",
+    "class": "protected"
+   },
+   "FXMA5@P3_ANISO:yz": {
+    "c_raw": "0",
+    "class": "protected"
+   },
+   "FXMA5@P3_BAL:xz": {
+    "c_raw": "0",
+    "class": "protected"
+   },
+   "FXMA6@P3_BAL:xy": {
+    "c_raw": "0",
+    "class": "protected"
+   },
+   "FXMB2b@P3_ANISO:xy": {
+    "c_raw": "0",
+    "class": "protected"
+   },
+   "FXMB2b@P3_ANISO:xz:ladder": {
+    "c_raw": "-9651/4294967296",
+    "class": "witness"
+   }
+  },
+  "n_coincidental": 2,
+  "n_protected": 7,
+  "n_witnesses": 2,
+  "plaquettes": {
+   "FXMC1:xy:coarse": {
+    "attributed": true,
+    "bound_holds": true,
+    "holonomy": "0",
+    "holonomy_zero": true,
+    "partition_closes": true,
+    "protected": true
+   },
+   "FXMC1:xy:ulp": {
+    "holonomy": "1/20282409603651670423947251286016",
+    "holonomy_zero": false,
+    "protected": true
+   },
+   "FXMC2:xy:ulp": {
+    "holonomy": "0",
+    "holonomy_zero": true,
+    "protected": true
+   },
+   "FXMC3:xy:ulp": {
+    "holonomy": "7/162259276829213363391578010288128",
+    "holonomy_zero": false,
+    "protected": true
+   },
+   "FXMC3:yz:ulp": {
+    "holonomy": "3/81129638414606681695789005144064",
+    "holonomy_zero": false,
+    "protected": true
+   },
+   "FXMC3:zx:ulp": {
+    "holonomy": "5/162259276829213363391578010288128",
+    "holonomy_zero": false,
+    "protected": true
+   }
+  },
+  "witness": "FXMA1@P_ANISO:xy:ladder"
+ },
+ "frozen": true,
+ "ladder": [
+  [
+   "FXMA1",
+   "P_ANISO",
+   "x",
+   "y",
+   "1048576",
+   "1/35184372088832"
+  ],
+  [
+   "FXMA3",
+   "P_ANISO",
+   "x",
+   "y",
+   "1048576",
+   "1/35184372088832"
+  ],
+  [
+   "FXMA2",
+   "P_ANISO",
+   "x",
+   "y",
+   "2097152",
+   "1/1099511627776"
+  ],
+  [
+   "FXMB2b",
+   "P3_ANISO",
+   "x",
+   "z",
+   "524288",
+   "3/4"
+  ]
+ ],
+ "organ": "IM_c_plaquette_v1: raw ordered commutators w/ ledger-only deviation folds; the sharp law C_raw == signed-residue-sum difference (corner deviations common-mode); predicate-selected witness from the pinned ladder; plaquette transport at per-axis-ulp and coarse dyadic steps.",
+ "plaquettes": [
+  [
+   "FXMC1",
+   "x",
+   "y",
+   "ulp"
+  ],
+  [
+   "FXMC1",
+   "x",
+   "y",
+   "coarse"
+  ],
+  [
+   "FXMC2",
+   "x",
+   "y",
+   "ulp"
+  ],
+  [
+   "FXMC3",
+   "x",
+   "y",
+   "ulp"
+  ],
+  [
+   "FXMC3",
+   "y",
+   "z",
+   "ulp"
+  ],
+  [
+   "FXMC3",
+   "z",
+   "x",
+   "ulp"
+  ]
+ ],
+ "predictions": {
+  "PMC.1": "Clairaut attribution: on every pinned cell (sweep + ladder, n=2 and n=3) BOTH orders close (value + ledger-folded deviation == the lane-certified truth) AND the defect is fully attributed twice over: C_raw == D2 - D1 AND C_raw == (signed residue sum of order 2) - (signed residue sum of order 1), exactly in Q - the fingerprint IS the account gap; zero unattributed defect anywhere. Units: cells.",
+  "PMC.2": "the conditional law (CL-M4), two-sided with derived witness: PROTECTED cells (every float subtraction in both orders exact - measured from the ledgers, corner deviations being common-mode) have C_raw == 0, ALL of them (7 pinned, incl. anisotropic corners that round); the PREDICATE-SELECTED witness - the FIRST ladder cell whose signed residue sums differ - measures C_raw != 0 exactly as pinned (the FXMA1 binade-spanning cell; the trivariate FXMB2b cell also fingerprints); ladder cells whose residue triples differ but signed sums agree are the COINCIDENTAL-CANCELLATION class (HR134 33-cell lineage), counted (2) and recorded, never failed. K-M3 refute-row on either direction failing. Units: cells + witness.",
+  "PMC.3": "plaquettes (CL-M5): holonomy H = the ledger-folded deviation of the pinned loop order; on every plaquette H is fully attributed, |H| <= the exposure bound (corner lane exposures + loop residue magnitudes) with ZERO violations, and the channel partition (per-variable + coupling + loop) closes onto the bound exactly; the protected plaquette (coarse dyadic steps, predicate satisfied) has H == 0 exactly; ulp plaquettes exhibit nonzero holonomy where pinned (both populations nonempty; all three trivariate faces scored). Units: plaquettes.",
+  "PMC.4": "refusal honesty: the pole-corner probe refuses TYPED; zero refusals on the lawful battery. Units: probes + rows.",
+  "PMC.5": "determinism: battery byte-stable x2 (sha256 over records)."
+ },
+ "referee": "lane-certified truth (Stage A organ) cross-checked by closure on both orders; the law identity graded per-cell; populations pinned at dry-run.",
+ "stage": "C",
+ "status_move_rules": "CL-M4 -> DEMONSTRATED iff PMC.1 AND PMC.2 AND PMC.4 PASS; PMC.2 FAIL = K-M3 refute-row (CL-M4 REFUTED, chain preserved, campaign continues). CL-M5 -> DEMONSTRATED iff PMC.3 AND PMC.4 PASS. Any other FAIL: halt-until-fixed.",
+ "sweep": [
+  [
+   "FXMA1",
+   "P_BAL",
+   "x",
+   "y",
+   "1/8",
+   "1/32"
+  ],
+  [
+   "FXMA3",
+   "P_BAL",
+   "x",
+   "y",
+   "1/8",
+   "1/32"
+  ],
+  [
+   "FXMA3",
+   "P_ANISO",
+   "x",
+   "y",
+   "1/1073741824",
+   "1/35184372088832"
+  ],
+  [
+   "FXMA5",
+   "P3_BAL",
+   "x",
+   "z",
+   "1/8",
+   "1/128"
+  ],
+  [
+   "FXMA5",
+   "P3_ANISO",
+   "y",
+   "z",
+   "1/1099511627776",
+   "1/1048576"
+  ],
+  [
+   "FXMA6",
+   "P3_BAL",
+   "x",
+   "y",
+   "1/8",
+   "1/32"
+  ],
+  [
+   "FXMB2b",
+   "P3_ANISO",
+   "x",
+   "y",
+   "1/1073741824",
+   "1/35184372088832"
+  ]
+ ],
+ "t2_fence_ack": "this stage makes NO G-claims and NO cross-fixture-invariant claims (manifest fence). The plaquette holonomy here is ACCOUNT bookkeeping on named fixtures, not a geometric-primitive claim.",
+ "telemetry": "permanently non-verdict-bearing (covenant 3).",
+ "version": 1
+}

@@ -1,0 +1,48 @@
+{
+ "account_population": "probe records carry the schema's I3-era account dict (exposure / realized from the lift's entries at the certified lower wall) \u2014 recorded, non-verdict-bearing at this facet.",
+ "amendment_1": "2026-06-11 (machine date), blessed by Will at the chat-side checkpoint (P0.5 pattern, pre-emission): depends_on.manifest_v1_pin corrected \u2014 the original value carried the true sha's first 16 hex with a CONFABULATED 48-hex tail (scribe defect; caught at checkpoint with zero probe emissions). The dependency pin is now ENFORCED at the runner gate (require_facet_prereg cross-checks it against sha256(manifest_v1.json) at runtime) and pinned by test. PA.1-PA.5 texts untouched.",
+ "authority": "campaign brief section 14 + Stage-0 report section 5 + Will's Facet-A GO (Stage-0 acceptance message); rows in play: CL-1 and CL-7 ONLY; status moves only on arbiter-graded results",
+ "battery_order": {
+  "first_rational": [
+   "FXA1",
+   "FXA2",
+   "FXD1",
+   "FXD3",
+   "FXE1",
+   "FXE2",
+   "FXF1",
+   "FXF2",
+   "FXG1",
+   "FXG2",
+   "FXK1a",
+   "FXK1b"
+  ],
+  "second_annex": [
+   "FXJ1",
+   "FXJ2",
+   "FXJ3",
+   "FXK3a",
+   "FXK3b"
+  ]
+ },
+ "campaign_id": "root_closure_atlas",
+ "date_stamped_from_machine": "2026-06-11",
+ "depends_on": {
+  "certified_elementary_set": "observers/typed_sin|typed_exp|typed_log (HR123-128, consumed); sqrt atom via integer isqrt (precision-flow lineage)",
+  "eft_lift": "src/lloyd_v4/evals/difference_tower/eft_eval.py (HR134; imported, never rebuilt)",
+  "manifest_v1_pin": "ce2e5352419cf7e1f996aafd9b4329d32836de160aa2a244408791036c540138"
+ },
+ "facet": "A",
+ "frozen": true,
+ "organ": "I3a_exact_sign_v1 (role=probe): probe-side CertifiedCell via the shared lattice-walk skeleton with the PROBE sign oracle \u2014 lane-account signs (rational class) / certified-enclosure signs with p-ladder 120/240/480 + honest cap refusal (annex class). The arbiter referee path (eval_exact / Arbiter-M) is NEVER called by the probe.",
+ "predictions": {
+  "PA.1": "probe cell == arbiter cell (certificate AND walls, exact) on EVERY rational-class battery fixture. CL-1's demonstration row. Units: fixtures.",
+  "PA.2": "ZERO probe sign decisions disagree with the referee: every (fixture, probed wall) sign recorded during the probe walk is post-hoc cross-graded against eval_exact (rational) \u2014 zero mismatches. Units: (fixture, wall) sign decisions.",
+  "PA.3": "refusal honesty (CL-7): the probe's refusal/none certificate set equals the arbiter's on the rational battery \u2014 pole-borne crossings refuse naming the pole; ghosts certify none (no invented cells); annex heads under the rational oracle refuse typed. Units: fixtures.",
+  "PA.4": "annex leg: probe enclosure-cells == Arbiter-M cells on every annex battery fixture, OR an honest probe refusal where the enclosure cannot separate 0 at the p-cap (recorded; a refusal where M certifies a cell is a PARTIAL row, not a failure \u2014 budget honesty is CL-7 content). Units: fixtures.",
+  "PA.5": "determinism: facet battery byte-stable x2 (sha256 over records)."
+ },
+ "status_move_rules": "CL-1 -> DEMONSTRATED iff PA.1 AND PA.2 PASS (arbiter-graded). CL-7 -> PARTIAL iff PA.3 PASS with the budget arm exercised (full coverage claim needs later facets). Any PA-FAIL: chain preserved verbatim, STOP, route to Will.",
+ "telemetry": "permanently non-verdict-bearing (covenant 3).",
+ "version": 1
+}

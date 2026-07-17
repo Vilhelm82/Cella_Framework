@@ -1,0 +1,198 @@
+# Substrate Derivation of c2 Lattice Rank — Preregistry
+
+> **Status: FROZEN 2026-05-18 pre-measurement.** Per `CAMPAIGN_DISCIPLINE.md` Rule 1.1, binding.
+
+## 0. Context
+
+Test A ([`../task032_cross_fixture_refinery_audit/closeout.md`](../task032_cross_fixture_refinery_audit/closeout.md)) observed empirically that for four V4 fixtures, the c2 routing produces a *clean integer-lattice* residual signature in float64:
+
+| Fixture | n (radical degree) | Observed c2 lattice levels |
+|---|---|---|
+| Schwarzschild | 2 (sqrt) | {−1, +1} |
+| SR | 2 (sqrt) | {−1, +1} |
+| pure_algebraic | 2 (sqrt) | {−1, +1} |
+| cube_root | 3 (cbrt) | {−4, −3, −2, −1, +1, +2, +3, +4} |
+
+c1, in contrast, produced fixture-specific sub-lattice patterns (quarter-integer, sixteenth-integer, irregular).
+
+The empirical universality is striking: **c2's integer-lattice property is fixture-invariant within a radical-degree class**, and the lattice range scales with radical degree. The 2026-05-18 conversation's question — *can we find a natural geometric invariant of IEEE 754?* — names this as the strongest candidate for a V4-discovered substrate-level invariant.
+
+## 1. Purpose
+
+Derive from IEEE 754 axioms two claims that explain the Test A observation:
+
+- **Part 1 (Universality theorem):** *In the Sterbenz-applicable region, c2 = round(R^n + (x_term − 1)) computed in float64 is exactly representable as `j · ulp(f)` for some integer j, where f = 1 − x_term.* This is the **fixture-invariant** part — independent of the fixture's algebraic chain.
+- **Part 2 (Rank bound):** *The maximum |j| is bounded by a function a(n) that depends only on the radical degree and the correctness-of-rounding properties of the root operation.* This is the **n-dependent** part — explains the radical-degree scaling.
+
+Per Axiom 12, both parts must derive from IEEE 754 + Sterbenz + the assumed library rounding properties — not from fixture-specific input.
+
+## 2. The IEEE 754 axiom set used (FROZEN)
+
+Inputs to the derivation:
+
+| Axiom | Statement |
+|---|---|
+| **R-N** (round-to-nearest-even) | `round(z)` is the nearest float to z; ties broken to even mantissa LSB |
+| **Rounding bound** | For z ∈ ℝ in normal-range, `|round(z) − z| ≤ ½ ulp(round(z))` |
+| **Binade spacing** | For x in a binade [2^k, 2^(k+1)), floats are spaced exactly ulp(x) = 2^(k−52) apart |
+| **Exact sum if same binade** | For floats a, b in the same binade with opposite signs and |a − b| < min(|a|, |b|), the result a + b is exact (a consequence of Sterbenz) |
+| **Sterbenz** | If x/2 ≤ y ≤ 2x, then x − y is exact in float64 |
+| **Library root assumption** | `round(root_n(x))` returns a float within `ε_root(n) · ulp(R)` of root_n(x); ε_root(2) = 0.5 (correctly rounded sqrt); ε_root(3) is library-dependent (typically ≤ 1.0 for libm `cbrt`) |
+| **No subnormal/overflow** | f ∈ (0, 1] so all values are in normal range |
+
+## 3. Part 1 — Universality theorem (FROZEN)
+
+### Claim
+
+Let f ∈ float64 with f ∈ (0, 1/2]. Let R = `round(root_n(f))` be the correctly-rounded n-th root, with R ∈ float64. Let V_n = R^n computed in float64 via the canonical multiplication chain. Then:
+
+```
+c2 := V_n + (x_term − 1) computed in float64,
+      where x_term = round(1 − f) ∈ float64 in Sterbenz region,
+satisfies
+      c2 ∈ { j · ulp(f) : j ∈ ℤ }.
+```
+
+### Derivation sketch
+
+1. **x_term − 1 is exact by Sterbenz.** In our region f ∈ (0, 1/2], we have x_term = 1 − f ∈ [1/2, 1). The Sterbenz condition for x_term − 1 is `x_term/2 ≤ 1 ≤ 2 · x_term`, which gives `x_term ∈ [1/2, 2]`. Satisfied. So `round(x_term − 1) = x_term − 1 = −f` exactly. **(No rounding error introduced.)**
+
+2. **V_n is a specific float64.** By IEEE 754, `V_n ∈ 𝔽` (the set of all float64 values).
+
+3. **V_n is near f.** From error analysis (Part 2), |V_n − f| ≤ a(n) · ulp(f) for some bounded a(n). For n = 2, a(2) ≤ 3/2 (worst-case bound, derived in Part 2). For n = 3, a(3) ≤ ~5 (derivation in Part 2). In all cases, V_n is within a few ulp(f) of f.
+
+4. **Floats in the same or adjacent binade are integer-multiples of ulp(f) apart.** This is the **binade spacing axiom**. If V_n and f are both in the binade [f/2, 2f] (or in adjacent binades, with appropriate ulp scaling), then V_n − f is exactly representable as `j · ulp(f)` for some integer j.
+   - For V_n in the same binade as f: V_n = f + j · ulp(f), j ∈ ℤ, |j| ≤ ulp(f)·2^52 ≈ 2^52.
+   - For V_n in [f/2, f) (the binade below f): V_n − f is at distance ≤ f, expressible as `−2^52 · ulp(f)/2 + j' · ulp(f)/2` for some integer j'. But ulp(f)/2 is the spacing in the lower binade. The difference is a half-integer multiple of ulp(f) in general.
+   - **Refinement needed:** We must restrict to the case where V_n is in the same binade as f. This requires |V_n − f| < f/2, which our error bound (a(n) ≤ a few) easily satisfies for f bounded away from binade boundaries.
+
+5. **The sum V_n + (−f) in float64 is exact when V_n and f are close.** If V_n − f is at the scale of a few ulp(f), the sum's exact value is at the same scale, which is representable exactly in float64 (because float64 has 53 bits of precision, and `j · ulp(f)` for small j requires only `log2(j) + 1` bits of mantissa, far less than 53). So `c2 = round(V_n + (−f)) = V_n − f` exactly.
+
+6. **Conclusion:** `c2 = V_n − f = j · ulp(f)` for some integer j with `|j| ≤ a(n)`. **∎**
+
+### Pre-registered checks for Part 1
+
+- **C_P1a:** Across a fine Sterbenz-region grid sweep (5000+ points) for each fixture, every observed c2 value satisfies `c2 / ulp(f) ∈ ℤ` to within float64 representational precision.
+- **C_P1b:** No c2 value falls on a half-integer, quarter-integer, or other sub-lattice.
+- **C_P1c:** The universality holds across n=2 and n=3 (both sqrt and cube-root families).
+
+## 4. Part 2 — Lattice rank bound a(n) (FROZEN)
+
+### Claim
+
+For n = 2 (correctly-rounded sqrt): `a(2) ≤ 3/2`.
+For n = 3 (libm cbrt, assumed within 1 ulp): `a(3) ≤ 5`.
+
+### Derivation for n = 2
+
+Let R = `round(sqrt(f))`, so R − sqrt(f) = δ_R with `|δ_R| ≤ ½ ulp(R) = ½ · sqrt(f) · 2^(−52)`.
+
+Then R² (real) = (sqrt(f) + δ_R)² = f + 2·sqrt(f)·δ_R + δ_R².
+
+V_2 = `round(R · R)` = R² + δ_2 with `|δ_2| ≤ ½ ulp(R²) = ½ · f · 2^(−52) = ½ ulp(f)`.
+
+|V_2 − f| ≤ |2·sqrt(f)·δ_R| + δ_R² + |δ_2|
+          ≤ 2 · sqrt(f) · ½ · sqrt(f) · 2^(−52) + O(2^(−104)) + ½ ulp(f)
+          = f · 2^(−52) + ½ ulp(f) + negligible
+          = ulp(f) + ½ ulp(f)
+          = (3/2) ulp(f)
+
+So **a(2) ≤ 3/2**, theoretical worst case. Test A observed `a(2) = 1`. Gap = 1/2 ulp(f) — explained by the *anti-correlation* between δ_R and δ_2 in the worst case rarely co-occurring on actual fixtures.
+
+### Derivation for n = 3
+
+Let R = `round(cbrt(f))`, with `|R − cbrt(f)| ≤ ε_cbrt · ulp(R)` and `ulp(R) ≈ cbrt(f) · 2^(−52)`. Conservatively `ε_cbrt = 1` (libm cbrt within 1 ulp, not correctly rounded).
+
+Let V_2_R = `round(R · R)`. By previous analysis with R₀ = R (treating R as exact), V_2_R = R² + δ_{2R} with `|δ_{2R}| ≤ ½ ulp(R²)`.
+
+Let V_3 = `round(V_2_R · R)`. V_3 = V_2_R · R + δ_3 with `|δ_3| ≤ ½ ulp(V_2_R · R) ≈ ½ ulp(f)`.
+
+R³ (real) − f via linearization:
+|R³ − f| ≤ 3 · cbrt(f)² · |R − cbrt(f)| + O(δ_R²)
+        ≤ 3 · f^(2/3) · ε_cbrt · cbrt(f) · 2^(−52)
+        = 3 ε_cbrt · ulp(f)
+
+V_2_R · R − R³ via linearization:
+|V_2_R · R − R³| ≤ |δ_{2R}| · R ≤ ½ ulp(R²) · R = ½ · cbrt(f)² · 2^(−52) · cbrt(f) = ½ ulp(f)
+
+V_3 − f = (V_3 − V_2_R · R) + (V_2_R · R − R³) + (R³ − f)
+       ≤ ½ ulp(f) + ½ ulp(f) + 3 ε_cbrt · ulp(f)
+       = (1 + 3 ε_cbrt) · ulp(f)
+
+For ε_cbrt = 1: `a(3) ≤ 4`. Test A observed `a(3) = 4`. **Tight match.**
+
+For ε_cbrt = 0.5 (if cbrt were correctly rounded): `a(3) ≤ 2.5`.
+
+### Pre-registered checks for Part 2
+
+- **C_P2a:** For n=2, max observed |c2/ulp(f)| across fine Sterbenz-region sweep ≤ 3/2; equality (= 1.5) not necessarily reached.
+- **C_P2b:** For n=3, max observed |c2/ulp(f)| across fine sweep ≤ 4 (assuming libm `cbrt` within 1 ulp); equality possibly reached.
+- **C_P2c:** Cross-fixture invariance: the lattice rank depends only on n, not on the fixture's parameter geometry. Specifically: SR (n=2) and Schwarzschild (n=2) produce the same a(2) within float64 statistical fluctuation.
+
+## 5. Pre-registered predictions
+
+| # | Prediction | Threshold |
+|---|---|---|
+| P_C1 | Part 1 universality theorem holds: 100% of measured c2 values are integer-multiples of ulp(f) | strict |
+| P_C2 | Part 2 bound for n=2 holds: max |c2/ulp(f)| ≤ 1.5 across fine sweep | strict |
+| P_C3 | Part 2 bound for n=3 holds: max |c2/ulp(f)| ≤ 4 across fine sweep | strict |
+| P_C4 | Cross-fixture invariance for n=2: SR and Schwarzschild produce identical lattice signatures | strict (same set of unique levels) |
+| P_C5 | Cross-fixture invariance for n=3: only one fixture (cube_root) tested; verify lattice signature matches Test A artifact | strict |
+| P_C6 | The Part 1 theorem is *fixture-independent*: it follows from Sterbenz + IEEE 754 binade-spacing alone | derivation review |
+
+## 6. Pre-registered failure modes
+
+| ID | Condition |
+|---|---|
+| F_C1 | A c2 value falls on a non-integer lattice position (refutes universality) |
+| F_C2 | Bound violated for n=2 (max > 1.5 ulp(f)) |
+| F_C3 | Bound violated for n=3 (max > 4 ulp(f)) |
+| F_C4 | Fixture-dependence of lattice rank within n=2 |
+| F_C5 | Derivation is *not fixture-independent* (relies on fixture-specific structure) |
+
+## 7. Verification methodology (FROZEN)
+
+For each (radical n, fixture) pair, sweep x_term across a **dense logarithmic-spaced grid** in the Sterbenz region. For each grid point:
+
+1. Compute f = round(1 − x_term) in float64.
+2. Compute R = root_n(f) in float64.
+3. Compute V_n in float64 (multiplication chain).
+4. Compute c2 = round(V_n + (x_term − 1)) in float64.
+5. Compute ulp(f).
+6. Compute level = c2 / ulp(f) (a real number).
+7. Check `abs(level - round(level)) < 1e-9` (integer to numerical precision).
+8. Record the integer level.
+
+Tabulate:
+- Fraction of records satisfying the integer-lattice property
+- Set of unique integer levels observed
+- Max |level|
+- Cross-fixture comparison
+
+Fixtures verified: SR (n=2), Schwarzschild (n=2), pure_algebraic (n=2), cube_root (n=3). Same as Test A but with a denser grid (5000+ points per fixture vs Test A's 25–96).
+
+## 8. Closeout criteria
+
+1. Part 1 universality theorem statement + verification: 100% of measured c2 values are integer-multiples of ulp(f). Predicted: strict.
+2. Part 2 bounds verified empirically on dense grid.
+3. Cross-fixture invariance demonstrated.
+4. Theorem statement formalized in plain language and (if possible) machine-checkable form.
+5. Gap analysis: theoretical bound vs empirical max.
+6. Reproducibility check (byte-stable artifact).
+7. Honest assessment of what this contributes to V4's methodology paper.
+
+## 9. Out of scope
+
+- Substrate-promotion of the theorem into V4 Layer 0/1/2 (this is eval-layer derivation, not substrate code).
+- Proving correctness of libm `cbrt` (we assume ε_cbrt ≤ 1).
+- Extending to other radical degrees beyond n=2, 3.
+- Generalizing to non-Sterbenz region (the theorem may fail there).
+- Tightening a(n) bounds beyond worst-case analysis.
+
+## 10. References
+
+- Test A: [`../task032_cross_fixture_refinery_audit/closeout.md`](../task032_cross_fixture_refinery_audit/closeout.md)
+- IEEE 754 binary64 standard
+- Sterbenz's theorem: classical
+- 2026-05-18 conversation: "natural geometric invariant of IEEE 754"
+- Discipline: `CAMPAIGN_DISCIPLINE.md` Rule 1.1

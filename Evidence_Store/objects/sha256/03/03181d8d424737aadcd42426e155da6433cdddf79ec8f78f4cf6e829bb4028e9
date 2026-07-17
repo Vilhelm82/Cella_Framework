@@ -1,0 +1,42 @@
+# Experiment 2 + F2-gate resolution — Closeout
+
+**Date:** 2026-06-05 · research-grade, eval-layer, byte-stable
+(artifact sha256 `560d00db0ea8841edd43028a6f17629684fed8850388833b0e19dbe59cba95d8`).
+Oracles only (Fraction + mpmath dps=80); no float128. Code: `scratch/g_forward_decomposition_exp2.py`.
+
+## Part A — F2-grain gate GREENED (Tier 3.1 resolved)
+
+Reproduced **HR40 `cancellation_operand_phase_inheritance`** exactly, all cells, all fixtures:
+- `(R²−1)/ulp(f)` integer-phase: **87/87 (Schw), 89/89 (SR), 67/67 (PA)**.
+- `phase(F2/ulp(f)) == phase(x_term/ulp(f))`: **87/87, 89/89, 67/67**.
+
+So Experiment 1's F2 "spread" **was the proven phase inheritance, not a gate failure.** F2 = `non_integer_lattice` (canonical label, snap-to-half metric); the visible phase tracks the cancellation operand (`2/r`, `β²`, `x`) and drifts because that operand walks fractional residues on the grid. The "0.5-vs-0.25 grain" is the snap convention (glossary §13 confirmed). **Retrodiction gate now green on F3/F4/G and F2** ⇒ the Experiment-1 1D null (G≡0, floorless) is promotable.
+
+## Part B — Experiment 2: the lifted "multi-D" construction collapses to 1D
+
+| Fixture | j_variance | lattice_frac | **G remainder (exact)** | C-model rel-err | final-sub exact |
+|---|---|---|---|---|---|
+| morris_thorne | 0.5010 | 1.0000 | **0.000e+00** | 1.4e-61 | 4000/4000 |
+| schwarzschild_photon | 0.4176 | 1.0000 | **0.000e+00** | 4.1e-63 | 4000/4000 |
+
+- **Reproduced** the corrected lifted finding (lattice survives 100%, fixtures distinguish MT 0.50 vs photon 0.42) — the `analyze_lifted` bug conclusion stays dead.
+- **But G remainder ≡ 0, floorless, both fixtures.** The lifted residual `sos − X·X` with `X = sqrt(sos)` is **literally a sqrt round-trip of `sos`** — the identical 1D mechanism. `X = sqrt(sos)` launders the joint state through a single scalar sqrt, so the construction **inherits the 1D G=0 proof.**
+- The fixture-distinguishing is entirely in the **`sos = ΣFᵢ²` distribution** — geometry shaping the *conditioning input*, i.e. **C, not a joint-state G remainder.**
+
+## The two points → the curve (honest reading)
+
+| point | construction | G-as-remainder |
+|---|---|---|
+| 1D four-form | sqrt round-trip of `f` | **0** (proven, gate green) |
+| "multi-D" lifted | sqrt round-trip of `sos` | **0** (proven) |
+
+**The curve is flat at zero — but both points are secretly the same point (effective dimension 1).** The lifted construction is not multi-D in the residual mechanism; `X=sqrt(sos)` collapses it. So we have **not yet tested the joint-coupling hypothesis** — we proved G=0 twice on what is arithmetically the same probe.
+
+## Corrections this forces (intellectual honesty)
+
+- **Walk back the "lifted lattice = candidate multi-D G signal" claim** (extraction Tier 2.1; glossary G-entry; R9). The lifted lattice survives and distinguishes fixtures, but Experiment 2 shows that is **conditioning-distribution (C), not a G remainder.** It is *not* G counter-evidence.
+- **Structural observation (research-grade hypothesis, not asserted):** G-as-unexplained-remainder may be ~0 generally, because a finite-precision residual is a closed dyadic function of its inputs ⇒ exactly M⊕C with nothing left over. If so, "geometric content" is **not a separate additive G term** — it lives in *how C depends on the surface* (the operand/`sos` distribution encodes geometry; cf. E↔K_G rank-cousin). That would reframe Q1: the patterns are cast by geometry **shaping the conditioning**, not by a separate geometric residual.
+
+## Next — the genuine multi-D test
+
+To actually bend the curve, build a joint construction whose residual is **not** laundered through a single sqrt — i.e. where the multiple constraints couple in the residual mechanism itself (e.g. a joint residual read per-constraint before any scalar lift, or a cross-constraint cancellation that BACL does not trivially close). Only such a construction gives a real D>1 point. Until then, "G absent" is proven only at effective-dimension-1.

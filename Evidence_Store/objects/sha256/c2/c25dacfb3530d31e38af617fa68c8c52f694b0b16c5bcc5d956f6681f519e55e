@@ -1,0 +1,32 @@
+# Task 050 Snapshot Reconciliation — 2026-05-28
+
+**Reconciles** the Task 050 audit snapshots (dated 2026-05-26) against repository state as of 2026-05-28, following the `typed_ulp` transplant (GAP-003, 2026-05-27).
+
+**Method:** supersede-not-erase. The original dated audit reports are preserved as the historical record; this note records what has changed since. To fold these annotations into the source files in place — matching the resolution-banner style already used on `parent_primitive_gaps.md` — apply the edits noted per item.
+
+---
+
+## drift_inventory.md
+
+- **DRY-003 (ULP helpers) — severity B → RESOLVED (2026-05-27).** `typed_ulp` primitive landed; all 12 consumer sites migrated; subnormal-underflow bug fixed (now returns 2^-1074, not 0.0) in `mcg_phase_1_g1_route_divergence` and `mcg_gate_3_killswitch`. The inventory file still reads **severity B / blocks GAP-003** as of this writing — this note supersedes that entry.
+- **Blocking-item tally: 4 → 3 live.** Remaining severity-B items:
+  - **MIS-001** — hardened dual-arm probe in `scratch/` → Transplant 2 (GAP-011).
+  - **AX11-001** — `math.sqrt` ×4 substrate sites → Transplant 3 (GAP-001).
+  - **AX11-002** — `math.log` ×5 substrate sites → Transplant 3 (GAP-002).
+
+## module_layer_mapping.md
+
+- **L1 primitive count: 10 → 11** (`typed_ulp` added). `primitives.__all__`: 65 → 80 exports (already reflected in 4 discipline-gate test files per the typed_ulp arc: `test_task017b`, `test_task024b`, `test_task025`, `test_task026`).
+
+## task050_summary.md — parked architecture-review items
+
+- **GAP-012 (conditioning naming collision) — RESOLVED (2026-05-27).** Primitive named `typed_ulp`; `V4_GLOSSARY.md` §13 disambiguation entry distinguishes the `core/conditioning.py` carrier from the §9 conditioning primitive.
+- **GAP-009 (L1 atomicity policy) — STILL OPEN.** Gates Transplant 3 (per Key Risk #5). Re-parked: resolve before the GAP-001/002 lift begins.
+
+## Axiom lifecycle
+
+- See new `Build_Docs/Architecture/AXIOM_STATUS_REGISTER.md`. Axiom 11′ criterion 3 satisfied by `typed_ulp`; Axiom 11 remains active, 11′ pending (1/4 criteria).
+
+---
+
+**Verified against disk 2026-05-28:** `drift_inventory.md` header still dated 2026-05-26; DRY-003 entry still severity B. **Provenance:** session handoff 2026-05-27; Task 050 reports; on-disk read of `drift_inventory.md`.

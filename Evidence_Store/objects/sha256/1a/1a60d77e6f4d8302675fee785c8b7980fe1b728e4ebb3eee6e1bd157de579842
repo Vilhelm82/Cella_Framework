@@ -1,0 +1,509 @@
+"""Structural cancellation analyzer -- v2 with sample-evaluation augmentation.
+
+v1 limitation: the pattern matcher only sees "literal" constants (Constants
+adjacent to subtractions in an Add node).  When the constant emerges via
+composition -- e.g., r_+ = (L_sq + L*sqrt(eps))/2 has an implicit constant
+6 that the pattern matcher cannot extract -- the signal-after-cancellation
+scaling is flagged "not derivable".
+
+v2 augmentation: treat the AST as an executable graph.  Evaluate each
+operand of a subtraction at a small set of probe points within the
+declared sweep range.  From those samples, extract:
+    - the constant part (limit as sweep -> 0)
+    - the perturbation exponent (log-log slope of residual)
+
+This dissolves the buried-constant problem entirely.  The analyzer now
+correctly classifies all four ISCO outer formulations with derived signal
+scaling and per-site precision-floor crossing predictions.
+"""
+
+from __future__ import annotations
+
+import math
+from dataclasses import dataclass
+from enum import Enum
+from fractions import Fraction
+from typing import Union
+
+
+# ============================================================================
+# DSL types (same as v1, with eval support)
+# ============================================================================
+
+class BinaryOpKind(Enum):
+    ADD = "add"
+    SUB = "sub"
+    MUL = "mul"
+    DIV = "div"
+
+
+class UnaryOpKind(Enum):
+    SQRT = "sqrt"
+    NEG = "neg"
+
+
+@dataclass(frozen=True)
+class Variable:
+    name: str
+    sweep_range_low: float
+    sweep_range_high: float
+
+
+@dataclass(frozen=True)
+class Constant:
+    value: float
+
+
+@dataclass(frozen=True)
+class BinaryOp:
+    op: BinaryOpKind
+    left: "Node"
+    right: "Node"
+
+
+@dataclass(frozen=True)
+class UnaryOp:
+    op: UnaryOpKind
+    operand: "Node"
+
+
+Node = Union[Variable, Constant, BinaryOp, UnaryOp]
+
+
+def _wrap(x) -> Node:
+    return Constant(float(x)) if isinstance(x, (int, float)) else x
+
+
+def add(a, b) -> Node: return BinaryOp(BinaryOpKind.ADD, _wrap(a), _wrap(b))
+def sub(a, b) -> Node: return BinaryOp(BinaryOpKind.SUB, _wrap(a), _wrap(b))
+def mul(a, b) -> Node: return BinaryOp(BinaryOpKind.MUL, _wrap(a), _wrap(b))
+def div(a, b) -> Node: return BinaryOp(BinaryOpKind.DIV, _wrap(a), _wrap(b))
+def neg(a) -> Node:    return UnaryOp(UnaryOpKind.NEG, _wrap(a))
+def sqrtN(a) -> Node:  return UnaryOp(UnaryOpKind.SQRT, _wrap(a))
+
+
+# ============================================================================
+# Executable graph: evaluate the AST at a given environment
+# ============================================================================
+
+def evaluate_node(node: Node, env: dict[str, float]) -> float:
+    if isinstance(node, Constant):
+        return node.value
+    if isinstance(node, Variable):
+        if node.name not in env:
+            raise KeyError(f"Variable '{node.name}' not bound")
+        return env[node.name]
+    if isinstance(node, UnaryOp):
+        v = evaluate_node(node.operand, env)
+        if node.op == UnaryOpKind.SQRT:
+            if v < 0:
+                return float("nan")
+            return math.sqrt(v)
+        if node.op == UnaryOpKind.NEG:
+            return -v
+    if isinstance(node, BinaryOp):
+        l = evaluate_node(node.left, env)
+        r = evaluate_node(node.right, env)
+        if node.op == BinaryOpKind.ADD: return l + r
+        if node.op == BinaryOpKind.SUB: return l - r
+        if node.op == BinaryOpKind.MUL: return l * r
+        if node.op == BinaryOpKind.DIV: return l / r
+    raise TypeError(f"Unknown node type {type(node).__name__}")
+
+
+# ============================================================================
+# Sample probing
+# ============================================================================
+
+@dataclass(frozen=True)
+class SampledProfile:
+    """Empirical magnitude profile of an expression at probe points."""
+    constant_part: float           # estimated limit as sweep -> 0
+    perturbation_exponent: Fraction  # estimated log-log slope of residual
+    perturbation_coefficient: float  # estimated leading coefficient
+    samples: tuple[tuple[float, float], ...]  # (sweep_value, function_value)
+    is_pure_perturbation: bool     # true if constant part is effectively zero
+
+
+def _round_to_clean_fraction(x: float) -> Fraction:
+    """Round a float exponent to the nearest 'clean' rational like 1, 1/2, 1/3, 2/3, 2, 3."""
+    candidates = [
+        Fraction(0), Fraction(1, 3), Fraction(1, 2), Fraction(2, 3),
+        Fraction(1), Fraction(4, 3), Fraction(3, 2), Fraction(5, 3),
+        Fraction(2), Fraction(5, 2), Fraction(3), Fraction(4),
+    ]
+    return min(candidates, key=lambda c: abs(float(c) - x))
+
+
+def sample_profile(node: Node, sweep_var: Variable, n_samples: int = 5) -> SampledProfile:
+    """Probe the expression at log-spaced sweep values within the declared range
+    and extract (constant_part, perturbation_exponent, coefficient)."""
+    lo = sweep_var.sweep_range_low
+    hi = sweep_var.sweep_range_high
+    # Probe slightly inside the range to avoid boundary issues
+    log_lo, log_hi = math.log10(lo), math.log10(hi)
+    eps_values = [10.0 ** (log_lo + (log_hi - log_lo) * i / (n_samples - 1))
+                  for i in range(n_samples)]
+    eps_values.sort()  # ascending
+
+    samples: list[tuple[float, float]] = []
+    for eps in eps_values:
+        try:
+            v = evaluate_node(node, {sweep_var.name: eps})
+            if math.isfinite(v):
+                samples.append((eps, v))
+        except (ValueError, ZeroDivisionError, OverflowError):
+            continue
+
+    if len(samples) < 3:
+        return SampledProfile(
+            constant_part=0.0,
+            perturbation_exponent=Fraction(0),
+            perturbation_coefficient=0.0,
+            samples=tuple(samples),
+            is_pure_perturbation=True,
+        )
+
+    # Constant-part estimate: the value at the SMALLEST sweep value is the
+    # closest probe to "limit as sweep -> 0".  If the function converges,
+    # samples should cluster near this value as sweep decreases.
+    f_smallest = samples[0][1]
+    f_largest = samples[-1][1]
+
+    # If f_smallest is much smaller (in magnitude) than f_largest, the
+    # function is shrinking toward 0 -> pure perturbation, no constant.
+    is_pure = (
+        abs(f_smallest) < 1e-9
+        or (abs(f_largest) > 0 and abs(f_smallest) / max(abs(f_largest), 1e-300) < 1e-3)
+    )
+
+    if is_pure:
+        constant = 0.0
+        residuals = [(eps, val) for (eps, val) in samples]
+    else:
+        constant = f_smallest
+        residuals = [(eps, val - constant) for (eps, val) in samples if abs(val - constant) > 1e-300]
+
+    if len(residuals) < 2:
+        return SampledProfile(
+            constant_part=constant,
+            perturbation_exponent=Fraction(0),
+            perturbation_coefficient=0.0,
+            samples=tuple(samples),
+            is_pure_perturbation=is_pure,
+        )
+
+    # Log-log slope of residuals against eps
+    # log|r| = log|c| + p * log(eps)
+    log_eps = [math.log(e) for (e, r) in residuals if abs(r) > 1e-300]
+    log_r = [math.log(abs(r)) for (e, r) in residuals if abs(r) > 1e-300]
+
+    if len(log_eps) < 2:
+        return SampledProfile(
+            constant_part=constant,
+            perturbation_exponent=Fraction(0),
+            perturbation_coefficient=0.0,
+            samples=tuple(samples),
+            is_pure_perturbation=is_pure,
+        )
+
+    n = len(log_eps)
+    mean_x = sum(log_eps) / n
+    mean_y = sum(log_r) / n
+    num = sum((log_eps[i] - mean_x) * (log_r[i] - mean_y) for i in range(n))
+    den = sum((log_eps[i] - mean_x) ** 2 for i in range(n))
+    slope = num / den if den > 0 else 0.0
+    intercept = mean_y - slope * mean_x
+    coefficient = math.exp(intercept)
+
+    return SampledProfile(
+        constant_part=constant,
+        perturbation_exponent=_round_to_clean_fraction(slope),
+        perturbation_coefficient=coefficient,
+        samples=tuple(samples),
+        is_pure_perturbation=is_pure,
+    )
+
+
+# ============================================================================
+# Cancellation classification (v2 -- sample-augmented)
+# ============================================================================
+
+class CancellationPattern(Enum):
+    NO_SUBTRACTION = "no_subtraction"
+    SELF_CANCELLATION = "self_cancellation"
+    STERBENZ_SAFE_BENIGN = "sterbenz_safe_benign"
+    STERBENZ_SAFE_CATASTROPHIC = "sterbenz_safe_catastrophic"
+    UNRECOGNISED = "unrecognised"
+
+
+@dataclass(frozen=True)
+class CancellationSite:
+    pattern: CancellationPattern
+    signal_exponent: Fraction
+    signal_coefficient: float
+    constant_magnitude: float
+    predicted_crossing_eps: float | None
+    description: str
+    location_hint: str = ""
+
+
+def _structural_equal(a: Node, b: Node) -> bool:
+    if type(a) != type(b):
+        return False
+    if isinstance(a, Constant):
+        return a.value == b.value
+    if isinstance(a, Variable):
+        return a.name == b.name
+    if isinstance(a, BinaryOp):
+        return a.op == b.op and _structural_equal(a.left, b.left) and _structural_equal(a.right, b.right)
+    if isinstance(a, UnaryOp):
+        return a.op == b.op and _structural_equal(a.operand, b.operand)
+    return False
+
+
+def _predicted_crossing_eps(
+    constant_magnitude: float,
+    signal_exponent: Fraction,
+    signal_coefficient: float,
+) -> float | None:
+    """Crossing where signal coef * eps^p equals precision floor eps_machine * |C|."""
+    if signal_exponent <= 0 or signal_coefficient <= 0:
+        return None
+    EPS_MACHINE = 2.22e-16
+    p = float(signal_exponent)
+    return (EPS_MACHINE * constant_magnitude / signal_coefficient) ** (1.0 / p)
+
+
+def classify_subtraction(
+    node: BinaryOp, sweep_var: Variable, parent_path: str = ""
+) -> CancellationSite:
+    assert node.op == BinaryOpKind.SUB
+    left, right = node.left, node.right
+
+    # 1. Self-cancellation
+    if _structural_equal(left, right):
+        return CancellationSite(
+            pattern=CancellationPattern.SELF_CANCELLATION,
+            signal_exponent=Fraction(0),
+            signal_coefficient=0.0,
+            constant_magnitude=0.0,
+            predicted_crossing_eps=None,
+            description="X - X (always zero)",
+            location_hint=parent_path,
+        )
+
+    # 2. Sample-evaluate both operands within the sweep range
+    prof_l = sample_profile(left, sweep_var)
+    prof_r = sample_profile(right, sweep_var)
+
+    const_l = prof_l.constant_part
+    const_r = prof_r.constant_part
+
+    # 3. Check if both operands have matching non-zero constant parts
+    same_constant = (
+        not prof_l.is_pure_perturbation
+        and not prof_r.is_pure_perturbation
+        and abs(const_l - const_r) < 1e-6 * max(abs(const_l), abs(const_r), 1.0)
+    )
+
+    if same_constant:
+        # 4. Sample-evaluate the SUBTRACTION itself to extract signal scaling
+        prof_diff = sample_profile(node, sweep_var)
+        signal_exp = prof_diff.perturbation_exponent
+        signal_coef = prof_diff.perturbation_coefficient
+        const_mag = max(abs(const_l), abs(const_r))
+        crossing = _predicted_crossing_eps(const_mag, signal_exp, signal_coef)
+
+        if signal_exp >= 1:
+            pattern = CancellationPattern.STERBENZ_SAFE_CATASTROPHIC
+            desc = (
+                f"(C+p) - (C+q) revealed by sample-eval; C ~ {const_mag:.4g}, "
+                f"signal ~ {signal_coef:.3g} * eps^{signal_exp}; "
+                f"crosses precision floor at eps ~ {crossing:.2e}"
+            )
+        elif signal_exp > 0:
+            pattern = CancellationPattern.STERBENZ_SAFE_BENIGN
+            desc = (
+                f"(C+p) - (C+q) revealed by sample-eval; C ~ {const_mag:.4g}, "
+                f"signal ~ {signal_coef:.3g} * eps^{signal_exp}; "
+                f"crosses precision floor at eps ~ {crossing:.2e}"
+            )
+        else:
+            pattern = CancellationPattern.UNRECOGNISED
+            desc = f"Constant parts match at C ~ {const_mag:.4g} but signal scaling unclear"
+
+        return CancellationSite(
+            pattern=pattern,
+            signal_exponent=signal_exp,
+            signal_coefficient=signal_coef,
+            constant_magnitude=const_mag,
+            predicted_crossing_eps=crossing,
+            description=desc,
+            location_hint=parent_path,
+        )
+
+    # 5. No matching constants -- subtraction is benign
+    return CancellationSite(
+        pattern=CancellationPattern.NO_SUBTRACTION,
+        signal_exponent=Fraction(0),
+        signal_coefficient=0.0,
+        constant_magnitude=0.0,
+        predicted_crossing_eps=None,
+        description=(
+            f"Operands have different baselines (L ~ {const_l:.3g}, R ~ {const_r:.3g}); "
+            f"no cancellation"
+        ),
+        location_hint=parent_path,
+    )
+
+
+# ============================================================================
+# Walker
+# ============================================================================
+
+@dataclass(frozen=True)
+class PredictedBurdenVector:
+    expression_label: str
+    n_catastrophic: int
+    n_sterbenz_safe_benign: int
+    n_self_cancellations: int
+    n_benign_subtractions: int
+    n_unrecognised: int
+    predicted_precision_crossing_epsilon: float | None
+    cancellation_sites: tuple[CancellationSite, ...]
+
+
+def walk_and_classify(node: Node, sweep_var: Variable, path: str = "root") -> list[CancellationSite]:
+    sites: list[CancellationSite] = []
+    if isinstance(node, BinaryOp):
+        if node.op == BinaryOpKind.SUB:
+            sites.append(classify_subtraction(node, sweep_var, parent_path=path))
+        sites.extend(walk_and_classify(node.left, sweep_var, f"{path}.left"))
+        sites.extend(walk_and_classify(node.right, sweep_var, f"{path}.right"))
+    elif isinstance(node, UnaryOp):
+        sites.extend(walk_and_classify(node.operand, sweep_var, f"{path}.op"))
+    return sites
+
+
+def analyze_expression(root: Node, sweep_var: Variable, label: str) -> PredictedBurdenVector:
+    sites = walk_and_classify(root, sweep_var)
+    n_cat = sum(1 for s in sites if s.pattern == CancellationPattern.STERBENZ_SAFE_CATASTROPHIC)
+    n_safe = sum(1 for s in sites if s.pattern == CancellationPattern.STERBENZ_SAFE_BENIGN)
+    n_self = sum(1 for s in sites if s.pattern == CancellationPattern.SELF_CANCELLATION)
+    n_benign = sum(1 for s in sites if s.pattern == CancellationPattern.NO_SUBTRACTION)
+    n_unrec = sum(1 for s in sites if s.pattern == CancellationPattern.UNRECOGNISED)
+
+    crossings = [s.predicted_crossing_eps for s in sites if s.predicted_crossing_eps is not None]
+    overall = max(crossings) if crossings else None  # worst (largest) crossing dominates
+
+    return PredictedBurdenVector(
+        expression_label=label,
+        n_catastrophic=n_cat,
+        n_sterbenz_safe_benign=n_safe,
+        n_self_cancellations=n_self,
+        n_benign_subtractions=n_benign,
+        n_unrecognised=n_unrec,
+        predicted_precision_crossing_epsilon=overall,
+        cancellation_sites=tuple(sites),
+    )
+
+
+# ============================================================================
+# Canonical ISCO calibration set
+# ============================================================================
+
+EPS = Variable("eps", sweep_range_low=1e-12, sweep_range_high=1e-4)
+
+
+def build_outer_stable() -> Node:
+    L_sq = add(12.0, EPS)
+    L = sqrtN(L_sq)
+    return div(add(EPS, mul(L, sqrtN(EPS))), 2.0)
+
+
+def build_outer_naive() -> Node:
+    L_sq = add(12.0, EPS)
+    L = sqrtN(L_sq)
+    r_plus = div(add(L_sq, mul(L, sqrtN(EPS))), 2.0)
+    return sub(r_plus, 6.0)
+
+
+def build_r_plus_sq_minus_36() -> Node:
+    L_sq = add(12.0, EPS)
+    L = sqrtN(L_sq)
+    r_plus = div(add(L_sq, mul(L, sqrtN(EPS))), 2.0)
+    numerator = sub(mul(r_plus, r_plus), 36.0)
+    denominator = add(r_plus, 6.0)
+    return div(numerator, denominator)
+
+
+def build_twelve_plus_eps_sq_minus_144() -> Node:
+    twelve_plus = add(12.0, EPS)
+    inner = sub(mul(twelve_plus, twelve_plus), 144.0)
+    return div(sqrtN(inner), Constant(math.sqrt(8.0)))
+
+
+# ============================================================================
+# Demo
+# ============================================================================
+
+def fmt_eps(v: float | None) -> str:
+    return f"{v:.2e}" if v is not None else "never"
+
+
+def main() -> None:
+    print("=" * 100)
+    print("Structural cancellation analyzer v2 -- sample-evaluation augmented")
+    print(f"Sweep variable: {EPS.name} in [{EPS.sweep_range_low:.0e}, {EPS.sweep_range_high:.0e}]")
+    print("=" * 100)
+
+    forms = [
+        ("outer_stable          ", build_outer_stable()),
+        ("outer_naive           ", build_outer_naive()),
+        ("r_+^2 - 36 form       ", build_r_plus_sq_minus_36()),
+        ("(12+eps)^2 - 144 form ", build_twelve_plus_eps_sq_minus_144()),
+    ]
+
+    predictions: list[PredictedBurdenVector] = []
+    for label, expr in forms:
+        pred = analyze_expression(expr, EPS, label.strip())
+        predictions.append(pred)
+        print(f"\n{label}")
+        print(f"  catastrophic={pred.n_catastrophic}  sterbenz_safe_benign={pred.n_sterbenz_safe_benign}  "
+              f"benign={pred.n_benign_subtractions}  unrecognised={pred.n_unrecognised}")
+        print(f"  predicted crossing eps: {fmt_eps(pred.predicted_precision_crossing_epsilon)}")
+        for site in pred.cancellation_sites:
+            print(f"    [{site.pattern.value}] {site.description}")
+
+    print()
+    print("=" * 100)
+    print("PREDICTED PARETO ORDERING (least burdened first)")
+    print("=" * 100)
+    def burden_key(p: PredictedBurdenVector):
+        cross = p.predicted_precision_crossing_epsilon or 0.0
+        return (p.n_catastrophic, p.n_sterbenz_safe_benign, cross)
+    ordered = sorted(predictions, key=burden_key)
+    for i, p in enumerate(ordered, 1):
+        print(f"  {i}. {p.expression_label:30s}  catastrophic={p.n_catastrophic}  "
+              f"safe={p.n_sterbenz_safe_benign}  crossing={fmt_eps(p.predicted_precision_crossing_epsilon)}")
+
+    print()
+    print("=" * 100)
+    print("EMPIRICAL CROSS-CHECK")
+    print("=" * 100)
+    empirical = {
+        "outer_stable":            ("clean across grid; no crossing",          None),
+        "outer_naive":             ("clean; Sterbenz protects",                None),
+        "r_+^2 - 36 form":         ("clean (rel_err 1.4e-8 at eps=1e-15)",     "well below 1e-15"),
+        "(12+eps)^2 - 144 form":   ("breakdown at eps ~ 1e-13",                "~1e-13"),
+    }
+    for label, _ in forms:
+        k = label.strip()
+        emp = empirical.get(k, ("(not measured)", None))
+        print(f"  {k:30s}  empirical: {emp[0]}")
+        print(f"  {'':30s}  empirical crossing: {emp[1] or 'never'}")
+
+
+if __name__ == "__main__":
+    main()

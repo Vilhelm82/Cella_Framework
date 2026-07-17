@@ -1,0 +1,1491 @@
+{
+  "atlas_version": "phase_alpha_v1",
+  "distinguishability_matrix": [
+    [
+      0,
+      6,
+      5,
+      6,
+      0,
+      0
+    ],
+    [
+      6,
+      0,
+      6,
+      7,
+      0,
+      1
+    ],
+    [
+      5,
+      6,
+      0,
+      3,
+      0,
+      0
+    ],
+    [
+      6,
+      7,
+      3,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      1
+    ],
+    [
+      0,
+      1,
+      0,
+      0,
+      1,
+      0
+    ]
+  ],
+  "distinguishability_matrix_row_labels": [
+    "SR",
+    "Schwarzschild",
+    "pure_algebraic",
+    "cube_root",
+    "Morris_Thorne",
+    "Kerr_ISCO_a09"
+  ],
+  "failure_modes_observed": [
+    "F2"
+  ],
+  "fingerprints_variant_A": [
+    {
+      "compactness": {
+        "budget_bits": 256,
+        "in_budget": false,
+        "total_bits": 264
+      },
+      "fingerprint": {
+        "slot_01_c1_sublattice_class": {
+          "status": "defined",
+          "value": "irregular"
+        },
+        "slot_02_c2_sublattice_class": {
+          "status": "defined",
+          "value": "integer"
+        },
+        "slot_03_c1_lattice_range": {
+          "status": "defined",
+          "value": {
+            "max": 1.5,
+            "min": -1.5
+          }
+        },
+        "slot_04_c2_lattice_range": {
+          "status": "defined",
+          "value": {
+            "max": 1.0,
+            "min": -1.0
+          }
+        },
+        "slot_05_c1_fractional_cardinality": {
+          "status": "defined",
+          "value": 31
+        },
+        "slot_06_observability_ratio": {
+          "status": "defined",
+          "value": 0.29927
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "status": "defined",
+          "value": 0.70073
+        },
+        "slot_08_null_tangent_alignment": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_09_hessian_rank_signature": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_10_branch_fingerprint_distribution": {
+          "status": "defined",
+          "value": {
+            "modal_fraction": 0.511111,
+            "n_branch_types": 2,
+            "normalized_entropy": 0.999644
+          }
+        },
+        "slot_11_dual_arm_split": {
+          "status": "defined",
+          "value": {
+            "inactive_frac": 0.195122,
+            "resolved_frac": 0.390244,
+            "total": 41,
+            "zero_sep_frac": 0.414634
+          }
+        },
+        "slot_12_channel_handover_beta": {
+          "status": "defined",
+          "value": 0.708753
+        }
+      },
+      "fixture": "SR",
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "variant": "A"
+    },
+    {
+      "compactness": {
+        "budget_bits": 256,
+        "in_budget": true,
+        "total_bits": 240
+      },
+      "fingerprint": {
+        "slot_01_c1_sublattice_class": {
+          "status": "defined",
+          "value": "quarter_integer"
+        },
+        "slot_02_c2_sublattice_class": {
+          "status": "defined",
+          "value": "integer"
+        },
+        "slot_03_c1_lattice_range": {
+          "status": "defined",
+          "value": {
+            "max": 1.0,
+            "min": -1.5
+          }
+        },
+        "slot_04_c2_lattice_range": {
+          "status": "defined",
+          "value": {
+            "max": 1.0,
+            "min": -1.0
+          }
+        },
+        "slot_05_c1_fractional_cardinality": {
+          "status": "defined",
+          "value": 3
+        },
+        "slot_06_observability_ratio": {
+          "status": "defined",
+          "value": 1.0
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "status": "defined",
+          "value": 0.182482
+        },
+        "slot_08_null_tangent_alignment": {
+          "status": "defined",
+          "value": 1.0
+        },
+        "slot_09_hessian_rank_signature": {
+          "status": "defined",
+          "value": {
+            "n_neg": 1,
+            "n_pos": 2,
+            "n_zero": 1,
+            "rank": 3
+          }
+        },
+        "slot_10_branch_fingerprint_distribution": {
+          "status": "defined",
+          "value": {
+            "modal_fraction": 0.714286,
+            "n_branch_types": 2,
+            "normalized_entropy": 0.863121
+          }
+        },
+        "slot_11_dual_arm_split": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_12_channel_handover_beta": {
+          "status": "not_applicable",
+          "value": null
+        }
+      },
+      "fixture": "Schwarzschild",
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "variant": "A"
+    },
+    {
+      "compactness": {
+        "budget_bits": 256,
+        "in_budget": true,
+        "total_bits": 192
+      },
+      "fingerprint": {
+        "slot_01_c1_sublattice_class": {
+          "status": "defined",
+          "value": "irregular"
+        },
+        "slot_02_c2_sublattice_class": {
+          "status": "defined",
+          "value": "integer"
+        },
+        "slot_03_c1_lattice_range": {
+          "status": "defined",
+          "value": {
+            "max": 1.5,
+            "min": -1.0
+          }
+        },
+        "slot_04_c2_lattice_range": {
+          "status": "defined",
+          "value": {
+            "max": 1.0,
+            "min": -1.0
+          }
+        },
+        "slot_05_c1_fractional_cardinality": {
+          "status": "defined",
+          "value": 10
+        },
+        "slot_06_observability_ratio": {
+          "status": "defined",
+          "value": 0.49635
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "status": "defined",
+          "value": 0.50365
+        },
+        "slot_08_null_tangent_alignment": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_09_hessian_rank_signature": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_10_branch_fingerprint_distribution": {
+          "status": "defined",
+          "value": {
+            "modal_fraction": 0.6875,
+            "n_branch_types": 2,
+            "normalized_entropy": 0.896038
+          }
+        },
+        "slot_11_dual_arm_split": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_12_channel_handover_beta": {
+          "status": "not_applicable",
+          "value": null
+        }
+      },
+      "fixture": "pure_algebraic",
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "variant": "A"
+    },
+    {
+      "compactness": {
+        "budget_bits": 256,
+        "in_budget": true,
+        "total_bits": 192
+      },
+      "fingerprint": {
+        "slot_01_c1_sublattice_class": {
+          "status": "defined",
+          "value": "irregular"
+        },
+        "slot_02_c2_sublattice_class": {
+          "status": "defined",
+          "value": "integer"
+        },
+        "slot_03_c1_lattice_range": {
+          "status": "defined",
+          "value": {
+            "max": 4.0625,
+            "min": -4.0
+          }
+        },
+        "slot_04_c2_lattice_range": {
+          "status": "defined",
+          "value": {
+            "max": 4.0,
+            "min": -4.0
+          }
+        },
+        "slot_05_c1_fractional_cardinality": {
+          "status": "defined",
+          "value": 10
+        },
+        "slot_06_observability_ratio": {
+          "status": "defined",
+          "value": 0.49635
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "status": "defined",
+          "value": 0.50365
+        },
+        "slot_08_null_tangent_alignment": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_09_hessian_rank_signature": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_10_branch_fingerprint_distribution": {
+          "status": "defined",
+          "value": {
+            "modal_fraction": 0.516129,
+            "n_branch_types": 2,
+            "normalized_entropy": 0.999249
+          }
+        },
+        "slot_11_dual_arm_split": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_12_channel_handover_beta": {
+          "status": "not_applicable",
+          "value": null
+        }
+      },
+      "fixture": "cube_root",
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "variant": "A"
+    },
+    {
+      "compactness": {
+        "budget_bits": 256,
+        "in_budget": true,
+        "total_bits": 96
+      },
+      "fingerprint": {
+        "slot_01_c1_sublattice_class": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_02_c2_sublattice_class": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_03_c1_lattice_range": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_04_c2_lattice_range": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_05_c1_fractional_cardinality": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_06_observability_ratio": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_08_null_tangent_alignment": {
+          "status": "defined",
+          "value": 1.0
+        },
+        "slot_09_hessian_rank_signature": {
+          "status": "defined",
+          "value": {
+            "n_neg": 1,
+            "n_pos": 2,
+            "n_zero": 1,
+            "rank": 3
+          }
+        },
+        "slot_10_branch_fingerprint_distribution": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_11_dual_arm_split": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_12_channel_handover_beta": {
+          "status": "not_applicable",
+          "value": null
+        }
+      },
+      "fixture": "Morris_Thorne",
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "variant": "A"
+    },
+    {
+      "compactness": {
+        "budget_bits": 256,
+        "in_budget": true,
+        "total_bits": 96
+      },
+      "fingerprint": {
+        "slot_01_c1_sublattice_class": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_02_c2_sublattice_class": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_03_c1_lattice_range": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_04_c2_lattice_range": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_05_c1_fractional_cardinality": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_06_observability_ratio": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_08_null_tangent_alignment": {
+          "status": "defined",
+          "value": 1.0
+        },
+        "slot_09_hessian_rank_signature": {
+          "status": "defined",
+          "value": {
+            "n_neg": 1,
+            "n_pos": 3,
+            "n_zero": 1,
+            "rank": 4
+          }
+        },
+        "slot_10_branch_fingerprint_distribution": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_11_dual_arm_split": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_12_channel_handover_beta": {
+          "status": "not_applicable",
+          "value": null
+        }
+      },
+      "fixture": "Kerr_ISCO_a09",
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "variant": "A"
+    }
+  ],
+  "fingerprints_variant_B": [
+    {
+      "compactness": {
+        "budget_bits": 256,
+        "in_budget": false,
+        "total_bits": 264
+      },
+      "fingerprint": {
+        "slot_01_c1_sublattice_class": {
+          "status": "defined",
+          "value": "irregular"
+        },
+        "slot_02_c2_sublattice_class": {
+          "status": "defined",
+          "value": "integer"
+        },
+        "slot_03_c1_lattice_range": {
+          "status": "defined",
+          "value": {
+            "max": 1.5,
+            "min": -1.5
+          }
+        },
+        "slot_04_c2_lattice_range": {
+          "status": "defined",
+          "value": {
+            "max": 1.0,
+            "min": -1.0
+          }
+        },
+        "slot_05_c1_fractional_cardinality": {
+          "status": "defined",
+          "value": 31
+        },
+        "slot_06_observability_ratio": {
+          "status": "defined",
+          "value": 0.29927
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "status": "defined",
+          "value": 0.70073
+        },
+        "slot_08_null_tangent_alignment": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_09_hessian_rank_signature": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_10_branch_fingerprint_distribution": {
+          "status": "defined",
+          "value": {
+            "modal_fraction": 0.511111,
+            "n_branch_types": 2,
+            "normalized_entropy": 0.999644
+          }
+        },
+        "slot_11_dual_arm_split": {
+          "status": "defined",
+          "value": {
+            "inactive_frac": 0.195122,
+            "resolved_frac": 0.390244,
+            "total": 41,
+            "zero_sep_frac": 0.414634
+          }
+        },
+        "slot_12_channel_handover_beta": {
+          "status": "defined",
+          "value": 0.708753
+        }
+      },
+      "fixture": "SR",
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "variant": "B"
+    },
+    {
+      "compactness": {
+        "budget_bits": 256,
+        "in_budget": true,
+        "total_bits": 240
+      },
+      "fingerprint": {
+        "slot_01_c1_sublattice_class": {
+          "status": "defined",
+          "value": "quarter_integer"
+        },
+        "slot_02_c2_sublattice_class": {
+          "status": "defined",
+          "value": "integer"
+        },
+        "slot_03_c1_lattice_range": {
+          "status": "defined",
+          "value": {
+            "max": 1.0,
+            "min": -1.5
+          }
+        },
+        "slot_04_c2_lattice_range": {
+          "status": "defined",
+          "value": {
+            "max": 1.0,
+            "min": -1.0
+          }
+        },
+        "slot_05_c1_fractional_cardinality": {
+          "status": "defined",
+          "value": 3
+        },
+        "slot_06_observability_ratio": {
+          "status": "defined",
+          "value": 1.0
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "status": "defined",
+          "value": 0.182482
+        },
+        "slot_08_null_tangent_alignment": {
+          "status": "defined",
+          "value": 1.0
+        },
+        "slot_09_hessian_rank_signature": {
+          "status": "defined",
+          "value": {
+            "n_neg": 1,
+            "n_pos": 2,
+            "n_zero": 1,
+            "rank": 3
+          }
+        },
+        "slot_10_branch_fingerprint_distribution": {
+          "status": "defined",
+          "value": {
+            "modal_fraction": 0.714286,
+            "n_branch_types": 2,
+            "normalized_entropy": 0.863121
+          }
+        },
+        "slot_11_dual_arm_split": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_12_channel_handover_beta": {
+          "status": "not_applicable",
+          "value": null
+        }
+      },
+      "fixture": "Schwarzschild",
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "variant": "B"
+    },
+    {
+      "compactness": {
+        "budget_bits": 256,
+        "in_budget": true,
+        "total_bits": 192
+      },
+      "fingerprint": {
+        "slot_01_c1_sublattice_class": {
+          "status": "defined",
+          "value": "irregular"
+        },
+        "slot_02_c2_sublattice_class": {
+          "status": "defined",
+          "value": "integer"
+        },
+        "slot_03_c1_lattice_range": {
+          "status": "defined",
+          "value": {
+            "max": 1.5,
+            "min": -1.0
+          }
+        },
+        "slot_04_c2_lattice_range": {
+          "status": "defined",
+          "value": {
+            "max": 1.0,
+            "min": -1.0
+          }
+        },
+        "slot_05_c1_fractional_cardinality": {
+          "status": "defined",
+          "value": 10
+        },
+        "slot_06_observability_ratio": {
+          "status": "defined",
+          "value": 0.49635
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "status": "defined",
+          "value": 0.50365
+        },
+        "slot_08_null_tangent_alignment": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_09_hessian_rank_signature": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_10_branch_fingerprint_distribution": {
+          "status": "defined",
+          "value": {
+            "modal_fraction": 0.6875,
+            "n_branch_types": 2,
+            "normalized_entropy": 0.896038
+          }
+        },
+        "slot_11_dual_arm_split": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_12_channel_handover_beta": {
+          "status": "not_applicable",
+          "value": null
+        }
+      },
+      "fixture": "pure_algebraic",
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "variant": "B"
+    },
+    {
+      "compactness": {
+        "budget_bits": 256,
+        "in_budget": true,
+        "total_bits": 192
+      },
+      "fingerprint": {
+        "slot_01_c1_sublattice_class": {
+          "status": "defined",
+          "value": "irregular"
+        },
+        "slot_02_c2_sublattice_class": {
+          "status": "defined",
+          "value": "integer"
+        },
+        "slot_03_c1_lattice_range": {
+          "status": "defined",
+          "value": {
+            "max": 4.0625,
+            "min": -4.0
+          }
+        },
+        "slot_04_c2_lattice_range": {
+          "status": "defined",
+          "value": {
+            "max": 4.0,
+            "min": -4.0
+          }
+        },
+        "slot_05_c1_fractional_cardinality": {
+          "status": "defined",
+          "value": 10
+        },
+        "slot_06_observability_ratio": {
+          "status": "defined",
+          "value": 0.49635
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "status": "defined",
+          "value": 0.50365
+        },
+        "slot_08_null_tangent_alignment": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_09_hessian_rank_signature": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_10_branch_fingerprint_distribution": {
+          "status": "defined",
+          "value": {
+            "modal_fraction": 0.516129,
+            "n_branch_types": 2,
+            "normalized_entropy": 0.999249
+          }
+        },
+        "slot_11_dual_arm_split": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_12_channel_handover_beta": {
+          "status": "not_applicable",
+          "value": null
+        }
+      },
+      "fixture": "cube_root",
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "variant": "B"
+    },
+    {
+      "compactness": {
+        "budget_bits": 256,
+        "in_budget": true,
+        "total_bits": 96
+      },
+      "fingerprint": {
+        "slot_01_c1_sublattice_class": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_02_c2_sublattice_class": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_03_c1_lattice_range": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_04_c2_lattice_range": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_05_c1_fractional_cardinality": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_06_observability_ratio": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_08_null_tangent_alignment": {
+          "status": "defined",
+          "value": 1.0
+        },
+        "slot_09_hessian_rank_signature": {
+          "status": "defined",
+          "value": {
+            "n_neg": 1,
+            "n_pos": 2,
+            "n_zero": 1,
+            "rank": 3
+          }
+        },
+        "slot_10_branch_fingerprint_distribution": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_11_dual_arm_split": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_12_channel_handover_beta": {
+          "status": "not_applicable",
+          "value": null
+        }
+      },
+      "fixture": "Morris_Thorne",
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "variant": "B"
+    },
+    {
+      "compactness": {
+        "budget_bits": 256,
+        "in_budget": true,
+        "total_bits": 96
+      },
+      "fingerprint": {
+        "slot_01_c1_sublattice_class": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_02_c2_sublattice_class": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_03_c1_lattice_range": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_04_c2_lattice_range": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_05_c1_fractional_cardinality": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_06_observability_ratio": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_08_null_tangent_alignment": {
+          "status": "defined",
+          "value": 1.0
+        },
+        "slot_09_hessian_rank_signature": {
+          "status": "defined",
+          "value": {
+            "n_neg": 1,
+            "n_pos": 3,
+            "n_zero": 1,
+            "rank": 4
+          }
+        },
+        "slot_10_branch_fingerprint_distribution": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_11_dual_arm_split": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_12_channel_handover_beta": {
+          "status": "not_applicable",
+          "value": null
+        }
+      },
+      "fixture": "Kerr_ISCO_a09",
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "variant": "B"
+    }
+  ],
+  "fixtures": [
+    "SR",
+    "Schwarzschild",
+    "pure_algebraic",
+    "cube_root",
+    "Morris_Thorne",
+    "Kerr_ISCO_a09"
+  ],
+  "indistinguishable_pair_count": 7,
+  "minimum_distinguishing_subset": [
+    "slot_03_c1_lattice_range",
+    "slot_09_hessian_rank_signature"
+  ],
+  "predictions": {
+    "P1_pairwise_distinguishability_geq_14_of_15": false,
+    "P2_c2_lattice_range_distinguishes_cube_root": true,
+    "P3_observability_distinguishes_schw_sr": true,
+    "P4_lifted_singularity_slots_NA_on_nonlifted_fixtures": true,
+    "P5_route_invariance_geq_80pct_all_fixtures": true,
+    "P6_min_distinguishing_subset_includes_cheap_slot": false,
+    "P7_compactness_budget_met_geq_4_of_6_fixtures": true
+  },
+  "route_invariance_details": {
+    "Kerr_ISCO_a09": {
+      "agreement_count": 2,
+      "applicable_slot_count": 2,
+      "invariance_ratio": 1.0,
+      "per_slot": {
+        "slot_01_c1_sublattice_class": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        },
+        "slot_02_c2_sublattice_class": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        },
+        "slot_03_c1_lattice_range": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        },
+        "slot_04_c2_lattice_range": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        },
+        "slot_05_c1_fractional_cardinality": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        },
+        "slot_06_observability_ratio": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        },
+        "slot_08_null_tangent_alignment": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_09_hessian_rank_signature": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_10_branch_fingerprint_distribution": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        },
+        "slot_11_dual_arm_split": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        },
+        "slot_12_channel_handover_beta": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        }
+      }
+    },
+    "Morris_Thorne": {
+      "agreement_count": 2,
+      "applicable_slot_count": 2,
+      "invariance_ratio": 1.0,
+      "per_slot": {
+        "slot_01_c1_sublattice_class": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        },
+        "slot_02_c2_sublattice_class": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        },
+        "slot_03_c1_lattice_range": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        },
+        "slot_04_c2_lattice_range": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        },
+        "slot_05_c1_fractional_cardinality": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        },
+        "slot_06_observability_ratio": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        },
+        "slot_08_null_tangent_alignment": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_09_hessian_rank_signature": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_10_branch_fingerprint_distribution": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        },
+        "slot_11_dual_arm_split": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        },
+        "slot_12_channel_handover_beta": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        }
+      }
+    },
+    "SR": {
+      "agreement_count": 10,
+      "applicable_slot_count": 10,
+      "invariance_ratio": 1.0,
+      "per_slot": {
+        "slot_01_c1_sublattice_class": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_02_c2_sublattice_class": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_03_c1_lattice_range": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_04_c2_lattice_range": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_05_c1_fractional_cardinality": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_06_observability_ratio": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_08_null_tangent_alignment": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        },
+        "slot_09_hessian_rank_signature": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        },
+        "slot_10_branch_fingerprint_distribution": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_11_dual_arm_split": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_12_channel_handover_beta": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        }
+      }
+    },
+    "Schwarzschild": {
+      "agreement_count": 10,
+      "applicable_slot_count": 10,
+      "invariance_ratio": 1.0,
+      "per_slot": {
+        "slot_01_c1_sublattice_class": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_02_c2_sublattice_class": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_03_c1_lattice_range": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_04_c2_lattice_range": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_05_c1_fractional_cardinality": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_06_observability_ratio": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_08_null_tangent_alignment": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_09_hessian_rank_signature": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_10_branch_fingerprint_distribution": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_11_dual_arm_split": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        },
+        "slot_12_channel_handover_beta": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        }
+      }
+    },
+    "cube_root": {
+      "agreement_count": 8,
+      "applicable_slot_count": 8,
+      "invariance_ratio": 1.0,
+      "per_slot": {
+        "slot_01_c1_sublattice_class": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_02_c2_sublattice_class": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_03_c1_lattice_range": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_04_c2_lattice_range": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_05_c1_fractional_cardinality": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_06_observability_ratio": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_08_null_tangent_alignment": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        },
+        "slot_09_hessian_rank_signature": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        },
+        "slot_10_branch_fingerprint_distribution": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_11_dual_arm_split": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        },
+        "slot_12_channel_handover_beta": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        }
+      }
+    },
+    "pure_algebraic": {
+      "agreement_count": 8,
+      "applicable_slot_count": 8,
+      "invariance_ratio": 1.0,
+      "per_slot": {
+        "slot_01_c1_sublattice_class": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_02_c2_sublattice_class": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_03_c1_lattice_range": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_04_c2_lattice_range": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_05_c1_fractional_cardinality": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_06_observability_ratio": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_08_null_tangent_alignment": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        },
+        "slot_09_hessian_rank_signature": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        },
+        "slot_10_branch_fingerprint_distribution": {
+          "agreement": true,
+          "applicable": true,
+          "status_a": "defined",
+          "status_b": "defined"
+        },
+        "slot_11_dual_arm_split": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        },
+        "slot_12_channel_handover_beta": {
+          "agreement": true,
+          "applicable": false,
+          "status_a": "not_applicable",
+          "status_b": "not_applicable"
+        }
+      }
+    }
+  },
+  "route_invariance_per_fixture": {
+    "Kerr_ISCO_a09": 1.0,
+    "Morris_Thorne": 1.0,
+    "SR": 1.0,
+    "Schwarzschild": 1.0,
+    "cube_root": 1.0,
+    "pure_algebraic": 1.0
+  },
+  "variants_per_fixture": [
+    "A",
+    "B"
+  ],
+  "verdict": "barcode_hypothesis_not_supported_at_phase_alpha"
+}

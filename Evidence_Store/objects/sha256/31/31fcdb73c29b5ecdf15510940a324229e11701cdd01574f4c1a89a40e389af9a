@@ -1,0 +1,224 @@
+"""
+Independent adversarial oracle for Cluster A (BACL / Conjecture C / c2 lattice).
+
+Does NOT import any project code (no typed_ulp, no audit helpers). Uses only
+struct, fractions.Fraction (exact rationals), mpmath, and numpy as independent
+oracles. The goal is to confirm the headline invariants survive a from-scratch
+reimplementation that cannot share a bug with the audit scripts.
+
+Key independence choices:
+  * ulp/binade computed directly from the IEEE 754 bit pattern via struct.
+  * a-b computed EXACTLY as a Fraction (each finite float is an exact dyadic
+    rational), so "integer multiple of ulp(b)" is decided with zero float slop
+    (no 1e-9 tolerance, which the audit used).
+"""
+from __future__ import annotations
+
+import math
+import struct
+from fractions import Fraction
+
+import numpy as np
+
+
+# ---------------------------------------------------------------------------
+# Exact IEEE 754 binary64 decomposition (independent of project primitives)
+# ---------------------------------------------------------------------------
+
+def bits64(x: float) -> int:
+    return struct.unpack(">Q", struct.pack(">d", x))[0]
+
+
+def decompose64(x: float):
+    """Return (sign, exp_field, mantissa_field)."""
+    b = bits64(x)
+    return (b >> 63) & 1, (b >> 52) & 0x7FF, b & ((1 << 52) - 1)
+
+
+def ulp64_exact(x: float) -> Fraction:
+    """Exact ULP of a positive finite float64 as a Fraction.
+
+    Normal:   ulp = 2^(E-1023-52).  Subnormal/zero: ulp = 2^(-1074).
+    """
+    _, E, _ = decompose64(abs(x))
+    if E == 0:
+        e = -1074            # smallest subnormal spacing
+    else:
+        e = E - 1023 - 52
+    return Fraction(2) ** e
+
+
+def to_exact(x: float) -> Fraction:
+    """Exact dyadic-rational value of a finite float64."""
+    return Fraction(x)  # Python's Fraction(float) is exact
+
+
+def floor_binade(x: float) -> int:
+    """k with x in [2^k, 2^(k+1)) for positive x, independent of frexp-helpers
+    in the audit (here we still use frexp but cross-checked against bit field)."""
+    if x == 0.0 or not math.isfinite(x):
+        return -10**9
+    k = math.frexp(abs(x))[1] - 1
+    return k
+
+
+# ---------------------------------------------------------------------------
+# 1. BACL — exact integer-j test on fresh random float64 sample
+# ---------------------------------------------------------------------------
+
+def verify_bacl(n: int = 100_000, seed: int = 20260531) -> dict:
+    rng = np.random.default_rng(seed)
+    # Draw random positive float64 across many binades by sampling exponents +
+    # mantissas directly, plus some structured pairs.
+    viol = 0
+    examples = []
+    checked = 0
+    proviso_ok = 0
+    # Mix: random exponents in [-200, 200], random 52-bit mantissa.
+    for _ in range(n):
+        ea = int(rng.integers(-200, 200))
+        eb = int(rng.integers(-200, 200))
+        ma = int(rng.integers(0, 1 << 52))
+        mb = int(rng.integers(0, 1 << 52))
+        a = math.ldexp(1.0 + ma / (1 << 52), ea)
+        b = math.ldexp(1.0 + mb / (1 << 52), eb)
+        if a <= 0 or b <= 0 or not (math.isfinite(a) and math.isfinite(b)):
+            continue
+        ub = ulp64_exact(b)
+        # BACL hypothesis: ulp(a) >= ulp(b) (equivalently binade(a)>=binade(b))
+        if ulp64_exact(a) < ub:
+            continue  # proviso not satisfied; BACL says nothing
+        proviso_ok += 1
+        checked += 1
+        diff = to_exact(a) - to_exact(b)          # EXACT
+        q = diff / ub                              # EXACT rational
+        if q.denominator != 1:                     # not an integer multiple
+            viol += 1
+            if len(examples) < 5:
+                examples.append({"a": a, "b": b, "q": str(q)})
+    return {
+        "test": "BACL exact-rational integer-j",
+        "n_drawn": n,
+        "proviso_satisfied_checked": checked,
+        "violations": viol,
+        "examples": examples,
+    }
+
+
+# ---------------------------------------------------------------------------
+# 2. Conjecture C — no binade drop, fresh binade sample, RN-even sqrt
+# ---------------------------------------------------------------------------
+
+def verify_conjecture_c(seed: int = 7) -> dict:
+    """For f in [2^k, 2^(k+1)) float64 normal range, R = round(sqrt(f)),
+    check round(R*R) >= 2^k. We sample edges + random interior per binade for
+    a representative subset of k (full k-range boundary-exactness is cheap, so
+    we also do every even/odd k boundary)."""
+    rng = np.random.default_rng(seed)
+    total = 0
+    viol = 0
+    examples = []
+    # (a) Every boundary 2^k across full normal range.
+    boundary_viol = 0
+    for k in range(-1021, 1024):
+        f = math.ldexp(1.0, k)        # exactly 2^k
+        R = math.sqrt(f)
+        V = R * R
+        if V < f:
+            boundary_viol += 1
+            if len(examples) < 5:
+                examples.append({"k": k, "f": f, "V": V, "where": "boundary"})
+        total += 1
+    # (b) Representative binades: edges + 2000 random interior floats each.
+    for k in list(range(-60, 61)) + [-500, -300, 300, 500, 900, 1000]:
+        lo = math.ldexp(1.0, k)
+        hi = math.ldexp(1.0, k + 1)
+        # 1000 floats just above lo
+        f = lo
+        for _ in range(1000):
+            f = math.nextafter(f, math.inf)
+            if f >= hi:
+                break
+            V = math.sqrt(f) ** 2
+            total += 1
+            if V < lo:
+                viol += 1
+                if len(examples) < 5:
+                    examples.append({"k": k, "f": f, "V": V, "where": "above_lo"})
+        # 2000 random interior
+        bits_lo = bits64(lo)
+        bits_hi = bits64(hi)
+        for _ in range(2000):
+            bf = int(rng.integers(bits_lo, bits_hi))
+            f = struct.unpack(">d", struct.pack(">Q", bf))[0]
+            V = math.sqrt(f) ** 2
+            total += 1
+            if V < lo:
+                viol += 1
+                if len(examples) < 5:
+                    examples.append({"k": k, "f": f, "V": V, "where": "interior"})
+    return {
+        "test": "Conjecture C no-binade-drop (independent)",
+        "boundary_checks": 2045,
+        "boundary_violations": boundary_viol,
+        "total_checks": total,
+        "violations": viol + boundary_viol,
+        "examples": examples,
+    }
+
+
+# ---------------------------------------------------------------------------
+# 3. c2 lattice — n=2 |j|<=1 ; n=3 route dependence (cbrt vs pow(1/3))
+# ---------------------------------------------------------------------------
+
+def c2_levels(grid, n: int, root_fn) -> dict:
+    """c2 = round( V_n + (x_term - 1) ), V_n = root_fn(f)^n via repeated mult.
+    x_term = grid value in (0,1); f = 1 - x_term. Return integer-violations and
+    observed lattice levels (j = c2 / ulp(f)), decided EXACTLY via Fraction."""
+    levels = set()
+    integer_viol = 0
+    max_abs = 0
+    for x_term in grid:
+        f = 1.0 - x_term
+        if f <= 0:
+            continue
+        R = root_fn(f)
+        V = R
+        for _ in range(n - 1):
+            V = V * R
+        c2 = V + (x_term - 1.0)        # float64 arithmetic, as in substrate
+        ub = ulp64_exact(f)
+        q = to_exact(c2) / ub          # EXACT
+        if q.denominator != 1:
+            integer_viol += 1
+        else:
+            j = int(q)
+            levels.add(j)
+            max_abs = max(max_abs, abs(j))
+    return {
+        "n": n,
+        "integer_violations": integer_viol,
+        "levels": sorted(levels),
+        "max_abs_level": max_abs,
+    }
+
+
+def verify_c2() -> dict:
+    grid = np.linspace(1e-3, 0.5 - 1e-6, 5000)
+    out = {}
+    out["n2_pure_algebraic"] = c2_levels(grid, 2, math.sqrt)
+    out["n3_np_cbrt"] = c2_levels(grid, 3, lambda f: float(np.cbrt(f)))
+    out["n3_pow_1_3"] = c2_levels(grid, 3, lambda f: f ** (1.0 / 3.0))
+    return out
+
+
+if __name__ == "__main__":
+    import json
+    res = {
+        "bacl": verify_bacl(),
+        "conjecture_c": verify_conjecture_c(),
+        "c2": verify_c2(),
+    }
+    print(json.dumps(res, indent=2))
+    with open("scratch/_revalidation/clusterA/independent_oracle_results.json", "w") as fh:
+        json.dump(res, fh, indent=2)

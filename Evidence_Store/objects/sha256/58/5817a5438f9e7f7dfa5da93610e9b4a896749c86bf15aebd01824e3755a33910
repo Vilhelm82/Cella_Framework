@@ -1,0 +1,71 @@
+#!/usr/bin/env python3
+"""
+INDEPENDENT check of claim 4 (parity trap). Written from scratch, no import of
+their scripts. mpmath oracle.
+
+Identity under test (pure algebraic, Sterbenz region x in (-0.005,0.005)):
+   direct = 1 - x
+   power  = sqrt(direct)**2        (float64)
+   Late F2 = power + (x - 1.0)      -- math truth = 0, so float value == abs error
+   Early F2 = (power - 1.0) + x
+
+V_n := power. We bin by sign(V_n - 1) i.e. whether V_n < 1 (x>0 side) vs V_n>1.
+Question: is there a one-sided, ~0.5-ulp(1) clustering of the Late residual on
+the V_n<1 side (a parity-driven residual trap)?
+
+We report, per side:
+  - count of Late residuals whose magnitude is within 0.05 ulp of 0.5 ulp(1)
+  - the SIGN distribution of the Late residual (one-sidedness)
+  - the discrete set of residual values / ulp(1) actually observed
+"""
+import numpy as np
+import mpmath as mp
+mp.mp.dps = 100
+
+ULP1 = 2.0 ** -52
+
+xs = np.linspace(-0.005, 0.005, 20001)
+xs = xs[np.abs(xs) > 1e-12]  # drop exact 0
+
+late = np.empty_like(xs)
+early = np.empty_like(xs)
+vn = np.empty_like(xs)
+for i, x in enumerate(xs):
+    direct = 1.0 - x
+    r = np.sqrt(direct)
+    power = r * r
+    vn[i] = power
+    late[i] = power + (x - 1.0)
+    early[i] = (power - 1.0) + x
+
+vn_lt1 = vn < 1.0          # this is the x>0 side
+vn_gt1 = vn > 1.0
+
+late_u = late / ULP1
+early_u = early / ULP1
+
+def near_half(u):
+    return np.sum(np.abs(np.abs(u) - 0.5) < 0.05)
+
+print("LATE residual / ulp(1):")
+print(f"  V_n<1 (x>0): n={vn_lt1.sum()} near-0.5ulp={near_half(late_u[vn_lt1])}"
+      f" mean={late_u[vn_lt1].mean():+.4f} (signed) sign>0:{(late[vn_lt1]>0).sum()} sign<0:{(late[vn_lt1]<0).sum()} sign==0:{(late[vn_lt1]==0).sum()}")
+print(f"  V_n>1 (x<0): n={vn_gt1.sum()} near-0.5ulp={near_half(late_u[vn_gt1])}"
+      f" mean={late_u[vn_gt1].mean():+.4f} (signed) sign>0:{(late[vn_gt1]>0).sum()} sign<0:{(late[vn_gt1]<0).sum()} sign==0:{(late[vn_gt1]==0).sum()}")
+
+# Discrete value set of LATE residual on V_n<1 side, in ulp(1)
+uvals_lt = np.unique(np.round(late_u[vn_lt1], 6))
+uvals_gt = np.unique(np.round(late_u[vn_gt1], 6))
+print(f"\n  distinct LATE residual values (ulp1) on V_n<1 side (first 12): {uvals_lt[:12]}")
+print(f"  distinct LATE residual values (ulp1) on V_n>1 side (first 12): {uvals_gt[:12]}")
+
+# Cross-check the 0.5-ulp 'trap' precisely: how many V_n<1 points have
+# late residual EXACTLY == -0.5*ulp(1) or +0.5*ulp(1)?
+exact_half = np.sum(np.isclose(np.abs(late[vn_lt1]), 0.5*ULP1, rtol=0, atol=1e-300))
+print(f"\n  LATE residual exactly +-0.5 ulp(1) on V_n<1 side: {exact_half} / {vn_lt1.sum()}")
+
+# mpmath confirmation: is math-truth of Late really 0? (so float val == abs err)
+xtest = 0.0031
+dm = mp.mpf(1) - mp.mpf(xtest)
+truth = mp.sqrt(dm)**2 + (mp.mpf(xtest) - 1)   # exact-ish (sqrt is irrational but power+(x-1) cancels to 0 only approx)
+print(f"\n  mpmath note: exact sqrt(1-x)^2 + (x-1) at x={xtest} = {mp.nstr(truth, 6)} (NOT exactly 0; identity is float-level)")

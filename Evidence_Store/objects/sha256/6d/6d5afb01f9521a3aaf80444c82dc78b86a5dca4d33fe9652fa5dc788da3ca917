@@ -1,0 +1,196 @@
+"""INDEPENDENT oracle check of CLAIM 1 (Phase 2A F1 boundary as instrument artifact).
+
+Sub-claims under test:
+ (ii) SR's apparent anchor-invariant boundary is the 80-bit float128 noise floor;
+      removing float128 from the binary ladder RELOCATES the boundary
+      0.74291 -> 0.34492.
+ (iii) the named 'dominating term' is REFUTED: F1 residual is EXACTLY 0 at the
+       SR / Schw / PA collapse cells (equal-and-opposite parity split).
+
+We reimplement the F1 residual and the R^2-vs-u_p fit FROM SCRATCH (our own
+least-squares), and use exact rational arithmetic (fractions.Fraction) +
+mpmath(>=2000 bit) as the oracle for the exact-zero claim. We do NOT call the
+scratch module's fit_linear; we write our own.
+"""
+from __future__ import annotations
+
+import math
+from decimal import Decimal, localcontext
+from fractions import Fraction
+
+import numpy as np
+import mpmath as mp
+
+# ------------------------------------------------------------------ f grid (mirror spec)
+def f_grid(n_per_decade=24, f_max=0.9, f_min_exp=12):
+    lo = -float(f_min_exp)
+    hi = math.log10(f_max)
+    n = int(round((hi - lo) * n_per_decade)) + 1
+    out = []
+    for i in range(n):
+        t = hi + (lo - hi) * (i / (n - 1))
+        out.append(10.0 ** t)
+    out.append(0.5)
+    return tuple(sorted(set(out), reverse=True))
+
+
+def operand_for_f(fixture, f):
+    if fixture == "schwarzschild":
+        return 2.0 / (1.0 - f)
+    if fixture == "sr":
+        return float(np.sqrt(1.0 - f))
+    if fixture in ("pure_algebraic", "cbrt_chain"):
+        return 1.0 - f
+    raise ValueError(fixture)
+
+
+DT = {"float32": np.float32, "float64": np.float64, "float128": np.float128}
+
+
+def u_p(label):
+    if label in DT:
+        return float(np.finfo(DT[label]).eps) / 2.0
+    if label.startswith("decimal_"):
+        prec = int(label.split("_", 1)[1])
+        return float(Decimal(5) * (Decimal(10) ** Decimal(-prec)))
+    raise ValueError(label)
+
+
+def f1_binary(fixture, operand, label):
+    s = DT[label]
+    one, two = s(1.0), s(2.0)
+    value = s(operand)
+    if fixture == "schwarzschild":
+        direct = one - two / value
+        root = np.sqrt(direct); power = root * root
+    elif fixture == "sr":
+        sq = value * value; direct = one - sq
+        root = np.sqrt(direct); power = root * root
+    elif fixture == "pure_algebraic":
+        direct = one - value
+        root = np.sqrt(direct); power = root * root
+    elif fixture == "cbrt_chain":
+        direct = one - value
+        root = np.cbrt(direct); power = root * root * root
+    else:
+        raise ValueError(fixture)
+    return abs(float(power - direct))
+
+
+def f1_decimal(fixture, operand, prec):
+    with localcontext() as ctx:
+        ctx.prec = prec
+        one, two = Decimal(1), Decimal(2)
+        value = Decimal.from_float(float(operand))
+        if fixture == "schwarzschild":
+            direct = one - two / value
+        elif fixture == "sr":
+            direct = one - value * value
+        elif fixture == "pure_algebraic":
+            direct = one - value
+        else:
+            raise ValueError(fixture)
+        root = direct.sqrt(); power = root * root
+        return abs(float(power - direct))
+
+
+def my_r_squared(xs, ys):
+    """Our own OLS R^2, independent of scratch fit_linear."""
+    x = np.asarray(xs, float); y = np.asarray(ys, float)
+    A = np.column_stack([np.ones_like(x), x])
+    coef, *_ = np.linalg.lstsq(A, y, rcond=None)
+    pred = A @ coef
+    ss_res = float(np.dot(y - pred, y - pred))
+    ss_tot = float(np.dot(y - np.mean(y), y - np.mean(y)))
+    if ss_tot == 0.0:
+        return 1.0 if ss_res == 0.0 else 0.0
+    return 1.0 - ss_res / ss_tot
+
+
+def first_dirty(fixture, binary_labels, anchor, tol=1.0 - 1e-9):
+    grid = f_grid()
+    last_clean = None
+    for f in grid:
+        op = operand_for_f(fixture, f)
+        xs, ys = [], []
+        for lab in binary_labels:
+            xs.append(u_p(lab)); ys.append(f1_binary(fixture, op, lab))
+        if anchor is not None and fixture != "cbrt_chain":
+            prec = int(anchor.split("_", 1)[1])
+            xs.append(u_p(anchor)); ys.append(f1_decimal(fixture, op, prec))
+        r2 = my_r_squared(xs, ys)
+        if r2 >= tol:
+            last_clean = f
+        else:
+            return last_clean, f
+    return last_clean, None
+
+
+def exact_f1_at(fixture, f, label="float64"):
+    """Compute F1 residual EXACTLY at operand for this f, via Fraction, cross-checked mpmath."""
+    op = operand_for_f(fixture, f)
+    s = DT[label]
+    one, two = s(1.0), s(2.0)
+    value = s(op)
+    if fixture == "sr":
+        sq = value * value; direct = one - sq; root = np.sqrt(direct); power = root * root
+    elif fixture == "schwarzschild":
+        direct = one - two / value; root = np.sqrt(direct); power = root * root
+    elif fixture == "pure_algebraic":
+        direct = one - value; root = np.sqrt(direct); power = root * root
+    else:
+        raise ValueError(fixture)
+    # exact residual power - direct using Fraction of the STORED float64 values
+    f1_exact = Fraction(float(power)) - Fraction(float(direct))
+    # mpmath cross check at 3000 bits
+    mp.mp.prec = 3000
+    f1_mp = mp.mpf(float(power)) - mp.mpf(float(direct))
+    return {
+        "f": f, "operand": float(op),
+        "direct_hex": float(direct).hex(), "root_hex": float(root).hex(),
+        "power_hex": float(power).hex(),
+        "f1_exact_is_zero": (f1_exact == 0),
+        "f1_exact": f1_exact,
+        "f1_mp_3000bit": f1_mp,
+    }
+
+
+def main():
+    print("=== Sub-claim (ii): SR boundary with vs without float128 ===")
+    full = ("float32", "float64", "float128")
+    no128 = ("float32", "float64")
+    for anchor in ("decimal_50", "decimal_120", "decimal_300"):
+        lc_f, fd_f = first_dirty("sr", full, anchor)
+        lc_n, fd_n = first_dirty("sr", no128, anchor)
+        print(f"   anchor={anchor:12s}  WITH float128 first_dirty_f={fd_f}   WITHOUT float128 first_dirty_f={fd_n}")
+
+    print("\n   (also report which tiers are nonzero at the WITH-128 SR boundary cell)")
+    lc_f, fd_f = first_dirty("sr", full, "decimal_50")
+    op = operand_for_f("sr", fd_f)
+    for lab in ("float32", "float64", "float128"):
+        print(f"      {lab}: F1={f1_binary('sr', op, lab):.6e}")
+    print(f"      decimal_50: F1={f1_decimal('sr', op, 50):.6e}")
+
+    print("\n=== Sub-claim (iii): F1 residual EXACTLY 0 at SR/Schw/PA collapse cells? ===")
+    # Get each fixture's own collapse cell (first_dirty) using the FULL ladder + decimal_50
+    for fixture in ("sr", "schwarzschild", "pure_algebraic"):
+        lc, fd = first_dirty(fixture, full, "decimal_50")
+        rec = exact_f1_at(fixture, fd, "float64")
+        print(f"   {fixture:14s} collapse f={fd}")
+        print(f"      operand={rec['operand']!r}")
+        print(f"      direct_hex={rec['direct_hex']} power_hex={rec['power_hex']}")
+        print(f"      F1_exact (Fraction) == 0 ? {rec['f1_exact_is_zero']}   value={rec['f1_exact']}")
+        print(f"      F1 (mpmath 3000-bit) = {rec['f1_mp_3000bit']}")
+
+    print("\n=== cbrt_chain F1 at its first_dirty (should be NONZERO) ===")
+    lc, fd = first_dirty("cbrt_chain", full, None)
+    op = operand_for_f("cbrt_chain", fd)
+    s = np.float64
+    one = s(1.0); value = s(op); direct = one - value
+    root = np.cbrt(direct); power = root * root * root
+    f1c = Fraction(float(power)) - Fraction(float(direct))
+    print(f"   cbrt_chain collapse f={fd}  F1_exact={f1c}  ==0? {f1c==0}  float={float(f1c):.3e}")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,67 @@
+{
+  "schema_id": "cella.continuation.cce0_baseline_lock",
+  "schema_version": "1.1",
+  "date": "2026-07-14",
+  "verdict": "PASS_RECERTIFIED",
+  "authority_event": {
+    "kind": "authorized_baseline_shift",
+    "reason": "required transport-safety edit after the v1.0 release record",
+    "previous_certificate_schema": "1.0",
+    "current_certificate_schema": "1.1",
+    "change_commit": "2a2fdc75e0cc52aa5e8d6096873a4ae9992736aa",
+    "instruction": "recertify and record the event in the final report"
+  },
+  "repository": {
+    "root": "/home/wlloyd/Cella Framework",
+    "head": "50683b971399236abe413cafcf2c56c5b1b9228c",
+    "branch": "main",
+    "python": "3.14.6",
+    "platform": "Linux 7.0.13-100.fc43.x86_64 x86_64",
+    "legacy_lane_worktree_diff": false,
+    "unrelated_dirty_work_preserved": true
+  },
+  "authorities": {
+    "handoff": {
+      "path": "research/paper/Theorems/DBP/technical_supplements/CODEX_HANDOFF_CELLA_CONTINUATION_ENGINE_v0.2.md",
+      "sha256": "001fbfb3f6a84d9ba90e843fcf10feedd33e9dba7401263e29ec2ff1fd1c12b8"
+    },
+    "superseded_release_receipt": {
+      "path": "research/campaigns/DBP_NATIVE_RELATIVE_PERIOD_EVALUATOR/DBP_NATIVE_EVALUATOR_RELEASE_REPORT_v1.0.json",
+      "sha256": "1c2819a237686abed7db1aaaac0fb3195f3302da32017d3edf346c7a7e4db5fa",
+      "scope": "historical schema-1.0 byte lock; mathematical release evidence retained"
+    }
+  },
+  "tests": {
+    "available_engine_test_processes": {"passed": 34, "failed": 0},
+    "dbp_gate_assertions": 1591,
+    "exact_verifier_assertions": [47, 75, 18],
+    "exact_verifiers_passed": true,
+    "forbidden_dependency_gate_passed": true
+  },
+  "certificate_replay": {
+    "clean_processes": 2,
+    "certificates_per_process": 6,
+    "byte_identical": true,
+    "canonicalization": "UTF-8 JSON array; sort_keys=true; separators=(',', ':')",
+    "canonical_bundle_sha256": "aa97101da7ae03f127adf4dc7940128fbdc8ee425a21c2ef88b828c76afd2989",
+    "all_current_certificates_verified": true,
+    "evaluations": [
+      {"target": "primary", "requested_bits": 192, "certificate_digest": "a2ee898068f07889de338866a97d86d221758f40dbaf80cebeaa8b7ad83fadde"},
+      {"target": "dual_cpv", "requested_bits": 192, "certificate_digest": "b0af49eed283d049f16d8ca13d11532f59975ffc716405387ef6f55ce3104ed3"},
+      {"target": "primary", "requested_bits": 256, "certificate_digest": "60d584a33bbde31c4e2a0126f63165e34cccb75f4e991b99be004cf90a36fb0b"},
+      {"target": "dual_cpv", "requested_bits": 256, "certificate_digest": "484a56c34282b1a44deb9292040ffbed1325a6e8b8f0cb4ff0c9224852427c5f"},
+      {"target": "primary", "requested_bits": 384, "certificate_digest": "56b1e74f5a8a2b2a3e53153e2bfe1c83758483ee84e83337e7e6fa2db803b59d"},
+      {"target": "dual_cpv", "requested_bits": 384, "certificate_digest": "588be2cd98bb977a601d21f4d4a55401a8eda983ea5ed752ea59a1576c616c69"}
+    ]
+  },
+  "legacy_refusal_semantics": {
+    "wrong_sheet_wrong_path_missing_cpv": "unsupported_relative_path:path_gate",
+    "altered_pole_or_source_identity": "route_identity_failed:source_ledger",
+    "tampered_arithmetic_account": "account_not_closed:account_ledger"
+  },
+  "production_dependency_audit": {
+    "forbidden_import_or_call_hits": 0,
+    "external_referees_in_certifying_path": false
+  },
+  "production_source_modified_by_recertification": false
+}

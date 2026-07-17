@@ -1,0 +1,125 @@
+[
+  {
+    "instrument_artifact_risk": "CONFIRMED AND DECISIVE: every reported R^2-departure boundary in Task A is an instrument artifact, not a substrate boundary. Three independent strands all converge.\n\n(1) Anchor-tier dependence (PA/Schw): confirmed from the recorded trace. first_dirty_f moves decimal_50=0.74291253059288 -> decimal_120=0.5571606608279347 for both pure_algebraic and schwarzschild (distinct count = 2, moves_with_anchor = true). The boundary tracks the decimal anchor's own floor, exactly the instrument-floor signature.\n\n(2) SR's anchor-invariance is itself an instrument artifact (the key new finding). The headline called SR 'candidate-real' because its boundary is invariant across decimal_50/decimal_120. But anchor-invariance is the WRONG test here: at the SR first-dirty cell (operand 0.5070379368519875), the per-precision residuals are float32=0, float64=0, decimal=0, and float128=5.421010862427522e-20 \u2014 i.e. the float128 tier is the ONLY nonzero residual (n_distinct_nonzero=1). Raising the DECIMAL anchor cannot move a boundary that is set by the float128 tier, so 'decimal-anchor invariance' is vacuous for SR. The correct discriminating test is to vary the BINARY tiers. My independent re-run (scratch/_A_lens_refutation.py) did exactly this: removing the float128 tier moves SR's first_dirty_f from 0.74291253059288 to 0.34492000219357877 (distinct_first_dirty_f_across_configs=[0.34492, 0.74291], sr_boundary_moves_when_tiers_changed=true), and it stays at 0.34492 across decimal_50/120/200/300. So SR's boundary is located precisely at the f where the caveated 80-bit-extended float128 tier (eps~1.084e-19, float128_is_ieee_binary128=false) is the sole tier with a nonzero residual. That is the purest instrument artifact: the 'boundary' IS the float128 tier's noise floor. Remove that one apparatus tier and it relocates to float64's floor.\n\n(3) Degenerate-fit mechanism: confirmed. At essentially all first-dirty cells the fit is under-determined \u2014 n_distinct_nonzero_residuals=1 (SR both anchors; PA/Schw decimal_50; cbrt) with one borderline case at 2 (PA decimal_120). A 2-parameter linear fit C=a+u_p*b_k needs >=2 distinct nonzero residuals to be identifiable; with exactly one nonzero point the R^2!=1.0 (observed r2~0.111 or ~0.25) is a least-squares artifact of fitting a line through a near-degenerate point cloud, carrying no substrate signal. The harness's own fit_carries_substrate_signal flag is false at these cells. The float64 collapse decomposition corroborates pure round-off: additive_check_exact=0 exactly, and for PA/Schw/SR eps_pow = -eps_root (ratio=1.0), i.e. the two error terms are equal-and-opposite \u2014 a non-separating, degenerate decomposition.\n\nNet: the original artifact's headline ('all 4 fixtures = degenerate_fit_artifact_not_a_substrate_boundary') is CORRECT, and the per-fixture instrument-artifact reasoning is strengthened \u2014 including for SR, whose 'candidate-real' caveat is downgraded: SR is an artifact too, via float128-tier dependence that the decimal-anchor test was blind to.",
+    "lens": "A:instrument-artifact",
+    "recommended_caveats": [
+      "Verdict CONFIRMED: all four Task A boundaries are instrument artifacts, consistent with the artifact's own 'degenerate_fit_artifact_not_a_substrate_boundary' classification for every fixture. The original numeric trace reproduced exactly under an independent recomputation.",
+      "Correction to the original framing of SR as 'candidate-real / anchor-invariant => intrinsic to binary arithmetic': anchor-invariance is necessary but NOT sufficient. SR's boundary is invariant to the DECIMAL anchor only because the boundary cell's sole nonzero residual is the float128 tier; the decimal tier is identically zero there and so cannot move it. The discriminating test is varying the BINARY tiers, which moves SR's boundary (0.74291 -> 0.34492 when float128 is removed). Recommend the harness add a binary-tier-swap rule-out (drop-float128 / drop-float32) alongside the decimal-anchor rule-out to avoid this blind spot.",
+      "The float128 tier is, by the artifact's own platform block, 80-bit x86 extended (eps 1.084202172485504434e-19), NOT IEEE binary128 (float128_is_ieee_binary128=false). SR's 'boundary' is literally this caveated tier's noise floor (residual 5.421010862427522e-20). Any conclusion that depended on it would be an x86-extended-precision artifact, host-specific and non-portable; on a true binary128 host the location would differ again.",
+      "Degenerate-fit confirmation: at the first-dirty cells the 2-param linear fit has only 1 distinct nonzero residual (one borderline case at 2 for PA/decimal_120), so the sub-1.0 R^2 values (~0.111, ~0.25) are least-squares artifacts of an under-determined fit, not substrate signal (fit_carries_substrate_signal=false). The equal-and-opposite eps_pow=-eps_root split (ratio=1.0) for PA/Schw/SR is a further degeneracy signature; cbrt differs (ratio~6.66, eps_root-dominated) but is still single-nonzero-tier.",
+      "All numbers here are observed and reproducible: float64 residuals at named hex-representable operands, and exact Fraction reductions with additive_check_exact='0'. The decimal/Decimal tiers are the true high-precision anchors; float128 is apparatus-only and caveated.",
+      "Artifacts written this session (eval-layer, scratch/ only): scratch/_A_lens_refutation.py and scratch/_A_lens_refutation_results.json. No src/ files were touched."
+    ],
+    "refutation_attempts": [
+      {
+        "claim": "Method as described: model C_{p,k}=a_k+u_p*b_k, path F1, ladder float32/64/128 + decimal_50/decimal_120, boundary = first f where per-f R^2 of C-vs-u_p departs 1.0, with degenerate-fit guard (n_distinct_nonzero>=2) and anchor-tier rule-out.",
+        "method": "Read full harness scratch/phase2A_precision_scaling_boundary.py (445 lines) and the artifact's platform + per-fixture summary.",
+        "result": "CONFIRMED. Harness implements exactly this and self-flags float128 as 80-bit x86 extended (float128_is_ieee_binary128=false, eps=1.084202172485504434e-19). Its classifier already requires BOTH multi-tier signal AND anchor-invariance to call a boundary 'candidate'."
+      },
+      {
+        "claim": "For PA/Schwarzschild first_dirty_f MOVES with the decimal anchor (decimal_50 ~0.74291 -> decimal_120 ~0.55716) => instrument-floor artifact.",
+        "method": "Job 1: read instrument_ruleout.first_dirty_f_per_anchor per fixture; count distinct values across anchors.",
+        "result": "CONFIRMED. PA and Schw each show {decimal_50: 0.74291253059288, decimal_120: 0.5571606608279347}, distinct=2, moves_with_anchor=true, recorded_anchor_invariant=false. Boundary tracks the anchor floor."
+      },
+      {
+        "claim": "SR boundary is anchor-INVARIANT at f~0.74291253059288, hence intrinsic to binary arithmetic (candidate-real).",
+        "method": "Job 2: independently recompute SR first_dirty_f (own binary+decimal arithmetic, same f_grid) under 8 configs: full ladder with decimal_50/120/200/300, and float128-REMOVED with decimal_50/120/200/300. Inspect per-precision residuals at the boundary cell.",
+        "result": "REFUTED as a substrate boundary. Anchor-invariance is real but VACUOUS: at the SR boundary cell only float128 is nonzero (float32=0, float64=0, decimal=0, float128=5.421010862427522e-20), so the decimal anchor cannot move it. Varying the BINARY tier instead: removing float128 moves the boundary 0.74291253059288 -> 0.34492000219357877 (stable across decimal_200/300). sr_boundary_moves_when_tiers_changed=true. SR's boundary is the float128 (caveated 80-bit extended) noise floor, not a binary-arithmetic-intrinsic feature. The decimal-anchor invariance test was the wrong instrument knob."
+      },
+      {
+        "claim": "The R^2 departure is a degenerate fit: collapse cells have too few distinct nonzero per-precision residuals to identify the 2-param linear model.",
+        "method": "Job 3: at each fixture's first-dirty cell (all anchors) extract n_tiers_nonzero, n_distinct_nonzero_residuals, fit_carries_substrate_signal, the per-precision residual vector, and the exact float64 decomposition.",
+        "result": "CONFIRMED. Distinct-nonzero-residual counts: SR=1 (both anchors), Schw=1 (decimal_50) / 1 (decimal_120), PA=1 (decimal_50) / 2 (decimal_120, borderline), cbrt=1. With <2 distinct nonzero residuals the 2-param fit is under-determined; observed r2 ~0.111 / ~0.25 is a least-squares artifact, fit_carries_substrate_signal=false. Float64 decomposition: additive_check_exact='0' exactly for all; PA/Schw/SR have eps_pow=-eps_root (ratio=1.0), a degenerate equal-and-opposite split; cbrt ratio=6.66 (eps_root-dominated). Mechanism is pure round-off, no substrate boundary."
+      },
+      {
+        "claim": "An alternative reading: SR could be genuinely binary-intrinsic because removing float128 'just lowers resolution' rather than relocating a real boundary.",
+        "method": "Check whether the post-removal boundary (0.34492) is itself a degenerate single-nonzero-tier cell (float64-floor) vs a genuine multi-tier signal cell.",
+        "result": "REFUTED. The float128-removed SR boundary at 0.34492 also has n_distinct_nonzero=1 (only float64=5.551e-17 nonzero) \u2014 it is simply the float64 noise floor. So neither the float128-set boundary nor the float64-set boundary carries multi-tier substrate signal; both are apparatus floors. There is no tier-invariant SR boundary, confirming artifact."
+      },
+      {
+        "claim": "The empty tool renders earlier in the session meant commands failed and no analysis was possible.",
+        "method": "Cross-check across windows: the harness read, directory listing, summary extraction, refutation-harness run (EXIT=0, 'SR_MOVES True'), and full results JSON all rendered with content; a transient mid-session window rendered empty per the documented display-channel fault.",
+        "result": "REFUTED. The fault was the documented intermittent render glitch, not a computation failure. All key outputs were ultimately observed with content; this verdict rests on rendered, reproducible numbers (hex-anchored residuals, exact Fraction additive_check='0'), not on the prior premature 'uncertain' submissions."
+      }
+    ],
+    "task_id": "A",
+    "verdict": "confirmed"
+  },
+  {
+    "instrument_artifact_risk": "HIGH. The headline rests on a tie-break artifact and a brief/artifact mismatch, not on exact dominance. (1) numpy float128 confirmed 80-bit x86 extended; never used as truth. Exact verdict rests on fractions.Fraction corroborated by mpmath, so the re-derivation itself is instrument-independent and reproducible (I matched the artifact's eps_pow, eps_root, and f1_exact=0 exactly from its own stored hex). (2) DOMINANCE IS AN ILLUSION: at every reported collapse cell (sr, schwarzschild, pure_algebraic) the F1 residual is f1_exact = 0.0 EXACTLY and eps_pow = -eps_root (equal and opposite). ratio=1.0 is PARITY. The harness names eps_pow only via Python max() first-on-tie ordering (dict lists eps_pow before eps_root) \u2014 a reporting artifact, not a measured fact. (3) TASK BRIEF IS MIS-SPECIFIED: it attributes operand 7.779453446767679 and a '-3.105e-17 squaring of R' to SR, but 7.779 is the SCHWARZSCHILD operand, SR's operand is 0.5070, and the -3.105e-17 value is eps_pow at the schwarzschild/pure_algebraic cell, where f1 itself is still 0. (4) FIXTURE COLLAPSE: schwarzschild and pure_algebraic carry byte-identical decomposition records (same direct_stored_hex 0x1.7c5f07fd5ebadp-1); they are one cell duplicated, so 'generality across fixtures' is false. (5) The artifact's OWN cbrt_chain record contradicts the headline (dominating_term = eps_root_sqrt_roundtrip, ratio 6.658, nonzero f1).\")",
+    "lens": "A:exact-dominance \u2014 independent exact-arithmetic re-derivation and refutation of the named dominating term eps_pow_squaring_round at the float64 SR collapse cell of the F1 residual. The actual harness F1 residual is f1 = power - direct where direct=1-beta^2, root=sqrt(direct), power=root*root; the harness decomposes f1 = eps_pow_squaring_round (power - root^2_exact) + eps_root_sqrt_roundtrip (root^2_exact - direct). Exact anchors: fractions.Fraction (closed-form exact) cross-checked by mpmath at up to 2000-bit; numpy float64 is the measured tier; numpy float128 confirmed 80-bit x86 extended and used only as instrument.",
+    "recommended_caveats": [
+      "VERDICT: refuted. eps_pow_squaring_round does NOT dominate at the SR collapse cell. The F1 residual there is exactly 0.0, and eps_pow_squaring_round (+4.931e-17) and eps_root_sqrt_roundtrip (-4.931e-17) are equal and opposite. ratio=1.0 means PARITY, not dominance.",
+      "The harness's dominating_term field is unreliable on ties: exact_decomposition uses max(terms, key=|.|) which returns the FIRST key on equal magnitude, and the dict orders eps_pow_squaring_round before eps_root_sqrt_roundtrip, so any exact tie is silently reported as eps_pow dominance. Fix: report 'tie' (or both terms) when |eps_pow| == |eps_root|, and recompute the cited headline.",
+      "The task BRIEF is mis-specified: operand 7.779453446767679 belongs to SCHWARZSCHILD, not SR (SR operand = 0.5070379368519875). The '-3.105e-17' figure is eps_pow at the schwarzschild/pure_algebraic cell, where f1_exact is nevertheless 0.0. Do not cite -3.105e-17 as the SR residual.",
+      "additive_check_exact = 0 is confirmed but trivial: it holds because the two equal-and-opposite terms cancel to the zero residual, not because one term dominates.",
+      "schwarzschild and pure_algebraic collapse records are byte-identical (same direct_stored_hex 0x1.7c5f07fd5ebadp-1, root, power, eps_pow, f1). They are one cell duplicated; 'generality across fixtures' is not demonstrated. Re-run to confirm the fixtures probe distinct operands.",
+      "The artifact's own cbrt_chain float64 record reports dominating_term = eps_root_sqrt_roundtrip (ratio 6.658, f1_exact = -1.11e-16, nonzero) \u2014 directly contradicting any uniform 'squaring-round dominates' headline. cbrt is the only fixture with a genuinely nonzero F1 residual and a genuine (non-tied) dominating term, and there the dominant term is the OTHER one.",
+      "Whether eps_pow or eps_root has larger magnitude is cell-contingent (scan: 2198 vs 1802 of 4000 cells); there is no structural dominance of the squaring-round term on the F1 path.",
+      "Established at n=2 (sqrt fixtures) plus inspection of the n=3 cbrt record. The exact re-derivation used Fraction as the authoritative anchor; mpmath needed >=2000-bit precision to resolve sub-ULP residuals (it rendered -0.0 at 600-bit), so default-precision mpmath must not be trusted for these sub-ULP checks."
+    ],
+    "refutation_attempts": [
+      {
+        "claim": "At the SR float64 collapse cell the F1 residual is -3.105e-17 and eps_pow_squaring_round dominates with ratio ~1.0 (task-brief headline)",
+        "method": "Read the ACTUAL artifact record fixtures.sr.exact_decomposition_at_collapse.float64 and re-derived f1 = power - direct exactly via fractions.Fraction from the artifact's own stored hex (direct_stored_hex 0x1.7c5f07fd5ebacp-1, root 0.861923738269738, power 0.7429125305928799), with mpmath cross-check.",
+        "result": "REFUTED on multiple counts. (a) The artifact's SR f1_exact is 0.0 EXACTLY (f1_exact_num=0, f1_exact_den=1, f1_exact_float=0.0), NOT -3.105e-17. The F1 residual at the SR collapse cell vanishes identically. (b) eps_pow_squaring_round = +4.9312238722904746e-17 and eps_root_sqrt_roundtrip = -4.9312238722904746e-17: they are EQUAL AND OPPOSITE and cancel to exactly zero. (c) The task brief's operand 7.779453446767679 is the SCHWARZSCHILD operand, not SR; SR's operand is 0.5070379368519875. The brief conflates fixtures."
+      },
+      {
+        "claim": "eps_pow_squaring_round dominates (ratio 1.0 means it is the dominant/sole term)",
+        "method": "Re-derived both terms exactly (Fraction + mpmath) for SR; inspected the harness tie-break logic in exact_decomposition (lines 309-312: dominating = max(terms, key=|.|); other = the complement; ratio = |dom|/|other|).",
+        "result": "REFUTED as a dominance claim. The two terms are EQUAL in magnitude (|eps_pow| = |eps_root| = 4.931e-17 for SR; = 3.105e-17 for schwarzschild/pure_algebraic). ratio = 1.0 therefore means PERFECT PARITY, not dominance. The harness reports 'eps_pow_squaring_round' only because Python's max() returns the FIRST max on a tie and the dict lists eps_pow first \u2014 a tie-break artifact. eps_root_sqrt_roundtrip has identical magnitude and equal claim. The named term does NOT dominate; it ties."
+      },
+      {
+        "claim": "Build's additive_check_exact = 0",
+        "method": "Exact Fraction evaluation eps_pow + eps_root - f1 at the SR cell, and re-derivation from artifact stored hex.",
+        "result": "CONFIRMED. eps_pow + eps_root = (+4.931e-17) + (-4.931e-17) = 0 = f1 exactly; additive_check string is '0'. This is the ONE part of the headline that holds, but it holds trivially because the two equal-and-opposite terms cancel to the zero residual."
+      },
+      {
+        "claim": "The decomposition is complete (no hidden third term)",
+        "method": "Exact test f1 = (power - root^2_exact) + (root^2_exact - direct) = eps_pow + eps_root via Fraction.",
+        "result": "CONFIRMED. The two-term split is algebraically complete for the (direct, root, power) triple; eps_pow + eps_root == f1 exactly. No third term is possible."
+      },
+      {
+        "claim": "Generality across fixtures (schwarzschild collapse cell independently confirms)",
+        "method": "Re-derived schwarzschild and pure_algebraic collapse cells from their artifact direct_stored_hex (both 0x1.7c5f07fd5ebadp-1) exactly.",
+        "result": "REFUTED as independent generality. schwarzschild and pure_algebraic share the BYTE-IDENTICAL direct_stored_hex, root, power, eps_pow (-3.1050974754189676e-17), eps_root (+3.1050974754189676e-17), and f1_exact = 0.0 \u2014 they are the SAME collapse cell reported twice, with f1 = 0 and equal-and-opposite terms, exactly as SR. No fixture shows genuine eps_pow dominance; all show eps_pow = -eps_root and f1 = 0."
+      },
+      {
+        "claim": "eps_pow dominance is structural for the F1 path",
+        "method": "Scanned 4000 nearby float64 cells (pure_algebraic-style direct=1-v^2, root=sqrt, power=root*root), classifying larger-magnitude term exactly via Fraction.",
+        "result": "REFUTED as structural. eps_pow larger in 2198 cells, eps_root larger in 1802, zero ties in the scanned band. Which term is larger is cell-contingent; at the reported collapse cells the two are exactly tied (f1=0), so neither dominates. The headline's 'eps_pow dominates' is unsupported at the cells it cites and non-general elsewhere."
+      },
+      {
+        "claim": "cbrt_chain shows eps_pow dominance (brief implies uniform headline)",
+        "method": "Read cbrt_chain float64 collapse record from the artifact.",
+        "result": "REFUTED for cbrt. The artifact itself reports cbrt_chain float64 dominating_term = eps_root_sqrt_roundtrip with ratio 6.658 and f1_exact = -1.11e-16 (nonzero). So even the artifact does not claim eps_pow dominance uniformly; the brief's framing that the squaring-round term dominates is contradicted by the cbrt fixture in the same artifact."
+      }
+    ],
+    "task_id": "A:exact-dominance",
+    "verdict": "refuted"
+  },
+  {
+    "false_accepts_found": 2,
+    "gate_i_window_sensitivity_confirmed": true,
+    "harness_reproduces_recorded_sha256": true,
+    "lens": "false-accept re-run (display-fault-blanked lens) on phase2C nested-window 3-model IC classifier",
+    "n_borderline_probes": 9,
+    "notes": [
+      "STEP 0 integrity gate PASS: canonical harness phase2C_nested_window_harness.py (28994 bytes, sha256 69f58ef30c805a5add5de3cc90fe00df48382244bbd496b8fbdb38d19488e53f) re-ran fresh with exit 0 / empty stderr; phase2C_typed_result.json recomputes to the recorded sha256 exactly. On-disk harness is the genuine canonical version, not truncated.",
+      "STEP 1: 9 borderline non-algebraic probes + 1 true-accept control run through the harness's OWN classify() via the authored importlib probe. True-accept control (0.9 + 0.7*sqrt(f) + 0.2*f^2) correctly classified algebraic_branch (delta_aic 1770.9, nw STABLE drift 0.0075).",
+      "REFUTE CONDITION NOT MET: all 4 genuine iterated-log forms were correctly REJECTED as non_algebraic_drift -> P1 (sqrt + small iterlog, nw UNSTABLE 5.90), P5 (large iterlog, M_E wins both IC, nw UNSTABLE 3.08), P6 (strong sqrt + tiny iterlog, nw UNSTABLE 36.4), P8 (microscopic iterlog under sqrt, nw UNSTABLE 3.71). genuine_iterated_log_false_accepts = [] (zero). No iterated-log form was misread as a stable fractional algebraic branch.",
+      "The 2 false-accepts are P2 (log-squared: 3.0 + 0.05*log(f)^2) and P3 (sqrt*log: 1.5 + 0.3*sqrt(f)*log(1/f)). Both were labelled algebraic_branch (M_A wins AIC+BIC, nw STABLE: P2 drift 1.9927, P3 drift 1.0595). These are slowly-varying log-family forms, NOT iterated-log (essential) drift, so they fall outside the must-reject class the gate guards. P2 is a known degeneracy (see scratch/Phase2C_LogSquared_Degeneracy_Proof.md): the power basis [1, f^rho, f^rho2] approximates log(f)^2 well enough over this 28-point geometric grid to win IC and stay nw-STABLE. P3's sqrt(f)*log(1/f) is dominated by the sqrt(f) algebraic envelope, so the local-slope estimate stays near 0.5 and STABLE.",
+      "P2 is the thinnest margin (nw drift 1.9927, just under K_DRIFT=2.0) -> a borderline that would flip to UNSTABLE under a slightly tighter drift gate; this is the same window-count fragility surfaced in STEP 2.",
+      "Verdict partially_confirmed per rubric: false-accepts of the protected class (iterated-log as stable fractional branch) are ZERO and the true-accept control passes, AND the gate-i window-count fragility is confirmed as a real caveat. Not 'confirmed' because two NON-iterated-log borderline forms (log^2, sqrt*log) are still accepted as algebraic_branch; not 'refuted' because no genuine iterated-log false-accept occurred.",
+      "Outputs (all absolute): /home/william_lloydlt/projects/V4/Lloyd_Engine_V4/scratch/_p2c_false_accept_report.json (regenerated this run, sha256 97b7780fc17aca952518bcf740bf0037d5e99cc9b88276740a12751694ad455d) and /home/william_lloydlt/projects/V4/Lloyd_Engine_V4/scratch/phase2C_typed_result.json (regenerated byte-identical to recorded). Master diagnostic also at /tmp/_p2c_master.json.",
+      "DISPLAY-FAULT DEFENSE applied: every key result was confirmed via multiple independent render channels (Read of JSON files, od -c byte dump, base64 single-line, and a results-encoded sentinel filename _RESULT_S0repro_True__...__S1FA_P2-P3__S1genIterlogFA_0__...__E2_1-053_S__E4_3-082_U). All channels agreed; no empty renders affected the conclusions.",
+      "Gate-i / gate-ii of the canonical artifact both MET on regeneration: Fixture E algebraic_rejected=true (M_E wins AIC+BIC, nw UNSTABLE), Fixture C s_inf_abs_error=0.0 (isolated from B*f^rho bias). Fixture D classified non_algebraic_drift."
+    ],
+    "ran_successfully": true,
+    "recorded_vs_observed_sha256": "recorded=1400781319d313758b9555002764fa08c1b594966558b3b9e7e20acc8bdf9198 observed=1400781319d313758b9555002764fa08c1b594966558b3b9e7e20acc8bdf9198 (exact match; byte-stable across multiple subprocess re-runs)",
+    "task_id": "C:false-accept",
+    "true_accept_control_passed": true,
+    "verdict": "partially_confirmed",
+    "window_sensitivity_detail": "Fixture E (s=2.0 - 0.15*log(f)*log(log(1/f))) nested-window drift_ratio vs K_DRIFT=2.0: nw=2 -> 1.05309 STABLE; nw=3 -> 2.450279 UNSTABLE; nw=4 -> 3.081692 UNSTABLE; nw=5 -> 3.798864 UNSTABLE; nw=6 -> 4.449675 UNSTABLE. Single STABLE->UNSTABLE flip at nw=3. Prior observation CONFIRMED exactly: STABLE at nw=2 (~1.05) and UNSTABLE at nw=4 (~3.08). drift_ratio increases monotonically with nw because finer splitting exposes the leftmost window's steeper local iterated-log slope (-0.057 at nw=2 deepening to -0.130 at nw=6) while slope_spread/|median| grows."
+  }
+]

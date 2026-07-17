@@ -1,0 +1,789 @@
+"""
+Substrate Fingerprint Atlas — Phase γ.
+
+Refinements:
+- Slot 14: window-based max/min (3 probe points) instead of single-point
+- Slot 15: max route variation over the same window
+- Slot 16 NEW: binade_loss_depth_log2 (universal cross-family)
+- Slots 3, 4, 11, 13, 14: quantized for compactness compression
+- Within-fixture stress test: slots 13–16 at each of 3 probe points per
+  four-form fixture; verify smoothness and preserved discrimination.
+
+Preregistry: Build_Docs/Reports/substrate_fingerprint_atlas_phase_gamma/preregistry.md
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import math
+import sys
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
+
+sys.path.insert(0, "src")
+
+# Phase α/β imports
+from scratch.substrate_fingerprint_atlas import (
+    Slot,
+    _na_slot,
+    _unobs_slot,
+    _failed_slot,
+    _defined_slot,
+    _load_json,
+    _test_a_entry,
+    _lifted_entry,
+    _slot_finite,
+    _values_equal,
+    slot_01_c1_sublattice_class,
+    slot_02_c2_sublattice_class,
+    slot_05_c1_fractional_cardinality,
+    slot_06_observability_ratio,
+    slot_07_sterbenz_applicable_mass_fraction,
+    slot_10_branch_fingerprint_distribution,
+    slot_12_channel_handover_beta,
+    PHASE_ALPHA_FIXTURES,
+    LIFTED_AUDIT_NAMES,
+    DUAL_ARM_CAPABLE,
+)
+from scratch.substrate_fingerprint_atlas_phase_beta import (
+    slot_08_family_tangent_signature_norm,
+    slot_09_pair_jacobian_log10_spread,
+    _ulp,
+    _four_form_at,
+    _route_a_four_form_residual,
+    _route_b_four_form_residual,
+)
+
+
+ROOT = Path(__file__).resolve().parents[1]
+REPORT_DIR = (
+    ROOT / "Build_Docs" / "Reports" / "substrate_fingerprint_atlas_phase_gamma"
+)
+ARTIFACT = REPORT_DIR / "atlas_artifact_phase_gamma.json"
+
+HARDENED_ARTIFACT = (
+    ROOT
+    / "Build_Docs"
+    / "Reports"
+    / "hardened_dual_arm_probe"
+    / "artifact_hardened_v1.json"
+)
+
+
+# Three-probe window per four-form fixture (FROZEN, preregistry §3)
+PROBE_WINDOW: dict[str, tuple[float, ...]] = {
+    "SR": (0.83, 0.85, 0.87),
+    "Schwarzschild": (4.5, 5.0, 5.5),
+    "pure_algebraic": (0.65, 0.70, 0.75),
+    "cube_root": (0.65, 0.70, 0.75),
+}
+
+
+# ---------------------------------------------------------------------------
+# Compressed slot 3, 4: max_abs lattice value
+# ---------------------------------------------------------------------------
+
+def slot_03c_c1_max_abs_level(fixture: str, variant: str) -> Slot:
+    name = "slot_03c_c1_max_abs_level"
+    entry = _test_a_entry(fixture)
+    if entry is None:
+        return _na_slot(name)
+    levels = entry.get("c1_classification", {}).get("unique_levels", [])
+    if not levels:
+        return _unobs_slot(name)
+    return _defined_slot(name, round(max(abs(float(lv)) for lv in levels), 6), bits=16)
+
+
+def slot_04c_c2_max_abs_level(fixture: str, variant: str) -> Slot:
+    name = "slot_04c_c2_max_abs_level"
+    entry = _test_a_entry(fixture)
+    if entry is None:
+        return _na_slot(name)
+    levels = entry.get("c2_classification", {}).get("unique_levels", [])
+    if not levels:
+        return _unobs_slot(name)
+    return _defined_slot(name, round(max(abs(float(lv)) for lv in levels), 6), bits=16)
+
+
+# ---------------------------------------------------------------------------
+# Compressed slot 11: dual-arm split as 3 quantized 8-bit fractions
+# ---------------------------------------------------------------------------
+
+def _quantize_fraction(f: float) -> int:
+    """Quantize a fraction in [0, 1] to 0..255."""
+    return min(255, max(0, int(round(f * 255.0))))
+
+
+def slot_11c_dual_arm_split(fixture: str, variant: str) -> Slot:
+    name = "slot_11c_dual_arm_split"
+    if not DUAL_ARM_CAPABLE.get(fixture, False):
+        return _na_slot(name)
+    data = _load_json(HARDENED_ARTIFACT)
+    if data is None:
+        return _unobs_slot(name)
+    headline = data.get("headline", {})
+    total = headline.get("total_records", 0)
+    resolved = headline.get("resolved_count", 0)
+    zero_sep = headline.get("underpromotion_breakdown", {}).get(
+        "armN_zero_path_separation", 0
+    )
+    if total == 0:
+        return _unobs_slot(name)
+    inactive = total - resolved - zero_sep
+    return _defined_slot(
+        name,
+        {
+            "resolved_q": _quantize_fraction(resolved / total),
+            "zero_sep_q": _quantize_fraction(zero_sep / total),
+            "inactive_q": _quantize_fraction(inactive / total),
+        },
+        bits=24,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Refined slot 13: window-mean curvature magnitude (kept at 16 bits)
+# ---------------------------------------------------------------------------
+
+def slot_13r_critical_curvature_log10(fixture: str, variant: str) -> Slot:
+    name = "slot_13r_critical_curvature_log10"
+    if fixture in PROBE_WINDOW:
+        all_mags: list[float] = []
+        for var in PROBE_WINDOW[fixture]:
+            forms = _four_form_at(fixture, var)
+            if forms is None:
+                continue
+            all_mags.extend(abs(v) for v in forms.values())
+        nonzero_mags = [m for m in all_mags if m > 0.0]
+        if not nonzero_mags:
+            return _unobs_slot(name)
+        return _defined_slot(name, round(math.log10(max(nonzero_mags)), 4), bits=16)
+    entry = _lifted_entry(fixture)
+    if entry is None:
+        return _na_slot(name)
+    eigs = entry.get("hessian_eigenvalues_ascending")
+    if eigs is None:
+        return _unobs_slot(name)
+    try:
+        magnitudes = [abs(float(e)) for e in eigs]
+    except (TypeError, ValueError):
+        return _failed_slot(name, "eigenvalues not iterable")
+    max_mag = max(magnitudes) if magnitudes else 0.0
+    if max_mag == 0.0:
+        return _unobs_slot(name)
+    return _defined_slot(name, round(math.log10(max_mag), 4), bits=16)
+
+
+# ---------------------------------------------------------------------------
+# Refined slot 14: window max/min (3 probe points → 12 magnitudes per fixture)
+# ---------------------------------------------------------------------------
+
+def slot_14r_conditioning_index_log10(fixture: str, variant: str) -> Slot:
+    name = "slot_14r_conditioning_index_log10"
+    if fixture in PROBE_WINDOW:
+        all_mags: list[float] = []
+        for var in PROBE_WINDOW[fixture]:
+            forms = _four_form_at(fixture, var)
+            if forms is None:
+                continue
+            all_mags.extend(abs(v) for v in forms.values())
+        nonzero_mags = sorted(m for m in all_mags if m > 0.0)
+        if len(nonzero_mags) < 2:
+            return _unobs_slot(name)
+        spread = math.log10(nonzero_mags[-1] / nonzero_mags[0])
+        return _defined_slot(name, round(spread, 4), bits=16)
+    entry = _lifted_entry(fixture)
+    if entry is None:
+        return _na_slot(name)
+    eigs = entry.get("hessian_eigenvalues_ascending")
+    if eigs is None:
+        return _unobs_slot(name)
+    try:
+        magnitudes = sorted(
+            abs(float(e)) for e in eigs if abs(float(e)) > 0.0
+        )
+    except (TypeError, ValueError):
+        return _failed_slot(name, "eigenvalues not iterable")
+    if len(magnitudes) < 2:
+        return _unobs_slot(name)
+    return _defined_slot(
+        name, round(math.log10(magnitudes[-1] / magnitudes[0]), 4), bits=16
+    )
+
+
+# ---------------------------------------------------------------------------
+# Refined slot 15: max route variation over the window
+# ---------------------------------------------------------------------------
+
+def slot_15r_route_variation_signature(fixture: str, variant: str) -> Slot:
+    name = "slot_15r_route_variation_signature"
+    if fixture in PROBE_WINDOW:
+        max_dev = 0.0
+        any_computed = False
+        for var in PROBE_WINDOW[fixture]:
+            a = _route_a_four_form_residual(fixture, var)
+            b = _route_b_four_form_residual(fixture, var)
+            if a is None or b is None:
+                continue
+            if fixture == "SR":
+                f = 1.0 - var * var
+            elif fixture in {"pure_algebraic", "cube_root"}:
+                f = 1.0 - var
+            elif fixture == "Schwarzschild":
+                f = 1.0 - 2.0 / var
+            else:
+                f = 1.0
+            dev = abs(a - b) / _ulp(f)
+            max_dev = max(max_dev, dev)
+            any_computed = True
+        if not any_computed:
+            return _failed_slot(name, "no four-form")
+        return _defined_slot(name, round(max_dev, 3), bits=24)
+    entry = _lifted_entry(fixture)
+    if entry is None:
+        return _na_slot(name)
+    f_joint = entry.get("F_joint")
+    eigs = entry.get("hessian_eigenvalues_ascending")
+    if f_joint is None or eigs is None:
+        return _unobs_slot(name)
+    max_eig_mag = max(abs(float(e)) for e in eigs) if eigs else 1.0
+    if max_eig_mag == 0.0:
+        max_eig_mag = 1.0
+    return _defined_slot(
+        name, round(abs(float(f_joint)) / _ulp(max_eig_mag), 3), bits=24
+    )
+
+
+# ---------------------------------------------------------------------------
+# NEW slot 16: binade_loss_depth_log2 (UNIVERSAL)
+# ---------------------------------------------------------------------------
+
+def slot_16_binade_loss_depth_log2(fixture: str, variant: str) -> Slot:
+    name = "slot_16_binade_loss_depth_log2"
+    if fixture in PROBE_WINDOW:
+        # Use the central probe point of the window
+        probe = PROBE_WINDOW[fixture][1]
+        forms = _four_form_at(fixture, probe)
+        if forms is None:
+            return _failed_slot(name, "no four-form")
+        max_mag = max(abs(v) for v in forms.values())
+        if max_mag == 0.0:
+            return _unobs_slot(name)
+        operand_mag = abs(probe)
+        if operand_mag == 0.0:
+            return _unobs_slot(name)
+        # binade_loss = log2(operand) - log2(result)
+        # Positive: result is below operand (cancellation occurred)
+        # Negative: result is above operand (no cancellation, growth)
+        depth = math.log2(operand_mag) - math.log2(max_mag)
+        return _defined_slot(name, round(depth, 4), bits=16)
+    # Lifted-singularity fixtures
+    entry = _lifted_entry(fixture)
+    if entry is None:
+        return _na_slot(name)
+    critical = entry.get("critical_point")
+    eigs = entry.get("hessian_eigenvalues_ascending")
+    if critical is None or eigs is None:
+        return _unobs_slot(name)
+    try:
+        operand_mag = math.sqrt(sum(float(c) ** 2 for c in critical))
+    except (TypeError, ValueError):
+        return _failed_slot(name, "critical_point not numeric")
+    max_mag = max(abs(float(e)) for e in eigs) if eigs else 0.0
+    if max_mag == 0.0 or operand_mag == 0.0:
+        return _unobs_slot(name)
+    depth = math.log2(operand_mag) - math.log2(max_mag)
+    return _defined_slot(name, round(depth, 4), bits=16)
+
+
+# ---------------------------------------------------------------------------
+# Stress test data: slot 13/14/15/16 at each probe point per four-form fixture
+# ---------------------------------------------------------------------------
+
+
+def stress_test_universal_slots(fixture: str) -> dict | None:
+    """For four-form fixtures, evaluate slots 13/14/15/16 at each probe
+    point individually. Returns None for non-four-form fixtures."""
+    if fixture not in PROBE_WINDOW:
+        return None
+    rows: list[dict] = []
+    for probe in PROBE_WINDOW[fixture]:
+        forms = _four_form_at(fixture, probe)
+        if forms is None:
+            continue
+        all_mags = [abs(v) for v in forms.values()]
+        nonzero_mags = sorted(m for m in all_mags if m > 0.0)
+        # Slot 13 at this point
+        if nonzero_mags:
+            s13 = round(math.log10(max(nonzero_mags)), 4)
+        else:
+            s13 = None
+        # Slot 14 at this point
+        if len(nonzero_mags) >= 2:
+            s14 = round(math.log10(nonzero_mags[-1] / nonzero_mags[0]), 4)
+        else:
+            s14 = None
+        # Slot 15 at this point
+        a = _route_a_four_form_residual(fixture, probe)
+        b = _route_b_four_form_residual(fixture, probe)
+        if a is not None and b is not None:
+            if fixture == "SR":
+                f = 1.0 - probe * probe
+            elif fixture in {"pure_algebraic", "cube_root"}:
+                f = 1.0 - probe
+            elif fixture == "Schwarzschild":
+                f = 1.0 - 2.0 / probe
+            else:
+                f = 1.0
+            s15 = round(abs(a - b) / _ulp(f), 3)
+        else:
+            s15 = None
+        # Slot 16 at this point
+        if all_mags and probe != 0.0 and max(all_mags) > 0.0:
+            s16 = round(math.log2(abs(probe)) - math.log2(max(all_mags)), 4)
+        else:
+            s16 = None
+        rows.append(
+            {
+                "probe": probe,
+                "slot_13": s13,
+                "slot_14": s14,
+                "slot_15": s15,
+                "slot_16": s16,
+            }
+        )
+    return {"rows": rows}
+
+
+# ---------------------------------------------------------------------------
+# Orchestrator
+# ---------------------------------------------------------------------------
+
+SLOT_FUNCTIONS_PHASE_GAMMA = [
+    slot_01_c1_sublattice_class,
+    slot_02_c2_sublattice_class,
+    slot_03c_c1_max_abs_level,
+    slot_04c_c2_max_abs_level,
+    slot_05_c1_fractional_cardinality,
+    slot_06_observability_ratio,
+    slot_07_sterbenz_applicable_mass_fraction,
+    slot_08_family_tangent_signature_norm,
+    slot_09_pair_jacobian_log10_spread,
+    slot_10_branch_fingerprint_distribution,
+    slot_11c_dual_arm_split,
+    slot_12_channel_handover_beta,
+    slot_13r_critical_curvature_log10,
+    slot_14r_conditioning_index_log10,
+    slot_15r_route_variation_signature,
+    slot_16_binade_loss_depth_log2,
+]
+
+
+def compute_fingerprint_gamma(fixture: str, variant: str = "A") -> dict:
+    slots: list[Slot] = []
+    for fn in SLOT_FUNCTIONS_PHASE_GAMMA:
+        try:
+            slot = fn(fixture, variant)
+        except Exception as exc:  # noqa: BLE001
+            slot = _failed_slot(fn.__name__, str(exc))
+        slots.append(slot)
+    total_bits = sum(s.bits for s in slots)
+    defined_count = sum(1 for s in slots if s.status == "defined")
+    return {
+        "fixture": fixture,
+        "variant": variant,
+        "fingerprint": {
+            s.name: {"value": s.value, "status": s.status} for s in slots
+        },
+        "compactness": {
+            "total_bits": int(total_bits),
+            "budget_bits": 256,
+            "in_budget": bool(total_bits <= 256),
+        },
+        "validity": {
+            "defined": defined_count > 0,
+            "finite": all(_slot_finite(s) for s in slots if s.status == "defined"),
+            "observable": any(s.status == "defined" for s in slots),
+            "selectable": True,
+            "advanceable": True,
+        },
+    }
+
+
+def distinguishability_matrix(
+    fingerprints: list[dict],
+) -> tuple[list[list[int]], list[str]]:
+    n = len(fingerprints)
+    names = [fp["fixture"] for fp in fingerprints]
+    matrix = [[0] * n for _ in range(n)]
+    for i in range(n):
+        for j in range(n):
+            if i == j:
+                continue
+            fp_i = fingerprints[i]["fingerprint"]
+            fp_j = fingerprints[j]["fingerprint"]
+            for slot_name, s_i in fp_i.items():
+                s_j = fp_j[slot_name]
+                if s_i["status"] != "defined" or s_j["status"] != "defined":
+                    continue
+                if _values_equal(s_i["value"], s_j["value"]):
+                    continue
+                matrix[i][j] += 1
+    return matrix, names
+
+
+def minimum_distinguishing_subset(fingerprints: list[dict]) -> tuple[list[str], int]:
+    n = len(fingerprints)
+    if n < 2:
+        return [], 0
+    slot_names = list(fingerprints[0]["fingerprint"].keys())
+    pair_disagreements: dict[tuple[int, int], set[str]] = {}
+    for i in range(n):
+        for j in range(i + 1, n):
+            fp_i = fingerprints[i]["fingerprint"]
+            fp_j = fingerprints[j]["fingerprint"]
+            slots = set()
+            for sn in slot_names:
+                s_i = fp_i[sn]
+                s_j = fp_j[sn]
+                if s_i["status"] != "defined" or s_j["status"] != "defined":
+                    continue
+                if not _values_equal(s_i["value"], s_j["value"]):
+                    slots.add(sn)
+            pair_disagreements[(i, j)] = slots
+    uncovered = set(k for k, v in pair_disagreements.items() if v)
+    chosen: list[str] = []
+    while uncovered:
+        scores = {
+            sn: sum(1 for p in uncovered if sn in pair_disagreements[p])
+            for sn in slot_names
+            if sn not in chosen
+        }
+        if not scores or max(scores.values()) == 0:
+            break
+        best = max(scores, key=lambda s: scores[s])
+        chosen.append(best)
+        uncovered = {p for p in uncovered if best not in pair_disagreements[p]}
+    indist = [k for k, v in pair_disagreements.items() if not v]
+    return chosen, len(indist)
+
+
+def stress_test_evaluation(
+    stress_data: dict[str, dict | None],
+    fingerprints: list[dict],
+) -> dict:
+    """Evaluate the stress test smoothness + discrimination criteria."""
+    per_fixture: dict[str, dict] = {}
+    smoothness_violations: list[dict] = []
+    for fixture, data in stress_data.items():
+        if data is None:
+            continue
+        rows = data.get("rows", [])
+        if not rows:
+            continue
+        # Smoothness: per-slot, max-min across the 3 probes should be ≤ 1 decade
+        per_slot_smoothness: dict[str, dict] = {}
+        for slot_key in ("slot_13", "slot_14", "slot_15", "slot_16"):
+            values = [r[slot_key] for r in rows if r[slot_key] is not None]
+            if len(values) < 2:
+                per_slot_smoothness[slot_key] = {"spread": None, "ok": None}
+                continue
+            spread = max(values) - min(values)
+            ok = abs(spread) <= 1.0
+            per_slot_smoothness[slot_key] = {
+                "min": round(min(values), 4),
+                "max": round(max(values), 4),
+                "spread": round(spread, 4),
+                "smooth_le_1_decade": bool(ok),
+            }
+            if slot_key in ("slot_13", "slot_14", "slot_16") and not ok:
+                smoothness_violations.append(
+                    {"fixture": fixture, "slot": slot_key, "spread": spread}
+                )
+        per_fixture[fixture] = {
+            "rows": rows,
+            "per_slot_smoothness": per_slot_smoothness,
+        }
+    # Discrimination preservation: for each fixture's stress-probe values of
+    # slot 13, check that they don't overlap with any other fixture's stress-
+    # probe values of slot 13.
+    overlap_violations: list[dict] = []
+    fixtures_with_data = [f for f, d in stress_data.items() if d is not None]
+    for fa in fixtures_with_data:
+        rows_a = stress_data[fa]["rows"]
+        s13_a = [r["slot_13"] for r in rows_a if r["slot_13"] is not None]
+        if not s13_a:
+            continue
+        a_lo, a_hi = min(s13_a), max(s13_a)
+        for fb in fixtures_with_data:
+            if fa >= fb:
+                continue
+            rows_b = stress_data[fb]["rows"]
+            s13_b = [r["slot_13"] for r in rows_b if r["slot_13"] is not None]
+            if not s13_b:
+                continue
+            b_lo, b_hi = min(s13_b), max(s13_b)
+            # Ranges overlap if a_lo <= b_hi AND b_lo <= a_hi
+            if a_lo <= b_hi and b_lo <= a_hi:
+                overlap_violations.append(
+                    {
+                        "fixture_a": fa,
+                        "fixture_b": fb,
+                        "slot": "slot_13",
+                        "range_a": [round(a_lo, 4), round(a_hi, 4)],
+                        "range_b": [round(b_lo, 4), round(b_hi, 4)],
+                    }
+                )
+    return {
+        "per_fixture": per_fixture,
+        "smoothness_violations": smoothness_violations,
+        "discrimination_overlap_violations": overlap_violations,
+    }
+
+
+def evaluate_phase_gamma_predictions(
+    fingerprints: list[dict],
+    matrix: list[list[int]],
+    min_subset: list[str],
+    stress_eval: dict,
+) -> dict:
+    names = [fp["fixture"] for fp in fingerprints]
+    n = len(names)
+
+    # P_γ1: slot 14 defined on ≥ 5 of 6
+    s14_defined = sum(
+        1
+        for fp in fingerprints
+        if fp["fingerprint"]["slot_14r_conditioning_index_log10"]["status"]
+        == "defined"
+    )
+
+    # P_γ2: slot 15 nonzero on ≥ 4 of 6
+    s15_nonzero = sum(
+        1
+        for fp in fingerprints
+        if fp["fingerprint"]["slot_15r_route_variation_signature"]["status"]
+        == "defined"
+        and fp["fingerprint"]["slot_15r_route_variation_signature"]["value"]
+        != 0.0
+    )
+
+    # P_γ3: all 15 pairs distinguishable
+    pair_count = 0
+    distinguishable = 0
+    for i in range(n):
+        for j in range(i + 1, n):
+            pair_count += 1
+            if matrix[i][j] >= 1:
+                distinguishable += 1
+
+    # P_γ4: compactness ≤ 256 on ≥ 5 of 6
+    in_budget = sum(
+        1 for fp in fingerprints if fp["compactness"]["in_budget"]
+    )
+
+    # P_γ5: slot 16 defined everywhere, with cross-family discrimination
+    s16_defined = sum(
+        1
+        for fp in fingerprints
+        if fp["fingerprint"]["slot_16_binade_loss_depth_log2"]["status"]
+        == "defined"
+    )
+    # cross-family disc: every four-form fixture's s16 differs from every
+    # lifted-singularity fixture's s16
+    four_form = ["SR", "Schwarzschild", "pure_algebraic", "cube_root"]
+    lifted = ["Morris_Thorne", "Kerr_ISCO_a09"]
+    cross_family_discrim = True
+    for ff in four_form:
+        ff_fp = next((fp for fp in fingerprints if fp["fixture"] == ff), None)
+        if not ff_fp:
+            continue
+        ff_val = ff_fp["fingerprint"]["slot_16_binade_loss_depth_log2"]
+        if ff_val["status"] != "defined":
+            continue
+        for lf in lifted:
+            lf_fp = next((fp for fp in fingerprints if fp["fixture"] == lf), None)
+            if not lf_fp:
+                continue
+            lf_val = lf_fp["fingerprint"]["slot_16_binade_loss_depth_log2"]
+            if lf_val["status"] != "defined":
+                continue
+            if _values_equal(ff_val["value"], lf_val["value"]):
+                cross_family_discrim = False
+                break
+    p_g5 = s16_defined == 6 and cross_family_discrim
+
+    # P_γ6: smoothness for slots 13, 14, 16 across all stress-tested fixtures
+    smoothness_violations = stress_eval.get("smoothness_violations", [])
+    smoothness_for_critical_slots = [
+        v for v in smoothness_violations
+        if v["slot"] in ("slot_13", "slot_14", "slot_16")
+    ]
+    p_g6 = len(smoothness_for_critical_slots) == 0
+
+    # P_γ7: discrimination preserved
+    p_g7 = len(stress_eval.get("discrimination_overlap_violations", [])) == 0
+
+    return {
+        "P_gamma_1_slot_14_defined_geq_5": s14_defined >= 5,
+        "P_gamma_2_slot_15_nonzero_geq_4": s15_nonzero >= 4,
+        "P_gamma_3_all_15_pairs_distinguishable": distinguishable == 15,
+        "P_gamma_4_compactness_geq_5_of_6": in_budget >= 5,
+        "P_gamma_5_slot_16_universal_with_cross_family_discrim": p_g5,
+        "P_gamma_6_stress_smoothness_critical_slots": p_g6,
+        "P_gamma_7_stress_discrimination_preserved": p_g7,
+        "diag_s14_defined_count": s14_defined,
+        "diag_s15_nonzero_count": s15_nonzero,
+        "diag_distinguishable_pairs": distinguishable,
+        "diag_in_budget_count": in_budget,
+        "diag_s16_defined_count": s16_defined,
+        "diag_smoothness_violations": smoothness_violations,
+        "diag_discrim_overlap_violations": stress_eval.get(
+            "discrimination_overlap_violations", []
+        ),
+    }
+
+
+def identify_failure_modes_gamma(
+    fingerprints: list[dict],
+    matrix: list[list[int]],
+    min_subset: list[str],
+    stress_eval: dict,
+) -> list[str]:
+    failures = []
+    n = len(fingerprints)
+    all_identical = all(
+        matrix[i][j] == 0 for i in range(n) for j in range(n) if i != j
+    )
+    if all_identical:
+        failures.append("F1")
+    if not all_identical and any(
+        matrix[i][j] == 0 for i in range(n) for j in range(n) if i != j
+    ):
+        failures.append("F2")
+    # F_γ1: slot 16 doesn't add discrimination beyond slot 13
+    s13_name = "slot_13r_critical_curvature_log10"
+    s16_name = "slot_16_binade_loss_depth_log2"
+    # If every pair distinguished by s16 is also distinguished by s13,
+    # then s16 adds no new info → F_γ1
+    pairs_disc_by_16: set[tuple[int, int]] = set()
+    pairs_disc_by_13: set[tuple[int, int]] = set()
+    for i in range(n):
+        for j in range(i + 1, n):
+            s16_i = fingerprints[i]["fingerprint"].get(s16_name, {})
+            s16_j = fingerprints[j]["fingerprint"].get(s16_name, {})
+            if (
+                s16_i.get("status") == "defined"
+                and s16_j.get("status") == "defined"
+                and not _values_equal(s16_i["value"], s16_j["value"])
+            ):
+                pairs_disc_by_16.add((i, j))
+            s13_i = fingerprints[i]["fingerprint"].get(s13_name, {})
+            s13_j = fingerprints[j]["fingerprint"].get(s13_name, {})
+            if (
+                s13_i.get("status") == "defined"
+                and s13_j.get("status") == "defined"
+                and not _values_equal(s13_i["value"], s13_j["value"])
+            ):
+                pairs_disc_by_13.add((i, j))
+    if pairs_disc_by_16 and pairs_disc_by_16.issubset(pairs_disc_by_13):
+        failures.append("F_gamma_1")
+    # F_γ2: probe-point fragility
+    if stress_eval.get("smoothness_violations"):
+        failures.append("F_gamma_2")
+    # F_γ3: quantization breaks discrimination — would manifest as F2
+    # but already covered above; skip duplicate
+    # F4 / F5 from prior phases
+    high_unobs = sum(
+        1
+        for fp in fingerprints
+        if sum(1 for s in fp["fingerprint"].values() if s["status"] == "unobservable")
+        / len(fp["fingerprint"])
+        >= 0.50
+    )
+    if high_unobs >= 3:
+        failures.append("F4")
+    if all(not fp["compactness"]["in_budget"] for fp in fingerprints):
+        failures.append("F5")
+    return failures
+
+
+def derive_verdict_gamma(predictions: dict, failures: list[str]) -> str:
+    if any(f in failures for f in ("F1", "F2", "F_gamma_1")):
+        return "barcode_hypothesis_not_supported_at_phase_gamma"
+    pred_keys = [k for k in predictions if k.startswith("P_gamma_") and isinstance(predictions[k], bool)]
+    passed = sum(1 for k in pred_keys if predictions[k])
+    total = len(pred_keys)
+    if passed == total:
+        return "barcode_hypothesis_supported_at_phase_gamma"
+    if passed >= total - 1:
+        return "barcode_hypothesis_supported_with_minor_caveat"
+    if predictions.get("P_gamma_3_all_15_pairs_distinguishable", False):
+        return "barcode_hypothesis_supported_with_secondary_caveats"
+    return "barcode_hypothesis_supported_with_caveats"
+
+
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
+
+
+def run_atlas_gamma() -> dict:
+    fingerprints = [compute_fingerprint_gamma(f, "A") for f in PHASE_ALPHA_FIXTURES]
+    matrix, names = distinguishability_matrix(fingerprints)
+    min_subset, indist = minimum_distinguishing_subset(fingerprints)
+    stress_data = {f: stress_test_universal_slots(f) for f in PHASE_ALPHA_FIXTURES}
+    stress_eval = stress_test_evaluation(stress_data, fingerprints)
+    predictions = evaluate_phase_gamma_predictions(
+        fingerprints, matrix, min_subset, stress_eval
+    )
+    failures = identify_failure_modes_gamma(
+        fingerprints, matrix, min_subset, stress_eval
+    )
+    verdict = derive_verdict_gamma(predictions, failures)
+    return {
+        "atlas_version": "phase_gamma_v1",
+        "fixtures": list(PHASE_ALPHA_FIXTURES),
+        "fingerprints": fingerprints,
+        "distinguishability_matrix": matrix,
+        "distinguishability_matrix_row_labels": names,
+        "indistinguishable_pair_count": indist,
+        "minimum_distinguishing_subset": min_subset,
+        "stress_test": stress_eval,
+        "predictions": predictions,
+        "failure_modes_observed": failures,
+        "verdict": verdict,
+    }
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", default=str(ARTIFACT))
+    args = parser.parse_args()
+    REPORT_DIR.mkdir(parents=True, exist_ok=True)
+    data = run_atlas_gamma()
+    Path(args.output).write_text(json.dumps(data, indent=2, sort_keys=True))
+    print(f"atlas-γ artifact written to {args.output}")
+    print(f"  verdict: {data['verdict']}")
+    print(f"  failure_modes_observed: {data['failure_modes_observed']}")
+    print(f"  predictions:")
+    for k, v in data["predictions"].items():
+        if isinstance(v, bool):
+            marker = "✓" if v else "✗"
+            print(f"    {marker} {k}")
+    print(f"  diagnostics:")
+    for k, v in data["predictions"].items():
+        if k.startswith("diag_"):
+            print(f"    {k}: {v}")
+    print(f"  minimum_distinguishing_subset: {data['minimum_distinguishing_subset']}")
+    print(f"  indistinguishable_pair_count: {data['indistinguishable_pair_count']}")
+    print(f"  distinguishability_matrix:")
+    labels = data["distinguishability_matrix_row_labels"]
+    print("    " + " ".join(f"{n[:6]:>7}" for n in labels))
+    for i, row in enumerate(data["distinguishability_matrix"]):
+        print(f"    {labels[i][:6]:>6} " + " ".join(f"{c:>7}" for c in row))
+
+
+if __name__ == "__main__":
+    main()

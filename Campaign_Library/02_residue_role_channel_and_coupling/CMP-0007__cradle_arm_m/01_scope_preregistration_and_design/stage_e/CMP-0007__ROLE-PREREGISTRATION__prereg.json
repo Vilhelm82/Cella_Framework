@@ -1,0 +1,135 @@
+{
+ "authority": "brief section 4 Arm M Stage E (landing decomposition + the T1 stretch + the curvature bridge; CL-M7 / CL-M9 / CL-M8) + Will's Stage-E GO (Stage D ACCEPTED; economics pins govern horizons; then the close draft)",
+ "campaign_id": "beyond_the_cradle_arm_m",
+ "curvature_steps": [
+  "1/64",
+  "1/128"
+ ],
+ "date_stamped_from_machine": "2026-06-13",
+ "depends_on": {
+  "manifest_v1_sha256": "add67c301f0f592484d7023a657302296f3b74376167f6fff8911ce670e3719c",
+  "note": "bench code pinned in the frozen (post-M1) manifest (rule 1.9)."
+ },
+ "expectations": {
+  "curvature": {
+   "FXMF1": {
+    "analytic_equal": true,
+    "enclosure": [
+     "157911341063959727/144115188075855872",
+     "1263290728511677817/1152921504606846976"
+    ],
+    "kappa_sq": "5070602400912917605986812821504/4223304739720369167701288648337"
+   },
+   "FXMF2": {
+    "analytic_equal": true,
+    "enclosure": [
+     "144115188075855867/144115188075855872",
+     "1152921504606846937/1152921504606846976"
+    ],
+    "kappa_sq": "81129638414606681695789005144064/81129638414606687241655851819561"
+   }
+  },
+  "landings": {
+   "FXMD1": {
+    "geo": {
+     "destination": "r_outer",
+     "label": "committed:r_outer"
+    },
+    "n_geo_steps": 6,
+    "n_sub_steps": 6,
+    "sub": {
+     "destination": "straddling:r_outer",
+     "label": "cycle_certified:2"
+    },
+    "tint": "SUBSTRATE_TINTED"
+   },
+   "FXMD2": {
+    "geo": {
+     "destination": "origin",
+     "label": "exact_root_hit@0"
+    },
+    "n_geo_steps": 0,
+    "n_sub_steps": 0,
+    "sub": {
+     "destination": "origin",
+     "label": "exact_root_hit@0"
+    },
+    "tint": "GEOMETRY_DETERMINED"
+   },
+   "FXMD3": {
+    "geo": {
+     "destination": "one",
+     "label": "committed:one"
+    },
+    "n_geo_steps": 6,
+    "n_sub_steps": 4,
+    "sub": {
+     "destination": "one",
+     "label": "exact_root_hit@4"
+    },
+    "tint": "GEOMETRY_DETERMINED"
+   },
+   "FXMD4": {
+    "geo": {
+     "destination": "sol",
+     "label": "committed:sol"
+    },
+    "n_geo_steps": 6,
+    "n_sub_steps": 6,
+    "sub": {
+     "destination": "sol",
+     "label": "committed:sol"
+    },
+    "tint": "GEOMETRY_DETERMINED"
+   }
+  }
+ },
+ "frozen": true,
+ "k_horizon": 6,
+ "label_points": {
+  "FXMD1": {
+   "r_inner": {
+    "x": "596796085801011253/1152921504606846976",
+    "y": "2227273313967609028/1152921504606846976"
+   },
+   "r_outer": {
+    "x": "2227273313967609029/1152921504606846976",
+    "y": "596796085801011252/1152921504606846976"
+   }
+  },
+  "FXMD2": {
+   "origin": {
+    "x": "0/1",
+    "y": "0/1"
+   }
+  },
+  "FXMD3": {
+   "one": {
+    "x": "1/1",
+    "y": "0/1"
+   }
+  },
+  "FXMD4": {
+   "sol": {
+    "x": "2171185819518711486/1152921504606846976",
+    "y": "612212913254733266/1152921504606846976",
+    "z": "-477555723559750800/1152921504606846976"
+   }
+  }
+ },
+ "organ": "IM_e_landing_v1: exact Q^n Newton (Cramer, determinant divisions) vs route-faithful float Newton; per-step dual-channel attribution (F lanes close; J deviation exact); destination-resolved landing labels; curvature from the Stage-B tensor (the keystone composed).",
+ "predictions": {
+  "PME.1": "geometry channel exact + refereed: every geometry trajectory is recomputed step-by-step through the independent transformed-tree path (F and J both) with identical iterates; exact-root hits certified in Q (F == 0 exactly); horizons per the Stage-0 economics pins (K = 6; measured bit growth within the pinned budget, telemetry non-verdict-bearing). Units: (start, step).",
+  "PME.2": "the decomposition: per (system, start) both channels labeled under the frozen rules with DESTINATION resolution (exact hits and terminal cycles resolve against pinned label points; arrival MODE carried separately); tints == pinned - FXMD1 SUBSTRATE_TINTED: the float map cannot fix the irrational root, its terminal attractor is a certified exact 2-CYCLE straddling it; FXMD3 (the T1 stretch) GEOMETRY_DETERMINED with the substrate-snap texture: float arrives EXACTLY at (1, 0) while geometry approaches asymptotically; FXMD2 the exact-root exhibit: F == 0 in Q at the pinned start, both channels stop at step 0; FXMD4 trivariate committed both - and at EVERY substrate step both deviation channels are measured exactly (every F-component lane closes, verified per step per component; the Jacobian deviation is an exact Q matrix): zero unattributed. Units: starts + steps.",
+  "PME.3": "the registered curvature measurement (CL-M9; the T3 ruling: MEASURE, NEVER SEARCH): kappa^2 (circle) and the mean-curvature H^2 (sphere) computed FROM THE STAGE-B TENSOR equal the analytic values EXACTLY in Q (the graded object is RATIONAL - no enclosure needed; the isqrt enclosure of kappa itself reported alongside); two routes agree identically (pinned-step and half-step tensors); G2/HR129 vocabulary - kappa as the continuum projection; the univariate non-recoverability negative does not bind the multivariate tensor. Units: bridges.",
+  "PME.4": "refusal arms (CL-M8, PARTIAL BY DESIGN): the lattice-floor box (sub-ulp sample step refuses typed), the anisotropy arm (non-dyadic ray direction refuses typed), the singular-Jacobian arm (both channels refuse typed on the constructed degenerate system); zero refusals on lawful rows; the appended-arm inventory enumerated incl. Stage-D's ray_in_locus and the scale-warrant boundary (cited, not re-run). Units: probes + arms.",
+  "PME.5": "determinism: battery byte-stable x2 (sha256 over records)."
+ },
+ "referee": "transformed-tree re-walk (F and J) for geometry; analytic curvature values exact in Q; pinned label points (60-bit dyadic).",
+ "rho": "1/1048576",
+ "stage": "E",
+ "status_move_rules": "CL-M7 -> DEMONSTRATED iff PME.1 AND PME.2 PASS. CL-M9 -> DEMONSTRATED iff PME.3 PASS. CL-M8: PARTIAL BY DESIGN - evidence appended iff PME.4 PASS (never moves to DEMONSTRATED; the full-coverage claim is not made). Any FAIL: halt-until-fixed, chain preserved, STOP, route to Will. ON COMPLETION: the ARM'S CLOSE DRAFT (stops at the draft for Will's sign-off).",
+ "t2_fence_ack": "no G-claims, no cross-fixture-invariant claims (manifest fence; the curvature row is a REGISTERED MEASUREMENT on named fixtures per T3, not an invariant hunt).",
+ "telemetry": "permanently non-verdict-bearing (covenant 3); bit growth recorded as telemetry only.",
+ "version": 1
+}

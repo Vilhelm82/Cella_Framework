@@ -1,0 +1,162 @@
+# Substrate Invariant Search — Phase A — Candidate Catalogue
+
+**Status:** Phase A complete. 13 candidates catalogued. Audit-only pass.
+**Date:** 2026-05-23
+**Authority:** [`Build_Docs/Agent_tasks/substrate_invariant_search_2026_05_23.md`](../../Agent_tasks/substrate_invariant_search_2026_05_23.md)
+**Pre-registry:** [`Build_Docs/Agent_tasks/substrate_invariant_search_phase_a_catalogue.md`](../../Agent_tasks/substrate_invariant_search_phase_a_catalogue.md)
+
+**Deliverables landed:**
+- [`phase_a_candidate_catalogue.json`](phase_a_candidate_catalogue.json) — primary catalogue artefact, byte-stable.
+- [`src/lloyd_v4/evals/substrate_invariant_search_phase_a.py`](../../../src/lloyd_v4/evals/substrate_invariant_search_phase_a.py) — generator module.
+- [`tests/test_substrate_invariant_search_phase_a.py`](../../../tests/test_substrate_invariant_search_phase_a.py) — 8 focused tests.
+- This characterisation markdown.
+
+---
+
+## 1. Catalogue summary
+
+13 candidates catalogued. Verification-status distribution:
+
+| Status | Count | Candidates |
+|---|---|---|
+| `proven` | 1 | BACL_grain |
+| `proven_within_scope` | 2 | conjecture_c_binade_floor_preservation, c2_lattice_integer_grain |
+| `proven_exact` | 1 | F3_calibration_exact_zero |
+| `operationally_validated_1d` | 1 | E_log2_base_operand |
+| `empirically_robust` | 1 | sigma1_universal_linearization_exponent |
+| `empirically_robust_1d` | 2 | sterbenz_cluster_threshold, F1_to_F2_BACL_phase_signature |
+| `empirically_robust_fixture_level` | 1 | fingerprint_atlas_distance_metric |
+| `empirically_robust_pending_grid_revalidation` | 1 | null_tangent_alignment_unity |
+| `substrate_attributed_via_BACL` | 1 | doubling_ladder_rung_index |
+| `empirical_uncharacterised` | 1 | two_form_asymmetry_path_cancellation |
+| `untested_in_v4` | 1 | v3_minus_2_eigenvalue_319_pts |
+
+## 2. P1 (input-derivable) status
+
+**Six of thirteen candidates satisfy P1** — computable from inputs alone, no iteration on `F(x)`:
+
+1. `BACL_grain` — `ulp(b)` from operand pair
+2. `conjecture_c_binade_floor_preservation` — binade-floor predicate from input value
+3. `c2_lattice_integer_grain` — corollary of (1) + (2)
+4. `E_log2_base_operand` — `log2(|base_operand|)` from coordinate
+5. `sterbenz_cluster_threshold` — cluster boundary derivable from binade structure
+6. `two_form_asymmetry_path_cancellation` — partition derivable from algebraic form alone (in principle)
+
+These six form the **primary substrate-input pool** for the Phase F synthesis target. The substrate-as-probe scalar `I(F, x)` must be built primarily from these.
+
+The remaining seven candidates require `F` evaluation in some form. They are not disqualified — they can serve as **confirmation observables** that the synthesised invariant agrees with at probe points where evaluation is available. But they cannot be the primary input-derived signal.
+
+## 3. Substrate-derivation depth
+
+Stratifying by how grounded each candidate is in IEEE 754 primitives:
+
+**Substrate-derived (proven from IEEE 754 axioms alone):**
+- BACL_grain (5-line proof from binade-spacing)
+- conjecture_c_binade_floor_preservation (definition-grounded, normal-range scope)
+- c2_lattice_integer_grain (3-line corollary)
+- F3_calibration_exact_zero (IEEE 754 exact-cancellation guarantee)
+
+**Substrate-attributed (derivation sketch but no formal proof):**
+- E_log2_base_operand (informal chain via BACL + binade)
+- sterbenz_cluster_threshold (binade-spaced neighbourhood of 2^−1)
+- doubling_ladder_rung_index (direct BACL consequence)
+
+**Empirically observed; substrate-derivation incomplete:**
+- F1_to_F2_BACL_phase_signature (mechanism understood, formal derivation pending)
+- sigma1_universal_linearization_exponent (regularity-class universal; not substrate-level)
+- fingerprint_atlas_distance_metric (fixture-level invariance demonstrated; per-slot derivation varies)
+- null_tangent_alignment_unity (per-row observable; universality pending re-validation)
+- two_form_asymmetry_path_cancellation (observed; partition criterion undefined)
+
+**Reference only (no V4-native derivation):**
+- v3_minus_2_eigenvalue_319_pts (V3 claim; V4 reproducibility unknown)
+
+## 4. Likely Phase C redundancy collapses
+
+Phase C will run the formal correlation analysis. Phase A surfaces obvious-on-inspection groupings:
+
+- **BACL family**: `BACL_grain`, `doubling_ladder_rung_index`, `c2_lattice_integer_grain`, `conjecture_c_binade_floor_preservation`. Likely collapse to **one degree of freedom** with `BACL_grain` as the irreducible representative. `c2_lattice` is a corollary; `doubling_ladder` is a direct consequence; `Conjecture C` is a specific algebraic-chain property of the same substrate.
+- **E family**: `E_log2_base_operand` and `sterbenz_cluster_threshold` are tightly coupled (the cluster is a threshold *on* E). Likely one degree of freedom.
+- **Phase-signature family**: `F1_to_F2_BACL_phase_signature` reads BACL through the algebraic-route lens; not redundant with BACL_grain (it adds the route distinction) but co-varies.
+
+**Tentative irreducible basis estimate (subject to Phase C verification):**
+1. BACL_grain (substrate lattice unit)
+2. E (substrate distance-to-singular)
+3. sigma_1 (regularity-class exponent)
+4. fingerprint_atlas_distance_metric (algebraic-route fingerprint distance, fixture-level)
+5. two_form_asymmetry_partition (algebraic-structure invariant)
+6. (V4-native K_G — Phase E addition)
+
+That's six candidates pre-collapse. Phase C will refine.
+
+## 5. The structural gap: V4-native K_G
+
+Phase A surfaces one structurally-required candidate **not currently in the V4 corpus**: a V4-native Gaussian curvature primitive `K_G(F, x)` derivable from substrate primitives, not imported from differential-geometry literature.
+
+This is consistent with what Phase 2h's V3 diagnostic bridge surfaced — V4 maps to V3's K_G as `diagnostic_neighbour`, but does not reproduce K_G natively. The substrate-as-probe synthesis lacks the canonical-curvature ingredient without it.
+
+The campaign authority Phase E adds it under plan-mode + axiom-check discipline. Phase A flags it here as the missing piece the catalogue cannot supply.
+
+## 6. Answers to the seven closeout questions
+
+### Q1 — How many candidates does the catalogue contain?
+13. Meets the 13-minimum from the pre-registry. No additional candidates surfaced in the audit pass.
+
+### Q2 — Verification-status breakdown?
+See §1 above. Substrate-proven (4 candidates, all BACL-family + F3-exact), operationally-validated-1D (1: E), empirically-robust (5: sigma_1, sterbenz cluster, F1_to_F2, fingerprint atlas, null-tangent), substrate-attributed (1: doubling-ladder), empirical-uncharacterised (1: two-form asymmetry), untested-in-V4 (1: V3 −2 eigenvalue).
+
+### Q3 — Which candidates currently satisfy P1 (input-derivable)?
+Six: BACL_grain, conjecture_c_binade_floor_preservation, c2_lattice_integer_grain, E_log2_base_operand, sterbenz_cluster_threshold, two_form_asymmetry_path_cancellation. These are the primary substrate-input pool for the Phase F synthesis target.
+
+### Q4 — Which candidates need new measurement / extension before P2–P5?
+The P1-violating seven (F1_to_F2 phase, sigma_1, fingerprint atlas, null-tangent alignment, F3 calibration, doubling-ladder rung index, V3 −2 eigenvalue) all require F-evaluation in some form. They can serve as confirmation observables in Phase B and onward but cannot be the primary input-derived signal of the synthesised invariant. `doubling_ladder_rung_index` has a partial P1 path (the rung *unit* is input-derivable from BACL grain; the rung *population* at a probe point requires evaluation).
+
+### Q5 — Are any candidates obviously redundant on inspection?
+Yes. The BACL family (BACL_grain, conjecture_c, c2_lattice, doubling-ladder) likely collapses to one degree of freedom with BACL_grain as the irreducible representative. The E family (E and sterbenz cluster threshold) likely collapses to one. Phase C will run the formal correlation analysis.
+
+### Q6 — What candidate is missing from the corpus that the catalogue surfaces as needed?
+**V4-native K_G primitive.** Not currently in V4. The substrate-as-probe synthesis needs the canonical-curvature ingredient, and Phase 2h's V3 diagnostic bridge already flagged this as the structural gap. Campaign authority Phase E adds it under plan-mode + axiom-check.
+
+### Q7 — Does the catalogue support proceeding to Phase B?
+Yes. Six P1-satisfied candidates are directly computable at any probe point. Seven F-evaluation-dependent candidates are computable via controlled probe protocols (BACL phase probe, delta sweep, fingerprint slot scan). Phase B common-probe-set evaluation is well-supported by this roster.
+
+## 7. What Phase A does not claim
+
+Phase A does **not** rank candidates by suitability. Ranking is Phase C's job after correlation analysis.
+
+Phase A does **not** propose new candidates beyond what's in the V4 corpus. New candidate proposals are Phase B/C/D moves under explicit rationale.
+
+Phase A does **not** run any new diagnostic computations. The audit reads existing reports; sha256-cited.
+
+Phase A does **not** evaluate candidates against P1–P5 properties. It only records the per-candidate property status as identified-blockers.
+
+Phase A does **not** modify the candidate ledger, MCG ledger, or any architectural document.
+
+## 8. Source artefact chain (sha256 prefixes)
+
+All cited reports sha256-recorded in `phase_a_candidate_catalogue.json` `source_artifact_hashes` field:
+
+- `bacl_invariant_audit/closeout.md` — `46c85d83ee696074`
+- `bacl_subnormal_audit/closeout.md` — `e7c93963bbc420b5`
+- `bacl_multi_format_audit/closeout.md` — `e6f8b4b08f27b16a`
+- `conjecture_c_proof_audit/closeout.md` — `eb05769cb461fbd2`
+- `c2_lattice_substrate_derivation/closeout.md` — `56dd278b44ff2ff2`
+- `c2_theorem_scope_gate/closeout.md` — `b0ef0fe5cca83c2c`
+- `mcg_geometry_first/phase_2d_solve_for_scout.json` — `ea4f29798a14484a`
+- `mcg_geometry_first/phase_2g_cdef1_calibration.json` — `8089f02638face50`
+- `mcg_geometry_first/phase_2h_v3_bridge.json` — `abf5f8f720699856`
+- `mcg_geometry_first/phase_2_joined_readback_table.json` — `6a212ee610d80893`
+- `mcg_geometry_first/phase_1_geometry_table.json` — `6502e942558f699d`
+- `blowup_exponent_v4_audit/closeout.md` — `adfc6c808d3fa61e`
+- `substrate_fingerprint_atlas_phase_delta/closeout.md` — `7e9fcbeae6eda99f`
+- `where_i_got_stuck.md` — `bce8ce918d44bd56`
+- `PROBE_READINESS.md` — see live hash in catalogue JSON
+
+## 9. References
+
+- Campaign authority: [`Build_Docs/Agent_tasks/substrate_invariant_search_2026_05_23.md`](../../Agent_tasks/substrate_invariant_search_2026_05_23.md)
+- Pre-registry: [`Build_Docs/Agent_tasks/substrate_invariant_search_phase_a_catalogue.md`](../../Agent_tasks/substrate_invariant_search_phase_a_catalogue.md)
+- Scoreboard: [`Build_Docs/PROBE_READINESS.md`](../../PROBE_READINESS.md)
+- Campaign discipline: [`Build_Docs/CAMPAIGN_DISCIPLINE.md`](../../CAMPAIGN_DISCIPLINE.md)
+- V3 isolation: [`/CLAUDE.md`](../../../../CLAUDE.md) §4
+- All sources listed in §8 above (sha256-chained)

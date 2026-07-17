@@ -1,0 +1,42 @@
+{
+  "rank": 4,
+  "lift": 92.25,
+  "count": 2,
+  "families": 1,
+  "a": {
+    "id": "OBJ:im-omega-2-period-control",
+    "label": "Im(omega_2) (period control)",
+    "standard_term": "imaginary/complementary period of an elliptic curve, expressed via K(k_dual^2)",
+    "nomenclature": "identical-to",
+    "symbols": [
+      "omega_2"
+    ]
+  },
+  "b": {
+    "id": "OBJ:k-dual-2",
+    "label": "k_dual^2",
+    "standard_term": "Galois-conjugate elliptic modulus squared",
+    "nomenclature": "variant-of",
+    "symbols": [
+      "k_dual"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-0729",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Im(omega_2) (period control)",
+      "summary": "Im(omega_2) =\n-2^(3/4) * K(k_dual^2)",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/16-DBP_Curvature_Constants_Corrected_Formulation.md"
+    },
+    {
+      "uid": "U-0992",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Exact Certification Gates G1-G9",
+      "summary": "G1. Bare residue exactness:\nRes_bare == -2^(1/4)*(3 + 2*sqrt(2))\n\nG2. Weighted residue exactness:\nP * Res_bare == 4\n\nG3. Branch jump:\none-sided continuation - CPV == ±4*pi*i\nupper - lower == 8*pi*i\n\nG4. Two-route CPV cer",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/16-DBP_Curvature_Constants_Corrected_Formulation.md"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "schema_id": "cella.cce6.stage_report",
+  "schema_version": "1.0",
+  "date": "2026-07-14",
+  "verdict": "MATHEMATICAL_CLOSEOFF_COMPLETE_PRODUCTION_IMPORT_READY",
+  "released_scope": "two exact DBP corridors on S_Z^nat=image(L_Z)",
+  "central_result": {
+    "norm_discriminant": "-4*(1-c)*T*(T-c^2*V)",
+    "norm_polar_resultant": "c^2*(T-c*V)^2",
+    "uniform_released_route_epsilon": "1/105186307200",
+    "base_divisor_reduction": {
+      "T=0": "x=x_p",
+      "T-c*V=0": "x=1",
+      "T-c^2*V=0": "x=infinity"
+    }
+  },
+  "certificate": {
+    "path": "DBP_NATIVE_SURFACE_SWEEP_CLEARANCE_CERTIFICATE_v1.0.json",
+    "canonical_digest": "2d5a395d5cebcb18f2792850741c46848c02efbb0fa05265cf8ec35e86505a4f",
+    "file_sha256": "5326bb2fe928c107264cd45f693fd7e0102551ab8aa60f61e339fa4eeabd6397"
+  },
+  "verifier": {
+    "path": "verify_dbp_native_surface_sweep_clearance.py",
+    "file_sha256": "d196955cc9d5eec7261c7b7ca1edbbd27bf93a98c53409141ffd3a0fc8e0fd00",
+    "assertions": 89,
+    "dependencies": "python standard library only"
+  },
+  "blocker_update": {
+    "retire": "SurfaceSweepClearanceUnproved for the two certified routes on the native image",
+    "retain": [
+      "OutsideNativeSurfaceImage",
+      "WholeSurfaceScopeUnproved",
+      "SurfaceRouteAdmissibilityMissing"
+    ]
+  },
+  "integration_status": "live Cella API/checkpoint/gate merge not claimed because the live repository was not present in the supplied workspace"
+}

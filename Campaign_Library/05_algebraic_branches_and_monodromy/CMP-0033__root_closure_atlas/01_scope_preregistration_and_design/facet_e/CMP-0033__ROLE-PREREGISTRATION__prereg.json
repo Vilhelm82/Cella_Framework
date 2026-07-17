@@ -1,0 +1,172 @@
+{
+ "authority": "campaign brief ladder (Facet E: route holonomy / basin fingerprints on FX-I/FX-K; CL-5) + Will's Facet-E GO (self-contained ruling: TWO-CURVATURES fold-in DECLINED, banked seed; TRIAL law carries; no oracle in probe seams)",
+ "campaign_id": "root_closure_atlas",
+ "date_stamped_from_machine": "2026-06-12",
+ "decomposition_statement": "Every landing decision factors as geometry (+) substrate. The geometry term is the exact-Q Newton trajectory of f itself \u2014 route-invariant by MEASUREMENT (the same exact trajectory through route-variant expressions), not by assumption. The substrate term is the per-route float trajectory's deviation from it. At every point where routes diverge, each route's lane closes (reading + account == TRUE in Q) and the reading gap IS the account gap \u2014 nothing about a landing decision is ever unattributed. (Consumes HR132/HR134: the lane-carried exact account; the lift is IMPORTED, never rebuilt. TWO-CURVATURES fold-in DECLINED, Will 2026-06-12: this facet is self-contained and its demonstrated results are prior wins for any future TWO-CURVATURES brief.)",
+ "depends_on": {
+  "facet_a_organ": "instruments/probe_facet_a.py (certified cell consumed as the FXI1 label point, drift-guarded at runtime)",
+  "hr134_lift": "difference_tower/eft_eval.py \u2014 eval_lane / eval_raw IMPORTED, never rebuilt (the lane closure is the attribution instrument)",
+  "manifest_v1_pin": "ce2e5352419cf7e1f996aafd9b4329d32836de160aa2a244408791036c540138",
+  "stage0_records_sha256": "ac3ab40dea296b569d2dbcb2558cc5fa4e5a7e49b7b6f11c669206cd8c933499"
+ },
+ "expected_divergence_points": 6,
+ "facet": "E",
+ "fences": "B7 stays frozen (no fractal/self-similarity claims about basin boundaries \u2014 labels and attributions only). No K_G search. One harness. Manifest_v1 FROZEN. No oracle in probe seams (Facet-E GO).",
+ "fixture_plan": {
+  "FXI1": {
+   "cycle_points": [
+    "0x0.0p+0",
+    "0x1.0p+0"
+   ],
+   "label_points": {
+    "real_root_cell": "-0x1.c4f057fe848c9p+0"
+   },
+   "rho_cycle_exp": 40,
+   "rho_exp": 20,
+   "rule": "cubic_horizon",
+   "starts": {
+    "-0x1.cp+0": {
+     "geo": "committed:real_root_cell",
+     "k": 8,
+     "sub": "committed:real_root_cell",
+     "tint": "GEOMETRY_DETERMINED"
+    },
+    "0x0.0p+0": {
+     "geo": "cycle_certified",
+     "k": 8,
+     "sub": "cycle_certified",
+     "tint": "GEOMETRY_DETERMINED"
+    },
+    "0x1.0p+0": {
+     "geo": "cycle_certified",
+     "k": 8,
+     "sub": "cycle_certified",
+     "tint": "GEOMETRY_DETERMINED"
+    },
+    "0x1.0p-20": {
+     "geo": "near_cycle_at_horizon",
+     "k": 8,
+     "sub": "cycle_certified",
+     "tint": "SUBSTRATE_TINTED"
+    }
+   }
+  },
+  "FXI2": {
+   "cycle_points": null,
+   "label_points": {
+    "-1": "-0x1.0p+0",
+    "0": "0x0.0p+0",
+    "1": "0x1.0p+0"
+   },
+   "rho_cycle_exp": null,
+   "rho_exp": 20,
+   "rule": "cubic_horizon",
+   "starts": {
+    "-0x1.0p-1": {
+     "geo": "committed:1",
+     "k": 8,
+     "sub": "committed:1",
+     "tint": "GEOMETRY_DETERMINED"
+    },
+    "0x1.0p-1": {
+     "geo": "committed:-1",
+     "k": 8,
+     "sub": "committed:-1",
+     "tint": "GEOMETRY_DETERMINED"
+    },
+    "0x1.c9f25c5bfedd9p-2": {
+     "geo": "unresolved_at_horizon",
+     "geo_orbit_all_distinct": true,
+     "k": 8,
+     "sub": "cycle_certified",
+     "tint": "SUBSTRATE_TINTED"
+    },
+    "0x1.cap-2": {
+     "geo": "committed:-1",
+     "k": 10,
+     "sub": "committed:-1",
+     "tint": "GEOMETRY_DETERMINED"
+    }
+   }
+  },
+  "FXK3a": {
+   "expected_refusal": "exact_geometry_inapplicable:sqrt",
+   "rule": "annex_refusal"
+  },
+  "K1": {
+   "fixtures": [
+    "FXK1a",
+    "FXK1b"
+   ],
+   "rule": "quadratic_side",
+   "starts": {
+    "-0x1.aaaaaaa2aaaabp-1": {
+     "div_step": 1,
+     "geo": "committed:1/3",
+     "k": 8,
+     "sub_a": "committed:1/3",
+     "sub_b": "committed:1/3",
+     "tint": "GEOMETRY_DETERMINED"
+    },
+    "-0x1.aaaaaaaaaaaaap-1": {
+     "div_step": 1,
+     "geo": "committed:1/3",
+     "k": 8,
+     "sub_a": "committed:1/3",
+     "sub_b": "committed:1/3",
+     "tint": "GEOMETRY_DETERMINED"
+    },
+    "-0x1.aaaaaaaaaaaabp-1": {
+     "div_step": 1,
+     "geo": "committed:-2",
+     "k": 8,
+     "sub_a": "refusal:derivative_zero_float",
+     "sub_b": "committed:-2",
+     "tint": "SUBSTRATE_TINTED"
+    },
+    "-0x1.aaaaaaaaaaaacp-1": {
+     "div_step": 1,
+     "geo": "committed:-2",
+     "k": 8,
+     "sub_a": "committed:-2",
+     "sub_b": "committed:-2",
+     "tint": "GEOMETRY_DETERMINED"
+    },
+    "-0x1.aaaaaab2aaaabp-1": {
+     "div_step": 1,
+     "geo": "committed:-2",
+     "k": 8,
+     "sub_a": "committed:-2",
+     "sub_b": "committed:-2",
+     "tint": "GEOMETRY_DETERMINED"
+    },
+    "0x1.0p-1": {
+     "div_step": 1,
+     "geo": "committed:1/3",
+     "k": 8,
+     "sub_a": "committed:1/3",
+     "sub_b": "committed:1/3",
+     "tint": "GEOMETRY_DETERMINED"
+    }
+   },
+   "x_crit": "-5/6"
+  }
+ },
+ "frozen": true,
+ "independence_seams": "organ geometry channel = its own exact dual evaluator; grader = dt-arbiter re-walk (eval_exact + derivative_at per step). Attribution reads the lane (HR134 lift); the derivative channel's deviation is measured against the exact dual and DISCLOSED as lane-undecomposed.",
+ "organ": "I3e_landing_decomposition_v1 (role=probe): exact dual evaluator (geometry channel, Q) + route-faithful float dual mirroring eval_raw's op semantics exactly (substrate channel) + Newton trajectories in both with typed refusals + frozen landing-label rules + the Cella attribution identity at divergence points. The referee (eval_exact/derivative_at) is never called by the organ (AST-asserted in tests).",
+ "predictions": {
+  "PE.1": "geometry route-invariance: on every pinned K1 start the probe's exact dual trajectories through the two route-variant expressions are IDENTICAL in Q step-by-step (route invariance MEASURED, not assumed), and on every battery geometry trajectory the referee's independent exact re-walk (dt-arbiter eval_exact + derivative_at per step - the path the probe never calls) reproduces the probe's trajectory exactly. Units: starts x steps.",
+  "PE.2": "cycle theorems + the classical contrast: the FXI1 trap start certifies an exact period-2 orbit of the Newton map in Q (x2 == x0, x1 != x0) in BOTH channels - the trap is GEOMETRY and float64 reproduces it exactly (dyadic orbit); the near-cycle start 2^-20 grades SUBSTRATE ABSORPTION (geometry approaches the cycle forever - near_cycle at the horizon, never on it; the float orbit lands ON the cycle exactly at a finite step); the FXI2 start RN(1/sqrt(5)) grades a SUBSTRATE-MANUFACTURED CYCLE (the float orbit is exactly periodic, period 2; the exact orbit from the same start is pairwise-distinct in the window - the geometric cycle at +-1/sqrt(5) is repelling and RN(1/sqrt(5)) is not on it); the classical contrast is pinned from the COMMITTED Stage-0 records: newton claims max_iter on exactly these two trap starts - the typed organ replaces the shrug with theorems. Units: pinned cycle rows + derived record counts.",
+  "PE.3": "basin fingerprints: the landing-label table over the pinned grid equals the dry-run-pinned fingerprint exactly - per (fixture, start, channel) labels under the frozen rules (cycle period >= 2 by exact repeat; period-1 stationary points classify by proximity; committed within the declared classification radius 2^-20 at the pinned horizon - radii CLASSIFY, nothing stops on them; quadratic K1 labels by side-of-critical-point at step 1 with side-stability measured); the K1 ulp-ladder reproduces geometry's side structure at the 1-ulp grain; >= 1 start grades SUBSTRATE_TINTED and >= 8 grade GEOMETRY_DETERMINED; the far-root overshoots (0.5 -> -1, -0.5 -> +1) grade GEOMETRY_DETERMINED - Stage-0's missed_root verdicts on these starts decompose into geometry, exonerating the substrate; the annex route FXK3a REFUSES exact geometry (typed) - the organ's class boundary stated, not blurred. Units: (fixture, start, channel) labels.",
+  "PE.4": "holonomy attribution: at every route-pair divergence point on the pinned grid (first step where the two routes' float trajectories differ, including starts whose LABELS agree - trajectory holonomy is ubiquitous, decision holonomy is boundary-localized): both routes' lanes close at the shared pre-divergence point (reading + account == TRUE in Q, verified), TRUE is one value across routes, and the reading gap equals the account gap EXACTLY - zero unattributed divergences; the derivative channel's deviation from the exact dual is measured exactly in Q and recorded (no lane decomposition exists for the derivative channel - its deviation is still exact; disclosed). Units: divergence points.",
+  "PE.5": "determinism: battery byte-stable x2 (sha256 over records)."
+ },
+ "stage0_contrast_pinned": {
+  "n_newton_max_iter_trap_rows": 2
+ },
+ "status_move_rules": "CL-5 -> DEMONSTRATED iff PE.1 AND PE.2 AND PE.3 AND PE.4 PASS (arbiter-graded). CL-7: evidence appended (annex-route exact-geometry refusal; route-split derivative-zero refusal at the basin boundary), stays PARTIAL. Any PE-FAIL: chain preserved verbatim, STOP, route to Will.",
+ "telemetry": "permanently non-verdict-bearing (covenant 3); trajectory lengths and bit counts are telemetry, never verdicts.",
+ "trial_law": "each PE grader embeds its governing clause verbatim (GRADER_CLAUSES in run_facet_e.py); the gate string-compares every embedded clause against this frozen prereg at runtime and REFUSES on drift. Carried as TRIAL; standing-law decision reserved for the campaign close.",
+ "version": 1
+}

@@ -1,0 +1,134 @@
+"""BACL exploration — outside-Sterbenz behavior and composite observables.
+
+Pre-registration (binding before measurement):
+
+PART 1 — outside-Sterbenz eta sweep:
+- Fix f0 = 1e-3.
+- Observable g = lambda f: f**(1/3) (cube-root).
+- Sweep eta from 1e-3 to 1e3 across 21 log-spaced values.
+- At each eta: compute g(f0), g(f0+δf), Sterbenz ratio, BACL grain.
+- Expected transition: ratio crosses 2.0 around eta ≈ 7 (cbrt(8)=2).
+- Question: what does BACL look like or fail like outside Sterbenz?
+
+PART 2 — composite observable: pure_algebraic F1 = R*R − (1−x):
+- F1 is algebraically zero; substrate residual is cancellation noise.
+- At each x = 1−f for our standard f sweep, compute F1(x), F1(x+δx).
+- δx = eta*x with eta = 1e-6 (same as our primitive default).
+- Question: do BACL grain and Sterbenz region still mean anything when
+  the operands are tiny cancellation residues rather than primary observables?
+"""
+import math
+import sys
+from pathlib import Path
+import numpy as np
+
+ROOT = Path("/home/william_lloydlt/projects/V4/Lloyd_Engine_V4")
+sys.path.insert(0, str(ROOT / "src"))
+
+
+def sterbenz_class(a, b):
+    abs_a = abs(a)
+    abs_b = abs(b)
+    if abs_a == 0 or abs_b == 0:
+        return "zero_operand"
+    ratio = max(abs_a, abs_b) / min(abs_a, abs_b)
+    if ratio <= 2.0:
+        if ratio <= 1.001:
+            return "tight"
+        return "marginal"
+    return "outside"
+
+
+def bacl_grain(a, b):
+    diff = a - b
+    if b == 0:
+        return {"diff": diff, "ulp_b": 0.0, "j_exact": float("inf"),
+                "j_integer": 0, "deviation": float("inf")}
+    ulp_b = math.ulp(b)
+    j_exact = diff / ulp_b
+    j_integer = int(round(j_exact))
+    deviation = j_exact - j_integer
+    return {"diff": diff, "ulp_b": ulp_b, "j_exact": j_exact,
+            "j_integer": j_integer, "deviation": deviation}
+
+
+def part1_outside_sterbenz():
+    print("=" * 100)
+    print("PART 1 — outside-Sterbenz eta sweep (cube-root observable, f0=1e-3)")
+    print("=" * 100)
+    f0 = 1e-3
+    g = lambda f: f ** (1.0/3.0)
+
+    etas = [10 ** (-3 + 6 * i / 20) for i in range(21)]
+
+    g_f0 = g(f0)
+    print(f"\n  g(f0) = {g_f0!r}\n")
+    print(f"{'eta':>10}  {'g(f0+δf)':>22}  {'ratio':>14}  {'sterbenz':>10}  "
+          f"{'j_integer':>20}  {'deviation':>14}")
+    print("-" * 100)
+
+    for eta in etas:
+        delta_f = eta * f0
+        f_plus = f0 + delta_f
+        g_plus = g(f_plus)
+        sclass = sterbenz_class(g_plus, g_f0)
+        bacl = bacl_grain(g_plus, g_f0)
+        if abs(g_f0) > 0 and abs(g_plus) > 0:
+            ratio = max(abs(g_plus), abs(g_f0)) / min(abs(g_plus), abs(g_f0))
+        else:
+            ratio = float('inf')
+        j_str = f"{bacl['j_integer']:>20d}"
+        dev_str = f"{bacl['deviation']:>+14.3e}"
+        print(f"{eta:>10.2e}  {g_plus:>22.16e}  {ratio:>14.4f}  {sclass:>10s}  "
+              f"{j_str}  {dev_str}")
+
+
+def part2_composite_F1():
+    print()
+    print("=" * 100)
+    print("PART 2 — composite observable: pure_algebraic F1 = R*R − (1−x)")
+    print("=" * 100)
+
+    f_values = [10.0 ** (-2.0 - (7.0 / 11.0) * i) for i in range(12)]
+    eta = 1e-6
+
+    def F1_of_x(x):
+        f = 1.0 - x
+        R = f ** 0.5
+        return R*R - f
+
+    print(f"\n  eta = {eta}\n")
+    print(f"{'x':>22}  {'F1(x)':>14}  {'F1(x+δx)':>14}  "
+          f"{'ratio':>14}  {'sterbenz':>10}  {'j_integer':>16}  {'deviation':>14}")
+    print("-" * 130)
+
+    for f in f_values:
+        x = 1.0 - f
+        delta_x = eta * x
+        F1_x = F1_of_x(x)
+        F1_x_plus = F1_of_x(x + delta_x)
+
+        if F1_x == 0 and F1_x_plus == 0:
+            print(f"{x:>22.16e}  {F1_x:>14.3e}  {F1_x_plus:>14.3e}  "
+                  f"{'both_zero':>14s}  {'n/a':>10s}  {'n/a':>16s}  {'n/a':>14s}")
+            continue
+        if F1_x == 0 or F1_x_plus == 0:
+            ratio_str = "one_zero"
+            sclass = "zero_op"
+        else:
+            ratio = max(abs(F1_x), abs(F1_x_plus)) / min(abs(F1_x), abs(F1_x_plus))
+            ratio_str = f"{ratio:.4e}"
+            sclass = sterbenz_class(F1_x_plus, F1_x)
+
+        bacl = bacl_grain(F1_x_plus, F1_x)
+        j_int = bacl["j_integer"]
+        dev = bacl["deviation"]
+        j_str = f"{j_int:>16d}" if isinstance(j_int, int) and abs(j_int) < 10**18 else f"{j_int!s:>16s}"
+        dev_str = f"{dev:>+14.3e}" if math.isfinite(dev) else f"{dev!s:>14s}"
+        print(f"{x:>22.16e}  {F1_x:>14.3e}  {F1_x_plus:>14.3e}  "
+              f"{ratio_str:>14s}  {sclass:>10s}  {j_str}  {dev_str}")
+
+
+if __name__ == "__main__":
+    part1_outside_sterbenz()
+    part2_composite_F1()

@@ -1,0 +1,169 @@
+"""Independent re-derivation of cross-fixture four-form invariants 1-3.
+
+ADVERSARIAL re-validation, Cluster D. This script does NOT import any
+lloyd_v4 eval module. It recomputes the four forms from scratch in raw
+float64/float32 to confirm the claimed invariants are genuine
+arithmetic-path properties of the constraint chain, not artifacts of the
+campaign harness.
+
+Forms (algebraically zero on the constraint surface):
+  R       := f_direct ** 0.5            (sqrt, evaluated once)
+  F1      := R*R - f_direct             (squared minus direct)
+  F2      := R*R - 1.0 + x_term         (squared, reordered: (R^2 - 1) + x)
+  F3      := R - f_direct ** 0.5        (sqrt, same path as R -> calibration zero)
+  F4      := R - f_alt ** 0.5           (sqrt, different algebraic route)
+
+Fixtures: f_direct, x_term, f_alt per fixture.
+  schwarzschild: f = 1 - 2/r,  x_term = 2/r,  f_alt = (r-2)/r
+  sr           : f = 1 - b^2,  x_term = b^2,  f_alt = (1-b)*(1+b)
+  pure_algebraic: f = 1 - x,   x_term = x,    f_alt split route (1 - x/2) - x/2
+  cbrt         : f = 1 - x (n=3); R = cbrt(f); F1=R^3-f; F2=(R^3-1)+x; F4=R-cbrt(f_alt)
+
+Invariants checked here (the ones reproducible without the campaign's
+lattice classifier internals):
+  (1) F3 silence: F3 == 0.0 at every cell, every precision.
+  (2) F2 non-integer lattice grain: nonzero F2 / ulp(f) lands on a
+      half-integer (0.5) lattice for schw/sr, quarter-integer (0.25) for
+      pure_algebraic/cbrt -> max fractional residual.
+  (3) F4 integer lattice character: nonzero F4 / ulp(f) lands on an
+      integer lattice (max fractional residual ~ 0).
+"""
+import json
+import math
+import struct
+
+
+def ulp_of_double(value: float) -> float:
+    """ULP of a float64 magnitude via raw bit increment (no library ulp)."""
+    value = abs(float(value))
+    if value == 0.0:
+        # smallest positive subnormal
+        return struct.unpack("<d", struct.pack("<Q", 1))[0]
+    bits = struct.unpack("<Q", struct.pack("<d", value))[0]
+    nxt = struct.unpack("<d", struct.pack("<Q", bits + 1))[0]
+    return nxt - value
+
+
+def frac_residual(value: float) -> float:
+    """Distance of value to the nearest integer, in [0, 0.5]."""
+    return abs(value - round(value))
+
+
+# ---- fixtures -------------------------------------------------------------
+
+def schwarzschild_cells():
+    # r grid 2.005 .. 10.0, 137 points (geometric-ish like the campaign;
+    # exact grid not needed -- we test the lattice character, not counts)
+    rs = [2.005 + (10.0 - 2.005) * i / 136 for i in range(137)]
+    for r in rs:
+        f = 1.0 - 2.0 / r
+        if f <= 0.0:
+            continue
+        x = 2.0 / r
+        f_alt = (r - 2.0) / r
+        yield ("schwarzschild", r, f, x, f_alt, 2)
+
+
+def sr_cells():
+    bs = [0.01 + (0.99 - 0.01) * i / 136 for i in range(137)]
+    for b in bs:
+        f = 1.0 - b * b
+        x = b * b
+        f_alt = (1.0 - b) * (1.0 + b)
+        yield ("sr", b, f, x, f_alt, 2)
+
+
+def pure_algebraic_cells():
+    xs = [0.01 + (0.99 - 0.01) * i / 136 for i in range(137)]
+    for x in xs:
+        f = 1.0 - x
+        f_alt = (1.0 - x / 2.0) - x / 2.0  # split route
+        yield ("pure_algebraic", x, f, x, f_alt, 2)
+
+
+def cbrt_cells():
+    xs = [0.01 + (0.99 - 0.01) * i / 136 for i in range(137)]
+    for x in xs:
+        f = 1.0 - x
+        f_alt = (1.0 - x / 2.0) - x / 2.0
+        yield ("cbrt", x, f, x, f_alt, 3)
+
+
+def four_forms(f, x, f_alt, n, cast):
+    f = cast(f); x = cast(x); f_alt = cast(f_alt)
+    if n == 2:
+        R = cast(math.sqrt(f))
+        Rn = cast(R * R)
+        R_alt = cast(math.sqrt(f_alt))
+        F3 = cast(R - cast(math.sqrt(f)))
+    else:  # n == 3, cube root via numpy-free real cbrt
+        R = cast(_cbrt(f))
+        Rn = cast(R * R * R)
+        R_alt = cast(_cbrt(f_alt))
+        F3 = cast(R - cast(_cbrt(f)))
+    F1 = cast(Rn - f)
+    F2 = cast(cast(Rn - cast(1.0)) + x)
+    F4 = cast(R - R_alt)
+    return {"R": R, "F1": F1, "F2": F2, "F3": F3, "F4": F4}
+
+
+def _cbrt(v):
+    # real cube root without numpy; sign-preserving
+    if v == 0.0:
+        return 0.0
+    return math.copysign(abs(v) ** (1.0 / 3.0), v)
+
+
+import numpy as np
+F64 = np.float64
+F32 = np.float32
+
+
+def run():
+    fixtures = {
+        "schwarzschild": schwarzschild_cells,
+        "sr": sr_cells,
+        "pure_algebraic": pure_algebraic_cells,
+        "cbrt": cbrt_cells,
+    }
+    expected_grain = {
+        "schwarzschild": 0.5, "sr": 0.5,
+        "pure_algebraic": 0.25, "cbrt": 0.25,
+    }
+    report = {}
+    for fname, gen in fixtures.items():
+        for prec_name, cast in (("float64", F64), ("float32", F32)):
+            f3_nonzero = 0
+            f2_residuals = []
+            f4_residuals = []
+            n_cells = 0
+            for (_, coord, f, x, f_alt, n) in gen():
+                n_cells += 1
+                vals = four_forms(f, x, f_alt, n, cast)
+                if float(vals["F3"]) != 0.0:
+                    f3_nonzero += 1
+                u = ulp_of_double(float(f))
+                if u > 0:
+                    if float(vals["F2"]) != 0.0:
+                        f2_residuals.append(frac_residual(float(vals["F2"]) / u))
+                    if float(vals["F4"]) != 0.0:
+                        f4_residuals.append(frac_residual(float(vals["F4"]) / u))
+            key = f"{fname}/{prec_name}"
+            f2_max = max(f2_residuals) if f2_residuals else None
+            f4_max = max(f4_residuals) if f4_residuals else None
+            report[key] = {
+                "n_cells": n_cells,
+                "F3_nonzero_count": f3_nonzero,
+                "F3_silent": f3_nonzero == 0,
+                "F2_nonzero": len(f2_residuals),
+                "F2_max_frac_residual": f2_max,
+                "F2_grain_expected": expected_grain[fname],
+                "F4_nonzero": len(f4_residuals),
+                "F4_max_frac_residual": f4_max,
+            }
+    return report
+
+
+if __name__ == "__main__":
+    rep = run()
+    print(json.dumps(rep, indent=2))

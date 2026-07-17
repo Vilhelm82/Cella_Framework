@@ -1,0 +1,605 @@
+"""
+Blow-Up Exponent V4-Native Audit.
+
+V3-reference test: blowup_exponent_analysis.py (zeros of ζ, J₀, Ai).
+V3 used its own K_G object. V4 cannot — we build V4-native substrate
+signatures and fit power laws independently.
+
+Preregistry: Build_Docs/Reports/blowup_exponent_v4_audit/preregistry.md
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import math
+import sys
+from pathlib import Path
+from typing import Callable
+
+import numpy as np
+import scipy.special as sp
+import mpmath
+from lloyd_v4.primitives import typed_ulp
+
+mpmath.mp.dps = 50  # decimal places for high-precision oracle
+
+
+ROOT = Path(__file__).resolve().parents[1]
+REPORT_DIR = ROOT / "Build_Docs" / "Reports" / "blowup_exponent_v4_audit"
+ARTIFACT = REPORT_DIR / "artifact.json"
+
+
+# Reference zeros — high-precision via library APIs
+# (pre-registered §3 + 2026-05-18 amendment for precise zeros)
+def _high_precision_zeros() -> dict[str, tuple[float, ...]]:
+    # Zeta: first 5 nontrivial zero imaginary parts via mpmath.zetazero
+    zeta_zeros = tuple(
+        float(mpmath.zetazero(k).imag) for k in range(1, 6)
+    )
+    # Bessel J0: first 5 zeros via scipy.special.jn_zeros
+    j0_zeros = tuple(float(z) for z in sp.jn_zeros(0, 5))
+    # Airy Ai: first 5 zeros (negative reals) via scipy.special.ai_zeros
+    ai_zeros_tuple = sp.ai_zeros(5)
+    ai_zeros = tuple(float(z) for z in ai_zeros_tuple[0])
+    return {"zeta": zeta_zeros, "j0": j0_zeros, "airy_ai": ai_zeros}
+
+
+ZEROS: dict[str, tuple[float, ...]] = _high_precision_zeros()
+
+
+# Delta sweep — logarithmic, both signs
+DELTAS = tuple(10.0 ** (-k) for k in range(1, 11))  # 10^-1 to 10^-10
+
+
+# ---------------------------------------------------------------------------
+# Function evaluators (route A: canonical; route B: permuted summation)
+# ---------------------------------------------------------------------------
+
+
+def _zeta_routeA(x: complex) -> complex:
+    """Canonical ζ(½+it) via mpmath at float64 precision."""
+    return complex(mpmath.zeta(complex(x)))
+
+
+def _zeta_routeB(x: complex) -> complex:
+    """Route-permuted ζ — use the functional equation symmetry s ↔ 1-s.
+    For non-trivial zeros, ζ(s) = 0 ↔ ζ(1-s̄) = 0. We compute via the
+    reflected argument and take complex conjugate. In float64, the
+    summation chain differs."""
+    s = complex(x)
+    one_minus = complex(1.0) - s
+    return complex(mpmath.zeta(one_minus)).conjugate()
+
+
+def _j0_routeA(x: float) -> float:
+    """Canonical J₀ via scipy."""
+    return float(sp.j0(x))
+
+
+def _j0_routeB(x: float) -> float:
+    """Route-permuted J₀: use the relation J₀(x) = J₀(-x) (even function),
+    evaluated at -x then negated-input. In float64, the internal summation
+    chain in scipy differs slightly between J₀(x) and J₀(-x) because of
+    sign handling in the series."""
+    return float(sp.j0(-x))
+
+
+def _airy_routeA(x: float) -> float:
+    """Canonical Ai(x) via scipy."""
+    return float(sp.airy(x)[0])
+
+
+def _airy_routeB(x: float) -> float:
+    """Route-permuted Ai: evaluate via the relation Ai(x) at adjacent point
+    plus FD step. Acts as a route-permuted summation path. In float64 the
+    chains differ."""
+    # Use the integral representation indirectly via scipy.special.ai_zeros's
+    # absence — alternative: compute via the Wronskian Bi route is overkill.
+    # Pragmatic route B: evaluate at x with a slightly perturbed argument
+    # then transport back via the linearization (this is what V3 might call
+    # a "rounded transcendental route" — diagnostic).
+    epsilon = 1e-14
+    return float(sp.airy(x - epsilon)[0]) + float(sp.airy(x + epsilon)[2]) * epsilon
+
+
+# ---------------------------------------------------------------------------
+# Mpmath high-precision oracle
+# ---------------------------------------------------------------------------
+
+
+def _zeta_oracle(t: float) -> float:
+    """|ζ(½+it)| at mpmath-50 precision."""
+    return float(abs(mpmath.zeta(mpmath.mpc(0.5, t))))
+
+
+def _j0_oracle(x: float) -> float:
+    return float(mpmath.besselj(0, x))
+
+
+def _airy_oracle(x: float) -> float:
+    return float(mpmath.airyai(x))
+
+
+# ---------------------------------------------------------------------------
+# Sampling at (zero, +δ) under multiple precisions
+# ---------------------------------------------------------------------------
+
+
+def _sample_zeta(zero: float, delta: float) -> dict:
+    """Return |ζ| at the offset point in float32, float64, and oracle."""
+    t = zero + delta
+    val_routeA = _zeta_routeA(0.5 + 1j * t)
+    val_routeB = _zeta_routeB(0.5 + 1j * t)
+    mag_routeA = abs(val_routeA)
+    mag_routeB = abs(val_routeB)
+    # float32 stress: cast t to float32 and re-evaluate
+    t32 = float(np.float32(t))
+    val_f32 = complex(mpmath.zeta(complex(0.5, t32)))
+    mag_f32 = float(np.float32(abs(val_f32)))
+    mag_oracle = _zeta_oracle(t)
+    return {
+        "x_native": t,
+        "value_routeA": mag_routeA,
+        "value_routeB": mag_routeB,
+        "value_float32": mag_f32,
+        "value_oracle": mag_oracle,
+    }
+
+
+def _sample_j0(zero: float, delta: float) -> dict:
+    x = zero + delta
+    val_routeA = _j0_routeA(x)
+    val_routeB = _j0_routeB(x)
+    mag_routeA = abs(val_routeA)
+    mag_routeB = abs(val_routeB)
+    x32 = float(np.float32(x))
+    mag_f32 = float(abs(np.float32(sp.j0(x32))))
+    mag_oracle = _j0_oracle(x)
+    return {
+        "x_native": x,
+        "value_routeA": mag_routeA,
+        "value_routeB": mag_routeB,
+        "value_float32": mag_f32,
+        "value_oracle": abs(mag_oracle),
+    }
+
+
+def _sample_airy(zero: float, delta: float) -> dict:
+    x = zero + delta
+    val_routeA = _airy_routeA(x)
+    val_routeB = _airy_routeB(x)
+    mag_routeA = abs(val_routeA)
+    mag_routeB = abs(val_routeB)
+    x32 = float(np.float32(x))
+    mag_f32 = float(abs(np.float32(sp.airy(x32)[0])))
+    mag_oracle = _airy_oracle(x)
+    return {
+        "x_native": x,
+        "value_routeA": mag_routeA,
+        "value_routeB": mag_routeB,
+        "value_float32": mag_f32,
+        "value_oracle": abs(mag_oracle),
+    }
+
+
+SAMPLERS = {
+    "zeta": _sample_zeta,
+    "j0": _sample_j0,
+    "airy_ai": _sample_airy,
+}
+
+
+# ---------------------------------------------------------------------------
+# Substrate-signature extraction per record + power-law fit
+# ---------------------------------------------------------------------------
+
+
+def _ulp(x: float) -> float:
+    """ULP via the ``typed_ulp`` substrate primitive (GAP-003, precision='float64').
+
+    Migrated from inline IEEE 754 ULP helper as part of the DRY-003 substrate
+    consolidation. Byte-compatible with the original on finite normal inputs.
+    """
+    return float(typed_ulp(x, precision="float64").value.ulp)
+
+
+def _signatures(samples: list[dict], zero: float) -> list[dict]:
+    """Compute σ1..σ4 per sample. σ5 is computed across the sweep."""
+    rows = []
+    for s in samples:
+        mag_f64 = s["value_routeA"]
+        mag_f32 = s["value_float32"]
+        mag_oracle = s["value_oracle"]
+        x = s["x_native"]
+        delta = x - zero
+        # σ1: residual magnitude — log of |f|
+        sigma_1 = mag_f64 if mag_f64 > 0 else None
+        # σ2: binade-loss depth — log2(|zero|) - log2(|f|)
+        if mag_f64 > 0 and abs(zero) > 0:
+            sigma_2 = math.log2(abs(zero)) - math.log2(mag_f64)
+        else:
+            sigma_2 = None
+        # σ3: conditioning index — |f'|/|f| ≈ 1/|δ| near simple zero.
+        # We can compute |f'| as (|f(x+h)| - |f(x-h)|)/(2h) via FD on the oracle.
+        # Here we approximate using the oracle ratio: f' ≈ (f(zero+δ) - f(zero))/δ
+        # Since f(zero) ≈ 0, this gives |f'| ≈ |f(x)| / |δ|, so |f'|/|f| ≈ 1/|δ|.
+        # We track log10(this) = -log10|δ| — a tautology for simple zeros.
+        # For a substrate observation, we use oracle-vs-float64 ratio:
+        if mag_f64 > 0 and mag_oracle > 0:
+            sigma_3 = math.log10(mag_oracle / mag_f64)
+        else:
+            sigma_3 = None
+        # σ4: route variation — |routeA - routeB| / ulp(routeA)
+        delta_routes = abs(s["value_routeA"] - s["value_routeB"])
+        ulp_ref = _ulp(s["value_routeA"]) if s["value_routeA"] > 0 else _ulp(1.0)
+        sigma_4 = delta_routes / ulp_ref
+        rows.append(
+            {
+                "delta": delta,
+                "abs_delta": abs(delta),
+                "value_f64": mag_f64,
+                "value_f32": mag_f32,
+                "value_oracle": mag_oracle,
+                "sigma_1": sigma_1,
+                "sigma_2": sigma_2,
+                "sigma_3": sigma_3,
+                "sigma_4": sigma_4,
+            }
+        )
+    return rows
+
+
+def _fit_power_law(
+    rows: list[dict], y_key: str, drop_zeros: bool = True
+) -> dict:
+    """Fit log(y) = α log|δ| + β. Returns alpha, beta, r_squared, n_pts."""
+    xs = []
+    ys = []
+    for r in rows:
+        ad = r["abs_delta"]
+        y = r.get(y_key)
+        if y is None:
+            continue
+        if drop_zeros and y <= 0:
+            continue
+        if ad <= 0:
+            continue
+        # log|y| if y can be negative; for σ1, σ4 it's positive magnitudes
+        if y_key == "sigma_1":
+            ys.append(math.log10(y))
+        elif y_key == "sigma_4":
+            if y <= 0:
+                continue
+            ys.append(math.log10(y))
+        elif y_key in ("sigma_2", "sigma_3"):
+            # σ2, σ3 are already log-like; fit linearly
+            ys.append(y)
+        else:
+            ys.append(math.log10(y) if y > 0 else None)
+        xs.append(math.log10(ad))
+    if len(xs) < 3:
+        return {"alpha": None, "beta": None, "r_squared": None, "n_pts": len(xs)}
+    xs_arr = np.array(xs)
+    ys_arr = np.array(ys)
+    # Linear regression
+    a_matrix = np.vstack([xs_arr, np.ones_like(xs_arr)]).T
+    alpha, beta = np.linalg.lstsq(a_matrix, ys_arr, rcond=None)[0]
+    y_pred = alpha * xs_arr + beta
+    ss_res = float(np.sum((ys_arr - y_pred) ** 2))
+    ss_tot = float(np.sum((ys_arr - ys_arr.mean()) ** 2))
+    r_sq = 1.0 - ss_res / ss_tot if ss_tot > 0 else 0.0
+    return {
+        "alpha": round(float(alpha), 4),
+        "beta": round(float(beta), 4),
+        "r_squared": round(r_sq, 4),
+        "n_pts": int(len(xs)),
+    }
+
+
+def _observability_boundary_delta(rows: list[dict]) -> float | None:
+    """σ5: the largest δ at which the float64 value is at or below ULP floor.
+
+    Heuristic: the largest δ where value_f64 < 1e-15 (rough float64 ULP near
+    unity-scale arguments). For high-precision oracle, value_oracle > 0 should
+    still hold."""
+    candidates = [
+        r for r in rows
+        if r["value_f64"] is not None and r["value_f64"] < 1e-15
+    ]
+    if not candidates:
+        return None
+    return max(c["abs_delta"] for c in candidates)
+
+
+# ---------------------------------------------------------------------------
+# Main audit driver
+# ---------------------------------------------------------------------------
+
+
+def _audit_one_zero(function: str, zero_index: int, zero_value: float) -> dict:
+    sampler = SAMPLERS[function]
+    samples_pos = [sampler(zero_value, +d) for d in DELTAS]
+    samples_neg = [sampler(zero_value, -d) for d in DELTAS]
+    rows_pos = _signatures(samples_pos, zero_value)
+    rows_neg = _signatures(samples_neg, zero_value)
+    rows_combined = rows_pos + rows_neg
+    fits = {
+        "sigma_1": _fit_power_law(rows_combined, "sigma_1"),
+        "sigma_2": _fit_power_law(rows_combined, "sigma_2"),
+        "sigma_3": _fit_power_law(rows_combined, "sigma_3"),
+        "sigma_4": _fit_power_law(rows_combined, "sigma_4"),
+    }
+    obs_boundary = _observability_boundary_delta(rows_combined)
+    validity = {
+        "defined": True,
+        "finite": all(
+            math.isfinite(r["value_f64"]) for r in rows_combined
+            if r["value_f64"] is not None
+        ),
+        "observable": fits["sigma_1"]["r_squared"] is not None
+        and fits["sigma_1"]["r_squared"] > 0.5,
+        "selectable": True,
+        "advanceable": fits["sigma_1"]["alpha"] is not None
+        and 0.5 <= fits["sigma_1"]["alpha"] <= 1.5,
+    }
+    return {
+        "function": function,
+        "zero_index": zero_index,
+        "zero_value": zero_value,
+        "fits": fits,
+        "observability_boundary_delta": obs_boundary,
+        "validity": validity,
+        "n_samples": len(rows_combined),
+    }
+
+
+def _aggregate_per_function(records: list[dict]) -> dict:
+    by_function: dict[str, list[dict]] = {}
+    for r in records:
+        by_function.setdefault(r["function"], []).append(r)
+    summary = {}
+    for fn, rs in by_function.items():
+        per_sigma = {}
+        for sigma in ("sigma_1", "sigma_2", "sigma_3", "sigma_4"):
+            alphas = [
+                r["fits"][sigma]["alpha"]
+                for r in rs
+                if r["fits"][sigma]["alpha"] is not None
+            ]
+            if alphas:
+                per_sigma[sigma] = {
+                    "mean": round(float(np.mean(alphas)), 4),
+                    "std": round(float(np.std(alphas)), 4),
+                    "min": round(min(alphas), 4),
+                    "max": round(max(alphas), 4),
+                    "n": len(alphas),
+                }
+            else:
+                per_sigma[sigma] = {
+                    "mean": None,
+                    "std": None,
+                    "min": None,
+                    "max": None,
+                    "n": 0,
+                }
+        obs_deltas = [
+            r["observability_boundary_delta"]
+            for r in rs
+            if r["observability_boundary_delta"] is not None
+        ]
+        summary[fn] = {
+            "per_sigma": per_sigma,
+            "observability_boundary_delta": {
+                "mean": round(float(np.mean(obs_deltas)), 10) if obs_deltas else None,
+                "min": round(min(obs_deltas), 10) if obs_deltas else None,
+                "max": round(max(obs_deltas), 10) if obs_deltas else None,
+                "n": len(obs_deltas),
+            },
+        }
+    return summary
+
+
+def _evaluate_predictions(
+    records: list[dict], summary: dict
+) -> dict:
+    # P_B1: σ1 exponent ≈ +1 for every record (within [0.9, 1.1])
+    p_b1_violations = [
+        (r["function"], r["zero_index"])
+        for r in records
+        if r["fits"]["sigma_1"]["alpha"] is None
+        or not (0.9 <= r["fits"]["sigma_1"]["alpha"] <= 1.1)
+    ]
+    p_b1 = len(p_b1_violations) == 0
+
+    # P_B2: σ2 ≈ -σ1
+    p_b2_violations = []
+    for r in records:
+        a1 = r["fits"]["sigma_1"]["alpha"]
+        a2 = r["fits"]["sigma_2"]["alpha"]
+        if a1 is None or a2 is None:
+            continue
+        # σ2 = -log2|f|/log10|δ| relationship; expect a2 ≈ -a1 * log2(10)
+        # log10|f| = a1*log10|δ| + b; σ2 = log2|zero|-log2|f|
+        # → σ2 = const - log2(10) * log10|f| = const - log2(10) * (a1*log10|δ|+b)
+        # → α_2 = -log2(10) * a1 ≈ -3.32 * 1 ≈ -3.32
+        expected = -math.log2(10.0) * a1
+        if abs(a2 - expected) > 0.5:
+            p_b2_violations.append((r["function"], r["zero_index"], a1, a2, expected))
+    p_b2 = len(p_b2_violations) == 0
+
+    # P_B3: σ3 function-specific universal — within-function std < 0.15,
+    # between-function range > 0.3
+    sigma3_per_func = {
+        fn: summary[fn]["per_sigma"]["sigma_3"] for fn in summary
+    }
+    within_stds = [
+        s["std"]
+        for s in sigma3_per_func.values()
+        if s["std"] is not None
+    ]
+    means = [
+        s["mean"] for s in sigma3_per_func.values() if s["mean"] is not None
+    ]
+    p_b3 = (
+        len(within_stds) > 0
+        and all(s < 0.15 for s in within_stds)
+        and len(means) > 1
+        and (max(means) - min(means)) > 0.3
+    )
+
+    # P_B4: σ4 bounded 0 ≤ α ≤ 2 across all records
+    sigma4_alphas = [
+        r["fits"]["sigma_4"]["alpha"]
+        for r in records
+        if r["fits"]["sigma_4"]["alpha"] is not None
+    ]
+    p_b4 = all(0 <= a <= 2 for a in sigma4_alphas) if sigma4_alphas else False
+
+    # P_B5: ordering of observability deltas: ζ < J₀ < Ai
+    obs = {
+        fn: summary[fn]["observability_boundary_delta"]["mean"]
+        for fn in summary
+    }
+    zeta_obs = obs.get("zeta")
+    j0_obs = obs.get("j0")
+    ai_obs = obs.get("airy_ai")
+    p_b5 = (
+        zeta_obs is not None
+        and j0_obs is not None
+        and ai_obs is not None
+        and zeta_obs < j0_obs < ai_obs
+    )
+
+    # P_B6: verdict on V3's H1/H2/H3
+    # H1: universal within and across (all means within 0.05 of each other AND
+    #     all within-function stds < 0.05)
+    # H2: universal_within_and_across — across-function range < 0.1
+    # H3: function-specific universal — within-function std < 0.15, between
+    #     range > 0.3 (this is P_B3 essentially)
+    # H_other: function-zero-specific (within-function std > 0.15)
+    sigma3_means = means
+    sigma3_stds = within_stds
+    if not sigma3_means or not sigma3_stds:
+        h_verdict = "indeterminate"
+    elif max(sigma3_stds) < 0.05 and (max(sigma3_means) - min(sigma3_means)) < 0.1:
+        h_verdict = "H2_universal_within_and_across"
+    elif (
+        max(sigma3_stds) < 0.15
+        and (max(sigma3_means) - min(sigma3_means)) > 0.3
+    ):
+        h_verdict = "H3_function_specific_universal"
+    elif max(sigma3_stds) >= 0.15:
+        h_verdict = "function_zero_specific"
+    else:
+        h_verdict = "between_classes"
+
+    return {
+        "P_B1_sigma1_alpha_near_unity": bool(p_b1),
+        "P_B1_violations": p_b1_violations,
+        "P_B2_sigma2_mirrors_sigma1": bool(p_b2),
+        "P_B2_violations": p_b2_violations,
+        "P_B3_sigma3_function_specific_universal": bool(p_b3),
+        "P_B4_sigma4_bounded": bool(p_b4),
+        "P_B5_observability_ordering_zeta_lt_j0_lt_ai": bool(p_b5),
+        "P_B6_H_verdict": h_verdict,
+        "diag_sigma3_means": sigma3_means,
+        "diag_sigma3_within_stds": within_stds,
+        "diag_obs_deltas": obs,
+        "diag_sigma4_range": [min(sigma4_alphas), max(sigma4_alphas)]
+        if sigma4_alphas else None,
+    }
+
+
+def _identify_failure_modes(records: list[dict], predictions: dict) -> list[str]:
+    failures = []
+    if not predictions["P_B1_sigma1_alpha_near_unity"]:
+        failures.append("F_B1")
+    # F_B2: ULP floor reached at very small δ for all records
+    ulp_hit_count = sum(
+        1
+        for r in records
+        if r["observability_boundary_delta"] is not None
+        and r["observability_boundary_delta"] >= 1e-7
+    )
+    if ulp_hit_count >= len(records) / 2:
+        failures.append("F_B2")
+    # F_B3: r_squared poor for σ3 or σ4 (no power law)
+    poor_fits = sum(
+        1
+        for r in records
+        for sk in ("sigma_3", "sigma_4")
+        if r["fits"][sk]["r_squared"] is not None
+        and r["fits"][sk]["r_squared"] < 0.5
+    )
+    if poor_fits >= len(records):
+        failures.append("F_B3")
+    return failures
+
+
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
+
+
+def run_audit() -> dict:
+    records = []
+    for fn, zeros in ZEROS.items():
+        for idx, z in enumerate(zeros, start=1):
+            records.append(_audit_one_zero(fn, idx, z))
+    summary = _aggregate_per_function(records)
+    predictions = _evaluate_predictions(records, summary)
+    failures = _identify_failure_modes(records, predictions)
+    # Verdict
+    verdict_components = [
+        predictions["P_B1_sigma1_alpha_near_unity"],
+        predictions["P_B3_sigma3_function_specific_universal"],
+        predictions["P_B4_sigma4_bounded"],
+    ]
+    if all(verdict_components) and not failures:
+        verdict = "blowup_exponent_audit_passed"
+    elif predictions["P_B1_sigma1_alpha_near_unity"]:
+        verdict = "blowup_exponent_audit_passed_with_caveats"
+    else:
+        verdict = "blowup_exponent_audit_failed"
+    return {
+        "audit_name": "blowup_exponent_v4_audit",
+        "preregistry_path": "Build_Docs/Reports/blowup_exponent_v4_audit/preregistry.md",
+        "functions": list(ZEROS.keys()),
+        "zeros": {fn: list(zs) for fn, zs in ZEROS.items()},
+        "deltas": list(DELTAS),
+        "records": records,
+        "summary_per_function": summary,
+        "predictions": predictions,
+        "failure_modes_observed": failures,
+        "verdict": verdict,
+    }
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", default=str(ARTIFACT))
+    args = parser.parse_args()
+    REPORT_DIR.mkdir(parents=True, exist_ok=True)
+    data = run_audit()
+    Path(args.output).write_text(json.dumps(data, indent=2, sort_keys=True))
+    print(f"blowup-exponent audit artifact written to {args.output}")
+    print(f"  verdict: {data['verdict']}")
+    print(f"  failure_modes_observed: {data['failure_modes_observed']}")
+    print(f"  H verdict: {data['predictions']['P_B6_H_verdict']}")
+    print(f"  predictions:")
+    for k, v in data["predictions"].items():
+        if isinstance(v, bool):
+            marker = "✓" if v else "✗"
+            print(f"    {marker} {k}")
+    print(f"  per-function summary:")
+    for fn, s in data["summary_per_function"].items():
+        print(f"    {fn}:")
+        for sig, vals in s["per_sigma"].items():
+            if vals["mean"] is not None:
+                print(f"      {sig}: α = {vals['mean']:.3f} ± {vals['std']:.3f} (range {vals['min']:.3f}..{vals['max']:.3f})")
+            else:
+                print(f"      {sig}: (no data)")
+
+
+if __name__ == "__main__":
+    main()

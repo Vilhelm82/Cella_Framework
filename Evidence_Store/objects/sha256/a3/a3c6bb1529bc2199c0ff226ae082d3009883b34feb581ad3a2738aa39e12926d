@@ -1,0 +1,96 @@
+#!/usr/bin/env python3
+"""
+lifted_sweep_fixed.py  --  corrected lifted-fixture sweep.
+
+BUG in expanded_fixtures_ulp_j.py::analyze_lifted:
+  physical coords were pinned at the critical point for the whole sweep; only
+  the lift variable X moved. So sum(Fi^2) ~ 0 identically and j ~ -X^2/ulp(X^2),
+  independent of the fixture. Morris-Thorne and the photon sphere returned
+  bit-identical stats because neither fixture entered the arithmetic.
+
+FIX:
+  perturb a PHYSICAL coordinate eps around the critical point, set the lift
+  variable X = sqrt(sum Fi^2) so the joint constraint is satisfied in exact
+  arithmetic, then measure j = (sum_strategy(Fi^2) - X*X) / ulp(reference).
+  Now the fixture's own geometry drives the residual.
+"""
+from __future__ import annotations
+import json, math
+from pathlib import Path
+import numpy as np
+
+TASK_DIR = Path(__file__).resolve().parent
+N_POINTS = 15001
+
+def ulp(x: float) -> float:
+    x = float(x)
+    if x == 0.0: return 5e-324
+    return math.ulp(x)
+
+# fixtures: (name, physical critical point, constraint funcs, which coord to perturb)
+def morris_thorne():
+    a0 = 1.0
+    return ("morris_thorne", [a0, a0, 1.0/a0],
+            (lambda r,a,k: (a*a)/r - r, lambda r,a,k: r/(a*a) - k), 0)
+
+def schwarzschild_photon():
+    M = 1.0
+    return ("schwarzschild_photon", [3.0*M, 27.0*M*M, M],
+            (lambda r,B,M: B*(r-2.0*M) - r**3, lambda r,B,M: B*r - 3.0*r**3), 0)
+
+STRATS = {
+    "naive":   lambda sq: _acc(sq),
+    "fsum":    lambda sq: math.fsum(sq),
+    "pairwise":lambda sq: _pair(sq),
+    "reversed":lambda sq: _acc(list(reversed(sq))),
+}
+def _acc(sq):
+    s=0.0
+    for v in sq: s+=v
+    return s
+def _pair(sq):
+    sq=list(sq)
+    while len(sq)>1:
+        sq=[sq[i]+sq[i+1] if i+1<len(sq) else sq[i] for i in range(0,len(sq),2)]
+    return sq[0] if sq else 0.0
+
+def analyze():
+    results={}
+    discrete=np.array([-1.,-0.5,0.,0.5,1.])
+    for name, crit, funcs, pidx in (morris_thorne(), schwarzschild_photon()):
+        # perturb the chosen physical coordinate multiplicatively, log-dense near crit
+        base = crit[pidx]
+        eps = base * np.concatenate([-np.logspace(-9,-3,N_POINTS//2),
+                                      np.logspace(-9,-3,N_POINTS-N_POINTS//2)])
+        per_strategy={}
+        for sname, sfun in STRATS.items():
+            js=[]
+            for e in eps:
+                pt=list(crit); pt[pidx]=base+e
+                fi=[f(*pt) for f in funcs]
+                sq=[v*v for v in fi]
+                sos=sfun(sq)                 # sum of squares via this rounding path
+                X=math.sqrt(sos) if sos>0 else 0.0   # lift var closes the constraint
+                residual=sos - X*X           # common-mode: should cancel to ~ulp
+                ref=abs(sos) if abs(sos)>1e-300 else 1.0
+                u=ulp(ref)
+                js.append(residual/u if u>0 else 0.0)
+            j=np.array(js)
+            frac=float(np.mean(np.min(np.abs(j[:,None]-discrete),axis=1)<0.1))
+            per_strategy[sname]={"j_variance":float(np.var(j)),
+                                 "j_max_abs":float(np.max(np.abs(j))),
+                                 "fraction_near_discrete_lattice":frac,
+                                 "j_median":float(np.median(j))}
+        results[name]={"perturbed_coord_index":pidx,"per_strategy_j":per_strategy,
+                       "n_points":N_POINTS}
+    return results
+
+if __name__=="__main__":
+    out={"task":"lifted_sweep_FIXED","fix":"perturb physical coord; X closes constraint",
+         "lifted_singularity":analyze()}
+    (TASK_DIR/"lifted_sweep_fixed_results.json").write_text(json.dumps(out,indent=2,default=str))
+    # quick console read
+    for fx,d in out["lifted_singularity"].items():
+        v=d["per_strategy_j"]["naive"]
+        print(f"{fx:22s} naive: var={v['j_variance']:.3e}  maxj={v['j_max_abs']:.3e}  lattice={v['fraction_near_discrete_lattice']:.3f}")
+    print("written: lifted_sweep_fixed_results.json")

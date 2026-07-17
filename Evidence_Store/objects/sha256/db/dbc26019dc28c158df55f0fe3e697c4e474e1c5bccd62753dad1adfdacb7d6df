@@ -1,0 +1,242 @@
+"""Lens A:instrument-artifact independent refutation harness.
+
+EVAL-LAYER ONLY. Instruments (numpy, decimal, fractions.Fraction) are
+MEASUREMENT APPARATUS, never substrate. Every numerical claim is backed by an
+IEEE 754 value or an exact (Fraction / Decimal) reduction.
+
+Three jobs:
+ (1) Re-read phase2A_boundary_trace.json; confirm/refute that PA/Schw
+     first_dirty_f MOVES with the decimal anchor tier and SR is anchor-INVARIANT.
+ (2) SR candidate-real probe: independently re-run the C_{p,k}=a_k+u_p*b_k fit
+     near f=0.74291253059288 with (a) float128 tier REMOVED and (b) decimal
+     anchor raised to decimal_200, decimal_300. Does SR's boundary MOVE?
+ (3) Degenerate-fit mechanism: at collapse cells count DISTINCT NONZERO
+     per-precision residuals. <2 => 2-param linear fit under-determined =>
+     R^2 departure is a fitting artifact, not a substrate boundary.
+
+Reads the recorded trace for anchors; recomputes binary/decimal residuals
+independently of the original harness (own arithmetic) for the SR probe.
+"""
+from __future__ import annotations
+import json, math
+from decimal import Decimal, localcontext
+from fractions import Fraction
+import numpy as np
+
+TRACE = '/home/william_lloydlt/projects/V4/Lloyd_Engine_V4/scratch/phase2A_boundary_trace.json'
+OUT = '/home/william_lloydlt/projects/V4/Lloyd_Engine_V4/scratch/_A_lens_refutation_results.json'
+
+DT = {"float32": np.float32, "float64": np.float64, "float128": np.float128}
+
+
+def u_p_float(label: str) -> float:
+    if label in DT:
+        return float(np.finfo(DT[label]).eps) / 2.0
+    if label.startswith("decimal_"):
+        prec = int(label.split("_", 1)[1])
+        return float(Decimal(5) * (Decimal(10) ** Decimal(-prec)))
+    raise ValueError(label)
+
+
+def operand_for_f(fixture, f):
+    if fixture == "schwarzschild":
+        return 2.0 / (1.0 - f)
+    if fixture == "sr":
+        return float(np.sqrt(1.0 - f))
+    if fixture in ("pure_algebraic", "cbrt_chain"):
+        return 1.0 - f
+    raise ValueError(fixture)
+
+
+def binary_residual(fixture, operand, label, path="F1"):
+    s = DT[label]
+    one = s(1.0); two = s(2.0); value = s(operand)
+    if fixture == "schwarzschild":
+        direct = one - two / value; root = np.sqrt(direct); power = root * root
+    elif fixture == "sr":
+        squared = value * value; direct = one - squared; root = np.sqrt(direct); power = root * root
+    elif fixture == "pure_algebraic":
+        direct = one - value; root = np.sqrt(direct); power = root * root
+    elif fixture == "cbrt_chain":
+        direct = one - value; root = np.cbrt(direct); power = root * root * root
+    else:
+        raise ValueError(fixture)
+    return abs(float(power - direct))
+
+
+def decimal_residual(fixture, operand, prec, path="F1"):
+    with localcontext() as ctx:
+        ctx.prec = prec
+        one = Decimal(1); two = Decimal(2)
+        value = Decimal.from_float(float(operand))
+        if fixture == "schwarzschild":
+            direct = one - two / value
+        elif fixture == "sr":
+            squared = value * value; direct = one - squared
+        elif fixture == "pure_algebraic":
+            direct = one - value
+        else:
+            raise ValueError(fixture)
+        root = direct.sqrt(); power = root * root
+        return abs(float(power - direct))
+
+
+def r_squared(xs, ys):
+    n = len(xs)
+    mx = sum(xs) / n; my = sum(ys) / n
+    sxx = sum((x - mx) ** 2 for x in xs)
+    sxy = sum((x - mx) * (y - my) for x, y in zip(xs, ys))
+    if sxx == 0:
+        return None, None, None
+    slope = sxy / sxx
+    intercept = my - slope * mx
+    ss_tot = sum((y - my) ** 2 for y in ys)
+    ss_res = sum((y - (slope * x + intercept)) ** 2 for x, y in zip(xs, ys))
+    if ss_tot == 0:
+        r2 = 1.0 if ss_res == 0 else 0.0
+    else:
+        r2 = 1.0 - ss_res / ss_tot
+    return r2, slope, intercept
+
+
+def fit_at_f(fixture, f, binary_labels, anchor_label):
+    operand = operand_for_f(fixture, f)
+    xs = []; ys = []; per = {}
+    for lab in binary_labels:
+        r = binary_residual(fixture, operand, lab); xs.append(u_p_float(lab)); ys.append(r); per[lab] = r
+    if anchor_label is not None:
+        prec = int(anchor_label.split("_", 1)[1])
+        r = decimal_residual(fixture, operand, prec); xs.append(u_p_float(anchor_label)); ys.append(r); per[anchor_label] = r
+    r2, slope, intercept = r_squared(xs, ys)
+    nz = [y for y in ys if y != 0.0]
+    return {
+        "f": f, "operand": operand, "operand_hex": operand.hex(),
+        "binary_labels": list(binary_labels), "anchor": anchor_label,
+        "r_squared": r2, "slope": slope, "intercept": intercept,
+        "per_precision_residual": per,
+        "n_tiers_total": len(ys), "n_tiers_nonzero": len(nz),
+        "n_distinct_nonzero_residuals": len(set(nz)),
+        "fit_carries_substrate_signal": bool(len(set(nz)) >= 2),
+    }
+
+
+def first_dirty_on_grid(fixture, binary_labels, anchor_label, grid, r2_tol=1.0 - 1e-9):
+    first_dirty = None; last_clean = None
+    for f in grid:
+        pt = fit_at_f(fixture, f, binary_labels, anchor_label)
+        if pt["r_squared"] is not None and pt["r_squared"] >= r2_tol:
+            last_clean = pt
+        else:
+            first_dirty = pt
+            break
+    return last_clean, first_dirty
+
+
+def f_grid(n_per_decade=24, f_max=0.9, f_min_exp=12):
+    lo = -float(f_min_exp); hi = math.log10(f_max)
+    n = int(round((hi - lo) * n_per_decade)) + 1
+    out = []
+    for i in range(n):
+        t = hi + (lo - hi) * (i / (n - 1)); out.append(10.0 ** t)
+    out.append(0.5)
+    return tuple(sorted(set(out), reverse=True))
+
+
+def main():
+    d = json.load(open(TRACE))
+    R = {"platform": d["platform"], "jobs": {}}
+
+    # JOB 1: read recorded per-anchor first_dirty_f, classify move vs invariant
+    job1 = {}
+    for fx, data in d["fixtures"].items():
+        ir = data["instrument_ruleout"]
+        fpa = ir["first_dirty_f_per_anchor"]
+        vals = [v for v in fpa.values() if v is not None]
+        distinct = sorted(set(round(v, 12) for v in vals))
+        job1[fx] = {
+            "recorded_classification": data["boundary_classification"],
+            "first_dirty_f_per_anchor": fpa,
+            "recorded_anchor_invariant": ir["anchor_invariant_boundary"],
+            "distinct_first_dirty_f_count": len(distinct),
+            "moves_with_anchor": (len(distinct) > 1) if len(vals) >= 2 else None,
+        }
+    R["jobs"]["job1_recorded_anchor_dependence"] = job1
+
+    # JOB 2: SR candidate-real probe. Independent re-run near f=0.74291253059288.
+    sr_target = 0.74291253059288
+    grid = f_grid()
+    # Identify grid neighbourhood of the SR boundary
+    near = sorted(grid, key=lambda x: abs(x - sr_target))[:5]
+    # Default config: float32/64/128 + decimal_50 (matches harness primary anchor)
+    configs = {
+        "baseline_f32_f64_f128_dec50": (("float32", "float64", "float128"), "decimal_50"),
+        "baseline_f32_f64_f128_dec120": (("float32", "float64", "float128"), "decimal_120"),
+        "f128_REMOVED_f32_f64_dec50": (("float32", "float64"), "decimal_50"),
+        "f128_REMOVED_f32_f64_dec120": (("float32", "float64"), "decimal_120"),
+        "f128_REMOVED_f32_f64_dec200": (("float32", "float64"), "decimal_200"),
+        "f128_REMOVED_f32_f64_dec300": (("float32", "float64"), "decimal_300"),
+        "full_ladder_dec200": (("float32", "float64", "float128"), "decimal_200"),
+        "full_ladder_dec300": (("float32", "float64", "float128"), "decimal_300"),
+    }
+    sr_probe = {"target_f": sr_target, "grid_neighbourhood": list(near), "configs": {}}
+    for name, (blabels, anchor) in configs.items():
+        lc, fd = first_dirty_on_grid("sr", blabels, anchor, grid)
+        sr_probe["configs"][name] = {
+            "first_dirty_f": (fd["f"] if fd else None),
+            "last_clean_f": (lc["f"] if lc else None),
+            "first_dirty_r2": (fd["r_squared"] if fd else None),
+            "first_dirty_n_distinct_nonzero": (fd["n_distinct_nonzero_residuals"] if fd else None),
+            "first_dirty_per_precision": (fd["per_precision_residual"] if fd else None),
+        }
+    # Did SR boundary move when we changed instrument tiers?
+    sr_fds = [c["first_dirty_f"] for c in sr_probe["configs"].values() if c["first_dirty_f"] is not None]
+    sr_distinct = sorted(set(round(v, 12) for v in sr_fds))
+    sr_probe["distinct_first_dirty_f_across_configs"] = sr_distinct
+    sr_probe["sr_boundary_moves_when_tiers_changed"] = (len(sr_distinct) > 1)
+    R["jobs"]["job2_sr_independent_tier_swap"] = sr_probe
+
+    # JOB 3: distinct-nonzero residual counts at the collapse cells for all fixtures
+    job3 = {}
+    for fx, data in d["fixtures"].items():
+        ba = data["boundary_by_anchor"]
+        per_anchor = {}
+        for akey, bv in ba.items():
+            fdcell = bv.get("first_dirty")
+            if fdcell is None:
+                per_anchor[akey] = {"first_dirty_f": None}
+                continue
+            per_anchor[akey] = {
+                "first_dirty_f": fdcell["f"],
+                "operand": fdcell["operand"],
+                "r_squared": fdcell["r_squared"],
+                "n_tiers_total": fdcell.get("n_tiers_total"),
+                "n_tiers_nonzero": fdcell.get("n_tiers_nonzero"),
+                "n_distinct_nonzero_residuals": fdcell.get("n_distinct_nonzero_residuals"),
+                "fit_carries_substrate_signal": fdcell.get("fit_carries_substrate_signal"),
+                "per_precision_residual": fdcell.get("per_precision_residual"),
+            }
+        coll = data.get("exact_decomposition_at_collapse")
+        c64 = None
+        if coll:
+            c64 = {
+                "operand": coll["float64"]["operand"],
+                "dominating_term": coll["float64"]["dominating_term"],
+                "ratio": coll["float64"]["dominating_over_other_ratio"],
+                "additive_check": coll["float64"]["additive_check_exact"],
+                "eps_pow": coll["float64"]["eps_pow_squaring_round_float"],
+                "eps_root": coll["float64"]["eps_root_sqrt_roundtrip_float"],
+            }
+        job3[fx] = {
+            "recorded_classification": data["boundary_classification"],
+            "any_anchor_first_dirty_cell": per_anchor,
+            "collapse_float64_decomposition": c64,
+        }
+    R["jobs"]["job3_degenerate_fit_distinct_residuals"] = job3
+
+    open(OUT, "w").write(json.dumps(R, indent=2, allow_nan=True))
+    print("WROTE", OUT)
+    print("SR_MOVES", sr_probe["sr_boundary_moves_when_tiers_changed"], "DISTINCT", sr_distinct)
+
+
+if __name__ == "__main__":
+    main()

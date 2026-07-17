@@ -1,0 +1,291 @@
+{
+ "annex_exclusion": "C1/C2/T1/T2/T3 (true_class annex) are OUTSIDE Stage A entirely (Amendment 1 DP1).",
+ "authority": "Build_Docs/Agent_tasks/CAMPAIGN_DIFFERENCE_TOWER.md sections 7 (H1, H3), 7A Amendment 1, 9 Stage A; Will's Stage-A GO 2026-06-12 (prereg-first; kills K1/K2 live)",
+ "campaign": "difference_tower",
+ "certificate_semantics": "terminates(F, m) := every (point, scheme, j) cell of F's grid has Delta^m == 0 in Q. certificate degree d*(F) := min{m-1 : terminates(F, m)} over F's m-grid, if any. FALSE POSITIVE (= K2 kill): a certificate fires on any h3_negative fixture, OR fires with d* < declared d on an h3_positive fixture.",
+ "date": "2026-06-12",
+ "depends_on": {
+  "stage0_manifest_sha256_pin": "85ae1400c2ac1d8e36bd6a70b2b2ce23651b309314282c08f497fe225033a029"
+ },
+ "determinism": "byte-stable re-run x2 (sha256 over records) required before the report; records sha-pinned in the verdicts file; zero RNG anywhere.",
+ "dp2_logging": "Amendment 1 DP2 standing instruction: every BOUNDED / below_sufficient_condition firing location is logged in stage records (expected count on this grid: 0 cells); any such firing on a rational-class fixture goes to the surprise ledger IMMEDIATELY.",
+ "frozen": true,
+ "grid": {
+  "K1": {
+   "extra_points": [],
+   "j_override": null,
+   "m": [
+    1,
+    2,
+    3,
+    4
+   ]
+  },
+  "K2": {
+   "extra_points": [
+    "0x1.0000000000000p-2"
+   ],
+   "j_override": null,
+   "m": [
+    1,
+    2,
+    3,
+    4
+   ]
+  },
+  "K3": {
+   "extra_points": [],
+   "j_override": null,
+   "m": [
+    1,
+    2,
+    3,
+    4
+   ]
+  },
+  "P0": {
+   "extra_points": [],
+   "j_override": null,
+   "m": [
+    1
+   ]
+  },
+  "P1": {
+   "extra_points": [],
+   "j_override": null,
+   "m": [
+    1,
+    2
+   ]
+  },
+  "P10": {
+   "extra_points": [],
+   "j_override": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+   ],
+   "m": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+   ]
+  },
+  "P2": {
+   "extra_points": [],
+   "j_override": null,
+   "m": [
+    1,
+    2,
+    3
+   ]
+  },
+  "P3": {
+   "extra_points": [],
+   "j_override": null,
+   "m": [
+    1,
+    2,
+    3,
+    4
+   ]
+  },
+  "P4": {
+   "extra_points": [],
+   "j_override": null,
+   "m": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "R1a": {
+   "extra_points": [],
+   "j_override": null,
+   "m": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "R1b": {
+   "extra_points": [],
+   "j_override": null,
+   "m": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "R2a": {
+   "extra_points": [],
+   "j_override": null,
+   "m": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "R2b": {
+   "extra_points": [],
+   "j_override": null,
+   "m": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "R3": {
+   "extra_points": [],
+   "j_override": null,
+   "m": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  }
+ },
+ "grid_notes": "points = frozen Stage-0 gate points per fixture + extra_points; j = tight ladder for the RN(1/10) point, j_override if set, else wide; ALL cells realizability-validated at freeze time (dry-run), so zero refusals are EXPECTED during execution and any refusal is recorded as an anomaly (fork discipline section 1.7)",
+ "h1_rule": "for every rational-class fixture, every grid cell (point, scheme, j, m): lane_tower_cell == referee_tower_cell, bit-for-bit in Q. Zero violations. ANY inequality = K1: HALT campaign for Will. Units: cells = (fixture, point, scheme, j, m) tuples.",
+ "h3_negative_probes": {
+  "K1": [
+   2,
+   3,
+   4
+  ],
+  "K2": [
+   2,
+   3,
+   4
+  ],
+  "K3": [
+   2,
+   3,
+   4
+  ],
+  "R1a": [
+   2,
+   3,
+   4,
+   5,
+   6
+  ],
+  "R1b": [
+   2,
+   3,
+   4,
+   5,
+   6
+  ],
+  "R3": [
+   2,
+   3,
+   4,
+   5,
+   6
+  ]
+ },
+ "h3_negative_rule": "for each negative fixture and each pinned probe order m*: Delta^(m*) != 0 in Q at SOME cell of its (point, scheme, j) grid. Exact grading.",
+ "h3_positive": {
+  "P0": 0,
+  "P1": 1,
+  "P10": 10,
+  "P2": 2,
+  "P3": 3,
+  "P4": 4,
+  "R2a": 3,
+  "R2b": 3
+ },
+ "h3_positive_rule": "for each positive fixture of declared degree d: (a) Delta^(d+1) == 0 in Q at EVERY (point, scheme, j) cell of its grid; (b) for d >= 1: Delta^d != 0 at SOME cell (degree exactness - the certificate must not under-shoot). Exact grading, zero band tests.",
+ "j_ladders": {
+  "p10": [
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14
+  ],
+  "tight_pt_tenth": [
+   8,
+   9,
+   10,
+   11,
+   12
+  ],
+  "wide": [
+   2,
+   3,
+   4,
+   5,
+   6,
+   7,
+   8,
+   9,
+   10,
+   11,
+   12,
+   13,
+   14,
+   15,
+   16,
+   17,
+   18,
+   19,
+   20,
+   21,
+   22,
+   23,
+   24
+  ]
+ },
+ "schemes": [
+  "forward",
+  "backward",
+  "centered"
+ ],
+ "stage": "A",
+ "version": 1
+}

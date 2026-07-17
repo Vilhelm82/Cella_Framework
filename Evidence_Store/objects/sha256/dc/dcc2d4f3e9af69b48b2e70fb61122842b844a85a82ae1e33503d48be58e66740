@@ -1,0 +1,214 @@
+"""
+Stage C -- Integral torsion and the failure to divide by 2.
+
+P-C1  raw lattice split  T_Z = std_Z (x) std_Z -> Sym^2(std_Z) (+) wedge^2(std_Z)
+      via  x(x)y -> (x (.) y, x (^) y).  SNF for n=3..8; expect all torsion 2-primary.
+P-C2  pairwise parity seam: s_ij=e_ij+e_ji, a_ij=e_ij-e_ji give a Z/2 per unordered
+      pair (the 2x2 [[1,1],[1,-1]] seam).  Measure the exponent; do not assume it.
+P-C3  coker(L) over Z (L_int and L_flag) and coker(gauge M_G); answer:
+      (1) is all torsion 2-primary?  (2) does it vanish over Z[1/2]?
+      (3) is the torsion localizable to the Sym/wedge splitting seam?
+      (4) do any torsion generators project nontrivially to wedge^2(std)?
+
+Classify C_VERDICT in {integral_split_confirmed, branch_*}.  All exact over ZZ.
+
+Run: cd evals/dbp_involution && python3 stageC_integral_snf.py
+"""
+
+from __future__ import annotations
+from math import comb
+import sympy as sp
+
+import rep_utils as RU
+import dbp_carrier as E
+from harness import Recorder, COMPUTER_VERIFIED, PROVEN, REFUTED, BRANCHED
+
+
+def factor_primes(facs):
+    """Set of primes dividing any invariant factor > 1."""
+    primes = set()
+    for f in facs:
+        f = int(f)
+        if f not in (0, 1):
+            for p in sp.factorint(f):
+                primes.add(int(p))
+    return primes
+
+
+def two_adic_exponent(facs):
+    """Total exponent of 2 across all invariant factors > 1 (size of the 2-group as 2^e)."""
+    e = 0
+    for f in facs:
+        f = int(f)
+        if f not in (0, 1):
+            e += sp.factorint(f).get(2, 0)
+    return e
+
+
+def run(rec: Recorder, n_lo=3, n_hi=8):
+    summary = {"P-C1": [], "P-C2": [], "P-C3": []}
+
+    # ---------------- P-C1  raw std-tensor lattice split ----------------
+    for n in range(n_lo, n_hi + 1):
+        Phi, nsym, nwed = E.sym_wedge_split_matrix(n)
+        facs = E.invariant_factors(Phi)
+        torsion = E.torsion_from_invariant_factors(facs)
+        primes = factor_primes(facs)
+        rank = sum(1 for f in facs if int(f) != 0)
+        free_rank = (nsym + nwed) - rank
+        two_exp = two_adic_exponent(facs)
+        odd = primes - {2}
+        ok = (not odd) and free_rank == 0          # square, full-rank over Q, only 2-torsion
+        rec.record(
+            f"P-C1 n={n}: SNF(std(x)std -> Sym^2 (+) wedge^2): torsion is 2-primary only",
+            COMPUTER_VERIFIED if ok else (BRANCHED if odd else REFUTED),
+            {"n": n, "domain_dim": (n - 1) ** 2, "codomain_dim": nsym + nwed,
+             "free_rank": free_rank, "torsion_factors": torsion,
+             "primes": sorted(primes), "two_adic_exponent": two_exp,
+             "coker == (Z/2)^C(n,2)": (torsion == [2] * comb(n, 2)), "C(n,2)": comb(n, 2)},
+            tier="[computer-verified]", gate=True,
+        )
+        summary["P-C1"].append({"n": n, "torsion_factors": torsion,
+                                 "two_adic_exponent": two_exp, "odd_torsion": sorted(odd)})
+
+    # ---------------- P-C2  pairwise parity seam ----------------
+    # Elementary local model on ordered pairs (i,j), i != j, of n roles:
+    #   map e_ij -> (s_{ij}, a_{ij}) = (e_ij + e_ji, e_ij - e_ji).
+    # Each unordered pair {i,j} is a 2x2 block [[1,1],[1,-1]], det -2, SNF [1,2] -> Z/2.
+    for n in range(n_lo, n_hi + 1):
+        ordered = [(i, j) for i in range(n) for j in range(n) if i != j]
+        unordered = E.pair_basis(n)
+        oidx = {p: k for k, p in enumerate(ordered)}
+        # codomain coords: s_{ij} (per unordered pair) and a_{ij} (per unordered pair)
+        sidx = {p: k for k, p in enumerate(unordered)}
+        npair = len(unordered)
+        M = sp.zeros(2 * npair, len(ordered))
+        for (i, j) in ordered:
+            lo, hi = (i, j) if i < j else (j, i)
+            c = oidx[(i, j)]
+            M[sidx[(lo, hi)], c] += 1                       # s gets +1 from both orders
+            M[npair + sidx[(lo, hi)], c] += (1 if i < j else -1)  # a gets +-1
+        facs = E.invariant_factors(M)
+        torsion = E.torsion_from_invariant_factors(facs)
+        n_z2 = sum(1 for f in torsion if int(f) == 2)
+        primes = factor_primes(facs)
+        ok = (torsion == [2] * comb(n, 2)) and (primes <= {2})
+        rec.record(
+            f"P-C2 n={n}: pairwise (s,a) seam gives exactly Z/2 per unordered pair",
+            COMPUTER_VERIFIED if ok else REFUTED,
+            {"n": n, "num_unordered_pairs": comb(n, 2), "num_Z/2_factors": n_z2,
+             "torsion_factors": torsion, "primes": sorted(primes),
+             "seam_block": "[[1,1],[1,-1]] -> SNF [1,2] -> Z/2"},
+        )
+        summary["P-C2"].append({"n": n, "Z2_per_pair": (torsion == [2] * comb(n, 2))})
+
+    # ---------------- P-C3  coker(L) and coker(gauge) over Z ----------------
+    pair_decomp_has_wedge = {}
+    for n in range(n_lo, n_hi + 1):
+        # gauge inclusion M_G : Z^n -> Sym^2(Z^n)
+        MG = E.gauge_matrix(n)
+        facs_g = E.invariant_factors(MG)
+        tor_g = E.torsion_from_invariant_factors(facs_g)
+        rank_g = sum(1 for f in facs_g if int(f) != 0)
+        free_g = MG.rows - rank_g
+        # 2*ggT in Im(MG) but ggT not in Im(MG) over Z
+        ggT = E.ggT_vector(n)
+        aug = MG.row_join(ggT)
+        ggT_in_Z = (aug.rank() == MG.rank())  # rank test over Q is necessary; check Z below
+        # exact Z-membership: solve MG x = ggT over Q, integral?
+        try:
+            sol = MG.solve(ggT)
+            ggT_integral = all(c.is_integer for c in sol)
+        except Exception:
+            ggT_integral = False
+        sol2 = MG.solve(2 * ggT)
+        two_ggT_integral = all(c.is_integer for c in sol2)
+
+        # coker(L_int) : Z^{C(n,2)} / Im(L_int)
+        Li = E.L_int(n)
+        facs_li = E.invariant_factors(Li)
+        tor_li = E.torsion_from_invariant_factors(facs_li)
+        rank_li = sum(1 for f in facs_li if int(f) != 0)
+        free_li = Li.rows - rank_li        # codomain is pairs, dim C(n,2)
+        primes_li = factor_primes(facs_li)
+
+        # coker(L_flag): codomain = flags
+        Lf = E.L_flag(n)
+        facs_lf = E.invariant_factors(Lf)
+        tor_lf = E.torsion_from_invariant_factors(facs_lf)
+        rank_lf = sum(1 for f in facs_lf if int(f) != 0)
+        free_lf = Lf.rows - rank_lf
+        primes_lf = factor_primes(facs_lf)
+
+        # Q4: does the codomain module (role-pair module) contain wedge^2(std)?
+        chi_pairmod = {mu: comb(RU.fix(RU.class_rep(mu, n)), 2)
+                       + sum(1 for k in mu if k == 2) for mu, _ in RU.conjugacy_classes(n)}
+        d_pair = RU.decompose(chi_pairmod, n)
+        chi_wed = RU.chi_wedge2_of(RU.chi_std(n), n)
+        wedge_in_pairmod = RU.inner_product(chi_pairmod, chi_wed, n)
+        pair_decomp_has_wedge[n] = int(wedge_in_pairmod)
+
+        all_primes = primes_li | primes_lf | factor_primes(facs_g)
+        only_two = all_primes <= {2}
+        vanishes_inv2 = only_two           # all torsion 2-power => dies over Z[1/2]
+        ok = (only_two and rank_li == comb(n, 2) and not ggT_integral
+              and two_ggT_integral and wedge_in_pairmod == 0)
+        rec.record(
+            f"P-C3 n={n}: coker(L)/coker(gauge) torsion is 2-primary; "
+            f"vanishes over Z[1/2]; no wedge^2 projection",
+            COMPUTER_VERIFIED if ok else (BRANCHED if (all_primes - {2}) else REFUTED),
+            {"n": n,
+             "gauge_invariant_factors": [int(f) for f in facs_g],
+             "gauge_torsion": tor_g, "gauge_free_rank": free_g,
+             "ggT_in_Im_over_Z": ggT_integral, "2ggT_in_Im_over_Z": two_ggT_integral,
+             "coker(L_int)_torsion": tor_li, "coker(L_int)_free_rank": free_li,
+             "rank_L_int": rank_li, "C(n,2)": comb(n, 2),
+             "coker(L_flag)_torsion": tor_lf, "coker(L_flag)_free_rank": free_lf,
+             "all_primes": sorted(all_primes), "vanishes_over_Z[1/2]": vanishes_inv2,
+             "mult_wedge^2_in_role_pair_module": int(wedge_in_pairmod),
+             "role_pair_module_decomp": {str(k): v for k, v in d_pair.items()}},
+            tier="[computer-verified]", gate=True,
+        )
+        summary["P-C3"].append({
+            "n": n, "gauge_torsion": tor_g, "coker(L_int)_torsion": tor_li,
+            "coker(L_flag)_torsion": tor_lf, "all_primes": sorted(all_primes),
+            "ggT_in_Z": ggT_integral, "2ggT_in_Z": two_ggT_integral,
+            "wedge_in_carrier": int(wedge_in_pairmod)})
+
+    # ---------------- C_VERDICT ----------------
+    odd_anywhere = any(set(row["all_primes"]) - {2} for row in summary["P-C3"])
+    # localizable-to-seam test: the gauge coker torsion (the phantom Z/2) is the
+    # uniform lattice seam; check it is a single Z/2 at every n (uniform, not spiking)
+    gauge_uniform = all(row["gauge_torsion"] == [2] for row in summary["P-C3"])
+    if odd_anywhere:
+        cverdict = "BRANCH_2primary_thesis_incomplete"
+    elif gauge_uniform:
+        cverdict = "integral_split_confirmed"
+    else:
+        cverdict = "BRANCH_2primary_yes_involution_source_unclear"
+    rec.record(
+        "C_VERDICT (integral split)",
+        COMPUTER_VERIFIED,
+        {"verdict": cverdict, "odd_torsion_anywhere": odd_anywhere,
+         "gauge_coker_uniform_Z2": gauge_uniform},
+        tier="[computer-verified]",
+    )
+    summary["C_VERDICT"] = cverdict
+    return summary
+
+
+if __name__ == "__main__":
+    rec = Recorder("StageC")
+    summary = run(rec)
+    for r in rec.records:
+        flag = "" if r["verdict"] not in (REFUTED, BRANCHED) else f"  <<< {r['verdict']}"
+        print(f"[{r['verdict']:17}] {r['claim']}{flag}")
+    import json
+    print("\n--- P-C1 (std-tensor split torsion) ---")
+    for row in summary["P-C1"]:
+        print(f"  n={row['n']}: torsion={row['torsion_factors']}  2-exp={row['two_adic_exponent']}  odd={row['odd_torsion']}")
+    print("\n--- P-C3 (coker L / gauge) ---")
+    for row in summary["P-C3"]:
+        print(f"  n={row['n']}: gauge_tors={row['gauge_torsion']}  cokerL_int={row['coker(L_int)_torsion']}  "
+              f"primes={row['all_primes']}  ggT_in_Z={row['ggT_in_Z']} 2ggT_in_Z={row['2ggT_in_Z']}  wedge_in_carrier={row['wedge_in_carrier']}")
+    print(f"\nC_VERDICT = {summary['C_VERDICT']}")

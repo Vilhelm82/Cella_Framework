@@ -1,0 +1,54 @@
+# Split-Constant Half-Grid Form Search
+
+Accepted outcome: `split_constant_support_mask_candidate`
+Headline classification: `split_constant_support_mask_candidate`
+
+## Test Design
+
+The campaign tests the new split-constant family suggested by the inverse half-grid audit:
+
+```text
+F_c = (R * R - c) + (q - (1 - c))
+```
+
+The target is pointwise half-ULP separation from the clean arm on matched coordinates. Constants are predeclared dyadic splits from `0` through `1`; `c=0` is the early-operand endpoint and `c=1` is the late-q endpoint.
+
+## Required Findings
+
+1. Stable half-grid supported: `False`.
+2. Support-mask candidate found: `True`.
+3. Best split: fixture `schwarzschild`, c `1/2`, mask `f_binade_-1`, half fraction `0.8`.
+4. Best phase counts: `{'integer': 4, 'half': 16, 'other': 0}`.
+5. Other misses removed against c=1 endpoint: `True`.
+6. c=0 early endpoint stays same-phase: `True`.
+7. c=1 late endpoint remains near miss: `True`.
+8. SR/pure controls promoted: `False` / `False`.
+9. Double precision language justified: `False`.
+
+## Fixture Findings
+
+- `schwarzschild` (primary): outcome `split_constant_support_mask_candidate`; best c `1/2` on `f_binade_-1` with `{'integer': 4, 'half': 16, 'other': 0}` and half fraction `0.8`.
+- `sr` (secondary_control): outcome `split_constant_not_conforming`; best c `1/2` on `f_binade_-1` with `{'integer': 26, 'half': 44, 'other': 0}` and half fraction `0.6285714285714286`.
+- `pure_affine_control` (pure_control): outcome `split_constant_not_conforming`; best c `1/2` on `region_low_x` with `{'integer': 20, 'half': 22, 'other': 0}` and half fraction `0.5238095238095238`.
+
+## Interpretation
+
+The split-constant family improves the shape of the Schwarzschild near miss. The best support mask reaches `16 / 20` half-grid hits and removes the quarter-phase `other` misses seen in the c=1 late-q endpoint.
+
+This is not yet a promoted half-grid method because the support fraction is `0.8`, below the stable gate. It is stronger than another route spelling, though: the design principle is now visible as constant-split placement across both arms.
+
+The next investigation should focus on why the remaining four Schwarzschild `f_binade_-1` cells are integer rather than half for c around `1/2`, then test whether a coordinate law or conditional split can eliminate those integer cells without triggering the pure control.
+
+## Verification
+
+- `PYTHONPATH=src python -m lloyd_v4.evals.split_constant_half_grid_form_search`
+  Result: passed; generated artifact_split_constant_half_grid_form_search.json and split_constant_half_grid_form_search_report.md.
+- `PYTHONPATH=src python -m pytest tests/test_split_constant_half_grid_form_search.py -q`
+  Result: passed; focused split-constant tests.
+- `PYTHONPATH=src python -m pytest tests/test_split_constant_half_grid_form_search.py tests/test_inverse_half_grid_design_audit.py tests/test_early_operand_phase_lock_search.py -q`
+  Result: passed; focused compatibility subset.
+
+## Artifacts
+
+- `Build_Docs/Reports/split_constant_half_grid_form_search/artifact_split_constant_half_grid_form_search.json`
+- `Build_Docs/Reports/split_constant_half_grid_form_search/split_constant_half_grid_form_search_report.md`

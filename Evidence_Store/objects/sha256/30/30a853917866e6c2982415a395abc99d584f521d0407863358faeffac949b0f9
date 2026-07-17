@@ -1,0 +1,98 @@
+# Arc 14 — V4 substrate-layer audit (Task 050) — gap & drift inventory
+_Window: 2026-05-26 (task050_summary.md dated 2026-05-26 in body; dir mtime May 28 reflects later reconciliation). Confidence: high · read-only audit frame_
+
+## 1. What the arc set out to build
+
+A **read-and-report audit of the entire substrate** — explicitly not a build. The Codex brief (`Build_Docs/Agent_tasks/codex_task050_substrate_layer_audit.md`, read in full) opens by declaring it a "read-and-report task. Do not modify source code. Do not implement new modules. Do not refactor existing modules. The deliverables are audit reports only" (L11). Its stated rationale (L17): *"Before further consumer-layer work proceeds, the project needs an honest map of what currently exists, where each module sits in the substrate layering, and which parent primitives are missing or misplaced."* (high)
+
+The brief pre-registered a five-phase methodology (L72-129) and five named deliverables (L172-235), all to land under `Build_Docs/Reports/task050/`:
+
+1. **`module_layer_mapping.md`** — every `src/lloyd_v4/` module + every `scratch/` prototype placed in the L0/L1/L2/L3/L4+/Unclear hierarchy, with explicit evidence per placement.
+2. **`parent_primitive_gaps.md`** — every primitive that L2+ consumers compose against but that does not exist at the correct parent layer, each classified by `SUBSTRATE_CONSTRUCTION.md §5.1` failure mode (Mode 1 not-atomic / Mode 2 two-operations-one-name / Mode 3 parent-layer-incomplete).
+3. **`drift_inventory.md`** — DRY violations, misplaced modules, composition violations, hidden guard rails (Axiom 3), Axiom 11 violations, Axiom 10 violations; each with severity (B blocks-transplant / Q quality / I informational).
+4. **`transplantation_readiness.md`** — scratch prototypes rated against the `§4` dissection gate; an *ordered list of the first three transplantation tasks* with capability-spread reasoning (`§6`).
+5. **`task050_summary.md`** — executive summary, honest about uncertainty.
+
+Explicit Non-Goals (brief L237-253): do not propose API designs, do not draft pre-regs, do not run pytest, do not modify any source/scratch/architecture file. The brief frames the audit as "the precursor to the first real transplantation work. Its outputs determine the order of subsequent tasks" (L26). (high)
+
+This sits squarely inside Claude Code's authorized "Investigation / Documentation" role (CLAUDE.md §3) — no substrate authorship intended. (high)
+
+## 2. Did it accomplish that?
+
+**Delivered.** (high)
+
+All five deliverables are present and dated in-window: `task050_summary.md`, `module_layer_mapping.md`, `drift_inventory.md` all carry on-disk mtime 2026-05-26 and an "Audit date: 2026-05-26" header; `parent_primitive_gaps.md` and `transplantation_readiness.md` carry the same "Audit date: 2026-05-26" header in their bodies (their May-28 file mtimes are from later supersede-not-erase reconciliation banners — see §4 trend note). The summary's own acceptance-criteria self-check (L155-170) marks all 14 brief criteria met, including "No source files modified / No new tests added / No architecture documents modified." (high)
+
+Evidence the audit did the work, not just the paperwork:
+
+- **Module mapping is exhaustive and evidenced.** `module_layer_mapping.md` places all 105+ `src/lloyd_v4/` modules and 69 `scratch/` prototypes; every row carries a one-line `evidence` column, an import-dependency list, and a LAYER_MANIFEST sub-layer note. It correctly flags the brief's own staleness — the spec assumed "currently 2" L1 primitives; reality is 10 (mapping L46; summary L29). (high)
+- **12 GAPs, each §5.1-classified.** `parent_primitive_gaps.md` enumerates GAP-001…GAP-012 with `failure_mode`, `affected_consumers`, `workarounds`, `capability_spread`. Distribution (summary L44-46): Mode 1 ×4, Mode 2 ×4, Mode 3 ×5 (some gaps multi-mode). (high)
+- **Drift inventory with line-cited evidence.** `drift_inventory.md` catalogues 9 DRY items, 2 misplaced modules, scratch composition flags, 6 GUARD entries, 6 Axiom-11 entries, 1 Axiom-10 entry; tally 4 severity-B / 8 Q / 11 I. The four blocking-B items: **DRY-003** (≥10 duplicated `ulp_*` helpers, subnormal handling diverges, file:line list at DRY-003 sites), **MIS-001** (`scratch/hardened_dual_arm_probe.py` is the production probe living in scratch), **AX11-001** (`math.sqrt` at 4 L1 substrate sites), **AX11-002** (`math.log` at 5 L1/L2 sites). Every hidden-guard-rail ripgrep match is adjudicated declared-vs-violation (criterion 8). (high)
+- **Ordered first-three transplants with capability-spread reasoning.** `transplantation_readiness.md` rates each scratch family against the four §4 dissection-gate criteria (a/b/c/d) and recommends, in order: **(1)** conditioning/ULP primitive (GAP-003) — "the methodology document explicitly names it" (`SUBSTRATE_CONSTRUCTION.md §9 step 1`), VERY HIGH spread, closes DRY-003; **(2)** hardened dual-arm probe lift (GAP-011/MIS-001) — independent, self-contained, HIGH-localised; **(3)** typed_sqrt + typed_log bundle (GAP-001+GAP-002) — VERY HIGH, clears Axiom 11→11′ criterion 1. (high)
+
+Honesty markers (the brief weighted "honesty over tidiness", L274-280): the audit flags GAP-004/008 as "DRY-violation candidate awaiting verification" rather than asserting agreement; surfaces three deviations (stale brief frame, repo-path mismatch, SUBSTRATE_CONSTRUCTION.md placed mid-session) and six surprises (incl. the methodology doc's §9-step-1 independently converging on the audit's #1 recommendation; "conditioning" name overloaded → GAP-012; substrate hidden-guard-rail discipline "exemplary"). (high)
+
+The audit is the **direct origin of a new campaign**: `LIVE_CAMPAIGNS_LEDGER.md` records `substrate-construction-transplant-arc` with "Aliases / merged from: none (new arc opened 2026-05-26 from task050 substrate-layer audit)" and Scope frozen to "The 12 GAP items from `Reports/task050/parent_primitive_gaps.md`." That is the cleanest possible confirmation the deliverable landed and was acted on. (high)
+
+## 3. Project state at completion
+
+Point-in-time snapshot as of 2026-05-26, taken from the audit's own module mapping (which is itself the authoritative in-window census). (high)
+
+**Layers in existence:**
+- **L0 core** — complete: 11 modules (`status.py` with 46 status codes across 10 families, `validity.py`, `conditioning.py` carrier, `provenance.py` SHA-256 trace_id, `result.py` TypedResult/TypedRefusal, `protocols.py`, `calculus.py`, `transitions.py`, `errors.py`, `serialization.py`). Axiom-11-clean (only `math.isnan`/`math.isinf`/`math.isfinite` predicates). (high)
+- **L1 primitives** — 10 primitive modules in `src/lloyd_v4/primitives/`: the long-stable May-11 set (`projective_ratio`, `stratified_quadratic_roots`, `typed_collection`, `typed_value`, `typed_finite_difference`, `typed_log_log_slope`), the alpha-probe family (`directional_alpha_probe` + `scalar_alpha_jet_bundle` + `singular_alpha_jet_bundle`), and `sweep_signature_probe` (the Arc-13 addition). The alpha-probe/sweep family carry intra-L1 sibling composition (flagged GAP-009 atomicity tension). `directional_alpha_probe` carries the Arc-13 companion-sweep hook. (high)
+- **L1.5 projection** — complete (`branches.py`, exact-projection protocol). (high)
+- **L2 metrology / branch / refinery / history** — present and operationally authoritative (metrology, branch incl. `slope_flow.py`, refinery, history). (high)
+- **L3 solver + evals** — `solver` (1 module, partial / NOT authoritative) + ~67 eval campaign modules. (high)
+
+**What the engine could do at this instant** (unchanged from Arc 13 — this arc adds no capability, by design): run the F1/F2/F3/F4 four-form battery across Schwarzschild / SR / pure-algebraic fixtures with typed results, refusal, provenance; alpha-at-branch directional probing with jet bundles; low-sensitivity sweep screening (optionally as a companion rider on `directional_alpha_probe`); BACL/c2/Conjecture-C analyses (in eval + scratch, theorem-proven). The substrate's hidden-guard-rail discipline is clean (all `epsilon`/`tolerance`/`threshold` constants in `src/` are declared `Final`-typed parameters with documented provenance); Axiom-10 over-complied (only V3 mentions in `src/` are explicit non-use declarations). (high)
+
+**Known debt newly catalogued (the audit's product):** L1 substrate primitives currently violate Axiom 11 *strict* form (`math.sqrt` ×4, `math.log` ×5 — the exact Axiom 11→11′ refinement targets named in `SUBSTRATE_CONSTRUCTION.md §7.1`); the production dual-arm probe lives in `scratch/` with no LAYER_MANIFEST slot; ≥10 duplicated ULP helpers with divergent subnormal handling; K_G is an honest-but-loud eval-layer Path-B fallback (`not_substrate_derived_path_b_fallback`). (high)
+
+**Then-active direction:** the audit opened a concrete forward queue — the `substrate-construction-transplant-arc` (Transplant 1 = GAP-003 typed_ulp; Transplant 2 = GAP-011 probe lift; Transplant 3 = GAP-001/002 typed_sqrt/typed_log), running alongside the still-open `substrate-invariant-search` 2026_05_26 authority rewrite (which gates GAP-005 K_G). (high)
+
+**Open / blocked at completion:** none of the 12 transplants executed yet (audit is read-only); GAP-009 (L1 atomicity policy) flagged as a methodology decision that must resolve before Transplant 3; GAP-005 (K_G) deferred until substrate-invariant-search Gate 2 closes; the strategic L3 "derivable law" blocker (Gate 2) still open. (high)
+
+## 4. North-star distance
+
+**On-vector**, dimension **Q6 (the tooling wall) at the substrate-construction / instrument-foundation level** — with the honest qualifier that this arc moves no Q-needle itself; it is the *map* that tells the next arcs where to build. (high)
+
+Frozen north-star reference: Q6 (`where_i_got_stuck.md` L124-128, verified) — the current method can *detect* structure but cannot *resolve* it finer than the arithmetic noise floor; "the instrument is too coarse… it is a tooling wall." Will built the typed substrate as "the foundation" but lacked the *method*. (high)
+
+Why on-vector: a substrate-layer audit is the disciplined precursor to making that foundation precise enough to host a finer instrument. The audit's top recommendation (GAP-003 conditioning/ULP primitive) is exactly the IEEE-754 float-lattice geometry primitive — the substrate's grip on the noise floor itself — and `SUBSTRATE_CONSTRUCTION.md §9 step 1` independently names it the prerequisite for nearly all subsequent substrate work. The audit converges the methodology doc and an empirical capability-spread analysis on the same first move. The other two recommended transplants (typed_sqrt/typed_log) close the Axiom-11→11′ refinement that makes the substrate's own arithmetic honestly typed — directly relevant to Q5/Q6 (an instrument you can trust must not smuggle raw named-math under its measurements). This is foundation-hardening on the exact axis Will named as missing. (high)
+
+Why *on-vector* and not *advancing*: the audit grows nothing and resolves nothing — it produces no new substrate, runs no new measurement, moves no frozen Q1-Q6 line. It is pure cartography. The forward leverage is real but entirely deferred to the arc it spawns. (high)
+
+Not diverging (falsifiers checked): (i) **scope discipline** — the spawned arc's Scope is frozen to exactly the 12 audited GAPs, with an explicit anti-restart note forbidding K_G as Transplant 1/2 and forbidding minting a separate "conditioning primitive" (`typed_ulp` IS the §9 one); no scope creep. (high) (ii) **Axiom 10 / V3 isolation** — the audit found `src/` over-complies (only non-use declarations); the audit itself reads only V4 + the project's own docs. (high) (iii) **Vera leak** — none; Vera appears only as the OBS-004 byte-identical-duplicate housekeeping note, no vocabulary promoted. (high) (iv) **no restart trap** — canonical campaign name registered with anti-restart note. (high)
+
+**Trajectory-watch (field-4 only, does not color §1-3):** the post-window record (May 27-28 reconciliation banners on `parent_primitive_gaps.md` / `transplantation_readiness.md`; `RECONCILIATION_2026-05-28.md`; `LIVE_CAMPAIGNS_LEDGER` status) shows the arc was *immediately and faithfully acted on*: Transplant 1 (GAP-003 `typed_ulp`) completed 2026-05-27, DRY-003 consolidated, GAP-012 closed, a subnormal-underflow bug found-and-fixed in the process. So the audit's chief risk — that a well-built map gets shelved (the deferral pattern flagged in the Arc-13 watch) — did NOT materialize here; the map converted to motion within a day. This is the first genuine substrate-construction execution since the May-11 buildout, and it is on the foundation axis Q6 names. Confidence high on on-vector / no-divergence; medium only on the precise Q-attribution (Q6-foundation vs Q5-instrument-trust — the audit serves both). (medium on attribution, high on classification)
+
+---
+
+## Adversarial check (independent refutation attempt)
+
+An independent skeptic re-read the arc report, the Codex brief, all five task050 deliverables, the reconciliation note, the frozen north-star (`where_i_got_stuck.md`), `SUBSTRATE_CONSTRUCTION.md §9`, the `LIVE_CAMPAIGNS_LEDGER` arc entry, the `AXIOM_STATUS_REGISTER`, and the live `src/` tree. Refutation attempted on both verdicts; what survived is recorded below.
+
+### Claim (a) — DELIVER = "delivered"
+
+**Refutations attempted:**
+
+1. **Date-integrity attack.** Two of the five deliverables (`parent_primitive_gaps.md`, `transplantation_readiness.md`) have on-disk mtimes of **2026-05-28**, not in-window. If those are May-28 *authorship*, the "all five present and dated in-window" claim breaks. **FAILED to refute:** both files carry `**Audit date:** 2026-05-26` as their line-4 body header; the May-28 deltas are demonstrably the appended resolution-tracker / status banners (verified by reading them) and are corroborated by `RECONCILIATION_2026-05-28.md` (supersede-not-erase, explicitly: "header still dated 2026-05-26") and the independent `AXIOM_STATUS_REGISTER.md` (May 28, records 11′ criterion 3 satisfied by typed_ulp). Supersede-not-erase is real and documented, not a backdating fiction.
+2. **Fabricated-evidence attack.** Spot-checked the audit's line-cited substrate violations against source. **FAILED:** `stratified_quadratic_roots.py:248` (`math.sqrt(discriminant)`), `typed_log_log_slope.py:104-105` (`math.log(...)`) and `:177` (`math.sqrt(...)`), `branch/slope_flow.py:244-245` (`math.log` differences) all match verbatim. The drift inventory cites real lines.
+3. **Phantom-citation attack.** The keystone "the methodology document itself names GAP-003 first" claim was checked against `SUBSTRATE_CONSTRUCTION.md §9`. **FAILED:** line 152 reads verbatim "The conditioning primitive (instrument geometry on the IEEE 754 float lattice) is implemented and stabilised. This is prerequisite to most subsequent transplants…"; §9 step 3 independently confirms the capability-spread ordering the audit used. The convergence Surprise-1 reports is genuine.
+4. **Non-goal-violation attack.** Tested whether the read-only audit (or its session) touched source. **FAILED:** no source modification attributable to the audit; the only post-window `src/` change (the `observers/` relocation, mtimes 2026-05-28) is a separate downstream action, not part of task050.
+5. **Internal-inconsistency attack — the one that partially landed.** The summary is *not* perfectly self-consistent on the L1 count: line 29 says "11 | (10 primitives + `__init__`)" / "reality is 10", while line 151 says "V4 has **11** L1 primitives." This is a genuine loose slip. **But it does not refute "delivered":** the module mapping Group 2 enumerates exactly 10 primitive modules + `__init__`, line 29's parenthetical is correct, and the arc report's own phrasing ("self-corrects … to the actual 10") tracks the correct figure. A one-word count wobble in a 196-line summary is a quality nit, not a missing or wrong deliverable.
+
+**Verdict: STANDS.** Every pre-registered deliverable is present, in-window-dated in body, line-cited, and externally corroborated. The single inconsistency found is cosmetic and does not touch any acceptance criterion. Confidence: **high**.
+
+### Claim (b) — NORTH-STAR = "on-vector in Q6 (tooling wall) at the substrate-construction / instrument-foundation level; moves no Q-needle itself (the map)"
+
+**Refutations attempted:**
+
+1. **Wrong-Q attack.** Could the audit be off-axis from the frozen Q6, or mis-attributed? **FAILED to refute on-vector:** Q6 (`where_i_got_stuck.md` L124-128) is the tooling wall — detect-but-cannot-resolve below the arithmetic noise floor. The audit's #1 recommendation, GAP-003, *is* the IEEE-754 float-lattice geometry primitive — the substrate's direct grip on that noise floor — and `SUBSTRATE_CONSTRUCTION.md §9-step-1` names it the prerequisite. The arc report already hedges the Q6-vs-Q5 split to **medium** confidence, so the attribution is not overstated.
+2. **Scope-creep / divergence attack.** **FAILED:** `LIVE_CAMPAIGNS_LEDGER` freezes the arc Scope to exactly the 12 GAPs, with an anti-restart note (line 39) forbidding K_G-first and forbidding minting a separate conditioning primitive ("`typed_ulp` IS the §9 conditioning primitive"). GAP-005/K_G is explicitly deferred to substrate-invariant-search Gate 2. No creep.
+3. **Vera-leak / V3-smuggling attack.** **FAILED:** Vera appears in the reports only as the OBS-004 byte-identical-duplicate housekeeping note (CLAUDE.md §10 cleanup); the "§6" citations are to `SUBSTRATE_CONSTRUCTION.md §6`, not Vera. The only V3 mentions are the audit's own Axiom-10 *compliance* findings (non-use declarations). No vocabulary promoted, no design sourced.
+4. **Overclaim attack on "moves no needle."** Cannot be turned into a refutation — the arc explicitly disclaims advancing any Q1-Q6 line and frames itself as pure cartography, which is the honest reading. (If anything the risk is *under*-claiming, and field-4 already addresses that via the trajectory note.)
+5. **Post-window relocation finding (new, surfaced by this check).** The four composed probes the audit placed at L1 `primitives/` (`directional_alpha_probe`, `sweep_signature_probe`, `scalar_alpha_jet_bundle`, `singular_alpha_jet_bundle`) now live in a new `src/lloyd_v4/observers/` sub-layer (mtimes 2026-05-28; LAYER_MANIFEST gained an `observers` section declaring them "calibrated primitive operations"). This is the *resolution* of the audit's own GAP-009 ("L1 atomicity vs sibling composition") tension — i.e., the map's flagged decision became a real architecture move. It is downstream of and consistent with Arc 14, **not** a divergence from it; it strengthens rather than weakens the "the map directs where to build / the map became motion" framing. Does not refute the verdict.
+
+**Verdict: STANDS.** On-vector in Q6 at the foundation level; no scope, Vera, or V3 divergence found; the "moves no needle / it is the map" qualifier is honest and confirmed by the post-window record (the map drove motion within a day, and even resolved its own GAP-009 flag). Confidence: **high on on-vector / no-divergence; medium on the Q6-vs-Q5 attribution** (the audit genuinely serves both), matching the arc's own hedge.

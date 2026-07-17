@@ -1,0 +1,175 @@
+# Hardened Dual-Arm Probe — Preregistry
+
+> **Status: FROZEN 2026-05-18 pre-measurement.** Per `CAMPAIGN_DISCIPLINE.md` Rule 1.1, binding.
+
+## 1. Purpose
+
+Lift the 6 operational conditions from `Build_Docs/Architecture/DUAL_ARM_PROBE_PRINCIPLES.md` from **principles honored by construction** into **preconditions enforced by code**, so that any future fixture / refactor / experiment that violates one of them produces a typed refusal (or, where appropriate, a hard `AssertionError` at probe construction time) rather than a silently-degraded verdict.
+
+This is **eval-layer hardening**, not substrate promotion. The output is a new module `scratch/hardened_dual_arm_probe.py` plus tests; the principles doc is left as the normative spec, and the probe checks itself against it.
+
+Per `dual_arm_behavior_verification/closeout.md` §3, the verification verdict on v10/v11 was:
+
+| Condition | Pre-hardening status |
+|---|---|
+| #1 Real float64 path/operand separation | Classification logic verified; fixture exercises it (v11 F2/F4) but **no enforcement** |
+| #2 Own instrument law | Verified — but **no defensive assertion** |
+| #3 Non-diagnostic route | **Absent from arms code** |
+| #4 Pre-declared selection (no target-aware bias) | Honored, **not enforced** |
+| #5 ARM-W-derived activation | Verified — but **no defensive assertion** |
+| #6 Stability under partition/guard | Out of scope of v10 verification; v11 does run phase-swap + guard variant but doesn't enforce concurrence |
+
+Hardening converts every "verified but not enforced" entry into "enforced." It does **not** generate new empirical findings — that is downstream work.
+
+## 2. Scope (what hardening means here)
+
+### In scope
+
+- A new `HardenedDualArmProbe` class (in `scratch/hardened_dual_arm_probe.py`) that:
+  - Takes a **frozen, hashable** `DualArmConfig` (frozen dataclass) declaring ARM-W channel, ARM-N channel, route metadata, activation rule, partition phase, and guard. Post-construction mutation raises `FrozenInstanceError`.
+  - At construction, runs a `_validate_config()` pass that asserts:
+    - ARM-W and ARM-N have distinct `route_id`s (or, if equal, that the config explicitly opts into a same-route control via `same_route_control=True`).
+    - ARM-N's validity predicate is declared as `arm_n_only` (i.e., its signature does not accept any ARM-W field beyond the activation signal). This is checked via Python introspection (`inspect.signature`) of the registered predicate.
+    - All route metadata carries `route_kind ∈ {"production", "diagnostic", "control"}`. Diagnostic routes are accepted but flag the run as `diagnostic_route_present=True` and downgrade max possible verdict to `active_handoff_diagnostic_only`.
+    - Activation rule is one of the pre-registered set: `{"armW_falloff"}`. Anything else fails construction.
+    - Selection rule is one of the pre-registered set: `{"predeclared_priority"}`. Target-aware selectors are explicitly absent from this set.
+  - Exposes a `run(points_armW, points_armN, ...)` method that:
+    - Computes ARM-W and ARM-N reads through v10 machinery (no re-implementation).
+    - Computes path separation per-record using v11's `sr_path_separation_for_record_v11`.
+    - Emits a **6-condition checklist** per record: `{c1_path_separation, c2_own_instrument_law, c3_non_diagnostic_route, c4_no_target_aware_selection, c5_armW_derived_activation, c6_partition_guard_stable}`.
+    - Emits a per-record `gap_resolution_status` derived **strictly** from the checklist via the resolution rule. No path may produce `gap_resolved` without all 6 conditions True.
+    - Emits a per-record `underpromotion_reason` (one of the labels in the principles doc taxonomy) when a condition fails.
+  - Runs phase-swap and guard-variant scans automatically and computes condition 6 from their concurrence.
+
+- A **test file** `tests/test_hardened_dual_arm_probe.py` that exercises:
+  - **Happy path** — F2 (wide) / F4 (microscope) SR fixture → some records reach `gap_resolved` (where separation nonzero and stability holds).
+  - **Negative control N1** — same-channel fixture (F4 / F4) without `same_route_control=True` → construction `AssertionError`.
+  - **Negative control N2** — same-channel fixture with `same_route_control=True` → runs but all records emit `underpromotion_reason=armN_zero_path_separation`.
+  - **Negative control N3** — config with `route_kind="diagnostic"` for ARM-N → runs but verdict capped at `active_handoff_diagnostic_only`.
+  - **Negative control N4** — config with `selection_rule="smallest_residual"` → construction `AssertionError`.
+  - **Negative control N5** — config with `activation_rule="independent"` → construction `AssertionError`.
+  - **Negative control N6** — attempt to mutate config after construction → `FrozenInstanceError`.
+  - **Negative control N7** — register an ARM-N validity predicate that accepts an `arm_w_verdict` parameter → construction `AssertionError`.
+
+- A **closeout** that records:
+  - Which of the 7 tests passed.
+  - The headline outcome on the F2/F4 SR fixture run via the hardened probe.
+  - Confirmation that the hardened headline matches the v11 headline (sanity check — the hardening must not change underlying numerics, only add gates).
+  - Byte-stable artifact verification.
+
+### Out of scope
+
+- New SR or non-SR fixtures. Hardening uses the existing v11 F2/F4 pairing.
+- Substrate promotion of dual-arm primitives. Per principles doc §"What these constraints are NOT," that is a separate exercise.
+- Re-deriving the v10 arms machinery. Hardening wraps it; it does not re-implement it.
+- Phase 3B unfreeze. Hardening is a prerequisite, not the action.
+- Diagnostic-route empirical evidence audit. The hardening **categorically distinguishes** diagnostic from production at the route metadata level; it does not produce new diagnostic-route campaign data.
+
+## 3. The 6 conditions, as code-level assertions
+
+Mapping from `DUAL_ARM_PROBE_PRINCIPLES.md` to enforcement mechanism:
+
+| # | Principle | Enforcement (hardened probe) |
+|---|---|---|
+| 1 | Real float64 path/operand separation | Per-record check: `operand_delta != 0.0 AND separation_observable=True`. Failure → `underpromotion_reason=armN_zero_path_separation`. |
+| 2 | Own instrument law | Construction-time `inspect.signature` check on the registered ARM-N validity predicate. Must not accept any parameter named `arm_w_*` other than the activation signal. Failure → `AssertionError`. |
+| 3 | Non-diagnostic route | Construction-time check: `route_kind` field must be in `{"production","diagnostic","control"}`. If `"diagnostic"`, the run is allowed but verdict is capped at `active_handoff_diagnostic_only`. |
+| 4 | Pre-declared selection | Construction-time check: `selection_rule` must be in `{"predeclared_priority"}`. Anything else → `AssertionError`. Furthermore, the config is a frozen dataclass — post-construction mutation raises. |
+| 5 | ARM-W-derived activation | Construction-time check: `activation_rule == "armW_falloff"`. Run-time check: every active ARM-N record has `activation_reason in {"core_gap","guard_extension"}`. Independent ARM-N activation → `AssertionError`. |
+| 6 | Stability under partition/guard | Run-time: automatic phase-swap (phase 0 ↔ 1) and guard-variant runs. Per-record check: the `armN.active` and `armN.inference` fields must match across the three scans for the record's β to count `c6_partition_guard_stable=True`. |
+
+Resolution rule: `gap_resolution_status == "resolved"` **if and only if** `c1 AND c2 AND c3 AND c4 AND c5 AND c6 AND record_inside_armW_gap`. All other paths → `unresolved` with a specific `underpromotion_reason`.
+
+## 4. Frozen pre-measurement predictions
+
+These are the binding predictions. Per `CAMPAIGN_DISCIPLINE.md`, the audit can only confirm or refute them.
+
+### P1: All 7 negative-control tests pass as specified
+
+The hardened probe rejects the 5 misconfiguration attempts (N1, N4, N5, N6, N7) at construction with `AssertionError` / `FrozenInstanceError`; N2 runs but never resolves; N3 runs but caps at `diagnostic_only`.
+
+### P2: Happy-path F2/F4 SR run produces ≥ 1 record with `gap_resolution_status="resolved"`
+
+The v11 closeout showed 6/7 overlap records agreed at non-zero separation. After the hardened probe's additional condition-6 stability check, **at least one record** must remain `resolved`. Prediction: between 3 and 7 resolved records (the exact count depends on whether phase-swap and guard-variant scans agree at the same β values; the v11 phase-swap and guard-variant scans exist as artifacts already, so this is recoverable).
+
+### P3: The hardened headline numerics match the v11 headline numerics
+
+The hardening must not change underlying arm-evaluation numerics. Specifically:
+- `total_records` same
+- `all_records_nonzero_separation_count` same
+- `valid_core_gap_count` same
+- `valid_core_gap_nonzero_separation_count` same
+
+What changes: the hardened probe adds the 6-condition checklist and a stricter `gap_resolution_status` field. The base v11 outcome is preserved as `legacy_v11_outcome` for cross-check.
+
+### P4: Same-route control (N2) emits `armN_zero_path_separation` for **all** core-gap records
+
+Because `arm_n_operand == arm_w_operand` by construction on the same-channel fixture, no record should have `nonzero_operand_offset`. Prediction: 0 resolved records, 100% of valid core-gap records carry `underpromotion_reason=armN_zero_path_separation`.
+
+### P5: Diagnostic-route ceiling (N3) caps verdict at `active_handoff_diagnostic_only`
+
+Even if all 6 conditions other than #3 would pass, the diagnostic flag downgrades the verdict to `active_handoff_diagnostic_only` for the entire run. No record can reach `resolved` while `diagnostic_route_present=True`.
+
+## 5. Typed outputs
+
+Each hardened-probe run emits a JSON artifact with:
+
+```
+{
+  "probe_version": "hardened_v1",
+  "config": { ...frozen DualArmConfig fields... },
+  "config_validation": "passed" | "failed:<reason>",
+  "scans": {
+    "primary":   { ...v11 scan with 6-condition checklist per record... },
+    "phase_swap": { ...v11 scan... },
+    "guard_variant": { ...v11 scan... }
+  },
+  "controls": {
+    "exact_zero":     { ...v11 scan... },
+    "matched_affine": { ...v11 scan... }
+  },
+  "stability_check": {
+    "controls_silent": bool,
+    "partition_invariant": bool,
+    "guard_invariant": bool
+  },
+  "headline": {
+    "total_records": int,
+    "resolved_count": int,
+    "underpromotion_breakdown": { "<reason>": count, ... },
+    "diagnostic_route_present": bool,
+    "legacy_v11_outcome": str,
+    "hardened_outcome": str
+  }
+}
+```
+
+V4 validity stamp on the top-level result: `{defined, finite, observable, selectable, advanceable}` where:
+- `defined` ↔ config validation passed
+- `finite` ↔ all numeric reads finite
+- `observable` ↔ ARM-N read inside an ARM-W-declared gap with separation_observable=True
+- `selectable` ↔ no target-aware selection
+- `advanceable` ↔ stability check passed (controls silent + partition + guard invariant)
+
+A run failing any of these emits a TypedRefusal with the specific failed field named.
+
+## 6. Reproducibility
+
+- JSON artifact must be byte-stable across reruns. Use `sort_keys=True, indent=2` and `_decimal_default` per v11 pattern.
+- Test suite uses `pytest` and asserts exact field values where deterministic.
+- Diff against a stored `expected_hardened_headline.json` is part of the test suite.
+
+## 7. Closeout criteria
+
+This audit closes when:
+1. All 7 tests in `tests/test_hardened_dual_arm_probe.py` pass.
+2. The artifact has been generated and matches P1–P5.
+3. Byte-stable rerun verified.
+4. Closeout doc records: (a) headline, (b) condition-level breakdown, (c) which v11-era weaknesses are now gated by code.
+5. `DUAL_ARM_PROBE_PRINCIPLES.md` gets an amendment pointer to this report.
+
+## 8. Out-of-scope follow-ups (logged, not run)
+
+- Construction of additional non-SR fixtures that exercise non-zero path separation (Schwarzschild dual-arm, Kerr ISCO dual-arm). Hardened probe accepts arbitrary `surface_points` callables; new fixtures slot in without probe changes.
+- Phase 3B unfreeze: still requires per-fixture discrimination check and control-silence quirk fix, both downstream of this hardening.
+- Substrate promotion review: still gated on chain-property + joint-state derivation (gate 2 unmet).

@@ -1,0 +1,48 @@
+# Split-Constant Integer-Cell Diagnostic
+
+Accepted outcome: `integer_cells_invariant_under_split_conditions`
+Headline classification: `integer_cells_invariant_under_split_conditions`
+
+## Test Design
+
+This diagnostic targets the four integer cells left by the `c=1/2` split-constant form on Schwarzschild `f_binade_-1`.
+It tests predeclared conditional split laws keyed by local arithmetic features such as `q/ulp(f)` phase and clean residual level.
+
+## Required Findings
+
+1. Conditional split supported: `False`.
+2. Conditional split improved over baseline: `False`.
+3. Baseline half fraction: `0.8`.
+4. Best law: `baseline_c_1_2` with half fraction `0.8` and counts `{'integer': 4, 'half': 16, 'other': 0}`.
+5. Integer cells invariant under predeclared split constants: `True`.
+   Integer cell indices: `[113, 117, 121, 135]`.
+   Integer cell q-phase classes: `{'integer': 3, 'other': 1}`.
+6. q-phase-half read mask is perfect but partial support: `True`.
+7. Pure control promoted: `False`.
+8. Double precision language justified: `False`.
+
+## Invariant Cell Summary
+
+- f_binade_-1 points: `25`.
+- baseline observable points: `20`.
+- invariant class counts: `{'half_reachable': 16, 'baseline_integer_invariant': 4, 'no_half_reachable': 5}`.
+
+## Interpretation
+
+The remaining integer cells are not a tuning problem inside the tested split-constant family. Changing `c`, even conditionally using local arithmetic features, does not make those cells half-phase.
+
+The useful diagnostic is the read mask: `q/ulp(f)` half-phase exactly selects the sixteen successful cells. That is a perfect partial-support read, not a complete interleaved form. The next form search should therefore change the source of `q` phase or add an independent companion read for the four non-half cells; more split-constant conditioning is not likely to close the gap.
+
+## Verification
+
+- `PYTHONPATH=src python -m lloyd_v4.evals.split_constant_integer_cell_diagnostic`
+  Result: passed; generated artifact_split_constant_integer_cell_diagnostic.json and split_constant_integer_cell_diagnostic_report.md.
+- `PYTHONPATH=src python -m pytest tests/test_split_constant_integer_cell_diagnostic.py -q`
+  Result: passed; focused integer-cell diagnostic tests.
+- `PYTHONPATH=src python -m pytest tests/test_split_constant_integer_cell_diagnostic.py tests/test_split_constant_half_grid_form_search.py tests/test_inverse_half_grid_design_audit.py -q`
+  Result: passed; focused compatibility subset.
+
+## Artifacts
+
+- `Build_Docs/Reports/split_constant_integer_cell_diagnostic/artifact_split_constant_integer_cell_diagnostic.json`
+- `Build_Docs/Reports/split_constant_integer_cell_diagnostic/split_constant_integer_cell_diagnostic_report.md`

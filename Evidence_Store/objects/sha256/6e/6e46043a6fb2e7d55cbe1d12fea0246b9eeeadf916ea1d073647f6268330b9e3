@@ -1,0 +1,186 @@
+# c2 Lattice Theorem — Sharpness / Extension Audit — Preregistry
+
+> **Status: FROZEN 2026-05-18 pre-measurement.** Per `CAMPAIGN_DISCIPLINE.md` Rule 1.1, binding.
+
+## 0. Context
+
+The c2 lattice substrate derivation ([`../c2_lattice_substrate_derivation/closeout.md`](../c2_lattice_substrate_derivation/closeout.md)) proved an integer-lattice theorem and verified it across 24,995 measurements. The proof I sketched there used the hypothesis "Sterbenz applies to `x_term − 1`," but **post-hoc review revealed this hypothesis was both incorrect and unnecessary**.
+
+### The hypothesis error
+
+For SR with β = 0.5 (Test A's region), x_term = β² = 0.25. The formal Sterbenz region for `x_term − 1` requires `x_term ∈ [1/2, 2]`. So x_term = 0.25 is **outside** the formal Sterbenz region for `x_term − 1`. Yet integer-lattice holds empirically. The previous preregistry claimed `x_term ∈ [1/2, 1)` for the relevant region — this was a math error.
+
+### The correct mechanism (revised proof sketch)
+
+What actually proves the theorem:
+
+1. **Sign symmetry of float subtraction.** `(x_term − 1)_float = −(1 − x_term)_float = −f_float` exactly (no extra rounding from sign flip). Whether or not `(1 − x_term)` is exactly representable, its sign flip is identical bit-for-bit.
+
+2. **Therefore** `c2 = round(V_n + (x_term − 1)_float) = round(V_n − f_float)`.
+
+3. **V_n and f_float are close** (both floats; |V_n − f_float| ≤ a few `ulp(f_float)`). When V_n ∈ [f_float/2, 2·f_float], **Sterbenz applies to `V_n − f_float`** — that subtraction is exact.
+
+4. **Therefore** `c2 = V_n − f_float` exactly in float64.
+
+5. **V_n − f_float is integer-multiple of ulp(f_float)** by binade spacing (both V_n and f_float are floats in the same or adjacent binade).
+
+The hypothesis that "Sterbenz applies for `x_term − 1`" is **neither needed nor met** in Test A's region. The actual hypothesis is just "V_n ∈ [f_float/2, 2·f_float]," which is virtually always satisfied because V_n is close to f_float by Part 2's bound.
+
+### What this means
+
+The theorem is **broader** than the previous preregistry claimed. It applies wherever V_n stays in the same/adjacent binade as f_float, not just in the formal Sterbenz region for `x_term − 1`.
+
+## 1. Purpose
+
+Empirically establish the **actual domain** of the c2 integer-lattice theorem by:
+
+1. **Full-range sweep.** Test x_term across `(0, 1)` for each fixture (both Test A's region and its complement), not just one half.
+2. **c1 routing as foil.** Run c1 in parallel to confirm it does NOT exhibit integer-lattice (validates that the c2-specific algebraic structure is essential).
+3. **Format generalization.** Verify the theorem holds at float32 with identical structure (no 64-bit-specific dependence).
+4. **Degree extension.** Verify n=4, 5 (quartic and quintic radicals).
+
+Pre-registered claim: **the theorem holds for the full natural range `x_term ∈ (0, 1)` for each fixture, at both float32 and float64, for n ∈ {2, 3, 4, 5}.**
+
+## 2. The revised theorem statement (FROZEN as the prediction)
+
+> **Theorem (revised):** Let f_float = `round(1 − x_term)` in float64 (or any binary IEEE float format), for x_term such that f_float > 0. Let R_float = `round(root_n(f_float))` for any positive integer n ≥ 2. Let V_n be R_float^n computed in float64 via the canonical left-to-right multiplication chain. Then `c2 = round(V_n + round(x_term − 1))` satisfies
+>
+> ```
+> c2 = j · ulp(f_float),  j ∈ ℤ,
+> ```
+>
+> **provided** V_n ∈ [f_float/2, 2·f_float] (i.e., V_n is in the same or adjacent binade as f_float).
+
+The proviso is the actual hypothesis — empirical bound from the previous campaign ensures `|V_n − f| ≤ a few · ulp(f) ≪ f_float/2` whenever f is not near subnormal or extremal boundaries.
+
+## 3. Sweep design (FROZEN)
+
+For each fixture, sweep x_term across the **full natural range**, not just Test A's region:
+
+| Fixture | Natural x_term range | Sweep domain | Grid pts |
+|---|---|---|---|
+| SR | β ∈ (0, 1) → x_term = β² ∈ (0, 1) | β ∈ [1e-3, 1−1e-3] | 10,000 |
+| Schwarzschild | r ∈ (2, ∞) → x_term = 2/r ∈ (0, 1) | r ∈ [2.001, 1e6] | 10,000 |
+| pure_algebraic | x ∈ (0, 1) → x_term = x | x ∈ [1e-3, 1−1e-3] | 10,000 |
+| cube_root | x ∈ (0, 1) → x_term = x | x ∈ [1e-3, 1−1e-3] | 10,000 |
+
+Both sqrt fixtures' Sterbenz regions (per Test A) cover x_term ≤ 1/2 (or β ≤ 1/√2 for SR). The audit's sweep includes both Test A's region AND its complement.
+
+For SR specifically: β-sweep covers [0.001, 0.999], which corresponds to x_term ∈ [1e-6, 0.998]. The Test A region (β ≤ 1/√2 ≈ 0.707) corresponds to x_term ≤ 0.5. The complement (β > 0.707) corresponds to x_term > 0.5.
+
+## 4. c1 routing as foil (FROZEN)
+
+For each fixture and each grid point, also compute c1 = `round(V_n − 1) + x_term`. Specifically the routing is:
+
+```
+intermediate = round(V_n − 1.0)   # NOT Sterbenz when V_n is close to 1
+c1 = round(intermediate + x_term)
+```
+
+Tabulate c1's lattice levels and compare to c2's. Prediction:
+
+- c2: integer-lattice everywhere
+- c1: NOT integer-lattice — exhibits fixture-specific sub-lattice patterns (matching Test A's findings)
+
+This is the foil: it shows that the c2-specific algebraic structure (Sterbenz-aligned subtraction at the assembly step) is what produces the universal integer property.
+
+## 5. Format generalization (FROZEN)
+
+Run the same c2 lattice check at **float32** (single precision). Same fixtures, same sweep grid, but all arithmetic in float32. The theorem should hold identically: c2_float32 = j · ulp(f_float32) for integer j.
+
+Sterbenz lemma and binade spacing both apply to any binary IEEE float format. The proof is format-independent.
+
+## 6. Degree extension (FROZEN)
+
+Run the theorem check at n = 4 and n = 5 using the pure_algebraic fixture (other fixtures don't have a meaningful n=4 or n=5 variant). The chain is `R = f^(1/n)`, then `V_n = R^n` via successive multiplications.
+
+For both n=4 and n=5: predict integer-lattice across the full sweep.
+
+## 7. Pre-registered predictions
+
+| # | Prediction | Threshold |
+|---|---|---|
+| P_S1 | c2 integer-lattice holds for ALL x_term in each fixture's natural range (full sweep, both halves) | strict (zero violations) |
+| P_S2 | c1 does NOT exhibit integer-lattice — at least 30% of records produce non-integer levels | strict |
+| P_S3 | c2 integer-lattice holds at float32 | strict (zero violations) |
+| P_S4 | c2 integer-lattice holds at n=4, 5 (quartic, quintic) | strict (zero violations) |
+| P_S5 | The theorem extends beyond the formal-Sterbenz region for (x_term − 1) | confirmed if P_S1 holds across both halves of the sweep |
+
+## 8. Pre-registered failure modes
+
+| ID | Condition |
+|---|---|
+| F_S1 | c2 produces non-integer lattice anywhere in the sweep |
+| F_S2 | c1 produces integer-lattice (no fixture-specific sub-lattice) — would refute the c2 vs c1 distinction |
+| F_S3 | float32 theorem fails |
+| F_S4 | n=4 or n=5 theorem fails |
+| F_S5 | The hypothesis V_n ∈ [f_float/2, 2·f_float] is violated at any grid point |
+
+## 9. V4 typed outputs
+
+Each (fixture, format, n, x_term) measurement produces a record:
+
+```json
+{
+  "fixture": "SR" | "Schwarzschild" | "pure_algebraic" | "cube_root",
+  "format": "float32" | "float64",
+  "n": 2 | 3 | 4 | 5,
+  "x_term_at_grid_pt": float,
+  "f_float": float,
+  "V_n": float,
+  "c1": float,
+  "c2": float,
+  "c1_level": float (real, possibly non-integer),
+  "c2_level": float (real, hopefully integer),
+  "c1_integer": bool,
+  "c2_integer": bool,
+  "V_n_in_adjacent_binade": bool,
+  "in_test_a_region": bool,
+  "v4_validity": {defined, finite, observable, selectable, advanceable}
+}
+```
+
+Cross-fixture aggregator:
+
+```json
+{
+  "audit_name": "c2_lattice_sharpness",
+  "total_records": int,
+  "c2_integer_count": int,
+  "c2_integer_violations": [first 10 violations],
+  "c1_integer_count": int,
+  "c1_non_integer_fraction": float,
+  "format_breakdown": { "float32": ..., "float64": ... },
+  "degree_breakdown": { "n2": ..., "n3": ..., "n4": ..., "n5": ... },
+  "test_a_region_only": { ... },
+  "complement_region_only": { ... },
+  "verdict": "theorem_extends_to_full_natural_range" | "theorem_sharp_at_test_a_boundary" | "theorem_partial"
+}
+```
+
+## 10. Closeout criteria
+
+1. 4 fixtures × 10,000 grid pts × 2 formats × 4 degrees worth of measurements emitted (or comparable, with some combinations N/A).
+2. All 5 predictions audited.
+3. Failure modes named.
+4. Verdict: theorem extension (strict P_S1 holds) / theorem sharp (transition exists) / theorem partial.
+5. If theorem extends: strengthened theorem statement formalized for closeout.
+6. If theorem sharp: transition location characterized.
+7. Reproducibility: byte-stable artifact.
+8. Phase next follow-ups.
+
+## 11. Out of scope
+
+- Subnormal / overflow extremes (proviso of theorem; we sample only x_term in [1e-3, 1−1e-3]).
+- Non-binary float formats (decimal, posit).
+- FMA-based variants of the multiplication chain.
+- Algebraic-tree variations (right-to-left vs left-to-right).
+- Generalization beyond `R^n + (x_term − 1)` structure.
+
+## 12. References
+
+- Previous campaign: [`../c2_lattice_substrate_derivation/closeout.md`](../c2_lattice_substrate_derivation/closeout.md)
+- Test A: [`../task032_cross_fixture_refinery_audit/closeout.md`](../task032_cross_fixture_refinery_audit/closeout.md)
+- 2026-05-18 conversation: "where should we start testing" to strengthen the c2 theorem
+- Sterbenz's lemma + IEEE 754 binade spacing (classical)
+- Discipline: `CAMPAIGN_DISCIPLINE.md` Rule 1.1

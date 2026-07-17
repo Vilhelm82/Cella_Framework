@@ -1,0 +1,34 @@
+# Form Generator v4 — Closeout (a derived F5, and the honest fine print)
+
+**Date:** 2026-06-05 · research-grade, eval-layer, PoC (NOT promoted).
+Code: `scratch/form_generator_v4_algebraic.py`. Schwarzschild (c=2/r), Sterbenz region r∈[4,10].
+Campaign: substrate-invariant-search / layer-3-promotion Gate-2 (derive the form basis). Anti-restart: NOT a new campaign.
+
+## Fix over v3 — algebraic irreducibility
+v3's filter was syntactic and missed *distributed* multiples (`R·F1 = R³−(1−c)·R`). v4 adds an **algebraic divisibility test**: a member that vanishes identically at R=0 is divisible by R (= R·member); at c=0, by c. Both reducible.
+- **Result:** members 1066 → irreducible 134 → distinct 67 (v3: 154 → 77). The half-lattice "cubic" forms (`R³−(1−c)·R` = R·F1 in disguise) are **gone** — correctly removed as R-multiples of F1.
+
+## The shiny new F5 — derived, not picked
+
+**`F5 = (R²+c) − 1`** (equivalently `1 − (R²+c)`, its exact sign-flip):
+- **Member:** `≡ 0` on the surface (R²=1−c) — verified by exact mpmath.
+- **Irreducible:** not syntactic-reducible, **not R-divisible, not c-divisible** — verified algebraically.
+- **Distinct from the battery:** residual and |residual| both ≠ F1, ≠ F2/c1 — it is genuinely a *fifth* form, not a relabel.
+- **Signature:** integer lattice (clean grain), greedy_sum 19.13.
+- **What it is:** the **"sum-then-cancel" association** — build `R²+c` (≈1) first, then subtract 1, deferring the cancellation to unit magnitude. F1 cancels two ~½ quantities; c1/F2 cancels early; this is the third strategy. The generator produced it **from the principle**, never told it.
+
+**This is derive-don't-select delivering: a form beyond the hand-picked F1–F4, generated and verified irreducible + distinct, on its own.**
+
+## Honest fine print (do not oversell)
+
+1. **The "67 distinct" is still inflated.** In {R,1,c} there are really only ~3 genuine *operational* forms — F1(=c2), c1/F2, and this F5=(R²+c)−1 — plus their sign-flips. The rest of the 67 are **trivial-detour variants** (e.g. `(R²+c) − ((R+1)−R)`, where `(R+1)−R = 1` is a dressed-up ×/+1). They survive because the detour's extra rounding gives a slightly different residual, so the residual-dedup treats them as distinct. A **normalization/detour filter** (constant-fold, identity-op elimination) is the remaining cleanup to a true minimal basis.
+
+2. **This F5 is a reassociation, not a structurally-novel form.** The *catalogued* universal F5+ — `P_compound_split`, `P_sign_c` (task029) — live in the **split-routing** operand space (`f` built as `(1−c/2)−c/2`), which atoms {R,1,c} **cannot reach** (no ÷ or ½). Deriving those needs richer atoms (a `½` constant / `÷2`). That's v5.
+
+## Net across v1→v4
+- v1: architecture works (forms self-derive). · v2: non-degeneracy filter + Task-031 early-absorb reproduced generatively. · v3: irreducibility (syntactic) collapses the flood. · **v4: algebraic irreducibility + a verified derived F5 = `(R²+c)−1`.**
+- Derive-don't-select is demonstrated end to end: enumerate AST codes → `identity_zero` membership → algebraic irreducibility → coupling-aware burden → **a new, distinct, irreducible form falls out.**
+
+## Next (v5)
+- Detour/normalization filter → true minimal operational basis (collapse the 67 to ~a handful).
+- Add `½`/`÷2` atoms → reach the split-routing space → attempt to **derive `P_compound_split` / `P_sign_c`** (the catalogued F5+) from the principle — the real retrodiction of the *named* F5 set, and the proof the generator can mint the catalogue, not just reassociations.

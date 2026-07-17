@@ -1,0 +1,172 @@
+#!/usr/bin/env python3
+"""Adversarial verification of phase2C nested-window harness (false-accept lens).
+
+Writes a NAME-ENCODED verdict sentinel so results survive a dark display channel:
+  scratch/_ADV_VERDICT_<TOKEN>.txt   where TOKEN encodes pass/fail summary.
+Also writes scratch/_p2c_adversarial_report.json (sorted keys).
+"""
+import hashlib, importlib.util, json, math, os, subprocess, sys
+import numpy as np
+import mpmath as mp
+mp.mp.dps = 80
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+HARNESS = os.path.join(HERE, "phase2C_nested_window_harness.py")
+ARTIFACT = os.path.join(HERE, "phase2C_typed_result.json")
+report = {}
+
+def sha(path):
+    with open(path, "rb") as fh:
+        return hashlib.sha256(fh.read()).hexdigest()
+
+# 1. Byte-stability: re-run 3x
+hashes = [sha(ARTIFACT)]
+for _ in range(3):
+    subprocess.run([sys.executable, HARNESS], check=True,
+                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    hashes.append(sha(ARTIFACT))
+report["byte_stability"] = {"hashes": hashes, "all_identical": len(set(hashes)) == 1,
+                            "sha256": hashes[0]}
+
+# import harness for its classify()
+spec = importlib.util.spec_from_file_location("p2c", HARNESS)
+p2c = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(p2c)
+
+def grid(f_max, ratio, n):
+    return [mp.mpf(f_max) * mp.power(mp.mpf(ratio), k) for k in range(n)]
+SCALES = grid(0.25, 0.5, 28)
+
+def gen_C(f): return mp.mpf("1.25") + mp.mpf("0.5")*mp.sqrt(f) + mp.mpf("0.125")*f
+def gen_D(f): return mp.mpf("0.75") - mp.mpf("0.3")*mp.log(f)
+def gen_E(f): return mp.mpf("2.0") - mp.mpf("0.15")*mp.log(f)*mp.log(mp.log(1/f))
+
+def realize(genf):
+    f = np.array([float(x) for x in SCALES], dtype=np.float64)
+    s = np.array([float(genf(x)) for x in SCALES], dtype=np.float64)
+    return f, s
+
+def aic_bic_indep(rss, n, k):
+    rss = max(rss, 1e-300)
+    return n*math.log(rss/n) + 2*k, n*math.log(rss/n) + k*math.log(n)
+
+def fit_MA(f, s):
+    rg = [0.05 + 0.05*i for i in range(60)]
+    best = None
+    for i in range(len(rg)):
+        fr = np.power(f, rg[i])
+        for j in range(i+1, len(rg)):
+            B = np.column_stack([np.ones_like(f), fr, np.power(f, rg[j])])
+            c, *_ = np.linalg.lstsq(B, s, rcond=None)
+            rss = float(np.sum((s - B@c)**2))
+            if best is None or rss < best[0]:
+                best = (rss, float(c[0]), rg[i], rg[j])
+    rss, sinf, rho, rho2 = best
+    a, b = aic_bic_indep(rss, f.size, 5)
+    return {"rss": rss, "s_inf": sinf, "rho": rho, "rho2": rho2, "aic": a, "bic": b}
+def fit_ML(f, s):
+    B = np.column_stack([np.ones_like(f), np.log(f)])
+    c, *_ = np.linalg.lstsq(B, s, rcond=None)
+    rss = float(np.sum((s - B@c)**2)); a, b = aic_bic_indep(rss, f.size, 2)
+    return {"rss": rss, "aic": a, "bic": b}
+def fit_ME(f, s):
+    ib = np.log(f)*np.log(np.log(1.0/f))
+    B = np.column_stack([np.ones_like(f), ib])
+    c, *_ = np.linalg.lstsq(B, s, rcond=None)
+    rss = float(np.sum((s - B@c)**2)); a, b = aic_bic_indep(rss, f.size, 2)
+    return {"rss": rss, "aic": a, "bic": b}
+
+def indep_nw(f, s, K=2.0):
+    logf = np.log(f); ds = np.diff(s); lm = 0.5*(logf[:-1]+logf[1:])
+    with np.errstate(divide="ignore", invalid="ignore"):
+        local = np.diff(np.log(np.abs(ds))) / np.diff(lm)
+    local = local[np.isfinite(local)]
+    if local.size == 0: return {"status": "UNSTABLE", "drift": None}
+    blocks = np.array_split(local, min(4, local.size))
+    sl = [float(np.median(b)) for b in blocks if b.size]
+    arr = np.array(sl); spread = float(arr.max()-arr.min()); med = float(np.median(arr))
+    dr = spread/max(abs(med), 1e-12)
+    return {"status": "STABLE" if dr <= K else "UNSTABLE", "drift": dr, "slopes": sl}
+
+def indep_classify(f, s):
+    ma, ml, me = fit_MA(f, s), fit_ML(f, s), fit_ME(f, s)
+    fits = {"M_A": ma, "M_L": ml, "M_E": me}
+    wa = min(fits, key=lambda k: fits[k]["aic"]); wb = min(fits, key=lambda k: fits[k]["bic"])
+    nw = indep_nw(f, s)
+    is_alg = (wa == "M_A" and wb == "M_A" and nw["status"] == "STABLE")
+    return {"win_aic": wa, "win_bic": wb, "nw_status": nw["status"], "nw_drift": nw["drift"],
+            "classification": "algebraic_branch" if is_alg else "non_algebraic_drift"}
+
+# 2. independent re-derivation
+indep = {}
+for nm, g in (("C", gen_C), ("D", gen_D), ("E", gen_E)):
+    f, s = realize(g); indep[nm] = indep_classify(f, s)
+report["independent_rederivation"] = indep
+
+with open(ARTIFACT) as fh: art = json.load(fh)
+abk = {r["fixture_key"]: r["payload"] for r in art["results"]}
+ag = {}
+for k in ("C", "D", "E"):
+    ag[k] = {"artifact": abk[k]["classification"], "indep": indep[k]["classification"],
+             "agree": abk[k]["classification"] == indep[k]["classification"]}
+report["agreement"] = ag
+
+# 3. FALSE-ACCEPT PROBES
+def harness_classify(f, s, sinf):
+    probe = p2c.FixtureSpec(name="p", kind="iterated_log", description="adv",
+                            s_inf=sinf, coeff=0.0, rho=0.0, sub_coeff=0.0, sub_rho=0.0)
+    p2c.FIXTURES["_PROBE_"] = probe
+    try:
+        d = p2c.classify("_PROBE_", f, s)
+    finally:
+        del p2c.FIXTURES["_PROBE_"]
+    return {"classification": d.classification, "winner_aic": d.winner_aic,
+            "winner_bic": d.winner_bic, "nw_status": d.nested_window.stability_status,
+            "nw_drift": d.nested_window.drift_ratio, "delta_aic": d.delta_aic_runnerup}
+
+probe_gens = {
+    "P1_sqrt_plus_small_iterlog": (lambda f: mp.mpf("1.0")+mp.mpf("0.4")*mp.sqrt(f)-mp.mpf("0.02")*mp.log(f)*mp.log(mp.log(1/f)), 1.0),
+    "P2_log_squared":             (lambda f: mp.mpf("3.0")+mp.mpf("0.05")*mp.log(f)*mp.log(f), 3.0),
+    "P3_sqrt_times_log":          (lambda f: mp.mpf("1.5")+mp.mpf("0.3")*mp.sqrt(f)*mp.log(1/f), 1.5),
+    "P4_sqrt_of_loginv":          (lambda f: mp.mpf("0.5")+mp.mpf("0.2")*mp.sqrt(mp.log(1/f)), 0.5),
+    "P5_large_iterlog":           (lambda f: mp.mpf("2.0")-mp.mpf("0.6")*mp.log(f)*mp.log(mp.log(1/f)), 2.0),
+    "P6_tiny_iterlog_strong_sqrt":(lambda f: mp.mpf("1.0")+mp.mpf("0.5")*mp.sqrt(f)-mp.mpf("0.003")*mp.log(f)*mp.log(mp.log(1/f)), 1.0),
+    "P7_sqrt_plus_logf":          (lambda f: mp.mpf("1.2")+mp.mpf("0.4")*mp.sqrt(f)-mp.mpf("0.05")*mp.log(f), 1.2),
+}
+probes = {}; false_accepts = []
+for pn, (g, si) in probe_gens.items():
+    f, s = realize(g); h = harness_classify(f, s, si); ic = indep_classify(f, s)
+    fa = (h["classification"] == "algebraic_branch")
+    probes[pn] = {"harness": h, "indep_class": ic["classification"], "FALSE_ACCEPT": fa}
+    if fa: false_accepts.append(pn)
+report["false_accept_probes"] = probes
+report["false_accepts_found"] = false_accepts
+report["any_false_accept"] = len(false_accepts) > 0
+
+# 4. true-accept control
+f, s = realize(lambda f: mp.mpf("0.9")+mp.mpf("0.7")*mp.sqrt(f)+mp.mpf("0.2")*f*f)
+ta = harness_classify(f, s, 0.9)
+report["true_accept_control"] = {"classification": ta["classification"],
+                                 "correct": ta["classification"] == "algebraic_branch"}
+
+report["gate_i_E_rejected_independent"] = indep["E"]["classification"] == "non_algebraic_drift"
+report["all_agree"] = all(ag[k]["agree"] for k in ("C", "D", "E"))
+
+with open(os.path.join(HERE, "_p2c_adversarial_report.json"), "w") as fh:
+    json.dump(report, fh, indent=2, sort_keys=True); fh.write("\n")
+
+# NAME-ENCODED verdict sentinel
+for vf in os.listdir(HERE):
+    if vf.startswith("_ADV_VERDICT_"):
+        os.remove(os.path.join(HERE, vf))
+tok = []
+tok.append("BSTAB" if report["byte_stability"]["all_identical"] else "BSTABFAIL")
+tok.append("GATEi" if report["gate_i_E_rejected_independent"] else "GATEiFAIL")
+tok.append("AGREE" if report["all_agree"] else "AGREEFAIL")
+tok.append("NOFALSEACCEPT" if not report["any_false_accept"] else "FALSEACCEPT_" + "_".join(false_accepts))
+tok.append("TACTRLok" if report["true_accept_control"]["correct"] else "TACTRLFAIL")
+vname = "_ADV_VERDICT_" + "__".join(tok) + ".txt"
+with open(os.path.join(HERE, vname), "w") as fh:
+    fh.write(json.dumps(report, indent=2, sort_keys=True) + "\n")
+print("VERDICT_FILE:", vname)
+print(json.dumps({k: report[k] for k in ("byte_stability","agreement","false_accepts_found","any_false_accept","gate_i_E_rejected_independent","all_agree","true_accept_control")}, indent=2, sort_keys=True))

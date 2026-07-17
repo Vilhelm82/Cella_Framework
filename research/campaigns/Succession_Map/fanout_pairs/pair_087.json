@@ -1,0 +1,52 @@
+{
+  "rank": 87,
+  "lift": 4.19,
+  "count": 6,
+  "families": 1,
+  "a": {
+    "id": "OBJ:conjugate-embedding-labels-u-i-gamma-i-beta-i-delta-i",
+    "label": "Conjugate embedding labels u_i, gamma_i, beta_i, delta_i",
+    "standard_term": "Galois conjugates under the embeddings of a degree-n field into its Galois closure",
+    "nomenclature": "identical-to",
+    "symbols": [
+      "beta_i",
+      "delta_i",
+      "gamma_i"
+    ]
+  },
+  "b": {
+    "id": "OBJ:four-charge-galois-core-f-k-k-f-5-gal-k-gal-f-s-5",
+    "label": "four-charge Galois core (F,K,[K:F]=5,Gal(K^gal/F)=S_5)",
+    "standard_term": "degree-5 field extension of the four-charge mass-square variable with full symmetric Galois group (generic quintic, Abel-Ruffini setting)",
+    "nomenclature": "identical-to",
+    "symbols": [
+      "s_5"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-1291",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Augmented channel vector",
+      "summary": "The augmented channel vector is\n\n```text\n(u_i,gamma_i,delta_i).\n```\n\nIts normal closure has group `C_2^3 wreath S_5`.",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/WREATH_COVER_INERTIA_BRANCH_STRATIFICATION_v1_1_2026-07-11.md"
+    },
+    {
+      "uid": "U-1322",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Faithful signed-permutation representation into C_2^2 wreath",
+      "summary": "Every element of Gal(H_tilde/F) restricts to a permutation sigma in S_5 of the mass roots and acts on the quadratic generators by sqrt(u_i) -> +/- sqrt(u_{sigma(i)}), sqrt(gamma_i) -> +/- sqrt(gamma_{sigma(i)}). This giv",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/R9_STATIC_CLOSURE_OPENING_DERIVATION_2026-07-10.md"
+    },
+    {
+      "uid": "U-1350",
+      "type": "theorem",
+      "claim_status": null,
+      "label": "J=0 is a Kummer relation divisor, not a branch divisor",
+      "summary": "```text\nv_J(u_i)=v_J(gamma_i)=v_J(delta_i)=0                    (11.1)\n```\n\nbecause\n\n```text\ndelta_i(0)=gamma_i-4P != 0.\n```\n\nTherefore the generic rotating Kummer cover is unramified along `J=0`. Nevertheless, specializ",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/WREATH_COVER_INERTIA_BRANCH_STRATIFICATION_v1_1_2026-07-11.md"
+    }
+  ]
+}

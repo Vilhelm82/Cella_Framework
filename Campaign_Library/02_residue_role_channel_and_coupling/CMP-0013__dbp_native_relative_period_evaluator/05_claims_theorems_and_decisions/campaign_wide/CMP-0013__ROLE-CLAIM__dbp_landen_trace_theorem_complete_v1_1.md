@@ -1,0 +1,1 @@
+../../../../../Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1__b6ac0c13.md

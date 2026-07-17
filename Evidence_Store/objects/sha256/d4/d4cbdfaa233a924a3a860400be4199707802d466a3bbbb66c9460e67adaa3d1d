@@ -1,0 +1,155 @@
+{
+  "audit_name": "mcg_geometry_first_phase_2h_v3_oracle_crosscheck",
+  "campaign": "mcg_geometry_first_discovery",
+  "data_provenance": {
+    "pure_algebraic_points": "fresh lv3_diagnose calls during Phase 2h oracle cross-check (2026-05-23)",
+    "schwarzschild_and_sr_points": "Build_Docs/Reports/v3_calibration_fixtures/smoke_test_fixture.json (2026-05-23)"
+  },
+  "fixtures_in_scope": [
+    "schwarzschild_four_form",
+    "sr_four_form",
+    "pure_algebraic_four_form"
+  ],
+  "n_v3_diagnose_calls": 9,
+  "overall_rationale": "All three primary fixtures' V3 K_G behaviour at the three E-regime points is consistent with the diagnostic_neighbour classification. K_G is monotonically related to E for Schwarzschild and pure_algebraic; K_G is constant (decoupled) for SR (unit circle has constant intrinsic curvature). Sterbenz-cluster K_G interpolates smoothly between E-neighbours in all three fixtures \u2014 V4's Sterbenz discriminator (validated for V4's F1_to_F2 dual-arm phase pipeline) does not appear in V3's K_G pipeline. Consistent with the bridge's diagnostic_neighbour classification.",
+  "overall_verdict": "agreement",
+  "per_fixture_verdicts": {
+    "pure_algebraic_four_form": {
+      "K_G_trend_with_E": "monotonic_decreasing_with_E",
+      "rationale": "K_G monotonic decreasing with E (low E / near-singular regime has high K_G; far-field has low K_G); V3 K_G at the Sterbenz cluster point interpolates smoothly between its E-neighbours; V4's Sterbenz-cluster discriminator does not appear in V3 K_G output. Consistent with diagnostic_neighbour.",
+      "sterbenz_K_G_interpolates_between_neighbours": true,
+      "v4_sterbenz_discriminator_visible_in_v3_K_G": false,
+      "verdict": "agreement"
+    },
+    "schwarzschild_four_form": {
+      "K_G_trend_with_E": "monotonic_decreasing_with_E",
+      "rationale": "K_G monotonic decreasing with E (low E / near-singular regime has high K_G; far-field has low K_G); V3 K_G at the Sterbenz cluster point interpolates smoothly between its E-neighbours; V4's Sterbenz-cluster discriminator does not appear in V3 K_G output. Consistent with diagnostic_neighbour.",
+      "sterbenz_K_G_interpolates_between_neighbours": true,
+      "v4_sterbenz_discriminator_visible_in_v3_K_G": false,
+      "verdict": "agreement"
+    },
+    "sr_four_form": {
+      "K_G_trend_with_E": "constant_decoupled_from_E",
+      "rationale": "K_G constant across E (decoupled from E) \u2014 consistent with diagnostic_neighbour's 'monotonic in some regimes, decoupled in others' framing. The unit-circle constraint has constant intrinsic curvature; this is real geometry, not noise.",
+      "sterbenz_K_G_interpolates_between_neighbours": true,
+      "v4_sterbenz_discriminator_visible_in_v3_K_G": false,
+      "verdict": "agreement"
+    }
+  },
+  "phase": "2h_oracle_crosscheck",
+  "primary_artifact_dependency_note": "This artifact is OPTIONAL and NON-PRIMARY. The primary Phase 2h bridge artifact (phase_2h_v3_bridge.json) stands without V3 runtime. Per CLAUDE.md \u00a74, lv3 is a confirmation oracle only, never a design source. This artifact reports agreement/disagreement between V3 diagnostic output and V4 bridge claims at representative E points.",
+  "primary_bridge_artifact_sha256": "01f6f98099c88f58863e86c1f38d2d2c8cc74304ff2b77aedf1324fb5b1a4377",
+  "primary_or_non_primary": "non_primary",
+  "representative_E_points_per_fixture": {
+    "pure_algebraic_four_form": [
+      {
+        "E_log2": -6.644,
+        "coordinate_value": 0.99,
+        "in_sterbenz_cluster": false,
+        "regime": "near_singular",
+        "second_value": 0.1,
+        "v3_K_G": 1.8857320686363852,
+        "v3_gradient_magnitude": 1.019803902718557,
+        "v3_oe4_marginal": false,
+        "v3_trust": 1.0
+      },
+      {
+        "E_log2": -0.863,
+        "coordinate_value": 0.45,
+        "in_sterbenz_cluster": true,
+        "regime": "sterbenz_cluster",
+        "second_value": 0.7416198487095663,
+        "v3_K_G": 0.3493856214843422,
+        "v3_gradient_magnitude": 1.7888543819998317,
+        "v3_oe4_marginal": false,
+        "v3_trust": 1.0
+      },
+      {
+        "E_log2": -0.152,
+        "coordinate_value": 0.1,
+        "in_sterbenz_cluster": false,
+        "regime": "far_from_singular",
+        "second_value": 0.9486832980505138,
+        "v3_K_G": 0.2027184365739813,
+        "v3_gradient_magnitude": 2.1447610589527217,
+        "v3_oe4_marginal": false,
+        "v3_trust": 1.0
+      }
+    ],
+    "schwarzschild_four_form": [
+      {
+        "E_log2": -4.392,
+        "coordinate_value": 2.1,
+        "in_sterbenz_cluster": false,
+        "regime": "near_singular_horizon",
+        "second_value": 0.21821789023599236,
+        "v3_K_G": 1.979710053962272,
+        "v3_gradient_magnitude": 0.6294059176510505,
+        "v3_oe4_marginal": true,
+        "v3_trust": 1.0
+      },
+      {
+        "E_log2": -0.874,
+        "coordinate_value": 4.4,
+        "in_sterbenz_cluster": true,
+        "regime": "sterbenz_cluster",
+        "second_value": 0.7385489458759964,
+        "v3_K_G": 0.038132981560884065,
+        "v3_gradient_magnitude": 1.480706002911537,
+        "v3_oe4_marginal": false,
+        "v3_trust": 1.0
+      },
+      {
+        "E_log2": -0.029,
+        "coordinate_value": 100,
+        "in_sterbenz_cluster": false,
+        "regime": "far_field",
+        "second_value": 0.9899494936611665,
+        "v3_K_G": 2.030612737049658e-06,
+        "v3_gradient_magnitude": 1.9798989974238583,
+        "v3_oe4_marginal": false,
+        "v3_trust": 1.0
+      }
+    ],
+    "sr_four_form": [
+      {
+        "E_log2": -5.651,
+        "coordinate_value": 0.99,
+        "in_sterbenz_cluster": false,
+        "regime": "near_singular_lightspeed",
+        "second_value": 0.14106735979665894,
+        "v3_K_G": 1.0,
+        "v3_gradient_magnitude": 2.0,
+        "v3_oe4_marginal": false,
+        "v3_trust": 1.0
+      },
+      {
+        "E_log2": -0.863,
+        "coordinate_value": 0.671,
+        "in_sterbenz_cluster": true,
+        "regime": "sterbenz_cluster",
+        "second_value": 0.7414573487396291,
+        "v3_K_G": 1.0,
+        "v3_gradient_magnitude": 2.0,
+        "v3_oe4_marginal": false,
+        "v3_trust": 1.0
+      },
+      {
+        "E_log2": -0.014,
+        "coordinate_value": 0.1,
+        "in_sterbenz_cluster": false,
+        "regime": "non_relativistic",
+        "second_value": 0.99498743710662,
+        "v3_K_G": 1.0,
+        "v3_gradient_magnitude": 2.0,
+        "v3_oe4_marginal": false,
+        "v3_trust": 1.0
+      }
+    ]
+  },
+  "v3_isolation_note": "lv3 outputs are recorded as static fixtures. V4's bridge classifications were derived from V4-native artifacts (Phases 1 through 2g) before this cross-check was run, not from V3 outputs. Per CLAUDE.md \u00a74 this is confirmation-oracle use, not design-source use.",
+  "v4_bridge_claims_tested": {
+    "claim_1": "K_G relates to E as diagnostic_neighbour (not direct_analogue) \u2014 monotonic in some regimes, decoupled in others.",
+    "claim_2": "V4's Sterbenz-cluster discriminator does NOT appear distinguishably in V3's K_G output \u2014 V4 discriminator is V4-pipeline-specific."
+  }
+}

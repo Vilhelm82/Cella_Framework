@@ -1,0 +1,92 @@
+{
+  "task": "grok_f1_f2_common_mode_expanded_fixtures",
+  "n_points": 15001,
+  "classical_four_baseline": {
+    "schwarzschild": {
+      "j_variance": 0.4969233146828275,
+      "j_max_abs": 1.0,
+      "fraction_near_discrete_lattice": 1.0
+    },
+    "sr": {
+      "j_variance": 0.13540711025703467,
+      "j_max_abs": 0.99951171875,
+      "fraction_near_discrete_lattice": 0.4453036464235718
+    },
+    "pure_algebraic": {
+      "j_variance": 0.08380434714767189,
+      "j_max_abs": 0.5,
+      "fraction_near_discrete_lattice": 0.40203986400906605
+    },
+    "cbrt": {
+      "j_variance": 0.08380434714767189,
+      "j_max_abs": 0.5,
+      "fraction_near_discrete_lattice": 0.40203986400906605
+    }
+  },
+  "lifted_singularity": {
+    "morris_thorne": {
+      "per_strategy_j": {
+        "naive": {
+          "j_variance": 1.7780454145258834e+30,
+          "j_max_abs": 9005795512213424.0,
+          "fraction_near_discrete_lattice": 6.666222251849876e-05
+        },
+        "fsum": {
+          "j_variance": 1.7780454145258834e+30,
+          "j_max_abs": 9005795512213424.0,
+          "fraction_near_discrete_lattice": 6.666222251849876e-05
+        },
+        "pairwise": {
+          "j_variance": 1.7780454145258834e+30,
+          "j_max_abs": 9005795512213424.0,
+          "fraction_near_discrete_lattice": 6.666222251849876e-05
+        },
+        "reversed": {
+          "j_variance": 1.7780454145258834e+30,
+          "j_max_abs": 9005795512213424.0,
+          "fraction_near_discrete_lattice": 6.666222251849876e-05
+        }
+      },
+      "n_points": 15001,
+      "strategies_tested": [
+        "naive",
+        "fsum",
+        "pairwise",
+        "reversed"
+      ],
+      "note": "j computed as (sum_of_squares_strategy - X*X) / ulp(X*X). Different strategies = different rounding paths for the same mathematical sum-of-squares."
+    },
+    "schwarzschild_photon": {
+      "per_strategy_j": {
+        "naive": {
+          "j_variance": 1.7780454145258834e+30,
+          "j_max_abs": 9005795512213424.0,
+          "fraction_near_discrete_lattice": 6.666222251849876e-05
+        },
+        "fsum": {
+          "j_variance": 1.7780454145258834e+30,
+          "j_max_abs": 9005795512213424.0,
+          "fraction_near_discrete_lattice": 6.666222251849876e-05
+        },
+        "pairwise": {
+          "j_variance": 1.7780454145258834e+30,
+          "j_max_abs": 9005795512213424.0,
+          "fraction_near_discrete_lattice": 6.666222251849876e-05
+        },
+        "reversed": {
+          "j_variance": 1.7780454145258834e+30,
+          "j_max_abs": 9005795512213424.0,
+          "fraction_near_discrete_lattice": 6.666222251849876e-05
+        }
+      },
+      "n_points": 15001,
+      "strategies_tested": [
+        "naive",
+        "fsum",
+        "pairwise",
+        "reversed"
+      ],
+      "note": "j computed as (sum_of_squares_strategy - X*X) / ulp(X*X). Different strategies = different rounding paths for the same mathematical sum-of-squares."
+    }
+  }
+}

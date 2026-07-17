@@ -1,0 +1,117 @@
+{
+ "authority": "campaign brief ladder (Facet B: typed smallness, FX-E/FX-K) + Will's Facet-B GO (Facet-A acceptance message); rows in play: CL-2 (+ CL-7 evidence) ONLY",
+ "campaign_id": "root_closure_atlas",
+ "date_stamped_from_machine": "2026-06-11",
+ "depends_on": {
+  "eft_lift": "src/lloyd_v4/evals/difference_tower/eft_eval.py (HR134; imported, never rebuilt)",
+  "facet_a_organ": "instruments/probe_facet_a.py (interval evaluator + p-ladder consumed)",
+  "manifest_v1_pin": "ce2e5352419cf7e1f996aafd9b4329d32836de160aa2a244408791036c540138"
+ },
+ "facet": "B",
+ "frozen": true,
+ "organ": "I3b_typed_smallness_v1 (role=probe): classifies the POINT per (fixture, point, tau) \u2014 GENUINE_PROXIMITY (|TRUE| <= tau) / ROUTE_ARTIFACT (|TRUE| > tau >= |reading|) / NOT_SMALL / FLOOR_LIMITED (annex enclosure straddles tau at the p-cap; channel-floor vocabulary). The classical reading is the COMPARISON COLUMN (classical_reading_agrees recorded) so the route's lie is caught in both directions: manufactured smallness AND masked smallness. TRUE via the probe's own paths (lane account / certified enclosures); referee never called by the organ.",
+ "predictions": {
+  "PB.1": "probe verdict == referee verdict on EVERY rational-class triple (referee: eval_exact magnitude vs tau, exact in Q). Zero mismatches. Units: triples.",
+  "PB.2": "both contrast arms present on battery: >= 1 ROUTE_ARTIFACT verdict AND >= 1 GENUINE_PROXIMITY with classical_reading_agrees == False (route-masked smallness). Units: triples.",
+  "PB.3": "K1 route-pair structure, two-component: (a) the TRUE-side classification (GENUINE_PROXIMITY vs not) is ROUTE-INVARIANT across the pair at every shared (point, tau) \u2014 TRUE is the same function; (b) the pinned reading-side SPLIT reproduces: at RN(1/3), tau=2^-55, FXK1b (factored) reads exactly 0 \u2014 the route structurally cannot see RN(1/3) - 1/3 \u2014 giving ROUTE_ARTIFACT, while FXK1a (expanded) reads ~TRUE giving NOT_SMALL (the registered fingerprint; pinned in the expectations at dry-run). A draft PB.3 claiming full verdict equality was caught AT AUTHORING by the dry-run expectations and reworded pre-freeze \u2014 recorded, not silent. Units: (point, tau) pairs + the pinned split row.",
+  "PB.4": "annex honesty: FXK3b (exact point through isqrt exactness) classifies GENUINE at both taus; FXK3a classifies GENUINE at tau=2^-40 (enclosure decides) and FLOOR_LIMITED at tau=2^-500 (cap straddle \u2014 CL-7's floor arm ON battery); referee (Arbiter-M magnitude with safety margin) agrees wherever it can decide; FLOOR_LIMITED where M also cannot decide = agreement per the channel-floor successor rule. Units: triples.",
+  "PB.5": "determinism: battery byte-stable x2 (sha256 over records)."
+ },
+ "referee_expectations_pinned_at_dry_run": {
+  "FXE1@0x1.0000000000000p+0@tau=1/1099511627776": "GENUINE_PROXIMITY",
+  "FXE1@0x1.0000002000000p+0@tau=1/36028797018963968": "ROUTE_ARTIFACT",
+  "FXE1@0x1.0040000000000p+0@tau=1/1099511627776": "NOT_SMALL",
+  "FXE2@0x1.0p+30@tau=1/536870912": "GENUINE_PROXIMITY",
+  "FXE2@0x1.dcd65p+29@tau=1/536870912": "GENUINE_PROXIMITY",
+  "FXK1a@0x1.0p-1@tau=1/1099511627776": "NOT_SMALL",
+  "FXK1a@0x1.5555555555555p-2@tau=1/1099511627776": "GENUINE_PROXIMITY",
+  "FXK1a@0x1.5555555555555p-2@tau=1/36028797018963968": "NOT_SMALL",
+  "FXK1b@0x1.0p-1@tau=1/1099511627776": "NOT_SMALL",
+  "FXK1b@0x1.5555555555555p-2@tau=1/1099511627776": "GENUINE_PROXIMITY",
+  "FXK1b@0x1.5555555555555p-2@tau=1/36028797018963968": "ROUTE_ARTIFACT",
+  "FXK3a@0x1.8p+0@tau=1/1099511627776": "see_PB.4_declared",
+  "FXK3a@0x1.8p+0@tau=1/3273390607896141870013189696827599152216642046043064789483291368096133796404674554883270092325904157150886684127560071009217256545885393053328527589376": "see_PB.4_declared",
+  "FXK3b@0x1.8p+0@tau=1/1099511627776": "see_PB.4_declared",
+  "FXK3b@0x1.8p+0@tau=1/3273390607896141870013189696827599152216642046043064789483291368096133796404674554883270092325904157150886684127560071009217256545885393053328527589376": "see_PB.4_declared"
+ },
+ "status_move_rules": "CL-2 -> DEMONSTRATED iff PB.1 AND PB.2 AND PB.3 AND PB.4 PASS (arbiter-graded). CL-7: evidence APPENDED (floor arm on battery), status stays PARTIAL. Any PB-FAIL: chain preserved verbatim, STOP, route to Will.",
+ "telemetry": "permanently non-verdict-bearing (covenant 3).",
+ "triples": [
+  {
+   "fixture_id": "FXE1",
+   "point": "0x1.0000002000000p+0",
+   "tau": "1/36028797018963968"
+  },
+  {
+   "fixture_id": "FXE1",
+   "point": "0x1.0000000000000p+0",
+   "tau": "1/1099511627776"
+  },
+  {
+   "fixture_id": "FXE1",
+   "point": "0x1.0040000000000p+0",
+   "tau": "1/1099511627776"
+  },
+  {
+   "fixture_id": "FXE2",
+   "point": "0x1.0p+30",
+   "tau": "1/536870912"
+  },
+  {
+   "fixture_id": "FXK1a",
+   "point": "0x1.5555555555555p-2",
+   "tau": "1/1099511627776"
+  },
+  {
+   "fixture_id": "FXK1b",
+   "point": "0x1.5555555555555p-2",
+   "tau": "1/1099511627776"
+  },
+  {
+   "fixture_id": "FXK1a",
+   "point": "0x1.5555555555555p-2",
+   "tau": "1/36028797018963968"
+  },
+  {
+   "fixture_id": "FXK1b",
+   "point": "0x1.5555555555555p-2",
+   "tau": "1/36028797018963968"
+  },
+  {
+   "fixture_id": "FXK1a",
+   "point": "0x1.0p-1",
+   "tau": "1/1099511627776"
+  },
+  {
+   "fixture_id": "FXK1b",
+   "point": "0x1.0p-1",
+   "tau": "1/1099511627776"
+  },
+  {
+   "fixture_id": "FXK3a",
+   "point": "0x1.8p+0",
+   "tau": "1/1099511627776"
+  },
+  {
+   "fixture_id": "FXK3b",
+   "point": "0x1.8p+0",
+   "tau": "1/1099511627776"
+  },
+  {
+   "fixture_id": "FXK3a",
+   "point": "0x1.8p+0",
+   "tau": "1/3273390607896141870013189696827599152216642046043064789483291368096133796404674554883270092325904157150886684127560071009217256545885393053328527589376"
+  },
+  {
+   "fixture_id": "FXK3b",
+   "point": "0x1.8p+0",
+   "tau": "1/3273390607896141870013189696827599152216642046043064789483291368096133796404674554883270092325904157150886684127560071009217256545885393053328527589376"
+  },
+  {
+   "fixture_id": "FXE2",
+   "point": "0x1.dcd65p+29",
+   "tau": "1/536870912"
+  }
+ ],
+ "version": 1
+}

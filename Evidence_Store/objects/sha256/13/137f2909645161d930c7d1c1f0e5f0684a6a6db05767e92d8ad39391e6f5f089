@@ -1,0 +1,222 @@
+# Task 050 — Parent Primitive Gap Inventory
+
+**Audit date:** 2026-05-26
+
+For every Layer 2+ module's required parent primitives that are not yet present at the correct substrate layer.
+
+Failure modes per `Build_Docs/Architecture/SUBSTRATE_CONSTRUCTION.md §5.1`:
+
+- **Mode 1 — primitive not atomic.** A deeper primitive underneath has not been identified.
+- **Mode 2 — two operations share a name.** A single named operation is in fact two conflated operations.
+- **Mode 3 — parent layer incomplete.** The substrate cannot yet express the generalisation; descend-extend-return required.
+- **`unknown`** when the failure mode is genuinely not yet diagnosable.
+
+Each gap also carries a **capability_spread** estimate (`consumer_count × downstream_leverage`) per §6.
+
+---
+
+## Resolution tracker (updated post-audit)
+
+This audit is a frozen snapshot dated 2026-05-26; the per-gap findings below are preserved as-written. The authoritative live tracker is `Build_Docs/LIVE_CAMPAIGNS_LEDGER.md` → `substrate-construction-transplant-arc`. Current resolution status:
+
+| gap | status | resolved | notes |
+|---|---|---|---|
+| **GAP-003** conditioning primitive (`typed_ulp`) | **RESOLVED** | 2026-05-27 | Transplant 1. `src/lloyd_v4/primitives/typed_ulp.py`, float64+float32 via `precision=` dispatcher, 45 tests green. 12 consumer sites migrated (2 MCG bug-fixes, 2 evals, 8 cosmetic scratch). DRY-003 consolidated. Manifest + glossary updated. |
+| **GAP-012** conditioning-primitive naming | **RESOLVED** | 2026-05-27 | Closed alongside GAP-003 via V4_GLOSSARY §13 disambiguation (core/conditioning.py carrier vs §9 conditioning primitive embodied by `typed_ulp`). |
+| **GAP-011** hardened dual-arm probe | **IN PROGRESS** | — | Transplant 2. Discovery complete; starting brief at `Build_Docs/Agent_tasks/transplant_2_gap011_starting_brief.md`. Architectural placement + v10/v11 dependency strategy undecided. |
+| **GAP-005** K_G composition | **DEFERRED** | — | Blocked on substrate-invariant-search Gate 2 (per ledger anti-restart note). NOT a Transplant-1/2 candidate. |
+| all other GAPs | open | — | See per-gap entries below; no work started. |
+
+
+## GAP-001 — Substrate-native square root
+
+| field | value |
+|---|---|
+| **primitive_needed** | Typed square-root primitive that emits `TypedResult[float]` with declared status (`sqrt_observed`, `sqrt_domain_refused`, `sqrt_indeterminate`) and finite-precision provenance. Required because sqrt is a load-bearing observation in V4's quadratic root primitive, alpha probe, log-log slope SE, and four-form battery. |
+| **required_layer** | L1 (substrate primitive) |
+| **current_state** | `not_present` |
+| **affected_consumers** | `src/lloyd_v4/primitives/stratified_quadratic_roots.py:248` (`math.sqrt(discriminant)`); `src/lloyd_v4/primitives/typed_log_log_slope.py:177` (`math.sqrt(...)` in standard-error formula); `src/lloyd_v4/primitives/directional_alpha_probe.py:502, 569` (`math.sqrt` in propagated_window_error and SE); all four-form battery eval scripts (`schwarzschild_*.py`, `sr_*.py`, `pure_algebraic_*.py`, `cbrt_*.py`) which call `math.sqrt`. |
+| **workarounds** | Direct `math.sqrt` call (named-math import). Substrate accepts the floating-point value as substrate-traceable because `math.sqrt` is correctly-rounded in IEEE 754 (BACL and Conjecture C audits already characterise this), but the call itself is named-mathematical content per Axiom 11. |
+| **failure_mode** | **Mode 3** — parent layer incomplete. The substrate has not declared a sqrt primitive; the typed quadratic-root primitive cannot honestly compose against one. |
+| **remediation** | Add `typed_sqrt(x: float) -> TypedSqrtResult` at L1 with status family `{sqrt_observed, sqrt_domain_refused, sqrt_nonfinite}`. The substrate-native implementation can call `math.sqrt` internally *during the construction phase* (the Axiom 11′ refinement path), provided the call is wrapped in a typed envelope, the constant `math.sqrt` is declared a transition target with provenance, and the consumer-visible API never exposes raw `math.sqrt`. Per SUBSTRATE_CONSTRUCTION §3.4 (Generalisation), this is the natural decomposition of the operation. |
+| **capability_spread** | **HIGH.** Consumers: 3 substrate primitives + ~14 eval scripts. Closing this gap is the prerequisite for Axiom 11 → Axiom 11′ criterion 1 ("every constant currently forbidden by Axiom 11 has a substrate-native equivalent"). |
+
+---
+
+## GAP-002 — Substrate-native natural log
+
+| field | value |
+|---|---|
+| **primitive_needed** | Typed natural-log primitive that emits `TypedResult[float]` with status (`log_observed`, `log_domain_refused`, `log_nonfinite`, `log_zero_input`). Required because every log-log slope fit in V4 calls `math.log` directly. |
+| **required_layer** | L1 (substrate primitive) |
+| **current_state** | `not_present` |
+| **affected_consumers** | `src/lloyd_v4/primitives/typed_log_log_slope.py:104,105` (log of f, log of |transfer|); `src/lloyd_v4/primitives/directional_alpha_probe.py:540,541` (log of h, log of |transfer|); `src/lloyd_v4/primitives/sweep_signature_probe.py:302,313`; `src/lloyd_v4/branch/slope_flow.py:244,245`; many eval scripts using `math.log` and `math.log2`. |
+| **workarounds** | Direct `math.log` / `math.log2` calls. Mathematically rigorous (`log` is well-defined for positive reals; precision behaviour known) but named-mathematical content per Axiom 11. |
+| **failure_mode** | **Mode 3** — parent layer incomplete. |
+| **remediation** | Add `typed_log(x: float)` and `typed_log2(x: float)` primitives at L1, mirroring `typed_sqrt`. Note potential conflation: `typed_log` (natural) and `typed_log2` (base 2) are not the same operation — careful Mode-2 separation needed. |
+| **capability_spread** | **HIGH.** Affects 3 substrate primitives + most slope-using evals. Required for Axiom 11′ criterion 1 alongside sqrt. |
+
+---
+
+## GAP-003 — IEEE-754 conditioning primitive
+
+| field | value |
+|---|---|
+| **primitive_needed** | The conditioning primitive `SUBSTRATE_CONSTRUCTION.md §9` names as **prerequisite to most V3 transplants**: "instrument geometry on the IEEE 754 float lattice." Computes ulp / binade / lattice spacing as a typed L1 primitive with declared float-format provenance. |
+| **required_layer** | L1 (substrate primitive) |
+| **current_state** | `not_present`. The `core/conditioning.py` module is the typed *Conditioning carrier* (a dataclass holding `ConditioningStatus` + diagnostic message). It is **not** the IEEE-754 geometry primitive the methodology calls for. Naming collision is a Mode-2 candidate (see GAP-009). |
+| **affected_consumers** | Every primitive that uses ulp or binade: `evals/scale_invariant_signature.py` (`_ulp_of_float32`); `evals/multi_precision_four_form.py` (`ulp_of_double`); all scratch BACL audits; all scratch c2 lattice prototypes; `evals/substrate_invariant_search_phase_d.py` (`_audit_ulp_spread_T1/T2/T3`); `scratch/symbolic_analyzer/probe.py` (sample evaluation depth). |
+| **workarounds** | At least **8 ad-hoc `_ulp_f64` / `ulp_float64` / `ulp_of_double` / `_ulp_of_float32` implementations** scattered across `scratch/` and `src/lloyd_v4/evals/`. Most use `struct.unpack` + bit manipulation; correctness is locally established but not centrally substrate-traceable. |
+| **failure_mode** | **Mode 1** (not atomic) ∧ **Mode 3** (parent layer incomplete). Multiple proposals exist (8+) but no canonical primitive at L1 — the operation is empirically atomic but the substrate has no slot for it. |
+| **remediation** | Promote a single typed primitive: `typed_ulp(x: float, format: Float64|Float32|...) -> TypedUlpResult`. Status: `ulp_observed`, `ulp_subnormal`, `ulp_nonfinite`. **This is SUBSTRATE_CONSTRUCTION §9's identified prerequisite for transplantation.** |
+| **capability_spread** | **VERY HIGH** — capability dividend per §6 is large. Every BACL-aware downstream module would inherit a substrate-conformant lattice primitive in one transplant. |
+
+---
+
+## GAP-004 — BACL grain primitive
+
+| field | value |
+|---|---|
+| **primitive_needed** | `bacl_grain(a, b) -> TypedBaclGrain` — the proven IEEE-754 binade-aligned cancellation lattice grain (max_ulp / 2) as a typed L1 primitive. |
+| **required_layer** | L1 (substrate primitive) |
+| **current_state** | `not_present`. Implemented in scratch (`scratch/bacl_composite_probe_v2.py:26`, `scratch/bacl_boundary_and_composite_probe.py:42` as `bacl_grain(a, b)`) and as `_bacl_spectrum*` in 5 eval scripts (`evals/substrate_invariant_search_phase_b.py:124`, `_c.py:68`, `_d.py:138, 153`, `_f.py:73`, `_g.py:141`). |
+| **affected_consumers** | substrate-invariant-search phases B/C/D/F/G; dual-arm probe; fold-readback probes; substrate fingerprint atlas. |
+| **workarounds** | DRY-replicated scratch helpers (see `drift_inventory.md` DRY-002). Each phase reimplements its own variant. |
+| **failure_mode** | **Mode 3** — parent layer incomplete. BACL is theorem-proven (per V4_GLOSSARY §2 BACL entry), so the primitive is well-defined; substrate just hasn't slotted it. Also touches Mode 1 (the differences between `_bacl_spectrum`, `_bacl_spectrum_for`, `_bacl_spectrum_float32` are presentation variants of one operation). |
+| **remediation** | Add `typed_bacl_grain(operand_chain: TypedCollection[float]) -> TypedBaclGrainResult` at L1, parented by L1 sibling `typed_collection` and the GAP-003 ulp primitive. The substrate already proves the invariant; only the typed slot is missing. |
+| **capability_spread** | **HIGH.** Consumers: ~5 active eval modules + ~3 scratch families. The BACL "predictable noise floor" is referenced everywhere substrate-as-probe analysis runs. |
+
+---
+
+## GAP-005 — K_G canonical Gaussian curvature
+
+| field | value |
+|---|---|
+| **primitive_needed** | A substrate-derived 2D/3D K_G computation. Currently an *eval-layer Path B fallback* (per `V4_GLOSSARY.md` K_G entry and `Reports/substrate_invariant_search/Phase E`). |
+| **required_layer** | Probably L2 (composition); requires L1 Hessian/gradient primitives first. |
+| **current_state** | `wrong_layer` (currently at L3 eval-layer, with `_kg_*` helpers duplicated across 4 sites). |
+| **affected_consumers** | `evals/substrate_invariant_search_phase_e.py` (`_kg_two_variable`, `_kg_three_variable`, `_kg_sr`, `_kg_schw`, `_kg_pa`, `_kg_sphere`), `phase_f.py`, `phase_g.py` (`_kg_parabola`, `_kg_schwarzschild`), `phase_h.py` (`_sr_constant_kg_slice`, `_cross_fixture_at_matched_kg`), `mcg_geometry_first_geometry.py` (`_principal_curvature_1d`). |
+| **workarounds** | Per-fixture `_kg_*` helper functions. The Phase E audit explicitly documents Path A (substrate derivation) **failed** and Path B (canonical bordered-determinant formula from Goldman 2005) is used as fallback — this is documented as *not_substrate_derived_path_b_fallback* in the source. |
+| **failure_mode** | **Mode 3** — parent layer incomplete (substrate cannot yet derive K_G from primitives). Open campaign `substrate-invariant-search` is the path; Gate 2 of L3 promotion is gated on this. Also touches Mode 1 (K_G computation per fixture is repeated — the *algorithm* is shared, only the gradient/hessian inputs differ). |
+| **remediation** | First, add `typed_hessian`, `typed_gradient` primitives at L1; then `typed_kg(F, point) -> TypedKgResult` at L2. **Out of scope** for first three transplants — depends on substrate-invariant-search Gate 2 closure. |
+| **capability_spread** | **MEDIUM.** Consumers: 6+ eval modules; downstream leverage is highest in `substrate-invariant-search` campaign authority, but K_G remains eval-layer for now. |
+
+---
+
+## GAP-006 — Four-form battery primitive
+
+| field | value |
+|---|---|
+| **primitive_needed** | A typed `four_form(fixture, coordinate, precision) -> TypedFourFormResult` primitive returning `{F1, F2, F3, F4}` with declared float-format and fixture-evaluator provenance. |
+| **required_layer** | L2 (composition over fixture evaluator + sqrt/log primitives) |
+| **current_state** | `duplicated`. ~7 fixture-specific `four_form_floatXX` implementations across `evals/{cbrt,sr,pure_algebraic,pure_algebraic_quartic,schwarzschild,schwarzschild_cbrt,schwarzschild_quartic}_four_form.py`. |
+| **affected_consumers** | Every campaign script that runs F1/F2/F3/F4. The four-form battery is the V4 workhorse (Theorem 4 cross-fixture invariance). |
+| **workarounds** | Per-fixture copies. Differences are limited to the radical (sqrt vs cbrt vs quartic-power) and the algebraic form (`1 - 2/r`, `1 - β²`, `1 - x`). |
+| **failure_mode** | **Mode 1** — same conceptual operation across fixtures; the absent atomic primitive is `(typed_fixture_evaluator, typed_radical) → four_form`. Could also be argued **Mode 2** because the four-form battery and the multi-precision four-form battery are presented as one operation when they are actually two (one float32, one float64, one Decimal-oracle). |
+| **remediation** | Lift `four_form` to L2 with `(fixture_evaluator: Callable[[float], float], radical: TypedRadical, precision: FloatFormat)` as inputs. Closes Theorem 4 cross-fixture machinery. |
+| **capability_spread** | **HIGH.** ~10 campaign scripts and ~6 fingerprint atlas / phase scripts. |
+
+---
+
+## GAP-007 — Sterbenz boundary observation primitive
+
+| field | value |
+|---|---|
+| **primitive_needed** | A typed `sterbenz_boundary(fixture, coordinate_grid) -> TypedSterbenzBoundaryResult` primitive that declares the boundary location and emits directional-bias evidence. |
+| **required_layer** | L2 (composition over L1 fixture evaluator) |
+| **current_state** | `duplicated`. 3 sites: `evals/schwarzschild_quartic_campaign.py:140`, `evals/schwarzschild_cbrt_campaign.py:134`, `evals/pure_algebraic_quartic_campaign.py:134` all define `sterbenz_boundary_observation()`. |
+| **affected_consumers** | All quartic/cbrt campaigns + Sterbenz audit chain (Task 031). |
+| **workarounds** | Per-campaign hardcoded boundary values (`r=4.0`, `β=1/√2`, `x=0.5`). |
+| **failure_mode** | **Mode 1** — same operation copied. |
+| **remediation** | Promote to L2 with `(fixture, native_variable) -> typed_boundary`. Provenance must include the Sterbenz lemma reference as a navigation target (Axiom 11 allows named theorems as navigation, never as substrate content). |
+| **capability_spread** | **MEDIUM.** Smaller consumer set than GAP-006 but tied to L3 promotion (Sterbenz boundary mechanism is one identified `b_k` component per `V4_GLOSSARY` §10). |
+
+---
+
+## GAP-008 — Measured-constant primitive
+
+| field | value |
+|---|---|
+| **primitive_needed** | The task spec lists "measured-constant primitive" as a candidate for L1. A typed primitive that wraps a *measured* (not imported) constant with declared measurement provenance: who measured it, with what instrument, in what precision, with what stability bound. Required by Axiom 11′ refinement criterion: "every constant currently forbidden by Axiom 11 has a substrate-native equivalent with declared measurement provenance." |
+| **required_layer** | L1 |
+| **current_state** | `not_present`. The substrate currently has only typed values, typed collections, ratios, and roots. There is no `MeasuredConstant`. |
+| **affected_consumers** | Any future code that needs `pi`, `e`, `tau`, etc. as substrate. Currently no L1 use; all `pi`/`e`/`tau` uses are in L3 eval scripts (`evals/substrate_invariant_search_phase_i.py:287` for `math.pi`, etc.) which are concession-permitted. |
+| **workarounds** | None at L1. L3 evals use `math.pi` directly as a declared concession. |
+| **failure_mode** | **Mode 3** — parent layer incomplete. |
+| **remediation** | Add `typed_measured_constant(name, value, measurement_provenance) -> TypedMeasuredConstantResult` at L1 with status family `{constant_measured, constant_declared_pending, constant_refused}`. Bohr-Mollerup / extension-uniqueness considerations per Axiom 11 rationale. |
+| **capability_spread** | **MEDIUM-LOW** in the short term (no current consumers); **HIGH** as enabler for the Axiom 11 → 11′ refinement path. Required for V3 transplants that need physical or mathematical constants. |
+
+---
+
+## GAP-009 — L1 atomicity / sibling-composition policy
+
+| field | value |
+|---|---|
+| **primitive_needed** | A policy decision (not a primitive). The task spec's "L1 = atomic" framing is in tension with the project's `LAYER_MANIFEST.md`, which allows intra-`primitives` sibling composition (e.g., `directional_alpha_probe` calls `typed_finite_difference` and `typed_log_log_slope`). |
+| **required_layer** | n/a (policy) |
+| **current_state** | `wrong_layer`-style tension. Either: (a) `directional_alpha_probe` is not L1 but a sub-L2 composition primitive; (b) "L1 atomic" should be relaxed to "L1 = composed-of-L1-only"; (c) introduce L1a (atomic) and L1b (L1-composing) sub-layers. |
+| **affected_consumers** | `directional_alpha_probe`, `sweep_signature_probe`, `scalar_alpha_jet_bundle`, `singular_alpha_jet_bundle` — all currently in `primitives/` and all compose against `typed_finite_difference` / `typed_log_log_slope`. |
+| **workarounds** | LAYER_MANIFEST silently permits sibling composition; the task spec's layering does not address it. |
+| **failure_mode** | **Mode 2** — "L1 primitive" names two operations: atomic typed wrappers (`typed_value`, `typed_collection`, `projective_ratio`, `stratified_quadratic_roots`) and composed observers (`directional_alpha_probe`, `sweep_signature_probe`, etc.). |
+| **remediation** | Methodology decision: either tighten L1 to atomic-only and lift composed probes to L1.5/L2, OR formalise that L1 permits sibling composition (the LAYER_MANIFEST status quo). **Not a primitive to build** — a layering clarification to write into `SUBSTRATE_CONSTRUCTION.md` or `LAYER_MANIFEST.md`. |
+| **capability_spread** | n/a — affects classification clarity, not capability dividend. |
+
+---
+
+## GAP-010 — Symbolic cancellation analyzer
+
+| field | value |
+|---|---|
+| **primitive_needed** | A substrate-conformant cancellation analyzer that classifies subtraction nodes by cancellation pattern (Sterbenz / catastrophic / signal-class) and emits a typed `PredictedBurdenVector`. The scratch prototype (`scratch/symbolic_analyzer/`) is the closest existing artifact and one of the artifacts the task spec calls out by name. |
+| **required_layer** | L1 (analyzer is atomic per-subtraction) plus L2 aggregator (PredictedBurdenVector is L2 composition over per-site analysis). |
+| **current_state** | `partial_implementation` in `scratch/symbolic_analyzer/`. Self-contained subpackage, **no `lloyd_v4.*` imports** — has not been integrated. Uses `Fraction` and `math.cos`/`math.sqrt` for symbolic evaluation. |
+| **affected_consumers** | Currently none in `src/`. Calibration scripts at `scratch/symbolic_analyzer_*.py` consume it. |
+| **workarounds** | Eval-layer scripts inline cancellation heuristics ad-hoc; e.g., `evals/substrate_invariant_search_phase_d.py` `_audit_ulp_spread_*` functions are partial substitutes. |
+| **failure_mode** | **Mode 2** ∧ **Mode 3.** Two operations conflated: (a) classification of cancellation patterns at a subtraction node (atomic, L1), (b) aggregation of per-site predictions into a burden vector (composition, L2). Also parent layer incomplete — depends on GAP-003 (ulp primitive), GAP-001 (sqrt), GAP-002 (log) before native integration. |
+| **remediation** | Two-step transplant: (i) decompose the DSL + classifier into L1 atomic primitives; (ii) lift `PredictedBurdenVector` to L2 with provenance referencing the GAP-006 four_form primitive. **Transplantation candidate** — see `transplantation_readiness.md`. |
+| **capability_spread** | **MEDIUM-HIGH.** Currently scratch-only, but the eval-layer `refinery_mvp/burden_vector.py` and `sterbenz_audit/` already compute *empirical* burden vectors; a substrate-conformant predictor would close the prediction↔observation loop. Capability dividend grows once refinery promotion (LIVE_CAMPAIGNS_LEDGER `layer-3-promotion`) is active. |
+
+---
+
+## GAP-011 — Hardened dual-arm probe (L3 instrument)
+
+| field | value |
+|---|---|
+| **primitive_needed** | The hardened V1 dual-arm probe currently lives at `scratch/hardened_dual_arm_probe.py`. Per `LIVE_CAMPAIGNS_LEDGER` `hardened-dual-arm-probe`, it is V4's *production* gap-resolution instrument and the campaign is marked `V1 complete and operative`. |
+| **required_layer** | L3 (composes L1 + L2 primitives into a 6-condition resolution rule + per-record `hardened_status`). |
+| **current_state** | `wrong_layer` — operational but architecturally not-integrated. It is being called from production code paths (per the campaign last result "15/15 tests pass… 16 `gap_resolved` records"). |
+| **affected_consumers** | Foldreadback v10/v11 callers; SR/F2/F4 fixture audits; alpha-minus-one-exhaustion Phase 3B planned executor. |
+| **workarounds** | The probe sits in `scratch/` but is imported by run scripts under scratch. Test code references the V1 directly. |
+| **failure_mode** | **Mode 2 / non-typical** — the failure isn't substrate-construction; it's lifecycle. The probe was developed via scratch iteration and never moved to `src/lloyd_v4/`. Closest formal mode: Mode 3 (the substrate has no L3 slot named for it — `src/lloyd_v4/branch/` or a new `src/lloyd_v4/probes/` is the natural home). |
+| **remediation** | Move `scratch/hardened_dual_arm_probe.py` → `src/lloyd_v4/probes/hardened_dual_arm_probe.py` (or extend `branch/` to host it). Wire its protocols into LAYER_MANIFEST. Apply dissection-gate criteria. **Transplantation candidate 1** — see readiness report. |
+| **capability_spread** | **HIGH.** Currently in active production use; integrating cements it into the substrate layering and lets future L3 instruments inherit dissection-gate machinery. |
+
+---
+
+## GAP-012 — Conditioning-carrier vs conditioning-primitive naming collision
+
+| field | value |
+|---|---|
+| **primitive_needed** | Disambiguation: `src/lloyd_v4/core/conditioning.py` (the typed `Conditioning` carrier with status + diagnostic) is *not* the conditioning primitive `SUBSTRATE_CONSTRUCTION.md §9` calls "instrument geometry on the IEEE 754 float lattice". Two distinct things share the name "conditioning." |
+| **required_layer** | n/a (clarification) |
+| **current_state** | naming collision. `core/conditioning.py` exists at L0 and provides a `Conditioning` dataclass. The §9 conditioning primitive is the IEEE-754 lattice primitive (related to GAP-003). |
+| **affected_consumers** | Anyone reading SUBSTRATE_CONSTRUCTION §9 and then grep'ing `conditioning.py`. |
+| **workarounds** | None — readers must internalise the distinction. The `V4_GLOSSARY.md` §13 ("Things commonly confused") could absorb this. |
+| **failure_mode** | **Mode 2** — two operations share a name. |
+| **remediation** | Either rename the §9 primitive (e.g., "IEEE-754 lattice geometry primitive" or "float-lattice conditioning") in `SUBSTRATE_CONSTRUCTION.md`, or add an explicit disambiguation entry in `V4_GLOSSARY.md` §13. Documentation-only change. |
+| **capability_spread** | n/a |
+
+---
+
+## Gaps not yet diagnosable (`unknown`)
+
+- **Spectral / multi-channel readback primitives.** `scratch/spectral_image_reconstruction.py` and `scratch/spectral_stack_test.py` propose multi-channel substrate-signature reconstruction. Whether this should be a substrate primitive or remain eval-layer is open per `LIVE_CAMPAIGNS_LEDGER` `substrate-invariant-search` Phase F/G. Not yet classifiable.
+- **Choptuik DSS log-periodic primitives.** `scratch/choptuik_step1_synthetic.py` and `_step2_amr_noise.py` propose synthetic DSS signal models. These are likely L3 fixture infrastructure rather than substrate primitives, but if log-periodic residual detection becomes a substrate observable (per active `codex_task045_log_periodic_residual_probe.md`), the substrate slot is open.
+
+---
+
+## Summary
+
+12 gaps identified. The first three (GAP-001 sqrt, GAP-002 log, GAP-003 ulp primitive) are **the immediate Axiom 11 → Axiom 11′ refinement criteria** and have the highest capability spread. GAP-011 (hardened dual-arm probe lifting) is independent of the Axiom 11′ path and has a self-contained transplant story.
+
+Recommended ordering and rationale are in `transplantation_readiness.md`.

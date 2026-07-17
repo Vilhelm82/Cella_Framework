@@ -1,0 +1,91 @@
+# Task 035 Summary - Sweep Signature Probe
+
+## Headline
+
+Task 035 adds the Layer 1 `sweep_signature_probe` primitive. It composes `typed_finite_difference` and `typed_log_log_slope` into a typed `SweepSignatureValue` and emits seven `SweepSignatureStatus` strata for clean sweeps, cancellation dominance, high drop rate, degenerate input, insufficient data, all-nonfinite cells, and all-domain-refused cells.
+
+## Deliverable Manifest
+
+| Path | Lines | Purpose |
+|---|---:|---|
+| `src/lloyd_v4/core/status.py` | 262 | Added `SweepSignatureStatus` and `StatusCode` membership. |
+| `src/lloyd_v4/primitives/sweep_signature_probe.py` | 368 | New primitive, value type, producer/consumer protocols, transition rule, and declared limits. |
+| `src/lloyd_v4/primitives/__init__.py` | 175 | Re-exported Task 035 primitive API. |
+| `tests/test_task035_source_purity.py` | 42 | Source audit for clean-room and math-use rules. |
+| `tests/test_task035_sweep_signature_probe.py` | 209 | GR calibration cases, synthetic strata, input validation, and boundary cases. |
+| `tests/test_task035_serialization.py` | 38 | JSON-safe serialization checks. |
+| `tests/test_task035_transition_rules.py` | 30 | Consumer transition coverage. |
+| `tests/test_task035_protocol_compatibility.py` | 32 | Producer/consumer protocol compatibility. |
+| `tests/test_task035_layer_manifest.py` | 20 | Machine-readable manifest coverage. |
+| `Build_Docs/Architecture/LAYER_MANIFEST.md` | 183 | Human-readable manifest update. |
+| `Build_Docs/Architecture/layer_manifest.json` | 132 | Machine-readable manifest update. |
+| `Build_Docs/Architecture/STATUS_CALCULUS.md` | 161 | Sweep signature strata and precedence. |
+| `Build_Docs/V4_GLOSSARY.md` | 542 | New glossary entries and confused-pair entry. |
+| `Build_Docs/LIVE_CAMPAIGNS_LEDGER.md` | 227 | New `sweep_signature_probe` campaign entry. |
+| `Build_Docs/Reports/task035_sweep_signature_probe_summary.md` | 91 | Task 035 closeout summary. |
+| `Build_Docs/Reports/task035_sweep_signature_probe/calibration_script.py` | 152 | Reproducible calibration generator. |
+| `Build_Docs/Reports/task035_sweep_signature_probe/calibration_observations.json` | 1781 | Structured 16-case calibration output. |
+| `Build_Docs/Reports/task035_sweep_signature_probe/calibration_observations.md` | 30 | Human-readable calibration narrative. |
+
+## Test Counts
+
+| Command | Result |
+|---|---|
+| `pytest tests/test_task035_*.py --collect-only` | 37 collected. |
+| `pytest tests/test_task035_*.py -x` | 37 passed. |
+| `pytest tests/test_task035_source_purity.py -v` | 3 passed. |
+| `grep -RE "^(import\|from) (cmath\|numpy\|scipy\|sympy\|mpmath)" src/lloyd_v4/primitives/sweep_signature_probe.py` | No matches; grep exits 1 on no-match. |
+| `pytest tests/test_task010a_layer_manifest_machine_readable.py` | 1 passed. |
+| `pytest tests/test_task010b_*.py` | 5 passed. |
+| `pytest tests/test_task010c_*.py` | 4 passed. |
+| `pytest tests/` | Collection blocked by pre-existing untracked scratch tests importing `scratch.*` as a package (`ModuleNotFoundError: No module named 'scratch'`). No task035 failure was reached. |
+
+Regression-suite delta: task035 adds 37 focused tests. The exact full-suite delta could not be measured in this dirty workspace because unrelated untracked tests block collection before the tracked suite runs.
+
+## Limit Justification
+
+`CANCELLATION_GRADE_THRESHOLD = 0.70`: calibrated on the 16 GR photon-sphere cases. The three catastrophic naive cases emit grades `0.985172682307`, `0.989068229867`, and `0.971615210307`, all above the limit. The expected-clean naive cases remain below the limit: `F1_along_B` `0.558520201728`, `F2_along_r` `0.335704810951`, `F2_along_B` `0.594664325259`; stable nonzero power-law cases remain clean.
+
+`DROP_RATE_THRESHOLD = 0.30`: calibrated so the expected-clean GR drop cases remain accepted (`naive_F1_along_B` `0.125`, `naive_F2_along_B` `0.25`) while synthetic mixed finite/nonfinite evidence at `0.333333333333` emits `sweep_signature_high_drop_rate`. `naive_F2_along_tangent` has drop rate `0.375`, but cancellation precedence classifies it as cancellation-dominated first.
+
+`MIN_OBSERVATIONS_FOR_FIT = 3`: inherited from the composed `typed_log_log_slope` ordinary-least-squares minimum; synthetic two-cell evidence emits `sweep_signature_insufficient_data`.
+
+## Calibration Headline
+
+| Case | Expected | Observed | Match |
+|---|---|---|---|
+| `stable_F1_along_r` | `sweep_signature_clean` | `sweep_signature_clean` | yes |
+| `stable_F1_along_B` | `sweep_signature_clean` | `sweep_signature_clean` | yes |
+| `stable_F1_along_M` | `sweep_signature_clean` | `sweep_signature_clean` | yes |
+| `stable_F2_along_r` | `sweep_signature_clean` | `sweep_signature_clean` | yes |
+| `stable_F2_along_B` | `sweep_signature_clean` | `sweep_signature_clean` | yes |
+| `stable_F2_along_M` | `sweep_signature_degenerate_input` | `sweep_signature_degenerate_input` | yes |
+| `stable_F1_along_tangent` | `sweep_signature_clean` | `sweep_signature_clean` | yes |
+| `stable_F2_along_tangent` | `sweep_signature_clean` | `sweep_signature_clean` | yes |
+| `naive_F1_along_r` | `sweep_signature_cancellation_dominated` | `sweep_signature_cancellation_dominated` | yes |
+| `naive_F1_along_B` | `sweep_signature_clean` | `sweep_signature_clean` | yes |
+| `naive_F1_along_M` | `sweep_signature_clean` | `sweep_signature_clean` | yes |
+| `naive_F2_along_r` | `sweep_signature_clean` | `sweep_signature_clean` | yes |
+| `naive_F2_along_B` | `sweep_signature_clean` | `sweep_signature_clean` | yes |
+| `naive_F2_along_M` | `sweep_signature_degenerate_input` | `sweep_signature_degenerate_input` | yes |
+| `naive_F1_along_tangent` | `sweep_signature_cancellation_dominated` | `sweep_signature_cancellation_dominated` | yes |
+| `naive_F2_along_tangent` | `sweep_signature_cancellation_dominated` | `sweep_signature_cancellation_dominated` | yes |
+
+Partition: 11 clean, 3 cancellation-dominated, 2 degenerate-input. The four GR-unexercised cells (`sweep_signature_high_drop_rate`, `sweep_signature_insufficient_data`, `sweep_signature_nonfinite`, `sweep_signature_domain_refused`) are exercised by synthetic fixtures in `tests/test_task035_sweep_signature_probe.py`.
+
+## Borderline Case
+
+`naive_F1_along_B` emits `sweep_signature_clean` with `cancellation_grade = 0.558520201728` and `drop_rate = 0.125`. Both values sit below the declared limits (`0.70` and `0.30`). This is intentional per Design Principle 10: `sweep_signature_probe` is a low-sensitivity pre-screen that accepts sub-limit evidence and leaves finer instability inference to `directional_alpha_probe` or a downstream consumer.
+
+## Reconciliation
+
+Cross-layer manifest reconciliation passed:
+
+- `pytest tests/test_task010a_layer_manifest_machine_readable.py`: 1 passed.
+- `pytest tests/test_task010b_*.py`: 5 passed.
+- `pytest tests/test_task035_layer_manifest.py`: included in the 37-test focused task slice.
+
+Lineage passed:
+
+- `pytest tests/test_task010c_*.py`: 4 passed.
+- `pytest tests/test_task035_*.py tests/test_task010c_*.py`: 41 passed, exercising Task 035 runtime lineage in the same collector session.

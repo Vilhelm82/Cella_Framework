@@ -1,0 +1,33 @@
+{
+ "authority": "covariance note section 5 (DSI literal) + Will's Amendment-3 ruling (d9c5f7d) + Stage-C multiplicative characterization + PF-6 (Sornette, framing only)",
+ "campaign": "precision_flow",
+ "date_approved": "2026-06-11 (Will's GO under Brief Amendment 3; binding order: manifest first; every count names its unit)",
+ "determinism": "fixtures pinned; zero RNG; byte-stable; any FAIL stops the stage for Will.",
+ "environment_pins": {
+  "dependencies": "stdlib only",
+  "python": "3.14.4"
+ },
+ "fixtures_pinned": {
+  "breaking_family": "graph M: n1 = a - b, n2 = a + b, nc = n2 + 1/3 (THE BREAKER: additive constant, weight-mixed), n3 = n1*nc (descendant), n4 = n1*n2 (covariant CONTROL sibling - not a descendant of nc; must remain invariant, policing the containment).",
+  "covariant_family": "graph K: n1 = a - b (w1), n2 = a + b (w1), n3 = n1*n2 (w2), n4 = n3/7 (w2; divisive constant - covariant per Amendment 3, in-fixture witness). All weights integer; family covariant by the calculus.",
+  "operands": "the 35 route-battery pairs REUSED under existing pin a369d82eb46d1430; sweep leaves (a,b) -> (a*2^j, b*2^j), j = -4..+4 (exact dyadic scalings; significands unchanged)",
+  "q_sweep": "q = 53..75 inclusive (22 steps within each (j, q) cell); interacting semantics as Stage C"
+ },
+ "frozen": true,
+ "grading_formulas_derived_and_cited": {
+  "D-P1": "for every battery pair, every node of K, every j in -4..+4, every q in 53..75: t_n(j, q) == t_n(0, q), exact Fraction equality (all K phenomena rational). Unit of any violation count: node-(j,q)-cells.",
+  "D-P2": "noninvariant set N = { n in M : exists (j,q) with t_n(j,q) != t_n(0,q) } per battery pair; graded: N subset-of {nc, n3} (descendant-closure of the breaker, nc inclusive as the broken node itself per the brief's 'descendant-closure of the additive constant's node'); FAIL requirement: N nonempty on the family overall (D-P1 must actually fail there); equality N == {nc, n3} reported OBSERVATIONALLY per pair. Units: nodes (set members), pairs (battery cases)."
+ },
+ "homogeneity_calculus_derived_cited": {
+  "t_invariance": "covariant node with integer weight w: x -> 2^(w*j) x under the sweep; binade shifts by w*j, u_q scales by 2^(w*j), and RN_q(2^k y) = 2^k RN_q(y) (power-of-two equivariance, CITED: Stage-C multiplicative characterization + authority section 1) => e scales by 2^(w*j) => t = e/u INVARIANT. Derived; cited to Will's Amendment-3 ruling.",
+  "weights": "operand leaves: w = 1 under the global rescaling ops x 2^j; constants: fixed (do not scale). add/sub: requires w_a == w_b, yields w; mul: w_a + w_b; div: w_a - w_b; sqrt: w/2 (integer weight requires even w); multiplicative/divisive constants are weight-transparent (c*x keeps w_x) - WHY /3 IS COVARIANT (Amendment 3). An ADDITIVE constant (w = 0) summed with a w != 0 node is weight-mixed: not homogeneous - the breaker pins an absolute scale ('the mass term')."
+ },
+ "object": "Obs 2 resurrection: exact discrete scale invariance and its breaking (Brief Amendment 3)",
+ "observational_survey": "composed-account statistics across binades: per j, the root nodes' |t| histograms and account binades - the ln-2 log-periodicity survey (DSI framing, PF-6 Sornette cited, ZERO claims; on K the histograms' exact j-invariance is D-P1's shadow, reported not re-graded; on M the drift across j is the breaking's observational face). Units named per table.",
+ "performance_budget": "120 s wall",
+ "predictions_verbatim_from_brief_amendment_3": {
+  "D-P1": "on the dyadic-covariant family, every node's t is INVARIANT under the global x2 rescaling - exactly, every node, every j, every step. The covariant family is DEFINED by the homogeneity calculus, recorded derived-and-cited in the manifest; covariance <=> integer weight <=> phenomenon scales by 2^(w*j) => t invariant.",
+  "D-P2": "on the +1/3 (additive-constant) family, D-P1 fails - and the set of t-noninvariant nodes is CONTAINED IN the descendant-closure of the additive constant's node. (Containment graded exactly; whether it is equality is reported observationally.)"
+ },
+ "stage": "D"
+}

@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "completed": "2026-07-15T13:07:38+10:00",
+  "policy": "Deduplicate only exact SHA-256 identities. Delete a source origin only when it is untracked or ignored, independently preserved, and has no inbound path, digest, import, package, symlink, or hardlink consequence.",
+  "campaign_count": 39,
+  "campaign_artifact_count": 952,
+  "campaign_origin_count": 952,
+  "unique_campaign_digest_count": 952,
+  "within_campaign_duplicate_count": 0,
+  "cross_campaign_duplicate_count": 0,
+  "papers_library_overlap_count": 176,
+  "papers_library_overlap_disposition": "DEDUPLICATED_BY_RELATIVE_SYMLINK",
+  "campaign_only_unique_count": 776,
+  "source_deletion_candidate_count": 2,
+  "deleted_count": 0,
+  "deleted_bytes": 0,
+  "excluded_candidates": [
+    {
+      "artifact_id": "CMA-000533",
+      "repository": "Lloyd_Engine_V4",
+      "origin_path": "research/campaigns/pi_rotation/PI_STAGE0_PREDECL.md",
+      "sha256": "f96fc3689b2297f975feda016db8105615250f399d9df60597593dd4f6c29a35",
+      "bytes": 2788,
+      "reason": "Lloyd STATE/ARTIFACTS.json records the exact path; the predeclaration names pi_stage0.py; this is an active two-file campaign package rather than an isolated duplicate"
+    },
+    {
+      "artifact_id": "CMA-000534",
+      "repository": "Lloyd_Engine_V4",
+      "origin_path": "research/campaigns/pi_rotation/pi_stage0.py",
+      "sha256": "11a8f8f3cefb3652af2287e503e1c059c1fa635cd4e76a295d5613df244799e2",
+      "bytes": 5415,
+      "reason": "Lloyd STATE/ARTIFACTS.json and PI_STAGE0_PREDECL.md record the exact filename; the script names its predeclaration and is package-coupled"
+    }
+  ],
+  "result": "NO_SAFE_SOURCE_DELETIONS"
+}

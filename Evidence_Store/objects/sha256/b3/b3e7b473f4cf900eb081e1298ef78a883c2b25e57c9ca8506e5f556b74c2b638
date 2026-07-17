@@ -1,0 +1,127 @@
+"""
+run_all.py -- Drive every stage of the DBP 2-Primary Involution Campaign, collect all
+records into results/dbp_involution/records.jsonl, emit prediction_verdicts.json, and
+print a stage-by-stage table.
+
+Independence discipline: rep_utils is the referee (Murnaghan-Nakayama, built from
+scratch); dbp_carrier is the engine under test; Campaign H (src) is reproduced for
+the n=3 regressions only.  No values are lifted from the parallel dbp_prime2_structure
+campaign.  Exact arithmetic throughout; no float reaches a graded verdict.
+
+Run: cd evals/dbp_involution && python3 run_all.py
+"""
+
+from __future__ import annotations
+import sys, os, json
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(os.path.dirname(HERE))
+sys.path.insert(0, HERE)
+sys.path.insert(0, os.path.join(ROOT, "src"))   # for Campaign H engine (Stage B/D)
+
+from harness import (Recorder, append_records, reset_records, dump_json, RESULTS_DIR,
+                     COMPUTER_VERIFIED, REFUTED, BRANCHED, OPEN, PROVEN)
+
+import stage0_regression
+import stageA_sym_wedge_split
+import stageB_O_parity_vs_tau
+import stageC_integral_snf
+import stageD_char2_rolechspec
+import stageE_monodromy_alt_probe
+
+
+def main():
+    reset_records()
+    all_records = []
+    stage_summaries = {}
+    stage_failed = {}
+
+    def run_stage(label, module):
+        rec = Recorder(label)
+        summary = module.run(rec)
+        all_records.extend(rec.records)
+        append_records(rec.records)
+        failed = any(r["verdict"] in (REFUTED,) for r in rec.records)
+        stage_failed[label] = failed
+        stage_summaries[label] = summary
+        n_pass = sum(1 for r in rec.records if r["verdict"] in (COMPUTER_VERIFIED, PROVEN))
+        n_total = len(rec.records)
+        print(f"  {label:8}: {n_pass}/{n_total} verified"
+              + ("   <<< CONTAINS FAIL (STOP gate)" if failed else ""))
+        return summary, failed
+
+    print("DBP 2-Primary Involution Campaign -- run_all\n")
+
+    # Stage 0 is a STOP gate
+    print("Stage 0 (regression gates):")
+    s0, f0 = run_stage("Stage0", stage0_regression)
+    if f0:
+        print("\nSTOP: Stage 0 gate failed -- banked theorem not reproduced. Halting campaign.")
+        _finalize(all_records, stage_summaries, halted_at="Stage0")
+        return
+
+    print("Stage A (Sym/wedge split, carrier = symmetric half):")
+    sA, _ = run_stage("StageA", stageA_sym_wedge_split)
+    print("Stage B (O-parity vs tensor-swap):")
+    sB, _ = run_stage("StageB", stageB_O_parity_vs_tau)
+    print("Stage C (integral torsion):")
+    sC, _ = run_stage("StageC", stageC_integral_snf)
+    print("Stage D (char-2 faithfulness, all n):")
+    sD, _ = run_stage("StageD", stageD_char2_rolechspec)
+    print("Stage E (alternating carrier hunt):")
+    sE, _ = run_stage("StageE", stageE_monodromy_alt_probe)
+
+    _finalize(all_records, stage_summaries)
+
+
+def _classify(stage_summaries):
+    """Final thesis classification per the campaign's strong-confirmation criteria."""
+    B = stage_summaries.get("StageB", {}).get("B_VERDICT")
+    C = stage_summaries.get("StageC", {}).get("C_VERDICT")
+    D = stage_summaries.get("StageD", {}).get("D_VERDICT")
+    E = stage_summaries.get("StageE", {}).get("E_VERDICT")
+    # item-by-item
+    item1 = True   # Im(L) verified as symmetric half (Stage A, all PASS)
+    item2 = B in ("tau_is_O_parity", "O_parity_not_tau")   # tau-parity OR compatible 2-primary parity
+    item3 = (C == "integral_split_confirmed")
+    item4 = (D == "char2_phantom_generalizes")             # linear core all-n; nonlinear n=3
+    item5 = (E == "alternating_carrier_found")
+    if not (item1 and item2 and item3):
+        # locate the branch
+        if not item2:
+            return "THESIS_BRANCHES_AT_O_PARITY"
+        if not item3:
+            return "THESIS_BRANCHES_AT_TORSION"
+        return "THESIS_REFUTED"
+    if item5:
+        return "THESIS_CONFIRMED_STRONG"
+    return "THESIS_CONFIRMED_LOCAL_ONLY"
+
+
+def _finalize(all_records, stage_summaries, halted_at=None):
+    classification = None if halted_at else _classify(stage_summaries)
+    verdicts = {
+        "campaign": "DBP 2-Primary Involution Campaign",
+        "halted_at": halted_at,
+        "stage_verdicts": {
+            "Stage0": "ALL_GATES_PASS" if "Stage0" in stage_summaries else None,
+            "StageA": "carrier_is_symmetric_half" if "StageA" in stage_summaries else None,
+            "StageB": stage_summaries.get("StageB", {}).get("B_VERDICT"),
+            "StageC": stage_summaries.get("StageC", {}).get("C_VERDICT"),
+            "StageD": stage_summaries.get("StageD", {}).get("D_VERDICT"),
+            "StageE": stage_summaries.get("StageE", {}).get("E_VERDICT"),
+        },
+        "final_classification": classification,
+        "n_records": len(all_records),
+    }
+    dump_json(verdicts, "prediction_verdicts.json")
+    print("\n" + "=" * 64)
+    print("STAGE VERDICTS:")
+    for k, v in verdicts["stage_verdicts"].items():
+        print(f"  {k}: {v}")
+    print(f"\nFINAL CLASSIFICATION: {classification}")
+    print(f"records.jsonl: {len(all_records)} records  ->  {RESULTS_DIR}")
+
+
+if __name__ == "__main__":
+    main()

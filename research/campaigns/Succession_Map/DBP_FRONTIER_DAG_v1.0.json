@@ -1,0 +1,4035 @@
+{
+  "schema_version": 1,
+  "graph_id": "cella-dbp-frontier",
+  "revision": "sha256:ec80d944bc41f3f0999a280e04eecc77223590562753222d8bc150480f88b90c",
+  "direction": "from is the grammatical subject: from -relation-> to",
+  "authority_policy": "Cella Papers_Library is canonical; Encyclopedia audit/ is a pre-reorg scaffold (paths stale). claim_status reflects mathematical truth independent of lifecycle_status (document state). Node ids are namespaced 'DBP:'; resolve to canonical E/B ids via source_refs pointer->sha256 against audit/DAG_CROSSWALK.csv. Non-destructive: retire/supersede, never delete.",
+  "generated": "2026-07-15 DBP succession+frontier audit v1.0",
+  "reachability_legend": {
+    "EASY": "one mechanical step / merge of an already-proven result",
+    "MODERATE": "bounded new lemma from in-corpus building blocks",
+    "WALL": "genuinely open or refuted; needs new mathematics",
+    "INVARIANT": "protected restriction, must remain (not an artificial fence)"
+  },
+  "nodes": [
+    {
+      "id": "DBP:paper:I",
+      "label": "Paper I — Active Role-Jet Orbit Calculus",
+      "type": "paper",
+      "claim_status": "proved",
+      "lifecycle_status": "released",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "S3 birational role action, Orbit Theorem, 3-channel K_G split, gauge transport. Standalone canonical Paper I.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+          "sha256": "f045a92762f68cd1ddfc83e243e76eb4739d720f8097bc6736e29195c88d2d01"
+        }
+      ],
+      "external_ids": {
+        "PAP": [
+          "PAP-0189"
+        ]
+      },
+      "facets": {
+        "paper": "I",
+        "subject_family": "dbp_role_channel_and_orbit_geometry"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [
+          "role jet",
+          "orbit calculus",
+          "S3",
+          "channel decomposition"
+        ],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:paper:II-general",
+      "label": "Paper II — Parity-fixed inverse-channel normal forms (general)",
+      "type": "paper",
+      "claim_status": "proved",
+      "lifecycle_status": "released",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "General local curvature calculus: -m(m+5)/B parity law, generic collapse, corner vertex rule. KN paper cites this.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/01_completed_papers/local_curvature_and_black_hole_metrics/pfc_normal_forms.tex",
+          "sha256": "d2970682094a56bbc26849376c728fff26796ff8356125865c4cf9e35a789c27"
+        }
+      ],
+      "external_ids": {
+        "PAP": [
+          "PAP-0002"
+        ]
+      },
+      "facets": {
+        "paper": "II",
+        "subject_family": "local_curvature_and_black_hole_metrics"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [
+          "pfc",
+          "normal form",
+          "Newton polytope",
+          "corner rule"
+        ],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:paper:II-KN",
+      "label": "Paper II — Kerr-Newman role-divisor retrodiction",
+      "type": "paper",
+      "claim_status": "proved",
+      "lifecycle_status": "released",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "u=0 metric selection, rationality, reflection coeffs, strict-negative extremal via Sturm. Cites pfc.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/01_completed_papers/local_curvature_and_black_hole_metrics/lead7_kn_n3_dbp_metric.tex",
+          "sha256": "19ae97737591ab7039f4ba78701f5611bdf75d44851586afdaf4258f657c2739"
+        }
+      ],
+      "external_ids": {
+        "PAP": [
+          "PAP-0004"
+        ]
+      },
+      "facets": {
+        "paper": "II",
+        "subject_family": "local_curvature_and_black_hole_metrics"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [
+          "Kerr-Newman",
+          "extremal",
+          "retrodiction"
+        ],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:paper:III",
+      "label": "Paper III — DBP Curvature Periods of the DBP Quadric",
+      "type": "paper",
+      "claim_status": "proved",
+      "lifecycle_status": "released",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "Consolidated Paper III (hash matches corpus-cited canonical). Contains CCE-2 but NOT CCE-5/CCE-6: lambda unresolved (L1543), informal thin-tube (L1559). Mathematically incomplete though released; see gaps III1/III2/III3.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md",
+          "sha256": "1fc835086c30fbae414853f186a9cab9ac8c39e6cff1ed79b7364ebb5db6d5ae"
+        }
+      ],
+      "external_ids": {
+        "PAP": [
+          "PAP-0012"
+        ]
+      },
+      "facets": {
+        "paper": "III",
+        "subject_family": "dbp_periods_landen_and_elliptic_structure"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [
+          "Landen",
+          "period",
+          "corridor",
+          "native transfer"
+        ],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:paper:IV",
+      "label": "Paper IV — Galois Theory of the Horizon Cover",
+      "type": "paper",
+      "claim_status": "proved",
+      "lifecycle_status": "released",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "Splitting/temperature, S5 obstruction, Kummer modules, wreath closures, realization poset. Covers k=4,5. Publication package established (normalized incidence, branch ideal 8*e3(w), inertia catalogue).",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/galois_horizon_cover_v1_0.tex",
+          "sha256": "777daf7b60d337709587606f0974f8d4c8ff9c79473b609aadd54827223613ce"
+        }
+      ],
+      "external_ids": {
+        "PAP": [
+          "PAP-0005"
+        ]
+      },
+      "facets": {
+        "paper": "IV",
+        "subject_family": "galois_horizon_and_kummer_covers"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [
+          "Galois",
+          "Kummer",
+          "wreath",
+          "monodromy",
+          "Abel-Ruffini"
+        ],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:paper:V",
+      "label": "Paper V — Selected Quotient Groupoids (HELD capstone, not yet written)",
+      "type": "draft",
+      "claim_status": "conjectured",
+      "lifecycle_status": "proposed",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "Held capstone gated behind SQG-E/SQG-C/R3. Foundations proved; equivalence/closure/three-way coherence open; full unreduced carrier equivalence REFUTED.",
+      "source_refs": [],
+      "external_ids": {},
+      "facets": {
+        "paper": "V",
+        "subject_family": "cella_residue_and_coupling_theory"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [
+          "selected quotient groupoid",
+          "equivalence",
+          "closure",
+          "capstone"
+        ],
+        "context_priority": "high"
+      }
+    },
+    {
+      "id": "DBP:thm:theorem_8_1",
+      "label": "Invariant-Preservation Theorem 8.1 (abstract)",
+      "type": "theorem",
+      "claim_status": "proved",
+      "lifecycle_status": "released",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "Additive phi=phi_K+phi_sym; kappa=0/kappa>0 dichotomy. Independent companion of the Orbit Theorem.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/dbp_role_channel_and_orbit_geometry/theorem_8_1.tex",
+          "sha256": "1ee94b05c87c3e619fce60a6b14cf533467a4f77d180032749fefb98a91ee192"
+        }
+      ],
+      "external_ids": {
+        "PAP": [
+          "PAP-0231"
+        ]
+      },
+      "facets": {
+        "paper": "I",
+        "subject_family": "dbp_role_channel_and_orbit_geometry"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:proof:canonical_invariant_reduction",
+      "label": "Canonical Invariant Reduction Theorem",
+      "type": "proof",
+      "claim_status": "proved",
+      "lifecycle_status": "released",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "Channel exact sequence + SOLE proof of the Lorentzian single-edge corollary (nu, 2I-J sig (2,1)).",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/dbp_role_channel_and_orbit_geometry/Canonical_Invariant_Reduction_Theorem.md",
+          "sha256": "9175da628839fc129bf722710238bda83beb6570e4b0b288d4e02091319d022e"
+        }
+      ],
+      "external_ids": {
+        "PAP": [
+          "PAP-0198"
+        ]
+      },
+      "facets": {
+        "paper": "I",
+        "subject_family": "dbp_role_channel_and_orbit_geometry"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:proof:gauge_channel_transport",
+      "label": "Gauge Channel Transport Law",
+      "type": "proof",
+      "claim_status": "proved",
+      "lifecycle_status": "released",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "Keystone transport laws + SOLE full Lorentzian pinning derivation.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/dbp_role_channel_and_orbit_geometry/Gauge_Channel_Transport_Law.md",
+          "sha256": "d7e31cb5b9041214a739f3491bb73b4f7ce92ca39cabb2abfc9d9a00f8b4fb0b"
+        }
+      ],
+      "external_ids": {
+        "PAP": [
+          "PAP-0193"
+        ]
+      },
+      "facets": {
+        "paper": "I",
+        "subject_family": "dbp_role_channel_and_orbit_geometry"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:doc:curvature_role_reduction",
+      "label": "DBP Curvature Role Reduction (research map)",
+      "type": "report",
+      "claim_status": "demonstrated",
+      "lifecycle_status": "active",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "S∧S bilinear channel split (proven+measured); Gauss-Lovelock elevation; order-3+ holonomy tower [OPEN].",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/DBP_Curvature_Role_Reduction.md",
+          "sha256": "f37becff0e871335c93b88e3bd0b8462cec904fcd15ab3a3a0a95504e31929b8"
+        }
+      ],
+      "external_ids": {
+        "PAP": [
+          "PAP-0194"
+        ]
+      },
+      "facets": {
+        "paper": "I",
+        "subject_family": "dbp_role_channel_and_orbit_geometry"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:doc:theorem_candidates",
+      "label": "THEOREM_CANDIDATES (measured finite bound)",
+      "type": "report",
+      "claim_status": "demonstrated",
+      "lifecycle_status": "active",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "5298-class finite bound measured over a frozen atlas; general n=3 converse deferred though proved in-family (Theorem H).",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/dbp_role_channel_and_orbit_geometry/THEOREM_CANDIDATES.md",
+          "sha256": "0d8116b325328d4f06b68f156fc88976e427b4d268a1fad75a27d136567402f4"
+        }
+      ],
+      "external_ids": {
+        "PAP": [
+          "PAP-0397"
+        ]
+      },
+      "facets": {
+        "paper": "I",
+        "subject_family": "dbp_role_channel_and_orbit_geometry"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:thm:three_channel_kg_ext",
+      "label": "Three-Channel KG New-Math Extension (n>=4 grid)",
+      "type": "theorem",
+      "claim_status": "proved",
+      "lifecycle_status": "active",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "Ambient-n sigma2 triple + explicit n=4 Gauss-Kronecker channel grid, closed form.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/Three_Channel_KG_New_Math_Extension.md",
+          "sha256": "dcb8e175e3c43f9b708afda98e8cbf02c55f910e2d67e28b300edf676ab7c2fd"
+        }
+      ],
+      "external_ids": {
+        "PAP": [
+          "PAP-0197"
+        ]
+      },
+      "facets": {
+        "paper": "I",
+        "subject_family": "dbp_role_channel_and_orbit_geometry"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:thm:cce8_naturality",
+      "label": "CCE-8 finite-tower naturality",
+      "type": "theorem",
+      "claim_status": "machine-verified",
+      "lifecycle_status": "released",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "tau_{N,r}(w f)=w tau_{N,r}(f) all finite N>=r>=2, all words. 53 assertions passed.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/cella_residue_and_coupling_theory/CCE_8_FINITE_TOWER_NATURALITY_THEOREM_v1.0.md",
+          "sha256": "8986ca49bcd4554a29174923946571377096610d9cfccead80c10223dac3ab6e"
+        }
+      ],
+      "external_ids": {
+        "PAP": [
+          "PAP-0144"
+        ]
+      },
+      "facets": {
+        "paper": "I",
+        "subject_family": "cella_residue_and_coupling_theory"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:thm:local_curvature_complete",
+      "label": "Local Curvature Calculus COMPLETE (proof spine)",
+      "type": "theorem",
+      "claim_status": "proved",
+      "lifecycle_status": "released",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "Lamé engine, decomposition Thm 3.1, weighted initial-form 7.7, codim-k Cor 7.6. Superset of pfc.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/01_completed_papers/local_curvature_and_black_hole_metrics/LOCAL_CURVATURE_CALCULUS_COMPLETE_v1.0.md",
+          "sha256": "13aa19de2cc57f1bcd5cd87afadddf2ac66e9473d02eb65ddb24f75f3b368afb"
+        }
+      ],
+      "external_ids": {
+        "PAP": [
+          "PAP-0074"
+        ]
+      },
+      "facets": {
+        "paper": "II",
+        "subject_family": "local_curvature_and_black_hole_metrics"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:doc:local_curvature_companion",
+      "label": "Local Curvature Calculus COMPANION",
+      "type": "report",
+      "claim_status": "proved",
+      "lifecycle_status": "superseded",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "Reference sheet; merge-then-retire into COMPLETE; unique §9 dual-constants block belongs to the periods family.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/local_curvature_and_black_hole_metrics/LOCAL_CURVATURE_CALCULUS_COMPANION.md",
+          "sha256": "98e1ef60b61da207f414d3e2640f9be46f9e8da4ab53dc270283238648991f5e"
+        }
+      ],
+      "external_ids": {
+        "PAP": [
+          "PAP-0068"
+        ]
+      },
+      "facets": {
+        "paper": "II",
+        "subject_family": "local_curvature_and_black_hole_metrics"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:thm:weighted_jet",
+      "label": "LEAD7 variable-transverse weighted-jet theorem",
+      "type": "theorem",
+      "claim_status": "machine-verified",
+      "lifecycle_status": "released",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "Leading laws hold for arbitrary transverse functions on nondegenerate stratum P1/P0+R1/R0!=0.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/local_curvature_and_black_hole_metrics/LEAD7_VARIABLE_TRANSVERSE_WEIGHTED_JET_THEOREM_v1.0.md",
+          "sha256": "35d29dc1cf1dfea9a074bd3d7e7d6f17b2504f23a059afe7b90cbc856fc15a18"
+        }
+      ],
+      "external_ids": {
+        "PAP": [
+          "PAP-0161"
+        ]
+      },
+      "facets": {
+        "paper": "II",
+        "subject_family": "local_curvature_and_black_hole_metrics"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:thm:landen_v11",
+      "label": "DBP Landen-Trace Theorem COMPLETE v1.1",
+      "type": "theorem",
+      "claim_status": "machine-verified",
+      "lifecycle_status": "released",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "Atomic proof authority across the corpus; anti-translation sector corrected (MR-002); verifier re-runs every gate.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md",
+          "sha256": "95488710030c9b2be2b4f8ba010ecbd94356c0ef063a8b45a585613b0af8f73e"
+        }
+      ],
+      "external_ids": {
+        "PAP": [
+          "PAP-0021"
+        ]
+      },
+      "facets": {
+        "paper": "III",
+        "subject_family": "dbp_periods_landen_and_elliptic_structure"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:thm:cce5_calibration",
+      "label": "CCE-5 Absolute Calibration Theorem",
+      "type": "theorem",
+      "claim_status": "machine-verified",
+      "lifecycle_status": "released",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "lambda_up=B, lambda_down=-B, braid M↑/M↓, trace (a,b,c)=(1,0,0). 61 assertions passed. PROMOTED.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/dbp_role_channel_and_orbit_geometry/DBP_CCE5_ABSOLUTE_CALIBRATION_THEOREM_v1.0.md",
+          "sha256": "ee7ed03edc592ba230da38f5337fa8d462cc5700b4198815113a4e86af9f5da2"
+        }
+      ],
+      "external_ids": {
+        "PAP": [
+          "PAP-0143"
+        ]
+      },
+      "facets": {
+        "paper": "III",
+        "subject_family": "dbp_role_channel_and_orbit_geometry"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:thm:cce6_sweep",
+      "label": "CCE-6 Native Surface-Sweep Clearance Theorem",
+      "type": "theorem",
+      "claim_status": "machine-verified",
+      "lifecycle_status": "released",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "Disc_Xi(N)=-4(1-c)TD2, Res=c^2 D1^2, eps*=1/105186307200. 16+19 assertions passed.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/dbp_role_channel_and_orbit_geometry/DBP_NATIVE_SURFACE_SWEEP_CLEARANCE_THEOREM_v1.0.md",
+          "sha256": "8f59e6641a9d7d588d284c3570695b43ebf7f77abd395beef6af2c1c6e0a3ef7"
+        }
+      ],
+      "external_ids": {
+        "PAP": [
+          "PAP-0166"
+        ]
+      },
+      "facets": {
+        "paper": "III",
+        "subject_family": "dbp_role_channel_and_orbit_geometry"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:note:allk_monodromy",
+      "label": "ALL_K Monodromy Theorem Note",
+      "type": "theorem",
+      "claim_status": "proved",
+      "lifecycle_status": "active",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "Math is PROVED for all k>=3 (via GS proof) but the note still LABELS it a conjecture with GS as an 'open lemma'. Splice pending (gap IV1). Certified k=3..6 groups S4/S5/S16/S22.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+          "sha256": "b40eec6ba91fb60cf0daa0848791367a7a10a8ddc4f8d7b2d48fe30fad4216fb"
+        }
+      ],
+      "external_ids": {
+        "PAP": [
+          "PAP-0075"
+        ]
+      },
+      "facets": {
+        "paper": "IV",
+        "subject_family": "galois_horizon_and_kummer_covers"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:proof:gs_morse",
+      "label": "GS Generic Morse Lemma Proof",
+      "type": "proof",
+      "claim_status": "proved",
+      "lifecycle_status": "released",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "Proves (GS) for all k>=3; ships a §9 splice script; discharges ALL_K's open lemma.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/GS_GENERIC_MORSE_LEMMA_PROOF_2026-07-10.md",
+          "sha256": "0045400c29629a52ded6f528a372b5cc942638cfc5cfbe1b54890713511a72b9"
+        }
+      ],
+      "external_ids": {
+        "PAP": [
+          "PAP-0076"
+        ]
+      },
+      "facets": {
+        "paper": "IV",
+        "subject_family": "galois_horizon_and_kummer_covers"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:proof:r9_static",
+      "label": "R9 Static Closure Opening Derivation",
+      "type": "proof",
+      "claim_status": "proved",
+      "lifecycle_status": "released",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "rank-10 valuation matrix -> full conjugate Kummer-wreath closure C_2^2≀S_5.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/R9_STATIC_CLOSURE_OPENING_DERIVATION_2026-07-10.md",
+          "sha256": "4cb446c7994aa8d09f522abbdb00c1e3ef803727997b45dcf9a217c379af2a9c"
+        }
+      ],
+      "external_ids": {
+        "PAP": [
+          "PAP-0046"
+        ]
+      },
+      "facets": {
+        "paper": "IV",
+        "subject_family": "galois_horizon_and_kummer_covers"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:doc:rotating_three_channel",
+      "label": "Rotating Three-Channel Wreath Closure",
+      "type": "proof",
+      "claim_status": "proved",
+      "lifecycle_status": "released",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "C_2^3≀S_5 rotating closure.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/ROTATING_THREE_CHANNEL_WREATH_CLOSURE_2026-07-10.md",
+          "sha256": "0a9d68ff15899a7143f49bd6e53fe46506a5fb92fe119372193b5465aa51d7e0"
+        }
+      ],
+      "external_ids": {
+        "PAP": [
+          "PAP-0047"
+        ]
+      },
+      "facets": {
+        "paper": "IV",
+        "subject_family": "galois_horizon_and_kummer_covers"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:thm:kummer_wreath_lift",
+      "label": "Kummer Module Wreath Lift Theorem",
+      "type": "theorem",
+      "claim_status": "proved",
+      "lifecycle_status": "released",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "General (G,d) wreath lift; §11 states the all-k interface.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/KUMMER_MODULE_WREATH_LIFT_THEOREM_2026-07-10.md",
+          "sha256": "ee9ef7e7a64ad7e2737094e1a3097e326fb33bc8ccff4490a9189f6b5448e293"
+        }
+      ],
+      "external_ids": {
+        "PAP": [
+          "PAP-0043"
+        ]
+      },
+      "facets": {
+        "paper": "IV",
+        "subject_family": "galois_horizon_and_kummer_covers"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:map:kellipse_v16",
+      "label": "GALOIS_K_ELLIPSE Research Map v1_6 (true head)",
+      "type": "report",
+      "claim_status": "demonstrated",
+      "lifecycle_status": "active",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "Program dashboard, verified newest on disk (supersedes v1.1/v1_3/v1_4). Rows R8/R9/R10/R11 present solved results as open.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/GALOIS_K_ELLIPSE_RESEARCH_MAP_v1_6.md",
+          "sha256": "7e27e7ef8707b74ba2a3f7018009f6460e62ad9d1731d87387c0dbe6bf6643ca"
+        }
+      ],
+      "external_ids": {
+        "PAP": [
+          "PAP-0067"
+        ]
+      },
+      "facets": {
+        "paper": "IV",
+        "subject_family": "galois_horizon_and_kummer_covers"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:paper:self_glue",
+      "label": "Self-Glue Monodromy (imprimitive wreath)",
+      "type": "paper",
+      "claim_status": "proved",
+      "lifecycle_status": "released",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "Independent companion paper; n-stage iterated wreath proven only symbolically for n=2,3.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/self_glue_monodromy.tex",
+          "sha256": "27efeeffa4a836161a248610c73c4d7b22ee5bb4482a691db875c0be3acf5a26"
+        }
+      ],
+      "external_ids": {
+        "PAP": [
+          "PAP-0190"
+        ]
+      },
+      "facets": {
+        "paper": "IV",
+        "subject_family": "galois_horizon_and_kummer_covers"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:thm:sqg_foundation",
+      "label": "Selected Quotient Groupoids Foundation",
+      "type": "theorem",
+      "claim_status": "proved",
+      "lifecycle_status": "released",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "SQG category Thm 3.1, flat scalar-ext functor 4.1; presentation-equivalence is a NOTION only, not proved.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/SELECTED_QUOTIENT_GROUPOIDS_FOUNDATION_v1.0.md",
+          "sha256": "40461c1fbb177e0d173f0b11a5d12224dc7ce894bb7fd43c944c8fa75cdaf0d9"
+        }
+      ],
+      "external_ids": {
+        "PAP": [
+          "PAP-0010"
+        ]
+      },
+      "facets": {
+        "paper": "V",
+        "subject_family": "dbp_role_channel_and_orbit_geometry"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:thm:r3_acfold",
+      "label": "R3 AC-Fold Independent Realization Theorem",
+      "type": "theorem",
+      "claim_status": "proved",
+      "lifecycle_status": "released",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "Independent AC fold; skeleton functor Z->C_2 full+ess-surj but NOT faithful (kernel 2Z); does not itself prove three-way coherence.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/cella_residue_and_coupling_theory/R3_AC_FOLD_INDEPENDENT_REALIZATION_THEOREM_v1.0.md",
+          "sha256": "0042fce16d4a4ce5b9de681addad28068f4270b04e0073d2a8213f490f14f953"
+        }
+      ],
+      "external_ids": {
+        "PAP": [
+          "PAP-0159"
+        ]
+      },
+      "facets": {
+        "paper": "V",
+        "subject_family": "cella_residue_and_coupling_theory"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:doc:ensemble_architecture",
+      "label": "DBP Paper Ensemble Architecture",
+      "type": "report",
+      "claim_status": "demonstrated",
+      "lifecycle_status": "active",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "Architecture/reference (NOT a theorem certificate). SOLE holder of the Paper V gate spec (Thm E/C) and the §7.3 elliptic (a,b,c) trace-path gap. Orphan risk if retired.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/DBP_PAPER_ENSEMBLE_ARCHITECTURE_v1.0.md",
+          "sha256": "414f1dd525415b2116b1ad2dc253bc9ca8f2b896902f177c9ba41472327cea70"
+        }
+      ],
+      "external_ids": {
+        "PAP": [
+          "PAP-0006"
+        ]
+      },
+      "facets": {
+        "paper": "V",
+        "subject_family": "dbp_role_channel_and_orbit_geometry"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:campaign:cce",
+      "label": "Cella Continuation Engine (CCE-1..8 + post-8)",
+      "type": "campaign",
+      "claim_status": null,
+      "lifecycle_status": "active",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "Continuation-engine campaign; owns CCE-2..8 stage theorems + the AR/gap ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/00_campaign_authority/CCE_4_8_MASTER_GAP_LEDGER_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "external_ids": {},
+      "facets": {
+        "paper": "III/IV/V"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [
+          "continuation engine",
+          "corridor",
+          "native period",
+          "monodromy"
+        ],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:ledger:AR",
+      "label": "Artificial-Restriction Live Reconciliation (AR-01..26, PI-01..12)",
+      "type": "report",
+      "claim_status": "demonstrated",
+      "lifecycle_status": "active",
+      "reachability": null,
+      "tracked": false,
+      "layer": "succession",
+      "summary": "The repo's own artificial-restriction ledger + protected invariants. Doctrine: a release floor / refusal / nonclaim is NOT a ban on investigation.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/00_campaign_authority/DBP_CCE_ARTIFICIAL_RESTRICTION_LIVE_RECONCILIATION_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "AR-00"
+        ]
+      },
+      "facets": {
+        "paper": "III/IV/V"
+      },
+      "visual_hints": {},
+      "extensions": {},
+      "retrieval": {
+        "key_terms": [
+          "artificial restriction",
+          "expansion",
+          "promotion"
+        ],
+        "context_priority": "high"
+      }
+    },
+    {
+      "id": "DBP:gate:editorial",
+      "label": "AR-20 authorized editorial workflow (paper-insertion gate)",
+      "type": "gap",
+      "claim_status": null,
+      "lifecycle_status": "active",
+      "reachability": "INVARIANT",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "Proved results are promoted into papers only through the user-authorized editorial workflow. Gate node for all EASY paper insertions.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/00_campaign_authority/DBP_CCE_ARTIFICIAL_RESTRICTION_LIVE_RECONCILIATION_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "AR-20"
+        ]
+      },
+      "facets": {
+        "paper": "all",
+        "reachability_class": "INVARIANT"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "tracked_ref": "AR-20"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:gap:I1",
+      "label": "Frozen-atlas RoleChSpec converse (general n=3)",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "proposed",
+      "reachability": "EASY",
+      "tracked": false,
+      "layer": "frontier",
+      "summary": "Candidate F calls the n=3 converse 'measured/open' though Theorem H already proves it symbolically on the full regular locus. Two campaigns never reconciled.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/dbp_role_channel_and_orbit_geometry/THEOREM_CANDIDATES.md#L21",
+          "sha256": "0d8116b325328d4f06b68f156fc88976e427b4d268a1fad75a27d136567402f4"
+        }
+      ],
+      "external_ids": {},
+      "facets": {
+        "paper": "I",
+        "subject_family": "dbp_role_channel_and_orbit_geometry",
+        "reachability_class": "EASY"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "next_object": "Merge Theorem H/Lemma H4 biconditional RoleChSpec_g(H1)=RoleChSpec_g(H2) <=> O_g(H2-H1)=0 (regular Q-locus, char!=2) into Candidate F; leave only n>=4 open.",
+        "tracked_ref": "NEW"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "high"
+      }
+    },
+    {
+      "id": "DBP:gap:I2",
+      "label": "All-finite-order active-role induction (written out)",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "proposed",
+      "reachability": "EASY",
+      "tracked": false,
+      "layer": "frontier",
+      "summary": "App.A stops at 'third-order reach proceeds identically'; CCE-8 already proves the recurrence for every finite order.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex#L450",
+          "sha256": "f045a92762f68cd1ddfc83e243e76eb4739d720f8097bc6736e29195c88d2d01"
+        }
+      ],
+      "external_ids": {},
+      "facets": {
+        "paper": "I",
+        "subject_family": "dbp_role_channel_and_orbit_geometry",
+        "reachability_class": "EASY"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "next_object": "Write the order-r Faà-di-Bruno / Lagrange-inversion induction closing T_sigma(j^r f) in Q[jet,a^-1]; cite CCE-8 as the verified instance.",
+        "tracked_ref": "NEW"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "high"
+      }
+    },
+    {
+      "id": "DBP:gap:I3",
+      "label": "n>=4 / ambient-n channel grid into canonical paper",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "proposed",
+      "reachability": "EASY",
+      "tracked": false,
+      "layer": "frontier",
+      "summary": "Canonical paper restricts to n=3/order-2; the n=4 grid is already written closed-form.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/Three_Channel_KG_New_Math_Extension.md#L384",
+          "sha256": "dcb8e175e3c43f9b708afda98e8cbf02c55f910e2d67e28b300edf676ab7c2fd"
+        }
+      ],
+      "external_ids": {},
+      "facets": {
+        "paper": "I",
+        "subject_family": "dbp_role_channel_and_orbit_geometry",
+        "reachability_class": "EASY"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "next_object": "Insert the ambient-n sigma2 channel triple + explicit n=4 K_{p,q} grid; drop the 'n=3' clause.",
+        "tracked_ref": "NEW"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "high"
+      }
+    },
+    {
+      "id": "DBP:gap:I4",
+      "label": "Gauss-Lovelock channel tower for general k",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "proposed",
+      "reachability": "MODERATE",
+      "tracked": false,
+      "layer": "frontier",
+      "summary": "Verified only k=1,2 by hand + sigma4 measured; split is bilinear so induction on k is bounded.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/DBP_Curvature_Role_Reduction.md#L339",
+          "sha256": "f37becff0e871335c93b88e3bd0b8462cec904fcd15ab3a3a0a95504e31929b8"
+        }
+      ],
+      "external_ids": {},
+      "facets": {
+        "paper": "I",
+        "subject_family": "dbp_role_channel_and_orbit_geometry",
+        "reachability_class": "MODERATE"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "next_object": "Prove Lambda_{k,j;p,q} channelisation by expanding the fixed Lovelock contraction of the bilinear S∧S split.",
+        "tracked_ref": "NEW"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:gap:I5",
+      "label": "Tensor-level active-recharting covariance",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "proposed",
+      "reachability": "MODERATE",
+      "tracked": false,
+      "layer": "frontier",
+      "summary": "Covariance proven only at scalar level; both the tensor split and gauge transport exist to compose. Shared wall with Paper II gap II4.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/DBP_Curvature_Role_Reduction.md#L314",
+          "sha256": "f37becff0e871335c93b88e3bd0b8462cec904fcd15ab3a3a0a95504e31929b8"
+        }
+      ],
+      "external_ids": {},
+      "facets": {
+        "paper": "I",
+        "subject_family": "dbp_role_channel_and_orbit_geometry",
+        "reachability_class": "MODERATE"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "next_object": "Prove the (0,4) channel tensor transforms covariantly under active S3 recharting (off-diagonal replay of the curvature identity).",
+        "tracked_ref": "NEW"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:gap:I6",
+      "label": "Order-3+ role-jet / holonomy channel split",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "proposed",
+      "reachability": "MODERATE",
+      "tracked": false,
+      "layer": "frontier",
+      "summary": "Generating function already gives every order x channel; only the HolSpec_r variant is genuinely new.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/DBP_Curvature_Role_Reduction.md#L294",
+          "sha256": "f37becff0e871335c93b88e3bd0b8462cec904fcd15ab3a3a0a95504e31929b8"
+        }
+      ],
+      "external_ids": {},
+      "facets": {
+        "paper": "I",
+        "subject_family": "dbp_role_channel_and_orbit_geometry",
+        "reachability_class": "MODERATE"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "next_object": "Read order-3 channels off the fingerprint chi(z;t,u); isolate the one new object = cubic third-fundamental-form holonomy channel.",
+        "tracked_ref": "NEW"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:gap:II1",
+      "label": "Codimension >=3 corner vertex/cancellation identity",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "proposed",
+      "reachability": "EASY",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "Cor 7.6 already gives the vertex set for codim-k mechanically; only per-face cancellation classification unrun.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/01_completed_papers/local_curvature_and_black_hole_metrics/pfc_normal_forms.tex#L173",
+          "sha256": "d2970682094a56bbc26849376c728fff26796ff8356125865c4cf9e35a789c27"
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "gap-ledger(PREREG_PFC4)"
+        ]
+      },
+      "facets": {
+        "paper": "II",
+        "subject_family": "local_curvature_and_black_hole_metrics",
+        "reachability_class": "EASY"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "next_object": "Extend pfc_test3_vertex_rule.py from (s,x,y) to (s,x,y,z): extract polar vertices C_a(P)/(2h_a) and cancellation loci; same closed-identity method, one extra coordinate.",
+        "tracked_ref": "gap-ledger(PREREG_PFC4)"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "high"
+      }
+    },
+    {
+      "id": "DBP:gap:II2",
+      "label": "Front-face (mixed) coefficient classification",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "proposed",
+      "reachability": "MODERATE",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/local_curvature_and_black_hole_metrics/PREREG_PFC4_corner.md#L67",
+          "sha256": "f653c5bf30360a35f51bcbc928fe2d51f5f1e11eeb35e8931d1e63410f5677ee"
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "gap-ledger(PREREG_PFC4)"
+        ]
+      },
+      "facets": {
+        "paper": "II",
+        "subject_family": "local_curvature_and_black_hole_metrics",
+        "reachability_class": "MODERATE"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "next_object": "Compute in_w(R) front polynomial as a function of the projective ratio rho + the two face germs, generalizing KN's mixed term M (k=2 instance), via Thm 7.7.",
+        "tracked_ref": "gap-ledger(PREREG_PFC4)"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:gap:II3",
+      "label": "Curvature-Valence crown experiment B1",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "proposed",
+      "reachability": "EASY",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "Fully chartered fork (sector -28=2*(-14) vs balanced -84); never run under GO though the rig exists.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/04_drafts_and_incomplete_papers/local_curvature_and_black_hole_metrics/CV_HANDOFF_2026-07-09.md#L48",
+          "sha256": "5120e496466e6cb1b7af069c0160cdfb3f24caef833a0e7114e4ec7423688fe3"
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "gap-ledger(CV)"
+        ]
+      },
+      "facets": {
+        "paper": "II",
+        "subject_family": "local_curvature_and_black_hole_metrics",
+        "reachability_class": "EASY"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "next_object": "Commit the B1 PREDICT log, run the spectator-fan-wall battery measuring the wedge-edge leading coefficient across a=1, decide P-A/P-B/P-C. Rig already reproduces the KN wedge.",
+        "tracked_ref": "gap-ledger(CV)"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "high"
+      }
+    },
+    {
+      "id": "DBP:gap:II4",
+      "label": "Off-diagonal role-rechart covariance (curvature replay)",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "proposed",
+      "reachability": "MODERATE",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "Diagonal laws closed on nondegenerate stratum; off-diagonal tensor pullback still required. Shared wall with Paper I gap I5.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/local_curvature_and_black_hole_metrics/LEAD7_VARIABLE_TRANSVERSE_WEIGHTED_JET_THEOREM_v1.0.md#L96",
+          "sha256": "35d29dc1cf1dfea9a074bd3d7e7d6f17b2504f23a059afe7b90cbc856fc15a18"
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "gap-ledger"
+        ]
+      },
+      "facets": {
+        "paper": "II",
+        "subject_family": "local_curvature_and_black_hole_metrics",
+        "reachability_class": "MODERATE"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "next_object": "Extend the Laurent-jet ring to a non-diagonal germ; add off-diagonal Christoffel/Ricci cross-terms; re-run the valuation replay; check whether cross-terms alter the x^-3/x^-4 coefficients.",
+        "tracked_ref": "gap-ledger"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:gap:II5",
+      "label": "Second-surface realization of the local-type calculus",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "proposed",
+      "reachability": "EASY",
+      "tracked": false,
+      "layer": "frontier",
+      "summary": "Paper asserts portability to 'any diagonal inverse-channel thermodynamic surface'; unrealized on any second surface. A second n=3 surface -> MODERATE.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/01_completed_papers/local_curvature_and_black_hole_metrics/lead7_kn_n3_dbp_metric.tex#L716",
+          "sha256": "19ae97737591ab7039f4ba78701f5611bdf75d44851586afdaf4258f657c2739"
+        }
+      ],
+      "external_ids": {},
+      "facets": {
+        "paper": "II",
+        "subject_family": "local_curvature_and_black_hole_metrics",
+        "reachability_class": "EASY"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "next_object": "Run the portable local-type table on a second surface, e.g. Reissner-Nordström (n=2, unique assembly, no selection problem); report divisor orders.",
+        "tracked_ref": "NEW"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "high"
+      }
+    },
+    {
+      "id": "DBP:gap:III1",
+      "label": "Insert calibrated lambda into Paper III §7F",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "proposed",
+      "reachability": "EASY",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "CCE-5 PROMOTED (machine-verified); pure merge of a certified result into the paper.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md#L1543",
+          "sha256": "1fc835086c30fbae414853f186a9cab9ac8c39e6cff1ed79b7364ebb5db6d5ae"
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "AR-13"
+        ]
+      },
+      "facets": {
+        "paper": "III",
+        "subject_family": "dbp_periods_landen_and_elliptic_structure",
+        "reachability_class": "EASY"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "next_object": "Replace the 'independent unresolved corrections' (L1543) and symbolic lambda in 7F.10 with proved lambda_up=B, lambda_down=-B and trace integers (1,0,0)/(1,0,1); cite the CCE-5 gate.",
+        "tracked_ref": "AR-13"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "high"
+      }
+    },
+    {
+      "id": "DBP:gap:III2",
+      "label": "De-stale Paper III 'Not claimed' block",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "proposed",
+      "reachability": "EASY",
+      "tracked": false,
+      "layer": "frontier",
+      "summary": "Live paper under-claims a proved result; AR-13 tracks the promotion but not that the nonclaim text is stale.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md#L1965",
+          "sha256": "1fc835086c30fbae414853f186a9cab9ac8c39e6cff1ed79b7364ebb5db6d5ae"
+        }
+      ],
+      "external_ids": {},
+      "facets": {
+        "paper": "III",
+        "subject_family": "dbp_periods_landen_and_elliptic_structure",
+        "reachability_class": "EASY"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "next_object": "Delete the two nonclaims 'exact A/B coefficients comparing Gamma_+/Gamma_-' and 'complete A/B monodromy matrices on the full relative basis' (both proved by CCE-5); move to a 'now proved (CCE-5)' note.",
+        "tracked_ref": "NEW"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "high"
+      }
+    },
+    {
+      "id": "DBP:gap:III3",
+      "label": "Insert CCE-6 clearance lemma into Paper III §7F",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "proposed",
+      "reachability": "EASY",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md#L1559",
+          "sha256": "1fc835086c30fbae414853f186a9cab9ac8c39e6cff1ed79b7364ebb5db6d5ae"
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "AR-06"
+        ]
+      },
+      "facets": {
+        "paper": "III",
+        "subject_family": "dbp_periods_landen_and_elliptic_structure",
+        "reachability_class": "EASY"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "next_object": "Replace the 'Choose thin tubular neighbourhoods' placeholder (L1559) with the clearance lemma + quantitative eps bound; relabel 7F.B to avoid colliding with the CCE-2 Lemma 7F.A at L1529.",
+        "tracked_ref": "AR-06"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "high"
+      }
+    },
+    {
+      "id": "DBP:gap:III4",
+      "label": "Expose route reversal/composition in public CCE-2 API",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "proposed",
+      "reachability": "EASY",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/03_cce2_corridors/CCE_2_GAP_LEDGER_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "AR-03"
+        ]
+      },
+      "facets": {
+        "paper": "III",
+        "reachability_class": "EASY"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "next_object": "Wire compose_routes/reverse_route to the already-proven CCE-5 word algebra + digest composition, with certificate replay; keep the guard against admitting new geometric routes.",
+        "tracked_ref": "AR-03"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "high"
+      }
+    },
+    {
+      "id": "DBP:gap:V1",
+      "label": "SQG Prop 4.2 citation refresh",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "proposed",
+      "reachability": "EASY",
+      "tracked": false,
+      "layer": "frontier",
+      "summary": "",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/SELECTED_QUOTIENT_GROUPOIDS_FOUNDATION_v1.0.md#L329",
+          "sha256": "40461c1fbb177e0d173f0b11a5d12224dc7ce894bb7fd43c944c8fa75cdaf0d9"
+        }
+      ],
+      "external_ids": {},
+      "facets": {
+        "paper": "V",
+        "subject_family": "cella_residue_and_coupling_theory",
+        "reachability_class": "EASY"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "next_object": "After III1, cite the calibrated transport instead of 'unresolved corrections' in the SQG minimal-ring table.",
+        "tracked_ref": "NEW"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "high"
+      }
+    },
+    {
+      "id": "DBP:gap:III5",
+      "label": "Full regular-plane relative-transport groupoid",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "proposed",
+      "reachability": "MODERATE",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "Local germs at 0,1/2,1,inf PROMOTED; full-plane groupoid still open.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/00_campaign_authority/CCE_SCOPE_EXPANSION_INVESTIGATION_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "AR-14"
+        ]
+      },
+      "facets": {
+        "paper": "III",
+        "reachability_class": "MODERATE"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "next_object": "Construct the m=1 meromorphic (logarithmic) gauge + integral marking + cleared loops (work-queue #3).",
+        "tracked_ref": "AR-14"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:gap:III6",
+      "label": "Smith form / integral intersection of the native inclusion",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "proposed",
+      "reachability": "MODERATE",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "Whole-surface surjectivity REFUTED (rank 4 in 12); the saturation sub-parts remain reachable.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/07_cce6_surface/CCE_6_GAP_LEDGER_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "AR-07"
+        ]
+      },
+      "facets": {
+        "paper": "III",
+        "reachability_class": "MODERATE"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "next_object": "Produce the certified 12x4 integral inclusion matrix OR 4 dual coordinate functionals deciding meridian 2-divisibility (work-queue #4).",
+        "tracked_ref": "AR-07"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:gap:V2",
+      "label": "Two DBP-arm reduction functors into common skeleton",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "proposed",
+      "reachability": "MODERATE",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "Full unreduced carrier equivalence REFUTED; explicit reduced-skeleton functors remain a valid target.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/10_post8_universalization/POST_8_OUTCOME_GAP_LEDGER_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "AR-23"
+        ]
+      },
+      "facets": {
+        "paper": "V",
+        "reachability_class": "MODERATE"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "next_object": "Construct the two DBP reduction functors on a common object domain + componentwise full/faithful/ess-surj checks (work-queue #6).",
+        "tracked_ref": "AR-23"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:gap:V3",
+      "label": "Three-way coherence of the reduced realizations",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "proposed",
+      "reachability": "MODERATE",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/10_post8_universalization/POST_8_OUTCOME_GAP_LEDGER_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "AR-25"
+        ]
+      },
+      "facets": {
+        "paper": "V",
+        "reachability_class": "MODERATE"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "next_object": "After V2, prove the componentwise coherence diagrams among the three realizations.",
+        "tracked_ref": "AR-25"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:gap:V4",
+      "label": "SQG closure under quotient/base-change/fibre-product",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "proposed",
+      "reachability": "MODERATE",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/SELECTED_QUOTIENT_GROUPOIDS_FOUNDATION_v1.0.md#L419",
+          "sha256": "40461c1fbb177e0d173f0b11a5d12224dc7ce894bb7fd43c944c8fa75cdaf0d9"
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "AR-24"
+        ]
+      },
+      "facets": {
+        "paper": "V",
+        "subject_family": "cella_residue_and_coupling_theory",
+        "reachability_class": "MODERATE"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "next_object": "Prove the four named closure defs: normal-symmetry subgroupoid quotient; admissible base change w/ section preservation; fibre-product transversality; functorial inertia/wall/valuation labels.",
+        "tracked_ref": "AR-24"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:gap:III7",
+      "label": "Generic DAG analytic evaluator semantics",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "proposed",
+      "reachability": "MODERATE",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/05_cce4_evaluator/CCE_4_GAP_LEDGER_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "AR-08"
+        ]
+      },
+      "facets": {
+        "paper": "III",
+        "reachability_class": "MODERATE"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "next_object": "Build compositional complex-disk enclosures per opcode + SQRT/DIV branch/zero witnesses + program-derived Cauchy majorant + tail-schedule theorem (work-queue #2).",
+        "tracked_ref": "AR-08"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:gap:IV7",
+      "label": "Generic complex braid / wall transport (Paper IV)",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "proposed",
+      "reachability": "MODERATE",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "Real static walls typed; the eliminant-discriminant shortcut is REFUTED (P8-19). Was WALL, now MODERATE with the incidence import.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/08_cce7_horizon/CCE_7_GAP_LEDGER_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "AR-11"
+        ]
+      },
+      "facets": {
+        "paper": "IV",
+        "reachability_class": "MODERATE"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "next_object": "Produce the factorized normalized-incidence ramification ideal + local-inertia ledger, then exact meridian paths (work-queue #5).",
+        "tracked_ref": "AR-11"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:gap:IV1",
+      "label": "Splice GS proof into the ALL_K note (mark Thm D PROVED)",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "proposed",
+      "reachability": "EASY",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "GS proof ships its own splice script; a PROVEN all-k theorem sits behind a stale 'conjecture' label. Unblocks IV2/IV3/IV5.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md#L32",
+          "sha256": "b40eec6ba91fb60cf0daa0848791367a7a10a8ddc4f8d7b2d48fe30fad4216fb"
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "GS-§9"
+        ]
+      },
+      "facets": {
+        "paper": "IV",
+        "subject_family": "galois_horizon_and_kummer_covers",
+        "reachability_class": "EASY"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "next_object": "Execute the GS §9 splice: replace ALL_K §7, mark Theorem D PROVED for all k>=3, delete the 'conjecture / single remaining obstruction' wording.",
+        "tracked_ref": "GS-§9"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "high"
+      }
+    },
+    {
+      "id": "DBP:gap:IV2",
+      "label": "Fold all-k base monodromy into the released paper",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "proposed",
+      "reachability": "MODERATE",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "Paper covers 4 charges only; its own open-problem (i) is now answered by the proven all-k base monodromy.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/galois_horizon_cover_v1_0.tex#L860",
+          "sha256": "777daf7b60d337709587606f0974f8d4c8ff9c79473b609aadd54827223613ce"
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "paper-OP(i)"
+        ]
+      },
+      "facets": {
+        "paper": "IV",
+        "subject_family": "galois_horizon_and_kummer_covers",
+        "reachability_class": "MODERATE"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "next_object": "Add an all-k base section (or assemble the planned Galois-arm capstone) folding Thm A/B/C/D + GS into the manuscript.",
+        "tracked_ref": "paper-OP(i)"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:gap:IV3",
+      "label": "Instantiate all-k Kummer/crown wreath closure",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "proposed",
+      "reachability": "MODERATE",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/KUMMER_MODULE_WREATH_LIFT_THEOREM_2026-07-10.md#L437",
+          "sha256": "ee9ef7e7a64ad7e2737094e1a3097e326fb33bc8ccff4490a9189f6b5448e293"
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "Kummer-§11"
+        ]
+      },
+      "facets": {
+        "paper": "IV",
+        "subject_family": "galois_horizon_and_kummer_covers",
+        "reachability_class": "MODERATE"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "next_object": "Instantiate the general-(G,d) wreath-lift at G=S_{delta_k}, s=2 static channels; re-derive the entropy-sum square class via e_k symmetric functions; verify parity rows -> C_2^2≀S_{delta_k}.",
+        "tracked_ref": "Kummer-§11"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:gap:IV4",
+      "label": "Flip stale R9 closure OPEN tags to RESOLVED(k=4)",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "proposed",
+      "reachability": "EASY",
+      "tracked": false,
+      "layer": "frontier",
+      "summary": "R9 marked OPEN in 3+ docs though static and rotating closures are proven.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ROTATING_KUMMER_RANK_JUMP_LEMMA_REPORT_2026-07-10.md#L502",
+          "sha256": "d81def7f00486ad0ae4a3718f643a13c333feec996f7ffde925e9dbea370d9db"
+        }
+      ],
+      "external_ids": {},
+      "facets": {
+        "paper": "IV",
+        "subject_family": "galois_horizon_and_kummer_covers",
+        "reachability_class": "EASY"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "next_object": "Update the R9 status tags to RESOLVED(k=4), cross-citing the static (C_2^2≀S_5) and rotating (C_2^3≀S_5) closure derivations.",
+        "tracked_ref": "NEW"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "high"
+      }
+    },
+    {
+      "id": "DBP:gap:IV5",
+      "label": "De-stale the v1_6 research map register (R8/R9/R10/R11)",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "proposed",
+      "reachability": "EASY",
+      "tracked": false,
+      "layer": "frontier",
+      "summary": "Four rows present solved results as the headline open questions.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/GALOIS_K_ELLIPSE_RESEARCH_MAP_v1_6.md#L74",
+          "sha256": "7e27e7ef8707b74ba2a3f7018009f6460e62ad9d1731d87387c0dbe6bf6643ca"
+        }
+      ],
+      "external_ids": {},
+      "facets": {
+        "paper": "IV",
+        "subject_family": "galois_horizon_and_kummer_covers",
+        "reachability_class": "EASY"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "next_object": "Promote R8->Established, R9->Resolved(k=4), R10 k=5-group->Established, R11->Established; update the live-fronts list.",
+        "tracked_ref": "NEW"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "high"
+      }
+    },
+    {
+      "id": "DBP:gap:IV6",
+      "label": "self_glue n-fold iterated wreath (all n)",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "proposed",
+      "reachability": "MODERATE",
+      "tracked": false,
+      "layer": "frontier",
+      "summary": "Only degrees proven; the wreath law is proven per-layer, only the iterated assembly is unworked.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/self_glue_monodromy.tex#L444",
+          "sha256": "27efeeffa4a836161a248610c73c4d7b22ee5bb4482a691db875c0be3acf5a26"
+        }
+      ],
+      "external_ids": {},
+      "facets": {
+        "paper": "IV",
+        "subject_family": "galois_horizon_and_kummer_covers",
+        "reachability_class": "MODERATE"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "next_object": "Prove the n-fold iterated wreath S_{m_D}≀...≀S_{m_D} by induction on seams using the §4 Lemma A/B already in hand.",
+        "tracked_ref": "NEW"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:wall:I_ambient",
+      "label": "Ambient background curvature does not channelise (KC8)",
+      "type": "gap",
+      "claim_status": "refuted",
+      "lifecycle_status": "active",
+      "reachability": "WALL",
+      "tracked": false,
+      "layer": "frontier",
+      "summary": "R̄ is nonlinear in the metric; channelisation needs bilinearity. Proven wall / validity boundary.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex#L313",
+          "sha256": "f045a92762f68cd1ddfc83e243e76eb4739d720f8097bc6736e29195c88d2d01"
+        }
+      ],
+      "external_ids": {},
+      "facets": {
+        "paper": "I",
+        "subject_family": "dbp_role_channel_and_orbit_geometry",
+        "reachability_class": "WALL"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "tracked_ref": "NEW"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:wall:I_n4",
+      "label": "RoleChSpec survival/injectivity for n>=4",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "active",
+      "reachability": "WALL",
+      "tracked": false,
+      "layer": "frontier",
+      "summary": "n=3 proof is a rank-3 linear recovery; n>=4 has many channels and no established rank argument.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/dbp_role_channel_and_orbit_geometry/THEOREM_CANDIDATES.md#L25",
+          "sha256": "0d8116b325328d4f06b68f156fc88976e427b4d268a1fad75a27d136567402f4"
+        }
+      ],
+      "external_ids": {},
+      "facets": {
+        "paper": "I",
+        "subject_family": "dbp_role_channel_and_orbit_geometry",
+        "reachability_class": "WALL"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "tracked_ref": "NEW"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:wall:I_mixed",
+      "label": "General-n mixed-bidegree grid interior",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "active",
+      "reachability": "WALL",
+      "tracked": false,
+      "layer": "frontier",
+      "summary": "Only three edges mapped; the mixed interior is unmapped new representation theory.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/DBP_Curvature_Role_Reduction.md#L295",
+          "sha256": "f37becff0e871335c93b88e3bd0b8462cec904fcd15ab3a3a0a95504e31929b8"
+        }
+      ],
+      "external_ids": {},
+      "facets": {
+        "paper": "I",
+        "subject_family": "dbp_role_channel_and_orbit_geometry",
+        "reachability_class": "WALL"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "tracked_ref": "NEW"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:wall:I_singular",
+      "label": "Singular-strata classification theorem",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "active",
+      "reachability": "WALL",
+      "tracked": false,
+      "layer": "frontier",
+      "summary": "Chart-failure -> characteristic channel/orbit behaviour is a real open theorem, not a replay.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex#L406",
+          "sha256": "f045a92762f68cd1ddfc83e243e76eb4739d720f8097bc6736e29195c88d2d01"
+        }
+      ],
+      "external_ids": {},
+      "facets": {
+        "paper": "I",
+        "subject_family": "dbp_role_channel_and_orbit_geometry",
+        "reachability_class": "WALL"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "tracked_ref": "NEW"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:wall:II_front",
+      "label": "Mixed front coefficient not recoverable from the exponent matrix alone",
+      "type": "gap",
+      "claim_status": "refuted",
+      "lifecycle_status": "active",
+      "reachability": "WALL",
+      "tracked": false,
+      "layer": "frontier",
+      "summary": "Proven structural fact: needs the full front metric. Correctness boundary that gap II2 works within.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/01_completed_papers/local_curvature_and_black_hole_metrics/LOCAL_CURVATURE_CALCULUS_COMPLETE_v1.0.md#L972",
+          "sha256": "13aa19de2cc57f1bcd5cd87afadddf2ac66e9473d02eb65ddb24f75f3b368afb"
+        }
+      ],
+      "external_ids": {},
+      "facets": {
+        "paper": "II",
+        "subject_family": "local_curvature_and_black_hole_metrics",
+        "reachability_class": "WALL"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "tracked_ref": "NEW"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:wall:II_tower",
+      "label": "Finite-jet tower has no uniform depth after arbitrary cancellation",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "active",
+      "reachability": "WALL",
+      "tracked": false,
+      "layer": "frontier",
+      "summary": "Genuinely open; the tower may die at level 2. Not lifted by any in-hand method.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/01_completed_papers/local_curvature_and_black_hole_metrics/LOCAL_CURVATURE_CALCULUS_COMPLETE_v1.0.md#L1137",
+          "sha256": "13aa19de2cc57f1bcd5cd87afadddf2ac66e9473d02eb65ddb24f75f3b368afb"
+        }
+      ],
+      "external_ids": {},
+      "facets": {
+        "paper": "II",
+        "subject_family": "local_curvature_and_black_hole_metrics",
+        "reachability_class": "WALL"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "tracked_ref": "NEW"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:wall:III_wholesurface",
+      "label": "Native swept image is NOT the whole surface lattice",
+      "type": "gap",
+      "claim_status": "refuted",
+      "lifecycle_status": "active",
+      "reachability": "WALL",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "REFUTED: rank H2(X,Y;Z)=12 vs native image rank<=4. Protects PI-09.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/07_cce6_surface/CCE_6_GAP_LEDGER_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "P8-11"
+        ]
+      },
+      "facets": {
+        "paper": "III",
+        "subject_family": "dbp_periods_landen_and_elliptic_structure",
+        "reachability_class": "WALL"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "tracked_ref": "P8-11"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:wall:V_faithful",
+      "label": "AC-fold reduction functor is NOT faithful",
+      "type": "gap",
+      "claim_status": "refuted",
+      "lifecycle_status": "active",
+      "reachability": "WALL",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "REFUTED: kernel 2Z (even winding lost). Keep explicit; do not fake equivalence.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/cella_residue_and_coupling_theory/R3_AC_FOLD_INDEPENDENT_REALIZATION_THEOREM_v1.0.md#L74",
+          "sha256": "0042fce16d4a4ce5b9de681addad28068f4270b04e0073d2a8213f490f14f953"
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "P8-06"
+        ]
+      },
+      "facets": {
+        "paper": "V",
+        "subject_family": "cella_residue_and_coupling_theory",
+        "reachability_class": "WALL"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "tracked_ref": "P8-06"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:wall:V_carrier",
+      "label": "Unreduced full-carrier equivalence (role/horizon/elliptic)",
+      "type": "gap",
+      "claim_status": "refuted",
+      "lifecycle_status": "active",
+      "reachability": "WALL",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "REFUTED by incompatible fibre type/dimension/isotropy/monodromy. Positive theorem must use explicit reductions.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/10_post8_universalization/POST_8_OUTCOME_GAP_LEDGER_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "P8-16"
+        ]
+      },
+      "facets": {
+        "paper": "V",
+        "subject_family": "cella_residue_and_coupling_theory",
+        "reachability_class": "WALL"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "tracked_ref": "P8-16"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:wall:IV_eliminant",
+      "label": "Eliminant discriminant is NOT a complete ramification oracle",
+      "type": "gap",
+      "claim_status": "refuted",
+      "lifecycle_status": "active",
+      "reachability": "WALL",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "REFUTED: projected sheet crossings != ramification.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/08_cce7_horizon/CCE_7_GAP_LEDGER_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "P8-19"
+        ]
+      },
+      "facets": {
+        "paper": "IV",
+        "subject_family": "galois_horizon_and_kummer_covers",
+        "reachability_class": "WALL"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "tracked_ref": "P8-19"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:wall:III_transcendence",
+      "label": "Scalar relation between the two special values / 2nd real dual region / transcendence",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "active",
+      "reachability": "WALL",
+      "tracked": false,
+      "layer": "frontier",
+      "summary": "Genuinely open: needs new relative-homology path comparison. Paper III 'Not claimed'.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md#L1968",
+          "sha256": "1fc835086c30fbae414853f186a9cab9ac8c39e6cff1ed79b7364ebb5db6d5ae"
+        }
+      ],
+      "external_ids": {},
+      "facets": {
+        "paper": "III",
+        "subject_family": "dbp_periods_landen_and_elliptic_structure",
+        "reachability_class": "WALL"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "tracked_ref": "NEW"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:wall:III_landen_pd",
+      "label": "Primary<->dual Landen transformation",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "active",
+      "reachability": "WALL",
+      "tracked": false,
+      "layer": "frontier",
+      "summary": "I_primary(l)=alpha(sqrt2) I_dual(1-l)+corr — targeted but unproven; new elliptic transformation content.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/LANDEN_TYPE_THEOREM_SOURCE.md",
+          "sha256": "f391a26e62088dc1a1a98ade7fef06b82fe8ff9d280d59ed696c32ec4f2899b5"
+        }
+      ],
+      "external_ids": {},
+      "facets": {
+        "paper": "III",
+        "subject_family": "dbp_periods_landen_and_elliptic_structure",
+        "reachability_class": "WALL"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "tracked_ref": "NEW"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:wall:IV_rotselect",
+      "label": "Rotating physical selection / indefinite spectral geometry (R13b)",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "active",
+      "reachability": "WALL",
+      "tracked": false,
+      "layer": "frontier",
+      "summary": "Indefinite pencil, no off-the-shelf tool; distinct from the (done) algebraic rotating rank-jump.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/GALOIS_K_ELLIPSE_RESEARCH_MAP_v1_6.md#L57",
+          "sha256": "7e27e7ef8707b74ba2a3f7018009f6460e62ad9d1731d87387c0dbe6bf6643ca"
+        }
+      ],
+      "external_ids": {},
+      "facets": {
+        "paper": "IV",
+        "subject_family": "galois_horizon_and_kummer_covers",
+        "reachability_class": "WALL"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "tracked_ref": "NEW"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:wall:IV_collision",
+      "label": "Higher-codimension collision-stratum realization/transversality",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "active",
+      "reachability": "WALL",
+      "tracked": false,
+      "layer": "frontier",
+      "summary": "Explicitly NOT mechanical from the inertia theorem; a remaining geometric task.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/WREATH_COVER_INERTIA_BRANCH_STRATIFICATION_v1_1_2026-07-11.md#L387",
+          "sha256": "5f3d1c65a6b07274611a386ee000cfb0cb411ead946cdd38dce600baa12ae9d0"
+        }
+      ],
+      "external_ids": {},
+      "facets": {
+        "paper": "IV",
+        "subject_family": "galois_horizon_and_kummer_covers",
+        "reachability_class": "WALL"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "tracked_ref": "NEW"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:wall:IV_nonsep",
+      "label": "self_glue non-separable cross-terms",
+      "type": "gap",
+      "claim_status": "open",
+      "lifecycle_status": "active",
+      "reachability": "WALL",
+      "tracked": false,
+      "layer": "frontier",
+      "summary": "Breaks the clean radical tower; a genuine hypothesis, not a convenience.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/self_glue_monodromy.tex#L521",
+          "sha256": "27efeeffa4a836161a248610c73c4d7b22ee5bb4482a691db875c0be3acf5a26"
+        }
+      ],
+      "external_ids": {},
+      "facets": {
+        "paper": "IV",
+        "subject_family": "galois_horizon_and_kummer_covers",
+        "reachability_class": "WALL"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "tracked_ref": "NEW"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:inv:PI-01",
+      "label": "PI-01: No theorem claim before an exact proof or authoritative source exists",
+      "type": "gap",
+      "claim_status": null,
+      "lifecycle_status": "active",
+      "reachability": "INVARIANT",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "Justified restriction — keep; not an artificial fence.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/agent_tasks/DBP_CCE_HANDOFF_SCOPE_REVISION_AND_ARTIFICIAL_RESTRICTION_LEDGER_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "PI-01"
+        ]
+      },
+      "facets": {
+        "paper": "all",
+        "reachability_class": "INVARIANT"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "tracked_ref": "PI-01"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:inv:PI-02",
+      "label": "PI-02: Typed runtime refusal until a capability is promoted",
+      "type": "gap",
+      "claim_status": null,
+      "lifecycle_status": "active",
+      "reachability": "INVARIANT",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "Justified restriction — keep; not an artificial fence.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/agent_tasks/DBP_CCE_HANDOFF_SCOPE_REVISION_AND_ARTIFICIAL_RESTRICTION_LEDGER_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "PI-02"
+        ]
+      },
+      "facets": {
+        "paper": "all",
+        "reachability_class": "INVARIANT"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "tracked_ref": "PI-02"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:inv:PI-03",
+      "label": "PI-03: Exact arithmetic and certified bounds where the theorem is exact",
+      "type": "gap",
+      "claim_status": "proved",
+      "lifecycle_status": "active",
+      "reachability": "INVARIANT",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "Justified restriction — keep; not an artificial fence.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/agent_tasks/DBP_CCE_HANDOFF_SCOPE_REVISION_AND_ARTIFICIAL_RESTRICTION_LEDGER_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "PI-03"
+        ]
+      },
+      "facets": {
+        "paper": "all",
+        "reachability_class": "INVARIANT"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "tracked_ref": "PI-03"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:inv:PI-04",
+      "label": "PI-04: Source/schema/implementation/request/plan/certificate binding",
+      "type": "gap",
+      "claim_status": null,
+      "lifecycle_status": "active",
+      "reachability": "INVARIANT",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "Justified restriction — keep; not an artificial fence.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/agent_tasks/DBP_CCE_HANDOFF_SCOPE_REVISION_AND_ARTIFICIAL_RESTRICTION_LEDGER_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "PI-04"
+        ]
+      },
+      "facets": {
+        "paper": "all",
+        "reachability_class": "INVARIANT"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "tracked_ref": "PI-04"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:inv:PI-05",
+      "label": "PI-05: Explicit sheet/orientation/route-word/isotopy/boundary/ring typing",
+      "type": "gap",
+      "claim_status": null,
+      "lifecycle_status": "active",
+      "reachability": "INVARIANT",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "Justified restriction — keep; not an artificial fence.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/agent_tasks/DBP_CCE_HANDOFF_SCOPE_REVISION_AND_ARTIFICIAL_RESTRICTION_LEDGER_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "PI-05"
+        ]
+      },
+      "facets": {
+        "paper": "all",
+        "reachability_class": "INVARIANT"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "tracked_ref": "PI-05"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:inv:PI-06",
+      "label": "PI-06: No silent zero for unknown compact corrections",
+      "type": "gap",
+      "claim_status": "proved",
+      "lifecycle_status": "active",
+      "reachability": "INVARIANT",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "Justified restriction — keep; not an artificial fence.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/agent_tasks/DBP_CCE_HANDOFF_SCOPE_REVISION_AND_ARTIFICIAL_RESTRICTION_LEDGER_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "PI-06"
+        ]
+      },
+      "facets": {
+        "paper": "all",
+        "reachability_class": "INVARIANT"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "tracked_ref": "PI-06"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:inv:PI-07",
+      "label": "PI-07: No absolute scalar from quotient-only data",
+      "type": "gap",
+      "claim_status": "proved",
+      "lifecycle_status": "active",
+      "reachability": "INVARIANT",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "Justified restriction — keep; not an artificial fence.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/agent_tasks/DBP_CCE_HANDOFF_SCOPE_REVISION_AND_ARTIFICIAL_RESTRICTION_LEDGER_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "PI-07"
+        ]
+      },
+      "facets": {
+        "paper": "all",
+        "reachability_class": "INVARIANT"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "tracked_ref": "PI-07"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:inv:PI-08",
+      "label": "PI-08: Proved i->integral-class boundary obstruction at the stated lattices",
+      "type": "gap",
+      "claim_status": "proved",
+      "lifecycle_status": "active",
+      "reachability": "INVARIANT",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "Justified restriction — keep; not an artificial fence.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/agent_tasks/DBP_CCE_HANDOFF_SCOPE_REVISION_AND_ARTIFICIAL_RESTRICTION_LEDGER_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "PI-08"
+        ]
+      },
+      "facets": {
+        "paper": "all",
+        "reachability_class": "INVARIANT"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "tracked_ref": "PI-08"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:inv:PI-09",
+      "label": "PI-09: No full-surface claim from native-image injectivity or (1/4)R_Z",
+      "type": "gap",
+      "claim_status": "proved",
+      "lifecycle_status": "active",
+      "reachability": "INVARIANT",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "Justified restriction — keep; not an artificial fence.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/agent_tasks/DBP_CCE_HANDOFF_SCOPE_REVISION_AND_ARTIFICIAL_RESTRICTION_LEDGER_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "PI-09"
+        ]
+      },
+      "facets": {
+        "paper": "all",
+        "reachability_class": "INVARIANT"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "tracked_ref": "PI-09"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:inv:PI-10",
+      "label": "PI-10: Preserve legacy certificate locks and unrelated dirty-worktree changes",
+      "type": "gap",
+      "claim_status": null,
+      "lifecycle_status": "active",
+      "reachability": "INVARIANT",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "Justified restriction — keep; not an artificial fence.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/agent_tasks/DBP_CCE_HANDOFF_SCOPE_REVISION_AND_ARTIFICIAL_RESTRICTION_LEDGER_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "PI-10"
+        ]
+      },
+      "facets": {
+        "paper": "all",
+        "reachability_class": "INVARIANT"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "tracked_ref": "PI-10"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:inv:PI-11",
+      "label": "PI-11: No production use of stale scout code",
+      "type": "gap",
+      "claim_status": null,
+      "lifecycle_status": "active",
+      "reachability": "INVARIANT",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "Justified restriction — keep; not an artificial fence.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/agent_tasks/DBP_CCE_HANDOFF_SCOPE_REVISION_AND_ARTIFICIAL_RESTRICTION_LEDGER_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "PI-11"
+        ]
+      },
+      "facets": {
+        "paper": "all",
+        "reachability_class": "INVARIANT"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "tracked_ref": "PI-11"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    },
+    {
+      "id": "DBP:inv:PI-12",
+      "label": "PI-12: Independent third realization must satisfy a real independence criterion",
+      "type": "gap",
+      "claim_status": null,
+      "lifecycle_status": "active",
+      "reachability": "INVARIANT",
+      "tracked": true,
+      "layer": "frontier",
+      "summary": "Justified restriction — keep; not an artificial fence.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/agent_tasks/DBP_CCE_HANDOFF_SCOPE_REVISION_AND_ARTIFICIAL_RESTRICTION_LEDGER_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "external_ids": {
+        "cce_ledger": [
+          "PI-12"
+        ]
+      },
+      "facets": {
+        "paper": "all",
+        "reachability_class": "INVARIANT"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "tracked_ref": "PI-12"
+      },
+      "retrieval": {
+        "key_terms": [],
+        "context_priority": "normal"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e::DBP:thm:theorem_8_1::supplements::DBP:paper:I",
+      "from": "DBP:thm:theorem_8_1",
+      "to": "DBP:paper:I",
+      "relation": "supplements",
+      "label": "DBP:thm:theorem_8_1 supplements DBP:paper:I",
+      "basis": "Companion; additive phi_K+phi_sym not in orbit_calculus. DBP succession audit v1.0; disposition + proof-location analysis.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/dbp_role_channel_and_orbit_geometry/theorem_8_1.tex",
+          "sha256": "1ee94b05c87c3e619fce60a6b14cf533467a4f77d180032749fefb98a91ee192"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:proof:canonical_invariant_reduction::supplements::DBP:paper:I",
+      "from": "DBP:proof:canonical_invariant_reduction",
+      "to": "DBP:paper:I",
+      "relation": "supplements",
+      "label": "DBP:proof:canonical_invariant_reduction supplements DBP:paper:I",
+      "basis": "Sole Lorentzian single-edge corollary. DBP succession audit v1.0; disposition + proof-location analysis.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/dbp_role_channel_and_orbit_geometry/Canonical_Invariant_Reduction_Theorem.md",
+          "sha256": "9175da628839fc129bf722710238bda83beb6570e4b0b288d4e02091319d022e"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:proof:gauge_channel_transport::supplements::DBP:paper:I",
+      "from": "DBP:proof:gauge_channel_transport",
+      "to": "DBP:paper:I",
+      "relation": "supplements",
+      "label": "DBP:proof:gauge_channel_transport supplements DBP:paper:I",
+      "basis": "Sole Lorentzian pinning derivation. DBP succession audit v1.0; disposition + proof-location analysis.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/dbp_role_channel_and_orbit_geometry/Gauge_Channel_Transport_Law.md",
+          "sha256": "d7e31cb5b9041214a739f3491bb73b4f7ce92ca39cabb2abfc9d9a00f8b4fb0b"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:doc:curvature_role_reduction::supplements::DBP:paper:I",
+      "from": "DBP:doc:curvature_role_reduction",
+      "to": "DBP:paper:I",
+      "relation": "supplements",
+      "label": "DBP:doc:curvature_role_reduction supplements DBP:paper:I",
+      "basis": "Research-map extension. DBP succession audit v1.0; disposition + proof-location analysis.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/DBP_Curvature_Role_Reduction.md",
+          "sha256": "f37becff0e871335c93b88e3bd0b8462cec904fcd15ab3a3a0a95504e31929b8"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:thm:three_channel_kg_ext::supplements::DBP:paper:I",
+      "from": "DBP:thm:three_channel_kg_ext",
+      "to": "DBP:paper:I",
+      "relation": "supplements",
+      "label": "DBP:thm:three_channel_kg_ext supplements DBP:paper:I",
+      "basis": "n>=4 channel grid. DBP succession audit v1.0; disposition + proof-location analysis.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/Three_Channel_KG_New_Math_Extension.md",
+          "sha256": "dcb8e175e3c43f9b708afda98e8cbf02c55f910e2d67e28b300edf676ab7c2fd"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:thm:cce8_naturality::supplements::DBP:paper:I",
+      "from": "DBP:thm:cce8_naturality",
+      "to": "DBP:paper:I",
+      "relation": "supplements",
+      "label": "DBP:thm:cce8_naturality supplements DBP:paper:I",
+      "basis": "Strengthens the S3 action across the finite truncation tower. DBP succession audit v1.0; disposition + proof-location analysis.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/cella_residue_and_coupling_theory/CCE_8_FINITE_TOWER_NATURALITY_THEOREM_v1.0.md",
+          "sha256": "8986ca49bcd4554a29174923946571377096610d9cfccead80c10223dac3ab6e"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:thm:cce8_naturality::derived_from_campaign::DBP:campaign:cce",
+      "from": "DBP:thm:cce8_naturality",
+      "to": "DBP:campaign:cce",
+      "relation": "derived_from_campaign",
+      "label": "DBP:thm:cce8_naturality derived_from_campaign DBP:campaign:cce",
+      "basis": "CCE-8 stage. DBP succession audit v1.0; disposition + proof-location analysis.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/cella_residue_and_coupling_theory/CCE_8_FINITE_TOWER_NATURALITY_THEOREM_v1.0.md",
+          "sha256": "8986ca49bcd4554a29174923946571377096610d9cfccead80c10223dac3ab6e"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:doc:local_curvature_companion::supplements::DBP:thm:local_curvature_complete",
+      "from": "DBP:doc:local_curvature_companion",
+      "to": "DBP:thm:local_curvature_complete",
+      "relation": "supplements",
+      "label": "DBP:doc:local_curvature_companion supplements DBP:thm:local_curvature_complete",
+      "basis": "Reference sheet subsumed by COMPLETE. DBP succession audit v1.0; disposition + proof-location analysis.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/local_curvature_and_black_hole_metrics/LOCAL_CURVATURE_CALCULUS_COMPANION.md",
+          "sha256": "98e1ef60b61da207f414d3e2640f9be46f9e8da4ab53dc270283238648991f5e"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:thm:local_curvature_complete::supplements::DBP:paper:II-general",
+      "from": "DBP:thm:local_curvature_complete",
+      "to": "DBP:paper:II-general",
+      "relation": "supplements",
+      "label": "DBP:thm:local_curvature_complete supplements DBP:paper:II-general",
+      "basis": "Full proof spine; pfc is its compiled extract. DBP succession audit v1.0; disposition + proof-location analysis.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/01_completed_papers/local_curvature_and_black_hole_metrics/LOCAL_CURVATURE_CALCULUS_COMPLETE_v1.0.md",
+          "sha256": "13aa19de2cc57f1bcd5cd87afadddf2ac66e9473d02eb65ddb24f75f3b368afb"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:paper:II-KN::depends_on::DBP:paper:II-general",
+      "from": "DBP:paper:II-KN",
+      "to": "DBP:paper:II-general",
+      "relation": "depends_on",
+      "label": "DBP:paper:II-KN depends_on DBP:paper:II-general",
+      "basis": "KN paper cites pfc note by name. DBP succession audit v1.0; disposition + proof-location analysis.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/01_completed_papers/local_curvature_and_black_hole_metrics/lead7_kn_n3_dbp_metric.tex",
+          "sha256": "19ae97737591ab7039f4ba78701f5611bdf75d44851586afdaf4258f657c2739"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:thm:weighted_jet::supplements::DBP:paper:II-general",
+      "from": "DBP:thm:weighted_jet",
+      "to": "DBP:paper:II-general",
+      "relation": "supplements",
+      "label": "DBP:thm:weighted_jet supplements DBP:paper:II-general",
+      "basis": "Newest strengthening. DBP succession audit v1.0; disposition + proof-location analysis.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/local_curvature_and_black_hole_metrics/LEAD7_VARIABLE_TRANSVERSE_WEIGHTED_JET_THEOREM_v1.0.md",
+          "sha256": "35d29dc1cf1dfea9a074bd3d7e7d6f17b2504f23a059afe7b90cbc856fc15a18"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:thm:landen_v11::supplements::DBP:paper:III",
+      "from": "DBP:thm:landen_v11",
+      "to": "DBP:paper:III",
+      "relation": "supplements",
+      "label": "DBP:thm:landen_v11 supplements DBP:paper:III",
+      "basis": "Reproduced in Paper III §1-8 but retained as atomic proof authority. DBP succession audit v1.0; disposition + proof-location analysis.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md",
+          "sha256": "95488710030c9b2be2b4f8ba010ecbd94356c0ef063a8b45a585613b0af8f73e"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:thm:cce5_calibration::derived_from_campaign::DBP:campaign:cce",
+      "from": "DBP:thm:cce5_calibration",
+      "to": "DBP:campaign:cce",
+      "relation": "derived_from_campaign",
+      "label": "DBP:thm:cce5_calibration derived_from_campaign DBP:campaign:cce",
+      "basis": "CCE-5 stage. DBP succession audit v1.0; disposition + proof-location analysis.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/dbp_role_channel_and_orbit_geometry/DBP_CCE5_ABSOLUTE_CALIBRATION_THEOREM_v1.0.md",
+          "sha256": "ee7ed03edc592ba230da38f5337fa8d462cc5700b4198815113a4e86af9f5da2"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:thm:cce6_sweep::derived_from_campaign::DBP:campaign:cce",
+      "from": "DBP:thm:cce6_sweep",
+      "to": "DBP:campaign:cce",
+      "relation": "derived_from_campaign",
+      "label": "DBP:thm:cce6_sweep derived_from_campaign DBP:campaign:cce",
+      "basis": "CCE-6 stage. DBP succession audit v1.0; disposition + proof-location analysis.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/dbp_role_channel_and_orbit_geometry/DBP_NATIVE_SURFACE_SWEEP_CLEARANCE_THEOREM_v1.0.md",
+          "sha256": "8f59e6641a9d7d588d284c3570695b43ebf7f77abd395beef6af2c1c6e0a3ef7"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:note:allk_monodromy::supplements::DBP:paper:IV",
+      "from": "DBP:note:allk_monodromy",
+      "to": "DBP:paper:IV",
+      "relation": "supplements",
+      "label": "DBP:note:allk_monodromy supplements DBP:paper:IV",
+      "basis": "All-k generalization beyond the k=4,5 paper. DBP succession audit v1.0; disposition + proof-location analysis.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+          "sha256": "b40eec6ba91fb60cf0daa0848791367a7a10a8ddc4f8d7b2d48fe30fad4216fb"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:proof:gs_morse::proves::DBP:note:allk_monodromy",
+      "from": "DBP:proof:gs_morse",
+      "to": "DBP:note:allk_monodromy",
+      "relation": "proves",
+      "label": "DBP:proof:gs_morse proves DBP:note:allk_monodromy",
+      "basis": "GS proof discharges the note's open (GS) lemma. DBP succession audit v1.0; disposition + proof-location analysis.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/GS_GENERIC_MORSE_LEMMA_PROOF_2026-07-10.md",
+          "sha256": "0045400c29629a52ded6f528a372b5cc942638cfc5cfbe1b54890713511a72b9"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:proof:r9_static::supplements::DBP:paper:IV",
+      "from": "DBP:proof:r9_static",
+      "to": "DBP:paper:IV",
+      "relation": "supplements",
+      "label": "DBP:proof:r9_static supplements DBP:paper:IV",
+      "basis": "Static wreath-closure proof. DBP succession audit v1.0; disposition + proof-location analysis.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/R9_STATIC_CLOSURE_OPENING_DERIVATION_2026-07-10.md",
+          "sha256": "4cb446c7994aa8d09f522abbdb00c1e3ef803727997b45dcf9a217c379af2a9c"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:doc:rotating_three_channel::supplements::DBP:paper:IV",
+      "from": "DBP:doc:rotating_three_channel",
+      "to": "DBP:paper:IV",
+      "relation": "supplements",
+      "label": "DBP:doc:rotating_three_channel supplements DBP:paper:IV",
+      "basis": "Rotating wreath-closure proof. DBP succession audit v1.0; disposition + proof-location analysis.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/ROTATING_THREE_CHANNEL_WREATH_CLOSURE_2026-07-10.md",
+          "sha256": "0a9d68ff15899a7143f49bd6e53fe46506a5fb92fe119372193b5465aa51d7e0"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:thm:kummer_wreath_lift::supplements::DBP:paper:IV",
+      "from": "DBP:thm:kummer_wreath_lift",
+      "to": "DBP:paper:IV",
+      "relation": "supplements",
+      "label": "DBP:thm:kummer_wreath_lift supplements DBP:paper:IV",
+      "basis": "General-(G,d) wreath lift. DBP succession audit v1.0; disposition + proof-location analysis.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/KUMMER_MODULE_WREATH_LIFT_THEOREM_2026-07-10.md",
+          "sha256": "ee9ef7e7a64ad7e2737094e1a3097e326fb33bc8ccff4490a9189f6b5448e293"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:paper:self_glue::depends_on::DBP:paper:IV",
+      "from": "DBP:paper:self_glue",
+      "to": "DBP:paper:IV",
+      "relation": "depends_on",
+      "label": "DBP:paper:self_glue depends_on DBP:paper:IV",
+      "basis": "Independent companion; shares wreath-monodromy machinery. DBP succession audit v1.0; disposition + proof-location analysis.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/self_glue_monodromy.tex",
+          "sha256": "27efeeffa4a836161a248610c73c4d7b22ee5bb4482a691db875c0be3acf5a26"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:thm:sqg_foundation::supplements::DBP:paper:V",
+      "from": "DBP:thm:sqg_foundation",
+      "to": "DBP:paper:V",
+      "relation": "supplements",
+      "label": "DBP:thm:sqg_foundation supplements DBP:paper:V",
+      "basis": "Foundation for the held capstone. DBP succession audit v1.0; disposition + proof-location analysis.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/SELECTED_QUOTIENT_GROUPOIDS_FOUNDATION_v1.0.md",
+          "sha256": "40461c1fbb177e0d173f0b11a5d12224dc7ce894bb7fd43c944c8fa75cdaf0d9"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:thm:r3_acfold::supplements::DBP:paper:V",
+      "from": "DBP:thm:r3_acfold",
+      "to": "DBP:paper:V",
+      "relation": "supplements",
+      "label": "DBP:thm:r3_acfold supplements DBP:paper:V",
+      "basis": "Independent realization for the held capstone. DBP succession audit v1.0; disposition + proof-location analysis.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/cella_residue_and_coupling_theory/R3_AC_FOLD_INDEPENDENT_REALIZATION_THEOREM_v1.0.md",
+          "sha256": "0042fce16d4a4ce5b9de681addad28068f4270b04e0073d2a8213f490f14f953"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:doc:ensemble_architecture::supplements::DBP:paper:V",
+      "from": "DBP:doc:ensemble_architecture",
+      "to": "DBP:paper:V",
+      "relation": "supplements",
+      "label": "DBP:doc:ensemble_architecture supplements DBP:paper:V",
+      "basis": "Sole gate/gap spec for the held capstone. DBP succession audit v1.0; disposition + proof-location analysis.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/DBP_PAPER_ENSEMBLE_ARCHITECTURE_v1.0.md",
+          "sha256": "414f1dd525415b2116b1ad2dc253bc9ca8f2b896902f177c9ba41472327cea70"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:ledger:AR::derived_from_campaign::DBP:campaign:cce",
+      "from": "DBP:ledger:AR",
+      "to": "DBP:campaign:cce",
+      "relation": "derived_from_campaign",
+      "label": "DBP:ledger:AR derived_from_campaign DBP:campaign:cce",
+      "basis": "AR ledger reconciles the CCE campaign. DBP succession audit v1.0; disposition + proof-location analysis.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/00_campaign_authority/DBP_CCE_ARTIFICIAL_RESTRICTION_LIVE_RECONCILIATION_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:I1::depends_on::DBP:doc:theorem_candidates",
+      "from": "DBP:gap:I1",
+      "to": "DBP:doc:theorem_candidates",
+      "relation": "depends_on",
+      "label": "DBP:gap:I1 depends_on DBP:doc:theorem_candidates",
+      "basis": "EASY merge of the in-family Theorem H proof. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/dbp_role_channel_and_orbit_geometry/THEOREM_CANDIDATES.md#L21",
+          "sha256": "0d8116b325328d4f06b68f156fc88976e427b4d268a1fad75a27d136567402f4"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:I2::depends_on::DBP:thm:cce8_naturality",
+      "from": "DBP:gap:I2",
+      "to": "DBP:thm:cce8_naturality",
+      "relation": "depends_on",
+      "label": "DBP:gap:I2 depends_on DBP:thm:cce8_naturality",
+      "basis": "CCE-8 already proves the all-order recurrence. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex#L450",
+          "sha256": "f045a92762f68cd1ddfc83e243e76eb4739d720f8097bc6736e29195c88d2d01"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:I2::opens_gap::DBP:paper:I",
+      "from": "DBP:gap:I2",
+      "to": "DBP:paper:I",
+      "relation": "opens_gap",
+      "label": "DBP:gap:I2 opens_gap DBP:paper:I",
+      "basis": "Unfinished App.A induction in the released paper. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex#L450",
+          "sha256": "f045a92762f68cd1ddfc83e243e76eb4739d720f8097bc6736e29195c88d2d01"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:I3::depends_on::DBP:thm:three_channel_kg_ext",
+      "from": "DBP:gap:I3",
+      "to": "DBP:thm:three_channel_kg_ext",
+      "relation": "depends_on",
+      "label": "DBP:gap:I3 depends_on DBP:thm:three_channel_kg_ext",
+      "basis": "n=4 grid already written closed-form. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/Three_Channel_KG_New_Math_Extension.md#L384",
+          "sha256": "dcb8e175e3c43f9b708afda98e8cbf02c55f910e2d67e28b300edf676ab7c2fd"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:I3::opens_gap::DBP:paper:I",
+      "from": "DBP:gap:I3",
+      "to": "DBP:paper:I",
+      "relation": "opens_gap",
+      "label": "DBP:gap:I3 opens_gap DBP:paper:I",
+      "basis": "Paper restricts to n=3. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/Three_Channel_KG_New_Math_Extension.md#L384",
+          "sha256": "dcb8e175e3c43f9b708afda98e8cbf02c55f910e2d67e28b300edf676ab7c2fd"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:I4::depends_on::DBP:doc:curvature_role_reduction",
+      "from": "DBP:gap:I4",
+      "to": "DBP:doc:curvature_role_reduction",
+      "relation": "depends_on",
+      "label": "DBP:gap:I4 depends_on DBP:doc:curvature_role_reduction",
+      "basis": "Bilinear S∧S split extends by induction on k. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/DBP_Curvature_Role_Reduction.md#L339",
+          "sha256": "f37becff0e871335c93b88e3bd0b8462cec904fcd15ab3a3a0a95504e31929b8"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:I5::depends_on::DBP:doc:curvature_role_reduction",
+      "from": "DBP:gap:I5",
+      "to": "DBP:doc:curvature_role_reduction",
+      "relation": "depends_on",
+      "label": "DBP:gap:I5 depends_on DBP:doc:curvature_role_reduction",
+      "basis": "Tensor split + gauge transport compose. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/DBP_Curvature_Role_Reduction.md#L314",
+          "sha256": "f37becff0e871335c93b88e3bd0b8462cec904fcd15ab3a3a0a95504e31929b8"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:I6::depends_on::DBP:doc:curvature_role_reduction",
+      "from": "DBP:gap:I6",
+      "to": "DBP:doc:curvature_role_reduction",
+      "relation": "depends_on",
+      "label": "DBP:gap:I6 depends_on DBP:doc:curvature_role_reduction",
+      "basis": "Fingerprint generating function gives order x channel. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/DBP_Curvature_Role_Reduction.md#L294",
+          "sha256": "f37becff0e871335c93b88e3bd0b8462cec904fcd15ab3a3a0a95504e31929b8"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:II1::depends_on::DBP:thm:local_curvature_complete",
+      "from": "DBP:gap:II1",
+      "to": "DBP:thm:local_curvature_complete",
+      "relation": "depends_on",
+      "label": "DBP:gap:II1 depends_on DBP:thm:local_curvature_complete",
+      "basis": "Cor 7.6 gives the codim-k vertex set mechanically. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/01_completed_papers/local_curvature_and_black_hole_metrics/pfc_normal_forms.tex#L173",
+          "sha256": "d2970682094a56bbc26849376c728fff26796ff8356125865c4cf9e35a789c27"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:II1::opens_gap::DBP:paper:II-general",
+      "from": "DBP:gap:II1",
+      "to": "DBP:paper:II-general",
+      "relation": "opens_gap",
+      "label": "DBP:gap:II1 opens_gap DBP:paper:II-general",
+      "basis": "pfc stops at codim-2. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/01_completed_papers/local_curvature_and_black_hole_metrics/pfc_normal_forms.tex#L173",
+          "sha256": "d2970682094a56bbc26849376c728fff26796ff8356125865c4cf9e35a789c27"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:II2::depends_on::DBP:thm:local_curvature_complete",
+      "from": "DBP:gap:II2",
+      "to": "DBP:thm:local_curvature_complete",
+      "relation": "depends_on",
+      "label": "DBP:gap:II2 depends_on DBP:thm:local_curvature_complete",
+      "basis": "Front-form recipe = Thm 7.7. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/local_curvature_and_black_hole_metrics/PREREG_PFC4_corner.md#L67",
+          "sha256": "f653c5bf30360a35f51bcbc928fe2d51f5f1e11eeb35e8931d1e63410f5677ee"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:II2::blocked_by::DBP:wall:II_front",
+      "from": "DBP:gap:II2",
+      "to": "DBP:wall:II_front",
+      "relation": "blocked_by",
+      "label": "DBP:gap:II2 blocked_by DBP:wall:II_front",
+      "basis": "Front coefficient needs the full front metric (correctness boundary). DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/local_curvature_and_black_hole_metrics/PREREG_PFC4_corner.md#L67",
+          "sha256": "f653c5bf30360a35f51bcbc928fe2d51f5f1e11eeb35e8931d1e63410f5677ee"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:II3::depends_on::DBP:paper:II-KN",
+      "from": "DBP:gap:II3",
+      "to": "DBP:paper:II-KN",
+      "relation": "depends_on",
+      "label": "DBP:gap:II3 depends_on DBP:paper:II-KN",
+      "basis": "Rig reproduces the KN wedge; experiment pre-chartered. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/04_drafts_and_incomplete_papers/local_curvature_and_black_hole_metrics/CV_HANDOFF_2026-07-09.md#L48",
+          "sha256": "5120e496466e6cb1b7af069c0160cdfb3f24caef833a0e7114e4ec7423688fe3"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:II4::depends_on::DBP:thm:weighted_jet",
+      "from": "DBP:gap:II4",
+      "to": "DBP:thm:weighted_jet",
+      "relation": "depends_on",
+      "label": "DBP:gap:II4 depends_on DBP:thm:weighted_jet",
+      "basis": "Extend the diagonal jet-ring replay off-diagonal. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/local_curvature_and_black_hole_metrics/LEAD7_VARIABLE_TRANSVERSE_WEIGHTED_JET_THEOREM_v1.0.md#L96",
+          "sha256": "35d29dc1cf1dfea9a074bd3d7e7d6f17b2504f23a059afe7b90cbc856fc15a18"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:II4::depends_on::DBP:gap:I5",
+      "from": "DBP:gap:II4",
+      "to": "DBP:gap:I5",
+      "relation": "depends_on",
+      "label": "DBP:gap:II4 depends_on DBP:gap:I5",
+      "basis": "Same off-diagonal covariance object as Paper I. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/local_curvature_and_black_hole_metrics/LEAD7_VARIABLE_TRANSVERSE_WEIGHTED_JET_THEOREM_v1.0.md#L96",
+          "sha256": "35d29dc1cf1dfea9a074bd3d7e7d6f17b2504f23a059afe7b90cbc856fc15a18"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:II5::depends_on::DBP:paper:II-KN",
+      "from": "DBP:gap:II5",
+      "to": "DBP:paper:II-KN",
+      "relation": "depends_on",
+      "label": "DBP:gap:II5 depends_on DBP:paper:II-KN",
+      "basis": "Portability asserted; run on a second surface. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/01_completed_papers/local_curvature_and_black_hole_metrics/lead7_kn_n3_dbp_metric.tex#L716",
+          "sha256": "19ae97737591ab7039f4ba78701f5611bdf75d44851586afdaf4258f657c2739"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:III1::depends_on::DBP:thm:cce5_calibration",
+      "from": "DBP:gap:III1",
+      "to": "DBP:thm:cce5_calibration",
+      "relation": "depends_on",
+      "label": "DBP:gap:III1 depends_on DBP:thm:cce5_calibration",
+      "basis": "CCE-5 proved lambda + traces; merge into the paper. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md#L1543",
+          "sha256": "1fc835086c30fbae414853f186a9cab9ac8c39e6cff1ed79b7364ebb5db6d5ae"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:III1::opens_gap::DBP:paper:III",
+      "from": "DBP:gap:III1",
+      "to": "DBP:paper:III",
+      "relation": "opens_gap",
+      "label": "DBP:gap:III1 opens_gap DBP:paper:III",
+      "basis": "Paper III leaves lambda unresolved at L1543. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md#L1543",
+          "sha256": "1fc835086c30fbae414853f186a9cab9ac8c39e6cff1ed79b7364ebb5db6d5ae"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:III1::blocked_by::DBP:gate:editorial",
+      "from": "DBP:gap:III1",
+      "to": "DBP:gate:editorial",
+      "relation": "blocked_by",
+      "label": "DBP:gap:III1 blocked_by DBP:gate:editorial",
+      "basis": "Paper insertion requires authorized editorial workflow (AR-20). DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md#L1543",
+          "sha256": "1fc835086c30fbae414853f186a9cab9ac8c39e6cff1ed79b7364ebb5db6d5ae"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:III2::depends_on::DBP:gap:III1",
+      "from": "DBP:gap:III2",
+      "to": "DBP:gap:III1",
+      "relation": "depends_on",
+      "label": "DBP:gap:III2 depends_on DBP:gap:III1",
+      "basis": "Follows the lambda insertion. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md#L1965",
+          "sha256": "1fc835086c30fbae414853f186a9cab9ac8c39e6cff1ed79b7364ebb5db6d5ae"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:III2::depends_on::DBP:thm:cce5_calibration",
+      "from": "DBP:gap:III2",
+      "to": "DBP:thm:cce5_calibration",
+      "relation": "depends_on",
+      "label": "DBP:gap:III2 depends_on DBP:thm:cce5_calibration",
+      "basis": "CCE-5 relative matrices refute the two nonclaims. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md#L1965",
+          "sha256": "1fc835086c30fbae414853f186a9cab9ac8c39e6cff1ed79b7364ebb5db6d5ae"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:III3::depends_on::DBP:thm:cce6_sweep",
+      "from": "DBP:gap:III3",
+      "to": "DBP:thm:cce6_sweep",
+      "relation": "depends_on",
+      "label": "DBP:gap:III3 depends_on DBP:thm:cce6_sweep",
+      "basis": "CCE-6 clearance lemma replaces the thin-tube placeholder. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md#L1559",
+          "sha256": "1fc835086c30fbae414853f186a9cab9ac8c39e6cff1ed79b7364ebb5db6d5ae"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:III3::blocked_by::DBP:gate:editorial",
+      "from": "DBP:gap:III3",
+      "to": "DBP:gate:editorial",
+      "relation": "blocked_by",
+      "label": "DBP:gap:III3 blocked_by DBP:gate:editorial",
+      "basis": "Paper insertion requires authorized editorial workflow (AR-20). DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md#L1559",
+          "sha256": "1fc835086c30fbae414853f186a9cab9ac8c39e6cff1ed79b7364ebb5db6d5ae"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:III4::depends_on::DBP:thm:cce5_calibration",
+      "from": "DBP:gap:III4",
+      "to": "DBP:thm:cce5_calibration",
+      "relation": "depends_on",
+      "label": "DBP:gap:III4 depends_on DBP:thm:cce5_calibration",
+      "basis": "CCE-5 word algebra backs the public API. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/03_cce2_corridors/CCE_2_GAP_LEDGER_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:V1::depends_on::DBP:gap:III2",
+      "from": "DBP:gap:V1",
+      "to": "DBP:gap:III2",
+      "relation": "depends_on",
+      "label": "DBP:gap:V1 depends_on DBP:gap:III2",
+      "basis": "Citation refresh follows the Paper III update. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/SELECTED_QUOTIENT_GROUPOIDS_FOUNDATION_v1.0.md#L329",
+          "sha256": "40461c1fbb177e0d173f0b11a5d12224dc7ce894bb7fd43c944c8fa75cdaf0d9"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:III5::depends_on::DBP:thm:cce5_calibration",
+      "from": "DBP:gap:III5",
+      "to": "DBP:thm:cce5_calibration",
+      "relation": "depends_on",
+      "label": "DBP:gap:III5 depends_on DBP:thm:cce5_calibration",
+      "basis": "Germs PROMOTED; extend to the full plane. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/00_campaign_authority/CCE_SCOPE_EXPANSION_INVESTIGATION_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:III6::blocked_by::DBP:wall:III_wholesurface",
+      "from": "DBP:gap:III6",
+      "to": "DBP:wall:III_wholesurface",
+      "relation": "blocked_by",
+      "label": "DBP:gap:III6 blocked_by DBP:wall:III_wholesurface",
+      "basis": "Surjectivity refuted; saturation sub-parts remain. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/07_cce6_surface/CCE_6_GAP_LEDGER_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:V2::depends_on::DBP:wall:V_carrier",
+      "from": "DBP:gap:V2",
+      "to": "DBP:wall:V_carrier",
+      "relation": "depends_on",
+      "label": "DBP:gap:V2 depends_on DBP:wall:V_carrier",
+      "basis": "Full equivalence refuted; build explicit reductions instead. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/10_post8_universalization/POST_8_OUTCOME_GAP_LEDGER_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:V3::depends_on::DBP:gap:V2",
+      "from": "DBP:gap:V3",
+      "to": "DBP:gap:V2",
+      "relation": "depends_on",
+      "label": "DBP:gap:V3 depends_on DBP:gap:V2",
+      "basis": "Coherence waits on the two reduction functors. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/10_post8_universalization/POST_8_OUTCOME_GAP_LEDGER_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:V4::depends_on::DBP:thm:sqg_foundation",
+      "from": "DBP:gap:V4",
+      "to": "DBP:thm:sqg_foundation",
+      "relation": "depends_on",
+      "label": "DBP:gap:V4 depends_on DBP:thm:sqg_foundation",
+      "basis": "Close SQG under the four named operations. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/SELECTED_QUOTIENT_GROUPOIDS_FOUNDATION_v1.0.md#L419",
+          "sha256": "40461c1fbb177e0d173f0b11a5d12224dc7ce894bb7fd43c944c8fa75cdaf0d9"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:III7::depends_on::DBP:campaign:cce",
+      "from": "DBP:gap:III7",
+      "to": "DBP:campaign:cce",
+      "relation": "depends_on",
+      "label": "DBP:gap:III7 depends_on DBP:campaign:cce",
+      "basis": "Generic DAG semantics over the CCE-4 evaluator. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/05_cce4_evaluator/CCE_4_GAP_LEDGER_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:IV7::blocked_by::DBP:wall:IV_eliminant",
+      "from": "DBP:gap:IV7",
+      "to": "DBP:wall:IV_eliminant",
+      "relation": "blocked_by",
+      "label": "DBP:gap:IV7 blocked_by DBP:wall:IV_eliminant",
+      "basis": "Eliminant shortcut refuted; needs the incidence ramification ledger. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/08_cce7_horizon/CCE_7_GAP_LEDGER_v1.0.md",
+          "sha256": null
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:IV1::depends_on::DBP:proof:gs_morse",
+      "from": "DBP:gap:IV1",
+      "to": "DBP:proof:gs_morse",
+      "relation": "depends_on",
+      "label": "DBP:gap:IV1 depends_on DBP:proof:gs_morse",
+      "basis": "GS proof + its §9 splice script. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md#L32",
+          "sha256": "b40eec6ba91fb60cf0daa0848791367a7a10a8ddc4f8d7b2d48fe30fad4216fb"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:IV1::opens_gap::DBP:note:allk_monodromy",
+      "from": "DBP:gap:IV1",
+      "to": "DBP:note:allk_monodromy",
+      "relation": "opens_gap",
+      "label": "DBP:gap:IV1 opens_gap DBP:note:allk_monodromy",
+      "basis": "Note still labels the proved theorem a conjecture. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md#L32",
+          "sha256": "b40eec6ba91fb60cf0daa0848791367a7a10a8ddc4f8d7b2d48fe30fad4216fb"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:IV2::depends_on::DBP:gap:IV1",
+      "from": "DBP:gap:IV2",
+      "to": "DBP:gap:IV1",
+      "relation": "depends_on",
+      "label": "DBP:gap:IV2 depends_on DBP:gap:IV1",
+      "basis": "Needs the spliced all-k base. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/galois_horizon_cover_v1_0.tex#L860",
+          "sha256": "777daf7b60d337709587606f0974f8d4c8ff9c79473b609aadd54827223613ce"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:IV2::opens_gap::DBP:paper:IV",
+      "from": "DBP:gap:IV2",
+      "to": "DBP:paper:IV",
+      "relation": "opens_gap",
+      "label": "DBP:gap:IV2 opens_gap DBP:paper:IV",
+      "basis": "Paper covers 4 charges only. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/galois_horizon_cover_v1_0.tex#L860",
+          "sha256": "777daf7b60d337709587606f0974f8d4c8ff9c79473b609aadd54827223613ce"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:IV3::depends_on::DBP:gap:IV2",
+      "from": "DBP:gap:IV3",
+      "to": "DBP:gap:IV2",
+      "relation": "depends_on",
+      "label": "DBP:gap:IV3 depends_on DBP:gap:IV2",
+      "basis": "Needs the all-k base monodromy. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/KUMMER_MODULE_WREATH_LIFT_THEOREM_2026-07-10.md#L437",
+          "sha256": "ee9ef7e7a64ad7e2737094e1a3097e326fb33bc8ccff4490a9189f6b5448e293"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:IV3::depends_on::DBP:thm:kummer_wreath_lift",
+      "from": "DBP:gap:IV3",
+      "to": "DBP:thm:kummer_wreath_lift",
+      "relation": "depends_on",
+      "label": "DBP:gap:IV3 depends_on DBP:thm:kummer_wreath_lift",
+      "basis": "General-(G,d) wreath lift instantiated at S_{delta_k}. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/KUMMER_MODULE_WREATH_LIFT_THEOREM_2026-07-10.md#L437",
+          "sha256": "ee9ef7e7a64ad7e2737094e1a3097e326fb33bc8ccff4490a9189f6b5448e293"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:IV4::depends_on::DBP:proof:r9_static",
+      "from": "DBP:gap:IV4",
+      "to": "DBP:proof:r9_static",
+      "relation": "depends_on",
+      "label": "DBP:gap:IV4 depends_on DBP:proof:r9_static",
+      "basis": "Static closure proved. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ROTATING_KUMMER_RANK_JUMP_LEMMA_REPORT_2026-07-10.md#L502",
+          "sha256": "d81def7f00486ad0ae4a3718f643a13c333feec996f7ffde925e9dbea370d9db"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:IV4::depends_on::DBP:doc:rotating_three_channel",
+      "from": "DBP:gap:IV4",
+      "to": "DBP:doc:rotating_three_channel",
+      "relation": "depends_on",
+      "label": "DBP:gap:IV4 depends_on DBP:doc:rotating_three_channel",
+      "basis": "Rotating closure proved. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ROTATING_KUMMER_RANK_JUMP_LEMMA_REPORT_2026-07-10.md#L502",
+          "sha256": "d81def7f00486ad0ae4a3718f643a13c333feec996f7ffde925e9dbea370d9db"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:IV5::depends_on::DBP:gap:IV1",
+      "from": "DBP:gap:IV5",
+      "to": "DBP:gap:IV1",
+      "relation": "depends_on",
+      "label": "DBP:gap:IV5 depends_on DBP:gap:IV1",
+      "basis": "R11 row resolved by the GS splice. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/GALOIS_K_ELLIPSE_RESEARCH_MAP_v1_6.md#L74",
+          "sha256": "7e27e7ef8707b74ba2a3f7018009f6460e62ad9d1731d87387c0dbe6bf6643ca"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:IV5::depends_on::DBP:gap:IV4",
+      "from": "DBP:gap:IV5",
+      "to": "DBP:gap:IV4",
+      "relation": "depends_on",
+      "label": "DBP:gap:IV5 depends_on DBP:gap:IV4",
+      "basis": "R9 row resolved by the closure tags. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/GALOIS_K_ELLIPSE_RESEARCH_MAP_v1_6.md#L74",
+          "sha256": "7e27e7ef8707b74ba2a3f7018009f6460e62ad9d1731d87387c0dbe6bf6643ca"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:IV5::opens_gap::DBP:map:kellipse_v16",
+      "from": "DBP:gap:IV5",
+      "to": "DBP:map:kellipse_v16",
+      "relation": "opens_gap",
+      "label": "DBP:gap:IV5 opens_gap DBP:map:kellipse_v16",
+      "basis": "Register presents solved rows as open. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/galois_horizon_and_kummer_covers/GALOIS_K_ELLIPSE_RESEARCH_MAP_v1_6.md#L74",
+          "sha256": "7e27e7ef8707b74ba2a3f7018009f6460e62ad9d1731d87387c0dbe6bf6643ca"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    },
+    {
+      "id": "e::DBP:gap:IV6::depends_on::DBP:paper:self_glue",
+      "from": "DBP:gap:IV6",
+      "to": "DBP:paper:self_glue",
+      "relation": "depends_on",
+      "label": "DBP:gap:IV6 depends_on DBP:paper:self_glue",
+      "basis": "Iterate the per-layer wreath lemma over n seams. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+      "source_refs": [
+        {
+          "pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/self_glue_monodromy.tex#L444",
+          "sha256": "27efeeffa4a836161a248610c73c4d7b22ee5bb4482a691db875c0be3acf5a26"
+        }
+      ],
+      "facets": {},
+      "extensions": {}
+    }
+  ],
+  "extensions": {}
+}

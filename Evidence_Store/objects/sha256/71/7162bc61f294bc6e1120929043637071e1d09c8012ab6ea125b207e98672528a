@@ -1,0 +1,246 @@
+# MCG Geometry-First — Phase 1 — Geometry Readback Characterization
+
+**Status:** Phase 1 discovery characterization log. **Geometry readback scaffold built; geometry strata characterized; C-covariates identified; first-pass G-strata candidates enumerated.** No G claim is made. No candidate is promoted out of `unresolved_candidate` in this pass.
+
+**Authority:** [`Build_Docs/Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md`](../../Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md) §9, with the user-imposed Phase 1 constraints (2026-05-19): split-scope fixture classes, V4-native finite-difference primary backend, no V3 oracle fields in the primary table, geometry keyed by `(fixture, coordinate_id)` not route-duplicated.
+
+**Deliverables landed:**
+- [`phase_1_geometry_table.json`](phase_1_geometry_table.json) — 413 rows; sha256 `6502e9…df42df54`; byte-stable on rerun.
+- [`src/lloyd_v4/evals/mcg_geometry_first_geometry.py`](../../../src/lloyd_v4/evals/mcg_geometry_first_geometry.py) — V4-native FD module with declared step ladder + stability flags.
+- [`tests/test_mcg_geometry_first_geometry.py`](../../../tests/test_mcg_geometry_first_geometry.py) — 7 focused tests covering the user-specified assertions; all pass.
+
+---
+
+## 1. What was built
+
+### 1.1 Fixture split (user constraint, honored)
+
+| `fixture_class` | Fixtures included | Rows | Notes |
+|---|---|---|---|
+| `four_form_primary` | `sr_four_form`, `schwarzschild_four_form`, `pure_algebraic_four_form` | 411 (137 × 3) | Grids matched to existing four-form modules (no new grids introduced) |
+| `geometry_anchor` | `schwarzschild_anchor` at r=6 (ISCO) and r=3 (photon sphere) | 2 | 1D evaluation only; multi-D lifted construction explicitly deferred (`lifted_construction_pending`) — NOT pooled with four_form_primary in any headline |
+
+Per user direction, no `pooled_headline` aggregates these classes; the artifact records `per_class_summary` and `per_fixture_summary` separately and a `fixture_class_pooling_rule` field stating the rule verbatim.
+
+### 1.2 Backend: V4-native finite-difference (declared metrology, not hidden magic)
+
+- **Step ladder** (relative): `(1e-2, 1e-3, 1e-4, 1e-5)` — four steps spanning three decades.
+- **Step capping**: per row, each declared step is capped at `0.45 × distance_to_nearest_open_domain_boundary`. Capped step counts recorded per row.
+- **Domain bounds** declared per fixture:
+  - SR: `|β| < 1` (radicand `1 − β²` must be positive)
+  - Schwarzschild: `r > 2` (horizon)
+  - Pure algebraic: `x < 1` (radicand `1 − x` must be positive)
+- **Stability flags** per row:
+  - `hessian_signature_stability` (sign consistent across ladder)
+  - `eigenvalue_stability_metric` (max relative spread of `|H|` across ladder; tolerance 0.10)
+  - `rank_stability` (J nonzero with consistent sign across ladder)
+  - `stability_status ∈ {"stable", "unstable", "indeterminate"}`
+- **No symbolic backend** (no `mpmath`/`sympy`/`scipy` symbolic derivatives). Closed-form analytic information is used only as anchor labels (e.g., `geometry_stratum = "schwarzschild_ISCO"` at r=6).
+- **No V3/lv3 oracle fields** in the primary table. Two explicit boolean flags assert this: `no_v3_oracle_fields: true`, `no_symbolic_backend: true`.
+
+### 1.3 Schema: geometry keyed by `(fixture, coordinate_id)`, not route-duplicated
+
+- Every row has `geometry_scope = "coordinate_level"`. No row in this pass uses `"route_conditioned"`.
+- The artifact does not contain `route_id`, `route`, `context_id`, `context`, or `form_id` keys at the row level. (Asserted by test 3.)
+- Phase 2 will join route-level residue/readback rows to this table by `(fixture, coordinate_id)`, NOT inflate it route-wise.
+
+### 1.4 Per-row schema
+
+```
+fixture, fixture_class, coordinate_id, coordinate_value, geometry_scope,
+natural_function_label, natural_function_value,
+J_rank, J_value, J_condition, hessian_value, hessian_signature,
+hessian_eigenvalue_summary, principal_curvature, principal_curvature_ratio,
+lifted_hessian_null_vector, family_tangent, null_tangent_alignment,
+spectral_gap, near_degenerate_flag, geometry_stratum,
+covariate_role,  # the legend mapping each named field to C_covariate or first_pass_G_stratum_candidate
+derivative_backend, step_schedule_relative, step_schedule_absolute,
+coordinate_scale_rule, stability_status,
+hessian_signature_stability, eigenvalue_stability_metric, rank_stability,
+notes
+```
+
+### 1.5 Covariate role assignment (user-specified)
+
+| Field | Role | Reason |
+|---|---|---|
+| `J_condition` | `C_covariate` | Per user direction §9 warning |
+| `spectral_gap` | `C_covariate` | (1D fixtures: spectral_gap is None — preserved as C-tagged slot) |
+| `smallest_singular_value` | `C_covariate` | reserved for multi-D anchors |
+| `near_null_eigenvalue_magnitude` | `C_covariate` | reserved for multi-D anchors |
+| `hessian_signature` | `first_pass_G_stratum_candidate` | per user direction; first-pass only, not proof |
+| `principal_curvature_ratio_class` | `first_pass_G_stratum_candidate` | (1D: None; reserved for multi-D anchors) |
+| `null_tangent_alignment_event` | `first_pass_G_stratum_candidate` | per user direction |
+| `closed_form_anchor_class` | `first_pass_G_stratum_candidate` | per user direction |
+| `family_tangent_class` | `first_pass_G_stratum_candidate` | per user direction |
+
+The two sets are disjoint. The covariate role legend is consistent across all rows.
+
+---
+
+## 2. What was observed (descriptive; no G claim)
+
+### 2.1 Stability headline
+
+All 411 `four_form_primary` rows + 2 `geometry_anchor` rows landed `stability_status = "stable"`. **No row is `unstable` or `indeterminate`** at the declared four-step relative ladder. Hessian signatures are consistent across the ladder for every row.
+
+Step capping fired for 5 rows total (1.2% of the four_form_primary class):
+- SR β ≈ 0.9999: 3 of 4 declared steps capped (close to β = 1)
+- Schwarzschild r = 2.005: 1 of 4 declared steps capped (close to r = 2)
+- Pure algebraic x = 0.99: 1 of 4 declared steps capped (close to x = 1)
+
+Capped rows still produced stable ladder readbacks because the smaller declared steps were already inside the domain. **No row's ladder collapsed to <2 valid steps** (which would have forced `indeterminate`). The capping mechanism functioned as designed.
+
+### 2.2 Hessian signature uniformity (descriptive)
+
+| Fixture | n | Hessian signature counts |
+|---|---|---|
+| `sr_four_form` | 137 | negative: 137; positive: 0; zero: 0 |
+| `schwarzschild_four_form` | 137 | negative: 137; positive: 0; zero: 0 |
+| `pure_algebraic_four_form` | 137 | negative: 137; positive: 0; zero: 0 |
+| `schwarzschild_anchor` | 2 | negative: 2; positive: 0; zero: 0 |
+
+**The natural function `y(t) = √(1 − ψ(t))` is concave-down at every evaluated point across all four fixtures.** This is consistent with the closed-form `y'' < 0` for each of the three primary fixtures (verifiable by hand for each algebraic form). The `hessian_signature` feature is therefore *uniform across this pass's domain* — it does not stratify rows by itself.
+
+**Discovery observation (not promotion).** `hessian_signature` was flagged `first_pass_G_stratum_candidate` per user direction; this pass shows the feature is constant across `four_form_primary`. That makes the *signature alone* uninformative for stratifying j-selection within this pass; however:
+- The *magnitude* of `|H|` varies substantially across rows (recorded per-row), and is a candidate stratifier.
+- Other first-pass-G-stratum fields (`null_tangent_alignment`, `family_tangent`) do vary across rows.
+- The uniformity may itself be informative when crossed with route-pair readback (Phase 2): a *constant* Hessian signature with *varying* j-selection would be a signature-of-non-Hessian-driven organization.
+
+No verdict on `G-curv-1` ledger state is drawn from this pass.
+
+### 2.3 Stratum distributions (descriptive; sampling-asymmetric)
+
+| Fixture | Stratum counts |
+|---|---|
+| `sr_four_form` | non_relativistic: 40, intermediate: 83, relativistic: 14 |
+| `schwarzschild_four_form` | horizon_approach: 89, photon_sphere_vicinity: 21, isco_vicinity: 4, near_field: 23 |
+| `pure_algebraic_four_form` | near_unity_radicand: 41, intermediate: 55, near_zero_radicand: 41 |
+| `schwarzschild_anchor` | schwarzschild_ISCO: 1, schwarzschild_photon_sphere: 1 |
+
+**Observation worth flagging:** `schwarzschild_four_form`'s grid (from the canonical `v3_reference_overlay.csv`) is **heavily concentrated in the horizon_approach stratum** — 65% of its 137 rows are in `r < 2.5`. Any per-stratum analysis on Schwarzschild will be dominated by horizon_approach unless rebalanced. This is **not a defect of this pass** (we preserved the canonical grid intentionally); it is a sampling fact future Phase 2c grid-stability analysis should record.
+
+### 2.4 Near-degeneracy (descriptive)
+
+`near_degenerate_count = 0` across all fixtures and both classes. The thresholds (y below `1e-12`, relative slope above `1e6`, or FD ladder collapsed) were not tripped on any row. The grids do not push deep enough toward their domain boundaries to trigger genuine divergence at the recorded resolution; capping handled boundary proximity smoothly.
+
+### 2.5 Spectral gap, principal-curvature ratio, lifted Hessian null vector
+
+These three fields are `null` for every row in this pass. Reasons:
+- `spectral_gap` requires ≥2 eigenvalues; the 1D primary fixtures and the 1D anchor evaluations have a single eigenvalue each.
+- `principal_curvature_ratio` requires ≥2 principal curvatures; 1D fixtures admit one.
+- `lifted_hessian_null_vector` requires the multi-D lifted construction; deferred (`lifted_construction_pending`) for all anchor rows.
+
+These slots are preserved in the schema for the second-iteration lifted-construction extension (geometry_anchor class), per the campaign's geometry-first design — recording them as `null` is honest about what this pass does not yet measure.
+
+### 2.6 What the J / H / κ readbacks look like (sample, descriptive)
+
+Three sample rows per primary fixture (first / middle / last grid point):
+
+| Fixture | coord | y = √(1−ψ) | J = y′ | H = y″ | principal κ |
+|---|---|---|---|---|---|
+| sr_four_form | β = 0.01 | 0.9999 | −0.01 | −1.00 | ≈ 1.00 |
+| sr_four_form | β ≈ 0.505 | 0.8631 | −0.585 | −1.555 | ≈ 0.83 |
+| sr_four_form | β = 0.9999 | 0.01414 | −70.79 | −3.55e+05 | ≈ 1.00 |
+| schwarzschild_four_form | r = 2.005 | 0.0499 | +4.98 | −502 | ≈ 0.96 |
+| schwarzschild_four_form | r ≈ 2.148 | 0.263 | +0.825 | −3.36 | ≈ 1.06 |
+| schwarzschild_four_form | r = 10 | 0.894 | +0.0112 | −0.00238 | ≈ 0.00238 |
+| pure_algebraic_four_form | x = 0.01 | 0.995 | −0.503 | −0.254 | ≈ 0.18 |
+| pure_algebraic_four_form | x = 0.50 | 0.7071 | −0.707 | −0.707 | ≈ 0.25 |
+| pure_algebraic_four_form | x = 0.99 | 0.10 | −5.00 | −250 | ≈ 0.19 |
+
+All three primary fixtures' geometry is concave-down everywhere; |H| grows steeply as the parameter approaches the radicand-zero boundary (β → 1, r → 2, x → 1). Schwarzschild's J changes sign for r > 2 (y is increasing in r), opposite to SR (y decreasing in β) and pure-algebraic (y decreasing in x).
+
+---
+
+## 3. Candidate ledger — Phase 1 evidence updates (no promotions)
+
+Per user direction §"Interpretation discipline": candidates are NOT promoted in this pass; they remain `unresolved_candidate` and Phase 1 observations attach as evidence links. The ledger update is recorded in [`candidate_ledger.json`](candidate_ledger.json) iteration logs (entries appended for each candidate with date 2026-05-19 and notes summarizing this pass's evidence).
+
+| Candidate | Phase 1 evidence | Updated ledger state |
+|---|---|---|
+| `G-curv-1` (Hessian/signature stratum vs j-selection) | `hessian_signature` uniformly `negative` across all 411 four_form_primary rows → signature alone cannot stratify within this pass; the *magnitude* of `H` varies and may inform later analyses | unchanged: `unresolved_candidate` |
+| `G-curv-2` (principal-curvature ratio vs route-pair phase) | `principal_curvature_ratio = null` for all 1D rows; observable not measurable in this pass; awaits lifted-construction extension on geometry_anchor class | unchanged: `unresolved_candidate` |
+| `G-curv-3` (null-tangent alignment vs transition grammar) | `null_tangent_alignment` computed per row as `1/√(1+J²)`; varies smoothly across each fixture's sweep; transition grammar requires Phase 2 readback | unchanged: `unresolved_candidate` |
+| `G-route-1` (path/operand-separated F1/F2 route-pair phase) | not addressed in Phase 1 (this is Phase 2 territory; geometry is not route-duplicated per user direction) | unchanged: `unresolved_candidate` |
+| `C-def-1` (finite-difference conditioning response) | not implemented in Phase 1 (Phase 2b deliverable); the geometry table's J_value approximates a 1D condition number but is recorded as the Jacobian itself, not as the C-extractor output | unchanged: `unresolved_candidate` |
+| `C-def-2` (Jacobian/Hessian spectral response) | partially scaffolded: Hessian eigenvalue summary (1D: single eigenvalue) is on every row; multi-D spectrum awaits anchor extension | unchanged: `unresolved_candidate` |
+| `C-def-3` (perturbation amplification ladder) | not implemented in Phase 1 (Phase 2b deliverable) | unchanged: `unresolved_candidate` |
+
+**No anti-candidate state changes.** ANTI-1/2/3 stand.
+
+---
+
+## 4. Tests
+
+Seven focused tests landed in [`tests/test_mcg_geometry_first_geometry.py`](../../../tests/test_mcg_geometry_first_geometry.py), one per assertion from the user-imposed Phase 1 testing requirements:
+
+| Test | Assertion |
+|---|---|
+| 1 | Geometry table generation produces required top-level keys |
+| 2 | Fixture-class separation is strict (no pooling) |
+| 3 | Geometry rows keyed by (fixture, coordinate_id); no route-duplication |
+| 4 | Finite-difference backend metadata recorded on every row |
+| 5 | Covariate role legend distinguishes C from G candidates |
+| 6 | Primary table contains no V3/lv3 oracle fields |
+| 7 | JSON artifact is byte-stable across reruns (sha256 match + main()-to-disk identity) |
+
+### Commands run + results
+
+```bash
+# 7 focused tests
+$ PYTHONPATH=src python -m pytest tests/test_mcg_geometry_first_geometry.py -v
+… 7 passed in 0.12s
+
+# Focused + smallest reasonable existing subset (four-form-adjacent)
+$ PYTHONPATH=src python -m pytest tests/test_f1_f2_natural_phase.py tests/test_f4_route_comb_search.py tests/test_mcg_geometry_first_geometry.py -v
+… 23 passed in 1.00s
+
+# Smoke test: fixture imports unchanged
+$ PYTHONPATH=src python -c "from lloyd_v4.evals.sr_four_form import beta_grid, four_form_float64, eta_of_beta; \
+                              from lloyd_v4.evals.schwarzschild_four_form import f_of_r, R_of_r, sweep_r_values; \
+                              from lloyd_v4.evals.pure_algebraic_four_form import x_grid"
+# (silent; imports OK; 137 + 137 + 137 grid points respectively)
+
+# Byte-stability
+$ cp Build_Docs/Reports/mcg_geometry_first/phase_1_geometry_table.json /tmp/run1.json
+$ PYTHONPATH=src python -m lloyd_v4.evals.mcg_geometry_first_geometry --output /tmp/run2.json
+$ diff -q /tmp/run1.json /tmp/run2.json
+# (silent — files identical)
+$ sha256sum /tmp/run1.json
+# 6502e942558f699d24011ae1d78601a07dea835c9ec9441fe42185a9df42df54
+```
+
+No manifest, status family, primitive, or fixture definition was modified by this work.
+
+---
+
+## 5. What this pass did *not* attempt (logged honestly)
+
+- **Lifted multi-D geometry** for the anchor class. `lifted_hessian_null_vector`, `principal_curvature_ratio`, `spectral_gap` are `null` for every row. Adding the K-constraint lift + X-lift to the anchor class is a second-iteration deliverable.
+- **Route-conditioned geometry** for any fixture. Per user direction, route data joins in Phase 2; geometry is `coordinate_level`.
+- **V3/lv3 oracle cross-check.** Per user direction §Decision 3, deferred to a separate non-primary artifact if useful; not part of this primary table.
+- **Cbrt / quartic variants.** Per user direction §Decision 1, first-pass scope excludes them; addable in a future iteration after the geometry table proves stable.
+- **C-extractor implementation.** Phase 2b deliverable; the geometry table records C-covariate slots but does not extract a C profile.
+- **Joined readback table.** Phase 2 deliverable.
+
+---
+
+## 6. Hunches and follow-ups (discovery output, not claims)
+
+- **Sampling asymmetry in Schwarzschild grid** (§2.3): 65% horizon-approach. Future Phase 2c grid-stability work should ask whether per-stratum analyses on Schwarzschild are dominated by this concentration, and whether re-sampling produces stable strata distributions.
+- **Hessian signature uniformity** (§2.2): `negative` everywhere. Whether this is a feature of the chosen natural functions or a deeper geometric property of the sqrt-cancellation cancellation regime is worth noting; switching the "natural function" to `f(t) = 1 − ψ(t)` (no sqrt) would give a different signature distribution for some fixtures.
+- **Step-capping rate** (§2.1): 5 of 411 rows (1.2%) required step capping at domain boundaries; capping mechanism functioned but did not produce indeterminate rows in this pass. A future fixture with a tighter grid against a boundary might exercise indeterminate-state code paths that currently went untriggered.
+- **Lifted construction (geometry_anchor class)**: the next iteration's most informative move. Adding multi-D `lifted_hessian_null_vector` + `principal_curvature_ratio` + `spectral_gap` to ISCO / photon-sphere / wormhole / Rayleigh-Benard would populate the currently-`null` first-pass-G-stratum slots and is the natural source of the `geometry_candidate` graduation evidence the campaign needs.
+
+---
+
+## 7. References
+
+- [`Build_Docs/Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md`](../../Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md) §9, §16, §17
+- [`phase_0_m_contract.md`](phase_0_m_contract.md) — M-contract this Phase 1 honors
+- [`candidate_ledger.json`](candidate_ledger.json) — to be updated with Phase 1 evidence links
+- [`phase_1_geometry_table.json`](phase_1_geometry_table.json) — 413-row artifact, byte-stable
+- [`src/lloyd_v4/evals/mcg_geometry_first_geometry.py`](../../../src/lloyd_v4/evals/mcg_geometry_first_geometry.py) — Phase 1 module
+- [`tests/test_mcg_geometry_first_geometry.py`](../../../tests/test_mcg_geometry_first_geometry.py) — 7 focused tests
+- Existing four-form fixtures (read-only, unmodified): `sr_four_form.py`, `schwarzschild_four_form.py`, `pure_algebraic_four_form.py`

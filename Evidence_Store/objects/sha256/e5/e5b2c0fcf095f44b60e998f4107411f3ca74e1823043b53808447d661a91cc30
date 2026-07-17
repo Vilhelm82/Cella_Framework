@@ -1,0 +1,198 @@
+# Substrate Invariant Search — Phase H — Semantic Characterization
+
+**Status:** Phase H complete. **K_G's cousin identified: `E_log2_base_operand`.** Spearman ρ = −1.0000 (perfect rank-monotone) with K_G across 137 rows in BOTH Schwarzschild and pure_algebraic. Fixture-bound encoding (cross-fixture relationship breaks).
+
+**Date:** 2026-05-23
+**Authority:** [`Build_Docs/Agent_tasks/substrate_invariant_search_2026_05_23.md`](../../Agent_tasks/substrate_invariant_search_2026_05_23.md)
+**Pre-registry:** [`Build_Docs/Agent_tasks/substrate_invariant_search_phase_h_semantic_characterization.md`](../../Agent_tasks/substrate_invariant_search_phase_h_semantic_characterization.md)
+**Source chain:** Phase 1 geometry table sha256 prefix `6502e942558f699d...`
+
+---
+
+## 1. Headline finding
+
+`E_log2_base_operand` — the substrate observable already validated as the 1D C-extractor in MCG Phase 2g — is **K_G's substrate-derived cousin within each varying-K_G fixture**.
+
+| Fixture | Spearman ρ(E, K_G) | Classification | n_rows |
+|---|---|---|---|
+| Schwarzschild | **−1.0000** | monotone_decreasing | 137 |
+| pure_algebraic | **−1.0000** | monotone_decreasing | 137 |
+| SR (control, constant K_G) | +0.0042 (noise) | non_monotone | 137 |
+
+Perfect rank-monotone relationship across the entire 137-row sweep in both fixtures. K_G goes up → E goes down, every step.
+
+The relationship is **fixture-bound**: at matched K_G across Schwarzschild and pure_algebraic, E values do not agree (5/5 sampled pairs mismatch within 0.5 log2 units). The substrate encoding is fixture-specific.
+
+---
+
+## 2. Per-fixture monotonicity table (all 6 candidates)
+
+### Schwarzschild (K_G varies)
+
+| Candidate | Classification | Spearman ρ |
+|---|---|---|
+| **`E_log2_base_operand`** | **monotone_decreasing** | **−1.0000** |
+| `signed_asymmetry` | monotone_decreasing | −0.9930 |
+| `log2_base_operand_ulp` | monotone_decreasing | −0.9909 |
+| `ulp_spread_log2` | non_monotone_mixed | +0.9476 |
+| `log2_min_ulp` | non_monotone_mixed | −0.9476 |
+| `log2_x_term_ulp` | undefined | +0.6721 |
+
+### pure_algebraic (K_G varies)
+
+| Candidate | Classification | Spearman ρ |
+|---|---|---|
+| **`E_log2_base_operand`** | **monotone_decreasing** | **−1.0000** |
+| `signed_asymmetry` | monotone_decreasing | −0.9821 |
+| `log2_base_operand_ulp` | undefined | −0.9244 |
+| `log2_x_term_ulp` | undefined | +0.9244 |
+| `ulp_spread_log2` | non_monotone | +0.0000 |
+| `log2_min_ulp` | non_monotone | +0.0000 |
+
+### SR (constant K_G = 1.0; control)
+
+All 6 candidates classified `non_monotone` with near-zero Spearman ρ — as expected when K_G is constant. The substrate observables vary along the constant-K_G slice, but they don't correlate with K_G itself because K_G doesn't change.
+
+---
+
+## 3. The SR constant-K_G slice (what the substrate encodes when K_G doesn't vary)
+
+SR has K_G ≈ 1.0 across all 137 rows (range 6.3e-4 from numerical noise). On this constant-K_G slice, every candidate substrate observable **varies**:
+
+| Candidate | Varies on SR slice? |
+|---|---|
+| `ulp_spread_log2` | VARIES |
+| `log2_min_ulp` | VARIES |
+| `log2_base_operand_ulp` | VARIES |
+| `log2_x_term_ulp` | VARIES |
+| `signed_asymmetry` | VARIES |
+| `E_log2_base_operand` | VARIES |
+
+**What the substrate is encoding** when K_G doesn't change: **coordinate position along the surface**. As β sweeps from 0.01 to 0.97, base_operand sweeps from ~1 to ~0.06; E sweeps from 0 to −4. K_G stays at 1.0 throughout. The substrate sees something K_G doesn't.
+
+This confirms the **finer-than-K_G** reading of the substrate encoding. It carries (K_G-like information) × (coordinate-position information). When K_G changes, the K_G-like piece tracks it perfectly (ρ = −1.0 in Schwarzschild + pure_algebraic). When K_G is constant, the coordinate-position piece varies freely.
+
+---
+
+## 4. Cross-fixture comparison at matched K_G
+
+10 matched-K_G pairs were found between Schwarzschild and pure_algebraic (K_G within 1% relative tolerance). For each pair, signature-match checked across all 6 candidates:
+
+| Candidate | Match rate across 5 sampled pairs |
+|---|---|
+| `E_log2_base_operand` | 0/5 (always differs) |
+| `log2_base_operand_ulp` | 1/5 |
+| `log2_min_ulp` | 1/5 |
+| `signed_asymmetry` | 1/5 |
+| `ulp_spread_log2` | 1/5 |
+| `log2_x_term_ulp` | **5/5** (consistently matches) |
+
+**Cross-fixture encoding is fixture-bound for E and most candidates.** The exception is `log2_x_term_ulp` — the ulp of the x_term operand consistently matches across fixtures at matched K_G. This makes physical sense: at matched K_G, the curve is at a matched proximity to the singular boundary, so `base_operand` is similar (1-x_term in both forms), so `x_term` is similar, so `ulp(x_term)` is similar.
+
+**E does NOT match cross-fixture** because base_operand IS similar but the *log2* of similar values can differ by O(1) if they're near a binade boundary. So E captures finer-grained position than `log2_x_term_ulp`.
+
+---
+
+## 5. Verdict: E is K_G's cousin
+
+**`qualifies_as_kg_cousin = True`.**
+
+Properties:
+- **Monotone with K_G** in both varying-K_G fixtures (ρ = −1.0000 perfect rank)
+- **Substrate-derived** from one operand's log-magnitude (`E := log2(|base_operand|)`)
+- **Distinct from K_G** — varies on the SR constant-K_G slice; K_G doesn't
+- **P1-satisfied** (input-derivable, no F iteration)
+- **Has a documented substrate-derivation chain** (BACL + binade structure, Phase 2g sketch)
+- **Fixture-bound** — does not generalise across fixtures at matched K_G
+
+E is the substrate's projection of K_G into binade-coordinate space within a fixture. The substrate carries K_G-monotone information; it doesn't carry the K_G *scalar* (which requires the canonical formula), but it carries the K_G *rank* perfectly within scope.
+
+---
+
+## 6. What this means for the substrate-as-probe instrument
+
+Phase F's multi-channel synthesis already has E as Channel 2. Phase H sharpens what that channel does:
+
+**Old framing** (Phase F): E is a "precision-conditional channel" — works in format-safe range, degrades near singular boundaries.
+
+**New framing** (Phase H): E is **K_G's within-fixture rank cousin**. In format-safe range, E rank-orders points by K_G perfectly within a fixture. The format-precision-pinned regime is where E loses precision, not where it stops being K_G-monotone.
+
+**Implication**: The substrate instrument can compute K_G *order* (which point has higher K_G within a fixture) directly from E, without bordered-determinant. The K_G *value* still requires Path B (canonical formula). But for many diagnostic uses (comparison, ordering, near-singular flagging), the order is sufficient.
+
+---
+
+## 7. The substrate's native encoding language (characterised)
+
+Phase G's intuition was that "the substrate speaks a structured language about geometry." Phase H characterises that language:
+
+The substrate signature at a probe point is a **two-tier encoding**:
+
+**Tier 1 — K_G-monotone information (within fixture)**: E carries this perfectly (ρ = −1.0). The encoding is monotone, log2-base, and tracks the proximity to the singular boundary which IS what K_G is sensitive to.
+
+**Tier 2 — Coordinate-position information (fixture-bound)**: Multiple observables (signed_asymmetry, log2_x_term_ulp, ulp_spread_log2) carry finer information about where on the surface the probe sits. This information is K_G-orthogonal — varies on the SR constant-K_G slice where K_G doesn't.
+
+The substrate doesn't speak K_G directly. It speaks `(K_G-rank, position-on-surface)` within each fixture's algebraic encoding. **Within-fixture, the K_G-rank is recoverable from E alone.** Cross-fixture, the encoding is bound to the fixture's algebraic form.
+
+---
+
+## 8. Closeout answers
+
+### Q1 — Monotone candidates per fixture?
+**Schwarzschild**: `E_log2_base_operand` (ρ=−1.0), `signed_asymmetry` (ρ=−0.99), `log2_base_operand_ulp` (ρ=−0.99) all monotone-decreasing with K_G.
+**pure_algebraic**: `E_log2_base_operand` (ρ=−1.0), `signed_asymmetry` (ρ=−0.98) monotone-decreasing.
+**SR**: none — K_G is constant.
+
+### Q2 — SR constant-K_G slice encoding?
+K_G is constant at 1.0 across SR. All 6 candidates vary. The substrate is encoding coordinate-position information that K_G discards. This is fixture-bound and complementary to K_G.
+
+### Q3 — Cross-fixture at matched K_G?
+E does not agree (0/5 matches). `log2_x_term_ulp` does match (5/5). The cross-fixture encoding is fixture-bound for the higher-resolution observables; the coarser `log2_x_term_ulp` is sufficient to identify matched K_G regimes but loses the fixture-specific structure.
+
+### Q4 — K_G's cousin verdict?
+**Yes — E_log2_base_operand qualifies.** Spearman ρ = −1.0000 with K_G in both varying-K_G fixtures. Distinct from K_G (carries position information on SR constant-K_G slice). Substrate-derived. P1-satisfied.
+
+### Q5 — Cousin relationship to K_G?
+E is K_G's **within-fixture rank** cousin. The substrate carries K_G-monotone information via E, perfectly within a fixture, fixture-bound across fixtures. The K_G value itself requires the canonical formula (Path B); the K_G ordering is recoverable from substrate alone.
+
+### Q6 — Next step?
+Update Phase F's synthesis interpretation to recognise E's dual role (precision-conditional channel + within-fixture K_G rank cousin). Consider whether the substrate-as-probe instrument can use E as a substrate-derived K_G surrogate for ordering / comparison purposes, with the canonical K_G computed only when scalar value is needed.
+
+### Q7 — Substrate's native encoding language?
+**Two-tier**: Tier 1 (K_G-rank, fixture-bound) carried by E. Tier 2 (coordinate-position, fixture-bound) carried by signed_asymmetry / ulp_spread / others. The substrate speaks operand-chain-magnitude relationships; K_G rank is recoverable from one operand's log-magnitude (E) within a fixture's algebraic encoding.
+
+---
+
+## 9. What Phase H establishes
+
+- **K_G's substrate cousin is named.** It is `E_log2_base_operand` — the same observable MCG Phase 2g operationally validated as the 1D C-extractor. Phase 2g knew E was substrate-derived and tracked something geometric; Phase H confirms what it tracks is K_G's within-fixture rank.
+- **Substrate-as-encoding hypothesis is empirically supported** in a refined form: within-fixture, substrate carries K_G-monotone information; cross-fixture, the encoding is fixture-bound.
+- **The campaign's open Path A item is now closed in a different way**: K_G is not substrate-derivable as a scalar, but K_G's within-fixture rank IS substrate-derivable via E. The substrate-as-probe instrument can use E for K_G-ranking without bordered-determinant.
+- **The substrate's native encoding language is characterised**: two-tier (rank + position), operand-chain-magnitude-based, fixture-bound.
+
+---
+
+## 10. What Phase H does not claim
+
+- Phase H does **not** claim K_G is substrate-derivable as a scalar — only its within-fixture rank.
+- Phase H does **not** modify substrate or architecture files.
+- Phase H does **not** call lv3 / V3 substrate.
+- Phase H does **not** revise Phase F's decision rule.
+- Phase H does **not** generalise the encoding across fixtures — fixture-bound is confirmed.
+
+---
+
+## 11. Source artefact chain
+
+| Artefact | sha256 prefix |
+|---|---|
+| `phase_1_geometry_table.json` | `6502e942558f699d` |
+| `phase_h_substrate_semantic_characterization.json` | (recorded live post-build) |
+
+---
+
+## 12. References
+
+- Campaign authority + Phase H pre-registry
+- MCG Phase 1 geometry table (the source corpus)
+- MCG Phase 2g (E operationally validated as 1D C-extractor; now characterised as K_G's within-fixture rank cousin)
+- Phase A–G prior artefacts (the substrate-as-probe instrument E is a channel of)

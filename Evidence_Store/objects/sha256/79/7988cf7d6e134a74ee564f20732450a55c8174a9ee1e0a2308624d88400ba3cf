@@ -1,0 +1,138 @@
+"""BACL-grain post-processor — eval-layer probe.
+
+Pre-registration (binding before measurement):
+- For each (f, routing) in our cube-root + sqrt sweep, compute:
+  - g(f), g(f+δf) where δf = eta·f
+  - diff = g(f+δf) − g(f)
+  - ulp_g = math.ulp(g(f))
+  - j_exact = diff / ulp_g
+  - j_integer = round(j_exact)
+  - deviation = j_exact − j_integer
+- Verify BACL holds: deviation ≈ 0 (within float64 floor of the division itself).
+- Compare j_integer across routings at each f.
+
+Expected:
+- BACL holds (deviation ≈ 0) for all (f, routing) — confirms the theorem holds
+  in our Sterbenz-region sweep.
+- For sqrt (3 IEEE-mandated routings): j_integer identical across all three.
+- For cube-root (2 non-mandated routings): j_integer differs between Python ** and
+  numpy.cbrt. The integer-j difference at each f IS the routing asymmetry at
+  the BACL grain.
+
+Sterbenz region check: For δf small enough that g(f)/2 ≤ g(f+δf) ≤ 2·g(f), BACL
+applies. For eta=1e-6 and g monotone+smooth in [1e-9, 1e-2], g(f+δf)/g(f) ≈ 1,
+well within [0.5, 2.0]. Verified inline.
+"""
+from __future__ import annotations
+
+import math
+import numpy as np
+
+
+def main() -> None:
+    f_values = [10.0 ** (-2.0 - (7.0 / 11.0) * i) for i in range(12)]
+    eta = 1e-6
+
+    routings_cbrt = {
+        "python_pow_1_3": lambda f: f ** (1.0 / 3.0),
+        "numpy_cbrt":     lambda f: float(np.cbrt(f)),
+    }
+    routings_sqrt = {
+        "python_pow_1_2": lambda f: f ** (1.0 / 2.0),
+        "math_sqrt":      lambda f: math.sqrt(f),
+        "numpy_sqrt":     lambda f: float(np.sqrt(f)),
+    }
+
+    def analyze(routing_name: str, g) -> list[dict]:
+        rows = []
+        for f in f_values:
+            delta_f = eta * f
+            g_f = g(f)
+            g_f_plus = g(f + delta_f)
+            # Sterbenz-region check
+            ratio = g_f_plus / g_f if g_f != 0 else float('inf')
+            in_sterbenz = 0.5 <= ratio <= 2.0
+            diff = g_f_plus - g_f
+            ulp_g = math.ulp(g_f)
+            j_exact = diff / ulp_g if ulp_g != 0 else float('inf')
+            j_integer = round(j_exact)
+            deviation = j_exact - j_integer
+            rows.append({
+                "f": f,
+                "g_f": g_f,
+                "g_f_plus": g_f_plus,
+                "diff": diff,
+                "ulp_g": ulp_g,
+                "j_exact": j_exact,
+                "j_integer": j_integer,
+                "deviation": deviation,
+                "in_sterbenz": in_sterbenz,
+            })
+        return rows
+
+    print("=" * 90)
+    print("BACL-grain probe — cube-root routings")
+    print("=" * 90)
+    cbrt_results = {name: analyze(name, g) for name, g in routings_cbrt.items()}
+    print_per_routing(cbrt_results)
+    print()
+    print("--- cross-routing j comparison (cube-root) ---")
+    compare_routings(cbrt_results, ["python_pow_1_3", "numpy_cbrt"], f_values)
+    print()
+
+    print("=" * 90)
+    print("BACL-grain probe — sqrt routings")
+    print("=" * 90)
+    sqrt_results = {name: analyze(name, g) for name, g in routings_sqrt.items()}
+    print_per_routing(sqrt_results)
+    print()
+    print("--- cross-routing j comparison (sqrt) ---")
+    compare_routings(sqrt_results, ["python_pow_1_2", "math_sqrt", "numpy_sqrt"], f_values)
+    print()
+
+    print("=" * 90)
+    print("BACL theorem violation summary")
+    print("=" * 90)
+    all_results = list(cbrt_results.items()) + list(sqrt_results.items())
+    for routing_name, rows in all_results:
+        max_dev = max(abs(r["deviation"]) for r in rows)
+        sterbenz_violations = sum(1 for r in rows if not r["in_sterbenz"])
+        print(f"  {routing_name:20s}  max|deviation|={max_dev:.3e}  "
+              f"sterbenz_violations={sterbenz_violations}/{len(rows)}")
+
+
+def print_per_routing(results: dict[str, list[dict]]) -> None:
+    for routing_name, rows in results.items():
+        print(f"\n--- {routing_name} ---")
+        print(f"{'f':>14}  {'g(f)':>22}  {'j_integer':>14}  {'deviation':>14}")
+        for r in rows:
+            print(f"{r['f']:14.3e}  {r['g_f']:22.16e}  {r['j_integer']:>14d}  "
+                  f"{r['deviation']:+14.3e}")
+
+
+def compare_routings(
+    results: dict[str, list[dict]],
+    routing_names: list[str],
+    f_values: list[float],
+) -> None:
+    header = f"{'f':>14}"
+    for name in routing_names:
+        header += f"  {'j_' + name:>22}"
+    if len(routing_names) >= 2:
+        header += f"  {'Δj (max-min)':>14}"
+    print(header)
+    for i, f in enumerate(f_values):
+        line = f"{f:14.3e}"
+        js = []
+        for name in routing_names:
+            j = results[name][i]["j_integer"]
+            js.append(j)
+            line += f"  {j:>22d}"
+        if len(js) >= 2:
+            delta_j = max(js) - min(js)
+            line += f"  {delta_j:>14d}"
+        print(line)
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,201 @@
+{
+ "P1": {
+  "bound": "64 ulp-relative of I1 per rung",
+  "pass": true,
+  "rows": [
+   {
+    "bound": 1.7763568394002505e-15,
+    "gap": 0.0,
+    "k": 0,
+    "pass": true
+   },
+   {
+    "bound": 1.4210854715202004e-14,
+    "gap": 8.881784197001252e-16,
+    "k": 1,
+    "pass": true
+   },
+   {
+    "bound": 2.842170943040401e-14,
+    "gap": 4.440892098500626e-16,
+    "k": 2,
+    "pass": true
+   },
+   {
+    "bound": 2.842170943040401e-14,
+    "gap": 3.552713678800501e-15,
+    "k": 3,
+    "pass": true
+   },
+   {
+    "bound": 2.842170943040401e-14,
+    "gap": 8.881784197001252e-16,
+    "k": 4,
+    "pass": true
+   },
+   {
+    "bound": 2.842170943040401e-14,
+    "gap": 1.3322676295501878e-15,
+    "k": 5,
+    "pass": true
+   },
+   {
+    "bound": 2.842170943040401e-14,
+    "gap": 6.661338147750939e-15,
+    "k": 6,
+    "pass": true
+   },
+   {
+    "bound": 2.842170943040401e-14,
+    "gap": 1.3322676295501878e-15,
+    "k": 7,
+    "pass": true
+   },
+   {
+    "bound": 2.842170943040401e-14,
+    "gap": 3.9968028886505635e-15,
+    "k": 8,
+    "pass": true
+   },
+   {
+    "bound": 2.842170943040401e-14,
+    "gap": 2.6645352591003757e-15,
+    "k": 9,
+    "pass": true
+   },
+   {
+    "bound": 2.842170943040401e-14,
+    "gap": 3.552713678800501e-15,
+    "k": 10,
+    "pass": true
+   },
+   {
+    "bound": 2.842170943040401e-14,
+    "gap": 3.552713678800501e-15,
+    "k": 11,
+    "pass": true
+   },
+   {
+    "bound": 2.842170943040401e-14,
+    "gap": 5.329070518200751e-15,
+    "k": 12,
+    "pass": true
+   },
+   {
+    "bound": 2.842170943040401e-14,
+    "gap": 3.552713678800501e-15,
+    "k": 13,
+    "pass": true
+   },
+   {
+    "bound": 2.842170943040401e-14,
+    "gap": 6.217248937900877e-15,
+    "k": 14,
+    "pass": true
+   },
+   {
+    "bound": 2.842170943040401e-14,
+    "gap": 1.3322676295501878e-15,
+    "k": 15,
+    "pass": true
+   }
+  ]
+ },
+ "P2": {
+  "fd_unresolved_seen": false,
+  "pass": true,
+  "unflagged_confidently_wrong_rungs": []
+ },
+ "P3": {
+  "nondecreasing": true,
+  "pass": true,
+  "per_rung": [
+   {
+    "cancel_binades": 2,
+    "conditioning": "well_conditioned",
+    "k": 0
+   },
+   {
+    "cancel_binades": 5,
+    "conditioning": "well_conditioned",
+    "k": 1
+   },
+   {
+    "cancel_binades": 8,
+    "conditioning": "well_conditioned",
+    "k": 2
+   },
+   {
+    "cancel_binades": 11,
+    "conditioning": "well_conditioned",
+    "k": 3
+   },
+   {
+    "cancel_binades": 15,
+    "conditioning": "well_conditioned",
+    "k": 4
+   },
+   {
+    "cancel_binades": 18,
+    "conditioning": "well_conditioned",
+    "k": 5
+   },
+   {
+    "cancel_binades": 21,
+    "conditioning": "well_conditioned",
+    "k": 6
+   },
+   {
+    "cancel_binades": 25,
+    "conditioning": "well_conditioned",
+    "k": 7
+   },
+   {
+    "cancel_binades": 28,
+    "conditioning": "warning",
+    "k": 8
+   },
+   {
+    "cancel_binades": 31,
+    "conditioning": "warning",
+    "k": 9
+   },
+   {
+    "cancel_binades": 35,
+    "conditioning": "warning",
+    "k": 10
+   },
+   {
+    "cancel_binades": 38,
+    "conditioning": "warning",
+    "k": 11
+   },
+   {
+    "cancel_binades": 41,
+    "conditioning": "ill_conditioned",
+    "k": 12
+   },
+   {
+    "cancel_binades": 45,
+    "conditioning": "ill_conditioned",
+    "k": 13
+   },
+   {
+    "cancel_binades": 48,
+    "conditioning": "ill_conditioned",
+    "k": 14
+   },
+   {
+    "cancel_binades": 51,
+    "conditioning": "ill_conditioned",
+    "k": 15
+   }
+  ],
+  "span_binades": 49,
+  "strata_seen": [
+   "ill_conditioned",
+   "warning",
+   "well_conditioned"
+  ]
+ }
+}

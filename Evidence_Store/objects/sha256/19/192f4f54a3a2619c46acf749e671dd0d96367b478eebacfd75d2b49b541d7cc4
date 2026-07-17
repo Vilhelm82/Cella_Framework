@@ -1,0 +1,178 @@
+"""Form generator v3 — irreducibility filter + mint a derived form beyond F1-F4.
+
+Fixes over v2:
+  Irreducibility filter — a PRIMITIVE form must not be:
+    * a product (*, A, B) where A or B is itself a member (form x g),
+    * a sum/difference (+/-, A, B) where BOTH A and B are members (form +/- form).
+  Then dedup primitives by |residual value-vector| (merge sign-flips).
+  Match survivors against the known {F1, F2/c1, c2}; anything left with a DISTINCT
+  residual signature is a DERIVED form beyond the hand-picked battery — a candidate F5.
+
+Eval-layer, research-grade. Schwarzschild (c=2/r), Sterbenz region r in [4,10].
+Oracles only (Fraction, mpmath).
+"""
+import math, struct
+from fractions import Fraction as Fr
+import mpmath as mp
+mp.mp.dps = 50
+
+ATOMS = [('R',), ('one',), ('c',)]
+OPS = ('+', '-', '*')
+RGRID = [4.0 + i * (10.0 - 4.0) / 31 for i in range(32)]
+def c_of_r(r): return 2.0 / r
+
+
+def ev64(node, r):
+    c = c_of_r(r); R = math.sqrt(1.0 - c)
+    def go(n):
+        k = n[0]
+        if k == 'R': return R
+        if k == 'one': return 1.0
+        if k == 'c': return c
+        a, b = go(n[1]), go(n[2])
+        return a + b if k == '+' else a - b if k == '-' else a * b
+    return go(node)
+
+
+def evfree(node, Rv, cv):
+    def go(n):
+        k = n[0]
+        if k == 'R': return Rv
+        if k == 'one': return mp.mpf(1)
+        if k == 'c': return cv
+        a, b = go(n[1]), go(n[2])
+        return a + b if k == '+' else a - b if k == '-' else a * b
+    return go(node)
+
+
+def evsurf(node, cv): return evfree(node, mp.sqrt(1 - cv), cv)
+def valvec(node): return tuple(struct.pack('>d', ev64(node, r)).hex() for r in RGRID)
+def absvec(node): return tuple(round(abs(ev64(node, r)) / math.ulp(1.0 - c_of_r(r)), 6) for r in RGRID)
+def depth(node): return 0 if len(node) == 1 else 1 + max(depth(node[1]), depth(node[2]))
+def ast_str(node):
+    if len(node) == 1: return {'R': 'R', 'one': '1', 'c': 'c'}[node[0]]
+    return f"({ast_str(node[1])} {node[0]} {ast_str(node[2])})"
+
+
+def is_structural_zero(node):
+    for Rv, cv in ((mp.mpf('0.31'), mp.mpf('0.27')), (mp.mpf('0.83'), mp.mpf('0.11')), (mp.mpf('1.4'), mp.mpf('0.55'))):
+        if abs(evfree(node, Rv, cv)) > mp.mpf('1e-40'): return False
+    return True
+
+
+def is_member(node):
+    if is_structural_zero(node): return False
+    for cv in (mp.mpf('0.137'), mp.mpf('0.42'), mp.mpf('0.491'), mp.mpf('0.30')):
+        if abs(evsurf(node, cv)) > mp.mpf('1e-40'): return False
+    return True
+
+
+def lattice_sig(node):
+    levels = set()
+    int_res = 0.0
+    for r in RGRID:
+        u = math.ulp(1.0 - c_of_r(r)); lvl = ev64(node, r) / u
+        levels.add(round(lvl - round(lvl), 3)); int_res = max(int_res, abs(lvl - round(lvl)))
+    cls = "integer" if int_res < 1e-9 else ("half" if max(abs(x) for x in levels) <= 0.5 + 1e-9 else "non_integer")
+    return cls, round(int_res, 4), sorted(levels)
+
+
+def greedy_and_burden(node):
+    sum_ro = 0.0
+    for r in RGRID:
+        c = c_of_r(r); R = math.sqrt(1.0 - c); u = math.ulp(1.0 - c); ros = []
+        def go(n):
+            k = n[0]
+            if k == 'R': return R
+            if k == 'one': return 1.0
+            if k == 'c': return c
+            a, b = go(n[1]), go(n[2])
+            fl = a + b if k == '+' else a - b if k == '-' else a * b
+            ex = (Fr(a) + Fr(b)) if k == '+' else (Fr(a) - Fr(b)) if k == '-' else (Fr(a) * Fr(b))
+            ros.append(abs(ex - Fr(fl)) / Fr(u)); return fl
+        go(node); sum_ro += float(sum(ros))
+    return round(sum_ro, 2)
+
+
+F1 = ('-', ('*', ('R',), ('R',)), ('-', ('one',), ('c',)))
+C1 = ('+', ('-', ('*', ('R',), ('R',)), ('one',)), ('c',))    # F2-style Sterbenz
+C2 = ('+', ('*', ('R',), ('R',)), ('-', ('c',), ('one',)))
+KNOWN = {"F1": F1, "F2/c1": C1, "c2": C2}
+
+
+def main():
+    seen = {}; by_depth = {0: []}
+    for a in ATOMS: seen[valvec(a)] = a; by_depth[0].append(a)
+    CAP = 120000
+    for d in range(1, 4):
+        by_depth[d] = []
+        shallow = [n for dd in range(0, d) for n in by_depth[dd]]
+        for a in by_depth[d - 1]:
+            for b in shallow:
+                for (x, y) in ((a, b), (b, a)):
+                    for op in OPS:
+                        if len(seen) >= CAP: break
+                        node = (op, x, y); vv = valvec(node)
+                        if vv not in seen: seen[vv] = node; by_depth[d].append(node)
+        if len(seen) >= CAP: break
+
+    members = [n for n in seen.values() if is_member(n)]
+    member_vvs = {valvec(n) for n in members}
+
+    # ---- irreducibility filter ----
+    def reducible(node):
+        if len(node) == 1: return False
+        op, a, b = node
+        if op == '*':
+            return valvec(a) in member_vvs or valvec(b) in member_vvs
+        if op in ('+', '-'):
+            return valvec(a) in member_vvs and valvec(b) in member_vvs
+        return False
+    primitives = [n for n in members if not reducible(n)]
+
+    # ---- dedup primitives by |residual| (merge sign flips) -> distinct forms ----
+    by_abs = {}
+    for n in primitives:
+        key = absvec(n)
+        if key not in by_abs or len(ast_str(n)) < len(ast_str(by_abs[key])):
+            by_abs[key] = n
+    distinct = list(by_abs.values())
+
+    known_abs = {absvec(v): k for k, v in KNOWN.items()}
+    derived = [n for n in distinct if absvec(n) not in known_abs]
+
+    print("=" * 86)
+    print(f"ENUMERATION {len(seen)} codes -> members {len(members)} -> "
+          f"irreducible primitives {len(primitives)} -> distinct (sign-merged) {len(distinct)}")
+    print(f"  [v2 had 1066 'genuine'; irreducibility + sign-merge collapses to {len(distinct)} distinct primitive forms]")
+    print()
+    print("DISTINCT PRIMITIVE FORMS (the derived basis):")
+    print(f"  {'label':10} {'AST':30} {'lattice':>11} {'int_res':>8} {'greedy':>8}  {'fractional levels'}")
+    # order: known first, then derived by simplicity
+    ordered = sorted(distinct, key=lambda n: (absvec(n) not in known_abs, depth(n), len(ast_str(n))))
+    for n in ordered[:14]:
+        cls, ir, lv = lattice_sig(n)
+        label = known_abs.get(absvec(n), "**DERIVED**")
+        print(f"  {label:10} {ast_str(n):30} {cls:>11} {ir:8} {greedy_and_burden(n):8}  {lv}")
+
+    print()
+    if derived:
+        # pick the shiniest new F5: distinct from known, lowest burden, simplest
+        derived_sorted = sorted(derived, key=lambda n: (lattice_sig(n)[1], depth(n), len(ast_str(n))))
+        f5 = derived_sorted[0]
+        cls, ir, lv = lattice_sig(f5)
+        print(f"SHINY NEW F5 (derived, not hand-picked, not F1/F2/c2):")
+        print(f"  AST        : {ast_str(f5)}")
+        print(f"  lattice    : {cls}   int_residual {ir}   fractional levels {lv}")
+        print(f"  greedy_sum : {greedy_and_burden(f5)}")
+        print(f"  membership : zero-on-surface & non-structural & irreducible (verified)")
+        # confirm distinct from each known by residual value-vector
+        for k, v in KNOWN.items():
+            same = valvec(f5) == valvec(v)
+            print(f"  vs {k:6}: residual identical? {same}")
+    else:
+        print("No primitive beyond the known set in this atom set {R,1,c} — need richer atoms (2nd sqrt / split).")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,49 @@
+{
+  "seq": 42,
+  "uid": "U-0724",
+  "type": "definition",
+  "claim_status": null,
+  "label": "DBP complete-integral values I_epsilon",
+  "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md",
+  "already_linked_objects": [
+    {
+      "id": "OBJ:bar-m-epsilon",
+      "label": "bar m_epsilon"
+    },
+    {
+      "id": "OBJ:i-epsilon",
+      "label": "I_epsilon"
+    },
+    {
+      "id": "OBJ:m-epsilon-n-epsilon-a-epsilon-b-epsilon",
+      "label": "m_epsilon, n_epsilon, A_epsilon, B_epsilon"
+    },
+    {
+      "id": "OBJ:u-a-epsilon-b-weierstrass-model-coordinates",
+      "label": "u, a_epsilon, b (Weierstrass-model coordinates)"
+    }
+  ],
+  "priority_candidate_pairs": [
+    {
+      "a": "OBJ:bar-m-epsilon",
+      "b": "OBJ:m-epsilon-n-epsilon-a-epsilon-b-epsilon",
+      "la": "bar m_epsilon",
+      "lb": "m_epsilon, n_epsilon, A_epsilon, B_epsilon",
+      "lift": 33.55
+    },
+    {
+      "a": "OBJ:bar-m-epsilon",
+      "b": "OBJ:i-epsilon",
+      "la": "bar m_epsilon",
+      "lb": "I_epsilon",
+      "lift": 32.8
+    },
+    {
+      "a": "OBJ:bar-m-epsilon",
+      "b": "OBJ:u-a-epsilon-b-weierstrass-model-coordinates",
+      "la": "bar m_epsilon",
+      "lb": "u, a_epsilon, b (Weierstrass-model coordinates)",
+      "lift": 28.38
+    }
+  ]
+}

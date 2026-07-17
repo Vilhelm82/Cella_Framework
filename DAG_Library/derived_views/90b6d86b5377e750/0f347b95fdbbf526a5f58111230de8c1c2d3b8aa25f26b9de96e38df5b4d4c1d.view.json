@@ -1,0 +1,399 @@
+{
+  "schema_version": 1,
+  "view_id": "cella-dbp-frontier:view:0f347b95fdbbf526",
+  "graph_id": "cella-dbp-frontier",
+  "graph_revision": "sha256:90b6d86b5377e750fdfbe4e6ce1f6843739eccc467a42e13870fba4ee96b1aae",
+  "created_at": "2026-07-15T13:19:17.700896Z",
+  "selection": {
+    "filters": {
+      "lifecycle_statuses": [
+        "proposed"
+      ]
+    },
+    "node_ids": [
+      "DBP:gap:I1",
+      "DBP:gap:I2",
+      "DBP:gap:I3",
+      "DBP:gap:I4",
+      "DBP:gap:I5",
+      "DBP:gap:I6",
+      "DBP:gap:II1",
+      "DBP:gap:II2",
+      "DBP:gap:II3",
+      "DBP:gap:II4",
+      "DBP:gap:II5",
+      "DBP:gap:III1",
+      "DBP:gap:III2",
+      "DBP:gap:III3",
+      "DBP:gap:III4",
+      "DBP:gap:III5",
+      "DBP:gap:III6",
+      "DBP:gap:III7",
+      "DBP:gap:IV1",
+      "DBP:gap:IV2",
+      "DBP:gap:IV3",
+      "DBP:gap:IV4",
+      "DBP:gap:IV5",
+      "DBP:gap:IV6",
+      "DBP:gap:IV7",
+      "DBP:gap:V1",
+      "DBP:gap:V2",
+      "DBP:gap:V3",
+      "DBP:gap:V4",
+      "DBP:paper:V",
+      "GFL:conj:af_engagement",
+      "GFL:conj:dual_confinement",
+      "GFL:conj:essdim_af",
+      "GFL:conj:grad_focusing",
+      "GFL:draft:two_lights",
+      "GFL:ghost:af_derivation",
+      "GFL:ghost:bridge_theorem",
+      "GFL:ghost:dualconf_proof",
+      "GFL:ghost:essdim_restate",
+      "GFL:ghost:floor3_cert",
+      "GFL:ghost:shadow_file",
+      "GFL:ghost:shape_paper",
+      "GFL:ghost:swap_theorem",
+      "GFL:ghost:twolights_validation",
+      "GFL:ghost:v4_paper",
+      "GFL:thm:realfiber",
+      "GR:ghost:lch_paper",
+      "PFT:draft:rf_obs2r6",
+      "PFT:ghost:rf_paper",
+      "PFT:ghost:rf_paper2",
+      "PHO:ghost:mzi_theorem",
+      "PHO:ghost:patent4",
+      "PHO:ghost:two_channel_proof",
+      "XPR:ghost:c_family",
+      "XPR:ghost:eatom_home",
+      "XPR:ghost:sublattice_paper"
+    ],
+    "edge_ids": [
+      "e::DBP:gap:II4::depends_on::DBP:gap:I5",
+      "e::DBP:gap:III2::depends_on::DBP:gap:III1",
+      "e::DBP:gap:IV2::depends_on::DBP:gap:IV1",
+      "e::DBP:gap:IV3::depends_on::DBP:gap:IV2",
+      "e::DBP:gap:IV5::depends_on::DBP:gap:IV1",
+      "e::DBP:gap:IV5::depends_on::DBP:gap:IV4",
+      "e::DBP:gap:V1::depends_on::DBP:gap:III2",
+      "e::DBP:gap:V3::depends_on::DBP:gap:V2",
+      "e::GFL:conj:essdim_af::supplements::GFL:conj:af_engagement",
+      "e::GFL:ghost:af_derivation::depends_on::GFL:conj:af_engagement",
+      "e::GFL:ghost:af_derivation::depends_on::GFL:conj:essdim_af",
+      "e::GFL:ghost:dualconf_proof::depends_on::GFL:conj:dual_confinement",
+      "e::GFL:ghost:shape_paper::depends_on::GFL:thm:realfiber",
+      "e::GFL:ghost:twolights_validation::depends_on::GFL:draft:two_lights"
+    ]
+  },
+  "compute": {
+    "algorithm": "layered",
+    "backend_requested": "auto",
+    "backend_resolved": "cpu",
+    "parameters": {
+      "seed": 17,
+      "iterations": 180
+    },
+    "implementation": "cella-layered-stdlib-v1",
+    "device": "CPU",
+    "cycle_bucket_nodes": []
+  },
+  "geometry": {
+    "dimensions": 2,
+    "coordinate_space": "normalised-unit-square",
+    "node_positions": [
+      {
+        "id": "DBP:gap:I1",
+        "x": 0.0,
+        "y": 0.0
+      },
+      {
+        "id": "DBP:gap:I2",
+        "x": 0.0,
+        "y": 0.02325581
+      },
+      {
+        "id": "DBP:gap:I3",
+        "x": 0.0,
+        "y": 0.04651163
+      },
+      {
+        "id": "DBP:gap:I4",
+        "x": 0.0,
+        "y": 0.06976744
+      },
+      {
+        "id": "DBP:gap:I5",
+        "x": 0.5,
+        "y": 0.40697674
+      },
+      {
+        "id": "DBP:gap:I6",
+        "x": 0.0,
+        "y": 0.09302326
+      },
+      {
+        "id": "DBP:gap:II1",
+        "x": 0.0,
+        "y": 0.11627907
+      },
+      {
+        "id": "DBP:gap:II2",
+        "x": 0.0,
+        "y": 0.13953488
+      },
+      {
+        "id": "DBP:gap:II3",
+        "x": 0.0,
+        "y": 0.1627907
+      },
+      {
+        "id": "DBP:gap:II4",
+        "x": 0.0,
+        "y": 0.18604651
+      },
+      {
+        "id": "DBP:gap:II5",
+        "x": 0.0,
+        "y": 0.20930233
+      },
+      {
+        "id": "DBP:gap:III1",
+        "x": 1.0,
+        "y": 0.47674419
+      },
+      {
+        "id": "DBP:gap:III2",
+        "x": 0.5,
+        "y": 0.43023256
+      },
+      {
+        "id": "DBP:gap:III3",
+        "x": 0.0,
+        "y": 0.23255814
+      },
+      {
+        "id": "DBP:gap:III4",
+        "x": 0.0,
+        "y": 0.25581395
+      },
+      {
+        "id": "DBP:gap:III5",
+        "x": 0.0,
+        "y": 0.27906977
+      },
+      {
+        "id": "DBP:gap:III6",
+        "x": 0.0,
+        "y": 0.30232558
+      },
+      {
+        "id": "DBP:gap:III7",
+        "x": 0.0,
+        "y": 0.3255814
+      },
+      {
+        "id": "DBP:gap:IV1",
+        "x": 1.0,
+        "y": 0.5
+      },
+      {
+        "id": "DBP:gap:IV2",
+        "x": 0.5,
+        "y": 0.45348837
+      },
+      {
+        "id": "DBP:gap:IV3",
+        "x": 0.0,
+        "y": 0.34883721
+      },
+      {
+        "id": "DBP:gap:IV4",
+        "x": 0.5,
+        "y": 0.47674419
+      },
+      {
+        "id": "DBP:gap:IV5",
+        "x": 0.0,
+        "y": 0.37209302
+      },
+      {
+        "id": "DBP:gap:IV6",
+        "x": 0.0,
+        "y": 0.39534884
+      },
+      {
+        "id": "DBP:gap:IV7",
+        "x": 0.0,
+        "y": 0.41860465
+      },
+      {
+        "id": "DBP:gap:V1",
+        "x": 0.0,
+        "y": 0.44186047
+      },
+      {
+        "id": "DBP:gap:V2",
+        "x": 0.5,
+        "y": 0.5
+      },
+      {
+        "id": "DBP:gap:V3",
+        "x": 0.0,
+        "y": 0.46511628
+      },
+      {
+        "id": "DBP:gap:V4",
+        "x": 0.0,
+        "y": 0.48837209
+      },
+      {
+        "id": "DBP:paper:V",
+        "x": 0.0,
+        "y": 0.51162791
+      },
+      {
+        "id": "GFL:conj:af_engagement",
+        "x": 1.0,
+        "y": 0.52325581
+      },
+      {
+        "id": "GFL:conj:dual_confinement",
+        "x": 0.5,
+        "y": 0.52325581
+      },
+      {
+        "id": "GFL:conj:essdim_af",
+        "x": 0.5,
+        "y": 0.54651163
+      },
+      {
+        "id": "GFL:conj:grad_focusing",
+        "x": 0.0,
+        "y": 0.53488372
+      },
+      {
+        "id": "GFL:draft:two_lights",
+        "x": 0.5,
+        "y": 0.56976744
+      },
+      {
+        "id": "GFL:ghost:af_derivation",
+        "x": 0.0,
+        "y": 0.55813953
+      },
+      {
+        "id": "GFL:ghost:bridge_theorem",
+        "x": 0.0,
+        "y": 0.58139535
+      },
+      {
+        "id": "GFL:ghost:dualconf_proof",
+        "x": 0.0,
+        "y": 0.60465116
+      },
+      {
+        "id": "GFL:ghost:essdim_restate",
+        "x": 0.0,
+        "y": 0.62790698
+      },
+      {
+        "id": "GFL:ghost:floor3_cert",
+        "x": 0.0,
+        "y": 0.65116279
+      },
+      {
+        "id": "GFL:ghost:shadow_file",
+        "x": 0.0,
+        "y": 0.6744186
+      },
+      {
+        "id": "GFL:ghost:shape_paper",
+        "x": 0.0,
+        "y": 0.69767442
+      },
+      {
+        "id": "GFL:ghost:swap_theorem",
+        "x": 0.0,
+        "y": 0.72093023
+      },
+      {
+        "id": "GFL:ghost:twolights_validation",
+        "x": 0.0,
+        "y": 0.74418605
+      },
+      {
+        "id": "GFL:ghost:v4_paper",
+        "x": 0.0,
+        "y": 0.76744186
+      },
+      {
+        "id": "GFL:thm:realfiber",
+        "x": 0.5,
+        "y": 0.59302326
+      },
+      {
+        "id": "GR:ghost:lch_paper",
+        "x": 0.0,
+        "y": 0.79069767
+      },
+      {
+        "id": "PFT:draft:rf_obs2r6",
+        "x": 0.0,
+        "y": 0.81395349
+      },
+      {
+        "id": "PFT:ghost:rf_paper",
+        "x": 0.0,
+        "y": 0.8372093
+      },
+      {
+        "id": "PFT:ghost:rf_paper2",
+        "x": 0.0,
+        "y": 0.86046512
+      },
+      {
+        "id": "PHO:ghost:mzi_theorem",
+        "x": 0.0,
+        "y": 0.88372093
+      },
+      {
+        "id": "PHO:ghost:patent4",
+        "x": 0.0,
+        "y": 0.90697674
+      },
+      {
+        "id": "PHO:ghost:two_channel_proof",
+        "x": 0.0,
+        "y": 0.93023256
+      },
+      {
+        "id": "XPR:ghost:c_family",
+        "x": 0.0,
+        "y": 0.95348837
+      },
+      {
+        "id": "XPR:ghost:eatom_home",
+        "x": 0.0,
+        "y": 0.97674419
+      },
+      {
+        "id": "XPR:ghost:sublattice_paper",
+        "x": 0.0,
+        "y": 1.0
+      }
+    ],
+    "edge_routes": []
+  },
+  "styles": {
+    "node_scalars": {},
+    "node_groups": {},
+    "extensions": {}
+  },
+  "provenance": {
+    "generator": "cella-derived-view-v1",
+    "canonical_graph_path": "/home/wlloyd/Cella Framework/DAG_Library/canonical/theorem-dag.json",
+    "authority": "derived-nonauthoritative"
+  },
+  "content_digest": "sha256:0f347b95fdbbf526a5f58111230de8c1c2d3b8aa25f26b9de96e38df5b4d4c1d",
+  "extensions": {}
+}

@@ -1,0 +1,45 @@
+# Genuine Multi-D G Test — Cross-Constraint Coupling — Closeout (R9)
+
+**Date:** 2026-06-05 · **Status:** research-grade, eval-layer, exact (Fraction), oracles only. Closes R9 (the genuine joint-coupling multi-D G test the lifted construction could not deliver). Code: `scratch/g_multid_coupling_test.py`.
+**Premise:** Exp 2's lifted fixture collapsed to a scalar sqrt round-trip (`X=sqrt(sos)`), inheriting the 1D G=0 proof. This builds constructions that **couple two constraints in the residual mechanism itself**, and confronts the only honest multi-D question after this session's insight (G-as-remainder is structurally 0 in any dimension): **does the cross-constraint coupling term carry irreducible joint structure, or fall below the floor?**
+
+## Pre-registered hypotheses
+- **H0 (expected):** the irreducible coupling is below the floor → joint residual separable → G-as-coupling absent in multi-D.
+- **H1:** coupling survives above the floor / tracks geometry → candidate multi-D G.
+
+## Result — H0 confirmed, decisively, two ways
+
+**Construction 1 — product manifold** `rho = (A·B)² − a·b`, coupling term `bilinear = eA·eB` (the only genuinely-joint object; `eA=A²−a`, `eB=B²−b`):
+- `|bilinear| / ulp(a·b)`: **median exactly 0, max 2.22e-16 = 2⁻⁵²** at every scale tested (a·b = 2⁻³⁰ … 2⁺³⁰). The coupling is a full factor of machine epsilon **below** the joint residual's own ulp — it rounds away. Joint residual = separable (per-constraint M⊕C) + joint-computation conditioning, no surviving coupling.
+
+**Construction 2 — degenerate determinant** `AD − BC` (two algebraically-equal sqrt-product paths; a different coupling):
+- Residual lands on the **integer-ulp BACL lattice** ({0,±1,±2,±3}); exactly zero (perfectly separable) in ~half the cells; **100% exactly zero when the geometry knob k is a power of 2** (scaling is BACL-exact). Pure M, no irreducible joint structure.
+
+## Why it generalises (not construction-specific)
+A bilinear coupling of two per-constraint residuals (each ~ulp) is ~ulp², i.e. ~ε **below** the joint residual's own ulp. **Cross-constraint geometric coupling is structurally below the floor** — it cannot survive into the observable residual, for any construction. Demonstrated on two; general by order-counting.
+
+## Conclusion — the ADDITIVE-RESIDUAL-TERM is closed; the geometric-PRIMITIVE question is OPEN
+
+> **Scope correction (the original draft of this section overclaimed and is retracted).** What is closed is narrow; do not read this as "G is closed."
+
+| dimension | construction | G-as-additive-residual-term |
+|---|---|---|
+| 1D | sqrt round-trip (Exp 1) | **0**, proven floorless |
+| genuine multi-D | bilinear cross-constraint coupling (this test) | **below-floor / pure M — absent** |
+
+**What is actually closed — only the two constructions we ran (NOT "the residual-term hunt"):**
+1. the four-form **sqrt-residual** M⊕C decomposition leaves zero additive remainder (Exp 1) — one residual family, one decomposition;
+2. a **bilinear coupling of two *independent* sqrt-residuals** is ~ε below the joint residual's ulp (this test) — one coupling shape, one operand type.
+The order-counting generalization (~ulp² ⇒ below floor) extends **only to bilinear couplings of *independent* residuals.**
+
+**Explicitly UNTESTED even within residual-terms (open doors):**
+- **First-order / shared-structure couplings** — if the two constraints share an operand or root, the coupling is **O(ulp), not below the floor**; this whole class is untested and is exactly where a surviving residual term could live.
+- Non-bilinear couplings; non-sqrt / higher-order-root residual families; other operand assemblies; other formats.
+So: *in these two constructions* geometry is not a surviving additive residual term. That is the entire negative result — no broader "residual-term hunt is closed" claim is warranted.
+
+**NOT closed — explicitly open (correcting the retracted overclaim):** whether the substrate contains a deterministic geometric **primitive** (an observable that *is* a geometric invariant). A *universal negative* over all possible observables is unprovable and was wrongly asserted. The evidence in fact points the other way: **E = log₂|base_operand| ↔ K_G at Spearman ρ = −1.0000 within Schwarzschild and pure_algebraic** (Phase H) — a deterministic substrate quantity that tracks curvature perfectly in rank inside a fixture. The substrate demonstrably carries geometry deterministically; the single failure is **cross-fixture universality** (E breaks at matched K_G across fixtures). Live candidate primitives: E, `ulp_spread_log2`, two-form partition, the j-distribution (MT 0.50 vs photon 0.42).
+
+**Q1 ("what casts the patterns"):** part of it is M (BACL lattice) ⊕ C (conditioning), and geometry is not an additive residual term — that piece is settled. **The central piece is open:** is there a deterministic substrate observable that is a geometric invariant *across* fixtures? That is the E↔K_G / Phase-H / Gate-2 frontier — and this test does **not** close it (it only rules out one shape: a bilinear residual-coupling term).
+
+## Scope / honesty
+Eval-layer, two constructions + a general order argument. Does not claim every conceivable construction (the order argument covers bilinear coupling of independent per-constraint residuals; a construction with *first-order* shared structure would be a different object — but that is shared M, not joint G). Does not re-derive Phase E (which tried to *derive* K_G); this tests the *coupling term*, a distinct and previously-unasked question.

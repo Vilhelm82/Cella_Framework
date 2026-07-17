@@ -1,0 +1,64 @@
+# Inverse Half-Grid Design Audit
+
+Accepted outcome: `inverse_near_miss_only`
+Headline classification: `late_q_direct_operand_after_root_subtract_near_miss`
+
+## Test Design
+
+This audit starts from the desired readout grid instead of from candidate formulas.
+The only promoted target is pointwise half-ULP separation from the clean arm: `phase delta == 0.5 mod 1`.
+Measured route families from the late-q and early-operand campaigns are regrouped into design principles and ranked by target conformity.
+
+## Required Findings
+
+1. Natural half-grid design principle supported: `False`.
+2. Natural support candidate: `False`.
+3. Natural near miss found: `True`.
+4. Best natural principle: `late_q_direct_operand_after_root_subtract` classified `half_grid_near_miss`.
+   Best fixture/mask/fraction: `schwarzschild` / `f_binade_-1` / `0.7272727272727273`.
+5. Synthetic detector conforms by construction: `True`.
+6. Early operand principles are same-phase anti-conformers: `True`.
+7. Double precision language justified: `False`.
+
+## Principle Ranking
+
+- `late_q_direct_operand_after_root_subtract`: `half_grid_near_miss`; best `schwarzschild` / `direct_2_over_r` / `f_binade_-1` half fraction `0.7272727272727273`, same fraction `0.13636363636363635`.
+- `late_q_inverse_operand_after_root_subtract`: `half_grid_near_miss`; best `schwarzschild` / `inverse_plus_inverse` / `f_binade_-1` half fraction `0.7272727272727273`, same fraction `0.13636363636363635`.
+- `late_q_reassociated_operand_after_root_subtract`: `half_grid_near_miss`; best `schwarzschild` / `subtract_numerators` / `f_binade_-1` half fraction `0.7272727272727273`, same fraction `0.13636363636363635`.
+- `late_q_split_operand_after_root_subtract`: `half_grid_near_miss`; best `schwarzschild` / `four_over_r_then_half` / `f_binade_-1` half fraction `0.7272727272727273`, same fraction `0.13636363636363635`.
+- `late_q_root_roundtrip_operand_after_root_subtract`: `half_grid_near_miss`; best `schwarzschild` / `sqrt_ratio_squared` / `f_binade_-1` half fraction `0.7222222222222222`, same fraction `0.1111111111111111`.
+- `early_operand_constant_split`: `same_phase_anti_conformer`; best `schwarzschild` / `split_c_1_5` / `full_support` half fraction `0.0`, same fraction `1.0`.
+- `early_operand_direct_q_minus_one`: `same_phase_anti_conformer`; best `schwarzschild` / `q_minus_one` / `full_support` half fraction `0.0`, same fraction `1.0`.
+- `early_operand_factored_f`: `same_phase_anti_conformer`; best `schwarzschild` / `two_minus_r_times_inverse` / `full_support` half fraction `0.0`, same fraction `1.0`.
+- `early_operand_negated_complement`: `same_phase_anti_conformer`; best `schwarzschild` / `negated_one_minus_q` / `full_support` half fraction `0.0`, same fraction `1.0`.
+- `early_operand_negative_f`: `same_phase_anti_conformer`; best `schwarzschild` / `negative_direct_f` / `full_support` half fraction `0.0`, same fraction `1.0`.
+- `early_operand_q_route`: `same_phase_anti_conformer`; best `schwarzschild` / `sqrt_ratio_squared_minus_one` / `full_support` half fraction `0.0`, same fraction `1.0`.
+- `early_operand_ratio_split`: `same_phase_anti_conformer`; best `schwarzschild` / `two_over_r_minus_r_over_r` / `full_support` half fraction `0.0`, same fraction `1.0`.
+- `early_operand_scaled_q`: `same_phase_anti_conformer`; best `schwarzschild` / `scaled_2` / `full_support` half fraction `0.0`, same fraction `1.0`.
+- `early_operand_split_f`: `same_phase_anti_conformer`; best `pure_affine_control` / `negative_split_f` / `full_support` half fraction `0.0`, same fraction `1.0`.
+- `early_operand_split_q`: `same_phase_anti_conformer`; best `schwarzschild` / `split_q_halves` / `full_support` half fraction `0.0`, same fraction `1.0`.
+- `late_q_complement_operand_after_root_subtract`: `same_phase_anti_conformer`; best `schwarzschild` / `complement_mul_inverse` / `full_observable` half fraction `0.0`, same fraction `1.0`.
+- `synthetic_destination_half_shift`: `manufactured_detector_only`; best `pure_affine_control` / `synthetic_destination_half_shift` / `full_support` half fraction `1.0`, same fraction `0.0`.
+- `same_route_negative_control`: `negative_control_same_phase`; best `sr` / `same_route_clean_arm` / `full_support` half fraction `0.0`, same fraction `1.0`.
+
+## Interpretation
+
+Working backward clarifies the design rule: the closest natural match is not an early `q - 1` form. It is the late direct-q arm after the root-square-minus-one cancellation, because that leaves the cancellation operand phase visible relative to `ulp(f)`.
+
+Every early-operand principle tested is an anti-conformer for the half grid: it globally cleans the lattice but locks to same phase. That makes it useful for cleanup, not for increasing comb density.
+
+The next productive move is a constrained q-phase law search on the late-q arm, especially Schwarzschild `f_binade_-1`, where the best natural principle already reaches `16 / 22` half-grid hits. More equivalent `q - 1 == -f` rewrites are unlikely to help.
+
+## Verification
+
+- `PYTHONPATH=src python -m lloyd_v4.evals.inverse_half_grid_design_audit`
+  Result: passed; generated artifact_inverse_half_grid_design_audit.json and inverse_half_grid_design_audit_report.md.
+- `PYTHONPATH=src python -m pytest tests/test_inverse_half_grid_design_audit.py -q`
+  Result: passed; focused inverse-design tests.
+- `PYTHONPATH=src python -m pytest tests/test_inverse_half_grid_design_audit.py tests/test_early_operand_phase_lock_search.py tests/test_f2_operand_route_search.py -q`
+  Result: passed; focused compatibility subset.
+
+## Artifacts
+
+- `Build_Docs/Reports/inverse_half_grid_design_audit/artifact_inverse_half_grid_design_audit.json`
+- `Build_Docs/Reports/inverse_half_grid_design_audit/inverse_half_grid_design_audit_report.md`

@@ -1,0 +1,54 @@
+# Route-Bank Offset Guard Audit
+
+Accepted outcome: `offset_guard_exact_for_route_bank_with_zero_offset_hard_cells`
+Headline classification: `operand_offset_guard_identifies_route_bank_basin`
+
+## Test Design
+
+This campaign expands the two-route pair into a natural q-route bank and tests whether an operand-offset guard predicts the cells where the bank can produce a half-phase read.
+
+Guard:
+
+```text
+direct route is half-phase OR any companion q_route differs from q_direct by a nonzero float64 value
+```
+
+The target is route-bank success: at least one route in the bank lands on half phase for the same cell.
+
+## Findings
+
+1. Offset guard exact on tested scope: `True`.
+2. Route bank resolves all tested cells: `False`.
+3. Route-bank success: `62` / `64` = `0.96875`.
+4. Guard precision/recall: `1.0` / `1.0`.
+5. Hard zero-offset cells: `[{'variant_id': 'nextafter_up', 'index': 130}, {'variant_id': 'alternating_nextafter', 'index': 130}]`.
+6. Double-precision language justified: `False`.
+
+## Variant Summary
+
+- `native_grid`: success `20` / `20`, guard selected `20`, hard zero-offset indices `[]`, selected routes `{'cbrt_power': 1, 'direct_2_over_r': 16, 'sqrt_ratio_squared': 3}`.
+- `nextafter_up`: success `13` / `14`, guard selected `13`, hard zero-offset indices `[130]`, selected routes `{'cbrt_power': 1, 'cbrt_ratio_cubed': 1, 'direct_2_over_r': 7, 'sqrt2_over_sqrtr_squared': 1, 'sqrt_four_over_r_squared': 1, 'sqrt_ratio_squared': 2}`.
+- `nextafter_down`: success `13` / `13`, guard selected `13`, hard zero-offset indices `[]`, selected routes `{'cbrt_power': 4, 'direct_2_over_r': 5, 'sqrt_four_over_r_squared': 1, 'sqrt_ratio_squared': 3}`.
+- `alternating_nextafter`: success `16` / `17`, guard selected `16`, hard zero-offset indices `[130]`, selected routes `{'cbrt_power': 3, 'cbrt_ratio_cubed': 1, 'direct_2_over_r': 8, 'sqrt_four_over_r_squared': 1, 'sqrt_ratio_squared': 3}`.
+
+## Interpretation
+
+The drift is not random route disagreement. On the tested `f_binade_-1` variants, route-bank success is exactly predicted by whether the route bank creates any operand-level q offset from the direct path, with direct half reads counted as already resolved.
+
+The two unresolved cells are both index `130` under perturbed grids. In those cells every tested natural companion route collapses to the same q value as direct, while direct itself is integer-phase. With no operand offset, the current route bank has no lever to create a half-grid read.
+
+This is useful, but it is still a basin guard over a finite route bank, not a precision-doubling method. The next test should target the zero-offset cells directly: either find a new q source that moves index `130`, or prove that this arithmetic family is exhausted there.
+
+## Verification
+
+- `PYTHONPATH=src python -m lloyd_v4.evals.route_bank_offset_guard_audit`
+  Result: passed; generated artifact_route_bank_offset_guard_audit.json and route_bank_offset_guard_audit_report.md.
+- `PYTHONPATH=src python -m pytest tests/test_route_bank_offset_guard_audit.py -q`
+  Result: passed; focused route-bank offset guard tests.
+- `PYTHONPATH=src python -m pytest tests/test_route_bank_offset_guard_audit.py tests/test_route_pair_selection_stability_audit.py tests/test_hard_cell_q_source_exhaustion_search.py -q`
+  Result: passed; focused compatibility subset.
+
+## Artifacts
+
+- `Build_Docs/Reports/route_bank_offset_guard_audit/artifact_route_bank_offset_guard_audit.json`
+- `Build_Docs/Reports/route_bank_offset_guard_audit/route_bank_offset_guard_audit_report.md`

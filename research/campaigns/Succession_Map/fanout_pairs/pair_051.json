@@ -1,0 +1,42 @@
+{
+  "rank": 51,
+  "lift": 18.92,
+  "count": 2,
+  "families": 1,
+  "a": {
+    "id": "OBJ:c-epsilon",
+    "label": "c_epsilon",
+    "standard_term": "auxiliary ratio constant m_epsilon/(m_epsilon - n_epsilon)",
+    "nomenclature": "novel",
+    "symbols": [
+      "c_epsilon"
+    ]
+  },
+  "b": {
+    "id": "OBJ:u-a-epsilon-b-weierstrass-model-coordinates",
+    "label": "u, a_epsilon, b (Weierstrass-model coordinates)",
+    "standard_term": "depressed-cubic (Tschirnhaus) substitution coordinates putting the curve in short Weierstrass form",
+    "nomenclature": "identical-to",
+    "symbols": [
+      "a_epsilon"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-1012",
+      "type": "formula",
+      "claim_status": null,
+      "label": "F_epsilon(b/u) under the complementary substitution",
+      "summary": "Under u=m_\\epsilon(r^2-1), F_\\epsilon(b/u) = A_\\epsilon c_\\epsilon \\frac{1-r^2}{1-\\bar m_\\epsilon r^2} -B_\\epsilon. \\tag{4.7}",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md"
+    },
+    {
+      "uid": "U-1283",
+      "type": "formula",
+      "claim_status": null,
+      "label": "Weierstrass form of C_epsilon",
+      "summary": "C_\\epsilon: \\qquad y^2=u^3+a_\\epsilon u^2+bu. \\tag{2.2}",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_periods_landen_and_elliptic_structure/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md"
+    }
+  ]
+}

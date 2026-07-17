@@ -1,0 +1,271 @@
+"""
+Hardened Dual-Arm Probe (V1) tests.
+
+Preregistry: Build_Docs/Reports/hardened_dual_arm_probe/preregistry.md (FROZEN 2026-05-18).
+
+Seven tests:
+  H0  happy path     — F2 wide / F4 microscope construction + run produces a
+                       hardened headline; resolved_count is recorded
+                       (the empirical value is part of the closeout, not pre-tested).
+  H1  N1 same-channel without opt-in  — construction AssertionError
+  H2  N2 same-channel with opt-in     — runs but all valid-core records carry
+                                        underpromotion_reason=armN_zero_path_separation
+  H3  N3 diagnostic route             — runs but hardened_outcome capped at
+                                        active_handoff_diagnostic_only
+  H4  N4 target-aware selection       — construction AssertionError
+  H5  N5 non-armW_falloff activation  — construction AssertionError
+  H6  N6 post-construction mutation   — FrozenInstanceError
+  H7  N7 armN predicate exposes ARM-W — construction AssertionError
+
+These tests run the v11 campaign internally, so they are heavier than unit
+tests. They are not in the conftest SLOW_TEST_FILES list but each test is
+quick enough on its own (the v11 campaign runs in a few seconds).
+"""
+from __future__ import annotations
+
+from dataclasses import FrozenInstanceError
+
+import pytest
+
+from scratch.hardened_dual_arm_probe import (
+    DualArmConfig,
+    HardenedDualArmProbe,
+    ALLOWED_ROUTE_KINDS,
+    ALLOWED_ACTIVATION_RULES,
+    ALLOWED_SELECTION_RULES,
+)
+
+
+def _base_config(**overrides) -> DualArmConfig:
+    base = dict(
+        armW_channel="F2_float64",
+        armN_channel="F4_float64",
+        armW_route_id="sr_four_form_F2",
+        armN_route_id="sr_four_form_F4",
+        armW_route_kind="production",
+        armN_route_kind="production",
+        activation_rule="armW_falloff",
+        selection_rule="predeclared_priority",
+        same_route_control=False,
+        label="hardened_test",
+    )
+    base.update(overrides)
+    return DualArmConfig(**base)
+
+
+# === H0 — Happy path =======================================================
+
+@pytest.mark.slow
+def test_h0_happy_path_f2_vs_f4_runs_and_emits_headline() -> None:
+    """Happy path: F2 wide / F4 microscope hardened probe constructs and runs.
+
+    Verifies the hardened artifact has the expected top-level structure and
+    that the 6-condition checklist is stamped on each record. The actual
+    resolved_count value is empirical — captured in the closeout.
+    """
+    probe = HardenedDualArmProbe(_base_config())
+    data = probe.run()
+    assert data["probe_version"] == "hardened_v1"
+    assert data["config_validation"] == "passed"
+    assert data["diagnostic_route_present"] is False
+    assert "headline" in data
+    assert "resolved_count" in data["headline"]
+    assert "underpromotion_breakdown" in data["headline"]
+    assert "legacy_v11_outcome" in data["headline"]
+    assert "hardened_outcome" in data["headline"]
+    # Every primary-scan record should carry the checklist
+    primary = data["scans"]["primary"]
+    assert primary.get("records"), "expected non-empty primary scan"
+    for rec in primary["records"]:
+        cl = rec.get("hardened_checklist")
+        assert cl is not None, f"missing checklist on record at β={rec.get('beta')}"
+        for key in (
+            "c1_path_separation",
+            "c2_own_instrument_law",
+            "c3_non_diagnostic_route",
+            "c4_no_target_aware_selection",
+            "c5_armW_derived_activation",
+            "c6_partition_guard_stable",
+            "inside_armW_gap",
+            "all_six_conditions",
+        ):
+            assert key in cl, f"missing checklist key {key}"
+        # c2, c3, c4 should be True under a non-diagnostic production config
+        assert cl["c2_own_instrument_law"] is True
+        assert cl["c3_non_diagnostic_route"] is True
+        assert cl["c4_no_target_aware_selection"] is True
+    # V4 validity stamp present
+    val = data["validity"]
+    for field in ("defined", "finite", "observable", "selectable", "advanceable"):
+        assert field in val
+
+
+# === H1 — N1 same-channel without opt-in ===================================
+
+def test_h1_same_channel_without_optin_raises() -> None:
+    with pytest.raises(AssertionError, match="armW_channel == armN_channel"):
+        cfg = _base_config(
+            armW_channel="F4_float64",
+            armN_channel="F4_float64",
+            armW_route_id="sr_four_form_F4_W",
+            armN_route_id="sr_four_form_F4_N",
+            same_route_control=False,
+        )
+        HardenedDualArmProbe(cfg)
+
+
+def test_h1b_same_route_id_without_optin_raises() -> None:
+    with pytest.raises(AssertionError, match="armW_route_id == armN_route_id"):
+        cfg = _base_config(
+            armW_channel="F2_float64",
+            armN_channel="F4_float64",
+            armW_route_id="shared_route",
+            armN_route_id="shared_route",
+            same_route_control=False,
+        )
+        HardenedDualArmProbe(cfg)
+
+
+# === H2 — N2 same-channel with opt-in =====================================
+
+@pytest.mark.slow
+def test_h2_same_channel_with_optin_runs_but_all_records_zero_separation() -> None:
+    cfg = _base_config(
+        armW_channel="F4_float64",
+        armN_channel="F4_float64",
+        armW_route_id="sr_four_form_F4_W",
+        armN_route_id="sr_four_form_F4_N",
+        same_route_control=True,
+        label="hardened_same_route_control",
+    )
+    probe = HardenedDualArmProbe(cfg)
+    data = probe.run()
+    # No record should resolve
+    assert data["headline"]["resolved_count"] == 0
+    # The zero-separation reason should dominate the breakdown for records
+    # where ARM-N is active and valid (i.e., inside a core gap)
+    breakdown = data["headline"]["underpromotion_breakdown"]
+    # Tolerate the possibility that some records fall into armN_inactive
+    # (those outside any ARM-W gap); but among unresolved records that are
+    # inside an ARM-W gap, the dominant reason must be zero_path_separation.
+    # The hardened_outcome reflects the most informative ceiling.
+    valid_core_zero = breakdown.get("armN_zero_path_separation", 0)
+    assert (
+        valid_core_zero > 0
+        or data["headline"]["hardened_outcome"]
+        in {
+            "active_handoff_gap_unresolved_zero_separation",
+            "active_handoff_no_armN_activation",
+            "no_active_handoff",
+        }
+    ), f"unexpected hardened outcome on same-route control: {data['headline']}"
+
+
+# === H3 — N3 diagnostic route =============================================
+
+@pytest.mark.slow
+def test_h3_diagnostic_route_caps_outcome() -> None:
+    cfg = _base_config(
+        armN_route_kind="diagnostic",
+        label="hardened_diagnostic_route",
+    )
+    probe = HardenedDualArmProbe(cfg)
+    assert probe.diagnostic_route_present is True
+    data = probe.run()
+    assert data["diagnostic_route_present"] is True
+    assert data["headline"]["hardened_outcome"] == "active_handoff_diagnostic_only"
+    assert data["headline"]["resolved_count"] == 0
+    # Every record must carry c3_non_diagnostic_route=False
+    for rec in data["scans"]["primary"]["records"]:
+        cl = rec.get("hardened_checklist", {})
+        assert cl["c3_non_diagnostic_route"] is False
+        assert rec["hardened_status"] != "gap_resolved"
+
+
+# === H4 — N4 target-aware selection raises ================================
+
+def test_h4_target_aware_selection_raises() -> None:
+    with pytest.raises(AssertionError, match="selection_rule"):
+        cfg = _base_config(selection_rule="smallest_residual")
+        HardenedDualArmProbe(cfg)
+
+
+def test_h4b_made_up_selection_rule_raises() -> None:
+    with pytest.raises(AssertionError, match="selection_rule"):
+        cfg = _base_config(selection_rule="best_fit_target")
+        HardenedDualArmProbe(cfg)
+
+
+# === H5 — N5 non-armW_falloff activation raises ===========================
+
+def test_h5_independent_activation_raises() -> None:
+    with pytest.raises(AssertionError, match="activation_rule"):
+        cfg = _base_config(activation_rule="independent")
+        HardenedDualArmProbe(cfg)
+
+
+def test_h5b_unknown_activation_rule_raises() -> None:
+    with pytest.raises(AssertionError, match="activation_rule"):
+        cfg = _base_config(activation_rule="armN_self_activated")
+        HardenedDualArmProbe(cfg)
+
+
+# === H6 — N6 post-construction mutation raises ============================
+
+def test_h6_post_construction_mutation_raises() -> None:
+    cfg = _base_config()
+    probe = HardenedDualArmProbe(cfg)
+    with pytest.raises(FrozenInstanceError):
+        probe.config.activation_rule = "independent"  # type: ignore[misc]
+    with pytest.raises(FrozenInstanceError):
+        probe.config.armN_channel = "F1_float64"  # type: ignore[misc]
+
+
+# === H7 — N7 ARM-N predicate exposes ARM-W field raises ==================
+
+def test_h7_armN_predicate_with_arm_w_param_raises() -> None:
+    def bad_predicate(enough_points, instrument, arm_w_verdict):
+        return bool(enough_points and arm_w_verdict)
+
+    with pytest.raises(AssertionError, match="arm_w_verdict|own instrument law"):
+        HardenedDualArmProbe(
+            _base_config(), armN_validity_predicate=bad_predicate
+        )
+
+
+def test_h7b_armN_predicate_with_armW_param_raises() -> None:
+    def bad_predicate(enough_points, instrument, armW_inference):
+        return bool(enough_points and armW_inference)
+
+    with pytest.raises(AssertionError, match="armW_inference|own instrument law"):
+        HardenedDualArmProbe(
+            _base_config(), armN_validity_predicate=bad_predicate
+        )
+
+
+# === H8 — channel allow-list typo ========================================
+
+def test_h8_unknown_channel_raises() -> None:
+    with pytest.raises(AssertionError, match="not in"):
+        cfg = _base_config(armW_channel="F9_float64")
+        HardenedDualArmProbe(cfg)
+
+
+# === H9 — unknown route kind raises ======================================
+
+def test_h9_unknown_route_kind_raises() -> None:
+    with pytest.raises(AssertionError, match="armN_route_kind"):
+        cfg = _base_config(armN_route_kind="experimental")
+        HardenedDualArmProbe(cfg)
+
+
+# === H10 — allow-list constants are frozen ===============================
+
+def test_h10_allow_lists_are_frozensets() -> None:
+    """Ensure the allow-lists are immutable so they can't be widened at
+    runtime to bypass the principles."""
+    assert isinstance(ALLOWED_ROUTE_KINDS, frozenset)
+    assert isinstance(ALLOWED_ACTIVATION_RULES, frozenset)
+    assert isinstance(ALLOWED_SELECTION_RULES, frozenset)
+    with pytest.raises(AttributeError):
+        ALLOWED_SELECTION_RULES.add("smallest_residual")  # type: ignore[attr-defined]

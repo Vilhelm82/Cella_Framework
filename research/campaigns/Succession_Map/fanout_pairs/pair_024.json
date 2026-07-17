@@ -1,0 +1,50 @@
+{
+  "rank": 24,
+  "lift": 36.9,
+  "count": 3,
+  "families": 1,
+  "a": {
+    "id": "OBJ:e-128",
+    "label": "E_128",
+    "standard_term": "minimal Weierstrass-model elliptic curve with j-invariant 128",
+    "nomenclature": "identical-to",
+    "symbols": [
+      "e_128"
+    ]
+  },
+  "b": {
+    "id": "OBJ:e-lambda-legendre-curve",
+    "label": "E_lambda / Legendre curve",
+    "standard_term": "Legendre normal form elliptic curve y^2 = (1-x^2)(1-lambda x^2)",
+    "nomenclature": "identical-to",
+    "symbols": [
+      "e_lambda"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-0817",
+      "type": "theorem",
+      "claim_status": "machine-verified",
+      "label": "E_lambda is 2-isogenous to E_128",
+      "summary": "E_lambda is 2-isogenous to E_128.",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/16-DBP_Curvature_Constants_Corrected_Formulation.md"
+    },
+    {
+      "uid": "U-0723",
+      "type": "theorem",
+      "claim_status": null,
+      "label": "Correct Theorem Spine",
+      "summary": "The primary DBP total-curvature constant is a third-kind curvature period\nassociated with the minimal non-CM DBP curve E_128.\n\nIts complete elliptic-integral expression is naturally written on the\nLegendre curve E_lambda",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/16-DBP_Curvature_Constants_Corrected_Formulation.md"
+    },
+    {
+      "uid": "U-0732",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Load-bearing correction: E_128 vs E_lambda",
+      "summary": "All period-lattice claims must specify which curve they refer to:\n\n- E_128: the minimal DBP j = 128 curve.\n- E_lambda: the Legendre j = 10976 curve on which K/Pi are naturally written.\n\nThe two are 2-isogenous, not ident",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/16-DBP_Curvature_Constants_Corrected_Formulation.md"
+    }
+  ]
+}

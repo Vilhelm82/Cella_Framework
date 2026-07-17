@@ -1,0 +1,132 @@
+{
+  "probe": "foldreadback_probe0",
+  "preregistry": "v4",
+  "mb": 24,
+  "eta": "0.000001",
+  "tol_020": 0.02,
+  "counts": {
+    "A1": 74,
+    "A2": 74,
+    "H": 74,
+    "nz_A1": 73,
+    "nz_A2": 74,
+    "nz_H": 74,
+    "nonobs_A1": 0,
+    "nonobs_A2": 0
+  },
+  "gate1": {
+    "median_A1": -0.5182603998347965,
+    "median_A2": -0.4833265421667485,
+    "sep": 0.034933857668048074,
+    "pooled_iqr": 1171.778397747722,
+    "n_win_A1": 37,
+    "n_win_A2": 37,
+    "separates": false
+  },
+  "gate2_nullband": {
+    "level_histogram": {
+      "band": 0.972972972972973,
+      "within_A1": 0.9459459459459459,
+      "within_A2": 0.972972972972973
+    },
+    "transition": {
+      "band": 1.0,
+      "within_A1": 1.0,
+      "within_A2": 1.0
+    },
+    "signed_occ": {
+      "band": 0.972972972972973,
+      "within_A1": 0.9459459459459459,
+      "within_A2": 0.972972972972973
+    },
+    "sign_pattern": {
+      "band": 0.16216216216216217,
+      "within_A1": 0.09759759759759767,
+      "within_A2": 0.16216216216216217
+    },
+    "lattice_rank": {
+      "band": 0,
+      "within_A1": 0,
+      "within_A2": 0
+    }
+  },
+  "gate3": {
+    "level_histogram": {
+      "status": "ok",
+      "discrepancy": 2.0,
+      "band": 0.972972972972973,
+      "separates": true
+    },
+    "transition": {
+      "status": "ok",
+      "discrepancy": 2.0,
+      "band": 1.0,
+      "separates": true
+    },
+    "signed_occ": {
+      "status": "ok",
+      "discrepancy": 2.0,
+      "band": 0.972972972972973,
+      "separates": true
+    },
+    "sign_pattern": {
+      "status": "ok",
+      "discrepancy": 0.9400222139948168,
+      "band": 0.16216216216216217,
+      "separates": true
+    },
+    "lattice_rank": {
+      "status": "ok",
+      "discrepancy": 2,
+      "band": 0,
+      "separates": true
+    }
+  },
+  "gate4": {
+    "level_histogram": {
+      "resid_discrepancy": 2.0,
+      "band": 0.972972972972973,
+      "survives": true
+    },
+    "transition": {
+      "resid_discrepancy": 1.0136986301369864,
+      "band": 1.0,
+      "survives": true
+    },
+    "signed_occ": {
+      "resid_discrepancy": 2.0,
+      "band": 0.972972972972973,
+      "survives": true
+    },
+    "sign_pattern": {
+      "resid_discrepancy": 0.05405405405405406,
+      "band": 0.16216216216216217,
+      "survives": false
+    },
+    "lattice_rank": {
+      "resid_discrepancy": 0,
+      "band": 0,
+      "survives": false
+    }
+  },
+  "out_of_sample": {
+    "level_histogram": {
+      "kind": "vector",
+      "degenerate": true,
+      "between": false
+    },
+    "transition": {
+      "kind": "vector",
+      "degenerate": true,
+      "between": false
+    },
+    "signed_occ": {
+      "kind": "vector",
+      "degenerate": true,
+      "between": false
+    }
+  },
+  "outcome": "precondition_refused_no_signal",
+  "interpretation": null,
+  "runtime_s": 0.11
+}

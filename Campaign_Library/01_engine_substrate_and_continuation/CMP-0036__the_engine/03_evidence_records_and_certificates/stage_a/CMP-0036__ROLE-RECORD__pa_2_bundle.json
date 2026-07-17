@@ -1,0 +1,36 @@
+{
+ "battery": "PA.2",
+ "byte_stable_x2": true,
+ "env": {
+  "numpy": "2.4.4",
+  "python": "3.12.3",
+  "sympy": "1.14.0"
+ },
+ "expected_records_sha": "74720504dfd88af7",
+ "predecl_pin": "44a2c8019b2929b2",
+ "runs": [
+  {
+   "last_line": "ALL_PASS",
+   "rc": 0,
+   "records_sha": "74720504dfd88af7",
+   "run": 1,
+   "stderr_tail": "",
+   "stdout_sha16": "3eb491defb6a354c",
+   "terminal_ok": true,
+   "wall_s": 4.37
+  },
+  {
+   "last_line": "ALL_PASS",
+   "rc": 0,
+   "records_sha": "74720504dfd88af7",
+   "run": 2,
+   "stderr_tail": "",
+   "stdout_sha16": "3eb491defb6a354c",
+   "terminal_ok": true,
+   "wall_s": 4.34
+  }
+ ],
+ "script": "portfolio/campaigns/deficit_engine/wave0_battery.py",
+ "terminal_required": "ALL_PASS",
+ "verdict": "PASS"
+}

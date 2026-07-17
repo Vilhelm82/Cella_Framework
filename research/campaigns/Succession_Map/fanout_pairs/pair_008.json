@@ -1,0 +1,50 @@
+{
+  "rank": 8,
+  "lift": 73.8,
+  "count": 10,
+  "families": 1,
+  "a": {
+    "id": "OBJ:e-128",
+    "label": "E_128",
+    "standard_term": "minimal Weierstrass-model elliptic curve with j-invariant 128",
+    "nomenclature": "identical-to",
+    "symbols": [
+      "e_128"
+    ]
+  },
+  "b": {
+    "id": "OBJ:theta-trace-differential-on-e-128",
+    "label": "Theta (trace differential on E_128)",
+    "standard_term": "specific meromorphic differential on E_128 subject to the Landen-Trace decomposition",
+    "nomenclature": "special-case-of",
+    "symbols": [
+      "e_128"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-0817",
+      "type": "theorem",
+      "claim_status": "machine-verified",
+      "label": "E_lambda is 2-isogenous to E_128",
+      "summary": "E_lambda is 2-isogenous to E_128.",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/16-DBP_Curvature_Constants_Corrected_Formulation.md"
+    },
+    {
+      "uid": "U-0165",
+      "type": "definition",
+      "claim_status": null,
+      "label": "E_128 (minimal DBP curve)",
+      "summary": "E_128:\ny^2 = w*(1 - w)*(1 + w^2)\n\nEquivalently, in minimal Weierstrass form:\n\nY^2 = X^3 - X^2 + X - 1",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/16-DBP_Curvature_Constants_Corrected_Formulation.md"
+    },
+    {
+      "uid": "U-0723",
+      "type": "theorem",
+      "claim_status": null,
+      "label": "Correct Theorem Spine",
+      "summary": "The primary DBP total-curvature constant is a third-kind curvature period\nassociated with the minimal non-CM DBP curve E_128.\n\nIts complete elliptic-integral expression is naturally written on the\nLegendre curve E_lambda",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/16-DBP_Curvature_Constants_Corrected_Formulation.md"
+    }
+  ]
+}

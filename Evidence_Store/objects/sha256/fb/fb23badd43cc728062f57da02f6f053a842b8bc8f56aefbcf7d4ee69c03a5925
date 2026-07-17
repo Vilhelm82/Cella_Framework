@@ -1,0 +1,254 @@
+# substrate-invariant-search — Phase A — Closeout (analytic resolution)
+
+**Status:** CLOSED (analytic). **Date:** 2026-06-07.
+**Campaign:** `substrate-invariant-search` (LIVE_CAMPAIGNS_LEDGER — Gate-2 / Q1).
+**Authority:** `substrate_invariant_search_successor_authority_2026_06_07.md` (R1).
+**Grade legend:** every claim below is tagged **[ANALYTIC]** (proven by identity/structure,
+no run can falsify it) or **[EMPIRICAL]** (a reproducible run stands behind it). The honest
+shape of this phase is *an empirical-grade receipt nested under an analytic-grade closeout*.
+
+**Supersedes as a discovery effort:** `substrate_invariant_search_phase_a_prereg_2026_06_07.md`
+(the frozen pre-registration for a leave-one-fixture-out *search instrument*). That prereg was
+never run as a verdict generator and must not be — see §5. It survives only as the record of a
+search we proved unnecessary.
+
+---
+
+## 0. One-paragraph result
+
+Gate-2 asks: *is there a deterministic substrate observable that is a geometric invariant across
+fixtures?* The answer is **yes, and it is deflationary**: the substrate observable
+`S2 = d²/dt² log₂|base_operand|` is, in every fixture, *identically* the operand
+log-acceleration `G2 = (2/ln2)(y''/y − (y'/y)²)`. That is the cross-fixture invariant. It is not
+an emergent discovery — it is the chain rule applied to `base_operand = y²`. Simultaneously, the
+thing the campaign spent eight phases chasing — a substrate observable that is a **univariate
+function of Euclidean curvature κ** across fixtures — **provably does not exist**, because κ is
+blind to the operand height that `S2`/`G2` carries. The flip side (§3b) is the strongest positive:
+κ *is* recoverable from the substrate, just **multivariately** — the full jet `(S0, S1, S2)` rebuilds
+it (verified from the fingerprint alone to ≤4.7e-4). The substrate carries more than κ, not less.
+Both halves are analytic. The only residual
+empirical content is (a) confirming the finite-difference instrument reproduces the identity
+(the receipt), and (b) the binade seam where the lattice channel `Δ²B` stops resolving the
+operand's curvature. Both are measured and reported.
+
+---
+
+## 1. Objects (fixed, verified against source)
+
+`base_operand(t) = w(t) = 1 − x_term(t)`, `y(t) = √w` (the geometry table's natural function),
+`F(t) = log₂|w| = (1/ln2) ln w`. Per fixture (`mcg_geometry_first_v3_bridge.py:88–96`):
+
+| fixture | `x_term` | `w(t)` | `w'` | `w''` |
+|---|---|---|---|---|
+| pure_algebraic | `x` | `1 − t` | `−1` | `0` |
+| Schwarzschild | `2/r` | `1 − 2/t` | `2/t²` | `−4/t³` |
+| SR | `β²` | `1 − t²` | `−2t` | `−2` |
+
+Geometric target κ = `principal_curvature` = `|y''|/(1+y'²)^{3/2}`
+(`mcg_geometry_first_geometry.py:446–448`) — a **2-jet**. The headline historical observable
+`E = log₂|base_operand| = 2 log₂ y` is a pure function of operand magnitude `y` — the **0-jet**
+(`phase_i.py:53–54` family). Eight phases tested a 0-jet against a 2-jet; the negatives were a
+**jet-order mismatch**, not absence of geometry (R1 §2; verified in code this campaign).
+
+---
+
+## 2. The proven IDENTITY — the cross-fixture invariant **[ANALYTIC]**
+
+```
+F   = (1/ln2) ln w
+F'  = (1/ln2)(w'/w)
+S2  = F'' = (1/ln2)(w''/w − (w'/w)²) = (1/ln2)(w·w'' − (w')²)/w²
+```
+
+Substituting `w = y²`, `w' = 2yy'`, `w'' = 2y'² + 2yy''`:
+
+```
+w''/w − (w'/w)²  =  2(y''/y − (y'/y)²)
+⇒  S2  =  (2/ln2)(y''/y − (y'/y)²)  ≡  G2.
+```
+
+This is an **identity**, true row-by-row in every fixture by construction — *not* a test that
+could have failed. `G2` is the same closed-form differential operator of the operand jet
+everywhere; what differs across fixtures is only the **path** `(w, w', w'')(t)` each one traces,
+because each has a different `x_term(t)`. **The cross-fixture invariant is the operator `G2`
+itself.** Calling this a "PASS" of a verdict cell would be dressing a tautology as a finding —
+the trap the prereg's §B "metrology→verdict" promotion would have walked into, caught before
+freeze.
+
+**Receipt (the only empirical claim about the identity), [EMPIRICAL]:** finite-differencing
+`F(t)` directly (central differences, relative ladder `{1e-2…1e-5}`, plateau-stability gate) and
+comparing to `G2` evaluated on the table's own `(y, y', y'')` reproduces the identity to:
+
+| fixture | n (resolved) | max rel-resid | tol | pass |
+|---|---|---|---|---|
+| pure_algebraic | 137 | 4.3e-06 | 1e-3 | ✓ |
+| SR | 136 (+1 boundary) | 1.7e-06 | 1e-3 | ✓ |
+| Schwarzschild | 137 | 4.4e-04 | 1e-3 | ✓ |
+
+One SR row (`t = 0.9999`, `w ≈ 2.0e-4`) is **declared unresolved** by the FD-operand-variation
+guard (Axiom 3: a declared limit, not a hidden exclusion): even the finest step varies the
+operand by ~10% of itself, so the central difference of `log₂|w|` is meaningless there. That row
+is the seam (§4) showing up in the smooth channel. Source:
+`phase_a_fd_metrology_receipt.json` (input table sha256 `6502e942…`).
+
+---
+
+## 3. The proven NEGATIVE — κ is not univariately recoverable **[ANALYTIC]**
+
+`κ = |y''|/(1+y'²)^{3/2}` is built from `(y', y'')` only; it is **blind to the operand height
+`y`** (equivalently `w`). `S2 = G2 = (2/ln2)(y''/y − (y'/y)²)` carries `y` explicitly. So at any
+fixed κ, `S2` still moves with `w`, and `w` at matched κ differs both across fixtures and *within
+a single fixture*. Therefore **no substrate jet is a univariate function of κ across fixtures.**
+This is structural; no choice of bins, floor, or arc-length reparametrization changes it.
+
+Two reproduced witnesses **[EMPIRICAL]** (numbers from the geometry table, sha256 `6502e942…`):
+
+- **Single-fixture disproof (SR).** SR traces the unit semicircle `β² + y² = 1`, so κ is pinned:
+  measured κ ∈ **[0.9994, 1.0000]** (Check-1, the cheap instrument sanity — passes). Yet on the
+  same rows `S2 = G2` sweeps **[−1.45×10⁸, −2.89]**. A function of κ alone would be constant
+  here; `S2` is not. One fixture is enough to kill the univariate-κ hypothesis. (The 10⁸ extreme
+  is the `w → 0` boundary row; even excluding it the sweep exceeds 4× across stable rows.)
+- **Cross-fixture gap at matched κ.** Nearest-to-κ=1 stable rows: pure_algebraic `S2 = −66.84`
+  (κ=0.9998) vs Schwarzschild `S2 = −21.87` (κ=0.9872) — a **3.06× gap** at the same geometric
+  curvature. Far outside any plausible noise band.
+
+The campaign's old "SR noise floor" was therefore never instrument noise — it was the operand
+height `w` that `S2` carries and κ discards.
+
+**Consequence for the retired prereg logic.** The prereg's D.5 mapping `all univariate cells FAIL
+⇒ H_zero_jet_only ⇒ clean negative` is **invalid**: the MULTIVARIATE relation (S2≡G2) holds by
+identity, so univariate failure against a single intrinsic scalar establishes only that `S2` is
+genuinely multivariate (it carries operand height), **not** that "only the 0-jet is shared." The
+honest verdict is **positive-but-multivariate**, not a clean negative.
+
+---
+
+## 3b. The constructive positive — κ IS recoverable, multivariately **[ANALYTIC + EMPIRICAL]**
+
+The negative (§3) is "no *univariate* function of a single substrate jet recovers κ." The
+complementary positive is stronger and was understated above: **the full substrate jet ladder
+carries the complete operand 2-jet, so κ is fully recoverable from it.** Reading the channels:
+
+```
+S0 = F            ⇒  y    = 2^(S0/2)
+S1 = dF/dt        ⇒  y'/y  = (ln2/2)·S1                ⇒ y' = y·(ln2/2)·S1
+S2 = d²F/dt²      ⇒  y''/y = (ln2/2)·S2 + (y'/y)²      ⇒ y'' = y·[(ln2/2)·S2 + ((ln2/2)·S1)²]
+then  κ = |y''| / (1 + y'²)^{3/2}.
+```
+
+So the substrate is not missing curvature — it carries **more** than κ: it keeps the operand
+height `y` (the 0-jet) that κ discards. The map `(jet) → κ` is many-to-one (that is exactly why
+§3's univariate recovery fails), but it is **invertible from the full vector `(S0, S1, S2)`**. κ
+is the substrate's *lossy continuum projection*; the substrate-native object is the full jet.
+
+**Receipt [EMPIRICAL]:** rebuilding κ from the FD fingerprint alone — `F(t)` and its FD jets, with
+**no table-supplied `(y, y', y'')`** — reproduces the table's `principal_curvature` to:
+
+| fixture | n | max rel-resid (κ_recon vs table) |
+|---|---|---|
+| pure_algebraic | 137 | 8.7e-06 |
+| SR | 136 | 2.0e-06 |
+| Schwarzschild | 137 | 4.7e-04 |
+
+(`phase_a_fd_metrology_receipt.json` → `kappa_reconstruction_from_substrate_jet`; same FD ladder
+and operand-variation guard as §2.) This is the phase's strongest *positive*: a validated
+substrate-only path to Euclidean curvature, with the height term made explicit as the reason κ
+alone cannot be inverted from one channel.
+
+## 4. The SEAM — where the algebraic handle is lost **[EMPIRICAL]**
+
+The lattice channel `B(t) = ⌊log₂|w|⌋` (binade index), with discrete differences `ΔB`, `Δ²B`
+over the actual coordinate grid, measures curvature at the substrate's *own* resolution. Measured
+(`phase_a_fd_metrology_receipt.json`):
+
+| fixture | distinct binades | grid | `Δ²B` flat fraction |
+|---|---|---|---|
+| pure_algebraic | 7 | [0.01, 0.99] | 0.919 |
+| SR | 8 | [0.01, 0.9999] | 0.926 |
+| Schwarzschild | 9 | [2.005, 10.0] | 0.881 |
+
+`Δ²B` is identically zero on ~88–93% of grid steps: across most of the domain the binade-quantized
+second difference cannot resolve curvature at all — the operand sits inside one binade and the
+lattice "handle" is flat. It only becomes nonzero at binade-boundary crossings (~7–12% of steps).
+This is the precise, measurable location where "the algebraic handle is lost" — **not in
+transcendence, but at the projection that drops operand magnitude**: the same height term that κ
+discards (§3) is what the binade quantization rounds away. The smooth-channel version of the same
+seam is the one declared-unresolved SR row in §2.
+
+---
+
+## 5. Why there is no search instrument (the prereg supersession) **[ANALYTIC]**
+
+The frozen prereg specified a leave-one-fixture-out functional-universality fit
+(`C = f(T)`, two folds, shuffle-null gate, 2×/5× thresholds). That instrument was designed to
+*discover* whether a substrate jet is a universal function of a geometric jet. We now know the
+answer in closed form before any fit:
+
+1. `S2 ≡ G2` — a verdict cell that cannot fail is not a test. Running it produces a guaranteed
+   "PASS" that means nothing.
+2. The univariate-κ cells are guaranteed to FAIL by §3, but their failure does **not** license the
+   `H_zero_jet_only` conclusion the prereg's D.5 would have drawn.
+
+So the only legitimate outputs are the receipt (§2) and the seam (§4), both delivered. **Do not
+build the search.** The prereg is retained as a superseded artifact; this closeout is its
+resolution.
+
+A secondary point also dissolves: the planned 3rd-fixture upgrade (generate a `cbrt_four_form`
+table to make the universality test 3-fold) is moot. `S2` expressed in operand variables never
+references the radical degree of `y`; a cube-root fixture traces a different `(w, w', w'')` path
+through the *same* operator `G2`. It would add a data point to an identity, not a test.
+
+---
+
+## 6. Scoped verdict (CAMPAIGN_DISCIPLINE §3 — "true within the tested space")
+
+Within the tested space — the three primary fixtures of `phase_1_geometry_table.json`
+(SR, Schwarzschild, pure_algebraic), each a 1-D plane curve `y = √(1 − x_term)`:
+
+- **PROVEN [ANALYTIC]:** the deterministic cross-fixture substrate invariant is the operand
+  log-acceleration `G2 = (2/ln2)(y''/y − (y'/y)²)`, identically equal to the substrate jet
+  `S2 = d²/dt² log₂|base_operand|`. Gate-2 is answered **positively but deflationarily**.
+- **PROVEN [ANALYTIC]:** no substrate jet is a univariate function of Euclidean curvature κ (or of
+  `y''`) across these fixtures; κ is the lossy continuum projection of `G2` through the
+  `(1+y'²)^{3/2}` Jacobian and the operand height it discards.
+- **PROVEN [ANALYTIC] + MEASURED [EMPIRICAL] (§3b):** κ *is* recoverable from the substrate — but
+  only multivariately, from the full jet vector `(S0, S1, S2)`, never one channel. Rebuilt from the
+  FD fingerprint alone (no table jets) to ≤4.7e-4. The substrate carries more than κ; it keeps the
+  operand height κ throws away. This is the phase's strongest positive and the basis for the
+  rebuild's curvature extractor.
+- **MEASURED [EMPIRICAL]:** the FD instrument reproduces `S2 ≡ G2` to ≤4.4e-4 on resolved rows;
+  the binade seam `Δ²B` is flat on ~88–93% of the grid (curvature unresolved off binade
+  boundaries); one SR boundary row is FD-unresolved by the declared operand-variation guard.
+
+What is **not** claimed: universality beyond `n=3` fixtures of one functional family; anything
+about intrinsic curvature (a 1-D curve has none — κ is extrinsic); any substrate-physics
+interpretation (these are numerical-substrate behaviours, CLAUDE.md §9).
+
+---
+
+## 7. Carry-forward for the V3 rebuild (tool, not discovery)
+
+`G2` is substrate-native — an exact differential of the operand chain, reproducible in any
+fixture via the FD ladder, with a declared resolution boundary (§2/§4). For the V4-native rebuild
+of V3's curvature/conditioning diagnostics (Axiom 11/12 — recover from substrate behaviour, do
+not import): **express curvature diagnostics in `G2` and treat κ as its lossy continuum
+projection.** This is the Axiom-11/12-clean direction. `G2` enters the rebuild as a validated
+*tool* — not as a finding to be re-litigated. The binade seam is the curvature observable's honest
+typed-refusal boundary (same spirit as the P2 budget seam).
+
+**Parked, not reopened (R9-fenced):** if any non-deflated discovery target remains, it is in the
+rounding-residual / conditioning channel (the `M ⊕ C` C-term, BACL `y'`-distribution), which is a
+different object from this geometric-invariant question and is fenced by R9 (residual-term G
+closed). It is *not* Phase A and is *not* reopened here.
+
+---
+
+## 8. Artifacts
+
+- `Build_Docs/Reports/substrate_invariant_search/phase_a_fd_metrology_receipt.json` — the receipt
+  (Check-1, FD-S2-vs-G2 metrology, binade seam, per-row table). Byte-stable; input sha256
+  `6502e942…`.
+- `src/lloyd_v4/evals/substrate_invariant_search_phase_a_fd_metrology.py` — the eval (V3-isolated,
+  no symbolic backend, byte-stable JSON). Eval-only; no substrate promotion.
+- `Build_Docs/Agent_tasks/substrate_invariant_search_phase_a_prereg_2026_06_07.md` — **superseded**
+  by this closeout (search instrument not built; see §5).

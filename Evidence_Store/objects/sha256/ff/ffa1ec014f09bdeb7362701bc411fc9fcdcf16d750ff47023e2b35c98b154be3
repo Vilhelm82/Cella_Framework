@@ -1,0 +1,242 @@
+# Substrate Fingerprint Atlas — Phase α — Preregistry
+
+> **Status: FROZEN 2026-05-18 pre-measurement.** Per `CAMPAIGN_DISCIPLINE.md` Rule 1.1, binding.
+>
+> **Pre-measurement amendment 2026-05-18 (before any data collected):** Kerr fixture corrected from `Kerr_ISCO_a05` (a=0.5) to `Kerr_ISCO_a09` (a=0.9) to match the spin value at which the existing lifted_singularity_v4_audit ran the analysis. Avoids a fresh measurement campaign that would be out of scope. No predictions reference the specific spin value, so the amendment is mechanical.
+
+## 0. Context
+
+This campaign tests the **noise-as-signature hypothesis**: that the deterministic-but-unmodeled "noise" patterns V4's eval-layer probes have observed (sub-lattice alignment, observability filtering, branch fingerprints, null-tangent alignment, hardened-probe verdicts, etc.) are not residual ignorance but a structured fingerprint of the underlying surface. If the hypothesis holds, finite-precision residual structure functions as a *measurement instrument* for the substrate surface — invertible, compact, and predictive.
+
+Phase α tests **claim 1 (fingerprint completeness)** and **claim 5 (route invariance)** from the strategic frame:
+
+1. A fixed-length vector of invariants $\mathbf{S}(\text{fixture})$ uniquely identifies the fixture up to a defined equivalence class.
+5. The fingerprint is invariant under irrelevant transformations (alternative routes, β-grid permutations) within a fixture.
+
+Out-of-scope for Phase α (will be later phases):
+- **Phase β** (claim 2: stress test under near-miss fixtures)
+- **Phase γ** (claim 3: cheap-slot prediction of expensive slots)
+- **Phase δ** (claim 4: substrate-derivation of slots from primitives)
+
+## 1. Purpose
+
+Build a fixed-format **fingerprint vector** from already-existing V4 eval-layer measurements; compute it on 6 fixtures; report whether the 6 fingerprints are pairwise distinguishable; report whether each fingerprint is invariant under within-fixture route variation.
+
+The campaign does NOT introduce new substrate primitives or new probe machinery. Every slot in the fingerprint is computable from existing V4 tools or existing artifacts. The contribution is **assembly + classification**, not new measurement.
+
+## 2. The fingerprint vector (FROZEN)
+
+The fingerprint $\mathbf{S}$ is a length-12 vector. Each slot has a defined source, a defined value type, and a defined `applicability` predicate.
+
+| # | Slot name | Type | Source | Applicability |
+|---|---|---|---|---|
+| 1 | `c1_sublattice_class` | enum {integer, quarter_integer, eighth_integer, irregular} | Test A's classifier | Sterbenz-applicable region of fixture exists |
+| 2 | `c2_sublattice_class` | same enum | Test A | same |
+| 3 | `c1_lattice_range` | (min: int, max: int) | Test A | same |
+| 4 | `c2_lattice_range` | (min: int, max: int) | Test A | same |
+| 5 | `c1_fractional_part_cardinality` | int (count of distinct fractional values in [0,1)) | Test A | same |
+| 6 | `observability_ratio` | float ∈ [0, 1] | observability_rule_audit | every fixture |
+| 7 | `sterbenz_applicable_mass_fraction` | float ∈ [0, 1] | direct computation on β grid | every fixture |
+| 8 | `null_tangent_alignment` | float ∈ [0, 1] OR `not_applicable` | lifted_singularity_v4_audit | lifted-singularity fixtures only |
+| 9 | `hessian_rank_signature` | (rank: int, n_pos: int, n_neg: int, n_zero: int) OR `not_applicable` | lifted_singularity_v4_audit | lifted-singularity fixtures only |
+| 10 | `branch_fingerprint_distribution` | (n_branch_types: int, modal_fraction: float, normalized_entropy: float) | V4 branch primitive (per-β classify, histogram) | every fixture |
+| 11 | `dual_arm_split` | (resolved_frac: float, zero_sep_frac: float, inactive_frac: float) OR `not_applicable` | hardened_dual_arm_probe | fixtures with defined ARM-W/N channel pair |
+| 12 | `channel_handover_beta` | float ∈ R OR `not_applicable` | dual-arm cross-channel pairing analysis | fixtures with multiple algebraically-zero channels |
+
+Each slot also emits a `slot_status` ∈ `{defined, not_applicable, unobservable, computation_failed}`.
+
+### Compactness budget
+
+- Total fingerprint payload: ≤ 512 bits (target ≤ 256 bits) when serialized canonically.
+- Per-slot budget: ≤ 64 bits.
+- A fingerprint exceeding the budget is recorded but flagged; the barcode framing requires we stay within budget for at least some fixtures.
+
+## 3. The 6 fixtures (FROZEN)
+
+| Fixture name | β coordinate | Lifted-class? | Dual-arm channels? |
+|---|---|---|---|
+| `SR` | β ∈ standard grid (137 pts), Sterbenz region β ≤ 1/√2 | No | F1, F2, F3, F4 (4 channels) |
+| `Schwarzschild` | r ∈ standard grid, Sterbenz region r ≥ 4 | Lifted singularity at ISCO and photon sphere | F1/F2 channels via the cube-root four-form battery |
+| `pure_algebraic` | x ∈ standard grid, Sterbenz region x ≤ 0.5 | No | F1, F2 channels (one nominal four-form) |
+| `cube_root` | x ∈ standard grid, Sterbenz region x ≤ 0.5 | No | F1, F2 channels |
+| `Morris_Thorne` | l ∈ throat-region grid | Lifted singularity at throat | No dual-arm channels defined here |
+| `Kerr_ISCO_a09` | r ∈ ISCO-region grid at a = 0.9 prograde | Lifted singularity at ISCO | No dual-arm channels defined here |
+
+Fixtures 5 and 6 will emit `not_applicable` on slots 11 and 12.
+Fixtures 1, 3, 4 will emit `not_applicable` on slots 8 and 9.
+Slot applicability is deterministic from the fixture's `lifted_class` / `dual_arm_class` flags.
+
+## 4. Route-invariance check (FROZEN)
+
+For each fixture, compute the fingerprint under **two route variants** within the fixture:
+
+- **Variant A (baseline):** the canonical Sterbenz-region β-grid and canonical four-form route.
+- **Variant B (route-permuted):** the same β-grid, but the four-form battery computed in a different order (e.g., evaluate F4 → F2 → F1 → F3 instead of F1 → F2 → F3 → F4). For fixtures without a four-form, use a different but algebraically-equivalent residual chain.
+
+A slot passes the route-invariance check if `Variant_A_value == Variant_B_value` exactly (for discrete slots) or `|Variant_A − Variant_B| < 1e-12` (for float slots).
+
+The fixture passes route invariance iff **all applicable slots** pass.
+
+## 5. Distinguishability metric (FROZEN)
+
+The 6 × 6 distinguishability matrix $D_{ij}$ has, for fixtures $i$ and $j$:
+
+- $D_{ii} = 0$ (a fingerprint matches itself)
+- $D_{ij}$ = number of applicable-on-both slots where fixture $i$ and fixture $j$ disagree
+
+Two fingerprints are **distinguishable** if $D_{ij} \geq 1$. The campaign succeeds on distinguishability if **all 15 off-diagonal pairs** have $D_{ij} \geq 1$.
+
+We also compute the **minimum distinguishing subset**: the smallest set of slots that suffices to distinguish all 15 pairs. This subset is the candidate **cheap-barcode**.
+
+## 6. Frozen predictions
+
+Per CAMPAIGN_DISCIPLINE, audit confirms or refutes these specifically.
+
+### P1 — Pairwise distinguishability holds for ≥ 14 of 15 pairs
+
+Predicted strong outcome: all 15 pairs distinguishable. Weak threshold: ≥ 14. Below 14 → barcode hypothesis empirically *not supported* at this fixture set; richer slots needed.
+
+### P2 — c₂ lattice range distinguishes cube-root from sqrt fixtures
+
+From Test A: cube-root c₂ extends to ±4; sqrt fixtures cap at ±1. The slot 4 column alone separates cube_root from {SR, Schwarzschild, pure_algebraic}.
+
+### P3 — Observability ratio distinguishes Schwarzschild from SR
+
+From observability_rule_audit_F4: Schwarzschild 100%, SR 30%. Slot 6 alone separates these two.
+
+### P4 — Slots 8 and 9 (lifted-singularity slots) are `not_applicable` on pure_algebraic, cube_root, and SR
+
+By fixture-class definition. Failure to emit `not_applicable` for these → slot-status taxonomy bug.
+
+### P5 — Route invariance holds for ≥ 80% of applicable slots across all 6 fixtures
+
+This is the empirical test of the barcode hypothesis's required invariance. **A fingerprint slot that varies under within-fixture route permutation is tracking the route, not the surface, and must be downgraded or removed.** Predicted strong outcome: ≥ 95%. Threshold: ≥ 80%.
+
+### P6 — At least one slot in the minimum distinguishing subset is cheap
+
+"Cheap" defined as: computable in under 10 seconds on the existing β-grid, no full v11 campaign required. Predicted: slots 6 (observability ratio) and 7 (Sterbenz mass fraction) both qualify; together they distinguish at least 10 of the 15 pairs. The remaining 5 pairs need at least one more slot, but the bulk discrimination is cheap.
+
+### P7 — Compactness budget met for at least 4 of 6 fixtures
+
+Predicted: SR, Schwarzschild, pure_algebraic, cube_root all stay under 256 bits because their slot 11 (dual_arm_split) compresses well. Morris_Thorne and Kerr_ISCO_a09 may exceed when slots 8–9 carry the additional Hessian signature. Threshold met if ≥ 4 fixtures fit.
+
+## 7. Pre-registered failure modes (would refute the barcode hypothesis at Phase α)
+
+| Failure ID | Failure condition | What it would mean |
+|---|---|---|
+| F1 | All 6 fingerprints identical | Slots fail to capture fixture-distinguishing features; the chosen slot set is uninformative |
+| F2 | Two distinct fixtures share an identical fingerprint | Slots too coarse; the barcode aliases distinct surfaces |
+| F3 | Route invariance < 80% on ≥ 1 fixture | Slot(s) track route choice, not surface; barcode framing fails for those slots |
+| F4 | ≥ 50% of slots emit `unobservable` on ≥ 3 fixtures | The instrument applies too narrowly for a fixture-class atlas |
+| F5 | Compactness budget exceeded on all 6 fixtures | Fingerprint isn't compact; barcode → database |
+
+Any single F1–F4 occurrence is sufficient to downgrade the Phase α verdict from "barcode hypothesis supported" to "barcode hypothesis requires slot redesign before Phase β." F5 alone downgrades to "supported but not yet compact."
+
+## 8. V4 typed outputs
+
+The campaign emits one JSON artifact per fixture × variant pair (12 records total) plus a cross-fixture aggregator.
+
+Per-fingerprint structure:
+
+```json
+{
+  "fixture": "<fixture_name>",
+  "variant": "A" | "B",
+  "fingerprint": {
+    "slot_01_c1_sublattice_class": { "value": "...", "status": "defined" },
+    ...
+    "slot_12_channel_handover_beta": { "value": ..., "status": "not_applicable" }
+  },
+  "compactness": { "total_bits": int, "budget_bits": 256, "in_budget": bool },
+  "validity": {
+    "defined": bool,
+    "finite": bool,
+    "observable": bool,
+    "selectable": true,
+    "advanceable": bool
+  }
+}
+```
+
+Cross-fixture aggregator emits:
+
+```json
+{
+  "atlas_version": "phase_alpha_v1",
+  "fixtures": ["SR", "Schwarzschild", "pure_algebraic", "cube_root", "Morris_Thorne", "Kerr_ISCO_a09"],
+  "variants_per_fixture": ["A", "B"],
+  "distinguishability_matrix": [[int, ...], ...],   // 6x6
+  "route_invariance_per_fixture": {"<fixture>": float, ...},
+  "minimum_distinguishing_subset": [slot_ids...],
+  "predictions": {
+    "P1_pairwise_distinguishability_geq_14_of_15": bool,
+    "P2_c2_lattice_range_distinguishes_cube_root": bool,
+    "P3_observability_distinguishes_schw_sr": bool,
+    "P4_lifted_singularity_slots_NA_on_nonlifted_fixtures": bool,
+    "P5_route_invariance_geq_80pct_all_fixtures": bool,
+    "P6_min_distinguishing_subset_includes_cheap_slot": bool,
+    "P7_compactness_budget_met_geq_4_of_6_fixtures": bool
+  },
+  "failure_modes_observed": [failure_ids...],
+  "verdict": "barcode_hypothesis_supported_at_phase_alpha"
+                | "barcode_hypothesis_supported_with_slot_redesign_needed"
+                | "barcode_hypothesis_supported_but_not_yet_compact"
+                | "barcode_hypothesis_not_supported_at_phase_alpha"
+}
+```
+
+## 9. Reproducibility
+
+- All JSON outputs byte-stable across reruns (`sort_keys=True, indent=2`, Decimal serializer).
+- Slot 8 (`null_tangent_alignment`) sourced verbatim from `Build_Docs/Reports/lifted_singularity_v4_audit/artifact.json` — no re-computation.
+- Slot 11 (`dual_arm_split`) sourced verbatim from `Build_Docs/Reports/hardened_dual_arm_probe/artifact_hardened_v1.json` when applicable; otherwise re-run hardened probe for the fixture's specific channel pair.
+- Slots 1–5 re-run via `cross_fixture_refinery_audit.py` for the 4 fixtures it already covers; extend to Morris_Thorne / Kerr_ISCO_a09 if their c₁/c₂ are definable, otherwise `not_applicable`.
+
+## 10. Code structure
+
+A new eval-layer script at `scratch/substrate_fingerprint_atlas.py`:
+
+- `compute_fingerprint(fixture_spec, variant: str = "A") -> dict` — assembles the 12-slot vector from existing tools or existing artifacts.
+- `compute_distinguishability_matrix(fingerprints) -> ndarray` — pairwise slot-disagreement count.
+- `route_invariance(variant_A, variant_B) -> dict` — per-slot match check.
+- `minimum_distinguishing_subset(fingerprints) -> list` — greedy or brute-force slot subset selection.
+- `compactness_audit(fingerprint) -> dict` — byte budget verification.
+- `main()` — runs all 6 fixtures × 2 variants, aggregates, writes artifact.
+
+Each fixture is defined by a small spec dict (β-grid + slot-source pointers) checked into the script. No new substrate code; no new probe machinery; only eval-layer assembly.
+
+## 11. Out of scope for Phase α (logged)
+
+- Phase β stress test (near-miss fixtures, perturbed β-grids, alternative algebraic chains beyond the single route-permutation variant in §4).
+- Phase γ cheap-slot prediction modeling.
+- Phase δ substrate-derivation of slots from primitives (Axiom-12 work).
+- Adding fixtures beyond the 6 named in §3.
+- Slot enrichment (new slot ideas surfacing during Phase α work are recorded as Phase β follow-ups, not added to Phase α).
+- The dual-arm probe's path-separation slots beyond what hardened-V1 already produces (no new probe development).
+- Promoting any slot into substrate (Layer 0–3). All slots remain eval-layer descriptive.
+
+## 12. Closeout criteria
+
+The audit closes when:
+
+1. Fingerprint computed on all 6 fixtures × 2 variants (12 total).
+2. Distinguishability matrix emitted and tabulated.
+3. Route-invariance per-fixture computed.
+4. Minimum distinguishing subset identified.
+5. Compactness budget reported.
+6. All 7 predictions (P1–P7) have audited outcomes.
+7. Failure modes (if any) named explicitly.
+8. Closeout doc names the verdict from §8.
+9. Reproducibility check: byte-stable rerun.
+10. Phase β follow-up list assembled (slot redesign candidates, near-miss fixture proposals, etc.).
+
+## 13. References
+
+- Strategic frame: 2026-05-18 conversation, "could we investigate where more invariants could be..." prompt.
+- Slot 1–5 source: `Build_Docs/Reports/task032_cross_fixture_refinery_audit/closeout.md` (Test A).
+- Slot 6 source: `Build_Docs/Reports/observability_rule_audit_F4/closeout.md`.
+- Slot 8–9 source: `Build_Docs/Reports/lifted_singularity_v4_audit/closeout.md`.
+- Slot 11 source: `Build_Docs/Reports/hardened_dual_arm_probe/closeout.md`.
+- Slot 12 source: `Build_Docs/Reports/foldreadback_probe0_v11_genuine_separation/closeout.md`.
+- Discipline: `Build_Docs/CAMPAIGN_DISCIPLINE.md` (Rule 1.1: pre-registration binding).
+- Axiom 12: derivation discipline — Phase α stays descriptive; Phase δ would do derivation.

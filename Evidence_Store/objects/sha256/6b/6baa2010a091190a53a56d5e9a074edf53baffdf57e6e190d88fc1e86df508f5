@@ -1,0 +1,196 @@
+#!/usr/bin/env python3
+"""RetestA matched-grid b_k comparison (Sterbenz vs Regular), exact rationals.
+
+Uses the SAME instrument as Task 017c -- the non-dyadic canonical-style x grid
+-- so the Sterbenz-vs-regular b_k comparison is apples-to-apples, while still
+carrying residuals as EXACT Fractions (escaping the float128 floor).
+
+Two readouts of b_k:
+  (A) ACROSS-TIER slope: the theorem object. RMS-of-residual over the region's
+      cells at each precision, then fit RMS_C = a + u_p*b_k across the ladder
+      (exact OLS). This is what Task 017c fitted.
+  (B) PER-CELL conditioning coefficient: residual_p / u_p per cell per tier
+      (the rounding-floor coefficient c_p). Reports magnitude distribution.
+
+EVAL-LAYER ONLY. RESEARCH-GRADE. Apparatus = numpy/Decimal/Fraction.
+
+Run:
+    PYTHONPATH=src python3 scratch/_revalidation/retestA/f2_matched_grid_bk_comparison.py
+"""
+from __future__ import annotations
+
+import json
+from decimal import Decimal, localcontext
+from fractions import Fraction
+from pathlib import Path
+
+import numpy as np
+
+OUT_DIR = Path(__file__).resolve().parent
+FLOAT_TIERS = {"float32": (np.float32, 24), "float64": (np.float64, 53),
+               "float128": (np.float128, 64)}
+DECIMAL_TIERS = (30, 50, 80, 120)
+LADDER = list(FLOAT_TIERS) + [f"decimal_{p}" for p in DECIMAL_TIERS]
+
+
+def u_p_fraction(label):
+    if label in FLOAT_TIERS:
+        return Fraction(1, 2) ** FLOAT_TIERS[label][1]
+    return Fraction(5) * Fraction(10) ** (-int(label.split("_", 1)[1]))
+
+
+def residual(x_frac, label, path="F2"):
+    if label in FLOAT_TIERS:
+        s = FLOAT_TIERS[label][0]
+        one = s(1.0)
+        x = s(float(x_frac))
+        direct = one - x
+        root = np.sqrt(direct)
+        power = root * root
+        val = (power - one) + x if path == "F2" else power - direct
+        return Fraction(float(val))
+    prec = int(label.split("_", 1)[1])
+    with localcontext() as ctx:
+        ctx.prec = prec
+        one = Decimal(1)
+        x = +Decimal(x_frac.numerator) / Decimal(x_frac.denominator)
+        direct = one - x
+        root = direct.sqrt()
+        power = root * root
+        val = (power - one) + x if path == "F2" else power - direct
+        return Fraction(val)
+
+
+def canonical_style_grid(lo, hi, n):
+    """Non-dyadic x built via float arithmetic (mirrors Task 017c grid build),
+    captured as exact Fraction of the float value."""
+    return [Fraction(float(lo + (hi - lo) * i / (n - 1))) for i in range(n)]
+
+
+def exact_ols(points):
+    """points: list of (u_p Fraction, y Fraction) -> (a,b,r2_float)."""
+    n = len(points)
+    xs = [p[0] for p in points]
+    ys = [p[1] for p in points]
+    sx = sum(xs, Fraction(0)); sy = sum(ys, Fraction(0))
+    sxx = sum((x * x for x in xs), Fraction(0))
+    sxy = sum((x * y for x, y in zip(xs, ys)), Fraction(0))
+    denom = Fraction(n) * sxx - sx * sx
+    if denom == 0:
+        b = Fraction(0); a = sy / n
+    else:
+        b = (Fraction(n) * sxy - sx * sy) / denom
+        a = (sy - b * sx) / n
+    ybar = sy / n
+    ss_res = sum(((y - (a + b * x)) ** 2 for x, y in zip(xs, ys)), Fraction(0))
+    ss_tot = sum(((y - ybar) ** 2 for y in ys), Fraction(0))
+    r2 = 1.0 if ss_tot == 0 and ss_res == 0 else (0.0 if ss_tot == 0 else 1.0 - float(ss_res / ss_tot))
+    return float(a), float(b), r2, a, b
+
+
+def region_across_tier_fit(grid, path="F2"):
+    """(A) RMS-over-region per tier, then exact OLS across tiers."""
+    rms_pts = []
+    per_tier = {}
+    for label in LADDER:
+        up = u_p_fraction(label)
+        sq = Fraction(0)
+        nz = 0
+        maxratio = 0.0
+        for x in grid:
+            r = residual(x, label, path)
+            sq += r * r
+            if r != 0:
+                nz += 1
+            maxratio = max(maxratio, abs(float(r / up)))
+        # exact mean-square; sqrt only at float readout
+        mean_sq = sq / len(grid)
+        rms = float(mean_sq) ** 0.5
+        rms_pts.append((up, Fraction(rms).limit_denominator(10**18)))
+        per_tier[label] = {
+            "u_p": float(up),
+            "rms_residual": rms,
+            "rms_over_u_p": rms / float(up),
+            "n_nonzero": nz,
+            "max_abs_residual_over_u_p": maxratio,
+        }
+    a, b, r2, _, _ = exact_ols(rms_pts)
+    return {"a_k": a, "b_k": b, "r_squared": r2, "per_tier": per_tier}
+
+
+def region_per_cell_coeff(grid, path="F2"):
+    """(B) distribution of residual/u_p across all (cell,tier)."""
+    coeffs = []
+    for x in grid:
+        for label in LADDER:
+            up = u_p_fraction(label)
+            r = residual(x, label, path)
+            if r != 0:
+                coeffs.append(float(r / up))
+    if not coeffs:
+        return {"n_nonzero_pairs": 0}
+    ac = sorted(abs(c) for c in coeffs)
+    n = len(ac)
+    return {
+        "n_nonzero_pairs": n,
+        "abs_coeff_max": ac[-1],
+        "abs_coeff_mean": sum(ac) / n,
+        "abs_coeff_median": ac[n // 2],
+        "abs_coeff_p97_5": ac[int(0.975 * (n - 1))],
+        "frac_within_2_ulp": sum(1 for c in ac if c <= 2.0) / n,
+    }
+
+
+def main():
+    n = 400
+    sterbenz = canonical_style_grid(0.01, 0.49, n)
+    regular = canonical_style_grid(0.51, 0.99, n)
+
+    out = {
+        "task": "retestA_f2_matched_grid_bk_comparison",
+        "eval_layer_only": True,
+        "instrument": "non-dyadic canonical-style grid (matches Task 017c)",
+        "ladder": LADDER,
+        "n_cells_per_region": n,
+        "F2": {
+            "sterbenz": {
+                "across_tier_fit_A": region_across_tier_fit(sterbenz, "F2"),
+                "per_cell_coeff_B": region_per_cell_coeff(sterbenz, "F2"),
+            },
+            "regular": {
+                "across_tier_fit_A": region_across_tier_fit(regular, "F2"),
+                "per_cell_coeff_B": region_per_cell_coeff(regular, "F2"),
+            },
+        },
+        "F1_control": {
+            "sterbenz": {
+                "across_tier_fit_A": region_across_tier_fit(sterbenz, "F1"),
+                "per_cell_coeff_B": region_per_cell_coeff(sterbenz, "F1"),
+            },
+        },
+    }
+    (OUT_DIR / "f2_matched_grid_bk_comparison.json").write_text(
+        json.dumps(out, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    def show(tag, blk):
+        A = blk["across_tier_fit_A"]; B = blk["per_cell_coeff_B"]
+        print("%-22s across-tier b_k=%.6f  r2=%.6f" % (tag, A["b_k"], A["r_squared"]))
+        print("    per-cell |res/u_p|: max=%.3f mean=%.3f median=%.3f p97.5=%.3f within2ULP=%.3f" % (
+            B.get("abs_coeff_max", 0), B.get("abs_coeff_mean", 0),
+            B.get("abs_coeff_median", 0), B.get("abs_coeff_p97_5", 0),
+            B.get("frac_within_2_ulp", 0)))
+
+    print("F2 matched-grid (non-dyadic) b_k comparison, exact rationals")
+    print("=" * 70)
+    show("F2 STERBENZ", out["F2"]["sterbenz"])
+    show("F2 REGULAR ", out["F2"]["regular"])
+    show("F1 STERBENZ(control)", out["F1_control"]["sterbenz"])
+    print()
+    print("across-tier b_k ratio Sterbenz/Regular = %.3f" % (
+        out["F2"]["sterbenz"]["across_tier_fit_A"]["b_k"] /
+        out["F2"]["regular"]["across_tier_fit_A"]["b_k"]
+        if out["F2"]["regular"]["across_tier_fit_A"]["b_k"] else float("inf")))
+
+
+if __name__ == "__main__":
+    main()

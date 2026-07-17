@@ -1,0 +1,157 @@
+"""Step 2: For F1 image of Schwarzschild, treat each channel as a dial.
+What does each channel ADD relative to E (the cleanest channel)?
+- Pure signal: tracks r in a way E doesn't capture
+- Redundant: deterministic function of E (no new info)
+- Localised detail: signal in a sub-region, flat elsewhere
+- Noise: chaotic relationship with both r and E
+
+No K_G. No other fixtures. No other forms. Just: what's in this image?
+"""
+from __future__ import annotations
+import json
+import math
+from pathlib import Path
+
+
+CHANNELS = ("ulp_spread_log2", "log2_min_ulp", "log2_base_operand_ulp",
+            "log2_x_term_ulp", "signed_asymmetry", "E_log2_base_operand")
+
+
+def F1_chain(r):
+    x_term = 2.0 / r
+    base = 1.0 - x_term
+    R = base ** 0.5
+    R_sq = R * R
+    residual = R_sq - base
+    return (R, R_sq, base, residual), base, x_term
+
+
+def signature(intermediates, base, x_term):
+    nonzero = [abs(v) for v in intermediates if v != 0.0]
+    ulps = [math.ulp(v) for v in nonzero] if nonzero else []
+    if not ulps: return {k: None for k in CHANNELS}
+    mn, mx = min(ulps), max(ulps)
+    bu = math.ulp(abs(base)) if base != 0 else None
+    xu = math.ulp(abs(x_term)) if x_term != 0 else None
+    return {
+        "ulp_spread_log2": math.log2(mx/mn) if mn > 0 else None,
+        "log2_min_ulp": math.log2(mn) if mn > 0 else None,
+        "log2_base_operand_ulp": math.log2(bu) if bu else None,
+        "log2_x_term_ulp": math.log2(xu) if xu else None,
+        "signed_asymmetry": math.log2(bu/xu) if bu and xu else None,
+        "E_log2_base_operand": math.log2(abs(base)) if base else None,
+    }
+
+
+def main():
+    ROOT = Path("/home/william_lloydlt/projects/V4/Lloyd_Engine_V4")
+    phase_1 = json.loads((ROOT / "Build_Docs/Reports/mcg_geometry_first"
+                         "/phase_1_geometry_table.json").read_text())
+    rows = [r for r in phase_1["rows"]
+            if r.get("fixture") == "schwarzschild_four_form"
+            and r.get("principal_curvature") is not None]
+    rows.sort(key=lambda x: x["coordinate_value"])
+
+    image = []
+    for row in rows:
+        r = row["coordinate_value"]
+        sig = signature(*F1_chain(r))
+        image.append({"r": r, **sig})
+
+    print(f"=== Channel-as-dial analysis: F1 image of Schwarzschild ===")
+    print(f"137 pixels, r ∈ [{image[0]['r']:.4f}, {image[-1]['r']:.4f}]\n")
+
+    # For each non-E channel: characterise its relationship with E
+    print("=== Per-channel diagnostic ===")
+    print(f"{'channel':<26} {'distinct_E_per_chV':>18} {'where_active':>18}")
+    print("-" * 70)
+
+    for ch in CHANNELS:
+        if ch == "E_log2_base_operand":
+            continue
+        # Group by channel value, list distinct E values for each
+        groups = {}
+        for p in image:
+            cv = p[ch]
+            ev = p["E_log2_base_operand"]
+            if cv is None or ev is None: continue
+            groups.setdefault(cv, []).append((p["r"], ev))
+        # Channel is a "function of E" if each channel value has a tight E range
+        # Channel is "redundant" if there's a 1-to-1 mapping with E
+        # Channel adds info if multiple distinct r have the same channel value
+        max_E_per_ch = max(max(e for _, e in v) - min(e for _, e in v)
+                            for v in groups.values())
+        # Where is this channel active (varying)?
+        sorted_image = sorted(image, key=lambda p: p["r"])
+        first_change_idx = None
+        last_change_idx = None
+        for i in range(len(sorted_image)-1):
+            v1 = sorted_image[i][ch]
+            v2 = sorted_image[i+1][ch]
+            if v1 is None or v2 is None: continue
+            if v1 != v2:
+                if first_change_idx is None:
+                    first_change_idx = i
+                last_change_idx = i
+        if first_change_idx is not None:
+            r_first = sorted_image[first_change_idx]["r"]
+            r_last = sorted_image[last_change_idx]["r"]
+            active = f"r∈[{r_first:.2f}, {r_last:.2f}]"
+        else:
+            active = "never changes"
+        print(f"{ch:<26} {max_E_per_ch:>18.4f} {active:>18}")
+
+    print()
+
+    # Now: at fixed values of channel, what r values get grouped?
+    print("=== Grouping behavior: each channel's level partition of r ===\n")
+    for ch in CHANNELS:
+        if ch == "E_log2_base_operand":
+            continue
+        groups = {}
+        for p in image:
+            cv = p[ch]
+            if cv is None: continue
+            groups.setdefault(cv, []).append(p["r"])
+        n_levels = len(groups)
+        print(f"  {ch}: {n_levels} levels")
+        sorted_levels = sorted(groups.items())
+        for cv, rs in sorted_levels[:6]:  # show first few levels
+            n = len(rs)
+            r_min = min(rs)
+            r_max = max(rs)
+            print(f"    {ch}={cv:+.2f}  →  {n:3d} pixels in r∈[{r_min:.4f}, {r_max:.4f}]")
+        if len(sorted_levels) > 6:
+            print(f"    ... ({n_levels - 6} more levels)")
+        print()
+
+    # Visualize the image in ASCII per channel (137 pixels → 50-char strip)
+    print("=== Visual image strips (50 chars each, normalised) ===\n")
+    print("r-axis:    " + "│" + "─" * 48 + "│")
+    print(f"           r={image[0]['r']:.2f}" + " " * 40 + f"r={image[-1]['r']:.2f}")
+    print()
+    for ch in CHANNELS:
+        vals = [p[ch] for p in image]
+        valid = [v for v in vals if v is not None]
+        if not valid: continue
+        vmin, vmax = min(valid), max(valid)
+        rng = vmax - vmin if vmax > vmin else 1.0
+        # Map each pixel to a character based on its value's position in range
+        chars = " .,:-=+*#@█"  # 11 levels of density
+        strip = ""
+        for i in range(50):
+            # Find the closest pixel in 0..136 to this strip position
+            src_idx = int(i * len(image) / 50)
+            v = vals[src_idx]
+            if v is None:
+                strip += " "
+            else:
+                normalized = (v - vmin) / rng if rng > 0 else 0.5
+                char_idx = min(len(chars) - 1, int(normalized * len(chars)))
+                strip += chars[char_idx]
+        print(f"  {ch:<26} {strip}  [{vmin:+.2f} → {vmax:+.2f}]")
+    print()
+
+
+if __name__ == "__main__":
+    main()

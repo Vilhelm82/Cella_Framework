@@ -1,0 +1,173 @@
+"""Full calibration: 8 cases through the symbolic_analyzer package.
+
+ISCO outer formulations (4 cases) + Kerr photon + 3 synthetics.
+Demonstrates the analyzer's predicted Pareto ordering matches the
+empirical Pareto ordering measured by V4's existing primitives in
+scratch/isco_alpha_recovery_*.py and scratch/kerr_extremal_alpha_recovery.py.
+"""
+
+from __future__ import annotations
+
+import math
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).parent))
+
+from lloyd_v4.evals.symbolic_analysis import (
+    Variable, Constant,
+    add, sub, mul, div, neg, sqrtN, cos, acos,
+    analyze_expression,
+    PredictedBurdenVector,
+)
+
+
+# ============================================================================
+# Sweep variables
+# ============================================================================
+
+EPS_ISCO = Variable("eps", sweep_range_low=1e-12, sweep_range_high=1e-4)
+DELTA_KERR = Variable("delta", sweep_range_low=1e-12, sweep_range_high=1e-4)
+EPS_GENERIC = Variable("eps", sweep_range_low=1e-12, sweep_range_high=1e-4)
+
+
+# ============================================================================
+# Calibration set
+# ============================================================================
+
+# --- ISCO outer deviation formulations ---
+
+def isco_outer_stable():
+    """(eps + sqrt(12+eps) * sqrt(eps)) / 2 -- no subtractions"""
+    L_sq = add(12.0, EPS_ISCO)
+    L = sqrtN(L_sq)
+    return div(add(EPS_ISCO, mul(L, sqrtN(EPS_ISCO))), 2.0)
+
+
+def isco_outer_naive():
+    """((12+eps) + sqrt(12+eps)*sqrt(eps))/2 - 6"""
+    L_sq = add(12.0, EPS_ISCO)
+    L = sqrtN(L_sq)
+    r_plus = div(add(L_sq, mul(L, sqrtN(EPS_ISCO))), 2.0)
+    return sub(r_plus, 6.0)
+
+
+def isco_r_plus_sq_minus_36():
+    """(r_+^2 - 36) / (r_+ + 6)"""
+    L_sq = add(12.0, EPS_ISCO)
+    L = sqrtN(L_sq)
+    r_plus = div(add(L_sq, mul(L, sqrtN(EPS_ISCO))), 2.0)
+    return div(sub(mul(r_plus, r_plus), 36.0), add(r_plus, 6.0))
+
+
+def isco_twelve_plus_eps_sq_minus_144():
+    """sqrt((12+eps)^2 - 144) / sqrt(8) -- catastrophic"""
+    twelve_plus = add(12.0, EPS_ISCO)
+    inner = sub(mul(twelve_plus, twelve_plus), 144.0)
+    return div(sqrtN(inner), Constant(math.sqrt(8.0)))
+
+
+# --- Kerr photon sphere ---
+
+def kerr_photon_pro():
+    """r_ph(1-delta) - 1, where r_ph(a) = 2*(1 + cos((2/3)*acos(-a)))"""
+    a_node = sub(1.0, DELTA_KERR)
+    inner = mul(Constant(2.0 / 3.0), acos(neg(a_node)))
+    r_ph = mul(Constant(2.0), add(1.0, cos(inner)))
+    return sub(r_ph, 1.0)
+
+
+# --- Synthetics ---
+
+def synth_pure_sqrt():
+    return sqrtN(EPS_GENERIC)
+
+
+def synth_catastrophic_simple():
+    """(1 + eps) - 1 -- textbook catastrophic, crossing at eps_machine"""
+    return sub(add(1.0, EPS_GENERIC), 1.0)
+
+
+def synth_clean_sterbenz():
+    """(1 + sqrt(eps)) - 1 -- Sterbenz-safe O(sqrt(eps)) signal"""
+    return sub(add(1.0, sqrtN(EPS_GENERIC)), 1.0)
+
+
+# ============================================================================
+# Demo
+# ============================================================================
+
+def fmt_eps(v):
+    return f"{v:.2e}" if v is not None else "never"
+
+
+def burden_key(p: PredictedBurdenVector):
+    """Pareto sort key: fewer catastrophic > fewer safe > smaller crossing."""
+    cross = p.predicted_precision_crossing_epsilon or 0.0
+    return (p.n_catastrophic, p.n_sterbenz_safe_benign, cross)
+
+
+def main():
+    print("=" * 100)
+    print("Symbolic structural cancellation analyzer -- 8-case calibration")
+    print("=" * 100)
+    print("Package: scratch/symbolic_analyzer/ (mirrors target V4 layout)")
+    print()
+
+    cases = [
+        # ISCO outer deviation, 4 forms
+        ("isco_outer_stable          ", isco_outer_stable(),                   EPS_ISCO,    "no subs"),
+        ("isco_outer_naive           ", isco_outer_naive(),                    EPS_ISCO,    "Sterbenz, O(sqrt(eps)) signal"),
+        ("isco_r+^2_minus_36         ", isco_r_plus_sq_minus_36(),             EPS_ISCO,    "Sterbenz, O(sqrt(eps)) signal"),
+        ("isco_(12+eps)^2_minus_144  ", isco_twelve_plus_eps_sq_minus_144(),   EPS_ISCO,    "CATASTROPHIC, O(eps) signal"),
+        # Kerr
+        ("kerr_photon_pro            ", kerr_photon_pro(),                     DELTA_KERR,  "Sterbenz, O(sqrt(d)) signal, coef ~ 1.633"),
+        # Synthetics
+        ("synth_pure_sqrt            ", synth_pure_sqrt(),                     EPS_GENERIC, "no subs"),
+        ("synth_catastrophic_simple  ", synth_catastrophic_simple(),           EPS_GENERIC, "CATASTROPHIC, crossing ~ eps_machine"),
+        ("synth_clean_sterbenz       ", synth_clean_sterbenz(),                EPS_GENERIC, "Sterbenz, O(sqrt(eps)) signal"),
+    ]
+
+    predictions = []
+    for label, expr, sweep, expected in cases:
+        pred = analyze_expression(expr, sweep, label=label.strip())
+        predictions.append(pred)
+        print(f"\n{label}  EXPECTED: {expected}")
+        print(f"  cat={pred.n_catastrophic}  safe={pred.n_sterbenz_safe_benign}  "
+              f"self={pred.n_self_cancellations}  benign={pred.n_benign_subtractions}  "
+              f"unrec={pred.n_unrecognised}")
+        print(f"  predicted crossing: {fmt_eps(pred.predicted_precision_crossing_epsilon)}")
+        for site in pred.cancellation_sites:
+            print(f"    [{site.pattern.value}] {site.description}")
+
+    print()
+    print("=" * 100)
+    print("PARETO ORDERING (least burdened first)")
+    print("=" * 100)
+    ordered = sorted(predictions, key=burden_key)
+    for i, p in enumerate(ordered, 1):
+        print(f"  {i}. {p.expression_label:32s}  "
+              f"cat={p.n_catastrophic}  safe={p.n_sterbenz_safe_benign}  "
+              f"crossing={fmt_eps(p.predicted_precision_crossing_epsilon)}")
+
+    print()
+    print("=" * 100)
+    print("EMPIRICAL CROSS-CHECK (from V4 scratch/ runs)")
+    print("=" * 100)
+    empirical = {
+        "isco_outer_stable":           "clean across full grid",
+        "isco_outer_naive":            "clean (Sterbenz exact)",
+        "isco_r+^2_minus_36":          "clean (rel_err 1.4e-8 at eps=1e-15)",
+        "isco_(12+eps)^2_minus_144":   "breakdown at eps ~ 1e-14 (rel_err 7% at eps=1e-14, 137% at 1e-15)",
+        "kerr_photon_pro":             "clean across delta in [1e-12, 1e-2]; alpha=1/2 recovered to 4 digits",
+        "synth_pure_sqrt":             "(synthetic; no V4 measurement needed)",
+        "synth_catastrophic_simple":   "(synthetic; textbook example)",
+        "synth_clean_sterbenz":        "(synthetic; textbook example)",
+    }
+    for p in predictions:
+        emp = empirical.get(p.expression_label, "(not measured)")
+        print(f"  {p.expression_label:32s}  {emp}")
+
+
+if __name__ == "__main__":
+    main()

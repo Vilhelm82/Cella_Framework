@@ -1,0 +1,125 @@
+{
+  "test": "pure_power_law_control",
+  "description": "matched filter applied to pure-power-law signal (no DSS); falsifies whether Step 2 SNR plateau is honest signal-to-noise or leakage-dominated",
+  "parameters": {
+    "gamma": 0.374,
+    "delta": 3.445,
+    "P_ln": 4.605614973262032,
+    "angular_freq": 1.3642445891931294
+  },
+  "sweep": {
+    "n_points": 100,
+    "eps_start": 0.01,
+    "eps_end": 1e-12
+  },
+  "reference_step2_snr_plateau_db": [
+    14.87,
+    14.86,
+    14.77,
+    14.85,
+    14.85,
+    14.61,
+    13.16
+  ],
+  "results": [
+    {
+      "baseline_level": 0.0,
+      "jump_level": 0.0,
+      "residual_rms": 4.2768811346368057e-16,
+      "matched_amplitude": 1.35604514046716e-16,
+      "matched_power": 1.8388584229845996e-32,
+      "median_background_power": 2.75475589369067e-33,
+      "matched_snr_db": 8.244651725186227,
+      "detection_verdict": "marginal",
+      "description": "no noise (machine epsilon residuals)"
+    },
+    {
+      "baseline_level": 0.001,
+      "jump_level": 0.0,
+      "residual_rms": 0.0010970605770868158,
+      "matched_amplitude": 0.00028631557960876684,
+      "matched_power": 8.197661112670411e-08,
+      "median_background_power": 5.2510949653242125e-08,
+      "matched_snr_db": 1.9344008831502584,
+      "detection_verdict": "marginal",
+      "description": "white only, 0.1%"
+    },
+    {
+      "baseline_level": 0.0,
+      "jump_level": 0.001,
+      "residual_rms": 0.001074612457682313,
+      "matched_amplitude": 0.00035628285653778664,
+      "matched_power": 1.2693747386272504e-07,
+      "median_background_power": 6.648700971077736e-08,
+      "matched_snr_db": 2.8085305056335046,
+      "detection_verdict": "marginal",
+      "description": "jump only, 0.1%"
+    },
+    {
+      "baseline_level": 0.001,
+      "jump_level": 0.001,
+      "residual_rms": 0.0014319143517827213,
+      "matched_amplitude": 0.0005658993390507205,
+      "matched_power": 3.202420619380423e-07,
+      "median_background_power": 5.335800787875826e-08,
+      "matched_snr_db": 7.782787665652572,
+      "detection_verdict": "marginal",
+      "description": "both at 0.1%"
+    },
+    {
+      "baseline_level": 0.005,
+      "jump_level": 0.005,
+      "residual_rms": 0.007160543545989715,
+      "matched_amplitude": 0.002833085745106391,
+      "matched_power": 8.026374839125035e-06,
+      "median_background_power": 1.3341049956776917e-06,
+      "matched_snr_db": 7.793294273983266,
+      "detection_verdict": "marginal",
+      "description": "both at 0.5%"
+    },
+    {
+      "baseline_level": 0.01,
+      "jump_level": 0.01,
+      "residual_rms": 0.014325145691318389,
+      "matched_amplitude": 0.0056755645148981616,
+      "matched_power": 3.22120325627712e-05,
+      "median_background_power": 5.3383042525294565e-06,
+      "matched_snr_db": 7.8061480700829575,
+      "detection_verdict": "marginal",
+      "description": "both at 1%"
+    },
+    {
+      "baseline_level": 0.02,
+      "jump_level": 0.02,
+      "residual_rms": 0.02867743845140457,
+      "matched_amplitude": 0.011391492477775498,
+      "matched_power": 0.00012976610087121575,
+      "median_background_power": 2.1121712726973583e-05,
+      "matched_snr_db": 7.8843212387103625,
+      "detection_verdict": "marginal",
+      "description": "both at 2%"
+    },
+    {
+      "baseline_level": 0.05,
+      "jump_level": 0.05,
+      "residual_rms": 0.0721210539888058,
+      "matched_amplitude": 0.02883725411279216,
+      "matched_power": 0.0008315872247657484,
+      "median_background_power": 0.00013669305133533666,
+      "matched_snr_db": 7.841613707033119,
+      "detection_verdict": "marginal",
+      "description": "both at 5%"
+    },
+    {
+      "baseline_level": 0.1,
+      "jump_level": 0.1,
+      "residual_rms": 0.1473285518483799,
+      "matched_amplitude": 0.059252461492462195,
+      "matched_power": 0.0035108541929157154,
+      "median_background_power": 0.0006442341504605253,
+      "matched_snr_db": 7.363690506477854,
+      "detection_verdict": "marginal",
+      "description": "both at 10%"
+    }
+  ]
+}

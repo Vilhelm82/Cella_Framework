@@ -1,0 +1,598 @@
+{
+  "audit_name": "mcg_geometry_first_phase_2e_e_reducibility",
+  "authority": "Build_Docs/Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md",
+  "campaign": "mcg_geometry_first_discovery",
+  "candidate_evidence_emissions": {
+    "C-def-1": {
+      "evidence_paths": [
+        "phase_2e_e_reducibility.json"
+      ],
+      "phase_2e_assessment": "Phase 2e uses E as the binning axis. Schwarzschild residual test classifies as: schwarzschild_residual_grid_driven. If second_axis_candidate, the C-extractor needs to be 2D (E + endpoint_distance) for Schwarzschild; if grid_driven, E alone is sufficient. Calibration ladder still pending.",
+      "proposed_ledger_state": "unresolved_candidate",
+      "rationale_for_state_change": "C-def-1 remains an operational extractor; calibration ladder still pending. Schwarzschild residual finding affects whether the extractor is 1D (E only) or 2D (E + endpoint_distance) for Schwarzschild-class fixtures.",
+      "tags": [
+        "phase_2e_evaluated",
+        "phase_2e_schwarzschild_residual_tested"
+      ],
+      "title": "Finite-difference conditioning response"
+    },
+    "C-def-2": {
+      "evidence_paths": [
+        "phase_2e_e_reducibility.json"
+      ],
+      "phase_2e_assessment": "1D-degenerate; no advance.",
+      "proposed_ledger_state": "unresolved_candidate",
+      "rationale_for_state_change": "Unchanged.",
+      "tags": [
+        "structurally_rate_limited_in_1d_scope"
+      ],
+      "title": "Jacobian/Hessian spectral response"
+    },
+    "C-def-3": {
+      "evidence_paths": [
+        "phase_2e_e_reducibility.json"
+      ],
+      "phase_2e_assessment": "Not exercised.",
+      "proposed_ledger_state": "unresolved_candidate",
+      "rationale_for_state_change": "Unchanged.",
+      "tags": [
+        "phase_2e_perturbation_ladder_still_pending"
+      ],
+      "title": "Perturbation amplification ladder"
+    },
+    "G-curv-1": {
+      "evidence_paths": [
+        "phase_2e_e_reducibility.json"
+      ],
+      "phase_2e_assessment": "Phase 2e does not address G-curv-1 directly; the candidate remains C_confounded from Phase 2d. No new evidence in this pass.",
+      "proposed_ledger_state": "C_confounded",
+      "rationale_for_state_change": "Unchanged from Phase 2d.",
+      "tags": [
+        "phase_2e_no_new_evidence"
+      ],
+      "title": "Hessian/signature stratum vs j-selection"
+    },
+    "G-curv-2": {
+      "evidence_paths": [
+        "phase_2e_e_reducibility.json"
+      ],
+      "phase_2e_assessment": "Still 1D-degenerate. Phase 2e does not advance.",
+      "proposed_ledger_state": "unresolved_candidate",
+      "rationale_for_state_change": "Unchanged; awaits multi-D extension.",
+      "tags": [
+        "structurally_rate_limited_in_1d_scope"
+      ],
+      "title": "Principal-curvature ratio vs route-pair phase"
+    },
+    "G-curv-3": {
+      "evidence_paths": [
+        "phase_2e_e_reducibility.json"
+      ],
+      "phase_2e_assessment": "Conditional-MI test within E-quintile bins per fixture, with 200-permutation null. Per-fixture classifications: {'sr_four_form': 'grammar_E_reducible', 'schwarzschild_four_form': 'grammar_E_reducible', 'pure_algebraic_four_form': 'grammar_E_resistant_candidate'}. At least one fixture shows actual MI exceeding the 95th percentile of the within-bin permutation null \u2014 grammar is NOT fully reducible to E in that fixture, supporting elevation to unexplained_correlation.",
+      "proposed_ledger_state": "unexplained_correlation",
+      "rationale_for_state_change": "Per user direction: if grammar is E-resistant in at least one fixture, G-curv-3 becomes unexplained_correlation (NOT geometry_candidate). If grammar is E-reducible everywhere, the candidate stays unresolved_candidate with a tag recording the E-reducibility finding.",
+      "tags": [
+        "phase_2e_evaluated",
+        "phase_2e_grammar_E_resistant"
+      ],
+      "title": "Null-tangent alignment vs transition grammar"
+    },
+    "G-route-1": {
+      "evidence_paths": [
+        "phase_2e_e_reducibility.json"
+      ],
+      "phase_2e_assessment": "Phase 2e tests transition-grammar reducibility on the existing zero-operand-offset F1_to_F2 data. The \u00a71.4 zero-offset gap remains independent.",
+      "proposed_ledger_state": "unresolved_candidate",
+      "rationale_for_state_change": "Unchanged from prior phases.",
+      "tags": [
+        "phase_2e_zero_offset_gap_unchanged"
+      ],
+      "title": "Path/operand-separated F1/F2 route-pair phase"
+    }
+  },
+  "declared_outcomes_used": [
+    "grammar_E_reducible",
+    "grammar_E_resistant_candidate",
+    "grammar_underpowered",
+    "schwarzschild_residual_grid_driven",
+    "schwarzschild_residual_second_axis_candidate",
+    "schwarzschild_residual_underpowered"
+  ],
+  "fixtures_in_scope": [
+    "sr_four_form",
+    "schwarzschild_four_form",
+    "pure_algebraic_four_form"
+  ],
+  "grid_jitter_comparison": {
+    "pure_algebraic_four_form": {
+      "canonical_vs_jittered_MI_comparison": {
+        "E_bin_0": {
+          "abs_delta": 0.0,
+          "canonical_MI": 0.0,
+          "jittered_MI": 0.0
+        },
+        "E_bin_1": {
+          "abs_delta": 0.0,
+          "canonical_MI": 0.0,
+          "jittered_MI": 0.0
+        },
+        "E_bin_2": {
+          "abs_delta": 0.0841794264798677,
+          "canonical_MI": 0.222284830685688,
+          "jittered_MI": 0.1381054042058203
+        },
+        "E_bin_3": {
+          "abs_delta": 0.7452277036471439,
+          "canonical_MI": 0.8033884890658535,
+          "jittered_MI": 0.058160785418709615
+        },
+        "E_bin_4": {
+          "abs_delta": 0.17522700531310353,
+          "canonical_MI": 0.3978155871110707,
+          "jittered_MI": 0.22258858179796714
+        }
+      },
+      "jittered_per_E_bin": {
+        "E_bin_0": {
+          "H_marginal_bits": 0.0,
+          "MI_bits": 0.0,
+          "n": 28
+        },
+        "E_bin_1": {
+          "H_marginal_bits": 0.0,
+          "MI_bits": 0.0,
+          "n": 27
+        },
+        "E_bin_2": {
+          "H_marginal_bits": 0.691289869405789,
+          "MI_bits": 0.1381054042058203,
+          "n": 27
+        },
+        "E_bin_3": {
+          "H_marginal_bits": 1.1779653169582593,
+          "MI_bits": 0.058160785418709615,
+          "n": 28
+        },
+        "E_bin_4": {
+          "H_marginal_bits": 1.3213264188253429,
+          "MI_bits": 0.22258858179796714,
+          "n": 27
+        }
+      }
+    },
+    "schwarzschild_four_form": {
+      "canonical_vs_jittered_MI_comparison": {
+        "E_bin_0": {
+          "abs_delta": 0.0,
+          "canonical_MI": 0.0,
+          "jittered_MI": 0.0
+        },
+        "E_bin_1": {
+          "abs_delta": 0.0,
+          "canonical_MI": 0.0,
+          "jittered_MI": 0.0
+        },
+        "E_bin_2": {
+          "abs_delta": 0.0,
+          "canonical_MI": 0.0,
+          "jittered_MI": 0.0
+        },
+        "E_bin_3": {
+          "abs_delta": 0.0,
+          "canonical_MI": 0.0,
+          "jittered_MI": 0.0
+        },
+        "E_bin_4": {
+          "abs_delta": 0.07176033274739657,
+          "canonical_MI": 0.19025176044635228,
+          "jittered_MI": 0.11849142769895571
+        }
+      },
+      "jittered_per_E_bin": {
+        "E_bin_0": {
+          "H_marginal_bits": 0.0,
+          "MI_bits": 0.0,
+          "n": 27
+        },
+        "E_bin_1": {
+          "H_marginal_bits": 0.0,
+          "MI_bits": 0.0,
+          "n": 28
+        },
+        "E_bin_2": {
+          "H_marginal_bits": 0.0,
+          "MI_bits": 0.0,
+          "n": 27
+        },
+        "E_bin_3": {
+          "H_marginal_bits": 0.0,
+          "MI_bits": 0.0,
+          "n": 27
+        },
+        "E_bin_4": {
+          "H_marginal_bits": 1.3830637132486205,
+          "MI_bits": 0.11849142769895571,
+          "n": 28
+        }
+      }
+    },
+    "sr_four_form": {
+      "canonical_vs_jittered_MI_comparison": {
+        "E_bin_0": {
+          "abs_delta": 0.0,
+          "canonical_MI": 0.0,
+          "jittered_MI": 0.0
+        },
+        "E_bin_1": {
+          "abs_delta": 0.0,
+          "canonical_MI": 0.10053682594618707,
+          "jittered_MI": 0.10053682594618707
+        },
+        "E_bin_2": {
+          "abs_delta": 0.1086116952434113,
+          "canonical_MI": 0.12217959301721493,
+          "jittered_MI": 0.23079128826062623
+        },
+        "E_bin_3": {
+          "abs_delta": 0.008104619282640835,
+          "canonical_MI": -0.003445534180259946,
+          "jittered_MI": 0.004659085102380889
+        },
+        "E_bin_4": {
+          "abs_delta": 0.07249265064513954,
+          "canonical_MI": 0.10396440981027166,
+          "jittered_MI": 0.1764570604554112
+        }
+      },
+      "jittered_per_E_bin": {
+        "E_bin_0": {
+          "H_marginal_bits": 0.0,
+          "MI_bits": 0.0,
+          "n": 28
+        },
+        "E_bin_1": {
+          "H_marginal_bits": 0.8256265261578954,
+          "MI_bits": 0.10053682594618707,
+          "n": 27
+        },
+        "E_bin_2": {
+          "H_marginal_bits": 1.561015010593309,
+          "MI_bits": 0.23079128826062623,
+          "n": 27
+        },
+        "E_bin_3": {
+          "H_marginal_bits": 1.2010947341319422,
+          "MI_bits": 0.004659085102380889,
+          "n": 28
+        },
+        "E_bin_4": {
+          "H_marginal_bits": 1.3105673797344795,
+          "MI_bits": 0.1764570604554112,
+          "n": 27
+        }
+      }
+    }
+  },
+  "log_base": 2,
+  "log_base_declaration": "Phase 2e uses E := log2(|base_operand|) \u2014 LOG BASE TWO. Phase 2b's log_radicand_magnitude is log10 and is a SEPARATE primitive; do not conflate. All Phase 2e bins, thresholds, and entropy calculations are in bits (log base 2).",
+  "n_E_bins_per_fixture": 5,
+  "n_permutations_per_bin": 200,
+  "n_records_per_fixture": {
+    "pure_algebraic_four_form": 137,
+    "schwarzschild_four_form": 137,
+    "sr_four_form": 137
+  },
+  "permutation_method": "Fisher-Yates shuffle via LCG (seed 12345, mult 1103515245, incr 12345, mask 0x7FFFFFFF) \u2014 same convention as Phase 2c jitter; byte-stable.",
+  "phase": "Phase 2e \u2014 E-reducibility of transition grammar",
+  "primary_test_results": {
+    "conditional_MI_within_E_bins": {
+      "pure_algebraic_four_form": {
+        "E_quintile_edges_log2": [
+          -2.2894123264828248,
+          -1.3251140256062102,
+          -0.7348455422918369,
+          -0.33017284887156634
+        ],
+        "fixture_classification": "grammar_E_resistant_candidate",
+        "mean_within_bin_MI_bits": 0.28469778137252244,
+        "n_E_bins": 5,
+        "n_bins_exceeding_null": 2,
+        "n_bins_underpowered": 0,
+        "n_bins_within_null": 3,
+        "n_records": 137,
+        "per_E_bin": {
+          "E_bin_0": {
+            "E_range_log2": [
+              -6.6438561897747235,
+              -2.3411500748248804
+            ],
+            "actual_H_conditional_bits": 0.0,
+            "actual_H_marginal_bits": 0.0,
+            "actual_MI_bits": 0.0,
+            "classification": "actual_MI_within_null",
+            "fraction_null_MI_exceeding_actual": 1.0,
+            "n": 27,
+            "null_MI_max": 0.0,
+            "null_MI_mean": 0.0,
+            "null_MI_p95": 0.0
+          },
+          "E_bin_1": {
+            "E_range_log2": [
+              -2.2894123264828248,
+              -1.3513992133785262
+            ],
+            "actual_H_conditional_bits": 0.0,
+            "actual_H_marginal_bits": 0.0,
+            "actual_MI_bits": 0.0,
+            "classification": "actual_MI_within_null",
+            "fraction_null_MI_exceeding_actual": 1.0,
+            "n": 27,
+            "null_MI_max": 0.0,
+            "null_MI_mean": 0.0,
+            "null_MI_p95": 0.0
+          },
+          "E_bin_2": {
+            "E_range_log2": [
+              -1.3251140256062102,
+              -0.7522511595445539
+            ],
+            "actual_H_conditional_bits": 0.0,
+            "actual_H_marginal_bits": 0.222284830685688,
+            "actual_MI_bits": 0.222284830685688,
+            "classification": "actual_MI_within_null",
+            "fraction_null_MI_exceeding_actual": 0.145,
+            "n": 28,
+            "null_MI_max": 0.222284830685688,
+            "null_MI_mean": 0.028560054529408865,
+            "null_MI_p95": 0.222284830685688
+          },
+          "E_bin_3": {
+            "E_range_log2": [
+              -0.7348455422918369,
+              -0.3433017456799294
+            ],
+            "actual_H_conditional_bits": 0.19562178181462783,
+            "actual_H_marginal_bits": 0.9990102708804813,
+            "actual_MI_bits": 0.8033884890658535,
+            "classification": "actual_MI_exceeds_null_p95",
+            "fraction_null_MI_exceeding_actual": 0.0,
+            "n": 27,
+            "null_MI_max": 0.29964425489505697,
+            "null_MI_mean": 0.03540467025527336,
+            "null_MI_p95": 0.1182663895382341
+          },
+          "E_bin_4": {
+            "E_range_log2": [
+              -0.33017284887156634,
+              -0.014499569695115089
+            ],
+            "actual_H_conditional_bits": 0.6292426794897199,
+            "actual_H_marginal_bits": 1.0270582666007906,
+            "actual_MI_bits": 0.3978155871110707,
+            "classification": "actual_MI_exceeds_null_p95",
+            "fraction_null_MI_exceeding_actual": 0.005,
+            "n": 28,
+            "null_MI_max": 0.3978155871110709,
+            "null_MI_mean": 0.107493148971771,
+            "null_MI_p95": 0.24630584210242024
+          }
+        },
+        "unconditional_H_marginal_bits": 1.1795384490529923,
+        "unconditional_MI_bits": 0.8666381469752638
+      },
+      "schwarzschild_four_form": {
+        "E_quintile_edges_log2": [
+          -6.090076156922759,
+          -4.774188058122404,
+          -2.896164189015461,
+          -1.2319467280496967
+        ],
+        "fixture_classification": "grammar_E_reducible",
+        "mean_within_bin_MI_bits": 0.038050352089270455,
+        "n_E_bins": 5,
+        "n_bins_exceeding_null": 0,
+        "n_bins_underpowered": 0,
+        "n_bins_within_null": 5,
+        "n_records": 137,
+        "per_E_bin": {
+          "E_bin_0": {
+            "E_range_log2": [
+              -8.647458426454946,
+              -6.134589587711823
+            ],
+            "actual_H_conditional_bits": 0.0,
+            "actual_H_marginal_bits": 0.0,
+            "actual_MI_bits": 0.0,
+            "classification": "actual_MI_within_null",
+            "fraction_null_MI_exceeding_actual": 1.0,
+            "n": 27,
+            "null_MI_max": 0.0,
+            "null_MI_mean": 0.0,
+            "null_MI_p95": 0.0
+          },
+          "E_bin_1": {
+            "E_range_log2": [
+              -6.090076156922759,
+              -4.87246843108755
+            ],
+            "actual_H_conditional_bits": 0.0,
+            "actual_H_marginal_bits": 0.0,
+            "actual_MI_bits": 0.0,
+            "classification": "actual_MI_within_null",
+            "fraction_null_MI_exceeding_actual": 1.0,
+            "n": 27,
+            "null_MI_max": 0.0,
+            "null_MI_mean": 0.0,
+            "null_MI_p95": 0.0
+          },
+          "E_bin_2": {
+            "E_range_log2": [
+              -4.774188058122404,
+              -3.0131354021891332
+            ],
+            "actual_H_conditional_bits": 0.0,
+            "actual_H_marginal_bits": 0.0,
+            "actual_MI_bits": 0.0,
+            "classification": "actual_MI_within_null",
+            "fraction_null_MI_exceeding_actual": 1.0,
+            "n": 28,
+            "null_MI_max": 0.0,
+            "null_MI_mean": 0.0,
+            "null_MI_p95": 0.0
+          },
+          "E_bin_3": {
+            "E_range_log2": [
+              -2.896164189015461,
+              -1.384663850235325
+            ],
+            "actual_H_conditional_bits": 0.0,
+            "actual_H_marginal_bits": 0.0,
+            "actual_MI_bits": 0.0,
+            "classification": "actual_MI_within_null",
+            "fraction_null_MI_exceeding_actual": 1.0,
+            "n": 27,
+            "null_MI_max": 0.0,
+            "null_MI_mean": 0.0,
+            "null_MI_p95": 0.0
+          },
+          "E_bin_4": {
+            "E_range_log2": [
+              -1.2319467280496967,
+              -0.3219280948873623
+            ],
+            "actual_H_conditional_bits": 1.142667000356099,
+            "actual_H_marginal_bits": 1.3329187608024513,
+            "actual_MI_bits": 0.19025176044635228,
+            "classification": "actual_MI_within_null",
+            "fraction_null_MI_exceeding_actual": 0.215,
+            "n": 28,
+            "null_MI_max": 0.47304702057226766,
+            "null_MI_mean": 0.1372693474345202,
+            "null_MI_p95": 0.2833374116306968
+          }
+        },
+        "unconditional_H_marginal_bits": 0.668055679114828,
+        "unconditional_MI_bits": 0.25036670813657114
+      },
+      "sr_four_form": {
+        "E_quintile_edges_log2": [
+          -1.4957867091562147,
+          -0.6626170573762642,
+          -0.25574953256044564,
+          -0.06288505892307263
+        ],
+        "fixture_classification": "grammar_E_reducible",
+        "mean_within_bin_MI_bits": 0.06464705891868275,
+        "n_E_bins": 5,
+        "n_bins_exceeding_null": 0,
+        "n_bins_underpowered": 0,
+        "n_bins_within_null": 5,
+        "n_records": 137,
+        "per_E_bin": {
+          "E_bin_0": {
+            "E_range_log2": [
+              -12.287784516105445,
+              -1.5443950737416774
+            ],
+            "actual_H_conditional_bits": 0.0,
+            "actual_H_marginal_bits": 0.0,
+            "actual_MI_bits": 0.0,
+            "classification": "actual_MI_within_null",
+            "fraction_null_MI_exceeding_actual": 1.0,
+            "n": 27,
+            "null_MI_max": 0.0,
+            "null_MI_mean": 0.0,
+            "null_MI_p95": 0.0
+          },
+          "E_bin_1": {
+            "E_range_log2": [
+              -1.4957867091562147,
+              -0.6830568532277981
+            ],
+            "actual_H_conditional_bits": 0.7250897002117084,
+            "actual_H_marginal_bits": 0.8256265261578954,
+            "actual_MI_bits": 0.10053682594618707,
+            "classification": "actual_MI_within_null",
+            "fraction_null_MI_exceeding_actual": 0.185,
+            "n": 27,
+            "null_MI_max": 0.37586434502586014,
+            "null_MI_mean": 0.03959299009678963,
+            "null_MI_p95": 0.1446041762096283
+          },
+          "E_bin_2": {
+            "E_range_log2": [
+              -0.6626170573762642,
+              -0.2659835442697222
+            ],
+            "actual_H_conditional_bits": 1.3204253501630823,
+            "actual_H_marginal_bits": 1.4426049431802972,
+            "actual_MI_bits": 0.12217959301721493,
+            "classification": "actual_MI_within_null",
+            "fraction_null_MI_exceeding_actual": 0.505,
+            "n": 28,
+            "null_MI_max": 0.4614854988961098,
+            "null_MI_mean": 0.1384727165328813,
+            "null_MI_p95": 0.31023779667637497
+          },
+          "E_bin_3": {
+            "E_range_log2": [
+              -0.25574953256044564,
+              -0.06750290672063079
+            ],
+            "actual_H_conditional_bits": 0.828425791528153,
+            "actual_H_marginal_bits": 0.824980257347893,
+            "actual_MI_bits": -0.003445534180259946,
+            "classification": "actual_MI_within_null",
+            "fraction_null_MI_exceeding_actual": 1.0,
+            "n": 27,
+            "null_MI_max": 0.25760342745950093,
+            "null_MI_mean": 0.06933173080676176,
+            "null_MI_p95": 0.22227868626845426
+          },
+          "E_bin_4": {
+            "E_range_log2": [
+              -0.06288505892307263,
+              -0.00014427671804501932
+            ],
+            "actual_H_conditional_bits": 0.7463614946946623,
+            "actual_H_marginal_bits": 0.850325904504934,
+            "actual_MI_bits": 0.10396440981027166,
+            "classification": "actual_MI_within_null",
+            "fraction_null_MI_exceeding_actual": 0.285,
+            "n": 28,
+            "null_MI_max": 0.3161103039702391,
+            "null_MI_mean": 0.08628152014011274,
+            "null_MI_p95": 0.2724235677803395
+          }
+        },
+        "unconditional_H_marginal_bits": 1.5298776591296142,
+        "unconditional_MI_bits": 0.5215658663532634
+      }
+    },
+    "pooled_classifications": {
+      "pure_algebraic_four_form": "grammar_E_resistant_candidate",
+      "schwarzschild_four_form": "grammar_E_reducible",
+      "sr_four_form": "grammar_E_reducible"
+    },
+    "pooled_status": "grammar_E_resistant_in_at_least_one_fixture"
+  },
+  "primitive_pin": "E := log2(|base_operand(coord)|), LOG BASE TWO. Distinct from Phase 2b's log_radicand_magnitude (log base 10).",
+  "right_tail_fraction_threshold_for_resistant_classification": 0.05,
+  "secondary_test_results": {
+    "schwarzschild_residual_with_balancing": {
+      "balanced_partial_correlation_y_z_given_x": 0.1419580633741672,
+      "balancing_target_n": 48,
+      "classification": "schwarzschild_residual_grid_driven",
+      "interpretation": "raw_partial=0.150, balanced_partial=0.142, null_abs_p95=0.2391299928584228; classification: schwarzschild_residual_grid_driven",
+      "n_horizon_records": 89,
+      "n_other_records": 48,
+      "permutation_null_abs_partial_p95": 0.2391299928584228,
+      "raw_partial_correlation_y_z_given_x": 0.1499614211241848
+    }
+  },
+  "source_phase_1_sha256": "6502e942558f699d24011ae1d78601a07dea835c9ec9441fe42185a9df42df54",
+  "source_phase_2_sha256": "6a212ee610d80893afd9a2629820006b2a74d34a373f9e7dd334e2042f28cc33",
+  "source_phase_2b_sha256": "e4268f25ebdd743dd9a463d32c53bf470843ba09852df1164e272a68962afd31",
+  "source_phase_2c_sha256": "62d86e0b081231abd37679b5e393de0f7fb1b16284fdff48d4d996d5b8887b85",
+  "source_phase_2d_sha256": "ea4f29798a14484a17f06273673871b53ce7900520c16083c65ffd312ce43942"
+}

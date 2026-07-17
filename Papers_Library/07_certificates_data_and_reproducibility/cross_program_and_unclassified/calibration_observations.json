@@ -1,0 +1,1781 @@
+{
+  "calibration": "task035_sweep_signature_probe",
+  "eta": 3e-07,
+  "f_values": [
+    0.1,
+    0.0071968567300115215,
+    0.0005179474679231213,
+    3.727593720314938e-05,
+    2.6826957952797274e-06,
+    1.9306977288832537e-07,
+    1.3894954943731388e-08,
+    1e-09
+  ],
+  "records": [
+    {
+      "case": "stable_F1_along_r",
+      "expected_status": "sweep_signature_clean",
+      "form_kind": "stable",
+      "label": "F1_along_r",
+      "match": true,
+      "observed_status": "sweep_signature_clean",
+      "result": {
+        "conditioning": {
+          "notes": [
+            "cancellation_grade=5.02875e-07",
+            "drop_rate=0",
+            "n_observed=8/8"
+          ],
+          "status": "well_conditioned"
+        },
+        "protocol": "ok",
+        "provenance": {
+          "backend": "python",
+          "device": "cpu",
+          "expression_path": "sweep_signature_probe",
+          "inputs": [
+            "stable_F1_along_r",
+            "stable_F1_along_r",
+            {
+              "count": 8,
+              "first": 0.1,
+              "last": 1e-09,
+              "max": 0.1,
+              "min": 1e-09,
+              "strictly_decreasing": true,
+              "strictly_increasing": false
+            },
+            3e-07
+          ],
+          "measurement_resolution": null,
+          "operation_id": "sweep_signature_probe",
+          "parents": [
+            "e45b8b80c244def1",
+            "370dd61cb9d19a9e",
+            "2821e3175f53f204",
+            "b4a9ce20ec52252d",
+            "ea6b3a6ee826b6f1",
+            "9e23ff7f4a531aa9",
+            "b7e5b2b65fe8589a",
+            "9c16e69f0b9f5c53",
+            "fdd103145ac0380d"
+          ],
+          "precision": "raw_python",
+          "status": "complete",
+          "trace_id": "659fb9fe8e337edb"
+        },
+        "refusal": null,
+        "space": "SweepSignatureObservation",
+        "status": "sweep_signature_clean",
+        "validity": {
+          "advanceable": true,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": true
+        },
+        "value": {
+          "cancellation_grade": 5.028752674274273e-07,
+          "drop_rate": 0.0,
+          "expression_path": "sweep_signature_probe",
+          "n_cancellation_dominated": 0,
+          "n_delta_indeterminate": 0,
+          "n_domain_refused": 0,
+          "n_dropped": 0,
+          "n_input": 8,
+          "n_nonfinite": 0,
+          "n_observed": 8,
+          "slope_observation": {
+            "expression_path": "ordinary_least_squares",
+            "intercept": 2.898951809826645,
+            "log_f_max": -2.3025850929940455,
+            "log_f_min": -20.72326583694641,
+            "n_input_observations": 8,
+            "n_used": 8,
+            "r_squared": 0.9999994971247326,
+            "slope": 1.000551750932123,
+            "standard_error": 0.0002896637698863658
+          }
+        }
+      },
+      "value": {
+        "cancellation_grade": 5.028752674274273e-07,
+        "drop_rate": 0.0,
+        "expression_path": "sweep_signature_probe",
+        "n_cancellation_dominated": 0,
+        "n_delta_indeterminate": 0,
+        "n_domain_refused": 0,
+        "n_dropped": 0,
+        "n_input": 8,
+        "n_nonfinite": 0,
+        "n_observed": 8,
+        "slope_observation": {
+          "expression_path": "ordinary_least_squares",
+          "intercept": 2.898951809826645,
+          "log_f_max": -2.3025850929940455,
+          "log_f_min": -20.72326583694641,
+          "n_input_observations": 8,
+          "n_used": 8,
+          "r_squared": 0.9999994971247326,
+          "slope": 1.000551750932123,
+          "standard_error": 0.0002896637698863658
+        }
+      }
+    },
+    {
+      "case": "stable_F1_along_B",
+      "expected_status": "sweep_signature_clean",
+      "form_kind": "stable",
+      "label": "F1_along_B",
+      "match": true,
+      "observed_status": "sweep_signature_clean",
+      "result": {
+        "conditioning": {
+          "notes": [
+            "cancellation_grade=0",
+            "drop_rate=0",
+            "n_observed=8/8"
+          ],
+          "status": "well_conditioned"
+        },
+        "protocol": "ok",
+        "provenance": {
+          "backend": "python",
+          "device": "cpu",
+          "expression_path": "sweep_signature_probe",
+          "inputs": [
+            "stable_F1_along_B",
+            "stable_F1_along_B",
+            {
+              "count": 8,
+              "first": 0.1,
+              "last": 1e-09,
+              "max": 0.1,
+              "min": 1e-09,
+              "strictly_decreasing": true,
+              "strictly_increasing": false
+            },
+            3e-07
+          ],
+          "measurement_resolution": null,
+          "operation_id": "sweep_signature_probe",
+          "parents": [
+            "f2cfd5da3a62f3da",
+            "23f52b51bbb9462a",
+            "910bee218d632784",
+            "34b15249375c5cd0",
+            "a8d825f0c0a6e20b",
+            "0f23a51ba887ebfe",
+            "782134734d3a5ad8",
+            "1f4ccc928dd8b731",
+            "5736ae66f6c571cf"
+          ],
+          "precision": "raw_python",
+          "status": "complete",
+          "trace_id": "0170d45215384f37"
+        },
+        "refusal": null,
+        "space": "SweepSignatureObservation",
+        "status": "sweep_signature_clean",
+        "validity": {
+          "advanceable": true,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": true
+        },
+        "value": {
+          "cancellation_grade": 0.0,
+          "drop_rate": 0.0,
+          "expression_path": "sweep_signature_probe",
+          "n_cancellation_dominated": 0,
+          "n_delta_indeterminate": 0,
+          "n_domain_refused": 0,
+          "n_dropped": 0,
+          "n_input": 8,
+          "n_nonfinite": 0,
+          "n_observed": 8,
+          "slope_observation": {
+            "expression_path": "ordinary_least_squares",
+            "intercept": -1.9718532334405447e-12,
+            "log_f_max": -2.3025850929940455,
+            "log_f_min": -20.72326583694641,
+            "n_input_observations": 8,
+            "n_used": 8,
+            "r_squared": 1.0,
+            "slope": 0.0,
+            "standard_error": 0.0
+          }
+        }
+      },
+      "value": {
+        "cancellation_grade": 0.0,
+        "drop_rate": 0.0,
+        "expression_path": "sweep_signature_probe",
+        "n_cancellation_dominated": 0,
+        "n_delta_indeterminate": 0,
+        "n_domain_refused": 0,
+        "n_dropped": 0,
+        "n_input": 8,
+        "n_nonfinite": 0,
+        "n_observed": 8,
+        "slope_observation": {
+          "expression_path": "ordinary_least_squares",
+          "intercept": -1.9718532334405447e-12,
+          "log_f_max": -2.3025850929940455,
+          "log_f_min": -20.72326583694641,
+          "n_input_observations": 8,
+          "n_used": 8,
+          "r_squared": 1.0,
+          "slope": 0.0,
+          "standard_error": 0.0
+        }
+      }
+    },
+    {
+      "case": "stable_F1_along_M",
+      "expected_status": "sweep_signature_clean",
+      "form_kind": "stable",
+      "label": "F1_along_M",
+      "match": true,
+      "observed_status": "sweep_signature_clean",
+      "result": {
+        "conditioning": {
+          "notes": [
+            "cancellation_grade=0",
+            "drop_rate=0",
+            "n_observed=8/8"
+          ],
+          "status": "well_conditioned"
+        },
+        "protocol": "ok",
+        "provenance": {
+          "backend": "python",
+          "device": "cpu",
+          "expression_path": "sweep_signature_probe",
+          "inputs": [
+            "stable_F1_along_M",
+            "stable_F1_along_M",
+            {
+              "count": 8,
+              "first": 0.1,
+              "last": 1e-09,
+              "max": 0.1,
+              "min": 1e-09,
+              "strictly_decreasing": true,
+              "strictly_increasing": false
+            },
+            3e-07
+          ],
+          "measurement_resolution": null,
+          "operation_id": "sweep_signature_probe",
+          "parents": [
+            "b1614a035b8f3262",
+            "f3fadcc36904c042",
+            "f94d4569624ff332",
+            "5a2f013ed59ded05",
+            "116267194835e194",
+            "e21b9f9482df3ad7",
+            "cfea13095e36abff",
+            "532895272dcc5a3b",
+            "59d55646a3c67b9c"
+          ],
+          "precision": "raw_python",
+          "status": "complete",
+          "trace_id": "71ca1d3bead2ee87"
+        },
+        "refusal": null,
+        "space": "SweepSignatureObservation",
+        "status": "sweep_signature_clean",
+        "validity": {
+          "advanceable": true,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": true
+        },
+        "value": {
+          "cancellation_grade": 0.0,
+          "drop_rate": 0.0,
+          "expression_path": "sweep_signature_probe",
+          "n_cancellation_dominated": 0,
+          "n_delta_indeterminate": 0,
+          "n_domain_refused": 0,
+          "n_dropped": 0,
+          "n_input": 8,
+          "n_nonfinite": 0,
+          "n_observed": 8,
+          "slope_observation": {
+            "expression_path": "ordinary_least_squares",
+            "intercept": 3.9889840464866513,
+            "log_f_max": -2.3025850929940455,
+            "log_f_min": -20.72326583694641,
+            "n_input_observations": 8,
+            "n_used": 8,
+            "r_squared": 1.0,
+            "slope": 0.0,
+            "standard_error": 0.0
+          }
+        }
+      },
+      "value": {
+        "cancellation_grade": 0.0,
+        "drop_rate": 0.0,
+        "expression_path": "sweep_signature_probe",
+        "n_cancellation_dominated": 0,
+        "n_delta_indeterminate": 0,
+        "n_domain_refused": 0,
+        "n_dropped": 0,
+        "n_input": 8,
+        "n_nonfinite": 0,
+        "n_observed": 8,
+        "slope_observation": {
+          "expression_path": "ordinary_least_squares",
+          "intercept": 3.9889840464866513,
+          "log_f_max": -2.3025850929940455,
+          "log_f_min": -20.72326583694641,
+          "n_input_observations": 8,
+          "n_used": 8,
+          "r_squared": 1.0,
+          "slope": 0.0,
+          "standard_error": 0.0
+        }
+      }
+    },
+    {
+      "case": "stable_F2_along_r",
+      "expected_status": "sweep_signature_clean",
+      "form_kind": "stable",
+      "label": "F2_along_r",
+      "match": true,
+      "observed_status": "sweep_signature_clean",
+      "result": {
+        "conditioning": {
+          "notes": [
+            "cancellation_grade=0",
+            "drop_rate=0",
+            "n_observed=8/8"
+          ],
+          "status": "well_conditioned"
+        },
+        "protocol": "ok",
+        "provenance": {
+          "backend": "python",
+          "device": "cpu",
+          "expression_path": "sweep_signature_probe",
+          "inputs": [
+            "stable_F2_along_r",
+            "stable_F2_along_r",
+            {
+              "count": 8,
+              "first": 0.1,
+              "last": 1e-09,
+              "max": 0.1,
+              "min": 1e-09,
+              "strictly_decreasing": true,
+              "strictly_increasing": false
+            },
+            3e-07
+          ],
+          "measurement_resolution": null,
+          "operation_id": "sweep_signature_probe",
+          "parents": [
+            "e76de1db4f25242a",
+            "0d74190e76f928b6",
+            "22857277db1a0799",
+            "d28d14ff45e9ac88",
+            "a0944d1e15fe4bec",
+            "42187cd6b16a2f19",
+            "a6ef173b49824cd6",
+            "edc19f86b3f9a5dd",
+            "7a1f7c008ea26e40"
+          ],
+          "precision": "raw_python",
+          "status": "complete",
+          "trace_id": "1ad09e545fb70649"
+        },
+        "refusal": null,
+        "space": "SweepSignatureObservation",
+        "status": "sweep_signature_clean",
+        "validity": {
+          "advanceable": true,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": true
+        },
+        "value": {
+          "cancellation_grade": 0.0,
+          "drop_rate": 0.0,
+          "expression_path": "sweep_signature_probe",
+          "n_cancellation_dominated": 0,
+          "n_delta_indeterminate": 0,
+          "n_domain_refused": 0,
+          "n_dropped": 0,
+          "n_input": 8,
+          "n_nonfinite": 0,
+          "n_observed": 8,
+          "slope_observation": {
+            "expression_path": "ordinary_least_squares",
+            "intercept": 4.039307154824638,
+            "log_f_max": -2.3025850929940455,
+            "log_f_min": -20.72326583694641,
+            "n_input_observations": 8,
+            "n_used": 8,
+            "r_squared": 1.0,
+            "slope": 0.0,
+            "standard_error": 0.0
+          }
+        }
+      },
+      "value": {
+        "cancellation_grade": 0.0,
+        "drop_rate": 0.0,
+        "expression_path": "sweep_signature_probe",
+        "n_cancellation_dominated": 0,
+        "n_delta_indeterminate": 0,
+        "n_domain_refused": 0,
+        "n_dropped": 0,
+        "n_input": 8,
+        "n_nonfinite": 0,
+        "n_observed": 8,
+        "slope_observation": {
+          "expression_path": "ordinary_least_squares",
+          "intercept": 4.039307154824638,
+          "log_f_max": -2.3025850929940455,
+          "log_f_min": -20.72326583694641,
+          "n_input_observations": 8,
+          "n_used": 8,
+          "r_squared": 1.0,
+          "slope": 0.0,
+          "standard_error": 0.0
+        }
+      }
+    },
+    {
+      "case": "stable_F2_along_B",
+      "expected_status": "sweep_signature_clean",
+      "form_kind": "stable",
+      "label": "F2_along_B",
+      "match": true,
+      "observed_status": "sweep_signature_clean",
+      "result": {
+        "conditioning": {
+          "notes": [
+            "cancellation_grade=0",
+            "drop_rate=0",
+            "n_observed=8/8"
+          ],
+          "status": "well_conditioned"
+        },
+        "protocol": "ok",
+        "provenance": {
+          "backend": "python",
+          "device": "cpu",
+          "expression_path": "sweep_signature_probe",
+          "inputs": [
+            "stable_F2_along_B",
+            "stable_F2_along_B",
+            {
+              "count": 8,
+              "first": 0.1,
+              "last": 1e-09,
+              "max": 0.1,
+              "min": 1e-09,
+              "strictly_decreasing": true,
+              "strictly_increasing": false
+            },
+            3e-07
+          ],
+          "measurement_resolution": null,
+          "operation_id": "sweep_signature_probe",
+          "parents": [
+            "5886f364725dc6c8",
+            "ba6dcd85788afd62",
+            "452ac75b92e1683f",
+            "34a9d038309ee990",
+            "472f68b26b3bbadb",
+            "ae7013ee25806e6c",
+            "2351416d1c738c93",
+            "acc70ecd86e21f65",
+            "5f6652329482fb5b"
+          ],
+          "precision": "raw_python",
+          "status": "complete",
+          "trace_id": "868fa480b045c120"
+        },
+        "refusal": null,
+        "space": "SweepSignatureObservation",
+        "status": "sweep_signature_clean",
+        "validity": {
+          "advanceable": true,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": true
+        },
+        "value": {
+          "cancellation_grade": 0.0,
+          "drop_rate": 0.0,
+          "expression_path": "sweep_signature_probe",
+          "n_cancellation_dominated": 0,
+          "n_delta_indeterminate": 0,
+          "n_domain_refused": 0,
+          "n_dropped": 0,
+          "n_input": 8,
+          "n_nonfinite": 0,
+          "n_observed": 8,
+          "slope_observation": {
+            "expression_path": "ordinary_least_squares",
+            "intercept": 1.098612288187477,
+            "log_f_max": -2.3025850929940455,
+            "log_f_min": -20.72326583694641,
+            "n_input_observations": 8,
+            "n_used": 8,
+            "r_squared": 1.0,
+            "slope": 0.0,
+            "standard_error": 0.0
+          }
+        }
+      },
+      "value": {
+        "cancellation_grade": 0.0,
+        "drop_rate": 0.0,
+        "expression_path": "sweep_signature_probe",
+        "n_cancellation_dominated": 0,
+        "n_delta_indeterminate": 0,
+        "n_domain_refused": 0,
+        "n_dropped": 0,
+        "n_input": 8,
+        "n_nonfinite": 0,
+        "n_observed": 8,
+        "slope_observation": {
+          "expression_path": "ordinary_least_squares",
+          "intercept": 1.098612288187477,
+          "log_f_max": -2.3025850929940455,
+          "log_f_min": -20.72326583694641,
+          "n_input_observations": 8,
+          "n_used": 8,
+          "r_squared": 1.0,
+          "slope": 0.0,
+          "standard_error": 0.0
+        }
+      }
+    },
+    {
+      "case": "stable_F2_along_M",
+      "expected_status": "sweep_signature_degenerate_input",
+      "form_kind": "stable",
+      "label": "F2_along_M",
+      "match": true,
+      "observed_status": "sweep_signature_degenerate_input",
+      "result": {
+        "conditioning": {
+          "notes": [
+            "cancellation_grade=0",
+            "drop_rate=0",
+            "n_observed=8/8"
+          ],
+          "status": "warning"
+        },
+        "protocol": "ok",
+        "provenance": {
+          "backend": "python",
+          "device": "cpu",
+          "expression_path": "sweep_signature_probe",
+          "inputs": [
+            "stable_F2_along_M",
+            "stable_F2_along_M",
+            {
+              "count": 8,
+              "first": 0.1,
+              "last": 1e-09,
+              "max": 0.1,
+              "min": 1e-09,
+              "strictly_decreasing": true,
+              "strictly_increasing": false
+            },
+            3e-07
+          ],
+          "measurement_resolution": null,
+          "operation_id": "sweep_signature_probe",
+          "parents": [
+            "0b0304c6857e7cbb",
+            "7fe49254d07482e8",
+            "03d2cb4f7cf44b8a",
+            "f794b035a857f500",
+            "54602da166e946cf",
+            "a5cb2daa10726f25",
+            "a9e55a692901a138",
+            "50a947b6fd90a28b",
+            "42884e1b8e463ac9"
+          ],
+          "precision": "raw_python",
+          "status": "complete",
+          "trace_id": "e0347c45d8e9c43b"
+        },
+        "refusal": null,
+        "space": "SweepSignatureObservation",
+        "status": "sweep_signature_degenerate_input",
+        "validity": {
+          "advanceable": false,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": false
+        },
+        "value": {
+          "cancellation_grade": 0.0,
+          "drop_rate": 0.0,
+          "expression_path": "sweep_signature_probe",
+          "n_cancellation_dominated": 0,
+          "n_delta_indeterminate": 0,
+          "n_domain_refused": 0,
+          "n_dropped": 0,
+          "n_input": 8,
+          "n_nonfinite": 0,
+          "n_observed": 8,
+          "slope_observation": {
+            "expression_path": "ordinary_least_squares",
+            "intercept": null,
+            "log_f_max": null,
+            "log_f_min": null,
+            "n_input_observations": 8,
+            "n_used": 0,
+            "r_squared": null,
+            "slope": null,
+            "standard_error": null
+          }
+        }
+      },
+      "value": {
+        "cancellation_grade": 0.0,
+        "drop_rate": 0.0,
+        "expression_path": "sweep_signature_probe",
+        "n_cancellation_dominated": 0,
+        "n_delta_indeterminate": 0,
+        "n_domain_refused": 0,
+        "n_dropped": 0,
+        "n_input": 8,
+        "n_nonfinite": 0,
+        "n_observed": 8,
+        "slope_observation": {
+          "expression_path": "ordinary_least_squares",
+          "intercept": null,
+          "log_f_max": null,
+          "log_f_min": null,
+          "n_input_observations": 8,
+          "n_used": 0,
+          "r_squared": null,
+          "slope": null,
+          "standard_error": null
+        }
+      }
+    },
+    {
+      "case": "stable_F1_along_tangent",
+      "expected_status": "sweep_signature_clean",
+      "form_kind": "stable",
+      "label": "F1_along_tangent",
+      "match": true,
+      "observed_status": "sweep_signature_clean",
+      "result": {
+        "conditioning": {
+          "notes": [
+            "cancellation_grade=3.54837e-05",
+            "drop_rate=0",
+            "n_observed=8/8"
+          ],
+          "status": "well_conditioned"
+        },
+        "protocol": "ok",
+        "provenance": {
+          "backend": "python",
+          "device": "cpu",
+          "expression_path": "sweep_signature_probe",
+          "inputs": [
+            "stable_F1_along_tangent",
+            "stable_F1_along_tangent",
+            {
+              "count": 8,
+              "first": 0.1,
+              "last": 1e-09,
+              "max": 0.1,
+              "min": 1e-09,
+              "strictly_decreasing": true,
+              "strictly_increasing": false
+            },
+            3e-07
+          ],
+          "measurement_resolution": null,
+          "operation_id": "sweep_signature_probe",
+          "parents": [
+            "a63195ffa7e35f13",
+            "875ee0b32ccddfef",
+            "9fe76721d9ea8cec",
+            "53b407b5903f8fac",
+            "be6419a255bb7e3d",
+            "b16cc167c207e22f",
+            "f2d73b0921a83079",
+            "698651a17bbc892f",
+            "299a737f2c9af11f"
+          ],
+          "precision": "raw_python",
+          "status": "complete",
+          "trace_id": "02fa7a780ae52d0d"
+        },
+        "refusal": null,
+        "space": "SweepSignatureObservation",
+        "status": "sweep_signature_clean",
+        "validity": {
+          "advanceable": true,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": true
+        },
+        "value": {
+          "cancellation_grade": 3.5483670321689864e-05,
+          "drop_rate": 0.0,
+          "expression_path": "sweep_signature_probe",
+          "n_cancellation_dominated": 0,
+          "n_delta_indeterminate": 0,
+          "n_domain_refused": 0,
+          "n_dropped": 0,
+          "n_input": 8,
+          "n_nonfinite": 0,
+          "n_observed": 8,
+          "slope_observation": {
+            "expression_path": "ordinary_least_squares",
+            "intercept": 4.061776315909445,
+            "log_f_max": -2.3025850929940455,
+            "log_f_min": -20.72326583694641,
+            "n_input_observations": 8,
+            "n_used": 8,
+            "r_squared": 0.9999645163296783,
+            "slope": 1.0046795305449692,
+            "standard_error": 0.0024432837237690352
+          }
+        }
+      },
+      "value": {
+        "cancellation_grade": 3.5483670321689864e-05,
+        "drop_rate": 0.0,
+        "expression_path": "sweep_signature_probe",
+        "n_cancellation_dominated": 0,
+        "n_delta_indeterminate": 0,
+        "n_domain_refused": 0,
+        "n_dropped": 0,
+        "n_input": 8,
+        "n_nonfinite": 0,
+        "n_observed": 8,
+        "slope_observation": {
+          "expression_path": "ordinary_least_squares",
+          "intercept": 4.061776315909445,
+          "log_f_max": -2.3025850929940455,
+          "log_f_min": -20.72326583694641,
+          "n_input_observations": 8,
+          "n_used": 8,
+          "r_squared": 0.9999645163296783,
+          "slope": 1.0046795305449692,
+          "standard_error": 0.0024432837237690352
+        }
+      }
+    },
+    {
+      "case": "stable_F2_along_tangent",
+      "expected_status": "sweep_signature_clean",
+      "form_kind": "stable",
+      "label": "F2_along_tangent",
+      "match": true,
+      "observed_status": "sweep_signature_clean",
+      "result": {
+        "conditioning": {
+          "notes": [
+            "cancellation_grade=3.54837e-05",
+            "drop_rate=0",
+            "n_observed=8/8"
+          ],
+          "status": "well_conditioned"
+        },
+        "protocol": "ok",
+        "provenance": {
+          "backend": "python",
+          "device": "cpu",
+          "expression_path": "sweep_signature_probe",
+          "inputs": [
+            "stable_F2_along_tangent",
+            "stable_F2_along_tangent",
+            {
+              "count": 8,
+              "first": 0.1,
+              "last": 1e-09,
+              "max": 0.1,
+              "min": 1e-09,
+              "strictly_decreasing": true,
+              "strictly_increasing": false
+            },
+            3e-07
+          ],
+          "measurement_resolution": null,
+          "operation_id": "sweep_signature_probe",
+          "parents": [
+            "6fa0cf1e37acecfe",
+            "b507c58ff1fc3db6",
+            "76286ec43a3f11ed",
+            "6066a2f3b59f3f84",
+            "5052ca551e0bfeee",
+            "c95755c333d0d1f9",
+            "def5988fe583925b",
+            "f85028eafb939a7d",
+            "944890c1fb737495"
+          ],
+          "precision": "raw_python",
+          "status": "complete",
+          "trace_id": "ac134feba49072a1"
+        },
+        "refusal": null,
+        "space": "SweepSignatureObservation",
+        "status": "sweep_signature_clean",
+        "validity": {
+          "advanceable": true,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": true
+        },
+        "value": {
+          "cancellation_grade": 3.548367024774901e-05,
+          "drop_rate": 0.0,
+          "expression_path": "sweep_signature_probe",
+          "n_cancellation_dominated": 0,
+          "n_delta_indeterminate": 0,
+          "n_domain_refused": 0,
+          "n_dropped": 0,
+          "n_input": 8,
+          "n_nonfinite": 0,
+          "n_observed": 8,
+          "slope_observation": {
+            "expression_path": "ordinary_least_squares",
+            "intercept": 5.1603886049154655,
+            "log_f_max": -2.3025850929940455,
+            "log_f_min": -20.72326583694641,
+            "n_input_observations": 8,
+            "n_used": 8,
+            "r_squared": 0.9999645163297523,
+            "slope": 1.0046795305707945,
+            "standard_error": 0.0024432837212849264
+          }
+        }
+      },
+      "value": {
+        "cancellation_grade": 3.548367024774901e-05,
+        "drop_rate": 0.0,
+        "expression_path": "sweep_signature_probe",
+        "n_cancellation_dominated": 0,
+        "n_delta_indeterminate": 0,
+        "n_domain_refused": 0,
+        "n_dropped": 0,
+        "n_input": 8,
+        "n_nonfinite": 0,
+        "n_observed": 8,
+        "slope_observation": {
+          "expression_path": "ordinary_least_squares",
+          "intercept": 5.1603886049154655,
+          "log_f_max": -2.3025850929940455,
+          "log_f_min": -20.72326583694641,
+          "n_input_observations": 8,
+          "n_used": 8,
+          "r_squared": 0.9999645163297523,
+          "slope": 1.0046795305707945,
+          "standard_error": 0.0024432837212849264
+        }
+      }
+    },
+    {
+      "case": "naive_F1_along_r",
+      "expected_status": "sweep_signature_cancellation_dominated",
+      "form_kind": "naive",
+      "label": "F1_along_r",
+      "match": true,
+      "observed_status": "sweep_signature_cancellation_dominated",
+      "result": {
+        "conditioning": {
+          "notes": [
+            "cancellation_grade=0.985173",
+            "drop_rate=0",
+            "n_observed=8/8"
+          ],
+          "status": "warning"
+        },
+        "protocol": "ok",
+        "provenance": {
+          "backend": "python",
+          "device": "cpu",
+          "expression_path": "sweep_signature_probe",
+          "inputs": [
+            "naive_F1_along_r",
+            "naive_F1_along_r",
+            {
+              "count": 8,
+              "first": 0.1,
+              "last": 1e-09,
+              "max": 0.1,
+              "min": 1e-09,
+              "strictly_decreasing": true,
+              "strictly_increasing": false
+            },
+            3e-07
+          ],
+          "measurement_resolution": null,
+          "operation_id": "sweep_signature_probe",
+          "parents": [
+            "3160d3af091657c5",
+            "8877cac8b191aa92",
+            "dec4497d67d97e3b",
+            "b33d42597338df3b",
+            "9163dd9d886bc962",
+            "95a5b001dabae37e",
+            "74ef1c6c1eadd8bd",
+            "575dbdd26acff794",
+            "d2ae6162274c772c"
+          ],
+          "precision": "raw_python",
+          "status": "complete",
+          "trace_id": "a0cc4ee3bff9cd43"
+        },
+        "refusal": null,
+        "space": "SweepSignatureObservation",
+        "status": "sweep_signature_cancellation_dominated",
+        "validity": {
+          "advanceable": false,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": false
+        },
+        "value": {
+          "cancellation_grade": 0.9851726823069747,
+          "drop_rate": 0.0,
+          "expression_path": "sweep_signature_probe",
+          "n_cancellation_dominated": 0,
+          "n_delta_indeterminate": 0,
+          "n_domain_refused": 0,
+          "n_dropped": 0,
+          "n_input": 8,
+          "n_nonfinite": 0,
+          "n_observed": 8,
+          "slope_observation": {
+            "expression_path": "ordinary_least_squares",
+            "intercept": -2.4931061089987097,
+            "log_f_max": -2.3025850929940455,
+            "log_f_min": -18.091740016381788,
+            "n_input_observations": 8,
+            "n_used": 7,
+            "r_squared": 0.014827317693025255,
+            "slope": 0.06159314384080666,
+            "standard_error": 0.22452890260421393
+          }
+        }
+      },
+      "value": {
+        "cancellation_grade": 0.9851726823069747,
+        "drop_rate": 0.0,
+        "expression_path": "sweep_signature_probe",
+        "n_cancellation_dominated": 0,
+        "n_delta_indeterminate": 0,
+        "n_domain_refused": 0,
+        "n_dropped": 0,
+        "n_input": 8,
+        "n_nonfinite": 0,
+        "n_observed": 8,
+        "slope_observation": {
+          "expression_path": "ordinary_least_squares",
+          "intercept": -2.4931061089987097,
+          "log_f_max": -2.3025850929940455,
+          "log_f_min": -18.091740016381788,
+          "n_input_observations": 8,
+          "n_used": 7,
+          "r_squared": 0.014827317693025255,
+          "slope": 0.06159314384080666,
+          "standard_error": 0.22452890260421393
+        }
+      }
+    },
+    {
+      "case": "naive_F1_along_B",
+      "expected_status": "sweep_signature_clean",
+      "form_kind": "naive",
+      "label": "F1_along_B",
+      "match": true,
+      "observed_status": "sweep_signature_clean",
+      "result": {
+        "conditioning": {
+          "notes": [
+            "cancellation_grade=0.55852",
+            "drop_rate=0.125",
+            "n_observed=7/8"
+          ],
+          "status": "well_conditioned"
+        },
+        "protocol": "ok",
+        "provenance": {
+          "backend": "python",
+          "device": "cpu",
+          "expression_path": "sweep_signature_probe",
+          "inputs": [
+            "naive_F1_along_B",
+            "naive_F1_along_B",
+            {
+              "count": 8,
+              "first": 0.1,
+              "last": 1e-09,
+              "max": 0.1,
+              "min": 1e-09,
+              "strictly_decreasing": true,
+              "strictly_increasing": false
+            },
+            3e-07
+          ],
+          "measurement_resolution": null,
+          "operation_id": "sweep_signature_probe",
+          "parents": [
+            "483165edd054385d",
+            "46963b458322284f",
+            "406943855e9366a3",
+            "d83ca499212425f5",
+            "420b5737f639ebcd",
+            "e2177cf35590731e",
+            "4064ab5016edbfcd",
+            "90350755cd43dc68",
+            "085f0353011381b7"
+          ],
+          "precision": "raw_python",
+          "status": "complete",
+          "trace_id": "2c7f464dbe12674c"
+        },
+        "refusal": null,
+        "space": "SweepSignatureObservation",
+        "status": "sweep_signature_clean",
+        "validity": {
+          "advanceable": true,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": true
+        },
+        "value": {
+          "cancellation_grade": 0.5585202017281914,
+          "drop_rate": 0.125,
+          "expression_path": "sweep_signature_probe",
+          "n_cancellation_dominated": 1,
+          "n_delta_indeterminate": 0,
+          "n_domain_refused": 0,
+          "n_dropped": 1,
+          "n_input": 8,
+          "n_nonfinite": 0,
+          "n_observed": 7,
+          "slope_observation": {
+            "expression_path": "ordinary_least_squares",
+            "intercept": 0.046068253132981345,
+            "log_f_max": -2.3025850929940455,
+            "log_f_min": -18.091740016381788,
+            "n_input_observations": 8,
+            "n_used": 7,
+            "r_squared": 0.4414797982718086,
+            "slope": 0.006989791243411337,
+            "standard_error": 0.003515954356885649
+          }
+        }
+      },
+      "value": {
+        "cancellation_grade": 0.5585202017281914,
+        "drop_rate": 0.125,
+        "expression_path": "sweep_signature_probe",
+        "n_cancellation_dominated": 1,
+        "n_delta_indeterminate": 0,
+        "n_domain_refused": 0,
+        "n_dropped": 1,
+        "n_input": 8,
+        "n_nonfinite": 0,
+        "n_observed": 7,
+        "slope_observation": {
+          "expression_path": "ordinary_least_squares",
+          "intercept": 0.046068253132981345,
+          "log_f_max": -2.3025850929940455,
+          "log_f_min": -18.091740016381788,
+          "n_input_observations": 8,
+          "n_used": 7,
+          "r_squared": 0.4414797982718086,
+          "slope": 0.006989791243411337,
+          "standard_error": 0.003515954356885649
+        }
+      }
+    },
+    {
+      "case": "naive_F1_along_M",
+      "expected_status": "sweep_signature_clean",
+      "form_kind": "naive",
+      "label": "F1_along_M",
+      "match": true,
+      "observed_status": "sweep_signature_clean",
+      "result": {
+        "conditioning": {
+          "notes": [
+            "cancellation_grade=0",
+            "drop_rate=0",
+            "n_observed=8/8"
+          ],
+          "status": "well_conditioned"
+        },
+        "protocol": "ok",
+        "provenance": {
+          "backend": "python",
+          "device": "cpu",
+          "expression_path": "sweep_signature_probe",
+          "inputs": [
+            "naive_F1_along_M",
+            "naive_F1_along_M",
+            {
+              "count": 8,
+              "first": 0.1,
+              "last": 1e-09,
+              "max": 0.1,
+              "min": 1e-09,
+              "strictly_decreasing": true,
+              "strictly_increasing": false
+            },
+            3e-07
+          ],
+          "measurement_resolution": null,
+          "operation_id": "sweep_signature_probe",
+          "parents": [
+            "7c42dfb11c2ffd81",
+            "477c65d7caa2f64b",
+            "481557c85419a1d6",
+            "936849f8c2045f0b",
+            "1259ce8c3234078c",
+            "8ea699d47e37dc18",
+            "0671f2fcf6c971cc",
+            "3e2f5b0f9e7c9027",
+            "fc3fe056cebeafd7"
+          ],
+          "precision": "raw_python",
+          "status": "complete",
+          "trace_id": "aedea12e7174d5c0"
+        },
+        "refusal": null,
+        "space": "SweepSignatureObservation",
+        "status": "sweep_signature_clean",
+        "validity": {
+          "advanceable": true,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": true
+        },
+        "value": {
+          "cancellation_grade": 0.0,
+          "drop_rate": 0.0,
+          "expression_path": "sweep_signature_probe",
+          "n_cancellation_dominated": 0,
+          "n_delta_indeterminate": 0,
+          "n_domain_refused": 0,
+          "n_dropped": 0,
+          "n_input": 8,
+          "n_nonfinite": 0,
+          "n_observed": 8,
+          "slope_observation": {
+            "expression_path": "ordinary_least_squares",
+            "intercept": 4.087917995641176,
+            "log_f_max": -2.3025850929940455,
+            "log_f_min": -20.72326583694641,
+            "n_input_observations": 8,
+            "n_used": 8,
+            "r_squared": 1.0,
+            "slope": 0.0,
+            "standard_error": 0.0
+          }
+        }
+      },
+      "value": {
+        "cancellation_grade": 0.0,
+        "drop_rate": 0.0,
+        "expression_path": "sweep_signature_probe",
+        "n_cancellation_dominated": 0,
+        "n_delta_indeterminate": 0,
+        "n_domain_refused": 0,
+        "n_dropped": 0,
+        "n_input": 8,
+        "n_nonfinite": 0,
+        "n_observed": 8,
+        "slope_observation": {
+          "expression_path": "ordinary_least_squares",
+          "intercept": 4.087917995641176,
+          "log_f_max": -2.3025850929940455,
+          "log_f_min": -20.72326583694641,
+          "n_input_observations": 8,
+          "n_used": 8,
+          "r_squared": 1.0,
+          "slope": 0.0,
+          "standard_error": 0.0
+        }
+      }
+    },
+    {
+      "case": "naive_F2_along_r",
+      "expected_status": "sweep_signature_clean",
+      "form_kind": "naive",
+      "label": "F2_along_r",
+      "match": true,
+      "observed_status": "sweep_signature_clean",
+      "result": {
+        "conditioning": {
+          "notes": [
+            "cancellation_grade=0.335705",
+            "drop_rate=0.125",
+            "n_observed=7/8"
+          ],
+          "status": "well_conditioned"
+        },
+        "protocol": "ok",
+        "provenance": {
+          "backend": "python",
+          "device": "cpu",
+          "expression_path": "sweep_signature_probe",
+          "inputs": [
+            "naive_F2_along_r",
+            "naive_F2_along_r",
+            {
+              "count": 8,
+              "first": 0.1,
+              "last": 1e-09,
+              "max": 0.1,
+              "min": 1e-09,
+              "strictly_decreasing": true,
+              "strictly_increasing": false
+            },
+            3e-07
+          ],
+          "measurement_resolution": null,
+          "operation_id": "sweep_signature_probe",
+          "parents": [
+            "ee548fc0e5ba7e40",
+            "5b4076309d08dd3f",
+            "1f600d6534ebef7c",
+            "aa623e4c94d8ca53",
+            "caa6c7344fbf52de",
+            "a6786614d201f664",
+            "df3d420f73b3e223",
+            "8f44f3d4766b9b1a",
+            "47e337f4847e187d"
+          ],
+          "precision": "raw_python",
+          "status": "complete",
+          "trace_id": "431b17494a2d0aa9"
+        },
+        "refusal": null,
+        "space": "SweepSignatureObservation",
+        "status": "sweep_signature_clean",
+        "validity": {
+          "advanceable": true,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": true
+        },
+        "value": {
+          "cancellation_grade": 0.33570481095051985,
+          "drop_rate": 0.125,
+          "expression_path": "sweep_signature_probe",
+          "n_cancellation_dominated": 1,
+          "n_delta_indeterminate": 0,
+          "n_domain_refused": 0,
+          "n_dropped": 1,
+          "n_input": 8,
+          "n_nonfinite": 0,
+          "n_observed": 7,
+          "slope_observation": {
+            "expression_path": "ordinary_least_squares",
+            "intercept": 4.0798603776316105,
+            "log_f_max": -2.3025850929940455,
+            "log_f_min": -18.091740016381788,
+            "n_input_observations": 8,
+            "n_used": 7,
+            "r_squared": 0.6642951890494802,
+            "slope": 0.009183909268981504,
+            "standard_error": 0.0029197173548183722
+          }
+        }
+      },
+      "value": {
+        "cancellation_grade": 0.33570481095051985,
+        "drop_rate": 0.125,
+        "expression_path": "sweep_signature_probe",
+        "n_cancellation_dominated": 1,
+        "n_delta_indeterminate": 0,
+        "n_domain_refused": 0,
+        "n_dropped": 1,
+        "n_input": 8,
+        "n_nonfinite": 0,
+        "n_observed": 7,
+        "slope_observation": {
+          "expression_path": "ordinary_least_squares",
+          "intercept": 4.0798603776316105,
+          "log_f_max": -2.3025850929940455,
+          "log_f_min": -18.091740016381788,
+          "n_input_observations": 8,
+          "n_used": 7,
+          "r_squared": 0.6642951890494802,
+          "slope": 0.009183909268981504,
+          "standard_error": 0.0029197173548183722
+        }
+      }
+    },
+    {
+      "case": "naive_F2_along_B",
+      "expected_status": "sweep_signature_clean",
+      "form_kind": "naive",
+      "label": "F2_along_B",
+      "match": true,
+      "observed_status": "sweep_signature_clean",
+      "result": {
+        "conditioning": {
+          "notes": [
+            "cancellation_grade=0.594664",
+            "drop_rate=0.25",
+            "n_observed=6/8"
+          ],
+          "status": "well_conditioned"
+        },
+        "protocol": "ok",
+        "provenance": {
+          "backend": "python",
+          "device": "cpu",
+          "expression_path": "sweep_signature_probe",
+          "inputs": [
+            "naive_F2_along_B",
+            "naive_F2_along_B",
+            {
+              "count": 8,
+              "first": 0.1,
+              "last": 1e-09,
+              "max": 0.1,
+              "min": 1e-09,
+              "strictly_decreasing": true,
+              "strictly_increasing": false
+            },
+            3e-07
+          ],
+          "measurement_resolution": null,
+          "operation_id": "sweep_signature_probe",
+          "parents": [
+            "f15aade0a685a46c",
+            "6beaa15d0501b019",
+            "cce3b5314cec2a51",
+            "50080137c0b196a9",
+            "09fd27d3bda228a3",
+            "f09a23d454b98ecc",
+            "d425927b1c9f9665",
+            "5c2505ba6300b0e4",
+            "a2f96637860f59c8"
+          ],
+          "precision": "raw_python",
+          "status": "complete",
+          "trace_id": "117548e6f1d63b61"
+        },
+        "refusal": null,
+        "space": "SweepSignatureObservation",
+        "status": "sweep_signature_clean",
+        "validity": {
+          "advanceable": true,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": true
+        },
+        "value": {
+          "cancellation_grade": 0.5946643252586001,
+          "drop_rate": 0.25,
+          "expression_path": "sweep_signature_probe",
+          "n_cancellation_dominated": 2,
+          "n_delta_indeterminate": 0,
+          "n_domain_refused": 0,
+          "n_dropped": 2,
+          "n_input": 8,
+          "n_nonfinite": 0,
+          "n_observed": 6,
+          "slope_observation": {
+            "expression_path": "ordinary_least_squares",
+            "intercept": 1.1044745316003113,
+            "log_f_max": -2.3025850929940455,
+            "log_f_min": -15.460214195817162,
+            "n_input_observations": 8,
+            "n_used": 6,
+            "r_squared": 0.40533567474139987,
+            "slope": 0.000999254386239803,
+            "standard_error": 0.0006051661055298409
+          }
+        }
+      },
+      "value": {
+        "cancellation_grade": 0.5946643252586001,
+        "drop_rate": 0.25,
+        "expression_path": "sweep_signature_probe",
+        "n_cancellation_dominated": 2,
+        "n_delta_indeterminate": 0,
+        "n_domain_refused": 0,
+        "n_dropped": 2,
+        "n_input": 8,
+        "n_nonfinite": 0,
+        "n_observed": 6,
+        "slope_observation": {
+          "expression_path": "ordinary_least_squares",
+          "intercept": 1.1044745316003113,
+          "log_f_max": -2.3025850929940455,
+          "log_f_min": -15.460214195817162,
+          "n_input_observations": 8,
+          "n_used": 6,
+          "r_squared": 0.40533567474139987,
+          "slope": 0.000999254386239803,
+          "standard_error": 0.0006051661055298409
+        }
+      }
+    },
+    {
+      "case": "naive_F2_along_M",
+      "expected_status": "sweep_signature_degenerate_input",
+      "form_kind": "naive",
+      "label": "F2_along_M",
+      "match": true,
+      "observed_status": "sweep_signature_degenerate_input",
+      "result": {
+        "conditioning": {
+          "notes": [
+            "cancellation_grade=0",
+            "drop_rate=0",
+            "n_observed=8/8"
+          ],
+          "status": "warning"
+        },
+        "protocol": "ok",
+        "provenance": {
+          "backend": "python",
+          "device": "cpu",
+          "expression_path": "sweep_signature_probe",
+          "inputs": [
+            "naive_F2_along_M",
+            "naive_F2_along_M",
+            {
+              "count": 8,
+              "first": 0.1,
+              "last": 1e-09,
+              "max": 0.1,
+              "min": 1e-09,
+              "strictly_decreasing": true,
+              "strictly_increasing": false
+            },
+            3e-07
+          ],
+          "measurement_resolution": null,
+          "operation_id": "sweep_signature_probe",
+          "parents": [
+            "dd121974325f7e72",
+            "20e0dc092644136f",
+            "170247e110559ed9",
+            "898a6ee82931389a",
+            "f3779e9f478ddec5",
+            "0d80b79be807876d",
+            "f31d5613034c15b0",
+            "a51c953b63851546",
+            "09599852edd43e41"
+          ],
+          "precision": "raw_python",
+          "status": "complete",
+          "trace_id": "30713cb7515e0bf8"
+        },
+        "refusal": null,
+        "space": "SweepSignatureObservation",
+        "status": "sweep_signature_degenerate_input",
+        "validity": {
+          "advanceable": false,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": false
+        },
+        "value": {
+          "cancellation_grade": 0.0,
+          "drop_rate": 0.0,
+          "expression_path": "sweep_signature_probe",
+          "n_cancellation_dominated": 0,
+          "n_delta_indeterminate": 0,
+          "n_domain_refused": 0,
+          "n_dropped": 0,
+          "n_input": 8,
+          "n_nonfinite": 0,
+          "n_observed": 8,
+          "slope_observation": {
+            "expression_path": "ordinary_least_squares",
+            "intercept": null,
+            "log_f_max": null,
+            "log_f_min": null,
+            "n_input_observations": 8,
+            "n_used": 0,
+            "r_squared": null,
+            "slope": null,
+            "standard_error": null
+          }
+        }
+      },
+      "value": {
+        "cancellation_grade": 0.0,
+        "drop_rate": 0.0,
+        "expression_path": "sweep_signature_probe",
+        "n_cancellation_dominated": 0,
+        "n_delta_indeterminate": 0,
+        "n_domain_refused": 0,
+        "n_dropped": 0,
+        "n_input": 8,
+        "n_nonfinite": 0,
+        "n_observed": 8,
+        "slope_observation": {
+          "expression_path": "ordinary_least_squares",
+          "intercept": null,
+          "log_f_max": null,
+          "log_f_min": null,
+          "n_input_observations": 8,
+          "n_used": 0,
+          "r_squared": null,
+          "slope": null,
+          "standard_error": null
+        }
+      }
+    },
+    {
+      "case": "naive_F1_along_tangent",
+      "expected_status": "sweep_signature_cancellation_dominated",
+      "form_kind": "naive",
+      "label": "F1_along_tangent",
+      "match": true,
+      "observed_status": "sweep_signature_cancellation_dominated",
+      "result": {
+        "conditioning": {
+          "notes": [
+            "cancellation_grade=0.989068",
+            "drop_rate=0",
+            "n_observed=8/8"
+          ],
+          "status": "warning"
+        },
+        "protocol": "ok",
+        "provenance": {
+          "backend": "python",
+          "device": "cpu",
+          "expression_path": "sweep_signature_probe",
+          "inputs": [
+            "naive_F1_along_tangent",
+            "naive_F1_along_tangent",
+            {
+              "count": 8,
+              "first": 0.1,
+              "last": 1e-09,
+              "max": 0.1,
+              "min": 1e-09,
+              "strictly_decreasing": true,
+              "strictly_increasing": false
+            },
+            3e-07
+          ],
+          "measurement_resolution": null,
+          "operation_id": "sweep_signature_probe",
+          "parents": [
+            "776433773d84d7d5",
+            "04e9f2f4ff64eccb",
+            "3a36898a24a7dd60",
+            "966baea99061d5a0",
+            "3a8d8a2a66cc5af4",
+            "5963767045e87729",
+            "a68007955cea8a07",
+            "91577cd2d008d1ab",
+            "deb8408dd2944c18"
+          ],
+          "precision": "raw_python",
+          "status": "complete",
+          "trace_id": "d9b779199bf928e8"
+        },
+        "refusal": null,
+        "space": "SweepSignatureObservation",
+        "status": "sweep_signature_cancellation_dominated",
+        "validity": {
+          "advanceable": false,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": false
+        },
+        "value": {
+          "cancellation_grade": 0.9890682298673651,
+          "drop_rate": 0.0,
+          "expression_path": "sweep_signature_probe",
+          "n_cancellation_dominated": 0,
+          "n_delta_indeterminate": 0,
+          "n_domain_refused": 0,
+          "n_dropped": 0,
+          "n_input": 8,
+          "n_nonfinite": 0,
+          "n_observed": 8,
+          "slope_observation": {
+            "expression_path": "ordinary_least_squares",
+            "intercept": -2.4088585925438153,
+            "log_f_max": -2.3025850929940455,
+            "log_f_min": -20.72326583694641,
+            "n_input_observations": 8,
+            "n_used": 8,
+            "r_squared": 0.01093177013263491,
+            "slope": -0.051120356143142996,
+            "standard_error": 0.19851170801228954
+          }
+        }
+      },
+      "value": {
+        "cancellation_grade": 0.9890682298673651,
+        "drop_rate": 0.0,
+        "expression_path": "sweep_signature_probe",
+        "n_cancellation_dominated": 0,
+        "n_delta_indeterminate": 0,
+        "n_domain_refused": 0,
+        "n_dropped": 0,
+        "n_input": 8,
+        "n_nonfinite": 0,
+        "n_observed": 8,
+        "slope_observation": {
+          "expression_path": "ordinary_least_squares",
+          "intercept": -2.4088585925438153,
+          "log_f_max": -2.3025850929940455,
+          "log_f_min": -20.72326583694641,
+          "n_input_observations": 8,
+          "n_used": 8,
+          "r_squared": 0.01093177013263491,
+          "slope": -0.051120356143142996,
+          "standard_error": 0.19851170801228954
+        }
+      }
+    },
+    {
+      "case": "naive_F2_along_tangent",
+      "expected_status": "sweep_signature_cancellation_dominated",
+      "form_kind": "naive",
+      "label": "F2_along_tangent",
+      "match": true,
+      "observed_status": "sweep_signature_cancellation_dominated",
+      "result": {
+        "conditioning": {
+          "notes": [
+            "cancellation_grade=0.971615",
+            "drop_rate=0.375",
+            "n_observed=5/8"
+          ],
+          "status": "warning"
+        },
+        "protocol": "ok",
+        "provenance": {
+          "backend": "python",
+          "device": "cpu",
+          "expression_path": "sweep_signature_probe",
+          "inputs": [
+            "naive_F2_along_tangent",
+            "naive_F2_along_tangent",
+            {
+              "count": 8,
+              "first": 0.1,
+              "last": 1e-09,
+              "max": 0.1,
+              "min": 1e-09,
+              "strictly_decreasing": true,
+              "strictly_increasing": false
+            },
+            3e-07
+          ],
+          "measurement_resolution": null,
+          "operation_id": "sweep_signature_probe",
+          "parents": [
+            "f768de2450a5dc44",
+            "21efa687430babe2",
+            "215c57fc49cd892b",
+            "3f5cfad143f30f73",
+            "d7739eb1e1f1cf16",
+            "9cf6146f1928fc7f",
+            "89d826aabefc9f02",
+            "dade245e50500da8",
+            "291df734d78d15c1"
+          ],
+          "precision": "raw_python",
+          "status": "complete",
+          "trace_id": "7a6031d162b37964"
+        },
+        "refusal": null,
+        "space": "SweepSignatureObservation",
+        "status": "sweep_signature_cancellation_dominated",
+        "validity": {
+          "advanceable": false,
+          "defined": true,
+          "finite": true,
+          "observable": true,
+          "selectable": false
+        },
+        "value": {
+          "cancellation_grade": 0.9716152103066905,
+          "drop_rate": 0.375,
+          "expression_path": "sweep_signature_probe",
+          "n_cancellation_dominated": 3,
+          "n_delta_indeterminate": 0,
+          "n_domain_refused": 0,
+          "n_dropped": 3,
+          "n_input": 8,
+          "n_nonfinite": 0,
+          "n_observed": 5,
+          "slope_observation": {
+            "expression_path": "ordinary_least_squares",
+            "intercept": 0.08553391401590238,
+            "log_f_max": -2.3025850929940455,
+            "log_f_min": -18.091740016381788,
+            "n_input_observations": 8,
+            "n_used": 5,
+            "r_squared": 0.028384789693309487,
+            "slope": 0.08984421926485356,
+            "standard_error": 0.3034826193269525
+          }
+        }
+      },
+      "value": {
+        "cancellation_grade": 0.9716152103066905,
+        "drop_rate": 0.375,
+        "expression_path": "sweep_signature_probe",
+        "n_cancellation_dominated": 3,
+        "n_delta_indeterminate": 0,
+        "n_domain_refused": 0,
+        "n_dropped": 3,
+        "n_input": 8,
+        "n_nonfinite": 0,
+        "n_observed": 5,
+        "slope_observation": {
+          "expression_path": "ordinary_least_squares",
+          "intercept": 0.08553391401590238,
+          "log_f_max": -2.3025850929940455,
+          "log_f_min": -18.091740016381788,
+          "n_input_observations": 8,
+          "n_used": 5,
+          "r_squared": 0.028384789693309487,
+          "slope": 0.08984421926485356,
+          "standard_error": 0.3034826193269525
+        }
+      }
+    }
+  ],
+  "thresholds": {
+    "CANCELLATION_GRADE_THRESHOLD": 0.7,
+    "DROP_RATE_THRESHOLD": 0.3,
+    "MIN_OBSERVATIONS_FOR_FIT": 3
+  }
+}

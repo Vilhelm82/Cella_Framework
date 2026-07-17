@@ -1,0 +1,44 @@
+{
+  "rank": 104,
+  "lift": 1.99,
+  "count": 2,
+  "families": 1,
+  "a": {
+    "id": "OBJ:active-chart-group-g-act-s-3",
+    "label": "active chart group G_act = S_3",
+    "standard_term": "local chart-permutation group S_3 acting on the three surface roles",
+    "nomenclature": "special-case-of",
+    "symbols": [
+      "g_act",
+      "s_3"
+    ]
+  },
+  "b": {
+    "id": "OBJ:dbp-surface-f-d-s-p-d-m-d-ds-p-m-p-3",
+    "label": "DBP surface F(D,S,P) = D^{m_D}+DS+P^{m_P}-3",
+    "standard_term": "generalized trinomial curve/surface in three variables with two integer power exponents",
+    "nomenclature": "special-case-of",
+    "symbols": [
+      "m_d",
+      "m_p"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-1654",
+      "type": "theorem",
+      "claim_status": "machine-verified",
+      "label": "Keystone as falsification test",
+      "summary": "The keystone $m_D = m_P = 2$ was chosen to break the morphology: if the directive cover threw up an $S_3$ or any $3$-cycle when both roles enter quadratically, the ``layer group $=$ extraction-Galois'' law would die. It ",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/self_glue_monodromy.tex"
+    },
+    {
+      "uid": "U-1608",
+      "type": "formula",
+      "claim_status": null,
+      "label": "Coupling anisotropy A_c (role-channel companion)",
+      "summary": "To each point of a DBP surface one attaches the three role-output coupling curvatures $\\kappa_{c,P}, \\kappa_{c,D}, \\kappa_{c,S}$ (the mixed second-jet of each role's graph, normalised by $q_0 = 1 + f_D^2 + f_S^2$) and th",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/self_glue_monodromy.tex"
+    }
+  ]
+}

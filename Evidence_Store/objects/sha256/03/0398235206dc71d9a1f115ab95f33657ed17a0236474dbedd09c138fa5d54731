@@ -1,0 +1,131 @@
+#!/usr/bin/env python3
+"""
+Conjecture C Subnormal Square Root Investigation - Focused on Items 1 & 2
+
+1. Much more targeted dense + systematic sampling in the first subnormals after 2^{-1022}
+2. Strong information-loss quantification (residual size vs original ~2^{-52} precision as f gets smaller)
+
+Also includes direct cbrt comparison.
+"""
+
+import json
+import math
+import struct
+from fractions import Fraction
+from pathlib import Path
+
+import numpy as np
+
+try:
+    import mpmath as mp
+    HAVE_MPMATH = True
+except ImportError:
+    HAVE_MPMATH = False
+
+# Constants
+EMIN = -1022
+SUB_EXP = -1074
+SUB_ulp = Fraction(1, 2**1074)
+
+SMALLEST_NORMAL = math.ldexp(1.0, EMIN)
+
+def f64_hex(x): return "0x" + struct.pack(">d", float(x)).hex()
+def binade_floor(x): return math.ldexp(1.0, math.frexp(x)[1]-1) if x > 0 else 0.0
+
+def investigate():
+    results = {
+        "metadata": {
+            "smallest_normal": f64_hex(SMALLEST_NORMAL),
+            "subnormal_ulp": str(SUB_ulp),
+            "original_precision_at_1": 2.0 ** -52,
+        },
+        "first_10000_subnormals": [],
+        "deeper_trend": [],
+        "cbrt_comparison": [],
+    }
+
+    ORIGINAL_PREC = 2.0 ** -52
+
+    # === 1. Systematic first 10,000 subnormals after smallest normal ===
+    print("Generating first 10,000 subnormals after 2^{-1022}...")
+    for m in range(1, 10001):
+        f = float(Fraction(m) / (1 << 1074))   # systematic construction
+        if f >= SMALLEST_NORMAL:
+            break
+
+        R = math.sqrt(f)
+        V = R * R
+
+        try:
+            res = Fraction(V) - Fraction(f)
+            res_over_ulp = float(res / SUB_ulp)
+            is_int = res.denominator == 1
+        except:
+            res_over_ulp = (V - f) / float(SUB_ulp)
+            is_int = False
+
+        abs_res = abs(V - f)
+        res_in_orig_units = abs_res / ORIGINAL_PREC
+        rel_to_f = abs_res / f if f > 0 else 0
+
+        results["first_10000_subnormals"].append({
+            "m": m,
+            "f_hex": f64_hex(f),
+            "V_hex": f64_hex(V),
+            "res_over_ulp": res_over_ulp,
+            "is_integer_multiple": is_int,
+            "residual_in_original_precision_units": res_in_orig_units,
+            "relative_to_f": rel_to_f,
+        })
+
+    # === 2. Deeper trend (log spaced) + information loss vs depth ===
+    print("Sampling deeper subnormals for trend...")
+    for k in range(0, 52, 2):
+        f = math.ldexp(1.0, -1074 + k)
+        if f >= SMALLEST_NORMAL: continue
+
+        R = math.sqrt(f)
+        V = R * R
+        abs_res = abs(V - f)
+
+        try:
+            res = Fraction(V) - Fraction(f)
+            res_over_ulp = float(res / SUB_ulp)
+        except:
+            res_over_ulp = abs_res / float(SUB_ulp)
+
+        results["deeper_trend"].append({
+            "log2_f_approx": -1074 + k,
+            "f_hex": f64_hex(f),
+            "residual_in_original_precision_units": abs_res / ORIGINAL_PREC,
+            "res_over_ulp": res_over_ulp,
+        })
+
+    # === 4. Quick cbrt comparison on first 500 ===
+    print("Cbrt comparison on first 500...")
+    for m in range(1, 501):
+        f = float(Fraction(m) / (1 << 1074))
+        R = np.cbrt(f)
+        V = R * R * R
+        abs_res = abs(V - f)
+        results["cbrt_comparison"].append({
+            "m": m,
+            "residual_in_original_precision_units": abs_res / ORIGINAL_PREC,
+        })
+
+    # Summary
+    first = results["first_10000_subnormals"]
+    results["summary"] = {
+        "first_10000_count": len(first),
+        "max_res_in_orig_units_first_10k": max(r["residual_in_original_precision_units"] for r in first),
+        "deeper_trend_points": len(results["deeper_trend"]),
+        "cbrt_compared": len(results["cbrt_comparison"]),
+    }
+
+    out = Path("scratch/conjecture_c_subnormal_sqrt_v3_results.json")
+    out.write_text(json.dumps(results, indent=2))
+    print(f"\nResults written to {out}")
+    print("Summary:", results["summary"])
+
+if __name__ == "__main__":
+    investigate()

@@ -1,0 +1,236 @@
+# MCG Geometry-First — Phase 2f — Pure-Algebraic E-Resistance Disambiguation
+
+**Status:** Phase 2f discovery characterization. **Designed-disturbance grid test resolves the Phase 2e E-resistance question for pure_algebraic. Outcome: `hypothesis_1_supported_e_resistance_collapses` — the Phase 2e E-resistance was a sampling artifact of the canonical x-uniform grid; the grammar is fundamentally E-reducible under a coord → base_operand mapping that is not linear.** G-curv-3 proposed demotion: `unexplained_correlation` → `unresolved_candidate`. No G claim. No precision claim.
+
+**Authority:** [`Build_Docs/Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md`](../../Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md) + user-imposed Phase 2f design constraints (2026-05-19).
+
+**Audit pin (log base):** `E := log2(|base_operand(coord)|)` throughout this pass, matching Phase 2e.
+
+**Deliverables:**
+- [`phase_2f_pa_e_resistance_disambig.json`](phase_2f_pa_e_resistance_disambig.json) — sha256 `286e8b…dbc798a7ed`; byte-stable; references all six prior artifacts.
+- [`src/lloyd_v4/evals/mcg_geometry_first_pa_e_uniform_grid.py`](../../../src/lloyd_v4/evals/mcg_geometry_first_pa_e_uniform_grid.py).
+- [`tests/test_mcg_geometry_first_pa_e_uniform_grid.py`](../../../tests/test_mcg_geometry_first_pa_e_uniform_grid.py) — 12 focused tests.
+
+---
+
+## 1. Grid design (user constraints honored)
+
+**Purpose:** specifically disturb the linear `coord → base_operand` relationship in pure_algebraic while preserving every other grid property, so the within-bin transition grammar can be measured under an alternative sampling and compared to the canonical.
+
+**Grid formula (deterministic, closed-form):**
+
+```
+x_0       = 0.01              (canonical low endpoint, forced exactly)
+x_{N-1}   = 0.99              (canonical high endpoint, forced exactly)
+For interior i ∈ 1..N-2:
+  E_i     = log2(0.99) + i * (log2(0.01) - log2(0.99)) / (N - 1)
+  x_i     = 1 - 2^(E_i)
+N         = 137               (canonical count)
+```
+
+**Constraint compliance** (asserted by tests):
+
+| Constraint | Status |
+|---|---|
+| Preserve domain `x ∈ (0, 1)` | ✓ Test 5: every interior point strictly in (0, 1) |
+| Preserve endpoints exactly | ✓ Test 4: `grid[0] == 0.01`, `grid[-1] == 0.99` exactly (forced) |
+| Preserve count `N = 137` | ✓ Test 3 |
+| Deterministic reproducibility | ✓ Test 7: regeneration produces identical sequence; closed-form, no RNG |
+| Specifically disturb the linear coord → base_operand | ✓ Test 6: E-spacing is uniform in index to within ~0.01 relative deviation (i.e., the new grid's `coord → E` is **linear in index**, the inverse of the canonical "x linear in index, E logarithmic in index" pattern) |
+
+**Verified grid-property numbers** (from artifact `grid_property_summary`):
+
+| Grid | x_abs_step uniformity ratio (max/min) | E_abs_step uniformity ratio (max/min) |
+|---|---|---|
+| canonical (x-uniform) | **1.000000** (x steps perfectly uniform) | (logarithmic in index; not uniform) |
+| e_uniform (this pass) | (x steps non-uniform by construction) | **1.000000** (E steps perfectly uniform) |
+
+The disturbance is clean: the canonical grid has uniform x-steps and non-uniform E-steps; the new grid has the inverse pattern.
+
+---
+
+## 2. Test structure
+
+For the pure_algebraic fixture only (the lone E-resistant fixture from Phase 2e):
+
+### A. Canonical-grid reproducibility check (sanity test)
+
+Re-run the Phase 2e within-bin grammar test on the **canonical** grid using this module's own code path. Expected: reproduce the Phase 2e finding (`hypothesis_2_supported_e_resistance_persists`). If this fails, the disambiguation isn't trustworthy.
+
+### B. Primary test (the disambiguation)
+
+Replay F1_to_F2 phase classification on the **E-uniform grid**. Bin records by the **canonical Phase 2e E-quintile edges** (fixed cuts — so bin labels mean the same numeric thing on both grids). Compute within-bin grammar MI + 200-permutation null + per-bin classification.
+
+### C. Secondary robustness (recomputed-edges check)
+
+Same as B but **recompute quintile edges on the new grid** (data-determined balanced bins on the alternative sampling). Robustness check: does the conclusion depend on which edges we use?
+
+### Classification outcomes
+
+- `hypothesis_2_supported_e_resistance_persists` — at least one bin's actual MI exceeds the permutation null p95 under the alternative grid → E-resistance is intrinsic, NOT a sampling effect.
+- `hypothesis_1_supported_e_resistance_collapses` — no bin exceeds the null under the alternative grid → E-resistance was a sampling artifact of the canonical grid.
+- `underpowered_post_resampling` — bin counts too low to classify.
+
+---
+
+## 3. Results
+
+### 3.1 Canonical-grid reproducibility check (sanity)
+
+| Quantity | Value |
+|---|---|
+| Fixture classification | **`hypothesis_2_supported_e_resistance_persists`** |
+| Bins exceeding null p95 | **2 / 5** |
+
+Phase 2e finding reproduced cleanly. The disambiguation test machinery works.
+
+### 3.2 Primary test — E-uniform grid with canonical edges
+
+| Bin | n | actual MI | null p95 | fraction null ≥ actual | Per-bin classification |
+|---|---|---|---|---|---|
+| E_bin_0 | **90** | 0.000 bits | 0.000 | 1.000 | `actual_MI_within_null` |
+| E_bin_1 | 20 | 0.000 bits | 0.000 | 1.000 | `actual_MI_within_null` |
+| E_bin_2 | 12 | 0.000 bits | 0.000 | 1.000 | `actual_MI_within_null` |
+| E_bin_3 | 8 | — | — | — | `underpowered` (n < 10) |
+| E_bin_4 | 7 | — | — | — | `underpowered` (n < 10) |
+
+**Fixture classification: `hypothesis_1_supported_e_resistance_collapses`.** Zero out of three populated bins exceed the null. The within-bin sequences in E_bin_0/1/2 have marginal entropy zero (all records share the same phase_class within each populated bin under the new sampling), so MI is trivially 0.
+
+**Bin-occupancy observation.** The E-uniform grid concentrates records in canonical E_bin_0 (90/137 ≈ 66%). This is because the canonical E-quintile edges were determined by canonical x-uniform sampling, which packed log2(|base_operand|) values densely near zero; the new grid spreads E uniformly, so most of the E values fall into the canonical's smallest-radicand bin. This is not a flaw — it's the disturbance working as designed. The **secondary** test handles the bin-balance concern.
+
+### 3.3 Secondary robustness — E-uniform grid with recomputed edges
+
+Edges recomputed as quintiles on the E-uniform grid itself, giving roughly equal-count bins.
+
+| Quantity | Value |
+|---|---|
+| Fixture classification | **`hypothesis_1_supported_e_resistance_collapses`** |
+| Bins exceeding null p95 | **0 / 5** |
+
+Both binning schemes agree. The conclusion is not sensitive to bin choice.
+
+---
+
+## 4. Headline finding
+
+> The Phase 2e E-resistance observed in pure_algebraic (2 / 5 canonical E-bins above null p95) is **a sampling artifact of the canonical x-uniform grid**. Under an E-uniform alternative grid that disturbs the linear `coord → base_operand` mapping while preserving domain, endpoints, count, and determinism, **the within-bin grammar collapses to the permutation null in every populated bin**. The grammar's apparent "structure beyond the marginal" came from how the canonical grid traversed E-space, not from the substrate's lattice traversal under pure-algebraic algebra.
+
+The disambiguation answers the open question from Phase 2e cleanly. The user's "hypothesis 1" (sampling artifact) is supported; "hypothesis 2" (genuine sub-E primitive) is refuted at this jitter level.
+
+---
+
+## 5. Reclassification
+
+### G-curv-3: `unexplained_correlation` → **`unresolved_candidate`**
+
+Per discipline, when subsequent evidence refutes an earlier elevation, the demotion is allowed. The user's pre-direction explicitly handled this case: "if the E-resistance is sampling artifact, demote G-curv-3 back to `unresolved_candidate`."
+
+The demotion is not a campaign failure — it's the test working as designed. Phase 2e elevated G-curv-3 based on what looked like genuine E-resistance; Phase 2f's targeted grid disturbance shows the elevation was premature; the discipline corrects it.
+
+Tags added: `phase_2f_pa_e_uniform_grid_tested`, `phase_2f_hypothesis_1_supported_e_resistance_collapses`.
+
+### Other candidates — unchanged
+
+All other candidates retain their Phase 2e ledger states. Phase 2f addresses only the pure_algebraic G-curv-3 question; no new evidence for the other six candidates.
+
+---
+
+## 6. What this pass does *not* claim
+
+- Phase 2f does **not** claim G is discovered or refuted. The G-curv-3 demotion is *back to `unresolved_candidate`*, not to `anti_candidate`.
+- Phase 2f does **not** claim precision doubling, sub-noise-floor, or any precision-resolution gain.
+- Phase 2f does **not** claim that all possible alternative grids would produce the same result. The E-uniform grid is one specific disturbance; other grids (quadratic spacing mimicking SR; hyperbolic mimicking Schwarzschild) might produce different patterns. The user-specified design — disturb the linear `coord → E` relationship — is honored, and that specific disturbance refutes hypothesis 2 cleanly.
+- Phase 2f does **not** address SR or Schwarzschild's grammar (which were already E-reducible in Phase 2e; no disambiguation needed).
+- Phase 2f does **not** address the §1.4 zero-operand-offset gap (G-route-1).
+- Phase 2f does **not** address multi-D anchor candidates.
+
+---
+
+## 7. Methodology notes
+
+- **The reproducibility-check pattern is valuable.** Running the alternative-grid analysis pipeline on the canonical grid first, and asserting it reproduces Phase 2e's finding, is what gives the disambiguation its credibility. Without it, a "hypothesis 1 collapse" could be a code bug rather than a real result. Worth reusing in future disambiguation passes.
+
+- **The bin-occupancy issue is intrinsic to fixed-edge cross-grid tests.** Forcing canonical edges onto a non-canonical grid will produce uneven bin counts. The secondary recomputed-edges test addresses this directly and reaches the same conclusion, which is the proper way to handle it.
+
+- **Marginal entropy degenerates to zero in the new grid's E_bin_0.** This is itself informative: the small-radicand regime under E-uniform sampling produces almost entirely `same_phase` records, leaving no marginal variance for transition grammar to operate on. The phase signal that the canonical grid spread across multiple E-bins is *all concentrated in one bin* under the new grid, which is precisely what "E-reducible" means.
+
+- **The Phase 2e finding is not refuted — it's contextualized.** Phase 2e correctly classified pure_algebraic as `grammar_E_resistant_candidate` *under the canonical sampling*. Phase 2f shows that classification was sampling-grid-conditional, not intrinsic. Both are true.
+
+- **The campaign now has zero candidates above `unresolved_candidate` in a positive direction.** G-curv-1 sits at `C_confounded` (negative classification — empirically refuted hypothesis). All other candidates are `unresolved_candidate`. The 1D scope has produced a clean operational E-extractor and demonstrated that the apparent G-shaped phenomena are either C-confounded or sampling-grid-driven.
+
+---
+
+## 8. Tests and exact commands
+
+12 focused tests in [`tests/test_mcg_geometry_first_pa_e_uniform_grid.py`](../../../tests/test_mcg_geometry_first_pa_e_uniform_grid.py):
+
+| # | Assertion |
+|---|---|
+| 1 | Artifact generation — required top-level keys |
+| 2 | All six source sha256 hashes recorded |
+| 3 | E-uniform grid preserves count (137) |
+| 4 | E-uniform grid preserves endpoints exactly (0.01, 0.99) |
+| 5 | E-uniform grid strictly inside (0, 1) |
+| 6 | E-uniform grid's E-spacing is uniform in index (<0.01 relative deviation) |
+| 7 | E-uniform grid is deterministic |
+| 8 | Canonical-grid reproducibility check reproduces Phase 2e finding |
+| 9 | Both primary and secondary classifications use declared outcomes |
+| 10 | G-curv-3 proposed state matches primary outcome (hypothesis_1 → unresolved_candidate) |
+| 11 | No forbidden G/precision claim language in this characterization |
+| 12 | JSON artifact byte-stable across reruns |
+
+### Exact commands and results
+
+```bash
+# 12 focused tests (Phase 2f)
+$ PYTHONPATH=src python -m pytest tests/test_mcg_geometry_first_pa_e_uniform_grid.py -v
+… 12 passed
+
+# Smallest reasonable subset (P1 + P2 + P2b + P2c + P2d + P2e + P2f + four-form-adjacent)
+$ PYTHONPATH=src python -m pytest \
+    tests/test_mcg_geometry_first_geometry.py \
+    tests/test_mcg_geometry_first_readback.py \
+    tests/test_mcg_geometry_first_c_profile.py \
+    tests/test_mcg_geometry_first_grid_stability.py \
+    tests/test_mcg_geometry_first_solve_for_scout.py \
+    tests/test_mcg_geometry_first_e_reducibility.py \
+    tests/test_mcg_geometry_first_pa_e_uniform_grid.py \
+    tests/test_f1_f2_natural_phase.py \
+    tests/test_f4_route_comb_search.py
+
+# Byte-stability of Phase 2f artifact
+$ cp Build_Docs/Reports/mcg_geometry_first/phase_2f_pa_e_resistance_disambig.json /tmp/pa_run1.json
+$ PYTHONPATH=src python -m lloyd_v4.evals.mcg_geometry_first_pa_e_uniform_grid --output /tmp/pa_run2.json
+$ diff -q /tmp/pa_run1.json /tmp/pa_run2.json
+# (silent — identical)
+$ sha256sum /tmp/pa_run1.json
+# 286e8b62eeb610a6849169371dabe0070227c637d780d96fc2f9d5dbc798a7ed
+```
+
+No manifest, status family, primitive, fixture definition, architecture document, or protocol was modified.
+
+---
+
+## 9. What this pass did *not* attempt
+
+- **Alternative grids beyond E-uniform.** Quadratic-in-coord (mimicking SR) or hyperbolic-in-coord (mimicking Schwarzschild) grids might surface different patterns. The user-specified design is E-uniform; other shapes are future work.
+- **Cross-fixture comparison.** Phase 2f is pure_algebraic-only because that was the lone E-resistant fixture from Phase 2e. SR and Schwarzschild were already E-reducible.
+- **Promotion of any candidate.** G-curv-3 is *demoted*, not promoted. All other candidates are unchanged.
+- **Naming a mechanism** for why canonical-grid sampling produces apparent E-resistance. The result rules out the "intrinsic substrate" explanation but doesn't fully characterize the sampling-artifact mechanism. That's a separate analytical question.
+
+---
+
+## 10. References
+
+- [`Build_Docs/Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md`](../../Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md)
+- [`phase_0_m_contract.md`](phase_0_m_contract.md)
+- [`phase_1_geometry_table.json`](phase_1_geometry_table.json) (sha256 recorded)
+- [`phase_2_joined_readback_table.json`](phase_2_joined_readback_table.json) (sha256 recorded)
+- [`phase_2b_c_profile.json`](phase_2b_c_profile.json) (sha256 recorded)
+- [`phase_2c_grid_stability.json`](phase_2c_grid_stability.json) (sha256 recorded)
+- [`phase_2d_solve_for_scout.json`](phase_2d_solve_for_scout.json) (sha256 recorded)
+- [`phase_2e_e_reducibility.json`](phase_2e_e_reducibility.json) (sha256 recorded; canonical E-quintile edges inherited)
+- [`phase_2f_pa_e_resistance_disambig.json`](phase_2f_pa_e_resistance_disambig.json) — this pass
+- [`candidate_ledger.json`](candidate_ledger.json) — to be updated with G-curv-3 demotion
+- [`../../../src/lloyd_v4/evals/mcg_geometry_first_pa_e_uniform_grid.py`](../../../src/lloyd_v4/evals/mcg_geometry_first_pa_e_uniform_grid.py)
+- [`../../../tests/test_mcg_geometry_first_pa_e_uniform_grid.py`](../../../tests/test_mcg_geometry_first_pa_e_uniform_grid.py)

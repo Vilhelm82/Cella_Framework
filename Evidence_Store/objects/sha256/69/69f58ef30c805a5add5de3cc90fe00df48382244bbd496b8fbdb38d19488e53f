@@ -1,0 +1,699 @@
+#!/usr/bin/env python3
+"""
+Phase 2 Task C -- Nested-Window Bias Harness (Task 023b fulfillment).
+
+GOAL
+----
+A V4 typed nested-window diagnostic that separates pure ALGEBRAIC branches from
+NON-ALGEBRAIC drift (logarithmic slow-variation, or iterated-log / essential
+drift) so that iterated-log drift is NOT misclassified as a small fractional
+exponent (the spurious alpha ~ 0.90 trap).
+
+WHAT EXISTS ALREADY (reused conceptually, NOT rebuilt as substrate)
+-------------------------------------------------------------------
+src/lloyd_v4/observers/directional_alpha_probe.py already provides a
+nested-window evidence pass (_nested_window_evidence, AlphaWindowFit,
+AlphaWindowStabilityStatus STABLE/UNSTABLE, K_DRIFT=2.0, materiality). That
+module answers "is the per-window slope estimate STABLE across nested windows?"
+but it does NOT do a *model comparison*. This harness fills the documented GAP: a
+3-model competition (M_A algebraic / M_L logarithmic-slow-variation /
+M_E essential-iterated-log) scored by an information criterion (AIC + BIC),
+emitting a TypedResult-shaped record.
+
+We mirror the existing module's contract (K_DRIFT = 2.0 drift gate, a
+STABLE/UNSTABLE stability verdict, a materiality flag) WITHOUT importing it, so
+this eval-layer probe is self-contained and reproducible from raw arithmetic.
+
+DISCIPLINE
+----------
+- Eval-layer ONLY. Everything lives under scratch/. No substrate edits.
+- Instruments: numpy is used ONLY as least-squares / linear-algebra apparatus.
+  mpmath.mpf at high working precision is the EXACT reference generator for the
+  synthetic stress observables, so the "ground truth" of each fixture is an exact
+  mathematical reduction, not assumed float behavior. The observable values
+  handed to the diagnostic are then realized in IEEE 754 binary64 and their raw
+  hex is recorded for every sample.
+- No hardcoded mathematical constants as substrate truth. The only literals are
+  fixture *design parameters* (the synthetic generators' own coefficients), which
+  ARE the experiment definition, plus K_DRIFT mirrored from the existing
+  observer's documented value.
+- Deterministic: sorted JSON keys, no timestamps, no RNG. Re-running and diffing
+  the emitted artifact verifies byte-stability (--selfcheck / --prove).
+
+OBSERVABLE MODEL
+----------------
+We observe a scalar sequence s_k at a geometric grid of window scales f_k -> 0
+(f = window half-width on the h-grid, shrinking geometrically). The diagnostic
+asks how s behaves as f -> 0:
+
+  M_A  ALGEBRAIC          s(f) = s_inf + B*f^rho + B2*f^rho2   (two-term power
+                          series: leading branch + sub-leading correction; rho,
+                          rho2 in a bounded positive band) -> s converges to
+                          s_inf with a clean power-law finite-window bias.
+  M_L  LOG SLOW-VARIATION s(f) = s_inf + C*log(f)     -> s drifts like a single
+                          log; a forced power fit's slope collapses toward zero.
+  M_E  ESSENTIAL/ITER-LOG s(f) = s_inf + D*log(f)*log(log(1/f))  -> compounded-
+                          log drift that a single forced power law misreads as a
+                          stable fractional rho (the alpha ~ 0.90 trap). Must be
+                          REJECTED as an algebraic branch.
+
+Model selection is by AIC and BIC on each model's least-squares residual sum of
+squares, with explicit parameter counts. The algebraic model is purely powers,
+so it STRUCTURALLY cannot absorb log / iterated-log drift; that is what lets the
+diagnostic reject the alpha ~ 0.90 trap.
+"""
+
+from __future__ import annotations
+
+import json
+import math
+import os
+import struct
+import sys
+from dataclasses import dataclass
+from typing import Dict, List, Optional, Sequence, Tuple
+
+import numpy as np
+
+try:
+    import mpmath as mp
+except Exception as _e:  # pragma: no cover - mpmath required as exact ref
+    raise SystemExit("mpmath required as exact high-precision reference: %r" % (_e,))
+
+# Mirrored contract value from
+# src/lloyd_v4/observers/directional_alpha_probe.py (documented K_DRIFT = 2.0
+# nested-window drift gate, line 41). Mirrored, not imported, to keep this eval
+# probe self-contained. Experiment constant, not a substrate math constant.
+K_DRIFT = 2.0
+
+mp.mp.dps = 80  # 80 decimal digits of exact working precision for the reference.
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ARTIFACT_PATH = os.path.join(HERE, "phase2C_typed_result.json")
+
+
+# --------------------------------------------------------------------------- #
+# Raw IEEE 754 binary64 introspection (measurement apparatus).
+# --------------------------------------------------------------------------- #
+def f64_hex(x: float) -> str:
+    """Raw 16-hex-digit big-endian representation of a binary64."""
+    return struct.pack(">d", float(x)).hex()
+
+
+def f64_from_hex(h: str) -> float:
+    return struct.unpack(">d", bytes.fromhex(h))[0]
+
+
+# --------------------------------------------------------------------------- #
+# Synthetic stress observables (Fixtures C / D / E). V4-native; NOT the
+# four-form fixtures. Each generator returns an EXACT mpf value at scale f.
+# --------------------------------------------------------------------------- #
+@dataclass(frozen=True)
+class FixtureSpec:
+    name: str
+    kind: str  # "algebraic" | "logarithmic" | "iterated_log"
+    description: str
+    s_inf: float
+    coeff: float       # leading amplitude
+    rho: float         # leading algebraic exponent
+    sub_coeff: float   # sub-leading power correction amplitude (algebraic only)
+    sub_rho: float     # sub-leading power correction exponent (algebraic only)
+
+
+def fixture_value_exact(spec: FixtureSpec, f: "mp.mpf") -> "mp.mpf":
+    s0 = mp.mpf(spec.s_inf)
+    c = mp.mpf(spec.coeff)
+    if spec.kind == "algebraic":
+        # Fixture C: s(f) = s_inf + B*f^rho + B2*f^rho2
+        rho = mp.mpf(spec.rho)
+        sc = mp.mpf(spec.sub_coeff)
+        srho = mp.mpf(spec.sub_rho)
+        return s0 + c * mp.power(f, rho) + sc * mp.power(f, srho)
+    if spec.kind == "logarithmic":
+        # Fixture D: s(f) = s_inf + C*log(f)
+        return s0 + c * mp.log(f)
+    if spec.kind == "iterated_log":
+        # Fixture E: s(f) = s_inf + D*log(f)*log(log(1/f))
+        Linv = mp.log(1 / f)  # log(1/f) > 0 for f < 1
+        return s0 + c * mp.log(f) * mp.log(Linv)
+    raise ValueError("unknown fixture kind: %r" % (spec.kind,))
+
+
+FIXTURES: Dict[str, FixtureSpec] = {
+    "C": FixtureSpec(
+        name="Fixture C (slow algebraic drift)",
+        kind="algebraic",
+        description=(
+            "Leading power law plus sub-leading power correction: "
+            "s(f)=s_inf + B*f^rho + B2*f^rho2. Pure algebraic branch; s converges "
+            "to s_inf as f->0 with a clean finite-window bias."
+        ),
+        s_inf=1.250,
+        coeff=0.500,      # leading B
+        rho=0.500,        # leading exponent (sqrt-like algebraic branch)
+        sub_coeff=0.125,  # sub-leading B2
+        sub_rho=1.000,    # sub-leading exponent (faster-vanishing correction)
+    ),
+    "D": FixtureSpec(
+        name="Fixture D (logarithmic divergence)",
+        kind="logarithmic",
+        description=(
+            "Single logarithm slow variation: s(f)=s_inf + C*log(f). Not "
+            "algebraic: a forced power-law slope in log-log collapses toward zero "
+            "rather than a fixed fractional exponent."
+        ),
+        s_inf=0.750,
+        coeff=-0.300,
+        rho=0.0,
+        sub_coeff=0.0,
+        sub_rho=0.0,
+    ),
+    "E": FixtureSpec(
+        name="Fixture E (iterated-log / essential drift)",
+        kind="iterated_log",
+        description=(
+            "Compounded-log drift s(f)=s_inf + D*log(f)*log(log(1/f)). The "
+            "x*log(x)-style case a single forced power law misreads as a stable "
+            "fractional alpha (~0.90). Must be REJECTED as an algebraic branch."
+        ),
+        s_inf=2.000,
+        coeff=-0.150,
+        rho=0.0,
+        sub_coeff=0.0,
+        sub_rho=0.0,
+    ),
+}
+
+
+# --------------------------------------------------------------------------- #
+# Geometric h-grid of window scales f_k -> 0.
+# --------------------------------------------------------------------------- #
+def geometric_scales(f_max: float, ratio: float, n: int) -> List["mp.mpf"]:
+    r = mp.mpf(ratio)
+    f0 = mp.mpf(f_max)
+    return [f0 * mp.power(r, k) for k in range(n)]
+
+
+# --------------------------------------------------------------------------- #
+# Least-squares fitting machinery (numpy as apparatus only).
+# --------------------------------------------------------------------------- #
+@dataclass
+class FitResult:
+    model: str
+    params: Dict[str, float]
+    rss: float
+    n: int
+    k_params: int
+    aic: float
+    bic: float
+    note: str
+
+
+def _aic_bic(rss: float, n: int, k: int) -> Tuple[float, float]:
+    """AIC/BIC for Gaussian least squares with unknown variance.
+
+    AIC = n*ln(rss/n) + 2k ; BIC = n*ln(rss/n) + k*ln(n).
+    A floor on rss avoids log(0) when a model fits to roundoff.
+    """
+    rss_floor = max(rss, 1e-300)
+    aic = n * math.log(rss_floor / n) + 2.0 * k
+    bic = n * math.log(rss_floor / n) + k * math.log(n)
+    return aic, bic
+
+
+# Bounded positive exponent band for the algebraic scan. Step exactly 0.05 so
+# that integer/half-integer true exponents land on grid nodes (e.g. 0.50, 1.00).
+_RHO_GRID = [0.05 + 0.05 * i for i in range(60)]  # 0.05 .. 3.00
+
+
+def fit_algebraic(f: np.ndarray, s: np.ndarray) -> FitResult:
+    """Model M_A: s = s_inf + B*f^rho + B2*f^rho2 (two-term power series).
+
+    Algebraic branch with a sub-leading power correction. For each ordered pair
+    (rho < rho2) on a deterministic exponent grid we solve the LINEAR least
+    squares for (s_inf, B, B2) on the basis [1, f^rho, f^rho2] and keep the pair
+    with minimum RSS. Purely powers: structurally cannot represent log or
+    iterated-log drift. k = 5 free params (s_inf, B, rho, B2, rho2). The exact
+    exponents of Fixture C (0.50, 1.00) lie on this grid, so s_inf is recovered
+    to binary64 realization precision, isolating it from the B*f^rho bias.
+    """
+    n = f.size
+    best = None
+    for i in range(len(_RHO_GRID)):
+        rho = _RHO_GRID[i]
+        frho = np.power(f, rho)
+        for j in range(i + 1, len(_RHO_GRID)):
+            rho2 = _RHO_GRID[j]
+            basis = np.column_stack([np.ones_like(f), frho, np.power(f, rho2)])
+            coef, *_ = np.linalg.lstsq(basis, s, rcond=None)
+            pred = basis @ coef
+            rss = float(np.sum((s - pred) ** 2))
+            if best is None or rss < best[0]:
+                best = (rss, float(coef[0]), float(coef[1]), float(rho),
+                        float(coef[2]), float(rho2))
+    rss, s_inf, B, rho, B2, rho2 = best
+    aic, bic = _aic_bic(rss, n, 5)
+    return FitResult(
+        model="M_A_algebraic",
+        params={"s_inf": s_inf, "B": B, "rho": rho, "B2": B2, "rho2": rho2},
+        rss=rss,
+        n=n,
+        k_params=5,
+        aic=aic,
+        bic=bic,
+        note="s_inf + B*f^rho + B2*f^rho2 ; (rho<rho2) scanned on [0.05,3.0] step 0.05",
+    )
+
+
+def fit_logarithmic(f: np.ndarray, s: np.ndarray) -> FitResult:
+    """Model M_L: s = s_inf + C*log(f). Linear in (s_inf, C). k = 2."""
+    n = f.size
+    basis = np.column_stack([np.ones_like(f), np.log(f)])
+    coef, *_ = np.linalg.lstsq(basis, s, rcond=None)
+    pred = basis @ coef
+    rss = float(np.sum((s - pred) ** 2))
+    aic, bic = _aic_bic(rss, n, 2)
+    return FitResult(
+        model="M_L_logarithmic",
+        params={"s_inf": float(coef[0]), "C": float(coef[1])},
+        rss=rss, n=n, k_params=2, aic=aic, bic=bic,
+        note="s_inf + C*log(f)",
+    )
+
+
+def fit_essential(f: np.ndarray, s: np.ndarray) -> FitResult:
+    """Model M_E: s = s_inf + D*log(f)*log(log(1/f)). Linear in (s_inf, D). k=2."""
+    n = f.size
+    iter_basis = np.log(f) * np.log(np.log(1.0 / f))
+    basis = np.column_stack([np.ones_like(f), iter_basis])
+    coef, *_ = np.linalg.lstsq(basis, s, rcond=None)
+    pred = basis @ coef
+    rss = float(np.sum((s - pred) ** 2))
+    aic, bic = _aic_bic(rss, n, 2)
+    return FitResult(
+        model="M_E_essential",
+        params={"s_inf": float(coef[0]), "D": float(coef[1])},
+        rss=rss, n=n, k_params=2, aic=aic, bic=bic,
+        note="s_inf + D*log(f)*log(log(1/f))  (iterated-log)",
+    )
+
+
+# --------------------------------------------------------------------------- #
+# Nested-window evidence (mirrors the documented contract of
+# directional_alpha_probe._nested_window_evidence): per-window local slope in
+# log-log space, and a STABLE/UNSTABLE drift verdict gated by K_DRIFT.
+# --------------------------------------------------------------------------- #
+@dataclass
+class NestedWindowEvidence:
+    window_slopes: List[float]
+    slope_spread: float
+    median_slope: float
+    drift_ratio: float
+    stability_status: str   # "STABLE" | "UNSTABLE"
+    materiality: str        # "material" | "immaterial"
+    k_drift: float
+
+
+def nested_window_evidence(f: np.ndarray, s: np.ndarray, n_windows: int = 4) -> NestedWindowEvidence:
+    """Split (log f, s) into nested sub-windows; estimate a LOCAL log-log slope
+    of the increment in each.
+
+    For a clean algebraic branch s = s_inf + B*f^rho the increment is dominated
+    by f^rho so the local log-log slope of |delta s| is ~ rho and STABLE across
+    windows. For log / iterated-log drift the local slope drifts. The drift gate
+    K_DRIFT (mirrored = 2.0) marks UNSTABLE when slope_spread exceeds
+    K_DRIFT * |median_slope| (guarded).
+    """
+    logf = np.log(f)
+    ds = np.diff(s)                          # length n-1, attached to f-midpoints
+    logf_mid = 0.5 * (logf[:-1] + logf[1:])  # length n-1, midpoint log scale
+    # local slope proxy d log|ds| / d log f as the finite difference of log|ds|
+    # against the midpoint log f. Both np.diff operands have length n-1, so both
+    # results have length n-2 and align elementwise (no broadcast mismatch).
+    with np.errstate(divide="ignore", invalid="ignore"):
+        log_abs_ds = np.log(np.abs(ds))
+        local = np.diff(log_abs_ds) / np.diff(logf_mid)
+    local = local[np.isfinite(local)]
+    if local.size == 0:
+        return NestedWindowEvidence([], 0.0, 0.0, 0.0, "UNSTABLE", "material", K_DRIFT)
+    blocks = np.array_split(local, min(n_windows, local.size))
+    window_slopes = [float(np.median(b)) for b in blocks if b.size]
+    arr = np.array(window_slopes)
+    slope_spread = float(arr.max() - arr.min())
+    median_slope = float(np.median(arr))
+    guard = max(abs(median_slope), 1e-12)
+    drift_ratio = slope_spread / guard
+    stability_status = "STABLE" if drift_ratio <= K_DRIFT else "UNSTABLE"
+    materiality = "material" if slope_spread > 0.05 else "immaterial"
+    return NestedWindowEvidence(
+        window_slopes=window_slopes,
+        slope_spread=slope_spread,
+        median_slope=median_slope,
+        drift_ratio=drift_ratio,
+        stability_status=stability_status,
+        materiality=materiality,
+        k_drift=K_DRIFT,
+    )
+
+
+# --------------------------------------------------------------------------- #
+# Automatic Stability Diagnostic.
+# --------------------------------------------------------------------------- #
+@dataclass
+class Diagnostic:
+    fixture_key: str
+    fixture_name: str
+    fixture_kind_truth: str
+    n_samples: int
+    fits: Dict[str, FitResult]
+    nested_window: NestedWindowEvidence
+    winner_aic: str
+    winner_bic: str
+    classification: str          # "algebraic_branch" | "non_algebraic_drift"
+    algebraic_rejected: bool     # True if E-style drift rejected as algebraic
+    s_inf_estimate: Optional[float]
+    s_inf_truth: float
+    s_inf_abs_error: Optional[float]
+    delta_aic_runnerup: float
+    delta_bic_runnerup: float
+    verdict_note: str
+
+
+def classify(fixture_key: str, f: np.ndarray, s: np.ndarray) -> Diagnostic:
+    spec = FIXTURES[fixture_key]
+    fa = fit_algebraic(f, s)
+    fl = fit_logarithmic(f, s)
+    fe = fit_essential(f, s)
+    fits = {fa.model: fa, fl.model: fl, fe.model: fe}
+
+    by_aic = sorted(fits.values(), key=lambda r: r.aic)
+    by_bic = sorted(fits.values(), key=lambda r: r.bic)
+    winner_aic = by_aic[0].model
+    winner_bic = by_bic[0].model
+    delta_aic = by_aic[1].aic - by_aic[0].aic
+    delta_bic = by_bic[1].bic - by_bic[0].bic
+
+    nw = nested_window_evidence(f, s)
+
+    # algebraic_branch iff the algebraic model wins BOTH criteria AND nested
+    # window is STABLE; else non_algebraic_drift.
+    is_algebraic = (
+        winner_aic == "M_A_algebraic"
+        and winner_bic == "M_A_algebraic"
+        and nw.stability_status == "STABLE"
+    )
+    classification = "algebraic_branch" if is_algebraic else "non_algebraic_drift"
+
+    algebraic_rejected = (spec.kind == "iterated_log") and (classification != "algebraic_branch")
+
+    if classification == "algebraic_branch":
+        s_inf_est = fits["M_A_algebraic"].params["s_inf"]
+        s_inf_err = abs(s_inf_est - spec.s_inf)
+    else:
+        s_inf_est = None
+        s_inf_err = None
+
+    verdict_note = (
+        "AIC winner=%s (margin %.3f), BIC winner=%s (margin %.3f), "
+        "nested-window=%s/%s -> %s" % (
+            winner_aic, delta_aic, winner_bic, delta_bic,
+            nw.stability_status, nw.materiality, classification,
+        )
+    )
+
+    return Diagnostic(
+        fixture_key=fixture_key,
+        fixture_name=spec.name,
+        fixture_kind_truth=spec.kind,
+        n_samples=int(f.size),
+        fits=fits,
+        nested_window=nw,
+        winner_aic=winner_aic,
+        winner_bic=winner_bic,
+        classification=classification,
+        algebraic_rejected=algebraic_rejected,
+        s_inf_estimate=s_inf_est,
+        s_inf_truth=spec.s_inf,
+        s_inf_abs_error=s_inf_err,
+        delta_aic_runnerup=delta_aic,
+        delta_bic_runnerup=delta_bic,
+        verdict_note=verdict_note,
+    )
+
+
+# --------------------------------------------------------------------------- #
+# Build observable: exact mpf -> binary64 + raw hex.
+# --------------------------------------------------------------------------- #
+def build_observable(spec: FixtureSpec, scales: Sequence["mp.mpf"]):
+    samples = []
+    f_arr, s_arr = [], []
+    for fk in scales:
+        s_exact = fixture_value_exact(spec, fk)
+        f64_f = float(fk)
+        f64_s = float(s_exact)
+        f_arr.append(f64_f)
+        s_arr.append(f64_s)
+        samples.append({
+            "f_binary64": f64_f,
+            "f_hex": f64_hex(f64_f),
+            "s_binary64": f64_s,
+            "s_hex": f64_hex(f64_s),
+            "s_exact_mpf_str": mp.nstr(s_exact, 40),
+            "s_realization_abs_error": mp.nstr(abs(mp.mpf(f64_s) - s_exact), 6),
+        })
+    return np.array(f_arr, dtype=np.float64), np.array(s_arr, dtype=np.float64), samples
+
+
+# --------------------------------------------------------------------------- #
+# TypedResult-shaped record (eval-layer descriptive). Mirrors V4 typed-result
+# spirit: payload, multi-field validity (axiom 4), observation metadata
+# (precision/backend/expression-path, axiom 5), provenance.
+# --------------------------------------------------------------------------- #
+def typed_result_for(diag: Diagnostic, samples) -> Dict:
+    spec = FIXTURES[diag.fixture_key]
+    slopes = diag.nested_window.window_slopes
+    nw_variance = float(np.var(slopes)) if slopes else 0.0
+
+    fits_block = {}
+    for name, fr in sorted(diag.fits.items()):
+        fits_block[name] = {
+            "aic": fr.aic,
+            "bic": fr.bic,
+            "rss": fr.rss,
+            "k_params": fr.k_params,
+            "n": fr.n,
+            "params": {k: fr.params[k] for k in sorted(fr.params)},
+            "note": fr.note,
+        }
+
+    defined = True
+    finite = all(math.isfinite(x["s_binary64"]) for x in samples) and all(
+        math.isfinite(x["f_binary64"]) for x in samples
+    )
+    selectable = diag.winner_aic == diag.winner_bic
+    advanceable = diag.classification == "algebraic_branch"
+    observable = True
+    policy_accepted = selectable and finite
+
+    return {
+        "fixture_key": diag.fixture_key,
+        "fixture_name": diag.fixture_name,
+        "fixture_truth_kind": diag.fixture_kind_truth,
+        "fixture_description": spec.description,
+        "payload": {
+            "classification": diag.classification,
+            "algebraic_rejected_as_branch": diag.algebraic_rejected,
+            "winning_ic_model_aic": diag.winner_aic,
+            "winning_ic_model_bic": diag.winner_bic,
+            "delta_aic_over_runnerup": diag.delta_aic_runnerup,
+            "delta_bic_over_runnerup": diag.delta_bic_runnerup,
+            "nested_window_slope_variance": nw_variance,
+            "nested_window_slope_spread": diag.nested_window.slope_spread,
+            "nested_window_drift_ratio": diag.nested_window.drift_ratio,
+            "nested_window_stability_status": diag.nested_window.stability_status,
+            "nested_window_materiality": diag.nested_window.materiality,
+            "nested_window_window_slopes": diag.nested_window.window_slopes,
+            "k_drift_gate": diag.nested_window.k_drift,
+            "s_inf_estimate": diag.s_inf_estimate,
+            "s_inf_truth": diag.s_inf_truth,
+            "s_inf_abs_error": diag.s_inf_abs_error,
+        },
+        "model_fits": fits_block,
+        "validity": {
+            "defined": defined,
+            "finite": finite,
+            "selectable": selectable,
+            "advanceable": advanceable,
+            "observable": observable,
+            "policy_accepted": policy_accepted,
+        },
+        "observation_metadata": {
+            "precision_tier": "binary64",
+            "exact_reference": "mpmath.mpf dps=%d" % (mp.mp.dps,),
+            "backend": "numpy.linalg.lstsq",
+            "expression_path": "exact_mpf_generator -> binary64_realization -> lstsq_fits -> AIC/BIC",
+            "n_samples": diag.n_samples,
+            "instrument_caveat": (
+                "numpy used as least-squares apparatus only; mpmath.mpf is the "
+                "exact high-precision anchor; binary64 raw hex recorded per sample."
+            ),
+        },
+        "samples": samples,
+        "verdict_note": diag.verdict_note,
+    }
+
+
+# --------------------------------------------------------------------------- #
+# Top-level run.
+# --------------------------------------------------------------------------- #
+def run() -> Dict:
+    # Window scales shrinking from f_max=2^-2 by ratio 1/2, 28 steps. For f<1 the
+    # logs are well-defined and iterated-log log(log(1/f)) is real and finite
+    # across the whole grid.
+    scales = geometric_scales(f_max=0.25, ratio=0.5, n=28)
+
+    results = []
+    for key in ("C", "D", "E"):
+        spec = FIXTURES[key]
+        f_arr, s_arr, samples = build_observable(spec, scales)
+        diag = classify(key, f_arr, s_arr)
+        results.append(typed_result_for(diag, samples))
+
+    rec = {r["fixture_key"]: r for r in results}
+
+    gate_i_reject_E = bool(rec["E"]["payload"]["algebraic_rejected_as_branch"]) and (
+        rec["E"]["payload"]["classification"] == "non_algebraic_drift"
+    )
+    c_class_alg = rec["C"]["payload"]["classification"] == "algebraic_branch"
+    c_s_inf_err = rec["C"]["payload"]["s_inf_abs_error"]
+    c_s_inf_tol = 1e-6
+    gate_ii_isolate_C = bool(
+        c_class_alg and (c_s_inf_err is not None) and (c_s_inf_err <= c_s_inf_tol)
+    )
+
+    burden_gates = {
+        "gate_i_fixture_E_rejected_as_algebraic_branch": {
+            "met": gate_i_reject_E,
+            "fixture": "E",
+            "evidence": (
+                "classification=%s, algebraic_rejected=%s, AIC winner=%s, BIC winner=%s"
+                % (
+                    rec["E"]["payload"]["classification"],
+                    rec["E"]["payload"]["algebraic_rejected_as_branch"],
+                    rec["E"]["payload"]["winning_ic_model_aic"],
+                    rec["E"]["payload"]["winning_ic_model_bic"],
+                )
+            ),
+        },
+        "gate_ii_fixture_C_s_inf_isolated_from_bias": {
+            "met": gate_ii_isolate_C,
+            "fixture": "C",
+            "tolerance": c_s_inf_tol,
+            "evidence": (
+                "classification=%s, s_inf_truth=%s, s_inf_estimate=%s, abs_error=%s, "
+                "B*f^rho (+B2*f^rho2) separated"
+                % (
+                    rec["C"]["payload"]["classification"],
+                    rec["C"]["payload"]["s_inf_truth"],
+                    rec["C"]["payload"]["s_inf_estimate"],
+                    c_s_inf_err,
+                )
+            ),
+        },
+    }
+
+    return {
+        "harness": "phase2C_nested_window_harness.py",
+        "task": "Phase 2 Task C -- Nested-Window Bias Harness (Task 023b fulfillment)",
+        "summary": (
+            "3-model nested-window diagnostic (M_A algebraic / M_L logarithmic / "
+            "M_E essential-iterated-log) ranked by AIC and BIC, with mirrored "
+            "K_DRIFT=%.1f nested-window stability gate, applied to V4-native "
+            "synthetic stress fixtures C/D/E." % (K_DRIFT,)
+        ),
+        "grid": {
+            "f_max": 0.25,
+            "ratio": 0.5,
+            "n_scales": len(scales),
+            "f_min_binary64": float(scales[-1]),
+            "f_min_hex": f64_hex(float(scales[-1])),
+        },
+        "k_drift_gate": K_DRIFT,
+        "burden_gates": burden_gates,
+        "results": results,
+    }
+
+
+def write_artifact(artifact: Dict, path: str) -> None:
+    with open(path, "w") as fh:
+        json.dump(artifact, fh, indent=2, sort_keys=True)
+        fh.write("\n")
+
+
+def main(argv: Sequence[str]) -> int:
+    artifact = run()
+    write_artifact(artifact, ARTIFACT_PATH)
+
+    if "--selfcheck" in argv or "--prove" in argv:
+        tmp = ARTIFACT_PATH + ".rerun"
+        artifact2 = run()
+        write_artifact(artifact2, tmp)
+        with open(ARTIFACT_PATH, "rb") as a, open(tmp, "rb") as b:
+            byte_stable = a.read() == b.read()
+        os.remove(tmp)
+        status = {
+            "byte_stable": byte_stable,
+            "artifact_path": ARTIFACT_PATH,
+            "gate_i_fixture_E_rejected": artifact["burden_gates"][
+                "gate_i_fixture_E_rejected_as_algebraic_branch"
+            ]["met"],
+            "gate_ii_fixture_C_s_inf_isolated": artifact["burden_gates"][
+                "gate_ii_fixture_C_s_inf_isolated_from_bias"
+            ]["met"],
+            "E_classification": artifact["results"][2]["payload"]["classification"],
+            "E_winner_aic": artifact["results"][2]["payload"]["winning_ic_model_aic"],
+            "E_winner_bic": artifact["results"][2]["payload"]["winning_ic_model_bic"],
+            "C_classification": artifact["results"][0]["payload"]["classification"],
+            "C_winner_aic": artifact["results"][0]["payload"]["winning_ic_model_aic"],
+            "C_winner_bic": artifact["results"][0]["payload"]["winning_ic_model_bic"],
+            "C_s_inf_estimate": artifact["results"][0]["payload"]["s_inf_estimate"],
+            "C_s_inf_abs_error": artifact["results"][0]["payload"]["s_inf_abs_error"],
+            "D_classification": artifact["results"][1]["payload"]["classification"],
+            "D_winner_aic": artifact["results"][1]["payload"]["winning_ic_model_aic"],
+        }
+        with open(os.path.join(HERE, "phase2C_status.json"), "w") as fh:
+            json.dump(status, fh, indent=2, sort_keys=True)
+            fh.write("\n")
+        print(json.dumps(status, indent=2, sort_keys=True))
+
+        if "--prove" in argv:
+            sentinel = os.path.join(HERE, "PHASE2C_PROOF.txt")
+            if os.path.exists(sentinel):
+                os.remove(sentinel)
+            conditions = {
+                "byte_stable": status["byte_stable"] is True,
+                "gate_i_E_rejected": status["gate_i_fixture_E_rejected"] is True,
+                "gate_ii_C_isolated": status["gate_ii_fixture_C_s_inf_isolated"] is True,
+                "E_is_non_algebraic": status["E_classification"] == "non_algebraic_drift",
+                "C_is_algebraic": status["C_classification"] == "algebraic_branch",
+            }
+            all_ok = all(conditions.values())
+            with open(sentinel, "w") as fh:
+                if all_ok:
+                    fh.write("PHASE2C_ALL_GREEN\n")
+                else:
+                    failed = [k for k, v in conditions.items() if not v]
+                    fh.write("PHASE2C_FAILED conditions=%s\n" % (",".join(failed),))
+                for k in sorted(conditions):
+                    fh.write("%s=%s\n" % (k, conditions[k]))
+                fh.write("E_winner_aic=%s\n" % status["E_winner_aic"])
+                fh.write("E_winner_bic=%s\n" % status["E_winner_bic"])
+                fh.write("D_winner_aic=%s\n" % status["D_winner_aic"])
+                fh.write("C_winner_aic=%s\n" % status["C_winner_aic"])
+                fh.write("C_s_inf_estimate=%s\n" % status["C_s_inf_estimate"])
+                fh.write("C_s_inf_abs_error=%s\n" % status["C_s_inf_abs_error"])
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv[1:]))

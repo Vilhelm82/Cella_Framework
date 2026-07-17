@@ -1,0 +1,131 @@
+# V3 engine — maturity survey (clean-vs-re-derive triage)
+
+**Date:** 2026-06-08. **Purpose:** empirical input to the (pending) V4-native curvature/
+frame-invariance campaign authority. Settles whether "reuse V3's math, rebuild V3's trust
+internals" is a clean split — and where it isn't.
+
+**Discipline:** V3 read as **oracle/specification only** (Axiom 10, proposed amended form). This
+survey classifies *what V3 computes* and *what maturity gap a V4 re-derivation must close*. It does
+**not** adopt V3's module decomposition as a design. Source: `lloyd_v3/lloyd_v3_engine/src/lloyd_v3/`.
+
+**Method:** breadth survey by sub-agent against a fixed rubric, headline cases spot-verified by hand
+(`spectrum.py`, `decomposition.py`, `precision.py`, `enums.py`, `methods/_refusal.py` read directly).
+
+---
+
+## The maturity-delta rubric
+
+A re-derivation must close these gaps relative to V3's implementation:
+
+- **G** — hidden guardrail: a numeric literal used as a *silent* decision boundary (Axiom 3).
+- **P** — non-constructive precision: `mpmath` / `linalg` eig·det·solve as the precision *authority*
+  with no constructive error bound (Axiom 11).
+- **F** — silent fallback: returns a value where it cannot actually decide, instead of refusing (Axiom 9).
+- **T** — untyped output: raw float/bool/tensor, no status/validity field (Axiom 1/4).
+- **L** — library-as-substrate: transcendental libm/`special` as computational content (Axiom 11).
+  (Exact integer combinatorics like `math.comb`/`factorial` are **not** L.)
+- **C** — convention/frame dependence: result depends on an arbitrary convention/ordering/tie-break.
+
+Verdicts: **CLEAN** (math is the spec, no sins — reuse as oracle, mechanical to re-derive) ·
+**RE-DERIVE** (≥1 sin — rebuild trust internals) · **PLUMBING** (wrappers/dispatch/serialisation, off
+the math-or-trust surface) · **ENTANGLED** (math fused with a *load-bearing* threshold/convention —
+see §3; the strategically important bucket).
+
+---
+
+## 1. Classification table (corrected)
+
+| Module | Computes | Tags | Verdict |
+|---|---|---|---|
+| `ops/tangent_projector` | `P = I − u·uᵀ` | T | **CLEAN** |
+| `ops/elementary_symmetric_from_power_sums` | `e_k` via Newton–Girard | T | **CLEAN** |
+| `geometry/hygiene` | zero-substitute non-finite jets + explicit pathology mask | T | **CLEAN** |
+| `ops/bordered_det` | bordered-Hessian det via `torch.linalg.det` | P,T | RE-DERIVE |
+| `ops/k_g_bordered` | `K_G = −sign·det(BH)/‖g‖^{n+1}` | F,T | RE-DERIVE (untyped zero sentinel; Axiom-6 zero) |
+| `ops/shape_operator` | Weingarten `S = −(1/‖g‖) sym(P H P)` | G,T | RE-DERIVE (`g_norm>0` gate) |
+| `ops/coupling_det_signature` | det sign + log\|det\| + trust-decades | G,P | RE-DERIVE (`math.log(128·eps)` calib; `slogdet`) |
+| `ops/tangent_basis_from_grad` | Householder tangent basis, pinned-sign | T,C | RE-DERIVE (`1+|u_n|` unguarded; sign convention) |
+| `ops/ambient_power_sums` | `p_k = Tr(Sᵏ)` | G,F,T | **ENTANGLED** (`eps_g=1e-10` → silent zero sums) |
+| `geometry/spectrum` (Cardano m=3) | eigenvalues, closed form | G,P,L,C | **ENTANGLED** (`p1_tol` strategy switch; `arccos`) |
+| `geometry/spectrum` (Sturm) | eigenvalues, tridiag+bisection | G,P | RE-DERIVE (`64·eps` Gershgorin/convergence) |
+| `geometry/decomposition` | `κ_self/coupling/int` via FD of `det(T_s+t·T_c)` | G,P | **ENTANGLED** (`min_grad_mag=1e-14` gate; det path) *(L tag retracted — `comb`/`factorial` exact)* |
+| `geometry/coupling` | coupling-graph edges + invariance mask | G,C | **ENTANGLED** (`edge_tol=256·eps`; edge-rule is a convention) |
+| `geometry/tangent` | `TangentFrame` (u,Q,T,T_s,T_c) | G,C,T | RE-DERIVE (`eps_g=1e-10`; `sign(0):=+1`) |
+| `geometry/chi_t_invariants` | `K_G` via e_k of power-sum spectrum | G,L,C | RE-DERIVE (order-tier bitmask; high-order drift unproven) |
+| `geometry/k_content` | `K_T3` + ∇K_G via cofactor/3-jet | P,L | RE-DERIVE (hand-Laplace det; near-singular numerator) |
+| `precision` | mpmath escalation suite | G,P,L | RE-DERIVE (`1e-8`, `256·eps`; mpmath authority; silent return-principal) |
+| `backends/exact_jet` | exact ∇/H/T³ via torch.func + fallback | F,P | **ENTANGLED** (silent autodiff-mode fallback changes rounding) |
+| `geometry/{shape,curvature,projector,basis}` | thin wrappers | T | PLUMBING |
+| `geometry/richness` | telemetry bundle (ratios/floors) | G,C | PLUMBING (diagnostic-only; not load-bearing) |
+| `geometry/spectrum` (dispatch) | route by tangent dim | T | PLUMBING |
+| `backends/ladder` | tier-walk provider selection | T | PLUMBING |
+| `methods/{observe_full,probe,reconstruct,interpret}` | assembly/serialisation/composition | T | PLUMBING |
+
+---
+
+## 2. Tag tallies (the shape of the work)
+
+| Tag | Count | Reading |
+|---|---|---|
+| **T** untyped | 16 | near-universal — every primitive returns raw values |
+| **G** hidden guardrail | 13 | **dominant** — silent thresholds in every precision-critical path |
+| **P** non-constructive precision | 10 | `linalg`/`mpmath` as authority |
+| **F** silent fallback | 6 | return zero/identity/sentinel on indecision |
+| **C** convention dependence | 5 | sign pins, tie-breaks, edge-rule |
+| **L** library transcendental | 3 | `arccos`/`cos` (spectrum), `math.log` (coupling_det_sig, precision) — *not* `comb`/`factorial` |
+
+**The dominant gap is G+T: hidden threshold + untyped output.** That pair is the *cheapest,
+most mechanical* fix — lift the constant into declared policy, attach a typed status. The bulk of the
+rebuild is maturity-lifting, not redesign.
+
+---
+
+## 3. The strategic finding — there IS a "neither" bucket, and it is the campaign's justification
+
+The survey was run to test whether V3 splits cleanly into "reuse the math / rebuild the plumbing."
+**It does not split cleanly — and the exception is the whole point.** Five modules are **ENTANGLED**:
+the mathematics is fused with a *load-bearing* threshold or convention, such that V3's *output value
+itself moves with a choice that is irrelevant in exact arithmetic*:
+
+1. **`spectrum` (Cardano):** `p1_tol = (64·eps·diag_scale)²` gates `where(is_diag, sorted_diag,
+   cardano)` — a **strategy switch**. Rows near the threshold get a different eigenvalue *value*
+   depending on a magic constant.
+2. **`decomposition`:** `min_grad_mag=1e-14` gates whether the FD sampling runs at all; det-path vs
+   eigh-path is a second hidden choice.
+3. **`ambient_power_sums`:** `eps_g=1e-10` → returns **silent zero** power sums on small gradient; a
+   downstream consumer cannot tell "flat" from "below detection."
+4. **`coupling`:** the edge-detection rule ("an edge exists if zeroing `H[i,j]` moves `K_G` by
+   `>256·eps·|K_G|`") is an **arbitrary convention** wearing the costume of pure geometry. A different
+   admissible rule gives a different graph at identical geometry.
+5. **`exact_jet`:** silently falls back from forward-mode batching to row-wise reverse mode on a
+   batching exception — both exact, but they accumulate rounding differently, undeclared.
+
+**Why this validates rather than threatens the amendment.** At an entangled row, V3's answer is
+*itself partly a frame artifact* — exactly the thing the frame-invariance pivot exists to catch. So:
+
+- In each method's **frame-invariant interior**, V3 is a trustworthy oracle → reuse the math, grade
+  V4 against it.
+- At the **entangled boundary**, there is **no clean oracle** — V3's number is convention/threshold-
+  dependent and its own machinery cannot flag it. Here V4 does not "re-certify"; it **improves**:
+  lift the choice to declared policy, or **refuse** when the choice is load-bearing and ambiguous.
+
+This is the precise location where the rebuild stops being ceremony and adds something V3 structurally
+lacks. The survey didn't just triage V3 — it found V3's blind spots, and they line up one-for-one with
+the campaign's reason to exist.
+
+---
+
+## 4. Consequences for the campaign plan
+
+- **Reuse-as-oracle:** the full CLEAN set + the frame-invariant interior of every RE-DERIVE/ENTANGLED
+  module. V3's math is the spec; grade every V4 result numerically against it. *(amended Axiom 10)*
+- **Mechanical maturity-lift (the bulk):** the G+T majority — declared policy + typed status. Low risk.
+- **Real design work (localised):** the five ENTANGLED modules — `spectrum`, `decomposition`,
+  `ambient_power_sums`, `coupling`, `exact_jet`. Each needs a *declared decision protocol* (policy or
+  refusal), and each is a natural home for the typed frame-invariance status the campaign installs.
+- **Do not reuse `precision.py` at all:** all three forbidden patterns; already superseded this week
+  by `typed_refine` (constructive, no mpmath) + the refusal machinery. It is the one V3 module that
+  was already the weak spot.
+
+**Verdict on the math/plumbing split:** it holds for ~80% of the engine (mechanical), and where it
+breaks (the 5 entangled modules) the break is not a problem to absorb but the deliverable to build.

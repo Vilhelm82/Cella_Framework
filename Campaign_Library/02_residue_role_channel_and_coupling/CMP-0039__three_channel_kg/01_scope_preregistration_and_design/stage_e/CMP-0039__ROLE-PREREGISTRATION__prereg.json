@@ -1,0 +1,218 @@
+{
+  "authority": "Frozen objects under results/three_channel_kg/ (manifest_v1.json, SCHEMA.md, FIXTURES.md, CLAIM_LEDGER.md) verified vs freeze_pins_sha256.json (the three pinned objects match; CLAIM_LEDGER intentionally unpinned, sha recorded for traceability); built+frozen bench under src/lloyd_v4/evals/three_channel_kg/ imported READ-ONLY by exact file path and pinned in depends_on. Covenant loop; ORCHESTRATOR OVERRIDE: no v4-campaign-discipline skill (unavailable this session); frozen objects + embedded covenant are SOLE binding authority. R1/R2/R3 dispositions standing.",
+  "campaign_id": "three_channel_kg",
+  "cycle_id": "c001",
+  "stage": "stage_e",
+  "stage_title": "parity / sigma_2 exactness (CL-c5 n=3 core; FAN-OUT stage, parallel with B/C/D)",
+  "frozen": true,
+  "version": "stage_e_prereg_v1",
+  "depends_on": {
+    "results/three_channel_kg/manifest_v1.json": "a28042d96a3588407a610f649388d93364c9be2b9294810cd666f3a7369b318b",
+    "src/lloyd_v4/evals/three_channel_kg/schema.py": "40335dc1501e3d737fedbf236c4e66a7c7641c1b1b6e4d840499fe23260ca085",
+    "src/lloyd_v4/evals/three_channel_kg/fixtures.py": "3d415011b7f4c81c38d70d94847cbdbacb9d02b7543cfe7e0d2f9e48b11f8b8c",
+    "src/lloyd_v4/evals/three_channel_kg/probe.py": "1f99965824afd3548841ca5360c56dc44250c858018f18349bf2a2c3b9e098d8",
+    "src/lloyd_v4/evals/three_channel_kg/referee_total.py": "993ffd21f9eac6c13eb015eacc5f3ed9bfb00cded0648fc963a83cead51feb29",
+    "src/lloyd_v4/evals/three_channel_kg/referee_channel.py": "28eff76c9eceef94d9927845a9fca33ce01f4cd3f452635607cf42a806921175",
+    "src/lloyd_v4/evals/three_channel_kg/oracle.py": "b8af9397710490a8d548b653aa301cf0eb2bd37ca50579fc26c1b58a5c1c7798"
+  },
+  "frozen_authority_pins": {
+    "results/three_channel_kg/freeze_pins_sha256.json": "c893a1e9758954c2ebeef9cd022cda170fa51d61a850c238ef0f76800d18ee16",
+    "results/three_channel_kg/SCHEMA.md": "fe0eb353ea6147c9d290fdfa2bf4ee2fb8d612a45a31b5d62bfce986a2d37b98",
+    "results/three_channel_kg/FIXTURES.md": "3d933e39fd03ef968ef943ff24df5292318fdac47a3ec1774b81deaea4f902f2",
+    "results/three_channel_kg/CLAIM_LEDGER.md": "d6e395fe82a09e743edc85658ab887445f299f793524b198d67f2bb336554958"
+  },
+  "organ": {
+    "module": "lloyd_v4.evals.three_channel_kg.oracle (Path C, parity row F13) cross-checked against referee_total (Path B) + referee_channel (Path B', det2 shape-operator)",
+    "probe_id": "three_channel_kg_probe_A_v1",
+    "role": "probe",
+    "path": "A",
+    "sha256": "1f99965824afd3548841ca5360c56dc44250c858018f18349bf2a2c3b9e098d8",
+    "reconstruction_law": "PARITY LAW (n=3). For a regular implicit surface in R^3 at a rational jet (g,H) with q=g^T g != 0, the tangent shape operator is S = -(1/|g|) P H P with P = I - g g^T/q. Its order-r elementary-symmetric invariant sigma_r (r in {1,2}) carries r factors of the prefactor -(1/|g|), i.e. a factor (1/|g|)^r = (1/q)^(r/2). EVEN r (r=2: sigma_2 = K_G, the Gaussian curvature) -> the radical (1/|g|) appears an EVEN number of times and squares to the rational 1/q^(r/2): sigma_2 is sqrt-q-FREE and lies in Q (exact-Q) -- concretely sigma_2 = det2(P H P)/q in Q, equal to -det(H_b)/q^2. ODD r (r=1: sigma_1, twice the mean curvature) -> the radical appears an ODD number of times and does NOT square away: sigma_1 = -(1/|g|) tr(P H P) lies in Q(sqrt q) and is exact-Q ONLY when q is a perfect square. sigma_1^2 = tr(P H P)^2/q is rational, but sigma_1 itself is irrational whenever q is a non-square. At the keystone jet g=(3,1,2), H=[[2,1,0],[1,0,0],[0,0,2]], q=14 (so sqrt q = sqrt 14): sigma_2 = -3/49 in Q (== K_G); tr(P H P)=12/7 nonzero so sigma_1 = -(1/sqrt14)(12/7) in Q(sqrt14), sigma_1^2 = 72/343 in Q but sigma_1 not in Q (14 is not a perfect square). The even-order anchor C1_hat = -24 = -2 det(H_b) in Q is an additional exact-Q (even-degree, sqrt-q-free) witness. Exact Q only; no tolerance; sqrt-q-free on every even-order quantity. THE PARITY-TYPE GATE (K10): an odd-order / radical-bearing invariant emitted AS IF exact-Q (any Fraction m offered as the numeric value of sigma_1) is caught because a genuine exact-Q sigma_1 would satisfy m^2 == sigma_1^2 = 72/343 exactly, which forces sqrt 14 in Q -- false; so m^2 != 72/343 for every Fraction m, and emitting m as exact-Q sigma_1 trips K10. The bench oracle therefore does NOT expose sigma_1 as a numeric Fraction (emitting a radical would itself be a sqrt-q leak); it exposes only the even-order exact-Q sigma_2 and C1_hat. The probe Path A / Path B total / Path B' channels are the supporting reconstruction of K_G = sigma_2 (every channel a degree-2 form, sqrt-q-free).",
+    "probe_source_verbatim_note": "The Stage-E parity organ is read off the FROZEN bench oracle.py (F13 parity row: sigma_2, C1_hat exposed exact-Q; sigma_1 withheld) and the FROZEN referee_channel.py det2 construction (every channel degree-2 => sqrt-q-free => K_G = sigma_2 in Q), both pinned in depends_on. The probe (Path A) source is pinned by sha256 above (1f999658...); the parity contrast itself does not re-run the probe read-off beyond the keystone K_G = sigma_2 corroboration."
+  },
+  "referee": {
+    "Path_A": "monomial channel read-off (probe; role=probe) -- supplies the keystone K_G = sigma_2 corroboration (every channel degree-2 => sqrt-q-free).",
+    "Path_B": "independent TOTAL referee referee_total.referee_total: K_G = -det(H_b)/q^2 (generic Bareiss det; sqrt-q-free). K_G == sigma_2 -- the even-order exact-Q witness. Also bordered_det for the C1_hat = -2 det(H_b) corroboration.",
+    "Path_Bprime": "independent CHANNEL referee referee_channel.referee_channel: channels from det2(P H_X P)/q -- every channel a degree-2 (even) form, so each is sqrt-q-free and exact-Q; their sum K_G = sigma_2. The -(1/|g|) prefactor squaring to 1/q is the parity mechanism made explicit in code.",
+    "Path_C": "frozen external fixture oracle oracle.F13: exact-Q sigma_2=-3/49, C1_hat=-24; sigma_1 deliberately NOT emitted (Q(sqrt14), odd-order). P-self-cert: the oracle does NOT import A/B/B' and they do not import it.",
+    "separation_note": "The probe never imports the referee. Path B, Path B', Path C are code-disjoint sources. All grading is mechanical exact-Q equality (no tolerance). The K10 mutant (battery-owned, NOT bench code) emits sigma_1 as a Fraction and is caught by the exactness witness m^2 != sigma_1^2."
+  },
+  "scope": {
+    "claims": ["CL-c5"],
+    "armed_kills": ["K10"],
+    "fixtures": ["F13"],
+    "fixture_rungs": ["r=1 (sigma_1, odd-order, Q(sqrt14))", "r=2 (sigma_2 = K_G, even-order, Q)"],
+    "anchors": {
+      "sigma_2_even_exact_Q": "-3/49",
+      "C1_hat_even_exact_Q": "-24/1",
+      "sigma_1_odd_radical": "Q(sqrt14)  (NOT emitted as exact-Q; equivalently sigma_1^2 = 72/343 in Q but sigma_1 not in Q since 14 is a non-square)",
+      "keystone_jet": "g=(3,1,2), H=[[2,1,0],[1,0,0],[0,0,2]], q=14"
+    },
+    "preconditions": ["P-self-cert", "P-frame"],
+    "out_of_scope": {
+      "claims": ["CL-c1", "CL-c2", "CL-c3", "CL-c3b", "CL-c3c-i", "CL-c3c-ii", "CL-c4", "CL-c6", "CL-c7", "CL-c8"],
+      "kills": ["K1", "K2", "K3", "K4", "K5", "K6", "K7", "K8", "K9", "K11"],
+      "fixtures": ["F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11", "F12", "F12a", "F12b"],
+      "tower": "CL-c5 n>=4 tower (the parity argument elevated to n-dimensional sigma_r for r even/odd in arbitrary dimension) is NOT established and is OUT of scope -- successor c002. Stage E grades ONLY the n=3 core.",
+      "note": "Stage E grades CL-c5 (n=3 core) and arms K10 only, on the F13 parity row, with P-self-cert/P-frame. The retrodiction spine (Stage A: CL-c1/CL-c2, K2/K3/K5/K6/K8/K9/K11), frame-relativity (CL-c7, K7, F12), gauge (CL-c4, K4), and the meta-thesis K1 belong to other stages. No substrate promotion: eval-tier only; nothing canonical until Will signs off."
+    }
+  },
+  "expectations": {
+    "F13_parity_row": {
+      "sigma_2": "-3/49",
+      "C1_hat": "-24/1",
+      "sigma_1_field": "Q(sqrt14)",
+      "sigma_1_squared": "72/343",
+      "sigma_1_emitted_numerically": false,
+      "frame": "declared DBP frame (keystone, rungs r=1,2)"
+    },
+    "keystone_jet": {
+      "g": ["3/1", "1/1", "2/1"],
+      "q": "14/1",
+      "det_hb": "12/1",
+      "K_G": "-3/49"
+    },
+    "even_order_exact_Q": {
+      "sigma_2_eq_KG": true,
+      "sigma_2_is_Fraction": true,
+      "C1_hat_is_Fraction": true,
+      "C1_hat_eq_minus_2_det_hb": true,
+      "sigma_2_eq_det2_PHP_over_q": true
+    },
+    "odd_order_radical": {
+      "tr_PHP": "12/7",
+      "tr_PHP_nonzero": true,
+      "sigma_1_squared_eq_trPHP2_over_q": "72/343",
+      "q_is_perfect_square": false,
+      "sigma_1_in_Q": false,
+      "sigma_1_oracle_attr_present": false,
+      "sigma_1_note_numeric_present": false
+    },
+    "parity_witness": {
+      "even_emitted_exact_Q": true,
+      "odd_not_emitted_exact_Q": true,
+      "contrast_holds": true
+    },
+    "K10_truth": {
+      "no_odd_invariant_emitted_as_exact_Q": true,
+      "even_odd_parity_distinction_intact": true,
+      "K10_silent_on_truth": true
+    },
+    "K10_mutant": {
+      "mutant_emits_sigma_1_as_Fraction": true,
+      "exactness_witness_m_squared_eq_sigma1_squared": false,
+      "K10_fires_on_mutant": true
+    }
+  },
+  "predictions": [
+    {
+      "id": "P1_sigma2_even_exact_Q",
+      "claims": ["CL-c5"],
+      "kills_relevant": ["K10"],
+      "statement": "EVEN-order exactness (sigma_2). The order-2 elementary-symmetric curvature invariant sigma_2 of the keystone jet (g=(3,1,2), q=14) is exact-Q: sigma_2 = -3/49 is a fractions.Fraction, and it EQUALS the keystone Gaussian curvature K_G on Path B total (-det(H_b)/q^2), on the Path B' det2(P H P)/q construction, and on the Path C oracle. (Even r => the -(1/|g|) prefactor appears an even number of times and squares to the rational 1/q => sqrt-q-free => exact-Q.)",
+      "expected": "sigma_2 == -3/49 (Fraction); sigma_2 == K_G across Path B, Path B', Path C; sigma_2 == det2(P H P)/q",
+      "units": "exact Q (Fraction); boolean type predicate (isinstance Fraction) and exact equality across paths"
+    },
+    {
+      "id": "P2_sigma1_odd_radical",
+      "claims": ["CL-c5"],
+      "kills_relevant": ["K10"],
+      "statement": "ODD-order radical-bearing (sigma_1). The order-1 invariant sigma_1 = -(1/|g|) tr(P H P) of the keystone jet lies in Q(sqrt14)\\Q: tr(P H P) = 12/7 is rational and NONZERO, sigma_1^2 = tr(P H P)^2/q = 72/343 is rational, but q=14 is NOT a perfect square, so sigma_1 is irrational (sigma_1 not in Q). The frozen oracle therefore does NOT expose sigma_1 as a numeric value (oracle.F13 has no sigma_1 attribute; F13_NOTE carries the field label Q(sqrt14) and no numeric sigma_1).",
+      "expected": "tr(P H P)=12/7 != 0; sigma_1^2 = 72/343 in Q; 14 not a perfect square => sigma_1 not in Q; oracle withholds sigma_1 (no attr, no numeric note)",
+      "units": "exact Q (Fraction) for tr and sigma_1^2; boolean perfect-square test; boolean oracle-withholding predicate"
+    },
+    {
+      "id": "P3_C1hat_even_exact_Q",
+      "claims": ["CL-c5"],
+      "kills_relevant": ["K10"],
+      "statement": "EVEN-order anchor (C1_hat). The frozen even-degree rational anchor C1_hat = -24 is exact-Q (a fractions.Fraction) and is corroborated by the sqrt-q-free relation C1_hat = -2*det(H_b) = -2*12 = -24 (det(H_b) is a sum of g^2*H^2 even-degree monomials, hence rational). C1_hat in Q is an additional even-order exact-Q witness alongside sigma_2.",
+      "expected": "C1_hat == -24 (Fraction); C1_hat == -2*det(H_b); det(H_b) == 12",
+      "units": "exact Q (Fraction); exact equality"
+    },
+    {
+      "id": "P4_parity_witness_contrast",
+      "claims": ["CL-c5"],
+      "kills_relevant": ["K10"],
+      "statement": "PARITY WITNESS (the contrast). The even/odd type contrast holds on F13: the even-order invariants sigma_2 (= -3/49) AND C1_hat (= -24) are emitted as exact-Q Fractions, while the odd-order sigma_1 (in Q(sqrt14)) is NOT emitted as exact-Q (it is withheld). sigma_2 in Q vs sigma_1 in Q(sqrt14) is the parity witness: even-order => exact-Q, odd-order => radical-bearing.",
+      "expected": "even invariants exact-Q AND emitted; odd invariant radical-bearing AND withheld; contrast_holds == True",
+      "units": "boolean (even-exact-Q-and-emitted AND odd-radical-and-withheld)"
+    },
+    {
+      "id": "P5_K10_silent_on_truth",
+      "claims": ["CL-c5"],
+      "kills_relevant": ["K10"],
+      "statement": "K10 SILENT on truth. On the unmutated bench F13 row, NO odd-order / radical-bearing invariant is emitted as if exact-Q: sigma_1 is withheld (not emitted as a Fraction), so the parity-type gate K10 does NOT fire; the even/odd parity distinction (sigma_2 in Q, sigma_1 in Q(sqrt14)) is intact and respected. K10 fires only on a violation, and truth contains none.",
+      "expected": "no odd/radical invariant emitted as exact-Q; parity distinction intact => K10 silent",
+      "units": "boolean (K10 does not fire on truth)"
+    },
+    {
+      "id": "P6_K10_fires_on_mutant",
+      "claims": ["CL-c5"],
+      "kills_relevant": ["K10"],
+      "statement": "K10 FIRES on the constructed mutant. A battery-owned mutant (NOT bench code) emits sigma_1 as a numeric fractions.Fraction m (as if exact-Q -- e.g. the float-rounded -(1/sqrt14)(12/7)). The exactness witness catches it: a genuine exact-Q sigma_1 would satisfy m^2 == sigma_1^2 = 72/343 exactly, which would force sqrt14 in Q -- false; so m^2 != 72/343 for EVERY Fraction m, and K10 fires on the mutant. (Demonstrates the type gate bites a lying engine that emits an odd/radical-bearing invariant as exact-Q.)",
+      "expected": "mutant emits sigma_1 as a Fraction; m^2 != sigma_1^2 (=72/343) for the emitted Fraction => K10 fires",
+      "units": "type predicate (emitted is Fraction); boolean (m^2 != 72/343) => K10 fires"
+    }
+  ],
+  "grader_clauses": {
+    "K10_parity_type": "K10 parity-type (type gate) -- fires if an odd-order / radical-bearing invariant is emitted as if exact-Q, or if the even/odd parity distinction is violated.",
+    "parity_law_even_exact_Q": "EVEN order r (r=2: sigma_2 = K_G) -> the -(1/|g|) prefactor appears an even number of times and squares to the rational 1/q -> sqrt-q-FREE -> exact-Q (sigma_2 = det2(P H P)/q = -det(H_b)/q^2 in Q).",
+    "parity_law_odd_radical": "ODD order r (r=1: sigma_1, twice the mean curvature) -> the -(1/|g|) prefactor appears an odd number of times and does NOT square away -> sigma_1 = -(1/|g|) tr(P H P) in Q(sqrt q); exact-Q only when q is a perfect square. sigma_1^2 = tr(P H P)^2/q in Q, but sigma_1 not in Q when q is a non-square.",
+    "parity_witness": "The contrast sigma_2 in Q (even, exact-Q, emitted) vs sigma_1 in Q(sqrt14) (odd, radical-bearing, withheld) is the parity witness.",
+    "sqrt_q_free_even": "every even-order curvature invariant is sqrt-q-free (the radical squares to a rational), hence exact-Q; the bench det2 channels are degree-2 forms whose -(1/|g|) factor squares to 1/q.",
+    "oracle_withholds_sigma_1": "the frozen oracle does NOT expose sigma_1 as a numeric Fraction (emitting a radical would itself be a sqrt-q leak); it exposes only the even-order exact-Q sigma_2 and C1_hat.",
+    "K10_exactness_witness": "a genuine exact-Q sigma_1 would satisfy emitted^2 == sigma_1^2 = 72/343 exactly, which forces sqrt 14 in Q -- false; so emitted^2 != 72/343 for every Fraction, and emitting sigma_1 as exact-Q trips K10.",
+    "type_gate_sqrt_q_leak": "a total/channel referee returning a radical/float instead of Fraction -> hard fail (K8).",
+    "semantics_K_G": "kappa_c + kappa_s + kappa_int (exact in Q)",
+    "semantics_total_referee": "K_G == -det(H_b)/q^2 (Path B, sqrt-q-free)",
+    "semantics_channel_referee": "channels == split-shape-operator det2 channels (Path B', disjoint source)",
+    "precondition_P_self_cert": "the oracle (Path C) must be external to A/B/B', or the run is void.",
+    "precondition_P_frame": "every channel fixture must carry its frame annotation, or it is rejected.",
+    "exact_Q_no_tolerance": "Exact Q only; no tolerance band anywhere; a near-miss is a FAIL. No substrate promotion (eval-tier only). Nothing canonical until Will signs off.",
+    "n3_core_only": "Stage E grades CL-c5 to the n=3 CORE only (parity => K_G = sigma_2 even => exact-Q). The n>=4 tower is NOT established and is OUT of scope (successor c002)."
+  },
+  "status_move_rules": {
+    "CL-c5": {
+      "ledger_statement": "parity => K_G = sigma_2 even => exact-Q (core); n>=4 tower NOT established",
+      "universal_claim": false,
+      "scope_disposition": "n=3 CORE ONLY. The even/odd parity type contrast (sigma_2 in Q even => exact-Q; sigma_1 in Q(sqrt14) odd => radical-bearing) is graded against the frozen keystone F13 row (exact Q). The n>=4 tower (parity elevated to arbitrary dimension) is NOT established by this stage and is explicitly OUT of scope (successor c002). The status move covers the core ONLY, not the tower.",
+      "R1_disposition": "CL-c5 (n=3 core) is graded as a verified-finite exact-Q type/parity contrast on the frozen keystone, NOT a symbolic-over-Q[g,H] universal. It is a structural type-gate demonstration (even-order exact-Q; odd-order radical-bearing; K10 silent on truth, fires on a constructed mutant), warrant scope = the n=3 keystone parity row. NOT named as an R1 [PROVEN]-warrant universal.",
+      "on_pass": {
+        "condition": "P1 AND P2 AND P3 AND P4 AND P5 AND P6 all PASS -- crucially P1 (sigma_2 even exact-Q = K_G), P2 (sigma_1 odd in Q(sqrt14), withheld), P4 (the parity witness contrast holds), P5 (K10 silent on truth) AND P6 (K10 fires on the constructed sigma_1-as-exact-Q mutant), with P3 (C1_hat even exact-Q) corroborating.",
+        "move_to": "DEMONSTRATED",
+        "warrant_scope": "CL-c5 n=3 CORE: parity => K_G = sigma_2 even => exact-Q, demonstrated on the frozen keystone F13 parity row (exact Q). The even/odd type contrast holds (sigma_2 in Q vs sigma_1 in Q(sqrt14)); K10 is silent on truth and fires on a constructed mutant that emits sigma_1 as exact-Q. The n>=4 tower is NOT established (successor c002). Warrant scope: the n=3 keystone parity core, finite/exact-Q, NOT a universal over Q[g,H] nor n>=4. Eval-tier; no substrate promotion; canonical only on Will's sign-off.",
+        "tower_disposition": "n>=4 tower remains NOT_established (OPEN; successor c002). The status move does NOT cover the tower."
+      },
+      "on_fail": {
+        "default": "any FAIL -> HALT, preserve chain verbatim, route to Will; no status move; do NOT fix/soften/widen.",
+        "if_P1_fails": "sigma_2 not exact-Q or != K_G -> even-order exactness broken -> HALT, route to Will (the core thesis K_G = sigma_2 even => exact-Q is contradicted).",
+        "if_P2_fails": "sigma_1 not in Q(sqrt14) as stated (e.g. tr(P H P)=0 making sigma_1 rational, or oracle emits sigma_1 numerically) -> parity contrast / oracle withholding broken -> HALT, route to Will.",
+        "if_P4_fails": "the even/odd parity witness contrast does not hold -> HALT, route to Will.",
+        "if_P5_fails": "K10 fires on truth (an odd/radical invariant IS emitted as exact-Q in the bench, or the parity distinction is violated) -> K10 fired against truth -> HALT, route to Will.",
+        "if_P6_fails": "K10 does NOT fire on the constructed sigma_1-as-exact-Q mutant -> the parity-type gate is tautological / does not bite a lying engine -> HALT, route to Will."
+      }
+    },
+    "kills": {
+      "K10": {
+        "claim": "parity-type (type gate); CL-c5",
+        "fires_on": "an odd-order / radical-bearing invariant emitted as if exact-Q, OR the even/odd parity distinction violated. Silent on truth (P5: sigma_1 withheld, distinction intact). FIRES on the constructed mutant (P6: sigma_1 emitted as a Fraction m with m^2 != sigma_1^2=72/343).",
+        "disposition": "K10 is ARMED. It must be SILENT on the unmutated bench (P5 PASS) and FIRE on the constructed mutant (P6 PASS). If K10 fired on truth (P5 FAIL) or failed to fire on the mutant (P6 FAIL) -> HALT, route to Will."
+      }
+    },
+    "preconditions": {
+      "P-self-cert": {
+        "checked_by": "P5/P6 (oracle external to A/B/B')",
+        "on_fail": "run VOID"
+      },
+      "P-frame": {
+        "checked_by": "P1/P4 (F13 carries its frame annotation)",
+        "on_fail": "channel/fixture row rejected; run VOID"
+      }
+    },
+    "halt_rule": "On ANY prediction FAIL: HALT. Preserve the chain verbatim. Do NOT fix, redesign, soften, or widen. Write what is held and route to Will. No status move is proposed for CL-c5 unless ALL of P1..P6 PASS. A FAIL in this FAN-OUT stage halts ONLY this stage; siblings B/C/D continue.",
+    "scope_note": "Stage E grades CL-c5 (n=3 core) only and arms K10 only, on the F13 parity row, with P-self-cert/P-frame. ALL other claims (CL-c1/c2/c3/c3b/c3c/c4/c6/c7/c8) and kills (K1/K2/K3/K4/K5/K6/K7/K8/K9/K11) and the F1..F12 fixtures are OUT of Stage-E scope (other stages). The CL-c5 n>=4 tower is NOT established (OUT of scope; successor c002). No substrate promotion: eval-tier only; nothing canonical until Will signs off."
+  },
+  "two_run_byte_stability_note": "The battery is run TWICE; the records jsonl from both runs MUST be byte-identical (sorted-keys serialisation, exact-Q frac:n/d strings, no float/time/random). Floats are used ONLY inside the K10 mutant constructor to FORGE a lying numeric sigma_1 (then immediately converted to an exact Fraction via Fraction.limit_denominator with a fixed denominator bound); no float reaches any record field (records carry frac:n/d strings only), so byte-stability is preserved deterministically.",
+  "no_tolerance_note": "Exact Q only; no tolerance band anywhere; a near-miss is a FAIL. No substrate promotion (eval-tier only). Nothing canonical until Will signs off.",
+  "n4_tower_disposition": "The CL-c5 n>=4 tower (the parity argument elevated to sigma_r for r even/odd in arbitrary dimension n>=4) is NOT established by Stage E and is explicitly OUT of scope. Successor c002. Stage E demonstrates the n=3 CORE only: parity => K_G = sigma_2 even => exact-Q, with the even/odd type contrast (sigma_2 in Q vs sigma_1 in Q(sqrt14)) and K10 (silent on truth, fires on a constructed mutant). Do NOT claim the tower."
+}

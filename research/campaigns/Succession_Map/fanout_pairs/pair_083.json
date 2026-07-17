@@ -1,0 +1,51 @@
+{
+  "rank": 83,
+  "lift": 4.56,
+  "count": 4,
+  "families": 1,
+  "a": {
+    "id": "OBJ:channel-vector-c-r",
+    "label": "Channel vector C_r",
+    "standard_term": "tuple listing all normalized channel curvatures κ_{r;p,q} for fixed order r",
+    "nomenclature": "novel",
+    "symbols": [
+      "c_r"
+    ]
+  },
+  "b": {
+    "id": "OBJ:channel-vector-static-u-i-gamma-i-rotating-gamma-i-delta-i-a",
+    "label": "Channel vector (static (u_i,gamma_i), rotating (gamma_i,delta_i), augmented (u_i",
+    "standard_term": "tuple of local Kummer radicands attached to a sheet, generating a C_2^s wr S_5 normal closure",
+    "nomenclature": "novel",
+    "symbols": [
+      "delta_i",
+      "gamma_i"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-0060",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Channel vector \\(C_r\\)",
+      "summary": "Equivalently, the channel vector\n\\[\nC_r=(\\kappa_{r;r,0},\\kappa_{r;r-1,1},\\ldots,\\kappa_{r;0,r})\n\\]",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/dbp_role_channel_and_orbit_geometry/Canonical_Invariant_Reduction_Theorem.md"
+    },
+    {
+      "uid": "U-0134",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Curvature-channel projection (channel-density polynomial, no",
+      "summary": "For a hypersurface relation $F=0$ at a regular point set $g=\\nabla F$, $H=\\nabla^2F$, $q=g^{\\mathsf T}g\\ne0$. In the distinguished coordinate basis split\n\\[\nH=H_c+H_s,\\qquad H_s=\\operatorname{diag}(H),\\qquad H_c=H-H_s .\n",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex"
+    },
+    {
+      "uid": "U-0557",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Reduction map Σ and ker Σ",
+      "summary": "The channel vector `C_r = (κ_{r;r,0}, …, κ_{r;0,r})` has the **reduction map**\nΣ : C_r ↦ Σ κ_{r;p,q} = σ_r,     ker Σ = { δC_r : Σ δκ_{r;p,q} = 0 }.\n\n> **The channel decomposition is not itself an intrinsic scalar invari",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/DBP_Curvature_Role_Reduction.md"
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "artifact_id": "THM-EXAMPLE-0001",
+  "artifact_type": "theorem",
+  "title": "Example dependency-preserving theorem record",
+  "summary": "A valid non-authoritative example showing the complete sidecar shape.",
+  "subject_families": ["schema_examples"],
+  "claim_status": "conjectured",
+  "lifecycle_status": "draft",
+  "provenance": {
+    "authors": ["Example Author"],
+    "created_utc": null,
+    "origin_repository": "Cella Framework",
+    "source_pointer": null
+  },
+  "files": [],
+  "claims": [
+    {
+      "claim_id": "CLAIM-EXAMPLE-0001",
+      "statement": "For every admitted dependency edge, the target identifier exists in the submitted graph revision.",
+      "hypotheses": ["The submission validates against schema version 1."],
+      "scope": "Schema example only; this is not a mathematical Cella result.",
+      "claim_status": "conjectured",
+      "proof_ids": [],
+      "evidence_ids": []
+    }
+  ],
+  "relations": [],
+  "external_ids": {},
+  "declared_impacts": [],
+  "llm": {
+    "one_sentence_purpose": "Demonstrate a complete theorem sidecar for LLM and validator clients.",
+    "key_terms": ["artifact sidecar", "stable id", "dependency"],
+    "retrieval_questions": ["What fields are required for a theorem submission?"],
+    "context_priority": "low",
+    "context_role": "historical"
+  },
+  "visual_hints": {},
+  "extensions": {"example_only": true}
+}

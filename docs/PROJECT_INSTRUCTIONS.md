@@ -90,9 +90,3 @@ A result enters `STATE/RESULTS.md` only with a derivation record
 4. Regenerate `STATE/CURRENT.md` (prune stale content; do not just append).
 5. Write `STATE/sessions/<YYYY-MM-DD>.md` with a delta block (ids created/edited).
 6. Commit.
-
----
-
-_Note: the MCP tool surface is being rebuilt with new mathematics; until then, do not
-treat current MCP tools or their behavior as final, and keep MCP concerns out of
-structural work._

@@ -1,0 +1,39 @@
+# SUPERSEDED — `mcg_discovery/` is no longer the active MCG campaign
+
+**Superseded:** 2026-05-19.
+**Replaced by:** [`Build_Docs/Reports/mcg_geometry_first/`](../mcg_geometry_first/) per [`Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md`](../../Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md).
+
+## What changed
+
+The prior `mcg_discovery/` campaign framed MCG as a **residue-first** discovery — start with route-divergence j-symbols, characterize, then ask whether they carry geometric content. The replacement campaign reframes MCG as a **geometry-first** discovery aperture: start from constraint geometry, propose candidate geometric invariants, then ask whether BACL-filtered residue/lattice readback shadows them. Per the new campaign §4: "Geometry proposes, residue audits."
+
+The framing change is structural, not cosmetic. A residue-first campaign cannot avoid the C-confound being structurally upstream of any G claim (you have to ask "is the variation I see geometric or just conditioning?" after the fact). A geometry-first campaign builds in conditioning covariates as part of the readback table from the start.
+
+## What is kept (provenance, not active research)
+
+The four documents in this directory remain readable as **prior-art context**:
+- `phase_0_g_candidate_criteria.md` — the four-criteria filter is largely re-applicable; superseded by the geometry-first campaign's §5 observable taxonomy + §7 candidate ledger states.
+- `phase_1_candidate_slate.md` — slate-style enumeration. The magnitude-vs-symbol reframe in §0 of that doc is **carried forward** in the new campaign's §5 observable families.
+- `phase_1_g1_artifact.json` + `phase_1_g1_characterization.md` — 600-record characterization of a route-divergence j-symbol observable. **Findings retained for the new campaign's ledger seed:**
+  - Naive route-divergence *magnitude* is anti-candidate empirically (off-lattice residual = 0 in 596/600 records).
+  - The (O1) vs (O2) normalization ambiguity is now §6 of the new campaign (sibling observables `J_final` / `J_step`).
+  - The G-1-equivalent (route-pair joint distribution) belongs in the new campaign's `G-route-1` slot, but **with path/operand separation telemetry** that the prior run did not record. The §1.4 active-dual-arm lesson — same-path/zero-offset reads cannot promote — was not built into the prior harness.
+- `phase_2_c_extractor_design.md` — three C-def candidates: C-def-1 (finite-difference), C-def-2 (multi-precision deviation slope), C-def-3 (operation-tree aggregation). All three carry forward to the new campaign's `C-def-1/2/3` ledger entries, with one renaming: the new campaign's C-def-2 is "Jacobian/Hessian spectral response" (a different formulation than the prior C-def-2 multi-precision slope) and C-def-3 is "perturbation amplification ladder." The prior C-def-1 maps directly to the new C-def-1.
+
+## What is not carried forward
+
+- The single-arm route-divergence kill-switch framing under "Gate 3."
+- The "MCG kill-switch campaign" gate sequence as a confirmatory protocol. Confirmatory protocol returns only at Phase 3 of the new campaign, with explicit entry gate per §14.
+- Any verdict language ("HALT," "GREEN," "VOID" except where they describe the prior closed Gate 3 audit, which remains an independent artifact and is not reopened).
+
+## What is not changed by this supersession
+
+- BACL, Conjecture C (definition-grounded, Gate 0 landed), c2 lattice theorem (Amendments I–IV including the sqrt-specific tightening) — **all stand**. M is consumed as a tool by the new campaign, not re-derived.
+- The Gate 3 closeout (`mcg_gate_3_killswitch/closeout.md`) — remains a citable independent artifact. The new campaign reads it for the cancellation-residue-substrate-dominated methodology lesson.
+
+## Reading order if approaching this directory fresh
+
+1. Read this file.
+2. Read [`Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md`](../../Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md).
+3. Read [`mcg_geometry_first/phase_0_m_contract.md`](../mcg_geometry_first/phase_0_m_contract.md) and [`mcg_geometry_first/candidate_ledger.json`](../mcg_geometry_first/candidate_ledger.json).
+4. Ignore everything in this directory unless you need provenance for a specific lattice/ledger entry.

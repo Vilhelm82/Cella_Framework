@@ -1,0 +1,78 @@
+{
+  "manifest_version": 1,
+  "campaign_id": "three_channel_kg",
+  "cycle_id": "c001",
+  "authority": "Merged committed spec c001 (stress-test-rm, ratified design) + both Field-Specialist approvals (CAMPAIGN_MODEL step 11) + Prior-Art Archivist audit cleared (step 12) + Will's sequencing ruling (138-redo first) + reserved-ruling dispositions R1/R2/R3 (see below)",
+  "thesis": "For a regular implicit surface F=0 in R^3 at a rational jet (g,H), q=g^T g != 0, the signed Gaussian curvature is an exact three-channel object K_G = kappa_c + kappa_s + kappa_int (exact in Q) -- the exhaustive disjoint monomial partition of the bordered-Hessian determinant in the supplied DBP frame; the sum is the intrinsic invariant sigma_2, the channel triple is a frame-relative representative in ker Sigma, and no non-negative scalar can represent the object.",
+  "date_stamped_from_machine": "2026-06-22",
+  "frozen": true,
+  "freeze_authority": "Records & Accounts (Sasha), CAMPAIGN_MODEL step 14 -- post step-11 approval + step-12 prior-art gate; no Will sign-off gate on the success path (Q3b). Presented to Will for acceptance before Dev handoff.",
+
+  "fixtures": [
+    {"fixture_id": "F1", "surface": "x1+x2+x3-3", "point": "(1,1,1)", "K_G": "0", "kappa_c": "0", "kappa_s": "0", "kappa_int": "0", "role": "flat sanity"},
+    {"fixture_id": "F2", "surface": "x1*x2+x2*x3-2", "point": "(1,1,1)", "K_G": "0", "kappa_c": "0", "kappa_s": "0", "kappa_int": "0", "role": "coupling yet developable"},
+    {"fixture_id": "F3", "surface": "x1*x2+x2*x3+x3*x1-3", "point": "(1,1,1)", "K_G": "1/12", "kappa_c": "1/12", "kappa_s": "0", "kappa_int": "0", "role": "pure-coupling positive"},
+    {"fixture_id": "F4", "surface": "x1*x2*x3-1", "point": "(1,1,1)", "K_G": "1/3", "kappa_c": "1/3", "kappa_s": "0", "kappa_int": "0", "role": "multilinear pure-coupling"},
+    {"fixture_id": "F5", "surface": "x3-x1^2-x2^2", "point": "(1,1,2)", "K_G": "4/81", "kappa_c": "0", "kappa_s": "4/81", "kappa_int": "0", "role": "pure-self; kappa_s trap"},
+    {"fixture_id": "F6", "surface": "x1^2+x2^2+x3^2-1", "point": "(3/5,4/5,0)", "K_G": "1", "kappa_c": "0", "kappa_s": "1", "kappa_int": "0", "role": "sphere, rational point; + sign witness"},
+    {"fixture_id": "F7", "surface": "x3-x1*x2", "point": "(1,1,1)", "K_G": "-1/9", "kappa_c": "-1/9", "kappa_s": "0", "kappa_int": "0", "role": "pure-coupling negative"},
+    {"fixture_id": "F8", "surface": "x1^2+x1*x2+x3^2-3", "point": "(1,1,1)", "K_G": "-3/49", "kappa_c": "-1/49", "kappa_s": "1/49", "kappa_int": "-3/49", "role": "sign-collapse catcher (keystone)"},
+    {"fixture_id": "F9", "surface": "x1^2+x2^2-x3^2", "point": "(3,4,5)", "K_G": "0", "kappa_c": "0", "kappa_s": "0", "kappa_int": "0", "role": "indefinite Hessian developable; rank-heuristic kill"},
+    {"fixture_id": "F10", "jet": "g=(2,1,1), H=[[2,2,2],[2,0,1],[2,1,0]]", "point": "(1,1,1)", "K_G": "2/9", "kappa_c": "1/3", "kappa_s": "0", "kappa_int": "-1/9", "role": "interaction decoupled (kappa_int != K_G)"},
+    {"fixture_id": "F11", "jet": "g=(2,1,1), H=[[1,2,0],[2,1,0],[0,0,-1]]", "point": "jet", "K_G": "0", "kappa_c": "-1/9", "kappa_s": "-1/9", "kappa_int": "2/9", "role": "positive interaction"},
+    {"fixture_id": "F13", "surface": "keystone, rungs r=1,2", "point": "(1,1,1)", "note": "sigma_2=-3/49 in Q; C1_hat=-24 in Q; sigma_1 in Q(sqrt14)", "role": "parity contrast"},
+    {"fixture_id": "F12a", "jet": "R=(1/5)[[3,-4,0],[4,3,0],[0,0,5]] in SO(3) (conv. x=Ry); g'=(13/5,-9/5,2), H'=[[42/25,-31/25,0],[-31/25,8/25,0],[0,0,2]], q'=14", "point": "(1,1,1) rotated", "K_G": "-3/49", "kappa_c": "-961/30625", "kappa_s": "2713/30625", "kappa_int": "-3627/30625", "role": "frame-relativity: channels MOVE, K_G invariant (R3 pinned)"},
+    {"fixture_id": "F12b", "jet": "signed permutation swap 1<->2; P=[[0,1,0],[1,0,0],[0,0,1]]", "point": "(1,1,1) permuted", "K_G": "-3/49", "kappa_c": "-1/49", "kappa_s": "1/49", "kappa_int": "-3/49", "role": "S3 x signs invariance: channels FIXED, K_G invariant (R3 pinned)"}
+  ],
+
+  "semantics_pinned": {
+    "K_G": "kappa_c + kappa_s + kappa_int (exact in Q)",
+    "kappa_X": "-Delta_X / q^2, with det(H_b) = Delta_c + Delta_s + Delta_m (off-diagonal -> Delta_c, diagonal -> Delta_s, mixed -> Delta_m)",
+    "total_referee": "K_G == -det(H_b)/q^2 (Path B, sqrt-q-free)",
+    "channel_referee": "channels == split-shape-operator det2 channels (Path B', disjoint source)",
+    "row_pass": "got.(K_G,kappa_c,kappa_s,kappa_int)==expected AND got.K_G==sum(channels) AND got.K_G==PathB_total AND got.channels==PathB'_channels AND det(H_b)==Delta_c+Delta_s+Delta_m"
+  },
+
+  "stage0_controls": {
+    "K1_true_object_passes": "F8 TRUE signed object (-1/49,1/49,-3/49,-3/49) -> PASS (no false positive)",
+    "K1_proxies_fire": "kappa^2=9/2401, H^2=18/343, any p>=0, drop-Delta_m (kappa_c+kappa_s=0), omit-tuple -> all FIRE",
+    "rank_heuristic_refusal": "F9 developable cone must return 0/refusal, never nonzero (K6)",
+    "sqrt_q_leak_gate": "any radical/float instead of Fraction -> hard fail (K8)",
+    "tolerance_leak_gate": "any injected mismatch passing/warning instead of hard-fail -> fail (K9)",
+    "singular_refusal": "q=0 / cone-apex / g_i=0 -> typed REFUSED, never 0/NaN/placeholder (K11)",
+    "preconditions": "P-self-cert (oracle external to A/B/B') and P-frame (frame annotation present) or run void"
+  },
+
+  "referee": "Four separated paths: Path A monomial channel read-off; Path B independent total referee (-det(H_b)/q^2, generic determinant, sqrt-q-free); Path B' independent channel referee (split shape-operator from PHP + trace identities, disjoint source); Path C frozen external fixture oracle (exact fractions). The probe (role=probe) never imports the referee.",
+
+  "governance": "Covenant rules 1.1-1.9 standing; pre-registration frozen pre-emission; content pins (1.9) + clause embedding (1.8) enforced at runtime in each stage prereg; armed kill conditions route a FAIL to Will (never soften); two-run byte-stability + suite exit 0; role gate via the schema; NO substrate promotion within the campaign (eval-tier only; geometry spine fence stays CLOSED); nothing canonical until Will signs off.",
+
+  "grounding_pins_sha256": {
+    "note": "The DRAFT corrective object and the existing native exact-Q source this freeze is grounded on (read first-hand and re-derived under the corrected frame; NOT imported as settled authority).",
+    "Build_Docs/reference/DBP_Curvature_Role_Reduction/Three_Channel_KG_Strong_Spec.md": "c4cc5090541b0b39a27ad2aa957394ace50d6ab79c8d3ba1e1789350bd889786",
+    "Build_Docs/reference/DBP_Curvature_Role_Reduction/Canonical_Invariant_Reduction_Theorem.md": "9175da628839fc129bf722710238bda83beb6570e4b0b288d4e02091319d022e",
+    "src/lloyd_v4/evals/cradle_arm_m/landing_m.py": "216721f89d6ed1f695dc21b92f810e71c4ef6d1d9537725751c803b1ecd71e7d",
+    "Project Management/roles/stress-test/rm/outbox/c001__MERGED_COMMITTED_SPEC__stress-test-rm-to-field-specialists.md": "ca88bcac640c9d3ffb0c64079ed341dd118f9e809c26eef28a12e87a47fa1749"
+  },
+
+  "code_pins_sha256": {
+    "note": "Bench code (fixtures.py, schema.py, probe, referees A/B/B'/C) is built by Dev/CLI against this frozen design and pinned in each stage prereg's depends_on BEFORE that stage's battery runs (covenant #2 / Rule 1.9). No bench code exists at Stage-0 freeze, by design (prereg freezes before implementation)."
+  },
+
+  "reserved_ruling_dispositions": {
+    "R3_F12_pin": "CLOSED -- R in SO(3), rotated jet, and tuples pinned in FIXTURES.md (exact Q).",
+    "R1_proven_warrant": "Logic-forced (not discretionary): a verified finite exact-Q both-sign witness earns [PROVEN] for impossibility/existence claims (CL-c3); universal claims (CL-c1, CL-c3b) require the symbolic identity over Q[g,H]. Encoded in each stage's status_move_rules.",
+    "R2_supplied_frame": "Channels are frame-relative in the supplied DBP frame; only the sum K_G is intrinsic (merged spec stance; connection-not-metric reading concurs). CL-c7 graded accordingly.",
+    "note": "Recorded by Records to unblock the freeze; Will may override."
+  },
+
+  "scope_out_to_c002": [
+    "carrier / oplus-universality re-ask (WARP Q2; sec 5.1/5.2 multiplicative-escape, with its rational-op-class / Richardson-wall cost)",
+    "n>=4 kappa grid",
+    "m=2 / tensor / Lovelock elevation (CL-c8)",
+    "one-spine-or-a-family",
+    "substrate promotion (eval-tier only; spine fence closed)"
+  ],
+
+  "next": "Dev Role Manager sizes this frozen campaign and produces the CC launch block for the CLI agents to build the bench to this design and run the staged batteries (CAMPAIGN_MODEL steps 15-17)."
+}

@@ -1,0 +1,66 @@
+# F2 Operand-Route Phase Search
+
+Accepted outcome: `operand_half_near_miss_only`
+Headline classification: `q_operand_near_miss_only`
+
+## Test Design
+
+The campaign tests whether the F2-family phase lever can be controlled by changing only the arithmetic route used for the cancellation operand `q`.
+
+Candidate form:
+
+```text
+F_candidate = sqrt(f)^2 - 1 + q_route
+```
+
+Prior diagnostic used by the design:
+
+```text
+phase(F_candidate / ulp(f)) = phase(q_route / ulp(f))
+```
+
+because `(sqrt(f)^2 - 1) / ulp(f)` was already shown to be integer-phase on the measured grids.
+The campaign still measures candidate-phase agreement per route rather than assuming this inheritance survives every alternate `q_route` addition.
+
+Promotion gates:
+
+- minimum observable support: `12`
+- stable route: half-phase fraction >= `0.9`
+- support-mask candidate: half-phase fraction >= `0.8`
+- near miss: half-phase fraction >= `0.7`
+
+## Required Findings
+
+1. Stable operand half-route found: `False`.
+2. Support-mask candidate found: `False`.
+3. Near miss found: `True`.
+4. Best observed route: fixture `schwarzschild`, route `direct_2_over_r`, mask `f_binade_-1`, half fraction `0.7272727272727273`.
+5. Double-precision language justified: `False`.
+
+## Fixture Findings
+
+- `schwarzschild` (primary): outcome `operand_half_near_miss_only`; best `direct_2_over_r` on `f_binade_-1` with `16` / `22` half-phase observable reads.
+- `sr` (secondary): outcome `route_family_negative`; best `beta_square` on `region_mildly_relativistic` with `16` / `28` half-phase observable reads.
+- `pure_affine_control` (affine_control): outcome `control_silent`; best `one_over_inverse` on `region_low_x` with `27` / `56` half-phase observable reads.
+
+## Interpretation
+
+No tested `q_route` produced a stable natural half-phase operand. The strongest primary result is Schwarzschild on `f_binade_-1`: direct-style `2/r` routes produce `16 / 22` half-phase observable reads, with `3` integer and `3` other residues. That is a genuine near miss, not a promotable comb.
+
+Complement routes such as `1 - ((r - 2) / r)` and `1 - ((1 - beta) * (1 + beta))` collapse to integer-phase and behave as useful negative controls. Square-root roundtrip and denominator-root-product routes did not improve the Schwarzschild support mask enough to cross the candidate gate. The pure affine square-root roundtrip also showed why the campaign measures candidate-phase agreement explicitly: alternate `q` arithmetic can disturb readback without creating a stable half-route.
+
+The next design step should not be another restatement of `2/r`; it should look for a coordinate or operand route law that makes `q / ulp(f)` phase-lock to `0.5` over a full predeclared support region.
+
+## Verification
+
+- `PYTHONPATH=src python -m lloyd_v4.evals.f2_operand_route_search`
+  Result: passed; generated artifact_f2_operand_route_search.json and operand_route_test_design_and_findings.md.
+- `PYTHONPATH=src python -m pytest tests/test_f2_operand_route_search.py -q`
+  Result: passed; 7 tests.
+- `PYTHONPATH=src python -m pytest tests/test_f2_operand_route_search.py tests/test_f2_phase_drift_diagnostics.py tests/test_f1_f2_natural_phase.py -q`
+  Result: passed; 21 tests.
+
+## Artifacts
+
+- `Build_Docs/Reports/f2_operand_route_search/artifact_f2_operand_route_search.json`
+- `Build_Docs/Reports/f2_operand_route_search/operand_route_test_design_and_findings.md`

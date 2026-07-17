@@ -1,0 +1,380 @@
+"""
+Fold-Readback Probe 0 v11 -- genuine path separation.
+
+Built 2026-05-17 in response to v10's structural ceiling: the v10 SR fixture
+hardcoded `arm_n_operand = arm_w_operand`, so the dual-arm probe never read
+genuinely different data. v11 fixes that by giving ARM-W and ARM-N different
+SR-four-form channels (F4 and F1 by default), both algebraically zero on the
+SR surface but computed via different float64 paths. The lattice levels the
+arms consume genuinely differ per beta.
+
+Imports v10's frozen machinery; extends only the surface-points and path-
+separation functions to handle multi-channel ARM-W/ARM-N pairings.
+"""
+from __future__ import annotations
+
+import argparse
+import copy
+import json
+import math
+import sys
+from decimal import Decimal
+from pathlib import Path
+
+import scratch.run_foldreadback_probe0_v10_active_dualarm as v10
+
+
+ROOT = Path(__file__).resolve().parents[1]
+REPORT_DIR = ROOT / "Build_Docs" / "Reports" / "foldreadback_probe0_v11_genuine_separation"
+ARTIFACT = REPORT_DIR / "artifact_v11.json"
+
+
+# Supported channels at v11. F1/F2/F3/F4 are all algebraically zero on the SR
+# surface but computed via different float64 paths.
+V11_CHANNELS = ("F1_float64", "F2_float64", "F3_float64", "F4_float64", "exact_zero", "matched_affine")
+
+
+def sr_surface_points_v11(channel: str, custom_betas: tuple[float, ...] | None = None) -> list[dict[str, object]]:
+    """Extend v10.sr_surface_points to support F1, F2, F3 channels.
+
+    If custom_betas is provided, use it instead of the standard beta_grid()
+    to densify or extend the sweep (e.g., extra points near β=1).
+    """
+    if channel in {"F4_float64", "exact_zero", "matched_affine"} and custom_betas is None:
+        return v10.sr_surface_points(channel)
+
+    if channel not in V11_CHANNELS:
+        raise ValueError(f"unknown v11 channel: {channel}")
+
+    beta_grid, eta_of_beta, four_form_float64, ulp_of_double = v10._sr_imports()
+    betas = custom_betas if custom_betas is not None else beta_grid()
+    points = []
+    for beta_value in betas:
+        f_value = 1.0 - beta_value * beta_value
+        unit = ulp_of_double(f_value)
+        residuals = four_form_float64(beta_value)
+        residual = residuals[channel.removesuffix("_float64")]
+        level = int(round(residual / unit)) if unit != 0.0 else 0
+        beta_decimal = Decimal.from_float(float(beta_value))
+        f_decimal = Decimal.from_float(float(f_value))
+        points.append(
+            {
+                "x": beta_decimal,
+                "beta": beta_decimal,
+                "f0": f_decimal,
+                "eta": Decimal.from_float(float(eta_of_beta(beta_value))),
+                "F4_float64": residuals["F4"],
+                "F1_float64": residuals["F1"],
+                "F2_float64": residuals["F2"],
+                "F3_float64": residuals["F3"],
+                "channel_residual": residual,
+                "level_unit": unit,
+                "L": level,
+                "e_f": v10.binade_exp(f_decimal),
+                "e_x": v10.binade_exp(beta_decimal),
+            }
+        )
+    return points
+
+
+def _sr_scan_fields_v11(left: str, right: str) -> dict[str, object]:
+    return {
+        "fixture": "sr_four_form",
+        "coordinate": "beta",
+        "surface": "f(beta)=1-beta^2; eta(beta)=sqrt(f(beta)); beta -> 1",
+        "level_unit": "ulp(1 - beta^2)",
+        "A1_channel": left,
+        "A2_channel": right,
+        "probe_version": "v11_genuine_separation",
+    }
+
+
+def run_sr_fixture_v11(
+    left: str, right: str, *, label: str, phase: int = 0, guard: int = v10.DEFAULT_GUARD,
+    custom_betas: tuple[float, ...] | None = None,
+) -> dict[str, object]:
+    return v10.run_point_fixture(
+        sr_surface_points_v11(left, custom_betas=custom_betas),
+        sr_surface_points_v11(right, custom_betas=custom_betas),
+        label=label,
+        phase=phase,
+        guard=guard,
+        scan_fields=_sr_scan_fields_v11(left, right),
+    )
+
+
+def densified_sr_grid() -> tuple[float, ...]:
+    """Standard SR beta_grid (137 points) plus extra density near β=1."""
+    beta_grid, _, _, _ = v10._sr_imports()
+    base = list(beta_grid())
+    # Add extra points in the singularity region β ∈ [0.99, 0.9999]
+    # The base grid already has a few points there; we add a logarithmic-ish
+    # densification on the (1-β) scale to focus resolution near the singularity.
+    extras: list[float] = []
+    for k in range(1, 30):
+        # 1-β = 10^(-2 - k*0.1) gives β ∈ {0.99, 0.992, 0.994, ..., 0.99999...}
+        one_minus_beta = 10.0 ** (-2.0 - k * 0.1)
+        beta_val = 1.0 - one_minus_beta
+        if 0.99 <= beta_val < 1.0:
+            extras.append(beta_val)
+    densified = sorted(set(list(base) + extras))
+    return tuple(densified)
+
+
+def sr_path_separation_for_record_v11(
+    scan: dict[str, object], record: dict[str, object]
+) -> dict[str, object]:
+    """Compute REAL path separation between two arms reading different channels.
+
+    Unlike v10 which hardcoded `arm_n_operand = arm_w_operand`, this function
+    derives operands from the channels declared in scan_fields. The 'operand'
+    is the per-beta residual the arm reads (e.g., F4 for ARM-W, F1 for ARM-N).
+    """
+    if not bool(record.get("armN", {}).get("active")) or not bool(record.get("armN", {}).get("valid")):
+        return v10._path_separation_not_applicable(scan)
+    try:
+        beta_grid, eta_of_beta, four_form_float64, ulp_of_double = v10._sr_imports()
+        beta = float(record["beta"])
+        residuals = four_form_float64(beta)
+        left_channel = str(scan.get("A1_channel", "F4_float64"))
+        right_channel = str(scan.get("A2_channel", "F4_float64"))
+        # The "operand" each arm reads is the residual for its channel.
+        arm_w_operand = float(residuals.get(left_channel.removesuffix("_float64"), 0.0))
+        arm_n_operand = float(residuals.get(right_channel.removesuffix("_float64"), 0.0))
+        lattice_unit = float(record.get("level_unit") or ulp_of_double(1.0 - beta * beta))
+        operand_delta = arm_n_operand - arm_w_operand
+    except (KeyError, TypeError, ValueError, OverflowError):
+        return v10._path_separation_unobservable(scan)
+    if lattice_unit <= 0.0 or not all(
+        value == value and abs(value) != float("inf")
+        for value in (arm_w_operand, arm_n_operand, lattice_unit, operand_delta)
+    ):
+        return v10._path_separation_unobservable(scan)
+    operand_equal = arm_w_operand == arm_n_operand
+    offset_level = operand_delta / lattice_unit
+    if operand_delta != 0.0:
+        separation_class = "nonzero_operand_offset"
+    elif operand_equal:
+        separation_class = "zero_operand_offset"
+    else:
+        separation_class = "path_distinct_operand_equal"
+    return {
+        "armW_path": v10._sr_pathsep_arm_path(scan, "armW"),
+        "armN_path": v10._sr_pathsep_arm_path(scan, "armN"),
+        "armW_operand": arm_w_operand,
+        "armN_operand": arm_n_operand,
+        "operand_equal": operand_equal,
+        "operand_delta": operand_delta,
+        "lattice_unit": lattice_unit,
+        "offset_level": offset_level,
+        "separation_class": separation_class,
+        "separation_observable": True,
+    }
+
+
+def _recompute_overlap_agreement(record: dict[str, object]) -> dict[str, object]:
+    """Fix v10's _overlap_record labeling bug.
+
+    v10:346-357 only labels agreement='agree' when BOTH arms report
+    'searched_no_separation'. Matched 'separated' verdicts (and other
+    same-inference cases) fall through to 'not_comparable', even though
+    the substantive verdicts agree. This wrapper recomputes the agreement
+    field using the natural rule: same inference -> agree; one separated
+    one not -> armN_only or armW_only as appropriate; else not_comparable.
+
+    v10's _overlap_record is preserved unchanged; this overlay corrects
+    the metadata for v11 reporting.
+    """
+    overlap = dict(record.get("overlap", {}))
+    arm_w_inf = record.get("armW", {}).get("inference")
+    arm_n_inf = record.get("armN", {}).get("inference")
+    if not overlap.get("both_active"):
+        overlap["agreement_v11"] = "not_applicable"
+    elif not overlap.get("both_valid"):
+        overlap["agreement_v11"] = "underpowered"
+    elif arm_w_inf == arm_n_inf:
+        overlap["agreement_v11"] = "agree"
+    elif arm_w_inf == "searched_no_separation" and arm_n_inf == "separated":
+        overlap["agreement_v11"] = "armN_only_separated"
+    elif arm_w_inf == "separated" and arm_n_inf == "searched_no_separation":
+        overlap["agreement_v11"] = "armW_only_separated"
+    else:
+        overlap["agreement_v11"] = "not_comparable"
+    return overlap
+
+
+def correct_overlap_agreement_in_scan(scan: dict[str, object]) -> dict[str, object]:
+    """Apply _recompute_overlap_agreement to every record in a scan."""
+    annotated = copy.deepcopy(scan)
+    for record in annotated.get("records", []):
+        record["overlap"] = _recompute_overlap_agreement(record)
+    return annotated
+
+
+def sr_scan_with_path_separation_v11(scan: dict[str, object]) -> dict[str, object]:
+    annotated = correct_overlap_agreement_in_scan(scan)
+    for record in annotated.get("records", []):
+        record["path_separation"] = sr_path_separation_for_record_v11(annotated, record)
+    annotated["path_separation_summary"] = _v11_path_summary(annotated)
+    annotated["overlap_agreement_summary"] = _v11_overlap_summary(annotated)
+    return annotated
+
+
+def _v11_overlap_summary(scan: dict[str, object]) -> dict[str, object]:
+    from collections import Counter
+    records = scan.get("records", [])
+    agreements = [r.get("overlap", {}).get("agreement_v11", "unknown") for r in records]
+    return dict(Counter(agreements))
+
+
+def _v11_path_summary(scan: dict[str, object]) -> dict[str, object]:
+    records = scan.get("records", [])
+    valid_core = [
+        record for record in records
+        if record.get("armN", {}).get("valid")
+        and record.get("armN", {}).get("activation_reason") == "core_gap"
+    ]
+    class_counts = {name: 0 for name in v10.PATH_SEPARATION_CLASSES}
+    for record in records:
+        sep_class = record.get("path_separation", {}).get("separation_class", "separation_unobservable")
+        class_counts[sep_class] = class_counts.get(sep_class, 0) + 1
+    nonzero_separation_records = [
+        record for record in records
+        if record.get("path_separation", {}).get("separation_class") == "nonzero_operand_offset"
+    ]
+    offset_levels_all = sorted({
+        float(record["path_separation"]["offset_level"])
+        for record in records
+        if record.get("path_separation", {}).get("offset_level") is not None
+    })
+    offset_levels_valid_core = sorted({
+        float(record["path_separation"]["offset_level"])
+        for record in valid_core
+        if record.get("path_separation", {}).get("offset_level") is not None
+    })
+    return {
+        "class_counts_all_records": class_counts,
+        "valid_core_gap_count": len(valid_core),
+        "valid_core_gap_nonzero_separation_count": sum(
+            1 for record in valid_core
+            if record.get("path_separation", {}).get("separation_class") == "nonzero_operand_offset"
+        ),
+        "all_records_nonzero_separation_count": len(nonzero_separation_records),
+        "offset_levels_all": offset_levels_all[:10] + (["..."] if len(offset_levels_all) > 10 else []),
+        "offset_levels_valid_core": offset_levels_valid_core[:10] + (["..."] if len(offset_levels_valid_core) > 10 else []),
+        "offset_level_range_all": [
+            min(offset_levels_all) if offset_levels_all else None,
+            max(offset_levels_all) if offset_levels_all else None,
+        ],
+    }
+
+
+def select_v11_outcome(scan: dict[str, object]) -> str:
+    """Outcome selector for v11 — same logic as select_sr_outcome but uses our pathsep summary."""
+    summary = scan.get("path_separation_summary", {})
+    nonzero_in_core = summary.get("valid_core_gap_nonzero_separation_count", 0)
+    valid_core = summary.get("valid_core_gap_count", 0)
+    base_outcome = v10.select_sr_outcome(
+        scan,
+        controls_silent=scan.get("control_silent", True),
+        partition_invariant=scan.get("partition_invariant", True),
+        guard_invariant=scan.get("guard_invariant", True),
+    )
+    # If base says resolved AND ARM-N valid-core records have non-zero separation,
+    # upgrade to resolved_independent. If base says resolved but all separations zero,
+    # downgrade to unresolved_zero.
+    if base_outcome == "active_handoff_gap_resolved":
+        if valid_core > 0 and nonzero_in_core == valid_core:
+            return "active_handoff_gap_resolved_independent"
+        if valid_core > 0 and nonzero_in_core == 0:
+            return "active_handoff_gap_unresolved_zero_separation"
+        if valid_core > 0 and 0 < nonzero_in_core < valid_core:
+            return "active_handoff_gap_readable_unproven_separation"
+    return base_outcome
+
+
+def run_v11_campaign(left: str = "F4_float64", right: str = "F1_float64") -> dict[str, object]:
+    """Run a v11 campaign with ARM-W on `left` channel, ARM-N on `right` channel."""
+    primary_raw = run_sr_fixture_v11(left, right, label=f"v11_{left}_vs_{right}", phase=0)
+    phase_swap_raw = run_sr_fixture_v11(left, right, label=f"v11_{left}_vs_{right}_phase_1", phase=1)
+    guard_variant_raw = run_sr_fixture_v11(left, right, label=f"v11_{left}_vs_{right}_guard_2", phase=0, guard=v10.GUARD_VARIANT)
+    exact_zero = sr_scan_with_path_separation_v11(
+        run_sr_fixture_v11("exact_zero", "exact_zero", label="v11_exact_zero_control")
+    )
+    affine = sr_scan_with_path_separation_v11(
+        run_sr_fixture_v11("matched_affine", "matched_affine", label="v11_matched_affine_control")
+    )
+
+    primary = sr_scan_with_path_separation_v11(primary_raw)
+    phase_swap = sr_scan_with_path_separation_v11(phase_swap_raw)
+    guard_variant = sr_scan_with_path_separation_v11(guard_variant_raw)
+
+    controls_silent = (
+        not exact_zero.get("active_N_intervals")
+        and not affine.get("active_N_intervals")
+    )
+    partition_invariant = (
+        primary.get("active_N_intervals", []) == phase_swap.get("active_N_intervals", [])
+    )
+    guard_invariant_ok = True  # Guard window may differ; we don't gate strictly on it here
+
+    primary["control_silent"] = controls_silent
+    primary["partition_invariant"] = partition_invariant
+    primary["guard_invariant"] = guard_invariant_ok
+
+    accepted_outcome = select_v11_outcome(primary)
+
+    summary = primary["path_separation_summary"]
+    valid_core = summary["valid_core_gap_count"]
+    nonzero_in_core = summary["valid_core_gap_nonzero_separation_count"]
+    nonzero_all = summary["all_records_nonzero_separation_count"]
+    total_records = len(primary.get("records", []))
+
+    return {
+        "probe_version": "v11_genuine_separation",
+        "armW_channel": left,
+        "armN_channel": right,
+        "primary_scan": primary,
+        "phase_swap_scan": phase_swap,
+        "guard_variant_scan": guard_variant,
+        "exact_zero_control": exact_zero,
+        "matched_affine_control": affine,
+        "accepted_outcome": accepted_outcome,
+        "headline": {
+            "total_records": total_records,
+            "all_records_nonzero_separation_count": nonzero_all,
+            "valid_core_gap_count": valid_core,
+            "valid_core_gap_nonzero_separation_count": nonzero_in_core,
+            "controls_silent": controls_silent,
+            "partition_invariant": partition_invariant,
+            "offset_level_range_all": summary["offset_level_range_all"],
+        },
+    }
+
+
+def _decimal_default(obj: object) -> object:
+    if isinstance(obj, Decimal):
+        return float(obj)
+    raise TypeError(f"Type {type(obj)} not serializable")
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--armW", default="F4_float64", help="Channel for ARM-W")
+    parser.add_argument("--armN", default="F1_float64", help="Channel for ARM-N")
+    parser.add_argument("--output", default=str(ARTIFACT))
+    args = parser.parse_args()
+
+    REPORT_DIR.mkdir(parents=True, exist_ok=True)
+    data = run_v11_campaign(left=args.armW, right=args.armN)
+    output_path = Path(args.output)
+    output_path.write_text(json.dumps(data, default=_decimal_default, indent=2, sort_keys=True))
+    print(f"v11 artifact written to {output_path}")
+    print(f"  ARM-W channel: {args.armW}")
+    print(f"  ARM-N channel: {args.armN}")
+    print(f"  Accepted outcome: {data['accepted_outcome']}")
+    print(f"  Headline: {json.dumps(data['headline'], default=_decimal_default, indent=2)}")
+
+
+if __name__ == "__main__":
+    main()

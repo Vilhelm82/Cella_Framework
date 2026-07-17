@@ -1,0 +1,36 @@
+{
+ "authority": "covariance note section 2 corollary 4 + PF_CITATIONS PF-1/PF-2/PF-4",
+ "b_p3_adopted_form": "DISTINCTNESS LEMMA (Claire's derivation, adopted per Will's GO): for irrational x the t-orbit values are pairwise DISTINCT - if t_q1 == t_q2 (q1 < q2) then by the bookmark identity the binary tails at depths q1, q2 coincide, making the expansion eventually periodic, hence x rational (PF-2), contradiction; the strictly-decreasing quantum guarantees the depths differ. Graded as: |{t_q : q in window}| == window length, decided by exact pairwise comparisons (sqrt t-values compared via the s-offsets: t_q1 == t_q2 <=> (x - s_q1)/u_q1 == (x - s_q2)/u_q2 <=> x*(u_q2 - u_q1) == s_q1*u_q2 - s_q2*u_q1, a rational comparison decidable by squaring - derived, cited). STRONGER than no-periodicity: any duplicate is a periodicity detection and stops the stage.",
+ "battery_counts": {
+  "denominators": "3,5,7,11,23,37,9,27,49,15,21,255 + 907(ord 906), 941(ord 940), 947(ord 946)",
+  "rational_cases": 132,
+  "sqrt_cases": 110,
+  "stage_a_resweep": "all 7 Stage-A battery files under their existing pins"
+ },
+ "battery_pins_sha256_prefix16": {
+  "rationals.json": "77445eafcd8cb24b",
+  "sqrts_b.json": "4530fbbc942f2e24"
+ },
+ "campaign": "precision_flow",
+ "date_approved": "2026-06-11 (Will's GO; binding order: manifest first; distinctness-lemma form of B-P3 ADOPTED per the GO's option)",
+ "determinism": "batteries literal; zero RNG at runtime; byte-stable re-run; FAIL or any periodicity detection stops the stage for Will.",
+ "environment_pins": {
+  "dependencies": "stdlib only",
+  "python": "3.14.4"
+ },
+ "frozen": true,
+ "grading_formulas_derived_and_cited": {
+  "B-P1": "transient derived at freeze (PF-1): every battery denominator's odd part b0 has pre-period s = 0 (odd denominator => purely periodic expansion; powers-of-2 scalings shift the binade, not the parity), and by the bookmark identity t_q is a function of the depth-(q-binade-1) tail, so the orbit is purely periodic from q = 53; transient_bound_q = 0 per case, NO free parameter. Minimal period measured over window_steps = max(2*ord2+60, 28) t-values by smallest P >= 1 with t[i] == t[i+P] for all i (exact Q equality); graded == ord2_frozen (computed by exact iteration at freeze).",
+  "B-P2": "rational phenomena: t_q = (x - rn(x,q))/u_q graded == recentred fractional part f* of x/u_q in Q, where f = x/u_q - floor(x/u_q); f* = f if f < 1/2, f - 1 if f > 1/2, and at f == 1/2 exactly: +1/2 if floor even else -1/2 (ties-even; authority section 1 tie anatomy). sqrt phenomena: same identity graded in comparison form - the referee's integer choice n == floor + recentring decision from exact comparisons (the identity's discrete content; t itself is irrational). Stage-A batteries re-swept under the rational form (all classes) and sqrt comparison form.",
+  "B-P3": "as b_p3_adopted_form."
+ },
+ "object": "arithmetic of the orbit (period = ord2; the bookmark identity; theorem-backed aperiodicity policing)",
+ "observational": "empirical t-distributions per battery class - OBSERVATIONAL ONLY, no verdict, normality fence PF-4 cited inline in the deliverable.",
+ "performance_budget": "120 s wall (large-ord windows ~1950 steps x 3 cases dominate; projected well under).",
+ "predictions_verbatim_from_brief": {
+  "B-P1": "for every rational case, the t-orbit's eventual minimal period EQUALS ord2(b0) - the cited theorem's value, frozen per-case in the manifest. Equality, not divisibility.",
+  "B-P2": "at every step of every case (rational AND sqrt AND the Stage-A batteries re-swept), t_q equals the re-centered fractional part of x/u_q, exactly in Q. This grades the interpretation - the account IS the unread tail - as a theorem-level identity, not a metaphor.",
+  "B-P3": "zero periodicity detections in the sqrt battery across the swept window. Backed by citation (ii): eventually-periodic <=> rational; therefore any detection is an INSTRUMENT DEFECT and stops the stage - this prediction polices the orbit machinery, not the mathematics."
+ },
+ "stage": "B"
+}

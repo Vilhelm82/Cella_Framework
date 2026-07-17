@@ -1,0 +1,1246 @@
+{
+ "authority": "Build_Docs/Agent_tasks/CAMPAIGN_ROOT_CLOSURE_ATLAS_DRAFT.md (approved; sections 8 D4, 17 S1-S10)",
+ "campaign_id": "root_closure_atlas",
+ "date_stamped_from_machine": "2026-06-11",
+ "determinism": "fixtures and grids pinned literals; zero RNG; battery byte-stable x2 (P0.1); records sha-pinned",
+ "fixtures": [
+  {
+   "bracket": [
+    "0x0.0p+0",
+    "0x1.0p+0"
+   ],
+   "facet_tags": [
+    "A",
+    "B"
+   ],
+   "fixture_id": "FXA1",
+   "fx_class": "FX-A",
+   "lv3_graph_lift": "(x - 1/3)*(x + 2) - y",
+   "lv3_param_form": null,
+   "notes": "terminal cell non-trivial: 1/3 strictly interior",
+   "pathology": "root non-representable in float64 (1/3)",
+   "q_roots": [
+    "1/3"
+   ],
+   "sexpr": "(mul (sub x 1/3) (add x 2/1))",
+   "sign_change_expected": true,
+   "starts": [
+    "0x1.0p-1",
+    "0x1.999999999999ap-4"
+   ]
+  },
+  {
+   "bracket": [
+    "0x1.0p+0",
+    "0x1.0p+1"
+   ],
+   "facet_tags": [
+    "A"
+   ],
+   "fixture_id": "FXA2",
+   "fx_class": "FX-A",
+   "lv3_graph_lift": "x**2 - 2 - y",
+   "lv3_param_form": null,
+   "notes": "",
+   "pathology": "irrational root sqrt(2) \u2014 cell-only ground truth",
+   "q_roots": null,
+   "sexpr": "(sub (pow x 2) 2/1)",
+   "sign_change_expected": true,
+   "starts": [
+    "0x1.8p+0"
+   ]
+  },
+  {
+   "bracket": [
+    "0x1.0p+0",
+    "0x1.0p+1"
+   ],
+   "facet_tags": [
+    "D"
+   ],
+   "fixture_id": "FXB2",
+   "fx_class": "FX-B",
+   "lv3_graph_lift": "(x - 3/2)**2 - y",
+   "lv3_param_form": "(x - 3/2)**2",
+   "multiplicity": 2,
+   "notes": "S2 dual-encoding pin",
+   "pathology": "even multiplicity: NO sign change; classical Newton linear-only convergence",
+   "q_roots": [
+    "3/2"
+   ],
+   "sexpr": "(pow (sub x 3/2) 2)",
+   "sign_change_expected": false,
+   "starts": [
+    "0x1.0p+0",
+    "0x1.cp+0"
+   ]
+  },
+  {
+   "bracket": [
+    "0x0.0p+0",
+    "0x1.0p+0"
+   ],
+   "facet_tags": [
+    "D"
+   ],
+   "fixture_id": "FXB3",
+   "fx_class": "FX-B",
+   "lv3_graph_lift": "(x - 1/3)**3 - y",
+   "lv3_param_form": "(x - 1/3)**3",
+   "multiplicity": 3,
+   "notes": "",
+   "pathology": "odd multiplicity 3, non-dyadic root",
+   "q_roots": [
+    "1/3"
+   ],
+   "sexpr": "(pow (sub x 1/3) 3)",
+   "sign_change_expected": true,
+   "starts": [
+    "0x1.0p-1"
+   ]
+  },
+  {
+   "bracket": [
+    "0x0.0p+0",
+    "0x1.0p+0"
+   ],
+   "facet_tags": [
+    "D"
+   ],
+   "fixture_id": "FXB4",
+   "fx_class": "FX-B",
+   "lv3_graph_lift": "(x - 1/3)**4 - y",
+   "lv3_param_form": "(x - 1/3)**4",
+   "multiplicity": 4,
+   "notes": "added at freeze per Will 2026-06-11",
+   "pathology": "even multiplicity 4, NON-dyadic root: no sign change AND no float carries the exact zero \u2014 the even x non-dyadic grid cell (certificate: none)",
+   "q_roots": [
+    "1/3"
+   ],
+   "sexpr": "(pow (sub x 1/3) 4)",
+   "sign_change_expected": false,
+   "starts": [
+    "0x1.0p-1"
+   ]
+  },
+  {
+   "bracket": [
+    "0x1.0p+0",
+    "0x1.8p+0"
+   ],
+   "facet_tags": [
+    "D"
+   ],
+   "fixture_id": "FXB5",
+   "fx_class": "FX-B",
+   "lv3_graph_lift": "(x - 5/4)**5 - y",
+   "lv3_param_form": "(x - 5/4)**5",
+   "multiplicity": 5,
+   "notes": "",
+   "pathology": "multiplicity 5, dyadic root",
+   "q_roots": [
+    "5/4"
+   ],
+   "sexpr": "(pow (sub x 5/4) 5)",
+   "sign_change_expected": true,
+   "starts": [
+    "0x1.2p+0"
+   ]
+  },
+  {
+   "bracket": [
+    "0x1.8p-1",
+    "0x1.4p+0"
+   ],
+   "cluster_eps_exp": 10,
+   "facet_tags": [
+    "D"
+   ],
+   "fixture_id": "FXC_e10",
+   "fx_class": "FX-C",
+   "lv3_graph_lift": "(x - 1)*((x - 1)**2 - 2**(-20)) - y",
+   "lv3_param_form": null,
+   "notes": "ladder member",
+   "pathology": "3-root cluster, eps = 2^-10",
+   "q_roots": [
+    "1/1",
+    "1023/1024",
+    "1025/1024"
+   ],
+   "sexpr": "(mul (sub x 1/1) (sub (pow (sub x 1/1) 2) 1/1048576))",
+   "sign_change_expected": true,
+   "starts": [
+    "0x1.0p+0"
+   ]
+  },
+  {
+   "bracket": [
+    "0x1.8p-1",
+    "0x1.4p+0"
+   ],
+   "cluster_eps_exp": 26,
+   "facet_tags": [
+    "D"
+   ],
+   "fixture_id": "FXC_e26",
+   "fx_class": "FX-C",
+   "lv3_graph_lift": "(x - 1)*((x - 1)**2 - 2**(-52)) - y",
+   "lv3_param_form": null,
+   "notes": "ladder member",
+   "pathology": "3-root cluster, eps = 2^-26",
+   "q_roots": [
+    "1/1",
+    "67108863/67108864",
+    "67108865/67108864"
+   ],
+   "sexpr": "(mul (sub x 1/1) (sub (pow (sub x 1/1) 2) 1/4503599627370496))",
+   "sign_change_expected": true,
+   "starts": [
+    "0x1.0p+0"
+   ]
+  },
+  {
+   "bracket": [
+    "0x1.8p-1",
+    "0x1.4p+0"
+   ],
+   "cluster_eps_exp": 40,
+   "facet_tags": [
+    "D"
+   ],
+   "fixture_id": "FXC_e40",
+   "fx_class": "FX-C",
+   "lv3_graph_lift": "(x - 1)*((x - 1)**2 - 2**(-80)) - y",
+   "lv3_param_form": null,
+   "notes": "ladder member",
+   "pathology": "3-root cluster, eps = 2^-40",
+   "q_roots": [
+    "1/1",
+    "1099511627775/1099511627776",
+    "1099511627777/1099511627776"
+   ],
+   "sexpr": "(mul (sub x 1/1) (sub (pow (sub x 1/1) 2) 1/1208925819614629174706176))",
+   "sign_change_expected": true,
+   "starts": [
+    "0x1.0p+0"
+   ]
+  },
+  {
+   "bracket": [
+    "0x1.8p-1",
+    "0x1.4p+0"
+   ],
+   "cluster_eps_exp": 52,
+   "facet_tags": [
+    "D"
+   ],
+   "fixture_id": "FXC_e52",
+   "fx_class": "FX-C",
+   "lv3_graph_lift": "(x - 1)*((x - 1)**2 - 2**(-104)) - y",
+   "lv3_param_form": null,
+   "notes": "ladder member",
+   "pathology": "3-root cluster, eps = 2^-52",
+   "q_roots": [
+    "1/1",
+    "4503599627370495/4503599627370496",
+    "4503599627370497/4503599627370496"
+   ],
+   "sexpr": "(mul (sub x 1/1) (sub (pow (sub x 1/1) 2) 1/20282409603651670423947251286016))",
+   "sign_change_expected": true,
+   "starts": [
+    "0x1.0p+0"
+   ]
+  },
+  {
+   "bracket": [
+    "0x1.0p-1",
+    "0x1.0p+0"
+   ],
+   "facet_tags": [
+    "D"
+   ],
+   "fixture_id": "FXC_kerr0",
+   "fx_class": "FX-C",
+   "kerr_a_hex": "0x1.ff80000000000p-1",
+   "lv3_graph_lift": "x**2 - 2*x + 0.9990234375**2 - y",
+   "lv3_param_form": "x - 1 - (1 - 0.9990234375**2)**0.5",
+   "multiplicity": null,
+   "notes": "S6 explicit-branch dual encoding pinned",
+   "pathology": "Kerr Delta(r) horizon pair, a -> M merger (A9); extremal = double root, no sign change",
+   "q_roots": null,
+   "sexpr": "(add (sub (pow x 2) (mul 2/1 x)) 1046529/1048576)",
+   "sign_change_expected": true,
+   "starts": [
+    "0x1.0p+0",
+    "0x1.8p+0"
+   ]
+  },
+  {
+   "bracket": [
+    "0x1.0p-1",
+    "0x1.0p+0"
+   ],
+   "facet_tags": [
+    "D"
+   ],
+   "fixture_id": "FXC_kerr1",
+   "fx_class": "FX-C",
+   "kerr_a_hex": "0x1.ffffff8000000p-1",
+   "lv3_graph_lift": "x**2 - 2*x + 0.9999999850988388**2 - y",
+   "lv3_param_form": "x - 1 - (1 - 0.9999999850988388**2)**0.5",
+   "multiplicity": null,
+   "notes": "S6 explicit-branch dual encoding pinned",
+   "pathology": "Kerr Delta(r) horizon pair, a -> M merger (A9); extremal = double root, no sign change",
+   "q_roots": null,
+   "sexpr": "(add (sub (pow x 2) (mul 2/1 x)) 4503599493152769/4503599627370496)",
+   "sign_change_expected": true,
+   "starts": [
+    "0x1.0p+0",
+    "0x1.8p+0"
+   ]
+  },
+  {
+   "bracket": [
+    "0x1.0p-1",
+    "0x1.8p+0"
+   ],
+   "facet_tags": [
+    "D"
+   ],
+   "fixture_id": "FXC_kerr2",
+   "fx_class": "FX-C",
+   "kerr_a_hex": "0x1.0000000000000p+0",
+   "lv3_graph_lift": "x**2 - 2*x + 1.0**2 - y",
+   "lv3_param_form": "x - 1 - (1 - 1.0**2)**0.5",
+   "multiplicity": 2,
+   "notes": "S6 explicit-branch dual encoding pinned",
+   "pathology": "Kerr Delta(r) horizon pair, a -> M merger (A9); extremal = double root, no sign change",
+   "q_roots": [
+    "1/1"
+   ],
+   "sexpr": "(add (sub (pow x 2) (mul 2/1 x)) 1/1)",
+   "sign_change_expected": false,
+   "starts": [
+    "0x1.0p+0",
+    "0x1.8p+0"
+   ]
+  },
+  {
+   "bracket": [
+    "0x1.0p+0",
+    "0x1.0p+1"
+   ],
+   "facet_tags": [
+    "A",
+    "C"
+   ],
+   "fixture_id": "FXD1",
+   "fx_class": "FX-D",
+   "lv3_graph_lift": "x - 3/2 - y",
+   "lv3_param_form": null,
+   "notes": "exact_zero certificate expected",
+   "pathology": "root exactly a float64 (cell degenerates to a point)",
+   "q_roots": [
+    "3/2"
+   ],
+   "sexpr": "(sub x 3/2)",
+   "sign_change_expected": true,
+   "starts": [
+    "0x1.4p+0"
+   ]
+  },
+  {
+   "bracket": [
+    "0x1.8p+0",
+    "0x1.4p+1"
+   ],
+   "facet_tags": [
+    "A"
+   ],
+   "fixture_id": "FXD3",
+   "fx_class": "FX-D",
+   "lv3_graph_lift": "(x - 2)*(x + 1/3) - y",
+   "lv3_param_form": null,
+   "notes": "",
+   "pathology": "root at a binade boundary (2.0)",
+   "q_roots": [
+    "2/1"
+   ],
+   "sexpr": "(mul (sub x 2/1) (add x 1/3))",
+   "sign_change_expected": true,
+   "starts": [
+    "0x1.cp+0"
+   ]
+  },
+  {
+   "bracket": [
+    "0x1.fp-1",
+    "0x1.08p+0"
+   ],
+   "facet_tags": [
+    "B",
+    "C"
+   ],
+   "fixture_id": "FXE1",
+   "fx_class": "FX-E",
+   "ghost_min_at": "1/1",
+   "lv3_graph_lift": "x**2 - 2*x + 1 + 2**(-200) - y",
+   "lv3_param_form": null,
+   "notes": "route pinned: expanded",
+   "pathology": "exact f >= 2^-200 > 0 everywhere; expanded route cancels to float noise near x=1 \u2014 spurious zero crossings; classical convergence here is a lie",
+   "q_roots": [],
+   "sexpr": "(add (add (sub (pow x 2) (mul 2/1 x)) 1/1) 1/1606938044258990275541962092341162602522202993782792835301376)",
+   "sign_change_expected": false,
+   "starts": [
+    "0x1.0p+0",
+    "0x1.fp-1"
+   ]
+  },
+  {
+   "bracket": [
+    "0x1.dcd65p+29",
+    "0x1.2a05f2p+30"
+   ],
+   "facet_tags": [
+    "B"
+   ],
+   "fixture_id": "FXE2",
+   "fx_class": "FX-E",
+   "ghost_min_at": null,
+   "lv3_graph_lift": "(x + 1)**2 - x**2 - 2*x - 1 + 2**(-30) - y",
+   "lv3_param_form": null,
+   "notes": "S10 noise-regime parameter pin",
+   "pathology": "algebraic-identity ghost: exact f == 2^-30 > 0; float noise regime needs x >~ 1.1e8 (S10 pin)",
+   "q_roots": [],
+   "sexpr": "(add (sub (sub (sub (pow (add x 1/1) 2) (pow x 2)) (mul 2/1 x)) 1/1) 1/1073741824)",
+   "sign_change_expected": false,
+   "starts": [
+    "0x1.0p+30"
+   ]
+  },
+  {
+   "bracket": [
+    "0x1.2p+0",
+    "0x1.0p+1"
+   ],
+   "facet_tags": [
+    "C"
+   ],
+   "fixture_id": "FXF1",
+   "fx_class": "FX-F",
+   "lv3_graph_lift": "1/(x - 1) - 2 - y",
+   "lv3_param_form": null,
+   "notes": "bracket excludes the pole",
+   "pathology": "root/pole interlace: pole at 1, root at 3/2",
+   "pole_at": "1/1",
+   "q_roots": [
+    "3/2"
+   ],
+   "sexpr": "(sub (div 1/1 (sub x 1/1)) 2/1)",
+   "sign_change_expected": true,
+   "starts": [
+    "0x1.8p+0"
+   ]
+  },
+  {
+   "bracket": [
+    "0x0.0p+0",
+    "0x1.0p+1"
+   ],
+   "facet_tags": [
+    "C"
+   ],
+   "fixture_id": "FXF2",
+   "fx_class": "FX-F",
+   "lv3_graph_lift": "(x - 3)/(x - 1) - y",
+   "lv3_param_form": null,
+   "notes": "classical bisection's classic lie: converges to the pole",
+   "pathology": "POLE-ONLY sign change in bracket [0,2]: the sign flips at x=1 with NO root there (root x=3 outside)",
+   "pole_at": "1/1",
+   "q_roots": [],
+   "sexpr": "(div (sub x 3/1) (sub x 1/1))",
+   "sign_change_expected": true,
+   "starts": [
+    "0x1.0p-1",
+    "0x1.8p+0"
+   ]
+  },
+  {
+   "bracket": [
+    "0x1.0p+0",
+    "0x1.0p+1"
+   ],
+   "facet_tags": [
+    "C"
+   ],
+   "fixture_id": "FXG1",
+   "fx_class": "FX-G",
+   "kink_at": "1/1",
+   "lv3_graph_lift": "abs(x - 1) - 1/2 - y",
+   "lv3_param_form": null,
+   "notes": "S5 contrast fixture",
+   "pathology": "roots flank the kink at 1 (HR134 field-screen fixture; S5: lv3 smooths the kink silently); bracket isolates 3/2 with the kink interior \u2014 bisection must cross it",
+   "q_roots": [
+    "3/2"
+   ],
+   "sexpr": "(sub (abs (sub x 1/1)) 1/2)",
+   "sign_change_expected": true,
+   "starts": [
+    "0x1.0p+0",
+    "0x1.cp-1"
+   ]
+  },
+  {
+   "bracket": [
+    "0x1.0p-1",
+    "0x1.8p+0"
+   ],
+   "facet_tags": [
+    "C",
+    "D"
+   ],
+   "fixture_id": "FXG2",
+   "fx_class": "FX-G",
+   "kink_at": "1/1",
+   "lv3_graph_lift": "abs(x - 1) - y",
+   "lv3_param_form": "abs(x - 1)",
+   "notes": "exact_zero certificate, no cell",
+   "pathology": "tangency at the kink: touches zero at x=1, no sign change; exact zero AT a float",
+   "q_roots": [
+    "1/1"
+   ],
+   "sexpr": "(abs (sub x 1/1))",
+   "sign_change_expected": false,
+   "starts": [
+    "0x1.0p+0"
+   ]
+  },
+  {
+   "bracket": [
+    "0x1.9p+3",
+    "0x1.bp+3"
+   ],
+   "coeffs_hex": [
+    "0x1.0000000000000p+0",
+    "-0x1.a400000000000p+7",
+    "0x1.421c000000000p+14",
+    "-0x1.32d9200000000p+20",
+    "0x1.96dc250000000p+25",
+    "-0x1.8eb3ebd000000p+30",
+    "0x1.2b4d92ddc0000p+35",
+    "-0x1.60177a24e8000p+39",
+    "0x1.492c215d26a00p+43",
+    "-0x1.ed418aa775280p+46",
+    "0x1.294c8df56adacp+50",
+    "-0x1.2042f1a583b0dp+53",
+    "0x1.bfdc611a2a6d6p+55",
+    "-0x1.14851321d0d39p+58",
+    "0x1.0bedfc8d1559bp+60",
+    "-0x1.8fad92626f97cp+61",
+    "0x1.be302d10f0c60p+62",
+    "-0x1.653d778c7766dp+63",
+    "0x1.7f219cb8912cfp+63",
+    "-0x1.e5e2df7512830p+62",
+    "0x1.0e1b3be415a00p+61"
+   ],
+   "facet_tags": [
+    "B",
+    "C"
+   ],
+   "fixture_id": "FXH1",
+   "fx_class": "FX-H",
+   "lv3_graph_lift": "<horner20_rounded> - y (pinned via coeffs_hex)",
+   "lv3_param_form": null,
+   "notes": "S7: lv3 defaults never probe 7..10",
+   "pathology": "W20 with float64-ROUNDED coefficients; ground truth = roots of the rounded polynomial (backward-error story explicit, recorded as metadata, not graded); bracket isolates the single cell near 13",
+   "q_roots": null,
+   "sexpr": "(add (mul (add (mul (add (mul (add (mul (add (mul (add (mul (add (mul (add (mul (add (mul (add (mul (add (mul (add (mul (add (mul (add (mul (add (mul (add (mul (add (mul (add (mul (add (mul (add (mul 1/1 x) -210/1) x) 20615/1) x) -1256850/1) x) 53327946/1) x) -1672280820/1) x) 40171771630/1) x) -756111184500/1) x) 11310276995381/1) x) -135585182899530/1) x) 1307535010540395/1) x) -10142299865511450/1) x) 63030812099294896/1) x) -311333643161390656/1) x) 1206647803780373248/1) x) -3599979517947607040/1) x) 8037811822645051392/1) x) -12870931245150988288/1) x) 13803759753640704000/1) x) -8752948036761600000/1) x) 2432902008176640000/1)",
+   "sign_change_expected": true,
+   "starts": [
+    "0x1.ap+3"
+   ]
+  },
+  {
+   "bracket": [
+    "0x1.1p+3",
+    "0x1.3p+3"
+   ],
+   "coeffs_hex": [
+    "0x1.0000000000000p+0",
+    "-0x1.a3fffffc00000p+7",
+    "0x1.421c000000000p+14",
+    "-0x1.32d9200000000p+20",
+    "0x1.96dc250000000p+25",
+    "-0x1.8eb3ebd000000p+30",
+    "0x1.2b4d92ddc0000p+35",
+    "-0x1.60177a24e8000p+39",
+    "0x1.492c215d26a00p+43",
+    "-0x1.ed418aa775280p+46",
+    "0x1.294c8df56adacp+50",
+    "-0x1.2042f1a583b0dp+53",
+    "0x1.bfdc611a2a6d6p+55",
+    "-0x1.14851321d0d39p+58",
+    "0x1.0bedfc8d1559bp+60",
+    "-0x1.8fad92626f97cp+61",
+    "0x1.be302d10f0c60p+62",
+    "-0x1.653d778c7766dp+63",
+    "0x1.7f219cb8912cfp+63",
+    "-0x1.e5e2df7512830p+62",
+    "0x1.0e1b3be415a00p+61"
+   ],
+   "facet_tags": [
+    "B",
+    "C"
+   ],
+   "fixture_id": "FXH2",
+   "fx_class": "FX-H",
+   "lv3_graph_lift": "<horner20_perturbed> - y (pinned via coeffs_hex)",
+   "lv3_param_form": null,
+   "notes": "",
+   "pathology": "Wilkinson classic: c19 += 2^-23 \u2014 real-root structure collapses (roots ~10..19 leave the real line); the surviving real cells are the recorded truth",
+   "q_roots": null,
+   "sexpr": "(add (mul (add (mul (add (mul (add (mul (add (mul (add (mul (add (mul (add (mul (add (mul (add (mul (add (mul (add (mul (add (mul (add (mul (add (mul (add (mul (add (mul (add (mul (add (mul (add (mul 1/1 x) -1761607679/8388608) x) 20615/1) x) -1256850/1) x) 53327946/1) x) -1672280820/1) x) 40171771630/1) x) -756111184500/1) x) 11310276995381/1) x) -135585182899530/1) x) 1307535010540395/1) x) -10142299865511450/1) x) 63030812099294896/1) x) -311333643161390656/1) x) 1206647803780373248/1) x) -3599979517947607040/1) x) 8037811822645051392/1) x) -12870931245150988288/1) x) 13803759753640704000/1) x) -8752948036761600000/1) x) 2432902008176640000/1)",
+   "sign_change_expected": true,
+   "starts": [
+    "0x1.4p+3"
+   ]
+  },
+  {
+   "bracket": [
+    "-0x1.0p+1",
+    "0x0.0p+0"
+   ],
+   "facet_tags": [
+    "E"
+   ],
+   "fixture_id": "FXI1",
+   "fx_class": "FX-I",
+   "lv3_graph_lift": "x**3 - 2*x + 2 - y",
+   "lv3_param_form": null,
+   "notes": "trap start pinned FIRST",
+   "pathology": "textbook Newton 2-cycle from x0 = 0 (S9: V3 ensemble defeats it \u2014 guaranteed contrast row)",
+   "q_roots": null,
+   "sexpr": "(add (sub (pow x 3) (mul 2/1 x)) 2/1)",
+   "sign_change_expected": true,
+   "starts": [
+    "0x0.0p+0",
+    "-0x1.cp+0"
+   ]
+  },
+  {
+   "bracket": [
+    "-0x1.8p+0",
+    "0x1.8p+0"
+   ],
+   "facet_tags": [
+    "E"
+   ],
+   "fixture_id": "FXI2",
+   "fx_class": "FX-I",
+   "lv3_graph_lift": "x**3 - x - y",
+   "lv3_param_form": null,
+   "notes": "first start = RN(1/sqrt(5)) basin boundary",
+   "pathology": "3 real roots; basin-boundary starts near 1/sqrt(5) \u2014 landing-root variability vs start recorded",
+   "q_roots": [
+    "-1/1",
+    "0/1",
+    "1/1"
+   ],
+   "sexpr": "(sub (pow x 3) x)",
+   "sign_change_expected": true,
+   "starts": [
+    "0x1.c9f25c5bfedd9p-2",
+    "0x1.cap-2",
+    "0x1.0p-1",
+    "-0x1.0p-1"
+   ]
+  },
+  {
+   "annex": true,
+   "bracket": [
+    "0x1.0p+0",
+    "0x1.0p+1"
+   ],
+   "facet_tags": [
+    "C"
+   ],
+   "fixture_id": "FXJ1",
+   "fx_class": "FX-J",
+   "lv3_graph_lift": "sin(x) - x/2 - y",
+   "lv3_param_form": null,
+   "notes": "x=0 root excluded by bracket",
+   "pathology": "transcendental; positive root ~1.8955",
+   "q_roots": null,
+   "sexpr": "(sub (sin x) (mul 1/2 x))",
+   "sign_change_expected": true,
+   "starts": [
+    "0x1.8p+0"
+   ]
+  },
+  {
+   "annex": true,
+   "bracket": [
+    "0x0.0p+0",
+    "0x1.0p+0"
+   ],
+   "facet_tags": [
+    "C"
+   ],
+   "fixture_id": "FXJ2",
+   "fx_class": "FX-J",
+   "lv3_graph_lift": "exp(-x) - x - y",
+   "lv3_param_form": null,
+   "notes": "",
+   "pathology": "transcendental; root ~0.5671 (Omega)",
+   "q_roots": null,
+   "sexpr": "(sub (exp (neg x)) x)",
+   "sign_change_expected": true,
+   "starts": [
+    "0x1.0p-1"
+   ]
+  },
+  {
+   "annex": true,
+   "bracket": [
+    "0x1.0p+0",
+    "0x1.0p+1"
+   ],
+   "facet_tags": [
+    "C"
+   ],
+   "fixture_id": "FXJ3",
+   "fx_class": "FX-J",
+   "lv3_graph_lift": "log(x) - 1/2 - y",
+   "lv3_param_form": null,
+   "notes": "",
+   "pathology": "log-chain; root sqrt(e) ~1.6487",
+   "q_roots": null,
+   "sexpr": "(sub (log x) 1/2)",
+   "sign_change_expected": true,
+   "starts": [
+    "0x1.8p+0"
+   ]
+  },
+  {
+   "bracket": [
+    "0x0.0p+0",
+    "0x1.0p+0"
+   ],
+   "facet_tags": [
+    "B",
+    "E"
+   ],
+   "fixture_id": "FXK1a",
+   "fx_class": "FX-K",
+   "lv3_graph_lift": "x**2 + 5*x/3 - 2/3 - y",
+   "lv3_param_form": null,
+   "notes": "pair of FXK1b",
+   "pathology": "expanded route of (x-1/3)(x+2)",
+   "q_roots": [
+    "1/3"
+   ],
+   "route_pair": "K1",
+   "sexpr": "(sub (add (pow x 2) (mul 5/3 x)) 2/3)",
+   "sign_change_expected": true,
+   "starts": [
+    "0x1.0p-1"
+   ]
+  },
+  {
+   "bracket": [
+    "0x0.0p+0",
+    "0x1.0p+0"
+   ],
+   "facet_tags": [
+    "B",
+    "E"
+   ],
+   "fixture_id": "FXK1b",
+   "fx_class": "FX-K",
+   "lv3_graph_lift": "(x - 1/3)*(x + 2) - y",
+   "lv3_param_form": null,
+   "notes": "pair of FXK1a",
+   "pathology": "factored route of the same f",
+   "q_roots": [
+    "1/3"
+   ],
+   "route_pair": "K1",
+   "sexpr": "(mul (sub x 1/3) (add x 2/1))",
+   "sign_change_expected": true,
+   "starts": [
+    "0x1.0p-1"
+   ]
+  },
+  {
+   "annex": true,
+   "bracket": [
+    "0x1.0p+0",
+    "0x1.0p+1"
+   ],
+   "facet_tags": [
+    "B"
+   ],
+   "fixture_id": "FXK3a",
+   "fx_class": "FX-K",
+   "lv3_graph_lift": "sqrt(x)*sqrt(x) - 3/2 - y",
+   "lv3_param_form": null,
+   "notes": "pair of FXK3b",
+   "pathology": "c1 sqrt-square chain (task031/HR134 lineage); TRUE root 3/2 but lane-\u211a inapplicable through sqrt",
+   "q_roots": null,
+   "route_pair": "K3",
+   "sexpr": "(sub (mul (sqrt x) (sqrt x)) 3/2)",
+   "sign_change_expected": true,
+   "starts": [
+    "0x1.8p+0"
+   ]
+  },
+  {
+   "annex": true,
+   "bracket": [
+    "0x1.0p+0",
+    "0x1.0p+1"
+   ],
+   "facet_tags": [
+    "B"
+   ],
+   "fixture_id": "FXK3b",
+   "fx_class": "FX-K",
+   "lv3_graph_lift": "sqrt(x*x) - 3/2 - y",
+   "lv3_param_form": null,
+   "notes": "pair of FXK3a",
+   "pathology": "c2 chain form of the same f",
+   "q_roots": null,
+   "route_pair": "K3",
+   "sexpr": "(sub (sqrt (mul x x)) 3/2)",
+   "sign_change_expected": true,
+   "starts": [
+    "0x1.8p+0"
+   ]
+  }
+ ],
+ "freeze_note": "FROZEN on Will's sign-off 2026-06-11 (machine date). P0.5 PINNED PRE-EXECUTION AMENDMENT: the certificate vocabulary carries a fifth value exact_zero beyond the brief's four (degenerate-cell + Axiom 6/9 argument, deviation note in SCHEMA.md) \u2014 blessed, pinned here BEFORE any battery record exists, so P0.5 grades against schema-v1-as-amended. FXD2 cut blessed (wall-identity, note in FIXTURES.md; subnormal regime-wall = manifest-v2 candidate). FXB4 added at freeze (m=4, even x non-dyadic).",
+ "frozen": true,
+ "i1_stopping_rules_registered": {
+  "I1a_bisection": {
+   "max_iter": 200,
+   "xtol_abs": 1e-12
+  },
+  "I1b_newton": {
+   "ftol_abs": 1e-12,
+   "max_iter": 100,
+   "xtol_rel": 8.881784197001252e-16
+  },
+  "I1c_halley": {
+   "ftol_abs": 1e-12,
+   "max_iter": 100,
+   "xtol_rel": 8.881784197001252e-16
+  },
+  "I1d_secant": {
+   "ftol_abs": 1e-12,
+   "max_iter": 100,
+   "xtol_rel": 8.881784197001252e-16
+  }
+ },
+ "i2_encoding_policy": "graph lift F(x,y) = f(x) - y solved at y = 0 (S1); dual param_form pinned for degeneracy-bearing fixtures (S2/S6); I2_multi_start with pinned start grids is primary (S7/S8), I2_solve_defaults the recorded variant; v3_status_bucket column verbatim (S3)",
+ "i2_lift_expressions_pinned": {
+  "FXA1": "(x - 1/3)*(x + 2) - y",
+  "FXA2": "x**2 - 2 - y",
+  "FXB2": "(x - 3/2)**2 - y",
+  "FXB3": "(x - 1/3)**3 - y",
+  "FXB4": "(x - 1/3)**4 - y",
+  "FXB5": "(x - 5/4)**5 - y",
+  "FXC_e10": "(x - 1)*((x - 1)**2 - 2**(-20)) - y",
+  "FXC_e26": "(x - 1)*((x - 1)**2 - 2**(-52)) - y",
+  "FXC_e40": "(x - 1)*((x - 1)**2 - 2**(-80)) - y",
+  "FXC_e52": "(x - 1)*((x - 1)**2 - 2**(-104)) - y",
+  "FXC_kerr0": "x**2 - 2*x + 0.9990234375**2 - y",
+  "FXC_kerr1": "x**2 - 2*x + 0.9999999850988388**2 - y",
+  "FXC_kerr2": "x**2 - 2*x + 1.0**2 - y",
+  "FXD1": "x - 3/2 - y",
+  "FXD3": "(x - 2)*(x + 1/3) - y",
+  "FXE1": "x**2 - 2*x + 1 + 2**(-200) - y",
+  "FXE2": "(x + 1)**2 - x**2 - 2*x - 1 + 2**(-30) - y",
+  "FXF1": "1/(x - 1) - 2 - y",
+  "FXF2": "(x - 3)/(x - 1) - y",
+  "FXG1": "abs(x - 1) - 1/2 - y",
+  "FXG2": "abs(x - 1) - y",
+  "FXH1": "((((((((((((((((((((((((((((((((((((((((1.0)*x + -210.0))*x + 20615.0))*x + -1256850.0))*x + 53327946.0))*x + -1672280820.0))*x + 40171771630.0))*x + -756111184500.0))*x + 11310276995381.0))*x + -135585182899530.0))*x + 1307535010540395.0))*x + -1.014229986551145e+16))*x + 6.30308120992949e+16))*x + -3.1133364316139066e+17))*x + 1.2066478037803732e+18))*x + -3.599979517947607e+18))*x + 8.037811822645051e+18))*x + -1.2870931245150988e+19))*x + 1.3803759753640704e+19))*x + -8.7529480367616e+18))*x + 2.43290200817664e+18) - y",
+  "FXH2": "((((((((((((((((((((((((((((((((((((((((1.0)*x + -209.9999998807907))*x + 20615.0))*x + -1256850.0))*x + 53327946.0))*x + -1672280820.0))*x + 40171771630.0))*x + -756111184500.0))*x + 11310276995381.0))*x + -135585182899530.0))*x + 1307535010540395.0))*x + -1.014229986551145e+16))*x + 6.30308120992949e+16))*x + -3.1133364316139066e+17))*x + 1.2066478037803732e+18))*x + -3.599979517947607e+18))*x + 8.037811822645051e+18))*x + -1.2870931245150988e+19))*x + 1.3803759753640704e+19))*x + -8.7529480367616e+18))*x + 2.43290200817664e+18) - y",
+  "FXI1": "x**3 - 2*x + 2 - y",
+  "FXI2": "x**3 - x - y",
+  "FXJ1": "sin(x) - x/2 - y",
+  "FXJ2": "exp(-x) - x - y",
+  "FXJ3": "log(x) - 1/2 - y",
+  "FXK1a": "x**2 + 5*x/3 - 2/3 - y",
+  "FXK1b": "(x - 1/3)*(x + 2) - y",
+  "FXK3a": "sqrt(x)*sqrt(x) - 3/2 - y",
+  "FXK3b": "sqrt(x*x) - 3/2 - y"
+ },
+ "i2_oracle_server_info": {
+  "name": "lloyd_v3_mcp",
+  "version": "1.27.0"
+ },
+ "lv3_expressibility_probed": {
+  "FXA1": {
+   "fixture_id": "FXA1",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "(x - 1/3)*(x + 2) - y",
+    "response_head": "{'ok': True, 'equation': '(x - 1/3)*(x + 2) - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": null
+  },
+  "FXA2": {
+   "fixture_id": "FXA2",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "x**2 - 2 - y",
+    "response_head": "{'ok': True, 'equation': 'x**2 - 2 - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": null
+  },
+  "FXB2": {
+   "fixture_id": "FXB2",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "(x - 3/2)**2 - y",
+    "response_head": "{'ok': True, 'equation': '(x - 3/2)**2 - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": {
+    "accepted": true,
+    "error": null,
+    "expression": "(x - 3/2)**2",
+    "response_head": "{'ok': True, 'equation': '(x - 3/2)**2', 'n': 2, 'variables': ['x', 'c'], 'error': None}"
+   }
+  },
+  "FXB3": {
+   "fixture_id": "FXB3",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "(x - 1/3)**3 - y",
+    "response_head": "{'ok': True, 'equation': '(x - 1/3)**3 - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": {
+    "accepted": true,
+    "error": null,
+    "expression": "(x - 1/3)**3",
+    "response_head": "{'ok': True, 'equation': '(x - 1/3)**3', 'n': 2, 'variables': ['x', 'c'], 'error': None}"
+   }
+  },
+  "FXB4": {
+   "fixture_id": "FXB4",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "(x - 1/3)**4 - y",
+    "response_head": "{'ok': True, 'equation': '(x - 1/3)**4 - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": {
+    "accepted": true,
+    "error": null,
+    "expression": "(x - 1/3)**4",
+    "response_head": "{'ok': True, 'equation': '(x - 1/3)**4', 'n': 2, 'variables': ['x', 'c'], 'error': None}"
+   }
+  },
+  "FXB5": {
+   "fixture_id": "FXB5",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "(x - 5/4)**5 - y",
+    "response_head": "{'ok': True, 'equation': '(x - 5/4)**5 - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": {
+    "accepted": true,
+    "error": null,
+    "expression": "(x - 5/4)**5",
+    "response_head": "{'ok': True, 'equation': '(x - 5/4)**5', 'n': 2, 'variables': ['x', 'c'], 'error': None}"
+   }
+  },
+  "FXC_e10": {
+   "fixture_id": "FXC_e10",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "(x - 1)*((x - 1)**2 - 2**(-20)) - y",
+    "response_head": "{'ok': True, 'equation': '(x - 1)*((x - 1)**2 - 2**(-20)) - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": null
+  },
+  "FXC_e26": {
+   "fixture_id": "FXC_e26",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "(x - 1)*((x - 1)**2 - 2**(-52)) - y",
+    "response_head": "{'ok': True, 'equation': '(x - 1)*((x - 1)**2 - 2**(-52)) - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": null
+  },
+  "FXC_e40": {
+   "fixture_id": "FXC_e40",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "(x - 1)*((x - 1)**2 - 2**(-80)) - y",
+    "response_head": "{'ok': True, 'equation': '(x - 1)*((x - 1)**2 - 2**(-80)) - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": null
+  },
+  "FXC_e52": {
+   "fixture_id": "FXC_e52",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "(x - 1)*((x - 1)**2 - 2**(-104)) - y",
+    "response_head": "{'ok': True, 'equation': '(x - 1)*((x - 1)**2 - 2**(-104)) - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": null
+  },
+  "FXC_kerr0": {
+   "fixture_id": "FXC_kerr0",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "x**2 - 2*x + 0.9990234375**2 - y",
+    "response_head": "{'ok': True, 'equation': 'x**2 - 2*x + 0.9990234375**2 - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": {
+    "accepted": true,
+    "error": null,
+    "expression": "x - 1 - (1 - 0.9990234375**2)**0.5",
+    "response_head": "{'ok': True, 'equation': 'x - 1 - (1 - 0.9990234375**2)**0.5', 'n': 2, 'variables': ['x', 'c'], 'error': None}"
+   }
+  },
+  "FXC_kerr1": {
+   "fixture_id": "FXC_kerr1",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "x**2 - 2*x + 0.9999999850988388**2 - y",
+    "response_head": "{'ok': True, 'equation': 'x**2 - 2*x + 0.9999999850988388**2 - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": {
+    "accepted": true,
+    "error": null,
+    "expression": "x - 1 - (1 - 0.9999999850988388**2)**0.5",
+    "response_head": "{'ok': True, 'equation': 'x - 1 - (1 - 0.9999999850988388**2)**0.5', 'n': 2, 'variables': ['x', 'c'], 'error': None}"
+   }
+  },
+  "FXC_kerr2": {
+   "fixture_id": "FXC_kerr2",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "x**2 - 2*x + 1.0**2 - y",
+    "response_head": "{'ok': True, 'equation': 'x**2 - 2*x + 1.0**2 - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": {
+    "accepted": true,
+    "error": null,
+    "expression": "x - 1 - (1 - 1.0**2)**0.5",
+    "response_head": "{'ok': True, 'equation': 'x - 1 - (1 - 1.0**2)**0.5', 'n': 2, 'variables': ['x', 'c'], 'error': None}"
+   }
+  },
+  "FXD1": {
+   "fixture_id": "FXD1",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "x - 3/2 - y",
+    "response_head": "{'ok': True, 'equation': 'x - 3/2 - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": null
+  },
+  "FXD3": {
+   "fixture_id": "FXD3",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "(x - 2)*(x + 1/3) - y",
+    "response_head": "{'ok': True, 'equation': '(x - 2)*(x + 1/3) - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": null
+  },
+  "FXE1": {
+   "fixture_id": "FXE1",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "x**2 - 2*x + 1 + 2**(-200) - y",
+    "response_head": "{'ok': True, 'equation': 'x**2 - 2*x + 1 + 2**(-200) - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": null
+  },
+  "FXE2": {
+   "fixture_id": "FXE2",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "(x + 1)**2 - x**2 - 2*x - 1 + 2**(-30) - y",
+    "response_head": "{'ok': True, 'equation': '(x + 1)**2 - x**2 - 2*x - 1 + 2**(-30) - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": null
+  },
+  "FXF1": {
+   "fixture_id": "FXF1",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "1/(x - 1) - 2 - y",
+    "response_head": "{'ok': True, 'equation': '1/(x - 1) - 2 - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": null
+  },
+  "FXF2": {
+   "fixture_id": "FXF2",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "(x - 3)/(x - 1) - y",
+    "response_head": "{'ok': True, 'equation': '(x - 3)/(x - 1) - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": null
+  },
+  "FXG1": {
+   "fixture_id": "FXG1",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "abs(x - 1) - 1/2 - y",
+    "response_head": "{'ok': True, 'equation': 'abs(x - 1) - 1/2 - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": null
+  },
+  "FXG2": {
+   "fixture_id": "FXG2",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "abs(x - 1) - y",
+    "response_head": "{'ok': True, 'equation': 'abs(x - 1) - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": {
+    "accepted": true,
+    "error": null,
+    "expression": "abs(x - 1)",
+    "response_head": "{'ok': True, 'equation': 'abs(x - 1)', 'n': 2, 'variables': ['x', 'c'], 'error': None}"
+   }
+  },
+  "FXH1": {
+   "fixture_id": "FXH1",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "((((((((((((((((((((((((((((((((((((((((1.0)*x + -210.0))*x + 20615.0))*x + -1256850.0))*x + 53327946.0))*x + -1672280820.0))*x + 40171771630.0))*x + -756111184500.0))*x + 11310276995381.0))*x + -135585182899530.0))*x + 1307535010540395.0))*x + -1.014229986551145e+16))*x + 6.30308120992949e+16))*x + -3.1133364316139066e+17))*x + 1.2066478037803732e+18))*x + -3.599979517947607e+18))*x + 8.037811822645051e+18))*x + -1.2870931245150988e+19))*x + 1.3803759753640704e+19))*x + -8.7529480367616e+18))*x + 2.43290200817664e+18) - y",
+    "response_head": "{'ok': True, 'equation': '((((((((((((((((((((((((((((((((((((((((1.0)*x + -210.0))*x + 20615.0))*x + -1256850.0))*x + 53327946.0))*x + -1672280820.0))*x + 40171771630.0))*x + -756111184500.0))*x + 11310276995381.0))*x + -135585182899530.0))*x + 1307535010540395.0))*x + -1.014229986551145e+16))*x + 6.30308120992949e+16))*x + -3.1133364316139066e+17))*x + 1.2066478037803732e+18))*x + -3.59997951794"
+   },
+   "param_form": null
+  },
+  "FXH2": {
+   "fixture_id": "FXH2",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "((((((((((((((((((((((((((((((((((((((((1.0)*x + -209.9999998807907))*x + 20615.0))*x + -1256850.0))*x + 53327946.0))*x + -1672280820.0))*x + 40171771630.0))*x + -756111184500.0))*x + 11310276995381.0))*x + -135585182899530.0))*x + 1307535010540395.0))*x + -1.014229986551145e+16))*x + 6.30308120992949e+16))*x + -3.1133364316139066e+17))*x + 1.2066478037803732e+18))*x + -3.599979517947607e+18))*x + 8.037811822645051e+18))*x + -1.2870931245150988e+19))*x + 1.3803759753640704e+19))*x + -8.7529480367616e+18))*x + 2.43290200817664e+18) - y",
+    "response_head": "{'ok': True, 'equation': '((((((((((((((((((((((((((((((((((((((((1.0)*x + -209.9999998807907))*x + 20615.0))*x + -1256850.0))*x + 53327946.0))*x + -1672280820.0))*x + 40171771630.0))*x + -756111184500.0))*x + 11310276995381.0))*x + -135585182899530.0))*x + 1307535010540395.0))*x + -1.014229986551145e+16))*x + 6.30308120992949e+16))*x + -3.1133364316139066e+17))*x + 1.2066478037803732e+18))*x + -3"
+   },
+   "param_form": null
+  },
+  "FXI1": {
+   "fixture_id": "FXI1",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "x**3 - 2*x + 2 - y",
+    "response_head": "{'ok': True, 'equation': 'x**3 - 2*x + 2 - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": null
+  },
+  "FXI2": {
+   "fixture_id": "FXI2",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "x**3 - x - y",
+    "response_head": "{'ok': True, 'equation': 'x**3 - x - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": null
+  },
+  "FXJ1": {
+   "fixture_id": "FXJ1",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "sin(x) - x/2 - y",
+    "response_head": "{'ok': True, 'equation': 'sin(x) - x/2 - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": null
+  },
+  "FXJ2": {
+   "fixture_id": "FXJ2",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "exp(-x) - x - y",
+    "response_head": "{'ok': True, 'equation': 'exp(-x) - x - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": null
+  },
+  "FXJ3": {
+   "fixture_id": "FXJ3",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "log(x) - 1/2 - y",
+    "response_head": "{'ok': True, 'equation': 'log(x) - 1/2 - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": null
+  },
+  "FXK1a": {
+   "fixture_id": "FXK1a",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "x**2 + 5*x/3 - 2/3 - y",
+    "response_head": "{'ok': True, 'equation': 'x**2 + 5*x/3 - 2/3 - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": null
+  },
+  "FXK1b": {
+   "fixture_id": "FXK1b",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "(x - 1/3)*(x + 2) - y",
+    "response_head": "{'ok': True, 'equation': '(x - 1/3)*(x + 2) - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": null
+  },
+  "FXK3a": {
+   "fixture_id": "FXK3a",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "sqrt(x)*sqrt(x) - 3/2 - y",
+    "response_head": "{'ok': True, 'equation': 'sqrt(x)*sqrt(x) - 3/2 - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": null
+  },
+  "FXK3b": {
+   "fixture_id": "FXK3b",
+   "graph_lift": {
+    "accepted": true,
+    "error": null,
+    "expression": "sqrt(x*x) - 3/2 - y",
+    "response_head": "{'ok': True, 'equation': 'sqrt(x*x) - 3/2 - y', 'n': 2, 'variables': ['x', 'y'], 'error': None}"
+   },
+   "param_form": null
+  }
+ },
+ "manifest_version": 1
+}

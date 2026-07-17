@@ -1,0 +1,593 @@
+"""
+Hardened Dual-Arm Probe — V1.
+
+Built 2026-05-18 to lift the 6 operational conditions in
+``Build_Docs/Architecture/DUAL_ARM_PROBE_PRINCIPLES.md`` from principles
+honored-by-construction into preconditions enforced-by-code.
+
+Wraps v11's machinery; does not re-implement arm evaluation. On top of v11
+this module adds:
+
+1. A frozen ``DualArmConfig`` declaring channels / routes / activation /
+   selection. Construction-time validation rejects target-aware selection
+   rules, non-`armW_falloff` activation, unknown route kinds, and
+   ARM-N validity predicates whose signatures expose ARM-W fields.
+2. A per-record 6-condition checklist + ``hardened_status`` derived
+   strictly from the checklist. Only `(c1..c6)` all True and the record
+   being inside an ARM-W-declared gap produces ``gap_resolved``.
+3. Diagnostic-route capping: when any route is declared ``diagnostic`` the
+   run is allowed (so audits can still record the data) but no record
+   reaches ``gap_resolved``; all records carry
+   ``underpromotion_reason=diagnostic_route_present``.
+4. Same-route control opt-in: ``same_route_control=True`` lets ARM-W and
+   ARM-N share a channel; without that flag, equal channels raise at
+   construction.
+5. A V4 validity stamp on the top-level result (defined/finite/observable/
+   selectable/advanceable) keyed to the six conditions and the scan-level
+   stability check.
+
+This module is **eval-layer** only. It records design-time discipline; it
+does not promote the dual-arm pattern into substrate. See
+``DUAL_ARM_PROBE_PRINCIPLES.md`` "What these constraints are NOT".
+"""
+from __future__ import annotations
+
+import argparse
+import copy
+import inspect
+import json
+import sys
+from dataclasses import dataclass, asdict, field
+from decimal import Decimal
+from pathlib import Path
+from typing import Callable
+
+import scratch.run_foldreadback_probe0_v10_active_dualarm as v10
+import scratch.run_foldreadback_probe0_v11_genuine_separation as v11
+
+
+ROOT = Path(__file__).resolve().parents[1]
+REPORT_DIR = ROOT / "Build_Docs" / "Reports" / "hardened_dual_arm_probe"
+ARTIFACT = REPORT_DIR / "artifact_hardened_v1.json"
+
+
+# ---------------------------------------------------------------------------
+# Pre-registered allow-lists (declarative; mutation would defeat the principle)
+# ---------------------------------------------------------------------------
+
+ALLOWED_ROUTE_KINDS: frozenset[str] = frozenset({"production", "diagnostic", "control"})
+ALLOWED_ACTIVATION_RULES: frozenset[str] = frozenset({"armW_falloff"})
+ALLOWED_SELECTION_RULES: frozenset[str] = frozenset({"predeclared_priority"})
+# Belt-and-braces: explicit deny list so the meaning of "not allowed" is in code.
+TARGET_AWARE_SELECTORS: frozenset[str] = frozenset(
+    {
+        "smallest_residual",
+        "smaller_residual",
+        "closest_to_zero",
+        "smallest_phase_error",
+        "best_fit_target",
+        "nearest_read",
+    }
+)
+ALLOWED_CHANNELS: frozenset[str] = frozenset(v11.V11_CHANNELS)
+
+# Underpromotion taxonomy — extends DUAL_ARM_PROBE_PRINCIPLES.md table with
+# the diagnostic-route ceiling label.
+UNDERPROMOTION_REASONS: frozenset[str] = frozenset(
+    {
+        "armN_zero_path_separation",
+        "armN_boundary_only",
+        "armN_diagnostic_route_present",
+        "partition_unstable",
+        "guard_unstable",
+        "armN_inactive",
+        "armN_invalid",
+        "outside_armW_gap",
+    }
+)
+
+
+# ---------------------------------------------------------------------------
+# Frozen config — post-construction mutation raises FrozenInstanceError.
+# ---------------------------------------------------------------------------
+
+
+@dataclass(frozen=True)
+class DualArmConfig:
+    """Frozen, hashable dual-arm probe configuration.
+
+    All fields are scalar; the dataclass is hashable so it can be embedded in
+    artifact metadata and audited verbatim.
+    """
+
+    armW_channel: str
+    armN_channel: str
+    armW_route_id: str
+    armN_route_id: str
+    armW_route_kind: str = "production"
+    armN_route_kind: str = "production"
+    activation_rule: str = "armW_falloff"
+    selection_rule: str = "predeclared_priority"
+    same_route_control: bool = False
+    label: str = "hardened_dual_arm"
+
+
+# ---------------------------------------------------------------------------
+# The probe.
+# ---------------------------------------------------------------------------
+
+
+class HardenedDualArmProbe:
+    """Dual-arm probe that enforces the 6 operational conditions in code.
+
+    Construction validates the config (conditions #2–#5 are enforced at
+    construction; conditions #1 and #6 are evaluated per-record at run
+    time). Mutation of the config post-construction raises
+    FrozenInstanceError.
+
+    Conditions:
+      1. Real float64 path/operand separation        [run-time, per record]
+      2. Own instrument law                          [construction, predicate signature]
+      3. Non-diagnostic route                        [construction → caps run-time]
+      4. Pre-declared selection (no target-aware)    [construction, allow-list]
+      5. ARM-W-derived activation                    [construction, allow-list; run-time, per record]
+      6. Stability under partition/guard             [run-time, cross-scan]
+    """
+
+    def __init__(
+        self,
+        config: DualArmConfig,
+        *,
+        armN_validity_predicate: Callable | None = None,
+    ) -> None:
+        self.config = config
+        self.armN_validity_predicate = (
+            armN_validity_predicate or v10.arm_n_validity_from_parts
+        )
+        self._validate_config()
+
+    # ------------------------------------------------------------------
+    # Construction-time validation
+    # ------------------------------------------------------------------
+
+    def _validate_config(self) -> None:
+        cfg = self.config
+
+        # C3: route kinds must be in the allow-list.
+        if cfg.armW_route_kind not in ALLOWED_ROUTE_KINDS:
+            raise AssertionError(
+                f"armW_route_kind={cfg.armW_route_kind!r} not in {sorted(ALLOWED_ROUTE_KINDS)}"
+            )
+        if cfg.armN_route_kind not in ALLOWED_ROUTE_KINDS:
+            raise AssertionError(
+                f"armN_route_kind={cfg.armN_route_kind!r} not in {sorted(ALLOWED_ROUTE_KINDS)}"
+            )
+
+        # C5: activation rule must be the pre-registered ARM-W-falloff chain.
+        if cfg.activation_rule not in ALLOWED_ACTIVATION_RULES:
+            raise AssertionError(
+                f"activation_rule={cfg.activation_rule!r} not in "
+                f"{sorted(ALLOWED_ACTIVATION_RULES)}; ARM-N must be activated by ARM-W "
+                "falloff only (no independent activation)"
+            )
+
+        # C4: selection rule must be predeclared, never target-aware.
+        if cfg.selection_rule not in ALLOWED_SELECTION_RULES:
+            raise AssertionError(
+                f"selection_rule={cfg.selection_rule!r} not in "
+                f"{sorted(ALLOWED_SELECTION_RULES)}; target-aware selection forbidden"
+            )
+        if cfg.selection_rule in TARGET_AWARE_SELECTORS:
+            # Should be impossible if the first check passed, but be defensive.
+            raise AssertionError(
+                f"selection_rule={cfg.selection_rule!r} is in the target-aware "
+                "deny list; this configuration cannot be admitted"
+            )
+
+        # C1 gate: shared channels / shared route IDs require explicit opt-in
+        # to the same-route control mode. Otherwise refuse construction.
+        if cfg.armW_channel == cfg.armN_channel and not cfg.same_route_control:
+            raise AssertionError(
+                f"armW_channel == armN_channel ({cfg.armW_channel!r}); "
+                "set same_route_control=True to opt into a zero-separation control "
+                "fixture, or pick distinct channels"
+            )
+        if cfg.armW_route_id == cfg.armN_route_id and not cfg.same_route_control:
+            raise AssertionError(
+                f"armW_route_id == armN_route_id ({cfg.armW_route_id!r}); "
+                "set same_route_control=True for a same-route control fixture"
+            )
+
+        # Channel allow-list check (catches typos cheaply).
+        if cfg.armW_channel not in ALLOWED_CHANNELS:
+            raise AssertionError(
+                f"armW_channel={cfg.armW_channel!r} not in {sorted(ALLOWED_CHANNELS)}"
+            )
+        if cfg.armN_channel not in ALLOWED_CHANNELS:
+            raise AssertionError(
+                f"armN_channel={cfg.armN_channel!r} not in {sorted(ALLOWED_CHANNELS)}"
+            )
+
+        # C2: own instrument law — ARM-N's validity predicate must not
+        # accept any parameter that exposes an ARM-W field.
+        sig = inspect.signature(self.armN_validity_predicate)
+        for pname in sig.parameters:
+            lowered = pname.lower()
+            if (
+                lowered.startswith("arm_w")
+                or lowered.startswith("armw")
+                or "w_verdict" in lowered
+                or "w_inference" in lowered
+                or "w_state" in lowered
+            ):
+                raise AssertionError(
+                    f"armN_validity_predicate exposes parameter {pname!r}; "
+                    "ARM-N must use only its own instrument law (no ARM-W field "
+                    "may enter the validity decision)"
+                )
+
+    @property
+    def diagnostic_route_present(self) -> bool:
+        return (
+            self.config.armW_route_kind == "diagnostic"
+            or self.config.armN_route_kind == "diagnostic"
+        )
+
+    # ------------------------------------------------------------------
+    # Run-time 6-condition evaluation
+    # ------------------------------------------------------------------
+
+    def _six_condition_check(
+        self,
+        record: dict[str, object],
+        ps_record: dict[str, object] | None,
+        gv_record: dict[str, object] | None,
+    ) -> dict[str, object]:
+        """Compute the 6-condition checklist for one record.
+
+        Returns a dict with c1..c6 booleans plus the chosen
+        underpromotion_reason (or None if all pass).
+        """
+        armW = record.get("armW", {}) or {}
+        armN = record.get("armN", {}) or {}
+        path_sep = record.get("path_separation", {}) or {}
+
+        armN_active = bool(armN.get("active"))
+        armN_valid = bool(armN.get("valid"))
+        activation_reason = str(armN.get("activation_reason", ""))
+
+        # C1: nonzero path/operand separation, observable.
+        c1 = (
+            bool(path_sep.get("separation_observable"))
+            and path_sep.get("separation_class") == "nonzero_operand_offset"
+        )
+
+        # C2: own instrument law. Construction-time check; per-record we
+        # affirm that the ARM-N read carries an own-instrument verdict
+        # (i.e., ARM-N validity is set by ARM-N's own predicate). v10
+        # already enforces this in code; here we record affirmation.
+        c2 = True if not armN_active else armN_valid or not armN_valid  # noqa: SIM222
+        # Simpler restatement: c2 is established by construction; if the
+        # record came through this probe, c2 holds. We carry it for the
+        # per-record checklist completeness.
+        c2 = True
+
+        # C3: non-diagnostic route — set False whenever any route is
+        # diagnostic.
+        c3 = not self.diagnostic_route_present
+
+        # C4: pre-declared selection — established at construction; the
+        # probe never re-selects per-record. Carried for completeness.
+        c4 = True
+
+        # C5: ARM-W-derived activation — every active ARM-N record must
+        # cite a core_gap or guard_extension activation reason that
+        # traces to ARM-W falloff. v10 produces this field; we audit it.
+        if armN_active:
+            c5 = activation_reason in {"core_gap", "guard_extension"}
+        else:
+            # Not active means no ARM-W gap declared at this β, which is
+            # not a violation — record will fail the "inside_armW_gap"
+            # check instead.
+            c5 = True
+
+        # C6: partition / guard stability — armN.active and
+        # armN.inference must match across primary / phase_swap /
+        # guard_variant at this β.
+        c6 = self._stability_match(record, ps_record, gv_record)
+
+        # Resolution flags
+        inside_gap = bool(armN_active) and bool(armN_valid)
+
+        all_six = c1 and c2 and c3 and c4 and c5 and c6
+
+        if all_six and inside_gap:
+            reason: str | None = None
+        elif self.diagnostic_route_present:
+            reason = "armN_diagnostic_route_present"
+        elif not armN_active:
+            reason = "armN_inactive"
+        elif not armN_valid:
+            reason = "armN_invalid"
+        elif not c1:
+            reason = "armN_zero_path_separation"
+        elif not c5:
+            reason = "outside_armW_gap"
+        elif not c6:
+            # Distinguish partition vs guard if possible (best-effort —
+            # both involve the cross-scan check).
+            reason = "partition_unstable"
+        else:
+            reason = "armN_inactive"
+
+        return {
+            "c1_path_separation": bool(c1),
+            "c2_own_instrument_law": bool(c2),
+            "c3_non_diagnostic_route": bool(c3),
+            "c4_no_target_aware_selection": bool(c4),
+            "c5_armW_derived_activation": bool(c5),
+            "c6_partition_guard_stable": bool(c6),
+            "inside_armW_gap": bool(inside_gap),
+            "all_six_conditions": bool(all_six),
+            "underpromotion_reason": reason,
+        }
+
+    @staticmethod
+    def _stability_match(
+        primary_rec: dict[str, object],
+        ps_rec: dict[str, object] | None,
+        gv_rec: dict[str, object] | None,
+    ) -> bool:
+        """Return True iff armN.active and armN.inference match across all
+        three scans at this β."""
+        if ps_rec is None or gv_rec is None:
+            return False
+        try:
+            base_active = bool(primary_rec.get("armN", {}).get("active"))
+            base_inf = primary_rec.get("armN", {}).get("inference")
+            for rec in (ps_rec, gv_rec):
+                if bool(rec.get("armN", {}).get("active")) != base_active:
+                    return False
+                if rec.get("armN", {}).get("inference") != base_inf:
+                    return False
+        except AttributeError:
+            return False
+        return True
+
+    @staticmethod
+    def _derive_status(
+        record: dict[str, object], checklist: dict[str, object]
+    ) -> str:
+        if checklist["all_six_conditions"] and checklist["inside_armW_gap"]:
+            return "gap_resolved"
+        reason = checklist.get("underpromotion_reason")
+        if reason in {None, "armN_inactive", "outside_armW_gap"}:
+            return "outside_or_inactive"
+        return f"unresolved:{reason}"
+
+    # ------------------------------------------------------------------
+    # End-to-end run
+    # ------------------------------------------------------------------
+
+    def run(self) -> dict[str, object]:
+        cfg = self.config
+        data = v11.run_v11_campaign(left=cfg.armW_channel, right=cfg.armN_channel)
+
+        # Index phase_swap and guard_variant by β
+        ps_by_beta: dict[float, dict[str, object]] = {}
+        for rec in data["phase_swap_scan"].get("records", []):
+            try:
+                ps_by_beta[float(rec["beta"])] = rec
+            except (KeyError, TypeError, ValueError):
+                continue
+        gv_by_beta: dict[float, dict[str, object]] = {}
+        for rec in data["guard_variant_scan"].get("records", []):
+            try:
+                gv_by_beta[float(rec["beta"])] = rec
+            except (KeyError, TypeError, ValueError):
+                continue
+
+        # Stamp the 6-condition checklist on each primary-scan record
+        primary = data["primary_scan"]
+        for record in primary.get("records", []):
+            try:
+                beta = float(record["beta"])
+            except (KeyError, TypeError, ValueError):
+                beta = None
+            ps_rec = ps_by_beta.get(beta) if beta is not None else None
+            gv_rec = gv_by_beta.get(beta) if beta is not None else None
+            checklist = self._six_condition_check(record, ps_rec, gv_rec)
+            record["hardened_checklist"] = checklist
+            record["hardened_status"] = self._derive_status(record, checklist)
+
+        # Headline derivation
+        resolved_count = sum(
+            1
+            for r in primary.get("records", [])
+            if r.get("hardened_status") == "gap_resolved"
+        )
+        underpromotion_breakdown: dict[str, int] = {}
+        for r in primary.get("records", []):
+            status = r.get("hardened_status", "")
+            if status.startswith("unresolved:"):
+                reason = status[len("unresolved:") :]
+                underpromotion_breakdown[reason] = (
+                    underpromotion_breakdown.get(reason, 0) + 1
+                )
+
+        legacy_v11_outcome = data.get("accepted_outcome", "unknown")
+        if self.diagnostic_route_present:
+            hardened_outcome = "active_handoff_diagnostic_only"
+        elif resolved_count > 0:
+            hardened_outcome = "active_handoff_gap_resolved_independent_hardened"
+        elif underpromotion_breakdown.get("armN_zero_path_separation", 0) > 0:
+            hardened_outcome = "active_handoff_gap_unresolved_zero_separation"
+        elif underpromotion_breakdown.get("partition_unstable", 0) > 0:
+            hardened_outcome = "active_handoff_partition_unstable"
+        else:
+            hardened_outcome = legacy_v11_outcome
+
+        # V4 validity stamp
+        controls_silent = bool(primary.get("control_silent", False))
+        partition_invariant = bool(primary.get("partition_invariant", False))
+        guard_invariant = bool(primary.get("guard_invariant", False))
+        validity = {
+            "defined": True,  # construction passed → config is well-defined
+            "finite": all(
+                _record_numerics_finite(r) for r in primary.get("records", [])
+            ),
+            "observable": any(
+                r.get("hardened_checklist", {}).get("inside_armW_gap")
+                and r.get("hardened_checklist", {}).get("c1_path_separation")
+                for r in primary.get("records", [])
+            ),
+            "selectable": True,  # construction-time allow-list excludes target-aware selection
+            "advanceable": controls_silent and partition_invariant and guard_invariant,
+        }
+
+        return {
+            "probe_version": "hardened_v1",
+            "config": asdict(cfg),
+            "config_validation": "passed",
+            "diagnostic_route_present": self.diagnostic_route_present,
+            "scans": {
+                "primary": primary,
+                "phase_swap": data["phase_swap_scan"],
+                "guard_variant": data["guard_variant_scan"],
+            },
+            "controls": {
+                "exact_zero": data["exact_zero_control"],
+                "matched_affine": data["matched_affine_control"],
+            },
+            "stability_check": {
+                "controls_silent": controls_silent,
+                "partition_invariant": partition_invariant,
+                "guard_invariant": guard_invariant,
+            },
+            "validity": validity,
+            "headline": {
+                "total_records": len(primary.get("records", [])),
+                "resolved_count": resolved_count,
+                "underpromotion_breakdown": underpromotion_breakdown,
+                "diagnostic_route_present": self.diagnostic_route_present,
+                "legacy_v11_outcome": legacy_v11_outcome,
+                "hardened_outcome": hardened_outcome,
+            },
+        }
+
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+
+def _record_numerics_finite(record: dict[str, object]) -> bool:
+    """Best-effort finite-check on the numeric fields a record exposes."""
+    try:
+        for key in ("F4_float64", "F1_float64", "F2_float64", "F3_float64", "level_unit"):
+            v = record.get(key)
+            if v is None:
+                continue
+            f = float(v)
+            if f != f or abs(f) == float("inf"):
+                return False
+    except (TypeError, ValueError):
+        return False
+    return True
+
+
+def _decimal_default(obj: object) -> object:
+    if isinstance(obj, Decimal):
+        return float(obj)
+    if isinstance(obj, frozenset):
+        return sorted(obj)
+    raise TypeError(f"Type {type(obj)} not serializable")
+
+
+def write_artifact(data: dict[str, object], path: Path = ARTIFACT) -> Path:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        json.dumps(data, default=_decimal_default, indent=2, sort_keys=True)
+    )
+    return path
+
+
+# ---------------------------------------------------------------------------
+# CLI entry point
+# ---------------------------------------------------------------------------
+
+
+def _default_F2_F4_config() -> DualArmConfig:
+    return DualArmConfig(
+        armW_channel="F2_float64",
+        armN_channel="F4_float64",
+        armW_route_id="sr_four_form_F2",
+        armN_route_id="sr_four_form_F4",
+        armW_route_kind="production",
+        armN_route_kind="production",
+        activation_rule="armW_falloff",
+        selection_rule="predeclared_priority",
+        same_route_control=False,
+        label="hardened_F2_wide_F4_microscope",
+    )
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Hardened dual-arm probe (V1).")
+    parser.add_argument("--armW", default="F2_float64", help="ARM-W channel")
+    parser.add_argument("--armN", default="F4_float64", help="ARM-N channel")
+    parser.add_argument("--output", default=str(ARTIFACT))
+    parser.add_argument(
+        "--same-route-control",
+        action="store_true",
+        help="Opt into a zero-separation control fixture (same channel on both arms)",
+    )
+    parser.add_argument(
+        "--armW-route-kind",
+        default="production",
+        choices=sorted(ALLOWED_ROUTE_KINDS),
+    )
+    parser.add_argument(
+        "--armN-route-kind",
+        default="production",
+        choices=sorted(ALLOWED_ROUTE_KINDS),
+    )
+    parser.add_argument(
+        "--label",
+        default="hardened_F2_wide_F4_microscope",
+    )
+    args = parser.parse_args()
+
+    cfg = DualArmConfig(
+        armW_channel=args.armW,
+        armN_channel=args.armN,
+        armW_route_id=f"sr_four_form_{args.armW.removesuffix('_float64')}",
+        armN_route_id=f"sr_four_form_{args.armN.removesuffix('_float64')}",
+        armW_route_kind=args.armW_route_kind,
+        armN_route_kind=args.armN_route_kind,
+        activation_rule="armW_falloff",
+        selection_rule="predeclared_priority",
+        same_route_control=args.same_route_control,
+        label=args.label,
+    )
+
+    probe = HardenedDualArmProbe(cfg)
+    data = probe.run()
+    path = write_artifact(data, Path(args.output))
+
+    print(f"hardened-v1 artifact written to {path}")
+    print(f"  ARM-W channel: {args.armW}")
+    print(f"  ARM-N channel: {args.armN}")
+    print(f"  diagnostic_route_present: {data['diagnostic_route_present']}")
+    print(f"  hardened_outcome: {data['headline']['hardened_outcome']}")
+    print(f"  resolved_count: {data['headline']['resolved_count']}")
+    print(f"  legacy_v11_outcome: {data['headline']['legacy_v11_outcome']}")
+    print(
+        f"  underpromotion_breakdown: "
+        f"{json.dumps(data['headline']['underpromotion_breakdown'], sort_keys=True)}"
+    )
+    print(f"  validity: {json.dumps(data['validity'], sort_keys=True)}")
+
+
+if __name__ == "__main__":
+    main()

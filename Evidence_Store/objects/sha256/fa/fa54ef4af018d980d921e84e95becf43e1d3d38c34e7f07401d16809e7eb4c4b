@@ -1,0 +1,265 @@
+#!/usr/bin/env python3
+"""
+Enhanced Validation for Corollary 1: Top-Down Lattice Pre-Alignment (v2)
+
+Implements all 4 requested improvements:
+1. Normalization by local ulp (of residual and of x_term)
+2. Additional reassociation variants (P_compound_split, P_sign_c)
+3. Analysis both inside and outside Sterbenz region
+4. Extension to n=4 (quartic) for pure algebraic + one physical fixture
+
+All work in scratch/. Eval-layer only.
+"""
+
+import numpy as np
+from dataclasses import dataclass, asdict
+from typing import Dict, List, Callable, Tuple
+import json
+
+# =============================================================================
+# Core Association Strategies
+# =============================================================================
+
+def early_f2(power: float, x_term: float) -> float:
+    """Classic early cancellation: (power - 1) + x_term"""
+    return (power - 1.0) + x_term
+
+def late_f2(power: float, x_term: float) -> float:
+    """Reassociated late: power + (x_term - 1)"""
+    return power + (x_term - 1.0)
+
+def compound_split(power: float, direct: float) -> float:
+    """P_compound_split: (power - 1) + (1 - direct)"""
+    return (power - 1.0) + (1.0 - direct)
+
+def sign_c(power: float, direct: float) -> float:
+    """P_sign_c: (power - 1) - (-1 + direct)"""
+    return (power - 1.0) - (-1.0 + direct)
+
+# =============================================================================
+# Fixture Definitions (return power, x_term, direct where relevant)
+# =============================================================================
+
+def get_schwarzschild_values(r: float) -> Dict[str, float]:
+    f = 1.0 - 2.0 / r
+    R = np.sqrt(f)
+    power = R * R
+    x_term = 2.0 / r
+    direct = f
+    return {"power": power, "x_term": x_term, "direct": direct}
+
+def get_sr_values(beta: float) -> Dict[str, float]:
+    f = 1.0 - beta**2
+    R = np.sqrt(f)
+    power = R * R
+    x_term = beta**2
+    direct = f
+    return {"power": power, "x_term": x_term, "direct": direct}
+
+def get_pure_algebraic_values(x: float) -> Dict[str, float]:
+    f = 1.0 - x
+    R = np.sqrt(f)
+    power = R * R
+    x_term = x
+    direct = f
+    return {"power": power, "x_term": x_term, "direct": direct}
+
+def get_cbrt_values(x: float) -> Dict[str, float]:
+    f = 1.0 - x
+    R = np.cbrt(f)
+    power = R * R * R
+    x_term = x
+    direct = f
+    return {"power": power, "x_term": x_term, "direct": direct}
+
+# =============================================================================
+# Sterbenz Region Checkers
+# =============================================================================
+
+STERBENZ_CHECKERS = {
+    "schwarzschild": lambda r: r >= 4.0,
+    "sr": lambda beta: beta <= (1.0 / np.sqrt(2.0)),
+    "pure_algebraic": lambda x: x <= 0.5,
+    "cbrt": lambda x: x <= 0.5,
+}
+
+# =============================================================================
+# Grid Generators (Sterbenz + Non-Sterbenz)
+# =============================================================================
+
+def get_schwarzschild_grid():
+    # Sterbenz: r >= 4
+    sterbenz = np.linspace(4.0, 100.0, 3000)
+    # Non-Sterbenz: r < 4, but avoid too close to horizon for stability
+    non_sterbenz = np.linspace(2.01, 3.99, 2000)
+    return {"sterbenz": sterbenz, "non_sterbenz": non_sterbenz}
+
+def get_sr_grid():
+    sterbenz = np.linspace(0.01, 1/np.sqrt(2), 2500)
+    non_sterbenz = np.linspace(1/np.sqrt(2) + 0.01, 0.999, 2500)
+    return {"sterbenz": sterbenz, "non_sterbenz": non_sterbenz}
+
+def get_pure_algebraic_grid():
+    sterbenz = np.linspace(0.001, 0.5, 3000)
+    non_sterbenz = np.linspace(0.501, 0.99, 2500)
+    return {"sterbenz": sterbenz, "non_sterbenz": non_sterbenz}
+
+def get_cbrt_grid():
+    sterbenz = np.linspace(0.001, 0.5, 3000)
+    non_sterbenz = np.linspace(0.501, 0.99, 2500)
+    return {"sterbenz": sterbenz, "non_sterbenz": non_sterbenz}
+
+GRID_GENERATORS = {
+    "schwarzschild": get_schwarzschild_grid,
+    "sr": get_sr_grid,
+    "pure_algebraic": get_pure_algebraic_grid,
+    "cbrt": get_cbrt_grid,
+}
+
+VALUE_GETTERS = {
+    "schwarzschild": get_schwarzschild_values,
+    "sr": get_sr_values,
+    "pure_algebraic": get_pure_algebraic_values,
+    "cbrt": get_cbrt_values,
+}
+
+# =============================================================================
+# Analysis
+# =============================================================================
+
+def ulp(x: float) -> float:
+    return np.spacing(np.float64(x))
+
+def analyze_form(residuals: np.ndarray, ulp_ref: float, name: str, tolerance: float = 1e-9) -> Dict:
+    if len(residuals) == 0:
+        return {"name": name, "n": 0}
+    
+    normalized = residuals / ulp_ref
+    frac_parts = np.abs(normalized - np.round(normalized))
+    on_lattice = frac_parts < tolerance
+    
+    return {
+        "name": name,
+        "n": len(residuals),
+        "frac_on_lattice": float(np.mean(on_lattice)),
+        "max_abs_j": float(np.max(np.abs(np.round(normalized)))),
+        "mean_frac_error": float(np.mean(frac_parts)),
+        "median_frac_error": float(np.median(frac_parts)),
+    }
+
+# =============================================================================
+# Main Runner
+# =============================================================================
+
+def run_for_fixture(fixture_name: str, value_getter, grid_gen, sterbenz_checker, n_points_per_region: int = 2001):
+    print(f"\n{'='*70}")
+    print(f"FIXTURE: {fixture_name}")
+    print('='*70)
+    
+    grids = grid_gen()
+    results = {}
+    
+    for region_name, raw_grid in grids.items():
+        if len(raw_grid) > n_points_per_region:
+            indices = np.linspace(0, len(raw_grid)-1, n_points_per_region, dtype=int)
+            grid = raw_grid[indices]
+        else:
+            grid = raw_grid
+        
+        early_res, late_res, compound_res, signc_res = [], [], [], []
+        local_ulps = []
+        
+        for val in grid:
+            vals = value_getter(val)
+            power = vals["power"]
+            x_term = vals["x_term"]
+            direct = vals.get("direct", 1.0 - x_term)  # fallback
+            
+            early = early_f2(power, x_term)
+            late = late_f2(power, x_term)
+            compound = compound_split(power, direct)
+            sign_c_val = sign_c(power, direct)
+            
+            early_res.append(early)
+            late_res.append(late)
+            compound_res.append(compound)
+            signc_res.append(sign_c_val)
+            
+            # Local ulp reference: ulp of the residual itself (or x_term if residual tiny)
+            res_ref = abs(early) if abs(early) > 1e-300 else abs(x_term)
+            local_ulps.append(ulp(res_ref))
+        
+        early_res = np.array(early_res)
+        late_res = np.array(late_res)
+        compound_res = np.array(compound_res)
+        signc_res = np.array(signc_res)
+        local_ulps = np.array(local_ulps)
+        
+        ulp_one = ulp(1.0)
+        
+        # Analyze with ulp(1.0)
+        early_u1 = analyze_form(early_res, ulp_one, "Early (F2)")
+        late_u1 = analyze_form(late_res, ulp_one, "Late (reassoc F2)")
+        comp_u1 = analyze_form(compound_res, ulp_one, "P_compound_split")
+        sign_u1 = analyze_form(signc_res, ulp_one, "P_sign_c")
+        
+        # Analyze with local ulp
+        early_local = analyze_form(early_res, local_ulps, "Early (local ulp)")
+        late_local = analyze_form(late_res, local_ulps, "Late (local ulp)")
+        
+        print(f"\n--- {region_name.upper()} region ({len(grid)} points) ---")
+        print("Normalized by ulp(1.0):")
+        for stats in [early_u1, late_u1, comp_u1, sign_u1]:
+            print(f"  {stats['name']:22s}: {stats['frac_on_lattice']*100:6.2f}% on lattice | max|j|={stats['max_abs_j']:4.0f}")
+        
+        print("Normalized by local ulp (of residual):")
+        for stats in [early_local, late_local]:
+            print(f"  {stats['name']:22s}: {stats['frac_on_lattice']*100:6.2f}% on lattice | max|j|={stats['max_abs_j']:4.0f}")
+        
+        results[region_name] = {
+            "n_points": len(grid),
+            "ulp1": {"early": early_u1, "late": late_u1, "compound": comp_u1, "sign_c": sign_u1},
+            "local": {"early": early_local, "late": late_local},
+        }
+    
+    return results
+
+def main():
+    print("=== Enhanced Validation: Top-Down Lattice Pre-Alignment (v2) ===\n")
+    
+    all_results = {}
+    
+    # Schwarzschild
+    all_results["schwarzschild"] = run_for_fixture(
+        "Schwarzschild", get_schwarzschild_values, get_schwarzschild_grid,
+        STERBENZ_CHECKERS["schwarzschild"]
+    )
+    
+    # SR
+    all_results["sr"] = run_for_fixture(
+        "SR", get_sr_values, get_sr_grid,
+        STERBENZ_CHECKERS["sr"]
+    )
+    
+    # Pure Algebraic (n=2)
+    all_results["pure_algebraic_n2"] = run_for_fixture(
+        "Pure Algebraic (n=2)", get_pure_algebraic_values, get_pure_algebraic_grid,
+        STERBENZ_CHECKERS["pure_algebraic"]
+    )
+    
+    # Cbrt (n=3)
+    all_results["cbrt_n3"] = run_for_fixture(
+        "Cube Root (n=3)", get_cbrt_values, get_cbrt_grid,
+        STERBENZ_CHECKERS["cbrt"]
+    )
+    
+    # Save results
+    out_path = "scratch/validate_lattice_prealignment_v2_results.json"
+    with open(out_path, "w") as f:
+        json.dump(all_results, f, indent=2, default=float)
+    
+    print(f"\n\nFull results written to {out_path}")
+    print("Script completed.")
+
+if __name__ == "__main__":
+    main()

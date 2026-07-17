@@ -1,0 +1,41 @@
+{
+  "rank": 107,
+  "lift": 0.95,
+  "count": 2,
+  "families": 1,
+  "a": {
+    "id": "OBJ:constraint-surface",
+    "label": "Constraint Surface",
+    "standard_term": "implicit zero-level-set hypersurface F(D,S,P)=0",
+    "nomenclature": "identical-to",
+    "symbols": []
+  },
+  "b": {
+    "id": "OBJ:self-coupling-hessian-split-h-h-c-h-s",
+    "label": "Self/coupling Hessian split H = H_c + H_s",
+    "standard_term": "diagonal-plus-hollow (diagonal / zero-diagonal) matrix decomposition of the Hessian",
+    "nomenclature": "variant-of",
+    "symbols": [
+      "h_c",
+      "h_s"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-0237",
+      "type": "theorem",
+      "claim_status": "proved",
+      "label": "Floor 1 — Mean Curvature Decomposition",
+      "summary": "The mean curvature H of an implicit constraint surface decomposes exactly as:\n\n    H = H_c + H_s     (no interaction term)\n\nwhere:\n\n    H_c = −g^T H_c g / (2|g|³)\n    H_s = (|g|² tr(H_s) − g^T H_s g) / (2|g|³)",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/geometric_fault_localization_and_decomposition/Mean Curvature Decomposition.md"
+    },
+    {
+      "uid": "U-0648",
+      "type": "theorem",
+      "claim_status": "proved",
+      "label": "Theorem 5 — Bilinear Coupling Graph Correspondence (n = 3)",
+      "summary": "For constraint surfaces where H_s = 0 everywhere (purely bilinear coupling): (a) K_G = κ_c everywhere on the surface. (b) κ_c = 0 at generic points iff the coupling polynomial factors. (c) Factorability is equivalent to ",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/geometric_fault_localization_and_decomposition/Bilinear Coupling Graph Correspondence.md"
+    }
+  ]
+}

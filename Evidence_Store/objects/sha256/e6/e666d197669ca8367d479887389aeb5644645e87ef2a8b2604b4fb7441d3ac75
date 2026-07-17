@@ -1,0 +1,33 @@
+# Form Generator v2 — Closeout
+
+**Date:** 2026-06-05 · research-grade, eval-layer, proof-of-concept (NOT promoted).
+Code: `scratch/form_generator_v2.py` (+ focused Task-031 confirmation inline). Fixture: Schwarzschild (c=2/r), Sterbenz region r∈[4,10].
+Campaign: substrate-invariant-search / layer-3-promotion Gate-2 (derive the form basis). Anti-restart: NOT a new campaign.
+
+## Fix 1 — non-degeneracy filter
+A genuine form is **zero on the surface (R²=1−c) AND not a structural zero** (not identically 0 for independent free R,c).
+- **Structural zeros removed: 114** — the `(R−R)·g` trivial-zero flood; this class (F3 + multiples) is the **calibration-zero / origin**, correctly excluded from forms.
+- **Genuine count: 1066** — still inflated. **Remaining gap:** the filter admits *products/multiples* of forms (`F1·g` with g≠0 on surface is zero-on-surface and not structural). These aren't new forms, just scaled residuals. **v3 needs an irreducibility filter** (a form must not factor as form×(nonzero) or decompose as form+form).
+
+## Fix 2 — Task-031 "operation-exact vs global" showdown — **CONFIRMED**
+Direct comparison of the two associations of `R²−1+c` on r≥4:
+
+| form | the catastrophic cancellation | global lattice |
+|---|---|---|
+| **c1 = (R²−1)+c** (Sterbenz-blessed) | `R²−1` **operation-EXACT, 32/32 cells** (greedy/local optimum) | **{−0.5…0.5} HALF lattice — worse** |
+| **c2 = R²+(c−1)** (reassociated) | allows the `c−1` rounding early | **{0.0} INTEGER lattice — cleaner** |
+
+**Making the cancellation operation-exact (c1, the greedy local choice) yields a globally WORSE lattice than reassociating (c2).** Operation-exactness ≠ global optimality. **Task-031 reproduced inside the generator; Will's early-absorb principle confirmed** — allowing more rounding early (the `c−1` absorbed early in c2) gives the cleaner global result.
+
+*(v2's auto-detector reported "no disagreement" because its greedy metric — "has any Sterbenz-exact op" — was too coarse; everything has one. The right metric is the round-off at the specific catastrophic-cancellation op, which is exactly 0 in c1 while c1 is globally worse. Fixed in the focused confirmation.)*
+
+## Retrodiction gate — GREEN
+F1, c1, c2 all recovered by free enumeration as genuine members; F3 correctly classified structural-zero (origin), not a form.
+
+## Net
+- Architecture proven (v1) + **non-degeneracy filter** (v2) + **early-absorb principle reproduced generatively** (v2). The generator now derives the forms, classifies the origin correctly, and recovers the Task-031 global-over-greedy result on its own fixture.
+- **One gap to a real instrument:** the genuine-form count (1066) is inflated by form-multiples → **v3 irreducibility filter** (and the auto greedy-metric should be the cancellation-op round-off, not any-exact-op).
+
+## Next (v3)
+- Irreducibility filter: quotient out form×(nonzero-on-surface) and form+form → the *primitive* form set (should collapse 1066 → a small basis containing F1/F2/F4 + universal F5+).
+- Then the live payoff: any primitive, membership-genuine form NOT in the known set, with low global burden = a **derived** F5+ candidate, retrodiction-gated.

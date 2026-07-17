@@ -1,0 +1,127 @@
+"""Rounding dial — EMERGENT (forms are NOT precomputed; they fall out of the cost frontier).
+
+Difference from v2: v2 enumerated the whole AST catalogue, then sorted by rounding — a
+precomputed list. Here the rounding cost IS the generator. A best-first (uniform-cost)
+frontier grows chains from the operands, ordered by TOTAL ROUNDING. The cheapest chain that
+reaches the answer (constraint = 0 on surface) emerges first; the dial only opens outward as
+cost increases. No full catalogue is ever built — the forms emerge in rounding order because
+the cost drives the frontier. The constraint (hit the answer) + the dial (cost) force them out.
+
+cost(chain) = sum over its operations of |exact_op - float_op| / ulp(f)   (exact, additive over the tree)
+A chain is EMITTED (a "form") when it is a genuine identity on the surface (zero on surface,
+nonzero off it). Eval-layer, exact. One fixture, one operand.
+"""
+import math, struct, heapq
+from fractions import Fraction as Fr
+
+ATOMS = [('R',), ('one',), ('c',)]
+OPS = ('+', '-', '*')
+def cof(r): return 2.0 / r
+DEDUP_RS = [2.1 + i * (9.9 - 2.1) / 9 for i in range(10)]
+READ_R = 3.3
+
+
+def ev(node, r):
+    c = cof(r); R = math.sqrt(1.0 - c)
+    def go(m):
+        k = m[0]
+        if k == 'R': return R
+        if k == 'one': return 1.0
+        if k == 'c': return c
+        a, b = go(m[1]), go(m[2]); return a + b if k == '+' else a - b if k == '-' else a * b
+    return go(node)
+
+
+def evfree(node, Rv, cv):
+    def go(m):
+        k = m[0]
+        if k == 'R': return Rv
+        if k == 'one': return 1.0
+        if k == 'c': return cv
+        a, b = go(m[1]), go(m[2]); return a + b if k == '+' else a - b if k == '-' else a * b
+    return go(node)
+
+
+def vvec(node): return tuple(struct.pack('>d', ev(node, r)).hex() for r in DEDUP_RS)
+def s(node):
+    if len(node) == 1: return {'R': 'R', 'one': '1', 'c': 'c'}[node[0]]
+    return f"({s(node[1])} {node[0]} {s(node[2])})"
+def depth(node): return 0 if len(node) == 1 else 1 + max(depth(node[1]), depth(node[2]))
+def on_surface(node):
+    return all(abs(evfree(node, math.sqrt(1 - cv), cv)) <= 1e-9 for cv in (0.2, 0.4, 0.49, 0.7))
+def structural_zero(node):
+    return all(abs(evfree(node, Rv, cv)) <= 1e-12 for Rv, cv in ((0.31, 0.27), (0.83, 0.11), (1.4, 0.55)))
+
+
+def op_roundoff(a, b, op):
+    fl = a + b if op == '+' else a - b if op == '-' else a * b
+    ex = (Fr(a) + Fr(b)) if op == '+' else (Fr(a) - Fr(b)) if op == '-' else (Fr(a) * Fr(b))
+    return fl, abs(ex - Fr(fl))
+
+
+U_READ = math.ulp(1.0 - cof(READ_R))
+
+
+def main():
+    # frontier: (cost, tiebreak, node). cost = total rounding in ulp at READ_R, additive over the tree.
+    materialized = []      # nodes popped in cost order
+    seen = set()
+    heap = []
+    counter = 0
+    for a in ATOMS:
+        vv = vvec(a)
+        if vv not in seen:
+            seen.add(vv); heapq.heappush(heap, (0.0, counter, a, Fr(0))); counter += 1
+
+    def node_cost_value(node):
+        # value at READ_R + total rounding (Fraction) — recompute additively
+        c = cof(READ_R); R = math.sqrt(1.0 - c)
+        tot = [Fr(0)]
+        def go(m):
+            k = m[0]
+            if k == 'R': return R
+            if k == 'one': return 1.0
+            if k == 'c': return c
+            a, b = go(m[1]), go(m[2])
+            fl, ro = op_roundoff(a, b, m[0]); tot[0] += ro; return fl
+        v = go(node); return v, tot[0]
+
+    emitted = []
+    MAX_MAT = 1400
+    while heap and len(materialized) < MAX_MAT and len(emitted) < 18:
+        cost, _, node, _ = heapq.heappop(heap)
+        materialized.append(node)
+        # EMIT if it's a genuine identity that reaches the answer
+        if len(node) > 1 and on_surface(node) and not structural_zero(node):
+            emitted.append((cost, node))
+        # expand: combine this node with all materialized-so-far (and atoms), grow chains
+        pool = materialized + ATOMS
+        for other in pool:
+            if depth(node) + depth(other) > 4:   # bound tree size
+                continue
+            for (x, y) in ((node, other), (other, node)):
+                for op in OPS:
+                    nd = (op, x, y)
+                    vv = vvec(nd)
+                    if vv in seen:
+                        continue
+                    seen.add(vv)
+                    v, tot = node_cost_value(nd)
+                    heapq.heappush(heap, (float(tot / Fr(U_READ)), counter, nd, tot)); counter += 1
+
+    print("=" * 90)
+    print("ROUNDING DIAL — EMERGENT (forms fall out of the cost frontier; nothing precomputed/catalogued)")
+    print(f"  Schwarzschild, read at r={READ_R} (f={1-cof(READ_R):.4f}); frontier ordered by total rounding (ulp)")
+    print(f"  materialized {len(materialized)} chains to surface the first {len(emitted)} genuine forms")
+    print("-" * 90)
+    print("  forms IN THE ORDER THE DIAL FORCED THEM OUT (cost-ascending):")
+    for i, (cost, node) in enumerate(emitted):
+        tag = "  <-- DIAL ORIGIN (minimal rounding to reach the answer)" if i == 0 else ""
+        print(f"   #{i:<2} rounding={cost:7.4f} ulp   {s(node)}{tag}")
+    print("-" * 90)
+    print("  The first form emerged from the cost frontier alone — never picked, never catalogued.")
+    print("  Each subsequent form is the next-cheapest operand-combination the constraint admits.")
+
+
+if __name__ == "__main__":
+    main()

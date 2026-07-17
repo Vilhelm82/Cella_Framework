@@ -1,0 +1,388 @@
+{
+ "arm": "algebra (THE WARP: factorability & \u2295-universality)",
+ "authority": "CAMPAIGN_BRIEF_algebra_arm_DRAFT.md \u00a710 RATIFIED 2026-06-14 (Will) + recon scratch/warp_stage0_recon/ (build-vs-consult verdicts) + geometry-arm successor notes (R15 inheritance)",
+ "campaign_id": "the_warp_algebra_arm",
+ "charter": "The Shared Residual (working title; Will's to confirm)",
+ "code_pins_sha256": {
+  "carrier.py": "ab8ce379e8a7527d2ca244832ce632b1d5a1c7d65d6d64a5d3adb7f4ab2f9281",
+  "ddynamic.py": "b283aa6f19931110d830d11f996ff50e4166a7700e4f09f64d400997351421fc",
+  "dstatic.py": "ac4aba22a432c4696634c26fb7e984dcfd102d45c548a5449e5d3498935c4a3f",
+  "fixtures.py": "b3a780194361b47362ec79a199f16b5c4ed7500e2254ba3a7465d67bb2fcdcbd",
+  "mexpr.py": "3e5c590f1ca640800a11c0becd7b1bec5c4fefe6de523791dd7606bbde5dc72a",
+  "referee.py": "79b7e5e7fd785c14967f8fc12cb3781fc69dd385ec73629a421bbd80c9a320bf",
+  "schema.py": "4d2efb3ea64535d115cc305720ec115d02226aea28cf15040184de0a5c2d3eeb"
+ },
+ "date_stamped_from_machine": "2026-06-14",
+ "economics_pins": {
+  "carrier_referee_residue_den_bits": {
+   "FXWE1": 53,
+   "FXWE2": 56,
+   "FXWE3": 57
+  },
+  "op_dag_walk_nodes": {
+   "FXWA1": 7,
+   "FXWA2": 13,
+   "FXWA3": 9,
+   "FXWB1": 5,
+   "FXWB2": 4,
+   "FXWC1": 5,
+   "FXWC2": 3,
+   "FXWC3": 19,
+   "FXWD1": 9,
+   "FXWD2": 5,
+   "FXWD3": 5
+  },
+  "representative_dependence_ordered_pairs": 6,
+  "simplification_oracle_calls_budget": 1
+ },
+ "execution": {
+  "byte_stability": "every battery x2; sha256 over records (Stage A+); Stage 0 = the frozen manifest sha",
+  "imports": "probe/substrate stdlib only (fractions); referee exact-\u211a via the commuted-tree path; mpmath referee-side only (transcendental enclosures, Stage A) \u2014 NOT imported at Stage 0",
+  "membrane_rule": "RESULT_TYPES Amendment 1: private float algebra, a byte-stable event accumulator (the ledger), one WarpRecord boundary object; role gate in the schema",
+  "three_roles": "probe (d_static/d_dynamic) never imports the referee (referee.py); enforced by the import-seam test (covenant #7)"
+ },
+ "fixtures": [
+  {
+   "fixture_id": "FXWA1",
+   "fx_class": "FX-W-A",
+   "n_vars": 2,
+   "pathology": "depth-2 product of sum and difference; all maps R_exact",
+   "points": [
+    {
+     "x": "0x1.8p+0",
+     "y": "0x1p-1"
+    }
+   ],
+   "sexpr": "(mul (add x y) (sub x y))"
+  },
+  {
+   "fixture_id": "FXWA2",
+   "fx_class": "FX-W-A",
+   "n_vars": 2,
+   "pathology": "expansion with internal cancellation; still all R_exact",
+   "points": [
+    {
+     "x": "0x1.4p+0",
+     "y": "0x1.cp-1"
+    }
+   ],
+   "sexpr": "(sub (pow (add x y) 2) (add (pow x 2) (mul 2 (mul x y))))"
+  },
+  {
+   "fixture_id": "FXWA3",
+   "fx_class": "FX-W-A",
+   "n_vars": 2,
+   "pathology": "division present but away from the \u00f70 locus",
+   "points": [
+    {
+     "x": "0x1.8p+0",
+     "y": "0x1p-1"
+    }
+   ],
+   "sexpr": "(div (sub (pow x 2) (pow y 2)) (add x y))"
+  },
+  {
+   "fixture_id": "FXWB1",
+   "fx_class": "FX-W-B",
+   "n_vars": 2,
+   "pathology": "intrinsic \u00f70 token; the organ must return indeterminate",
+   "points": [
+    {
+     "x": "0x1.8p+0",
+     "y": "0x1p-1"
+    }
+   ],
+   "sexpr": "(div x (sub y y))"
+  },
+  {
+   "fixture_id": "FXWB2",
+   "fx_class": "FX-W-B",
+   "n_vars": 1,
+   "pathology": "intrinsic 0^neg token; indeterminate, never a wrong factors",
+   "points": [
+    {
+     "x": "0x1.8p+0"
+    }
+   ],
+   "sexpr": "(pow (sub x x) -2)"
+  },
+  {
+   "fixture_id": "FXWC1",
+   "fx_class": "FX-W-C",
+   "n_vars": 1,
+   "pathology": "UNDERFLOW-WITNESS-ULP (HR138, banked): total float cancellation, factors by R_exact-by-composition",
+   "points": [
+    {
+     "x": "0x1p+60"
+    }
+   ],
+   "sexpr": "(sub (add x 1) x)"
+  },
+  {
+   "fixture_id": "FXWC2",
+   "fx_class": "FX-W-C",
+   "n_vars": 2,
+   "pathology": "Sterbenz-protected subtraction (x/2 <= y <= 2x): float-exact",
+   "points": [
+    {
+     "x": "0x1.8p+0",
+     "y": "0x1.4p+0"
+    }
+   ],
+   "sexpr": "(sub x y)"
+  },
+  {
+   "fixture_id": "FXWC3",
+   "fx_class": "FX-W-C",
+   "n_vars": 2,
+   "pathology": "separated_coincidental cousin: two routes coincide at TRUE 0; factors (CL-M4 finite-precision cousin, reproduced not banked)",
+   "points": [
+    {
+     "x": "0x1.999999999999ap-4",
+     "y": "0x1.7p+0"
+    }
+   ],
+   "sexpr": "(sub (mul (add x y) (add x y)) (add (add (pow x 2) (pow y 2)) (mul 2 (mul x y))))"
+  },
+  {
+   "fixture_id": "FXWD1",
+   "fx_class": "FX-W-D",
+   "n_vars": 1,
+   "pathology": "Richardson wall: D_static does_not_factor; factors only after one simplification-oracle call (CL-W3, Stage A)",
+   "points": [
+    {
+     "x": "0x1p+0"
+    }
+   ],
+   "sexpr": "(sub (add (pow (sin x) 2) (pow (cos x) 2)) 1)"
+  },
+  {
+   "fixture_id": "FXWD2",
+   "fx_class": "FX-W-D",
+   "n_vars": 1,
+   "pathology": "Richardson wall: inverse-pair identity, oracle-recoverable",
+   "points": [
+    {
+     "x": "0x1.8p+0"
+    }
+   ],
+   "sexpr": "(sub (exp (log x)) x)"
+  },
+  {
+   "fixture_id": "FXWD3",
+   "fx_class": "FX-W-D",
+   "n_vars": 1,
+   "pathology": "Richardson wall: on-branch inverse pair (|x| < pi/2)",
+   "points": [
+    {
+     "x": "0x1p-1"
+    }
+   ],
+   "sexpr": "(sub (atan (tan x)) x)"
+  },
+  {
+   "carrier": "Q",
+   "carrier_sort": "free_module",
+   "fixture_id": "FXWE1",
+   "fx_class": "FX-W-E",
+   "n_vars": 0,
+   "pathology": "scalar carrier \u211a; additive reconstruction",
+   "samples": [
+    {
+     "float": "0x1.5555555555555p+1",
+     "true": "7/3"
+    }
+   ]
+  },
+  {
+   "carrier": "Q^n",
+   "carrier_sort": "free_module",
+   "fixture_id": "FXWE2",
+   "fx_class": "FX-W-E",
+   "n_vars": 0,
+   "pathology": "vector solve \u211a\u207f (n=2); componentwise additive",
+   "samples": [
+    {
+     "float": [
+      "0x1.5555555555555p+1",
+      "-0x1.999999999999ap-2"
+     ],
+     "true": [
+      "7/3",
+      "-2/5"
+     ]
+    }
+   ]
+  },
+  {
+   "carrier": "Q^{nxm}",
+   "carrier_sort": "free_module",
+   "fixture_id": "FXWE3",
+   "fx_class": "FX-W-E",
+   "n_vars": 0,
+   "pathology": "Jacobian \u211a\u207f\u02e3\u1d50 (2x2; Arm M reuse); entrywise additive",
+   "samples": [
+    {
+     "float": [
+      [
+       "0x1p-1",
+       "0x1.5555555555555p-2"
+      ],
+      [
+       "0x1.999999999999ap-3",
+       "0x1.2492492492492p-3"
+      ]
+     ],
+     "true": [
+      [
+       "1/2",
+       "1/3"
+      ],
+      [
+       "1/5",
+       "1/7"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "carrier": "P1(Q)",
+   "carrier_sort": "quotient",
+   "fixture_id": "FXWF1",
+   "fx_class": "FX-W-F",
+   "mobius": [
+    1,
+    1,
+    0,
+    1
+   ],
+   "n_vars": 0,
+   "pathology": "make-or-break Q2 edge: additive residue is representative-dependent (ill-defined on the quotient); M\u00f6bius/PGL2 is the named native reconstruction; equality by cross-multiply a\u00b7d==b\u00b7c",
+   "point_repr": [
+    1,
+    2
+   ],
+   "representatives": [
+    [
+     1,
+     2
+    ],
+    [
+     2,
+     4
+    ],
+    [
+     -3,
+     -6
+    ]
+   ]
+  }
+ ],
+ "frozen": true,
+ "kill_conditions": {
+  "K-W1": "HALT (campaign dies): any pure-R_exact rational-op DAG (away from \u00f70/0^neg) that D_dynamic finds does NOT factor. The decidable-core foundational claim is false; the campaign stops, chain preserved.",
+  "K-W2": "HALT (arm): D_static != D_dynamic on the rational-op class in either direction (a false verdict). The decider is broken; the arm halts.",
+  "K-W3": "REFUTE-ROW (continue \u2014 the make-or-break): CL-W5 fails \u2014 either additive \u2295 DOES descend on \u2119\u00b9, or a free \u211a-module carrier fails additive in CL-W4. Halt the row, preserve the witness, name what reconstructs instead, reduce scope, keep the chain.",
+  "K-W4": "REFUTE-ROW: CL-W3 \u2014 the D_static/D_dynamic split does NOT coincide with expression-equality (the wall is located elsewhere than predicted).",
+  "K-W5": "DESCOPE (pre-declared): the \u2119\u00b9/PGL\u2082 parent build or a quotient extension exceeds the Stage-0 budget -> fence per the pre-registered schedule, never silently."
+ },
+ "recorded_non_tests": {
+  "FX-W-F/multiplicative_relative_error": "a multiplicative-relative-error cell cannot fire the refutation kill \u2014 the exact EFT residue of any rational op is additive by construction. Recorded, not tested."
+ },
+ "rulings_applied": {
+  "CL_W5_grading": "additive-failure half [ANALYTIC] (foregone on \u2119\u00b9); measured weight on the M\u00f6bius reconstruction (\u00a710.5)",
+  "R15_inheritance": "below_detection = R_exact-by-composition, NOT a T_token; prereg inherits it (\u00a710.7, binding)",
+  "charter_home": "results/the_warp/ (Stages a/b); charter row OPEN until both arms close (\u00a710.2)",
+  "dstatic_reuse": "D_static lifts the AtomKind partition (partial_wrap), NOT the manifest-lineage walk (recon Q2; \u00a710.5)",
+  "naming": "working label only (F14); no name adopted in-campaign",
+  "oracle": "exactly one declared, Rule-1.9-pinned, referee-side-only algebraic-simplification call (CL-W3); never substrate (\u00a710.5)",
+  "ordering": "geometry-close gate satisfied (HR138 ratified); WARP proceeds (\u00a710.1)",
+  "scope_cap": "\u2119\u00b9(\u211a) the sole representative quotient; n=2/3 free-module carriers; carrier stores raw (num,den), referee judges equality by cross-multiply a\u00b7d==b\u00b7c (\u00a710.5)"
+ },
+ "schema_version": "warp_record_v1",
+ "spine_fence": "SPINE FENCE (brief \u00a79; the manifest's verbatim fence, carried). This arm MEASURES factorability and the \u2295-carrier on named fixtures. It carries NO claim that the coupling/account primitive is the universal substrate spine, and NO cross-domain G-claim. [INFERENCE] (cella-as-trunk) stays [INFERENCE]. WARP closing satisfies the ALGEBRA-ARM HALF of the charter only \u2014 it is NOT the last gate to the spine; the unfence is a charter-level disposition reserved to Will, and requires BOTH arms to survive AND a separate spine-confirmation (SPINE_STATUS.md HR138). Eval-tier only; no substrate promotion in-campaign (Rule 1.2).",
+ "stage": "0",
+ "stage0_controls": {
+  "K_W2_detects_planted_disagreement": {
+   "dynamic": "factors",
+   "fixture": "FXWA1",
+   "planted_static": "does_not_factor"
+  },
+  "ast_seam_clean": {
+   "checked": "_factor_verdict",
+   "forbidden_hits": [],
+   "reads_forbidden": false,
+   "rogue_calls": []
+  },
+  "carrier_apparatus_sane": {
+   "FXWF1_carrier_sort": "quotient",
+   "consult_projective_ratio_parent": "ProjectiveRatioValue(1,2)",
+   "free_module_additive_closes": {
+    "FXWE1": "free_module",
+    "FXWE2": "free_module",
+    "FXWE3": "free_module"
+   },
+   "mobius_respects_quotient": true,
+   "p1_cross_multiply_equality": true
+  },
+  "carrier_informativeness_control_fails": {
+   "fixture": "FXWF1",
+   "lesson": "cross-multiply certifies [1:2]==[2:4], but the additive residue between representatives differs \u2014 \u2295_add is ill-defined on \u2119\u00b9 (CL-W5 foregone [ANALYTIC] half)",
+   "naive_assumption": "additive residue well-defined on the quotient",
+   "same_point_by_cross_multiply": true,
+   "truth": "representative-dependent"
+  },
+  "dry_runs_refuse_token_locus": {
+   "div0": {
+    "fixture": "FXWB1",
+    "refusal": "pole",
+    "verdict": "intrinsic_token"
+   },
+   "zero_neg_pow": {
+    "fixture": "FXWB2",
+    "refusal": "zero_neg_pow",
+    "verdict": "intrinsic_token"
+   }
+  },
+  "informativeness_control_fails": {
+   "fixture": "FXWC1",
+   "float": 0.0,
+   "lesson": "the float lane reads 0.0 from total cancellation; only the EFT residue recovers TRUE \u2014 factorability != float-lane exactness (CL-W2; HR138 UNDERFLOW-WITNESS-ULP, R15)",
+   "naive_reading": "vanished / does_not_factor",
+   "residue": "1",
+   "true_q": "1",
+   "truth": "factors"
+  },
+  "lawful_battery_no_kill": {
+   "FXWA1": {
+    "dynamic": "factors",
+    "referee_matches": true,
+    "static": "factors"
+   },
+   "FXWA2": {
+    "dynamic": "factors",
+    "referee_matches": true,
+    "static": "factors"
+   },
+   "FXWA3": {
+    "dynamic": "factors",
+    "referee_matches": true,
+    "static": "factors"
+   },
+   "FXWD1": {
+    "oracle_recoverable": true,
+    "static": "does_not_factor"
+   },
+   "FXWD2": {
+    "oracle_recoverable": true,
+    "static": "does_not_factor"
+   },
+   "FXWD3": {
+    "oracle_recoverable": true,
+    "static": "does_not_factor"
+   }
+  }
+ },
+ "thesis": "a computation inherits Cella's coherence IFF it factors into observation maps each whose defect lies in R_exact and composes (Q1, decidable in advance on the rational-op class, semi-decidable past the Richardson wall); and \u2295 is additive exactly over free \u211a-module carriers, stopping at quotient carriers (Q2; the make-or-break edge is \u2119\u00b9(\u211a))."
+}

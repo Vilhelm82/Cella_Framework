@@ -1,0 +1,492 @@
+{
+  "audit_name": "substrate_invariant_search_phase_a_catalogue",
+  "authority": "Build_Docs/Agent_tasks/substrate_invariant_search_2026_05_23.md",
+  "campaign": "substrate_invariant_search",
+  "candidates": [
+    {
+      "candidate_id": "BACL_grain",
+      "canonical_name": "BACL lattice grain ulp(b) at operand pair",
+      "computability": {
+        "P1_satisfied": true,
+        "input_only": true,
+        "requires_F_evaluation": false
+      },
+      "definition": "For a, b in F+ with ulp(a) >= ulp(b), the substrate's lattice unit at the operand pair (a, b) is ulp(b); the difference a - b lies on this lattice with integer index j: a - b = j * ulp(b).",
+      "identified_gaps": [
+        "BACL is a pair invariant; the surface-level lattice-grain field has not been characterised as a geometric object",
+        "float128 (x86 80-bit extended) verification pending due to exact-rational tooling limits",
+        "Decimal IEEE 754 analog separate; different ulp structure"
+      ],
+      "mathematical_form": "ulp(b) = 2^(floor(log2(|b|)) - p + 1) for IEEE 754 binary format with p-bit mantissa (p = 11/24/53 for float16/32/64).",
+      "promotion_blockers_for_P_set": {
+        "P1_input_derivable": "satisfied",
+        "P2_geometric_content": "partial \u2014 substrate granularity, not directly geometric; needs lifting to a surface-level field",
+        "P3_route_invariant": "pair-level invariant; route-level lifting open",
+        "P4_format_invariant": "satisfied across float16/32/64; float128 pending",
+        "P5_substrate_phenomenon_discriminating": "pending \u2014 BACL alone tells substrate granularity, not phenomenon presence"
+      },
+      "records_verified": 31000,
+      "scope_of_applicability": [
+        "float16",
+        "float32",
+        "float64",
+        "normal",
+        "subnormal"
+      ],
+      "source_references": [
+        "Build_Docs/Reports/bacl_invariant_audit/closeout.md",
+        "Build_Docs/Reports/bacl_subnormal_audit/closeout.md",
+        "Build_Docs/Reports/bacl_multi_format_audit/closeout.md"
+      ],
+      "substrate_derivation_chain": "Direct from IEEE 754 binade structure. 5-line proof from binade-spacing axioms; no Sterbenz, no scaling invariance, no rounding-mode hypothesis. Proven in bacl_invariant_audit/.",
+      "verification_status": "proven"
+    },
+    {
+      "candidate_id": "conjecture_c_binade_floor_preservation",
+      "canonical_name": "Conjecture C: binade-floor preservation under sqrt-square chain",
+      "computability": {
+        "P1_satisfied": true,
+        "input_only": true,
+        "requires_F_evaluation": false
+      },
+      "definition": "For f in float64 in binade [2^k, 2^(k+1)) (normal range), if R = round-to-nearest-even(sqrt(f)), then round-to-nearest-even(R * R) >= 2^k.",
+      "identified_gaps": [
+        "Subnormal range (C_subnormal) open; mechanism (scaling invariance) breaks there",
+        "Multi-format generalization beyond float64 not yet attempted",
+        "Chain-specific (sqrt-square); other algebraic chains require separate proofs"
+      ],
+      "mathematical_form": "RN_even(R * R) >= 2^k where R = RN_even(sqrt(f)) and f in [2^k, 2^(k+1)), for k such that 2^k >= 2^(-1021).",
+      "promotion_blockers_for_P_set": {
+        "P1_input_derivable": "satisfied",
+        "P2_geometric_content": "partial \u2014 operates on the chain's algebraic structure, not directly on the geometry of F = 0",
+        "P3_route_invariant": "violated by construction \u2014 chain-specific (sqrt-square)",
+        "P4_format_invariant": "violated \u2014 proven only for float64",
+        "P5_substrate_phenomenon_discriminating": "pending"
+      },
+      "records_verified": 221466,
+      "scope_of_applicability": [
+        "float64",
+        "normal_range_only",
+        "f >= 2^-1021",
+        "sqrt_square_chain_only"
+      ],
+      "source_references": [
+        "Build_Docs/Reports/conjecture_c_proof_audit/closeout.md"
+      ],
+      "substrate_derivation_chain": "Case analysis on parity of k + finite enumeration over 2,044 normal-range binade boundaries + monotonicity argument for in-binade extension. Amendment II grounds R_above derivation in RN-even definition + mpmath exact sqrt (definition-grounded, not libm-asserted). Proven in conjecture_c_proof_audit/.",
+      "verification_status": "proven_within_scope"
+    },
+    {
+      "candidate_id": "c2_lattice_integer_grain",
+      "canonical_name": "c2 lattice theorem: integer-ulp grain for canonical sqrt-square chain",
+      "computability": {
+        "P1_satisfied": true,
+        "input_only": true,
+        "requires_F_evaluation": false
+      },
+      "definition": "For f_float = round(1 - x_term) in IEEE 754 binary64 with f_float >= 2^(-1021), if R = round(sqrt(f_float)) and V_2 = round(R * R), then c2 = round(V_2 + round(x_term - 1)) = j * ulp(f_float) for integer j in Z.",
+      "identified_gaps": [
+        "Scope-bound by Conjecture C (genuinely scope-bound)",
+        "n=3 (cbrt) chain showed transformed_operand_law_refuted_at_n3 (Task 033) \u2014 algebraic chain matters",
+        "n=4 (quartic) chain showed transformed_decay_converges_to_identity_floor (Task 034)"
+      ],
+      "mathematical_form": "c2 = j * ulp(f_float) where j in Z and f_float >= 2^(-1021).",
+      "promotion_blockers_for_P_set": {
+        "P1_input_derivable": "satisfied",
+        "P2_geometric_content": "partial \u2014 algebraic-chain structure, not yet geometry-of-F",
+        "P3_route_invariant": "violated \u2014 chain-specific; different n chains produce different behaviours",
+        "P4_format_invariant": "violated \u2014 proven only for float64",
+        "P5_substrate_phenomenon_discriminating": "pending"
+      },
+      "records_verified": 90000,
+      "scope_of_applicability": [
+        "float64",
+        "f_float >= 2^-1021",
+        "n=2 sqrt-square chain"
+      ],
+      "source_references": [
+        "Build_Docs/Reports/c2_lattice_substrate_derivation/closeout.md",
+        "Build_Docs/Reports/c2_theorem_scope_gate/closeout.md"
+      ],
+      "substrate_derivation_chain": "3-line corollary of BACL + Conjecture C. The c2 quantity is the residual structure of the canonical n=2 sqrt-square chain; BACL provides the lattice membership and Conjecture C provides the binade-floor preservation that closes the integer-j claim.",
+      "verification_status": "proven_within_scope"
+    },
+    {
+      "candidate_id": "E_log2_base_operand",
+      "canonical_name": "E := log2(|base_operand|) substrate image of distance-to-singular-surface",
+      "computability": {
+        "P1_satisfied": true,
+        "input_only": true,
+        "requires_F_evaluation": false
+      },
+      "definition": "Substrate image of distance to a singular endpoint, defined per fixture: SR base_operand = 1 - beta*beta; Schwarzschild base_operand = 1 - 2/r; pure_algebraic base_operand = 1 - x. E = log2(|base_operand|), log base 2 audit-locked.",
+      "identified_gaps": [
+        "Multi-D generalisation open (MD_Q1 from Phase 2h)",
+        "Family-specific to 1 - x_term form; general F not yet covered",
+        "Formal substrate derivation of ratio-to-phase mapping pending"
+      ],
+      "mathematical_form": "E(F, x) = log2(|base_operand_F(x)|) where base_operand_F is the F-specific 1 - x_term form.",
+      "promotion_blockers_for_P_set": {
+        "P1_input_derivable": "satisfied",
+        "P2_geometric_content": "yes \u2014 endpoint-distance substrate image is the geometric content for 1D",
+        "P3_route_invariant": "pending \u2014 algebraic-route variation across F1/F2/F3/F4 produces distinguishable phase signatures even at fixed E",
+        "P4_format_invariant": "pending \u2014 validated for float64; multi-format extension open",
+        "P5_substrate_phenomenon_discriminating": "yes within 1D \u2014 Phase 2g validated the threshold-on-E as the substrate-recognisable C-extractor"
+      },
+      "records_verified": 411,
+      "scope_of_applicability": [
+        "1D constraint surfaces",
+        "1 - x_term form fixtures (SR, Schwarzschild, pure_algebraic)",
+        "float64"
+      ],
+      "source_references": [
+        "Build_Docs/Reports/mcg_geometry_first/phase_2d_solve_for_scout.json",
+        "Build_Docs/Reports/mcg_geometry_first/phase_2g_cdef1_calibration.json",
+        "Build_Docs/Reports/mcg_geometry_first/phase_2h_v3_bridge.json"
+      ],
+      "substrate_derivation_chain": "(1) BACL invariant; (2) ulp(x_term) = 2^(k_x_term - 52); (3) base_operand = 1 - x_term sits in binade floor(E); (4) ratio between BACL lattice unit and result's intrinsic granularity governs F1_to_F2 phase distribution and depends on floor(E). Formal derivation pending; sketch validated in Phase 2g.",
+      "verification_status": "operationally_validated_1d"
+    },
+    {
+      "candidate_id": "sterbenz_cluster_threshold",
+      "canonical_name": "Sterbenz cluster threshold (cross-fixture E-threshold convergence)",
+      "computability": {
+        "P1_satisfied": true,
+        "input_only": true,
+        "requires_F_evaluation": false
+      },
+      "definition": "Per-fixture best E threshold for F1_to_F2 phase organisation clusters in log2 [-0.949, -0.750], spread 0.198, corresponding to |base_operand| in [0.518, 0.594] - near the Sterbenz boundary at |base_operand| ~ 0.5.",
+      "identified_gaps": [
+        "Cluster validated in 1D only",
+        "Persistence under multi-D anchor extension is MD_Q1 of Phase 2h",
+        "V4-native K_G across the cluster shows no signature (smoke test 2026-05-23) \u2014 cluster is V4-pipeline-specific"
+      ],
+      "mathematical_form": "E* in [-0.949, -0.750] across fixtures (cross-fixture cluster), spread 0.198, mapped to |base_operand| in [0.518, 0.594].",
+      "promotion_blockers_for_P_set": {
+        "P1_input_derivable": "satisfied",
+        "P2_geometric_content": "yes \u2014 substrate-recognisable threshold derived from binade structure",
+        "P3_route_invariant": "yes \u2014 cluster appears across all four-form routes in the campaign",
+        "P4_format_invariant": "pending \u2014 only float64 tested; predicted to scale across formats via binade structure",
+        "P5_substrate_phenomenon_discriminating": "partial \u2014 discriminates V4-pipeline regimes but NOT V3 K_G regimes (Phase 2h oracle)"
+      },
+      "records_verified": 411,
+      "scope_of_applicability": [
+        "1D constraint surfaces",
+        "SR + Schwarzschild + pure_algebraic",
+        "F1_to_F2 phase pipeline"
+      ],
+      "source_references": [
+        "Build_Docs/Reports/mcg_geometry_first/phase_2g_cdef1_calibration.json",
+        "Build_Docs/Reports/mcg_geometry_first/phase_2h_v3_bridge.json"
+      ],
+      "substrate_derivation_chain": "Sterbenz boundary at |base_operand| ~ 0.5 = 2^(-1) is where BACL's hypothesis ulp(a) >= ulp(b) transitions from always-satisfied to potentially marginal for cancellation operands. The threshold cluster is the binade-spaced neighbourhood of this boundary, not a single binade edge.",
+      "verification_status": "empirically_robust_1d"
+    },
+    {
+      "candidate_id": "F1_to_F2_BACL_phase_signature",
+      "canonical_name": "F1_to_F2 BACL phase signature (algebraic-path-dependent lattice readback)",
+      "computability": {
+        "P1_satisfied": false,
+        "input_only": false,
+        "requires_F_evaluation": true
+      },
+      "definition": "Per-coordinate phase classification of the F1-to-F2 algebraic route pair: same_phase / half_phase_candidate / phase_drift / phase_unobservable. Half-phase fraction across E-quintiles organises the F1/F2 distinction.",
+      "identified_gaps": [
+        "Requires F-evaluation (violates P1)",
+        "Nonzero-operand-offset characterization open (\u00a71.4 of campaign authority)",
+        "Multi-D extension structurally rate-limited in 1D"
+      ],
+      "mathematical_form": "phase_delta_mod_1 in [0, 1) computed from BACL j-values of F1 and F2 routes at matched coordinates; classification by proximity to 0 (same), 0.5 (half), or other (drift).",
+      "promotion_blockers_for_P_set": {
+        "P1_input_derivable": "violated \u2014 requires evaluating F at the probe point",
+        "P2_geometric_content": "yes \u2014 encodes algebraic-route distinction at the BACL lattice level",
+        "P3_route_invariant": "violated by construction \u2014 the signature IS the route distinction",
+        "P4_format_invariant": "predicted but not tested",
+        "P5_substrate_phenomenon_discriminating": "yes \u2014 captures BACL-substrate signal modulated by C (per Phase 2g)"
+      },
+      "records_verified": 411,
+      "scope_of_applicability": [
+        "F1/F2 algebraic route pairs",
+        "1D fixtures",
+        "zero_operand_offset configuration"
+      ],
+      "source_references": [
+        "Build_Docs/Reports/mcg_geometry_first/phase_2_joined_readback_table.json",
+        "Build_Docs/Reports/mcg_geometry_first/phase_2g_cdef1_calibration.json"
+      ],
+      "substrate_derivation_chain": "F1 and F2 are algebraically equivalent rewrites of the same identity; their IEEE 754 paths differ. BACL guarantees both land on the integer-ulp lattice, but the j-values can differ by half a unit (half-phase) at fixed coordinate when binade structure of intermediate operands diverges between routes.",
+      "verification_status": "empirically_robust_1d"
+    },
+    {
+      "candidate_id": "sigma1_universal_linearization_exponent",
+      "canonical_name": "sigma_1 = 1.000 universal linearization-order exponent",
+      "computability": {
+        "P1_satisfied": false,
+        "input_only": false,
+        "requires_F_evaluation": true
+      },
+      "definition": "Residual magnitude exponent sigma_1 (linearization order) = 1.000 +/- 0.000 universally across 15 simple zeros of Riemann zeta, Bessel J_0, Airy Ai. H1-equivalent universal across very different transcendental functions.",
+      "identified_gaps": [
+        "Requires F-evaluation in a delta-sweep (violates P1)",
+        "Validated only at simple zeros; multiplicity >= 2 behaviour is the analogue but distinct invariant",
+        "sigma_4 route-permutation degeneracy disclosed in audit (zeta/J_0)",
+        "sigma_5 observability boundary not reached in tested delta range"
+      ],
+      "mathematical_form": "sigma_1 = 1.000 in the residual magnitude fit |F(x_0 + delta)| ~ |delta|^sigma_1 near simple zero x_0; result is the calculus linearization order, structurally universal.",
+      "promotion_blockers_for_P_set": {
+        "P1_input_derivable": "violated \u2014 requires F-sweep around the probe point",
+        "P2_geometric_content": "yes \u2014 regularity-class invariant of the constraint at the probe",
+        "P3_route_invariant": "yes within scope \u2014 universal across function families",
+        "P4_format_invariant": "predicted by linearization argument; multi-format test pending",
+        "P5_substrate_phenomenon_discriminating": "yes \u2014 universality is phenomenon-level (regularity-class); substrate appears only at the precision floor"
+      },
+      "records_verified": 225,
+      "scope_of_applicability": [
+        "simple zeros (multiplicity-1 roots)",
+        "transcendental functions zeta, J_0, Ai",
+        "linearization regime"
+      ],
+      "source_references": [
+        "Build_Docs/Reports/blowup_exponent_v4_audit/closeout.md"
+      ],
+      "substrate_derivation_chain": "Function-agnostic: at a simple zero, linearization order is 1 by definition. Result reflects regularity class, not substrate. Provides a cross-function universal invariant that any substrate-aware probe must reproduce.",
+      "verification_status": "empirically_robust"
+    },
+    {
+      "candidate_id": "fingerprint_atlas_distance_metric",
+      "canonical_name": "Fingerprint atlas distance metric (6-slot fixture fingerprint)",
+      "computability": {
+        "P1_satisfied": false,
+        "input_only": false,
+        "requires_F_evaluation": true
+      },
+      "definition": "6-slot cheap fingerprint vector uniquely identifies all 6 campaign fixtures. Perturbed SR (probe window {0.80, 0.82, 0.84}) vs canonical SR ({0.83, 0.85, 0.87}) at distance 0.0 byte-identical.",
+      "identified_gaps": [
+        "Requires F-evaluation at probe-window points (violates P1)",
+        "Fixture-level invariant; point-level analogue is the Phase B+ goal",
+        "Slot 16 (binade-loss depth) found redundant with slot 13 in Phase gamma \u2014 redundancy elimination already partial"
+      ],
+      "mathematical_form": "fingerprint(F, probe_window) in R^6; distance(fingerprint_A, fingerprint_B) = L2 norm of slot differences. Perturbed vs canonical SR: distance = 0.0 exact.",
+      "promotion_blockers_for_P_set": {
+        "P1_input_derivable": "violated \u2014 slots are evaluation-derived",
+        "P2_geometric_content": "yes \u2014 distinguishes geometric structure across fixtures",
+        "P3_route_invariant": "partial \u2014 some slots are route-invariant, others not",
+        "P4_format_invariant": "predicted but not multi-format tested",
+        "P5_substrate_phenomenon_discriminating": "yes \u2014 barcode demonstrates fixture identity readable from substrate residue"
+      },
+      "records_verified": 6,
+      "scope_of_applicability": [
+        "6 campaign fixtures",
+        "probe-window perturbation within validated range"
+      ],
+      "source_references": [
+        "Build_Docs/Reports/substrate_fingerprint_atlas_phase_delta/closeout.md"
+      ],
+      "substrate_derivation_chain": "Slots are computed from substrate observables at probe-window points; the fingerprint factors out which observables are structural invariants (insensitive to probe-window choice) vs which are sampling-grid-dependent. Phase delta validated the barcode framing: perturbation preserves the fingerprint.",
+      "verification_status": "empirically_robust_fixture_level"
+    },
+    {
+      "candidate_id": "null_tangent_alignment_unity",
+      "canonical_name": "Null-tangent alignment |cos theta| = 1.0000 universal (per-row)",
+      "computability": {
+        "P1_satisfied": false,
+        "input_only": false,
+        "requires_F_evaluation": true
+      },
+      "definition": "Per-row null-tangent alignment computed as 1/sqrt(1 + J^2) where J is the per-coordinate Jacobian. The blowup-exponent audit reported |cos theta| = 1.0000 universal across 18 cases.",
+      "identified_gaps": [
+        "Phase 2f showed related transition-grammar claims were sampling artefacts of canonical grid; needs re-validation under E-uniform alternative grid",
+        "Requires gradient evaluation (violates P1)",
+        "Universality may reflect sweep-direction choice rather than substrate invariance"
+      ],
+      "mathematical_form": "|cos theta(F, x)| = |grad F . sweep_direction| / (||grad F|| * ||sweep_direction||) computed per row; observed = 1.0000 across 18 cases.",
+      "promotion_blockers_for_P_set": {
+        "P1_input_derivable": "violated \u2014 requires gradient",
+        "P2_geometric_content": "yes \u2014 alignment is geometric by construction",
+        "P3_route_invariant": "pending \u2014 algebraic-route variation may produce different gradient computations",
+        "P4_format_invariant": "pending",
+        "P5_substrate_phenomenon_discriminating": "pending \u2014 current universality could be sweep-design artefact"
+      },
+      "records_verified": 18,
+      "scope_of_applicability": [
+        "18 cases across multiple fixtures",
+        "canonical sweep direction"
+      ],
+      "source_references": [
+        "Build_Docs/Reports/blowup_exponent_v4_audit/closeout.md",
+        "Build_Docs/Reports/mcg_geometry_first/phase_1_geometry_table.json"
+      ],
+      "substrate_derivation_chain": "Per-row geometric observable from Phase 1 of MCG. Universality across 18 cases is not yet substrate-derived; it may reflect the canonical sweep direction's alignment with the gradient in the chosen fixtures.",
+      "verification_status": "empirically_robust_pending_grid_revalidation"
+    },
+    {
+      "candidate_id": "F3_calibration_exact_zero",
+      "canonical_name": "F3 calibration exact zero (algebraic-path invariant)",
+      "computability": {
+        "P1_satisfied": false,
+        "input_only": false,
+        "requires_F_evaluation": true
+      },
+      "definition": "F3_to_F3 readback value = 0.0 exactly in every record across all three primary fixtures (411/411). F3 is the silent algebraic path: the same computation performed twice cancels itself at the bit level by IEEE 754 exactness.",
+      "identified_gaps": [
+        "F3 is the silent path \u2014 zero information per the substrate-as-probe framing",
+        "Useful as baseline / control, not as positive invariant"
+      ],
+      "mathematical_form": "F3_to_F3(F, x) = 0.0 exact for all (F, x) in scope.",
+      "promotion_blockers_for_P_set": {
+        "P1_input_derivable": "violated \u2014 F3 evaluation required (though result is exact)",
+        "P2_geometric_content": "no \u2014 F3 is information-zero by construction",
+        "P3_route_invariant": "violated \u2014 F3 is path-specific",
+        "P4_format_invariant": "satisfied \u2014 exact cancellation is format-independent",
+        "P5_substrate_phenomenon_discriminating": "no \u2014 F3 emits no signal"
+      },
+      "records_verified": 411,
+      "scope_of_applicability": [
+        "F3 algebraic path",
+        "all 1D primary fixtures",
+        "float64"
+      ],
+      "source_references": [
+        "Build_Docs/Reports/mcg_geometry_first/phase_2g_cdef1_calibration.json"
+      ],
+      "substrate_derivation_chain": "When the same float64 computation is performed twice and subtracted, IEEE 754 guarantees exact cancellation (the operation is bit-deterministic). F3 is the route designed to make this happen.",
+      "verification_status": "proven_exact"
+    },
+    {
+      "candidate_id": "doubling_ladder_rung_index",
+      "canonical_name": "Doubling-ladder rung index (binade-scaled residual quantisation)",
+      "computability": {
+        "P1_satisfied": false,
+        "input_only": false,
+        "requires_F_evaluation": true
+      },
+      "definition": "Nonzero IEEE 754 residuals from noisy algebraic routes sit on a discrete ladder with rung spacing factor 2. Rung index = floor(log2(r / ulp)) at the residual r and lattice unit ulp.",
+      "identified_gaps": [
+        "Rung distribution as a function of probe point not yet characterised",
+        "Closed-form prediction of rung populations would be a derivative invariant"
+      ],
+      "mathematical_form": "rung(r) = floor(log2(|r| / ulp))) for residual r and lattice unit ulp at the operand pair.",
+      "promotion_blockers_for_P_set": {
+        "P1_input_derivable": "partial \u2014 rung-unit derivable from inputs (ulp); rung observation requires evaluation",
+        "P2_geometric_content": "partial \u2014 geometry enters through which residuals materialise at each rung",
+        "P3_route_invariant": "violated \u2014 rung populations are route-specific",
+        "P4_format_invariant": "predicted by BACL multi-format",
+        "P5_substrate_phenomenon_discriminating": "partial \u2014 rung structure is substrate; rung population is phenomenon-plus-substrate"
+      },
+      "records_verified": 0,
+      "scope_of_applicability": [
+        "noisy algebraic routes (F1, F2, F4)",
+        "BACL-scope operand pairs"
+      ],
+      "source_references": [
+        "Build_Docs/where_i_got_stuck.md",
+        "Build_Docs/Reports/bacl_invariant_audit/closeout.md"
+      ],
+      "substrate_derivation_chain": "Direct BACL consequence: residuals on the integer-ulp lattice with rung spacing determined by the binade structure of the operand. Observation 3 of where_i_got_stuck.md substrate-attributed via BACL.",
+      "verification_status": "substrate_attributed_via_BACL"
+    },
+    {
+      "candidate_id": "two_form_asymmetry_path_cancellation",
+      "canonical_name": "Two-form asymmetry under path cancellation",
+      "computability": {
+        "P1_satisfied": true,
+        "input_only": true,
+        "requires_F_evaluation": false
+      },
+      "definition": "Two algebraically-equivalent forms of the same identity produce one identically-zero output (the silent form) and one BACL-lattice-residual output. The asymmetry \u2014 which algebraic structures produce silence vs which produce BACL-residual signal \u2014 is a structural property of the algebraic form.",
+      "identified_gaps": [
+        "Partition criterion not derived",
+        "Could be a syntactic property of the parse tree, or a deeper invariant of the algebraic identity",
+        "Multi-Path Generator v0.1 produces algebraically-equivalent forms but does not yet classify them"
+      ],
+      "mathematical_form": "Given F = (algebraic_form_A) - (algebraic_form_B) where A and B are mathematically equal: form_A may produce IEEE 754 exact result (silent) while form_B produces BACL-lattice residual; the silence-vs-residual partition is a function of the algebraic structure.",
+      "promotion_blockers_for_P_set": {
+        "P1_input_derivable": "satisfied in principle \u2014 partition determinable from algebraic form alone",
+        "P2_geometric_content": "no \u2014 this is an algebraic-structural invariant, not geometric",
+        "P3_route_invariant": "not applicable \u2014 this IS the route-level structural property",
+        "P4_format_invariant": "predicted \u2014 IEEE 754 exactness rules are format-uniform in structure",
+        "P5_substrate_phenomenon_discriminating": "yes \u2014 silent partition tells substrate; residual partition tells substrate-modulated-by-input"
+      },
+      "records_verified": 0,
+      "scope_of_applicability": [
+        "algebraically-equivalent rewrites",
+        "1D primary fixtures (extends to all)"
+      ],
+      "source_references": [
+        "Build_Docs/where_i_got_stuck.md"
+      ],
+      "substrate_derivation_chain": "Empirical (Observation 1 + Observation 4 of where_i_got_stuck.md). Not yet characterised: which structural property of an algebraic form predicts whether it lands in the silent partition vs the BACL-residual partition?",
+      "verification_status": "empirical_uncharacterised"
+    },
+    {
+      "candidate_id": "v3_minus_2_eigenvalue_319_pts",
+      "canonical_name": "V3's universal -2 eigenvalue across 319 GR points",
+      "computability": {
+        "P1_satisfied": false,
+        "input_only": false,
+        "requires_F_evaluation": true
+      },
+      "definition": "V3 reported a universal -2 eigenvalue across 319 points of a general-relativity test. The claim is V3-side; V4-native reproduction has not been attempted.",
+      "identified_gaps": [
+        "V4-native reproducibility unknown",
+        "Listed as A6 row in Build_Docs/PROBE_READINESS.md",
+        "Reproducing requires either V4-native eigenvalue primitive or oracle cross-check"
+      ],
+      "mathematical_form": "lambda(F, x) = -2 universally across 319 GR-fixture points (V3 reference; V4 reproduction pending).",
+      "promotion_blockers_for_P_set": {
+        "P1_input_derivable": "violated \u2014 requires Jacobian/Hessian evaluation",
+        "P2_geometric_content": "yes (claimed) \u2014 eigenvalue is geometric content",
+        "P3_route_invariant": "unknown \u2014 V3 did not record route variation",
+        "P4_format_invariant": "unknown",
+        "P5_substrate_phenomenon_discriminating": "unknown \u2014 universality could be phenomenon, could be V3 substrate artefact"
+      },
+      "records_verified": 319,
+      "scope_of_applicability": [
+        "general-relativity test fixture (V3)",
+        "319 sampled points (V3)"
+      ],
+      "source_references": [
+        "Build_Docs/PROBE_READINESS.md"
+      ],
+      "substrate_derivation_chain": "Unknown V4-native. V3's derivation uses V3 substrate, which by CLAUDE.md \u00a74 cannot be imported as a design source. A V4-native derivation is required to elevate this to an invariant candidate.",
+      "verification_status": "untested_in_v4"
+    }
+  ],
+  "closeout_questions": {
+    "Q1_n_candidates": "13 candidates catalogued. Roster meets the 13-minimum from the pre-registry; no additional candidates surfaced in this audit pass.",
+    "Q2_status_distribution": "Proven (substrate-derived from IEEE 754 alone): BACL_grain, Conjecture C (within scope), c2 lattice (within scope), F3_calibration_exact_zero. Operationally validated (1D): E_log2_base_operand. Empirically robust: sterbenz_cluster_threshold, F1_to_F2_BACL_phase_signature, sigma1_universal_linearization_exponent, fingerprint_atlas_distance_metric. Empirically robust pending re-validation: null_tangent_alignment_unity. Substrate-attributed but uncharacterised: doubling_ladder_rung_index, two_form_asymmetry_path_cancellation. Untested in V4: v3_minus_2_eigenvalue_319_pts.",
+    "Q3_P1_satisfied": "Candidates with P1_satisfied=true (input-derivable, no iteration on F): BACL_grain, conjecture_c_binade_floor_preservation, c2_lattice_integer_grain, E_log2_base_operand, sterbenz_cluster_threshold, two_form_asymmetry_path_cancellation. Six of thirteen. The substrate-as-probe synthesis target must be built primarily from these.",
+    "Q4_needs_extension_before_P2_to_P5": "Most P1-violating candidates require F-evaluation (F1_to_F2 phase, sigma1, fingerprint atlas, null-tangent, F3, doubling-ladder, V3 eigenvalue). They can still contribute to the invariant search as confirmation observables but cannot be the primary input-derived scalar. doubling_ladder_rung_index has a partial P1 path (the rung unit is input-derivable; the population requires evaluation).",
+    "Q5_obvious_redundancies": "Conjecture C and c2 lattice are tightly related (c2 is a 3-line corollary of BACL + Conjecture C). BACL_grain underlies both. doubling_ladder_rung_index is a direct BACL consequence. These four likely collapse to one degree of freedom in Phase C (BACL_grain is the irreducible substrate-lattice invariant).",
+    "Q6_missing_from_corpus": "Phase A surfaces one structurally-required candidate not yet in the corpus: a V4-native K_G primitive. The campaign authority Phase E adds this. Without it, the substrate-as-probe synthesis lacks the canonical-curvature ingredient. No other invariant candidate in the corpus serves as K_G's V4-native equivalent.",
+    "Q7_supports_phase_b": "Yes. The catalogue contains six P1-satisfied candidates that can be computed at any probe point without F-evaluation, plus seven F-evaluation-dependent candidates that can be computed via controlled probe protocols (BACL phase probe, blowup-exponent delta sweep, fingerprint-atlas slot scan). Phase B common probe set evaluation is well-supported by this roster."
+  },
+  "date": "2026-05-23",
+  "n_candidates_catalogued": 13,
+  "phase": "A",
+  "preregistry": "Build_Docs/Agent_tasks/substrate_invariant_search_phase_a_catalogue.md",
+  "source_artifact_hashes": {
+    "Build_Docs/PROBE_READINESS.md": "cbe9f15f8d2df74fafe1da52d9723095f74f64734f52be7e241c992008b06ae1",
+    "Build_Docs/Reports/bacl_invariant_audit/closeout.md": "46c85d83ee696074c7ad5e0904cbfbebdc57576448b863b210fc9be54d6f3b2d",
+    "Build_Docs/Reports/bacl_multi_format_audit/closeout.md": "e6f8b4b08f27b16abd0a8acbb3458ba2ce73398db9905659a9a281b99f6b6689",
+    "Build_Docs/Reports/bacl_subnormal_audit/closeout.md": "e7c93963bbc420b5a3c81662a9e9aebdfeb7d1289e76cb916f781fa8b61cf63b",
+    "Build_Docs/Reports/blowup_exponent_v4_audit/closeout.md": "adfc6c808d3fa61e3a10828c1f47d50f0313ec3a8ab3b86f3ec2e10a6b76deab",
+    "Build_Docs/Reports/c2_lattice_substrate_derivation/closeout.md": "56dd278b44ff2ff2e3ab0312c0c71d7d9130af72f999d1130789603fec9f86d6",
+    "Build_Docs/Reports/c2_theorem_scope_gate/closeout.md": "b0ef0fe5cca83c2c52c60701e2563ddd969aca232337e09c6df21d5797d9812f",
+    "Build_Docs/Reports/conjecture_c_proof_audit/closeout.md": "eb05769cb461fbd2ac69379729a0f16506f79535538534bd525a163f192fdbe6",
+    "Build_Docs/Reports/mcg_geometry_first/phase_1_geometry_table.json": "6502e942558f699d24011ae1d78601a07dea835c9ec9441fe42185a9df42df54",
+    "Build_Docs/Reports/mcg_geometry_first/phase_2_joined_readback_table.json": "6a212ee610d80893afd9a2629820006b2a74d34a373f9e7dd334e2042f28cc33",
+    "Build_Docs/Reports/mcg_geometry_first/phase_2d_solve_for_scout.json": "ea4f29798a14484a17f06273673871b53ce7900520c16083c65ffd312ce43942",
+    "Build_Docs/Reports/mcg_geometry_first/phase_2g_cdef1_calibration.json": "8089f02638face50161ea65e684fdb75bb8c58142a9e0db97efc6189b1bb4730",
+    "Build_Docs/Reports/mcg_geometry_first/phase_2h_v3_bridge.json": "abf5f8f72069985613021e6d469822dfc2452333865465a4c51e77394f5347ad",
+    "Build_Docs/Reports/substrate_fingerprint_atlas_phase_delta/closeout.md": "7e9fcbeae6eda99fbd7d3f765e9f11eb7d9906f98e515544a6a66f3e25f148c8",
+    "Build_Docs/where_i_got_stuck.md": "bce8ce918d44bd5609f364df704f8f4ee653234c2331223df43f8cd7f96b4ec7"
+  },
+  "what_phase_a_does_not_claim": [
+    "Phase A does NOT rank candidates",
+    "Phase A does NOT propose new candidates beyond the corpus",
+    "Phase A does NOT run new measurements",
+    "Phase A does NOT evaluate candidates against P1-P5 (it only records the blockers)",
+    "Phase A does NOT modify the candidate ledger or any architectural document"
+  ]
+}

@@ -1,0 +1,815 @@
+{
+  "audit_name": "substrate_invariant_search_phase_d_transformation_audit",
+  "authority": "Build_Docs/Agent_tasks/substrate_invariant_search_2026_05_23.md",
+  "campaign": "substrate_invariant_search",
+  "classification_scheme": [
+    "invariant_strict",
+    "invariant_within_ulp",
+    "format_scaled",
+    "dependent_by_design",
+    "dependent_unexpected"
+  ],
+  "closeout_questions": {
+    "Q1_survived_all_three": "2/3 basis elements survived all three transformations: ulp_spread_log2, two_form_partition.",
+    "Q2_per_element_per_transformation": "Per-element survival breakdown is in `survival_per_element`. Each cell records all_test_points_survived (bool), survival_count, and the per-test-point classifications.",
+    "Q3_refuted_predictions": "Compare each cell's `prediction` field against its `classification` field in `results`. Refutations (mismatch) are flagged for Phase F.",
+    "Q4_dependent_by_design_pattern": "two_form_partition is dependent_by_design under T1 (route variation is the observable's purpose) AND invariant_strict under T2 (format) and T3 (reparam). This pattern \u2014 route-variant + format/reparam-stable \u2014 is exactly what a substrate-route discriminator should look like. Useful synthesis ingredient.",
+    "Q5_synthesis_ingredient_list": "For Phase F synthesis: ['ulp_spread_log2', 'two_form_partition']. Each ingredient survived all three transformations (with route-variation accepted for dependent_by_design observables).",
+    "Q6_unexpected_substrate_behaviour": "Check the `results` field for classifications of `dependent_unexpected`. These flag substrate behaviours that weren't predicted and warrant Phase F attention or scope-caveat documentation.",
+    "Q7_supports_phase_e": "Phase D's role is to validate the substrate axes are well-behaved under transformations. Phase E adds V4-native K_G as a fourth axis. If the three Phase D axes survive, Phase E is well-positioned: it adds an orthogonal substrate observable to a basis whose existing members have known transformation behaviour."
+  },
+  "date": "2026-05-23",
+  "n_test_points": 6,
+  "phase": "D",
+  "phase_c_basis_sha256": "fbddb9fbe9889f87bb09e0015488a98d28e182fac6eaf94dbf10f54a10a89046",
+  "preregistry": "Build_Docs/Agent_tasks/substrate_invariant_search_phase_d_transformations.md",
+  "results": [
+    {
+      "E_log2_base_operand": {
+        "T1_route": {
+          "canonical_value": -8.966505812579566,
+          "classification": "invariant_strict",
+          "delta": 0.0,
+          "prediction": "invariant_strict",
+          "rationale": "E := log2(|1 - x_term|) is a function of the coordinate alone, not of any algebraic route through the F = 0 surface. Route-invariant by construction.",
+          "survival": true,
+          "transformation": "T1_route",
+          "transformed_value": -8.966505812579566
+        },
+        "T2_format": {
+          "canonical_float64_value": -8.966505812579566,
+          "classification": "dependent_unexpected",
+          "delta": -2.816723044141156e-05,
+          "prediction": "invariant_within_ulp",
+          "rationale": "E in float32 vs float64 at the same coordinate. Small differences from base_operand rounding can shift E by ~1 ulp. Expected within float32 ulp tolerance.",
+          "survival": false,
+          "transformation": "T2_format",
+          "transformed_float32_value": -8.966533979810007
+        },
+        "T3_reparam": {
+          "canonical_value": -8.966505812579566,
+          "classification": "invariant_strict",
+          "delta": 0.0,
+          "prediction": "invariant_strict",
+          "rationale": "Same physical point in different coordinates: Schwarzschild r=R and u=1/R refer to the same physical location; base_operand value at that location is identical (1 - 2/R = 1 - 2u). E should be exactly invariant under this reparameterisation.",
+          "reparameterised_value": -8.966505812579566,
+          "survival": true,
+          "transformation": "T3_reparam"
+        }
+      },
+      "coord": 0.999,
+      "fixture": "sr_four_form",
+      "regime": "near_singular",
+      "test_id": "sr_lightspeed_approach",
+      "two_form_partition": {
+        "T1_route": {
+          "canonical_F1_partition": "residual_carrying",
+          "canonical_F2_partition": "residual_carrying",
+          "canonical_F3_partition": "silent",
+          "canonical_F4_partition": "residual_carrying",
+          "classification": "dependent_by_design",
+          "prediction": "dependent_by_design",
+          "rationale": "two_form_partition IS the route distinction by construction. Variation across F1/F2/F3/F4 routes is the observable's purpose, not a failure mode.",
+          "survival": true,
+          "transformation": "T1_route"
+        },
+        "T2_format": {
+          "canonical_float64_F3_silent": true,
+          "classification": "invariant_strict",
+          "prediction": "invariant_strict",
+          "rationale": "F3 silence is IEEE 754 exact-cancellation: R - sqrt(base) where R = sqrt(base). The operation is bit-deterministic in any binary format. Invariance is structural.",
+          "survival": true,
+          "transformation": "T2_format",
+          "transformed_float32_F3_silent": true
+        },
+        "T3_reparam": {
+          "F3_silent_under_reparameterisation": true,
+          "classification": "invariant_strict",
+          "prediction": "invariant_strict",
+          "rationale": "F3 of the reparameterised form remains R - sqrt(new_base). IEEE 754 exact cancellation still applies, so the partition's silent class should be reparam-invariant for the F3 route.",
+          "survival": true,
+          "transformation": "T3_reparam"
+        }
+      },
+      "ulp_spread_log2": {
+        "T1_route": {
+          "canonical_F1_value": 9.0,
+          "classification": "dependent_by_design",
+          "prediction": "dependent_by_design",
+          "rationale": "ulp_spread captures the operand-chain binade arrangement, which differs by construction across F1/F2/F4 forms. Variation IS the observable; this is dependent_by_design, not failure.",
+          "survival": true,
+          "transformation": "T1_route",
+          "transformed_F2_value": 1.0,
+          "transformed_F4_value": 10.0
+        },
+        "T2_format": {
+          "canonical_float64_value": 9.0,
+          "classification": "invariant_strict",
+          "delta": 0.0,
+          "prediction": "invariant_strict",
+          "rationale": "ulp_spread_log2 is log2(max_ulp / min_ulp) \u2014 a ratio in log2 space. Format precision affects both terms equally; the ratio should be format-invariant. Empirical result classifies the observed delta.",
+          "survival": true,
+          "transformation": "T2_format",
+          "transformed_float32_value": 9.0
+        },
+        "T3_reparam": {
+          "canonical_value": 9.0,
+          "classification": "invariant_strict",
+          "delta": 0.0,
+          "prediction": "dependent_unexpected_or_invariant",
+          "rationale": "Reparameterisation changes the operand chain. Schwarzschild r\u21921/r and pure_algebraic x\u21921-y produce different intermediates. The observable's response under reparam is a substantive empirical question. If invariant_within_ulp: the substrate observable is reparam-stable. If dependent_unexpected: ulp_spread is parameterisation-specific.",
+          "reparameterised_value": 9.0,
+          "survival": true,
+          "transformation": "T3_reparam"
+        }
+      }
+    },
+    {
+      "E_log2_base_operand": {
+        "T1_route": {
+          "canonical_value": -4.392317422778759,
+          "classification": "invariant_strict",
+          "delta": 0.0,
+          "prediction": "invariant_strict",
+          "rationale": "E := log2(|1 - x_term|) is a function of the coordinate alone, not of any algebraic route through the F = 0 surface. Route-invariant by construction.",
+          "survival": true,
+          "transformation": "T1_route",
+          "transformed_value": -4.392317422778759
+        },
+        "T2_format": {
+          "canonical_float64_value": -4.392317422778759,
+          "classification": "dependent_unexpected",
+          "delta": -1.891810401666305e-06,
+          "prediction": "invariant_within_ulp",
+          "rationale": "E in float32 vs float64 at the same coordinate. Small differences from base_operand rounding can shift E by ~1 ulp. Expected within float32 ulp tolerance.",
+          "survival": false,
+          "transformation": "T2_format",
+          "transformed_float32_value": -4.392319314589161
+        },
+        "T3_reparam": {
+          "canonical_value": -4.392317422778759,
+          "classification": "invariant_strict",
+          "delta": 0.0,
+          "prediction": "invariant_strict",
+          "rationale": "Same physical point in different coordinates: Schwarzschild r=R and u=1/R refer to the same physical location; base_operand value at that location is identical (1 - 2/R = 1 - 2u). E should be exactly invariant under this reparameterisation.",
+          "reparameterised_value": -4.392317422778759,
+          "survival": true,
+          "transformation": "T3_reparam"
+        }
+      },
+      "coord": 2.1,
+      "fixture": "schwarzschild_four_form",
+      "regime": "near_singular",
+      "test_id": "schw_horizon_approach",
+      "two_form_partition": {
+        "T1_route": {
+          "canonical_F1_partition": "residual_carrying",
+          "canonical_F2_partition": "residual_carrying",
+          "canonical_F3_partition": "silent",
+          "canonical_F4_partition": "residual_carrying",
+          "classification": "dependent_by_design",
+          "prediction": "dependent_by_design",
+          "rationale": "two_form_partition IS the route distinction by construction. Variation across F1/F2/F3/F4 routes is the observable's purpose, not a failure mode.",
+          "survival": true,
+          "transformation": "T1_route"
+        },
+        "T2_format": {
+          "canonical_float64_F3_silent": true,
+          "classification": "invariant_strict",
+          "prediction": "invariant_strict",
+          "rationale": "F3 silence is IEEE 754 exact-cancellation: R - sqrt(base) where R = sqrt(base). The operation is bit-deterministic in any binary format. Invariance is structural.",
+          "survival": true,
+          "transformation": "T2_format",
+          "transformed_float32_F3_silent": true
+        },
+        "T3_reparam": {
+          "F3_silent_under_reparameterisation": true,
+          "classification": "invariant_strict",
+          "prediction": "invariant_strict",
+          "rationale": "F3 of the reparameterised form remains R - sqrt(new_base). IEEE 754 exact cancellation still applies, so the partition's silent class should be reparam-invariant for the F3 route.",
+          "survival": true,
+          "transformation": "T3_reparam"
+        }
+      },
+      "ulp_spread_log2": {
+        "T1_route": {
+          "canonical_F1_value": 5.0,
+          "classification": "dependent_by_design",
+          "prediction": "dependent_by_design",
+          "rationale": "ulp_spread captures the operand-chain binade arrangement, which differs by construction across F1/F2/F4 forms. Variation IS the observable; this is dependent_by_design, not failure.",
+          "survival": true,
+          "transformation": "T1_route",
+          "transformed_F2_value": 1.0,
+          "transformed_F4_value": 6.0
+        },
+        "T2_format": {
+          "canonical_float64_value": 5.0,
+          "classification": "invariant_strict",
+          "delta": 0.0,
+          "prediction": "invariant_strict",
+          "rationale": "ulp_spread_log2 is log2(max_ulp / min_ulp) \u2014 a ratio in log2 space. Format precision affects both terms equally; the ratio should be format-invariant. Empirical result classifies the observed delta.",
+          "survival": true,
+          "transformation": "T2_format",
+          "transformed_float32_value": 5.0
+        },
+        "T3_reparam": {
+          "canonical_value": 5.0,
+          "classification": "invariant_strict",
+          "delta": 0.0,
+          "prediction": "dependent_unexpected_or_invariant",
+          "rationale": "Reparameterisation changes the operand chain. Schwarzschild r\u21921/r and pure_algebraic x\u21921-y produce different intermediates. The observable's response under reparam is a substantive empirical question. If invariant_within_ulp: the substrate observable is reparam-stable. If dependent_unexpected: ulp_spread is parameterisation-specific.",
+          "reparameterised_value": 5.0,
+          "survival": true,
+          "transformation": "T3_reparam"
+        }
+      }
+    },
+    {
+      "E_log2_base_operand": {
+        "T1_route": {
+          "canonical_value": -6.6438561897747235,
+          "classification": "invariant_strict",
+          "delta": 0.0,
+          "prediction": "invariant_strict",
+          "rationale": "E := log2(|1 - x_term|) is a function of the coordinate alone, not of any algebraic route through the F = 0 surface. Route-invariant by construction.",
+          "survival": true,
+          "transformation": "T1_route",
+          "transformed_value": -6.6438561897747235
+        },
+        "T2_format": {
+          "canonical_float64_value": -6.6438561897747235,
+          "classification": "dependent_unexpected",
+          "delta": -1.375861864438832e-06,
+          "prediction": "invariant_within_ulp",
+          "rationale": "E in float32 vs float64 at the same coordinate. Small differences from base_operand rounding can shift E by ~1 ulp. Expected within float32 ulp tolerance.",
+          "survival": false,
+          "transformation": "T2_format",
+          "transformed_float32_value": -6.643857565636588
+        },
+        "T3_reparam": {
+          "canonical_value": -6.6438561897747235,
+          "classification": "invariant_strict",
+          "delta": 0.0,
+          "prediction": "invariant_strict",
+          "rationale": "Same physical point in different coordinates: Schwarzschild r=R and u=1/R refer to the same physical location; base_operand value at that location is identical (1 - 2/R = 1 - 2u). E should be exactly invariant under this reparameterisation.",
+          "reparameterised_value": -6.6438561897747235,
+          "survival": true,
+          "transformation": "T3_reparam"
+        }
+      },
+      "coord": 0.99,
+      "fixture": "pure_algebraic_four_form",
+      "regime": "near_singular",
+      "test_id": "pa_near_singular",
+      "two_form_partition": {
+        "T1_route": {
+          "canonical_F1_partition": "residual_carrying",
+          "canonical_F2_partition": "residual_carrying",
+          "canonical_F3_partition": "silent",
+          "canonical_F4_partition": "silent",
+          "classification": "dependent_by_design",
+          "prediction": "dependent_by_design",
+          "rationale": "two_form_partition IS the route distinction by construction. Variation across F1/F2/F3/F4 routes is the observable's purpose, not a failure mode.",
+          "survival": true,
+          "transformation": "T1_route"
+        },
+        "T2_format": {
+          "canonical_float64_F3_silent": true,
+          "classification": "invariant_strict",
+          "prediction": "invariant_strict",
+          "rationale": "F3 silence is IEEE 754 exact-cancellation: R - sqrt(base) where R = sqrt(base). The operation is bit-deterministic in any binary format. Invariance is structural.",
+          "survival": true,
+          "transformation": "T2_format",
+          "transformed_float32_F3_silent": true
+        },
+        "T3_reparam": {
+          "F3_silent_under_reparameterisation": true,
+          "classification": "invariant_strict",
+          "prediction": "invariant_strict",
+          "rationale": "F3 of the reparameterised form remains R - sqrt(new_base). IEEE 754 exact cancellation still applies, so the partition's silent class should be reparam-invariant for the F3 route.",
+          "survival": true,
+          "transformation": "T3_reparam"
+        }
+      },
+      "ulp_spread_log2": {
+        "T1_route": {
+          "canonical_F1_value": 7.0,
+          "classification": "dependent_by_design",
+          "prediction": "dependent_by_design",
+          "rationale": "ulp_spread captures the operand-chain binade arrangement, which differs by construction across F1/F2/F4 forms. Variation IS the observable; this is dependent_by_design, not failure.",
+          "survival": true,
+          "transformation": "T1_route",
+          "transformed_F2_value": 1.0,
+          "transformed_F4_value": 7.0
+        },
+        "T2_format": {
+          "canonical_float64_value": 7.0,
+          "classification": "invariant_strict",
+          "delta": 0.0,
+          "prediction": "invariant_strict",
+          "rationale": "ulp_spread_log2 is log2(max_ulp / min_ulp) \u2014 a ratio in log2 space. Format precision affects both terms equally; the ratio should be format-invariant. Empirical result classifies the observed delta.",
+          "survival": true,
+          "transformation": "T2_format",
+          "transformed_float32_value": 7.0
+        },
+        "T3_reparam": {
+          "canonical_value": 7.0,
+          "classification": "invariant_strict",
+          "delta": 0.0,
+          "prediction": "dependent_unexpected_or_invariant",
+          "rationale": "Reparameterisation changes the operand chain. Schwarzschild r\u21921/r and pure_algebraic x\u21921-y produce different intermediates. The observable's response under reparam is a substantive empirical question. If invariant_within_ulp: the substrate observable is reparam-stable. If dependent_unexpected: ulp_spread is parameterisation-specific.",
+          "reparameterised_value": 7.0,
+          "survival": true,
+          "transformation": "T3_reparam"
+        }
+      }
+    },
+    {
+      "E_log2_base_operand": {
+        "T1_route": {
+          "canonical_value": -0.863128777527745,
+          "classification": "invariant_strict",
+          "delta": 0.0,
+          "prediction": "invariant_strict",
+          "rationale": "E := log2(|1 - x_term|) is a function of the coordinate alone, not of any algebraic route through the F = 0 surface. Route-invariant by construction.",
+          "survival": true,
+          "transformation": "T1_route",
+          "transformed_value": -0.863128777527745
+        },
+        "T2_format": {
+          "canonical_float64_value": -0.863128777527745,
+          "classification": "invariant_within_ulp",
+          "delta": 7.962470671696309e-08,
+          "prediction": "invariant_within_ulp",
+          "rationale": "E in float32 vs float64 at the same coordinate. Small differences from base_operand rounding can shift E by ~1 ulp. Expected within float32 ulp tolerance.",
+          "survival": true,
+          "transformation": "T2_format",
+          "transformed_float32_value": -0.8631286979030383
+        },
+        "T3_reparam": {
+          "canonical_value": -0.863128777527745,
+          "classification": "invariant_strict",
+          "delta": 0.0,
+          "prediction": "invariant_strict",
+          "rationale": "Same physical point in different coordinates: Schwarzschild r=R and u=1/R refer to the same physical location; base_operand value at that location is identical (1 - 2/R = 1 - 2u). E should be exactly invariant under this reparameterisation.",
+          "reparameterised_value": -0.863128777527745,
+          "survival": true,
+          "transformation": "T3_reparam"
+        }
+      },
+      "coord": 0.671,
+      "fixture": "sr_four_form",
+      "regime": "sterbenz_cluster",
+      "test_id": "sr_sterbenz_center",
+      "two_form_partition": {
+        "T1_route": {
+          "canonical_F1_partition": "residual_carrying",
+          "canonical_F2_partition": "residual_carrying",
+          "canonical_F3_partition": "silent",
+          "canonical_F4_partition": "residual_carrying",
+          "classification": "dependent_by_design",
+          "prediction": "dependent_by_design",
+          "rationale": "two_form_partition IS the route distinction by construction. Variation across F1/F2/F3/F4 routes is the observable's purpose, not a failure mode.",
+          "survival": true,
+          "transformation": "T1_route"
+        },
+        "T2_format": {
+          "canonical_float64_F3_silent": true,
+          "classification": "invariant_strict",
+          "prediction": "invariant_strict",
+          "rationale": "F3 silence is IEEE 754 exact-cancellation: R - sqrt(base) where R = sqrt(base). The operation is bit-deterministic in any binary format. Invariance is structural.",
+          "survival": true,
+          "transformation": "T2_format",
+          "transformed_float32_F3_silent": true
+        },
+        "T3_reparam": {
+          "F3_silent_under_reparameterisation": true,
+          "classification": "invariant_strict",
+          "prediction": "invariant_strict",
+          "rationale": "F3 of the reparameterised form remains R - sqrt(new_base). IEEE 754 exact cancellation still applies, so the partition's silent class should be reparam-invariant for the F3 route.",
+          "survival": true,
+          "transformation": "T3_reparam"
+        }
+      },
+      "ulp_spread_log2": {
+        "T1_route": {
+          "canonical_F1_value": 2.0,
+          "classification": "dependent_by_design",
+          "prediction": "dependent_by_design",
+          "rationale": "ulp_spread captures the operand-chain binade arrangement, which differs by construction across F1/F2/F4 forms. Variation IS the observable; this is dependent_by_design, not failure.",
+          "survival": true,
+          "transformation": "T1_route",
+          "transformed_F2_value": 2.0,
+          "transformed_F4_value": 2.0
+        },
+        "T2_format": {
+          "canonical_float64_value": 2.0,
+          "classification": "invariant_strict",
+          "delta": 0.0,
+          "prediction": "invariant_strict",
+          "rationale": "ulp_spread_log2 is log2(max_ulp / min_ulp) \u2014 a ratio in log2 space. Format precision affects both terms equally; the ratio should be format-invariant. Empirical result classifies the observed delta.",
+          "survival": true,
+          "transformation": "T2_format",
+          "transformed_float32_value": 2.0
+        },
+        "T3_reparam": {
+          "canonical_value": 2.0,
+          "classification": "invariant_strict",
+          "delta": 0.0,
+          "prediction": "dependent_unexpected_or_invariant",
+          "rationale": "Reparameterisation changes the operand chain. Schwarzschild r\u21921/r and pure_algebraic x\u21921-y produce different intermediates. The observable's response under reparam is a substantive empirical question. If invariant_within_ulp: the substrate observable is reparam-stable. If dependent_unexpected: ulp_spread is parameterisation-specific.",
+          "reparameterised_value": 2.0,
+          "survival": true,
+          "transformation": "T3_reparam"
+        }
+      }
+    },
+    {
+      "E_log2_base_operand": {
+        "T1_route": {
+          "canonical_value": -0.8744691179161412,
+          "classification": "invariant_strict",
+          "delta": 0.0,
+          "prediction": "invariant_strict",
+          "rationale": "E := log2(|1 - x_term|) is a function of the coordinate alone, not of any algebraic route through the F = 0 surface. Route-invariant by construction.",
+          "survival": true,
+          "transformation": "T1_route",
+          "transformed_value": -0.8744691179161412
+        },
+        "T2_format": {
+          "canonical_float64_value": -0.8744691179161412,
+          "classification": "invariant_within_ulp",
+          "delta": 4.299566225274276e-08,
+          "prediction": "invariant_within_ulp",
+          "rationale": "E in float32 vs float64 at the same coordinate. Small differences from base_operand rounding can shift E by ~1 ulp. Expected within float32 ulp tolerance.",
+          "survival": true,
+          "transformation": "T2_format",
+          "transformed_float32_value": -0.874469074920479
+        },
+        "T3_reparam": {
+          "canonical_value": -0.8744691179161412,
+          "classification": "invariant_strict",
+          "delta": 0.0,
+          "prediction": "invariant_strict",
+          "rationale": "Same physical point in different coordinates: Schwarzschild r=R and u=1/R refer to the same physical location; base_operand value at that location is identical (1 - 2/R = 1 - 2u). E should be exactly invariant under this reparameterisation.",
+          "reparameterised_value": -0.8744691179161412,
+          "survival": true,
+          "transformation": "T3_reparam"
+        }
+      },
+      "coord": 4.4,
+      "fixture": "schwarzschild_four_form",
+      "regime": "sterbenz_cluster",
+      "test_id": "schw_sterbenz_center",
+      "two_form_partition": {
+        "T1_route": {
+          "canonical_F1_partition": "residual_carrying",
+          "canonical_F2_partition": "residual_carrying",
+          "canonical_F3_partition": "silent",
+          "canonical_F4_partition": "residual_carrying",
+          "classification": "dependent_by_design",
+          "prediction": "dependent_by_design",
+          "rationale": "two_form_partition IS the route distinction by construction. Variation across F1/F2/F3/F4 routes is the observable's purpose, not a failure mode.",
+          "survival": true,
+          "transformation": "T1_route"
+        },
+        "T2_format": {
+          "canonical_float64_F3_silent": true,
+          "classification": "invariant_strict",
+          "prediction": "invariant_strict",
+          "rationale": "F3 silence is IEEE 754 exact-cancellation: R - sqrt(base) where R = sqrt(base). The operation is bit-deterministic in any binary format. Invariance is structural.",
+          "survival": true,
+          "transformation": "T2_format",
+          "transformed_float32_F3_silent": true
+        },
+        "T3_reparam": {
+          "F3_silent_under_reparameterisation": true,
+          "classification": "invariant_strict",
+          "prediction": "invariant_strict",
+          "rationale": "F3 of the reparameterised form remains R - sqrt(new_base). IEEE 754 exact cancellation still applies, so the partition's silent class should be reparam-invariant for the F3 route.",
+          "survival": true,
+          "transformation": "T3_reparam"
+        }
+      },
+      "ulp_spread_log2": {
+        "T1_route": {
+          "canonical_F1_value": 2.0,
+          "classification": "dependent_by_design",
+          "prediction": "dependent_by_design",
+          "rationale": "ulp_spread captures the operand-chain binade arrangement, which differs by construction across F1/F2/F4 forms. Variation IS the observable; this is dependent_by_design, not failure.",
+          "survival": true,
+          "transformation": "T1_route",
+          "transformed_F2_value": 2.0,
+          "transformed_F4_value": 3.0
+        },
+        "T2_format": {
+          "canonical_float64_value": 2.0,
+          "classification": "invariant_strict",
+          "delta": 0.0,
+          "prediction": "invariant_strict",
+          "rationale": "ulp_spread_log2 is log2(max_ulp / min_ulp) \u2014 a ratio in log2 space. Format precision affects both terms equally; the ratio should be format-invariant. Empirical result classifies the observed delta.",
+          "survival": true,
+          "transformation": "T2_format",
+          "transformed_float32_value": 2.0
+        },
+        "T3_reparam": {
+          "canonical_value": 2.0,
+          "classification": "invariant_strict",
+          "delta": 0.0,
+          "prediction": "dependent_unexpected_or_invariant",
+          "rationale": "Reparameterisation changes the operand chain. Schwarzschild r\u21921/r and pure_algebraic x\u21921-y produce different intermediates. The observable's response under reparam is a substantive empirical question. If invariant_within_ulp: the substrate observable is reparam-stable. If dependent_unexpected: ulp_spread is parameterisation-specific.",
+          "reparameterised_value": 2.0,
+          "survival": true,
+          "transformation": "T3_reparam"
+        }
+      }
+    },
+    {
+      "E_log2_base_operand": {
+        "T1_route": {
+          "canonical_value": -0.862496476250065,
+          "classification": "invariant_strict",
+          "delta": 0.0,
+          "prediction": "invariant_strict",
+          "rationale": "E := log2(|1 - x_term|) is a function of the coordinate alone, not of any algebraic route through the F = 0 surface. Route-invariant by construction.",
+          "survival": true,
+          "transformation": "T1_route",
+          "transformed_value": -0.862496476250065
+        },
+        "T2_format": {
+          "canonical_float64_value": -0.862496476250065,
+          "classification": "invariant_within_ulp",
+          "delta": 3.126957248689166e-08,
+          "prediction": "invariant_within_ulp",
+          "rationale": "E in float32 vs float64 at the same coordinate. Small differences from base_operand rounding can shift E by ~1 ulp. Expected within float32 ulp tolerance.",
+          "survival": true,
+          "transformation": "T2_format",
+          "transformed_float32_value": -0.8624964449804925
+        },
+        "T3_reparam": {
+          "canonical_value": -0.862496476250065,
+          "classification": "invariant_strict",
+          "delta": 0.0,
+          "prediction": "invariant_strict",
+          "rationale": "Same physical point in different coordinates: Schwarzschild r=R and u=1/R refer to the same physical location; base_operand value at that location is identical (1 - 2/R = 1 - 2u). E should be exactly invariant under this reparameterisation.",
+          "reparameterised_value": -0.862496476250065,
+          "survival": true,
+          "transformation": "T3_reparam"
+        }
+      },
+      "coord": 0.45,
+      "fixture": "pure_algebraic_four_form",
+      "regime": "sterbenz_cluster",
+      "test_id": "pa_sterbenz_center",
+      "two_form_partition": {
+        "T1_route": {
+          "canonical_F1_partition": "residual_carrying",
+          "canonical_F2_partition": "residual_carrying",
+          "canonical_F3_partition": "silent",
+          "canonical_F4_partition": "silent",
+          "classification": "dependent_by_design",
+          "prediction": "dependent_by_design",
+          "rationale": "two_form_partition IS the route distinction by construction. Variation across F1/F2/F3/F4 routes is the observable's purpose, not a failure mode.",
+          "survival": true,
+          "transformation": "T1_route"
+        },
+        "T2_format": {
+          "canonical_float64_F3_silent": true,
+          "classification": "invariant_strict",
+          "prediction": "invariant_strict",
+          "rationale": "F3 silence is IEEE 754 exact-cancellation: R - sqrt(base) where R = sqrt(base). The operation is bit-deterministic in any binary format. Invariance is structural.",
+          "survival": true,
+          "transformation": "T2_format",
+          "transformed_float32_F3_silent": true
+        },
+        "T3_reparam": {
+          "F3_silent_under_reparameterisation": true,
+          "classification": "invariant_strict",
+          "prediction": "invariant_strict",
+          "rationale": "F3 of the reparameterised form remains R - sqrt(new_base). IEEE 754 exact cancellation still applies, so the partition's silent class should be reparam-invariant for the F3 route.",
+          "survival": true,
+          "transformation": "T3_reparam"
+        }
+      },
+      "ulp_spread_log2": {
+        "T1_route": {
+          "canonical_F1_value": 2.0,
+          "classification": "dependent_by_design",
+          "prediction": "dependent_by_design",
+          "rationale": "ulp_spread captures the operand-chain binade arrangement, which differs by construction across F1/F2/F4 forms. Variation IS the observable; this is dependent_by_design, not failure.",
+          "survival": true,
+          "transformation": "T1_route",
+          "transformed_F2_value": 2.0,
+          "transformed_F4_value": 2.0
+        },
+        "T2_format": {
+          "canonical_float64_value": 2.0,
+          "classification": "invariant_strict",
+          "delta": 0.0,
+          "prediction": "invariant_strict",
+          "rationale": "ulp_spread_log2 is log2(max_ulp / min_ulp) \u2014 a ratio in log2 space. Format precision affects both terms equally; the ratio should be format-invariant. Empirical result classifies the observed delta.",
+          "survival": true,
+          "transformation": "T2_format",
+          "transformed_float32_value": 2.0
+        },
+        "T3_reparam": {
+          "canonical_value": 2.0,
+          "classification": "invariant_strict",
+          "delta": 0.0,
+          "prediction": "dependent_unexpected_or_invariant",
+          "rationale": "Reparameterisation changes the operand chain. Schwarzschild r\u21921/r and pure_algebraic x\u21921-y produce different intermediates. The observable's response under reparam is a substantive empirical question. If invariant_within_ulp: the substrate observable is reparam-stable. If dependent_unexpected: ulp_spread is parameterisation-specific.",
+          "reparameterised_value": 2.0,
+          "survival": true,
+          "transformation": "T3_reparam"
+        }
+      }
+    }
+  ],
+  "survival_per_element": {
+    "E_log2_base_operand": {
+      "per_transformation": {
+        "T1_route": {
+          "all_test_points_survived": true,
+          "classifications": [
+            "invariant_strict",
+            "invariant_strict",
+            "invariant_strict",
+            "invariant_strict",
+            "invariant_strict",
+            "invariant_strict"
+          ],
+          "n_test_points": 6,
+          "survival_count": 6
+        },
+        "T2_format": {
+          "all_test_points_survived": false,
+          "classifications": [
+            "dependent_unexpected",
+            "dependent_unexpected",
+            "dependent_unexpected",
+            "invariant_within_ulp",
+            "invariant_within_ulp",
+            "invariant_within_ulp"
+          ],
+          "n_test_points": 6,
+          "survival_count": 3
+        },
+        "T3_reparam": {
+          "all_test_points_survived": true,
+          "classifications": [
+            "invariant_strict",
+            "invariant_strict",
+            "invariant_strict",
+            "invariant_strict",
+            "invariant_strict",
+            "invariant_strict"
+          ],
+          "n_test_points": 6,
+          "survival_count": 6
+        }
+      },
+      "survives_all_three": false
+    },
+    "two_form_partition": {
+      "per_transformation": {
+        "T1_route": {
+          "all_test_points_survived": true,
+          "classifications": [
+            "dependent_by_design",
+            "dependent_by_design",
+            "dependent_by_design",
+            "dependent_by_design",
+            "dependent_by_design",
+            "dependent_by_design"
+          ],
+          "n_test_points": 6,
+          "survival_count": 6
+        },
+        "T2_format": {
+          "all_test_points_survived": true,
+          "classifications": [
+            "invariant_strict",
+            "invariant_strict",
+            "invariant_strict",
+            "invariant_strict",
+            "invariant_strict",
+            "invariant_strict"
+          ],
+          "n_test_points": 6,
+          "survival_count": 6
+        },
+        "T3_reparam": {
+          "all_test_points_survived": true,
+          "classifications": [
+            "invariant_strict",
+            "invariant_strict",
+            "invariant_strict",
+            "invariant_strict",
+            "invariant_strict",
+            "invariant_strict"
+          ],
+          "n_test_points": 6,
+          "survival_count": 6
+        }
+      },
+      "survives_all_three": true
+    },
+    "ulp_spread_log2": {
+      "per_transformation": {
+        "T1_route": {
+          "all_test_points_survived": true,
+          "classifications": [
+            "dependent_by_design",
+            "dependent_by_design",
+            "dependent_by_design",
+            "dependent_by_design",
+            "dependent_by_design",
+            "dependent_by_design"
+          ],
+          "n_test_points": 6,
+          "survival_count": 6
+        },
+        "T2_format": {
+          "all_test_points_survived": true,
+          "classifications": [
+            "invariant_strict",
+            "invariant_strict",
+            "invariant_strict",
+            "invariant_strict",
+            "invariant_strict",
+            "invariant_strict"
+          ],
+          "n_test_points": 6,
+          "survival_count": 6
+        },
+        "T3_reparam": {
+          "all_test_points_survived": true,
+          "classifications": [
+            "invariant_strict",
+            "invariant_strict",
+            "invariant_strict",
+            "invariant_strict",
+            "invariant_strict",
+            "invariant_strict"
+          ],
+          "n_test_points": 6,
+          "survival_count": 6
+        }
+      },
+      "survives_all_three": true
+    }
+  },
+  "synthesis_ingredient_list": [
+    "ulp_spread_log2",
+    "two_form_partition"
+  ],
+  "test_points": [
+    {
+      "coord": 0.999,
+      "fixture": "sr_four_form",
+      "regime": "near_singular",
+      "test_id": "sr_lightspeed_approach"
+    },
+    {
+      "coord": 2.1,
+      "fixture": "schwarzschild_four_form",
+      "regime": "near_singular",
+      "test_id": "schw_horizon_approach"
+    },
+    {
+      "coord": 0.99,
+      "fixture": "pure_algebraic_four_form",
+      "regime": "near_singular",
+      "test_id": "pa_near_singular"
+    },
+    {
+      "coord": 0.671,
+      "fixture": "sr_four_form",
+      "regime": "sterbenz_cluster",
+      "test_id": "sr_sterbenz_center"
+    },
+    {
+      "coord": 4.4,
+      "fixture": "schwarzschild_four_form",
+      "regime": "sterbenz_cluster",
+      "test_id": "schw_sterbenz_center"
+    },
+    {
+      "coord": 0.45,
+      "fixture": "pure_algebraic_four_form",
+      "regime": "sterbenz_cluster",
+      "test_id": "pa_sterbenz_center"
+    }
+  ],
+  "tolerances": {
+    "float32_ulp_tolerance": 4.76837158203125e-07,
+    "float64_ulp_tolerance": 8.881784197001252e-16
+  },
+  "what_phase_d_does_not_claim": [
+    "Phase D does NOT add or remove candidates beyond the Phase C basis",
+    "Phase D does NOT add the V4-native K_G primitive (Phase E)",
+    "Phase D does NOT synthesise the substrate invariant (Phase F)",
+    "Phase D does NOT modify substrate or architecture files",
+    "Phase D does NOT test sphere reparameterisation (no canonical reparam scoped)"
+  ]
+}

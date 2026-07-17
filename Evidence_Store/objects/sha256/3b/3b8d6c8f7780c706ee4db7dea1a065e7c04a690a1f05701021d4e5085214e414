@@ -1,0 +1,5 @@
+MODEL C_{p,k} = a_k + u_p * b_k  (Theorem 3 / Task 017c)
+PATH_UNDER_TEST F1
+BINARY_PRECISIONS ['float32', 'float64', 'float128']
+DECIMAL_ANCHORS ['decimal_50', 'decimal_120']
+FIXTURE_KEYS ['cbrt_chain', 'pure_algebraic', 'schwarzschild', 'sr']

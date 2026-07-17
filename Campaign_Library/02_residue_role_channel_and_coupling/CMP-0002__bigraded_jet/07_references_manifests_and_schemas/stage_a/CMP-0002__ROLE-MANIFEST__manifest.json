@@ -1,0 +1,88 @@
+{
+  "campaign": "bigraded_jet",
+  "stage": "A",
+  "object": "J^(0,1) - upsilon lanes alone (naming covenant: placeholder notation; no christening)",
+  "manifest_version": "stage-a-v1",
+  "frozen": true,
+  "date_approved": "2026-06-10 (Will: Phase 0 ACCEPTED; Stage-A GO with rulings 1-3 applied below)",
+  "authority": "Build_Docs/Agent_tasks/CAMPAIGN_BIGRADED_JET.md",
+  "scoreboard": "HR131 section-5 gap (primary driver); rows A4/A6 wave-two; Section-B leverage B3/B4",
+  "branch": "campaign/bigraded-jet (from main 6e54868)",
+  "normative_law": "RESULT_TYPES.md Amendment 1 (membrane pattern); the events tuple is the designated docking slot",
+
+  "rulings_applied": {
+    "1_module_name": "src/lloyd_v4/evals/bigraded_jet.py - placeholder infrastructure under the naming covenant; renames with the object when the name falls out.",
+    "2_residual_pairs": "division/sqrt upsilon-entries carried as exact residual pairs (r, b) / (r, s); structural exactness preserved; scalarized error values marked once-rounded BOUNDED.",
+    "3a_kind_taxonomy": "see upsilon_entry_taxonomy below; A-P1 grading is kind-aware.",
+    "3b_twosum_default": "unordered TwoSum (Knuth, CITATIONS E1) is THE default everywhere. Fast2Sum (E2) is permitted ONLY where the ordering precondition is PROVEN at the call site with the proof cited in-code. Stage A uses zero Fast2Sum call sites. Silent-wrong-residue is forbidden by construction.",
+    "3c_frozen_battery": "all batteries are pinned literal JSON (generated once via an ephemeral out-of-repo script, committed, hashed below) - never a seed."
+  },
+
+  "upsilon_entry_taxonomy": {
+    "FLOAT_EXACT": {
+      "payload": "single float e",
+      "claim": "true_op_result = fl_result + e exactly in the reals",
+      "ops": "add, sub (TwoSum, CITATIONS E1); mul (FMA TwoProd, E3); neg/abs (e = 0 identically)",
+      "a_p1_grading": "Fraction(fl_result) + Fraction(e) == exact real op result computed in Fraction arithmetic - ZERO gap, exact rational comparison (stronger than 200-bit; mpmath 200-bit cross-check recorded as corroboration)"
+    },
+    "PAIR_EXACT": {
+      "payload": "exact residual pair: div -> (r, b) with r = a - q*b; sqrt -> (r, s) with r = a - s*s; both r computed via fma, exactly representable (CITATIONS E4/E6)",
+      "claim": "the residual r is EXACT; the normalized error (r/b, r/(2s)) is a REAL, not claimed as a float",
+      "a_p1_grading": "Fraction(r) == Fraction(a) - Fraction(q)*Fraction(b) (div); Fraction(r) == Fraction(a) - Fraction(s)**2 (sqrt) - ZERO gap on the residual; any scalarization is BOUNDED and excluded from zero-gap grading"
+    },
+    "BOUNDED": {
+      "payload": "bound value beta with |true - fl| <= beta claimed from a cited theorem",
+      "ops": "scalarized PAIR_EXACT errors (one extra rounding, second-order, beta = u*|scalarized|)",
+      "a_p1_grading": "|Fraction(true) - Fraction(fl)| <= Fraction(beta) - bound honored, not zero-gap"
+    },
+    "UNKNOWN": {
+      "payload": "none (entry records op + values only)",
+      "ops": "transcendentals (sin/cos/exp/log...): Python libm is NOT certified correctly-rounded, so the honest class is UNKNOWN (brief non-goal 2 option b); a half-ulp ASSUMPTION is never silently claimed",
+      "a_p1_grading": "excluded from exactness grading; presence asserted (coverage honesty test)"
+    }
+  },
+
+  "precondition_flags": {
+    "OVERFLOW_FLAGGED": "any nonfinite intermediate in an EFT (CITATIONS preconditions) - typed event + coverage degradation, never a wrong zero",
+    "UNDERFLOW_FLAGGED": "result magnitude below 2^-969 - the theorem-true residual-representability sufficient condition (result exponent >= e_min + p - 1 = -970; CITATIONS E3/E4/E6 as corrected). The band (2^-1021, 2^-969) is input-dependent and flagged as sufficient-condition-unsatisfied: honest sufficient-condition gating. Typed event + entry degraded to BOUNDED (RN half-ulp).",
+    "addition_underflow": "no flag needed - Hauser's lemma (E10): subnormal fl(a+b) is exact"
+  },
+
+  "amendment_2026_06_10": {
+    "classification": "transcription-fidelity correction, NOT a retune (Will's review): prediction text unchanged; guard moved conservative; the error was a misquoted cited theorem; the A-P1 FAIL at the original pin (git history, commit 'A-P1 FAIL recorded verbatim') stays in the record as the stage's first finding.",
+    "what_changed": "UNDERFLOW_FLAGGED boundary 2^-1021 -> 2^-969 (above); CITATIONS E3/E4/E6 corrected with derivation + erratum; grader rebuilt with TWO-SIDED flag honesty (unflagged => exact zero-gap; flagged => sufficient condition genuinely unsatisfied; MISSING_FLAG only for unflagged violations; flag counts reported in prediction_verdicts).",
+    "independently_verified": "Will, on-host: sqrt(1e-300) s^2 exp -997 normal, true residual needs 2^-1102 < 2^-1074 floor; FMA residual != exact in rationals while printing identically; control at 2^-100 exact; (2^-540)^2 underflow-to-zero confirmed.",
+    "a_p3_exceeding_observation": "A-P3's exact-Fraction equality (value (+) residues == TRUE result) held on ALL cases at ALL cond levels - an observation EXCEEDING the registered prediction, labeled as such; reported, not retro-claimed."
+  },
+
+  "predictions_verbatim_from_brief": {
+    "A-P1": "for every EXACT-covered op in the frozen battery, value (+) residue reconstructed at 200-bit precision equals the true real-arithmetic result of that operation with zero gap; every precondition violation (overflow, subnormal-edge) emits a typed flag - no silent wrong zeros.",
+    "A-P2": "100% of in-precondition subtraction residues pass the BACL membership check; Conjecture-C / c2 invariants hold on the frozen boundary set.",
+    "A-P3": "lane-built compensated summation/dot reproduces the ORO reference results on the cited battery - equal to the 200-bit-truth-rounded-to-double wherever cond*u^2 << 1, per the cited theorem, with the campaign reporting the measured boundary."
+  },
+
+  "prediction_grading_mechanical": {
+    "A-P1": "per battery case x op: kind-aware zero-gap rule from upsilon_entry_taxonomy (exact Fraction comparisons; 200-bit mpmath corroboration recorded). PASS iff every in-precondition case reconstructs with zero gap AND every flagged case (overflow_expected/underflow_expected in the battery) carries its typed flag AND no unflagged precondition violation exists.",
+    "A-P2": "BACL: for each battery pair (a,b) with a,b in F+, ulp(a)>=ulp(b): TwoSum subtraction residue e of fl(a-b) satisfies Fraction(e) % Fraction(ulp(b)) == 0 (membership via exact rationals). PASS iff 100%. Conjecture-C: for each c2-battery f in [2^k, 2^(k+1)): R = fl(sqrt(f)) (lane op), check fl(R*R) >= 2^k. c2 corollary: sqrt round-trip residual j-multiple with |j| <= 1 on the same battery, j extracted from the upsilon-lanes. PASS iff both invariant sets hold 100%.",
+    "A-P3": "Sum2/Dot2 BUILT FROM THE LANES (values + lane residue accumulation, ORO Algorithm 4.1/5.3 structure) on the frozen batteries: result == float(200-bit truth) for every case with measured_cond * u^2 < 0.01; for all cases the measured error and cond recorded; the empirical accuracy boundary reported (not asserted). PASS iff the low-cond equality holds universally and no case contradicts the cited cond*u^2 law by more than the theorem's own constant."
+  },
+
+  "battery_pins_sha256_prefix16": {
+    "identity_battery.json": "7506285759512eae",
+    "bacl_battery.json": "09b2d20c4e6557d5",
+    "c2_boundary_battery.json": "be48cd84fff2f877",
+    "oro_sum_battery.json": "67f35cb32600e44d",
+    "oro_dot_battery.json": "d8a7014a8c0e2e66"
+  },
+
+  "platform_route": "math.fma PRESENT in Python 3.14.4, verified true-fused (Phase 0). FMA route for TwoProd/div/sqrt residuals. Dekker splitting (E5) documented dead-code fallback.",
+  "environment_pins": {"python": "3.14.4", "mpmath": "1.3.0"},
+  "membrane": "Amendment 1 obligations 1-6 binding; operation_id 'bigraded_jet_upsilon' registered in the eval-tier ledger citing this brief; module-local UpsilonStatus family; one TypedResult per evaluation; events tuple = docking slot.",
+  "determinism_policy": "inherited verbatim (zero RNG at runtime; batteries are literals; canonical JSONL; byte-stable re-runs).",
+  "commands": {
+    "green_slice": "PYTHONPATH=src python -m pytest tests/test_bigraded_upsilon_exactness.py tests/test_bigraded_theorem_oracles.py tests/test_bigraded_oro_battery.py tests/test_bigraded_membrane.py",
+    "full_suite": "PYTHONPATH=src python -m pytest",
+    "source_audit": "PYTHONPATH=src python -m pytest tests/test_source_purity.py && frozen-token grep (HR131 list, unchanged) over src/lloyd_v4/evals/bigraded_jet.py"
+  },
+  "names_that_fell_out": "collected in the Stage-A report only - never adopted (covenant)"
+}

@@ -1,0 +1,66 @@
+{
+  "task": "lifted_sweep_FIXED",
+  "fix": "perturb physical coord; X closes constraint",
+  "lifted_singularity": {
+    "morris_thorne": {
+      "perturbed_coord_index": 0,
+      "per_strategy_j": {
+        "naive": {
+          "j_variance": 0.4906794627797206,
+          "j_max_abs": 1.0,
+          "fraction_near_discrete_lattice": 1.0,
+          "j_median": 0.0
+        },
+        "fsum": {
+          "j_variance": 0.4906794627797206,
+          "j_max_abs": 1.0,
+          "fraction_near_discrete_lattice": 1.0,
+          "j_median": 0.0
+        },
+        "pairwise": {
+          "j_variance": 0.4906794627797206,
+          "j_max_abs": 1.0,
+          "fraction_near_discrete_lattice": 1.0,
+          "j_median": 0.0
+        },
+        "reversed": {
+          "j_variance": 0.4906794627797206,
+          "j_max_abs": 1.0,
+          "fraction_near_discrete_lattice": 1.0,
+          "j_median": 0.0
+        }
+      },
+      "n_points": 15001
+    },
+    "schwarzschild_photon": {
+      "perturbed_coord_index": 0,
+      "per_strategy_j": {
+        "naive": {
+          "j_variance": 0.41166578495460254,
+          "j_max_abs": 1.0,
+          "fraction_near_discrete_lattice": 1.0,
+          "j_median": 0.0
+        },
+        "fsum": {
+          "j_variance": 0.41166578495460254,
+          "j_max_abs": 1.0,
+          "fraction_near_discrete_lattice": 1.0,
+          "j_median": 0.0
+        },
+        "pairwise": {
+          "j_variance": 0.41166578495460254,
+          "j_max_abs": 1.0,
+          "fraction_near_discrete_lattice": 1.0,
+          "j_median": 0.0
+        },
+        "reversed": {
+          "j_variance": 0.41166578495460254,
+          "j_max_abs": 1.0,
+          "fraction_near_discrete_lattice": 1.0,
+          "j_median": 0.0
+        }
+      },
+      "n_points": 15001
+    }
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "task_id": "warp_stage0_recon",
+  "campaign": "the-shared-residual (algebra arm / WARP)",
+  "producer": "claude-code",
+  "read_only": true,
+  "run": { "date": "2026-06-14", "branch": "main", "commit": "dab02b0", "transcript": "commands_transcript.txt" },
+  "findings": [
+    {
+      "id": "Q1-projective-action",
+      "question": "Does projective_ratio already carry a PGL2/Mobius action?",
+      "verdict": "action_absent_thin_build",
+      "evidence": [
+        "src/lloyd_v4/primitives/projective_ratio.py:45 ProjectiveRatioValue (raw numerator/denominator dataclass; no GCD/canonical-representative reduction, [a:b]=[lambda a:lambda b] NOT enforced)",
+        "src/lloyd_v4/primitives/projective_ratio.py:78 projective_ratio (constructor -> 4 strata; no transform)",
+        "src/lloyd_v4/primitives/projective_ratio.py:117 scalarize_projective_ratio + :60 PROJECTIVE_RATIO_SCALARIZATION_TRANSITION_RULE (only transition is scalarization OUT of P1, not a group action ON P1)",
+        "src/lloyd_v4/primitives/stratified_quadratic_roots.py:265 ProjectiveRatioValue(numerator=...,denominator=...) (downstream uses it as a raw [num:den] container)",
+        "ABSENCE: CMD2 grep mobius|PGL|fractional.linear|act_on over src/lloyd_v4/ -> zero carrier-action hits; all 'transform' matches are transformed-tree referees (evals/cradle_arm_m/*, evals/coupling_holonomy/holonomy.py:57 fn_transformed), not a projective action"
+      ],
+      "commands": [
+        "grep -rn 'projective_ratio|ProjectiveRatio|PROJECTIVE_RATIO' src/lloyd_v4/ Build_Docs/Architecture/LAYER_MANIFEST.md",
+        "grep -rni 'mobius|m\\xf6bius|fractional.linear|PGL|projective.*action|act_on|transform' src/lloyd_v4/"
+      ],
+      "freeze_implication": "FX-W-F (CL-W5 keystone carrier) = consult ProjectiveRatioValue/projective_ratio as typed parent (Rule 1.2) + ONE thin eval-tier build = the PGL2/Mobius action + representative-equivalence handling. Not from-scratch. The raw unnormalized (num,den) storage is favourable for CL-W5 (lets it hold two representatives of one point side-by-side). Recommend ratifying P1(Q) as consult + one small action micro-build.",
+      "confidence": "high"
+    },
+    {
+      "id": "Q2-dstatic-lift",
+      "question": "Can D_static lift closure_grade + AtomKind?",
+      "verdict": "partial_wrap",
+      "evidence": [
+        "src/lloyd_v4/core/binding.py:33 AtomKind {FINITE_EXACT_ALGEBRAIC, CONSTRUCT_TO_TOLERANCE, NOT_ATOM} = the R_exact / non-R_exact partition (consult-direct)",
+        "src/lloyd_v4/core/binding.py:57-59 PrimitiveBinding.{requires, leaf_kind, atom_kind} (each node carries its DAG edges AND its atom kind)",
+        "partition populated across op set: src/lloyd_v4/primitives/typed_sqrt.py:124 FINITE_EXACT_ALGEBRAIC; observers/typed_{log,exp,sin,cos,asin,acos,atan,log2}.py CONSTRUCT_TO_TOLERANCE; observers/typed_{pow,tan}.py NOT_ATOM",
+        "src/lloyd_v4/harness/closure_grade.py:47 lineage_witnessed_leaves ('Pure graph walk -- no manifest needed' DFS over requires closure; :34 _symbol_index) = reusable walk PATTERN, but :60 per-node test hardwired to leaf_kind==WITNESSED (grading-specialized, not a generic visitor)",
+        "src/lloyd_v4/harness/closure_grade.py:69 closure_grade anchors to manifest via route_binding/load_manifest (:25) = lineage-grading machinery, orthogonal to a per-expression factorability walk"
+      ],
+      "commands": [
+        "grep -rn 'class AtomKind|class LeafKind|FINITE_EXACT_ALGEBRAIC|CONSTRUCT_TO_TOLERANCE|NOT_ATOM' src/lloyd_v4/",
+        "read src/lloyd_v4/harness/closure_grade.py (full); read src/lloyd_v4/core/binding.py (full)"
+      ],
+      "freeze_implication": "Stage-A D_static REUSES the AtomKind partition directly and MIRRORS the closure_grade DFS pattern, but carries its own traversal because the graphs differ: closure_grade walks the PrimitiveBinding lineage DAG (manifest-anchored), D_static walks a per-expression op-DAG (mexpr). Lift partition + walk-shape; D_static supplies the expression-DAG + a generic node-visit + the R_exact/residue-preservation predicate. Thin wrapper, not a rebuild. Flag: keep route_binding/load_manifest OUT of D_static unless an op-node's primitive lineage genuinely needs grading.",
+      "confidence": "high"
+    },
+    {
+      "id": "Q3-decidability-precedent",
+      "question": "Is required_precision the decidability precedent CL-W1 claims?",
+      "verdict": "precedent_confirmed",
+      "evidence": [
+        "src/lloyd_v4/harness/required_precision.py:102 is_terminal (pure static predicate; module ':28-30' docstring: 'not a runtime layer. It mutates nothing')",
+        "src/lloyd_v4/harness/required_precision.py:24-26 docstring: 'decidable for THIS restricted lattice -- a finite computation tree, a closed-form W(k), two atom kinds, and a fixed format precision ... yes' (verbatim the brief's conditions)",
+        "src/lloyd_v4/harness/required_precision.py:50 PrecisionVerdict {PROVEN,EVAL,UNMEETABLE} + :134 certify_precision (verdict is computed = answered, not deferred)",
+        "Build_Docs/Architecture/V4_GLOSSARY.md:452 'Required-precision composition floor (decidable terminal predicate)' (certified-precision-spine P1, 2026-06-05, 'answered YES for this restricted lattice')"
+      ],
+      "commands": [
+        "grep -rn 'decidable terminal|composition floor|restricted lattice|def is_terminal' src/lloyd_v4/harness/required_precision.py",
+        "read src/lloyd_v4/harness/required_precision.py (full); grep glossary line 452"
+      ],
+      "freeze_implication": "CL-W1's [ANALYTIC] decidability leg CITES this in-family precedent (static structural predicate over a restricted finite lattice, fixed atom-kinds, decidable=YES) rather than presenting factorability-decidability as novel. De-risks A-P1. Caveat: it is the SHAPE that is the precedent; the predicate differs (precision-deliverability vs factorability), so CL-W1 still constructs and confirms its own biconditional on FX-W-A/C/E.",
+      "confidence": "high"
+    }
+  ],
+  "scope_compliance": {
+    "touched_substrate": false,
+    "touched_normative_docs": false,
+    "wrote_canonical_record": false,
+    "froze_anything": false
+  },
+  "not_established": [
+    "Did not assess whether a Mobius/PGL2 action build closes the SUBSTRATE_CONSTRUCTION section 4 dissection gate -- that is a Stage-0/promotion build task, not recon (WARP is eval-tier; no promotion in-campaign per brief section 9).",
+    "Did not decide whether FX-W-F keeps the carrier's raw unnormalized (num,den) storage (looks favourable for CL-W5) or adds a canonical-representative reduction -- a Stage-0 FX-W-F design choice.",
+    "Did not decide whether D_static should reuse closure_grade's manifest-anchored route_binding/load_manifest path or stay manifest-free on the expression-DAG -- a Stage-A instrument design decision.",
+    "Did not verify the exact 'UNDERFLOW-WITNESS-ULP' banked-witness label at its source (the close draft references 'the new ULP-underflow witness'; the literal label likely lives in results/coupling_holonomy/v2_floor_correction/V2_REPORT.md) -- confirm at freeze before CL-W2 cites it.",
+    "Did NOT test or grade factorability or oplus-universality themselves -- out of scope by construction.",
+    "Pure read/grep only; no module imported or test run -- 'consult-ready' is a source-level verdict, not an executed-import verdict."
+  ]
+}

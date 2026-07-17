@@ -1,0 +1,52 @@
+{
+  "rank": 15,
+  "lift": 61.5,
+  "count": 10,
+  "families": 4,
+  "a": {
+    "id": "OBJ:certified-keystone-channel-labels-kappa-c-kappa-s-kappa-int",
+    "label": "certified keystone channel labels (kappa_c, kappa_s, kappa_int)",
+    "standard_term": "curvature-channel decomposition labels for the certified keystone case",
+    "nomenclature": "novel",
+    "symbols": [
+      "kappa_c",
+      "kappa_int",
+      "kappa_s"
+    ]
+  },
+  "b": {
+    "id": "OBJ:kappa-c-pinning-condition-c-0",
+    "label": "Kappa_c-pinning condition Δκ_c = 0",
+    "standard_term": "invariance condition preserving the pure-coupling channel under gauge transport (no classical analogue)",
+    "nomenclature": "novel",
+    "symbols": [
+      "kappa_c"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-0002",
+      "type": "theorem",
+      "claim_status": "machine-verified",
+      "label": "'Same S3?' resolved NO: local role-S3 and global within-bloc",
+      "summary": "LOCAL role S3: (kappa_c^P,kappa_c^D,kappa_c^S)=(-4/49,-1/441,-4/441); A_c(cubic)=2258/194481; permutes ROLES {D,S,P}. GLOBAL within-block S3: directive cubic D^3+D-2=0 @ (S,P)=(1,1); roots {1,(-1+-i*sqrt7)/2}; disc=-112 ",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/dbp_four_role_calc_log_v8.md"
+    },
+    {
+      "uid": "U-0112",
+      "type": "theorem",
+      "claim_status": "machine-verified",
+      "label": "Coupling carrier / A_c retrodiction — THE GATE (CALC-02)",
+      "summary": "kappa_c^(P) = -25/196; kappa_c^(D) = -1/441; kappa_c^(S) = -1/49; A_c = (kappa_P-kappa_D)^2 + (kappa_D-kappa_S)^2 + (kappa_S-kappa_P)^2 = 42793/1555848 <- target hit exactly.",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/dbp_four_role_calc_log_v8.md"
+    },
+    {
+      "uid": "U-1236",
+      "type": "theorem",
+      "claim_status": "machine-verified",
+      "label": "T2 realizability RESOLVED (positive): wedge^2=S^(n-2,1,1) re",
+      "summary": "The full gauge-normal quadratic algebra on O carries wedge^2(std) (central projector on degree-2 O-monomials: n=4 rank 3 / target 3, n=5 rank 6 / target 6). Structural reduction: kappa_c = const * (Hadamard square of L(O",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/dbp_four_role_calc_log_v8.md"
+    }
+  ]
+}

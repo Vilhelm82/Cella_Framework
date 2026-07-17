@@ -1,0 +1,71 @@
+# substrate-invariant-search — Phase artifact disposition
+
+**Status:** Phase artifacts in this directory document a constrained-toolkit run of the substrate-invariant-search campaign. Authority retired 2026-05-25. **Not citable as substrate-physics findings** about the campaign's stated goal (substrate-derived K_G observable for L3 promotion).
+
+**Active campaign authority:** pending at `Agent_tasks/substrate_invariant_search_2026_05_26.md` (under draft). The new authority will open at §1 with the proper toolkit as required reading + foundational tools.
+
+**Retired authority:** `Agent_tasks/substrate_invariant_search_2026_05_23.md` (see retired header for context).
+
+---
+
+## What was constrained about the prior toolkit
+
+The retired authority was scoped without consulting parallel V4 work that contained foundational tools for the campaign's stated goal:
+
+- `transfer_function_exponent_family_v4.tex` (the α-1 transfer law, proven; Theorem 1)
+- The BACL theorem as a *prediction engine* (not just a catalogued observable)
+- α as a *per-probe local observable* at branch
+- `typed_log_log_slope` and `typed_finite_difference` primitives
+- The relationship machinery between BACL grain, α, and log-log slope
+
+Phases A through I were executed in observable-space restricted to *scalar-per-probe values*. Derivative-class observables (slopes, finite differences, asymptotic exponents) were excluded from Phase A's catalogue, which restricted every subsequent phase.
+
+## Phase artifact disposition
+
+| Artifact | Status under new authority |
+|---|---|
+| `phase_a_candidate_catalogue.{md,json}` | **Constrained-toolkit catalogue (13 observables, scalar-per-probe only).** Not citable as the substrate observable inventory. New Phase A under revised authority will extend this with derivative-class observables. |
+| `phase_b_invariant_vector_table.{md,json}` | **Probe set selected for matched-K_G only.** Branch-proximate sampling was not systematic; the 5 probes nearest each branch used in the yesterday's slope-field test were accidentally present. New Phase B under revised authority will include systematic branch-proximate sampling. |
+| `phase_c_irreducible_basis.{md,json}` | **Irreducible basis (ulp_spread_log2, two_form_partition, E) is irreducible within scalar-per-probe space only.** Whether α-at-branch is a fourth basis element is not addressed. |
+| `phase_d_transformation_invariance_audit.{md,json}` | **Transformation invariance tested in value-space only.** Slope-space invariance under the same transformations was not tested. |
+| `phase_e_kg_observable.{md,json}` | **K_G derivation Path A failed.** The deliverable the campaign was set up to produce was not produced. Path B (BACL + α + log-log slope construction, using the relationship machinery in `transfer_function_exponent_family_v4.tex`) was not attempted because the toolkit needed to attempt it was not on the menu. |
+| `phase_f_invariant_synthesis.{md,json}` | **4-channel StructuredReading (ulp_spread_log2, E, two_form_partition, K_G eval-layer).** A 5th channel for local α at branch was not present. Magic-number thresholds calibrated against value-space data only. |
+| `phase_f_channel_2_amendment.md` | **Cross-fixture ceiling ρ ≈ −0.94 declared "mathematical, structural" based on three value-space attacks.** Correct as a statement about *value-space observables under the constrained toolkit*. Not a general structural claim about the substrate. |
+| `phase_g_failure_mode_demo.{md,json}` | Proof-of-concept demonstration with the constrained-toolkit instrument and magic-number thresholds. |
+| `phase_h_substrate_semantic_characterization.{md,json}` | **E identified as K_G's within-fixture rank cousin (ρ = −1.0).** The complementary question — whether α stands in a particular cross-fixture relationship to K_G — was not asked. |
+| `phase_i_focused_probe_sweep.json` | Focused probe sweep within the constrained-toolkit instrument's value-space domain. |
+| `2026_05_25_cross_fixture_closure_via_transfer_function.md` | **Not a campaign result.** This is the *surprise that revealed the toolkit limitation*. The cross-fixture log-log slope agreement at branch (Schw 0.9962, PA 1.0000, \|Δ\|=0.0038 at N=5) demonstrated that a derivative-class observable (α at branch) is cross-fixture invariant where value-space observables were declared "structurally" ceiling-bound. The slope-field finding is preserved here for historical context; the new authority will reference it in its motivation section as the evidence that triggered the rewrite. |
+
+## What survives as toolkit-independent
+
+A small number of findings from the retired authority's phase runs are toolkit-independent and stand:
+
+| Finding | Why it stands |
+|---|---|
+| BACL theorem (proven; not run inside this campaign but cited by it) | Proven in `transfer_function_exponent_family_v4.tex`. Toolkit-independent. |
+| F1 ≡ F4 collapse at substrate-signature level (Phase F amendment, yesterday's dial-behaviour matrix) | Structural finding about the algebraic forms F1 and F4. Toolkit-independent. |
+| The value-space ceiling at ρ ≈ −0.94 *as a characterisation of constrained-instrument behavior in value-space* | True statement about what the constrained instrument observed. Useful as instrument characterisation; not citable as substrate physics. |
+
+## What does NOT stand
+
+| Finding | Why it does not stand |
+|---|---|
+| "Cross-fixture ceiling is mathematical, structural" as a substrate claim | Made by an instrument that could only observe value-space. Yesterday's slope-field finding falsifies it as a general claim. |
+| "K_G is not substrate-derivable" | Phase E tested one route (Path A) and failed. Path B was not attempted. The campaign goal remains research-grade open. |
+| The 4-channel StructuredReading as the substrate-as-probe instrument | Missing the slope-space channel. The instrument synthesised in Phase F is incomplete. |
+| Magic-number thresholds in Phase F decision rule | Calibrated against value-space data only; need recalibration with proper toolkit. |
+| Phase H's E-as-K_G-cousin characterisation as a complete statement | Within-fixture only; whether α relates to K_G cross-fixture is unasked. |
+
+## For the fresh session reading this
+
+When you draft the new authority `substrate_invariant_search_2026_05_26.md`:
+
+- The campaign goal is **substrate-derived K_G observable** for L3 promotion. Cross-fixture invariant search is in service of K_G derivation, not a separable deliverable.
+- Open at §1 with the proper toolkit as required reading + foundational tools. The required-reading list itself is a process gate: do not pre-register Phase A before the toolkit's foundational documents have been read.
+- Phases A through I in this directory document a constrained-instrument run. Cite them as historical context only; do not anchor your scope statements to their framings.
+- Yesterday's slope-field finding (`2026_05_25_cross_fixture_closure_via_transfer_function.md`) belongs in your motivation section as the surprise that revealed the constraint, not as a campaign result.
+- The race-car analogy in plain language: the prior authority tested a three-wheeled car. The fourth wheel (BACL + α + log-log slope + transfer-function paper) is now available. New phases test the four-wheeled car. The prior lap times do not characterise the four-wheeled car.
+
+---
+
+*Authored 2026-05-25 by Will + Claude as the disposition note for retired campaign authority `substrate_invariant_search_2026_05_23.md`. References to "yesterday" are 2026-05-24.*

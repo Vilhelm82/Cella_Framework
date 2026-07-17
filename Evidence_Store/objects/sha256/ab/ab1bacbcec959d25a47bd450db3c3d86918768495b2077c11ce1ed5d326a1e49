@@ -1,0 +1,231 @@
+{
+  "audit_name": "substrate_invariant_search_phase_g_failure_mode_demo",
+  "authority": "Build_Docs/Agent_tasks/substrate_invariant_search_2026_05_23.md",
+  "campaign": "substrate_invariant_search",
+  "campaign_verdict": "proof_of_concept_achieved",
+  "closeout_questions": {
+    "Q1_per_probe_match": "Per-probe attribution summary: G1=substrate\u2713, G2=substrate\u2717, G3=format_precision_pinned\u2713, G4=phenomenon\u2713. Pathological matches: 2/3. Phenomenon control: matches.",
+    "Q2_mismatches": "Mismatches: G2_ambiguous_near_flat_parabola_R1e14: expected=ambiguous, actual=substrate",
+    "Q3_demonstration_success": "By pre-registered criteria: proof_of_concept_achieved. Required: phenomenon control + \u22652/3 pathological matches. Achieved: control match=True, pathological matches=2/3.",
+    "Q4_thesis_support": "If verdict = proof_of_concept_achieved: The substrate-as-probe thesis has empirical proof-of-concept at the pathological probe set. The instrument's attribution categories distinguish substrate / ambiguous / format_precision_pinned regimes that residual-based solvers cannot. If verdict = partial: limited support requiring specific scope caveats. If failed: thesis not supported at this probe set; gap recorded for future work.",
+    "Q5_scope_caveats": "Even with proof_of_concept_achieved: (a) only 4 pathological probes tested; broader probe-set sweeps remain future work. (b) Newton failure-mode is narratively characterised, not algorithmically run \u2014 a future demo could actually execute Newton iterations and record termination behaviour. (c) The decision rule's thresholds are still pre-registered magic numbers; calibration on broader data is open. (d) Substrate-derivation of K_G remains research-grade open.",
+    "Q6_campaign_verdict": "Campaign verdict: proof_of_concept_achieved. The substrate invariant search campaign Phases A through G is now complete. The instrument is defined, P1-P5 verified, attribution rule pre-registered, and demonstrated on both clean (Phase F) and pathological (Phase G) probe sets.",
+    "Q7_next_cycle_work": "Recommended next-cycle work, in priority order: (1) Broader pathological probe sweep \u2014 more pathology types, more coordinate sweeps within each. (2) Algorithmic Newton-execution demo \u2014 actually run Newton iterations at pathological probes and record termination behaviour. (3) Decision-rule threshold calibration from format-precision properties rather than magic numbers. (4) Multi-D extension of E primitive (carried from MD_Q1). (5) Substrate-derivation of K_G (Path A research-grade)."
+  },
+  "date": "2026-05-23",
+  "n_probes": 4,
+  "open_work_items_carried_forward": [
+    "Decision-rule threshold calibration on broader probe sets",
+    "Substrate-derivation of K_G (Path A research-grade)",
+    "Multi-D extension of E (MD_Q1 from Phase 2h)",
+    "Format-precision-pinned attribution alternative (higher-precision arithmetic)",
+    "Per-probe two_form_partition observable (Phase F structural critique)"
+  ],
+  "pathological_probe_set": [
+    {
+      "category_expected": "substrate",
+      "newton_failure_mode": "Residual |F| is below 1e-16 (BACL noise floor) at most points within ~1e-10 of the surface; residual-based termination cannot distinguish 'on surface' from 'near surface'. Newton from any moderately close starting point 'converges' trivially by residual magnitude but the geometric interpretation is ambiguous.",
+      "probe_coords": {
+        "x": 1.0,
+        "y": 1e-20
+      },
+      "probe_id": "G1_substrate_near_flat_parabola_R1e20",
+      "regime": "near_flat_extreme_curvature_radius",
+      "surface_form": "y - x**2 / R = 0",
+      "surface_params": {
+        "R": 1e+20
+      }
+    },
+    {
+      "category_expected": "ambiguous",
+      "newton_failure_mode": "Residual termination is borderline: |F| at the probe is ~1e-14, above absolute noise floor 1e-16 but within 2 orders of magnitude. Convergence test fires both at points genuinely near the surface and at substrate-noise-dominated locations with similar magnitudes.",
+      "probe_coords": {
+        "x": 1.0,
+        "y": 1e-14
+      },
+      "probe_id": "G2_ambiguous_near_flat_parabola_R1e14",
+      "regime": "near_flat_moderate_curvature_radius",
+      "surface_form": "y - x**2 / R = 0",
+      "surface_params": {
+        "R": 100000000000000.0
+      }
+    },
+    {
+      "category_expected": "format_precision_pinned",
+      "newton_failure_mode": "Near-horizon coordinates: 1 - 2/r involves catastrophic cancellation. In float32, almost all precision is lost; in float64, the relative error is ~5e-12. Newton step across near-horizon coordinates produces high relative error in gradient and updates; unreliable beyond the first few iterations.",
+      "probe_coords": {
+        "r": 2.0001,
+        "z": 0.007070891041808792
+      },
+      "probe_id": "G3_format_pinned_schwarzschild_r2.0001",
+      "regime": "schwarzschild_extreme_near_horizon",
+      "surface_form": "1 - 2/r - z**2 = 0",
+      "surface_params": {}
+    },
+    {
+      "category_expected": "phenomenon",
+      "newton_failure_mode": "None \u2014 this is a clean probe. Newton converges cleanly. Included as false-positive control: the instrument must NOT classify this as substrate / ambiguous / format-pinned.",
+      "probe_coords": {
+        "r": 5.0,
+        "z": 0.7745966692414834
+      },
+      "probe_id": "G4_phenomenon_control_schwarzschild_r5.0",
+      "regime": "schwarzschild_far_field_control",
+      "surface_form": "1 - 2/r - z**2 = 0",
+      "surface_params": {}
+    }
+  ],
+  "per_probe_results": [
+    {
+      "E_log2_base_operand": null,
+      "F_val_at_probe": 0.0,
+      "K_G": 2e-20,
+      "K_G_details": {
+        "det_h_b": 2e-20,
+        "f_x": -2e-20,
+        "f_y": 1.0,
+        "grad_norm": 1.0,
+        "grad_norm_pow3": 1.0
+      },
+      "attribution": "substrate",
+      "attribution_confidence": 1.0,
+      "attribution_matches_expectation": true,
+      "attribution_rationale": "signal_ratio=2.441e-24 at or below 1; substrate-attributed.",
+      "attribution_signal_ratio": 2.44140625e-24,
+      "bacl_predicted_noise_floor": 8192.0,
+      "category_expected": "substrate",
+      "max_ulp": 16384.0,
+      "min_ulp": 1.504632769052528e-36,
+      "newton_failure_mode": "Residual |F| is below 1e-16 (BACL noise floor) at most points within ~1e-10 of the surface; residual-based termination cannot distinguish 'on surface' from 'near surface'. Newton from any moderately close starting point 'converges' trivially by residual magnitude but the geometric interpretation is ambiguous.",
+      "probe_coords": {
+        "x": 1.0,
+        "y": 1e-20
+      },
+      "probe_id": "G1_substrate_near_flat_parabola_R1e20",
+      "regime": "near_flat_extreme_curvature_radius",
+      "surface_form": "y - x**2 / R = 0",
+      "surface_params": {
+        "R": 1e+20
+      },
+      "ulp_spread_log2": 133.0
+    },
+    {
+      "E_log2_base_operand": null,
+      "F_val_at_probe": 0.0,
+      "K_G": 2e-14,
+      "K_G_details": {
+        "det_h_b": 2e-14,
+        "f_x": -2e-14,
+        "f_y": 1.0,
+        "grad_norm": 1.0,
+        "grad_norm_pow3": 1.0
+      },
+      "attribution": "substrate",
+      "attribution_confidence": 0.99999999999744,
+      "attribution_matches_expectation": false,
+      "attribution_rationale": "signal_ratio=2.560e-12 at or below 1; substrate-attributed.",
+      "attribution_signal_ratio": 2.56e-12,
+      "bacl_predicted_noise_floor": 0.0078125,
+      "category_expected": "ambiguous",
+      "max_ulp": 0.015625,
+      "min_ulp": 1.5777218104420236e-30,
+      "newton_failure_mode": "Residual termination is borderline: |F| at the probe is ~1e-14, above absolute noise floor 1e-16 but within 2 orders of magnitude. Convergence test fires both at points genuinely near the surface and at substrate-noise-dominated locations with similar magnitudes.",
+      "probe_coords": {
+        "x": 1.0,
+        "y": 1e-14
+      },
+      "probe_id": "G2_ambiguous_near_flat_parabola_R1e14",
+      "regime": "near_flat_moderate_curvature_radius",
+      "surface_form": "y - x**2 / R = 0",
+      "surface_params": {
+        "R": 100000000000000.0
+      },
+      "ulp_spread_log2": 93.0
+    },
+    {
+      "E_log2_base_operand": -14.2877845124942,
+      "F_val_at_probe": 0.0,
+      "K_G": 3.9964027280433525,
+      "K_G_details": {
+        "det_h_b": 0.4999999925012499,
+        "f_x": 0.4999500037497499,
+        "f_y": -0.014141782083617584,
+        "grad_norm": 0.5001499737577474,
+        "grad_norm_pow3": 0.12511251405987578
+      },
+      "attribution": "format_precision_pinned",
+      "attribution_confidence": 0.0,
+      "attribution_matches_expectation": true,
+      "attribution_rationale": "E_log2_base_operand = -14.288 below format-safe threshold -13.288; format-precision-dominated.",
+      "attribution_signal_ratio": 3.599639567367695e+16,
+      "bacl_predicted_noise_floor": 1.1102230246251565e-16,
+      "base_operand": 4.999750012513182e-05,
+      "category_expected": "format_precision_pinned",
+      "max_ulp": 2.220446049250313e-16,
+      "min_ulp": 6.776263578034403e-21,
+      "newton_failure_mode": "Near-horizon coordinates: 1 - 2/r involves catastrophic cancellation. In float32, almost all precision is lost; in float64, the relative error is ~5e-12. Newton step across near-horizon coordinates produces high relative error in gradient and updates; unreliable beyond the first few iterations.",
+      "probe_coords": {
+        "r": 2.0001,
+        "z": 0.007070891041808792
+      },
+      "probe_id": "G3_format_pinned_schwarzschild_r2.0001",
+      "regime": "schwarzschild_extreme_near_horizon",
+      "surface_form": "1 - 2/r - z**2 = 0",
+      "surface_params": {},
+      "ulp_spread_log2": 15.0
+    },
+    {
+      "E_log2_base_operand": -0.7369655941662062,
+      "F_val_at_probe": -1.1102230246251565e-16,
+      "K_G": 0.024002489108416066,
+      "K_G_details": {
+        "det_h_b": 0.08960000000000001,
+        "f_x": 0.08,
+        "f_y": -1.5491933384829668,
+        "grad_norm": 1.5512575543732254,
+        "grad_norm_pow3": 3.7329461788437306
+      },
+      "attribution": "phenomenon",
+      "attribution_confidence": 0.8959278782178629,
+      "attribution_matches_expectation": true,
+      "attribution_rationale": "signal_ratio=2.162e+14 above 1e3 threshold; phenomenon.",
+      "attribution_signal_ratio": 216195202009253.97,
+      "bacl_predicted_noise_floor": 1.1102230246251565e-16,
+      "base_operand": 0.6,
+      "category_expected": "phenomenon",
+      "max_ulp": 2.220446049250313e-16,
+      "min_ulp": 5.551115123125783e-17,
+      "newton_failure_mode": "None \u2014 this is a clean probe. Newton converges cleanly. Included as false-positive control: the instrument must NOT classify this as substrate / ambiguous / format-pinned.",
+      "probe_coords": {
+        "r": 5.0,
+        "z": 0.7745966692414834
+      },
+      "probe_id": "G4_phenomenon_control_schwarzschild_r5.0",
+      "regime": "schwarzschild_far_field_control",
+      "surface_form": "1 - 2/r - z**2 = 0",
+      "surface_params": {},
+      "ulp_spread_log2": 2.0
+    }
+  ],
+  "phase": "G",
+  "phase_f_synthesis_sha256": "b19c0ee9ef3c6e3c195d970b454e0af6539aaad79ee8e52a9b403c73dfab8e65",
+  "preregistry": "Build_Docs/Agent_tasks/substrate_invariant_search_phase_g_demonstration.md",
+  "substrate_modifications": [],
+  "success_criteria_outcome": {
+    "demonstration_failed": false,
+    "demonstration_partial": false,
+    "demonstration_succeeded": true,
+    "g4_phenomenon_control_correct": true,
+    "n_pathological_matches": 2,
+    "n_pathological_total": 3,
+    "required_pathological_matches_for_success": 2
+  },
+  "v3_isolation_preserved": true,
+  "what_phase_g_does_not_claim": [
+    "Phase G does NOT modify substrate or architecture files",
+    "Phase G does NOT call lv3 / V3 substrate",
+    "Phase G does NOT retire Newton as general-purpose solver (defined failure-mode comparison only)",
+    "Phase G does NOT revise Phase F decision rule thresholds based on results",
+    "Phase G does NOT extend probe set beyond the 4 pre-registered cases"
+  ]
+}

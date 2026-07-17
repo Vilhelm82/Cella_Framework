@@ -1,0 +1,173 @@
+{
+ "B-P1": {
+  "note": "fused epsilon-content (S0,S1,S2,kappa) vs HR131 records, bit-for-bit",
+  "pass": true,
+  "rungs_checked": 16
+ },
+ "B-P2": {
+  "floor_rule": "2*ulp(|kappa_arbiter|) per rung (frozen pre-grading)",
+  "pass": false,
+  "rows": [
+   {
+    "floor": 8.881784197001252e-16,
+    "k": 8,
+    "measured": 6.217248937900877e-15,
+    "mode": "band",
+    "pass": true,
+    "predicted": 4.1428604495307024e-14,
+    "ratio": 6.6634945631265845
+   },
+   {
+    "floor": 8.881784197001252e-16,
+    "k": 9,
+    "measured": 2.6645352591003757e-15,
+    "mode": "band",
+    "pass": false,
+    "predicted": 3.59312479171928e-14,
+    "ratio": 13.484996227568866
+   },
+   {
+    "floor": 8.881784197001252e-16,
+    "k": 10,
+    "measured": 3.1086244689504383e-15,
+    "mode": "band",
+    "pass": false,
+    "predicted": 3.2477703626754155e-14,
+    "ratio": 10.447612425092816
+   },
+   {
+    "floor": 8.881784197001252e-16,
+    "k": 11,
+    "measured": 3.9968028886505635e-15,
+    "mode": "band",
+    "pass": false,
+    "predicted": 3.896830184519401e-14,
+    "ratio": 9.74986831495982
+   },
+   {
+    "floor": 8.881784197001252e-16,
+    "k": 12,
+    "measured": 5.773159728050814e-15,
+    "mode": "band",
+    "pass": true,
+    "predicted": 3.60614190438579e-14,
+    "ratio": 6.246392052629606
+   },
+   {
+    "floor": 8.881784197001252e-16,
+    "k": 13,
+    "measured": 3.552713678800501e-15,
+    "mode": "band",
+    "pass": false,
+    "predicted": 3.931793407086184e-14,
+    "ratio": 11.067014576906944
+   },
+   {
+    "floor": 8.881784197001252e-16,
+    "k": 14,
+    "measured": 6.661338147750939e-15,
+    "mode": "band",
+    "pass": false,
+    "predicted": 6.134622675567847e-14,
+    "ratio": 9.209294798581984
+   },
+   {
+    "floor": 8.881784197001252e-16,
+    "k": 15,
+    "measured": 4.440892098500626e-16,
+    "mode": "split_FAIL",
+    "pass": false,
+    "predicted": 7.483491380968645e-14,
+    "ratio": null
+   }
+  ]
+ },
+ "B-P3": {
+  "expected": "WARNING k=8+/-1, ILL k=12+/-1 (HR131 stratification)",
+  "first_ill_rung": null,
+  "first_warning_rung": 8,
+  "pass": false,
+  "strata": [
+   {
+    "k": 0,
+    "max_binades_lost": 3.4411810951293305,
+    "stratum": "WELL"
+   },
+   {
+    "k": 1,
+    "max_binades_lost": 3.441277709889782,
+    "stratum": "WELL"
+   },
+   {
+    "k": 2,
+    "max_binades_lost": 6.712844984199236,
+    "stratum": "WELL"
+   },
+   {
+    "k": 3,
+    "max_binades_lost": 10.80491767428856,
+    "stratum": "WELL"
+   },
+   {
+    "k": 4,
+    "max_binades_lost": 13.518806351481679,
+    "stratum": "WELL"
+   },
+   {
+    "k": 5,
+    "max_binades_lost": 15.819042961749012,
+    "stratum": "WELL"
+   },
+   {
+    "k": 6,
+    "max_binades_lost": 19.619071391021315,
+    "stratum": "WELL"
+   },
+   {
+    "k": 7,
+    "max_binades_lost": 24.20061106757991,
+    "stratum": "WELL"
+   },
+   {
+    "k": 8,
+    "max_binades_lost": 26.424575234567936,
+    "stratum": "WARNING"
+   },
+   {
+    "k": 9,
+    "max_binades_lost": 23.102647431588103,
+    "stratum": "WELL"
+   },
+   {
+    "k": 10,
+    "max_binades_lost": 19.78072373436737,
+    "stratum": "WELL"
+   },
+   {
+    "k": 11,
+    "max_binades_lost": 16.458864134462004,
+    "stratum": "WELL"
+   },
+   {
+    "k": 12,
+    "max_binades_lost": 13.137238257774627,
+    "stratum": "WELL"
+   },
+   {
+    "k": 13,
+    "max_binades_lost": 9.81837626203361,
+    "stratum": "WELL"
+   },
+   {
+    "k": 14,
+    "max_binades_lost": 7.378277852043702,
+    "stratum": "WELL"
+   },
+   {
+    "k": 15,
+    "max_binades_lost": 7.396718180036771,
+    "stratum": "WELL"
+   }
+  ]
+ }
+}

@@ -1,0 +1,884 @@
+{
+  "atlas_version": "phase_gamma_v1",
+  "distinguishability_matrix": [
+    [
+      0,
+      6,
+      5,
+      8,
+      3,
+      3
+    ],
+    [
+      6,
+      0,
+      8,
+      11,
+      5,
+      5
+    ],
+    [
+      5,
+      8,
+      0,
+      5,
+      3,
+      3
+    ],
+    [
+      8,
+      11,
+      5,
+      0,
+      4,
+      4
+    ],
+    [
+      3,
+      5,
+      3,
+      4,
+      0,
+      5
+    ],
+    [
+      3,
+      5,
+      3,
+      4,
+      5,
+      0
+    ]
+  ],
+  "distinguishability_matrix_row_labels": [
+    "SR",
+    "Schwarzschild",
+    "pure_algebraic",
+    "cube_root",
+    "Morris_Thorne",
+    "Kerr_ISCO_a09"
+  ],
+  "failure_modes_observed": [
+    "F_gamma_1"
+  ],
+  "fingerprints": [
+    {
+      "compactness": {
+        "budget_bits": 256,
+        "in_budget": false,
+        "total_bits": 268
+      },
+      "fingerprint": {
+        "slot_01_c1_sublattice_class": {
+          "status": "defined",
+          "value": "irregular"
+        },
+        "slot_02_c2_sublattice_class": {
+          "status": "defined",
+          "value": "integer"
+        },
+        "slot_03c_c1_max_abs_level": {
+          "status": "defined",
+          "value": 1.5
+        },
+        "slot_04c_c2_max_abs_level": {
+          "status": "defined",
+          "value": 1.0
+        },
+        "slot_05_c1_fractional_cardinality": {
+          "status": "defined",
+          "value": 31
+        },
+        "slot_06_observability_ratio": {
+          "status": "defined",
+          "value": 0.29927
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "status": "defined",
+          "value": 0.70073
+        },
+        "slot_08_family_tangent_signature_norm": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_09_pair_jacobian_log10_spread": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_10_branch_fingerprint_distribution": {
+          "status": "defined",
+          "value": {
+            "modal_fraction": 0.511111,
+            "n_branch_types": 2,
+            "normalized_entropy": 0.999644
+          }
+        },
+        "slot_11c_dual_arm_split": {
+          "status": "defined",
+          "value": {
+            "inactive_q": 50,
+            "resolved_q": 100,
+            "zero_sep_q": 106
+          }
+        },
+        "slot_12_channel_handover_beta": {
+          "status": "defined",
+          "value": 0.708753
+        },
+        "slot_13r_critical_curvature_log10": {
+          "status": "defined",
+          "value": -15.9546
+        },
+        "slot_14r_conditioning_index_log10": {
+          "status": "defined",
+          "value": 0.0
+        },
+        "slot_15r_route_variation_signature": {
+          "status": "defined",
+          "value": 1.0
+        },
+        "slot_16_binade_loss_depth_log2": {
+          "status": "unobservable",
+          "value": null
+        }
+      },
+      "fixture": "SR",
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "variant": "A"
+    },
+    {
+      "compactness": {
+        "budget_bits": 256,
+        "in_budget": false,
+        "total_bits": 288
+      },
+      "fingerprint": {
+        "slot_01_c1_sublattice_class": {
+          "status": "defined",
+          "value": "quarter_integer"
+        },
+        "slot_02_c2_sublattice_class": {
+          "status": "defined",
+          "value": "integer"
+        },
+        "slot_03c_c1_max_abs_level": {
+          "status": "defined",
+          "value": 1.5
+        },
+        "slot_04c_c2_max_abs_level": {
+          "status": "defined",
+          "value": 1.0
+        },
+        "slot_05_c1_fractional_cardinality": {
+          "status": "defined",
+          "value": 3
+        },
+        "slot_06_observability_ratio": {
+          "status": "defined",
+          "value": 1.0
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "status": "defined",
+          "value": 0.182482
+        },
+        "slot_08_family_tangent_signature_norm": {
+          "status": "defined",
+          "value": 24.758837
+        },
+        "slot_09_pair_jacobian_log10_spread": {
+          "status": "defined",
+          "value": 1.766085
+        },
+        "slot_10_branch_fingerprint_distribution": {
+          "status": "defined",
+          "value": {
+            "modal_fraction": 0.714286,
+            "n_branch_types": 2,
+            "normalized_entropy": 0.863121
+          }
+        },
+        "slot_11c_dual_arm_split": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_12_channel_handover_beta": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_13r_critical_curvature_log10": {
+          "status": "defined",
+          "value": -15.9546
+        },
+        "slot_14r_conditioning_index_log10": {
+          "status": "defined",
+          "value": 0.0
+        },
+        "slot_15r_route_variation_signature": {
+          "status": "defined",
+          "value": 0.0
+        },
+        "slot_16_binade_loss_depth_log2": {
+          "status": "defined",
+          "value": 55.3219
+        }
+      },
+      "fixture": "Schwarzschild",
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "variant": "A"
+    },
+    {
+      "compactness": {
+        "budget_bits": 256,
+        "in_budget": true,
+        "total_bits": 220
+      },
+      "fingerprint": {
+        "slot_01_c1_sublattice_class": {
+          "status": "defined",
+          "value": "irregular"
+        },
+        "slot_02_c2_sublattice_class": {
+          "status": "defined",
+          "value": "integer"
+        },
+        "slot_03c_c1_max_abs_level": {
+          "status": "defined",
+          "value": 1.5
+        },
+        "slot_04c_c2_max_abs_level": {
+          "status": "defined",
+          "value": 1.0
+        },
+        "slot_05_c1_fractional_cardinality": {
+          "status": "defined",
+          "value": 10
+        },
+        "slot_06_observability_ratio": {
+          "status": "defined",
+          "value": 0.49635
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "status": "defined",
+          "value": 0.50365
+        },
+        "slot_08_family_tangent_signature_norm": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_09_pair_jacobian_log10_spread": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_10_branch_fingerprint_distribution": {
+          "status": "defined",
+          "value": {
+            "modal_fraction": 0.6875,
+            "n_branch_types": 2,
+            "normalized_entropy": 0.896038
+          }
+        },
+        "slot_11c_dual_arm_split": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_12_channel_handover_beta": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_13r_critical_curvature_log10": {
+          "status": "defined",
+          "value": -16.2556
+        },
+        "slot_14r_conditioning_index_log10": {
+          "status": "unobservable",
+          "value": null
+        },
+        "slot_15r_route_variation_signature": {
+          "status": "defined",
+          "value": 1.0
+        },
+        "slot_16_binade_loss_depth_log2": {
+          "status": "defined",
+          "value": 53.4854
+        }
+      },
+      "fixture": "pure_algebraic",
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "variant": "A"
+    },
+    {
+      "compactness": {
+        "budget_bits": 256,
+        "in_budget": true,
+        "total_bits": 232
+      },
+      "fingerprint": {
+        "slot_01_c1_sublattice_class": {
+          "status": "defined",
+          "value": "irregular"
+        },
+        "slot_02_c2_sublattice_class": {
+          "status": "defined",
+          "value": "integer"
+        },
+        "slot_03c_c1_max_abs_level": {
+          "status": "defined",
+          "value": 4.0625
+        },
+        "slot_04c_c2_max_abs_level": {
+          "status": "defined",
+          "value": 4.0
+        },
+        "slot_05_c1_fractional_cardinality": {
+          "status": "defined",
+          "value": 10
+        },
+        "slot_06_observability_ratio": {
+          "status": "defined",
+          "value": 0.49635
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "status": "defined",
+          "value": 0.50365
+        },
+        "slot_08_family_tangent_signature_norm": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_09_pair_jacobian_log10_spread": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_10_branch_fingerprint_distribution": {
+          "status": "defined",
+          "value": {
+            "modal_fraction": 0.516129,
+            "n_branch_types": 2,
+            "normalized_entropy": 0.999249
+          }
+        },
+        "slot_11c_dual_arm_split": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_12_channel_handover_beta": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_13r_critical_curvature_log10": {
+          "status": "defined",
+          "value": -15.6536
+        },
+        "slot_14r_conditioning_index_log10": {
+          "status": "defined",
+          "value": 0.301
+        },
+        "slot_15r_route_variation_signature": {
+          "status": "defined",
+          "value": 1.0
+        },
+        "slot_16_binade_loss_depth_log2": {
+          "status": "defined",
+          "value": 51.4854
+        }
+      },
+      "fixture": "cube_root",
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "variant": "A"
+    },
+    {
+      "compactness": {
+        "budget_bits": 256,
+        "in_budget": true,
+        "total_bits": 176
+      },
+      "fingerprint": {
+        "slot_01_c1_sublattice_class": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_02_c2_sublattice_class": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_03c_c1_max_abs_level": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_04c_c2_max_abs_level": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_05_c1_fractional_cardinality": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_06_observability_ratio": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_08_family_tangent_signature_norm": {
+          "status": "defined",
+          "value": 1.732051
+        },
+        "slot_09_pair_jacobian_log10_spread": {
+          "status": "defined",
+          "value": 0.577109
+        },
+        "slot_10_branch_fingerprint_distribution": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_11c_dual_arm_split": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_12_channel_handover_beta": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_13r_critical_curvature_log10": {
+          "status": "defined",
+          "value": 1.4177
+        },
+        "slot_14r_conditioning_index_log10": {
+          "status": "defined",
+          "value": 8.0753
+        },
+        "slot_15r_route_variation_signature": {
+          "status": "defined",
+          "value": 0.0
+        },
+        "slot_16_binade_loss_depth_log2": {
+          "status": "defined",
+          "value": -3.9171
+        }
+      },
+      "fixture": "Morris_Thorne",
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "variant": "A"
+    },
+    {
+      "compactness": {
+        "budget_bits": 256,
+        "in_budget": true,
+        "total_bits": 176
+      },
+      "fingerprint": {
+        "slot_01_c1_sublattice_class": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_02_c2_sublattice_class": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_03c_c1_max_abs_level": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_04c_c2_max_abs_level": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_05_c1_fractional_cardinality": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_06_observability_ratio": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_07_sterbenz_applicable_mass_fraction": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_08_family_tangent_signature_norm": {
+          "status": "defined",
+          "value": 7.879319
+        },
+        "slot_09_pair_jacobian_log10_spread": {
+          "status": "defined",
+          "value": 1.71312
+        },
+        "slot_10_branch_fingerprint_distribution": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_11c_dual_arm_split": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_12_channel_handover_beta": {
+          "status": "not_applicable",
+          "value": null
+        },
+        "slot_13r_critical_curvature_log10": {
+          "status": "defined",
+          "value": 4.5655
+        },
+        "slot_14r_conditioning_index_log10": {
+          "status": "defined",
+          "value": 8.8286
+        },
+        "slot_15r_route_variation_signature": {
+          "status": "defined",
+          "value": 0.0
+        },
+        "slot_16_binade_loss_depth_log2": {
+          "status": "defined",
+          "value": -13.6054
+        }
+      },
+      "fixture": "Kerr_ISCO_a09",
+      "validity": {
+        "advanceable": true,
+        "defined": true,
+        "finite": true,
+        "observable": true,
+        "selectable": true
+      },
+      "variant": "A"
+    }
+  ],
+  "fixtures": [
+    "SR",
+    "Schwarzschild",
+    "pure_algebraic",
+    "cube_root",
+    "Morris_Thorne",
+    "Kerr_ISCO_a09"
+  ],
+  "indistinguishable_pair_count": 0,
+  "minimum_distinguishing_subset": [
+    "slot_13r_critical_curvature_log10",
+    "slot_01_c1_sublattice_class"
+  ],
+  "predictions": {
+    "P_gamma_1_slot_14_defined_geq_5": true,
+    "P_gamma_2_slot_15_nonzero_geq_4": false,
+    "P_gamma_3_all_15_pairs_distinguishable": true,
+    "P_gamma_4_compactness_geq_5_of_6": false,
+    "P_gamma_5_slot_16_universal_with_cross_family_discrim": false,
+    "P_gamma_6_stress_smoothness_critical_slots": true,
+    "P_gamma_7_stress_discrimination_preserved": false,
+    "diag_discrim_overlap_violations": [
+      {
+        "fixture_a": "SR",
+        "fixture_b": "Schwarzschild",
+        "range_a": [
+          -15.9546,
+          -15.9546
+        ],
+        "range_b": [
+          -15.9546,
+          -15.9546
+        ],
+        "slot": "slot_13"
+      },
+      {
+        "fixture_a": "SR",
+        "fixture_b": "cube_root",
+        "range_a": [
+          -15.9546,
+          -15.9546
+        ],
+        "range_b": [
+          -15.9546,
+          -15.6536
+        ],
+        "slot": "slot_13"
+      },
+      {
+        "fixture_a": "Schwarzschild",
+        "fixture_b": "cube_root",
+        "range_a": [
+          -15.9546,
+          -15.9546
+        ],
+        "range_b": [
+          -15.9546,
+          -15.6536
+        ],
+        "slot": "slot_13"
+      }
+    ],
+    "diag_distinguishable_pairs": 15,
+    "diag_in_budget_count": 4,
+    "diag_s14_defined_count": 5,
+    "diag_s15_nonzero_count": 3,
+    "diag_s16_defined_count": 5,
+    "diag_smoothness_violations": []
+  },
+  "stress_test": {
+    "discrimination_overlap_violations": [
+      {
+        "fixture_a": "SR",
+        "fixture_b": "Schwarzschild",
+        "range_a": [
+          -15.9546,
+          -15.9546
+        ],
+        "range_b": [
+          -15.9546,
+          -15.9546
+        ],
+        "slot": "slot_13"
+      },
+      {
+        "fixture_a": "SR",
+        "fixture_b": "cube_root",
+        "range_a": [
+          -15.9546,
+          -15.9546
+        ],
+        "range_b": [
+          -15.9546,
+          -15.6536
+        ],
+        "slot": "slot_13"
+      },
+      {
+        "fixture_a": "Schwarzschild",
+        "fixture_b": "cube_root",
+        "range_a": [
+          -15.9546,
+          -15.9546
+        ],
+        "range_b": [
+          -15.9546,
+          -15.6536
+        ],
+        "slot": "slot_13"
+      }
+    ],
+    "per_fixture": {
+      "SR": {
+        "per_slot_smoothness": {
+          "slot_13": {
+            "ok": null,
+            "spread": null
+          },
+          "slot_14": {
+            "ok": null,
+            "spread": null
+          },
+          "slot_15": {
+            "max": 1.0,
+            "min": 0.0,
+            "smooth_le_1_decade": true,
+            "spread": 1.0
+          },
+          "slot_16": {
+            "ok": null,
+            "spread": null
+          }
+        },
+        "rows": [
+          {
+            "probe": 0.83,
+            "slot_13": -15.9546,
+            "slot_14": 0.0,
+            "slot_15": 1.0,
+            "slot_16": 52.7312
+          },
+          {
+            "probe": 0.85,
+            "slot_13": null,
+            "slot_14": null,
+            "slot_15": 0.0,
+            "slot_16": null
+          },
+          {
+            "probe": 0.87,
+            "slot_13": null,
+            "slot_14": null,
+            "slot_15": 0.0,
+            "slot_16": null
+          }
+        ]
+      },
+      "Schwarzschild": {
+        "per_slot_smoothness": {
+          "slot_13": {
+            "max": -15.9546,
+            "min": -15.9546,
+            "smooth_le_1_decade": true,
+            "spread": 0.0
+          },
+          "slot_14": {
+            "max": 0.0,
+            "min": 0.0,
+            "smooth_le_1_decade": true,
+            "spread": 0.0
+          },
+          "slot_15": {
+            "max": 0.0,
+            "min": 0.0,
+            "smooth_le_1_decade": true,
+            "spread": 0.0
+          },
+          "slot_16": {
+            "max": 55.4594,
+            "min": 55.3219,
+            "smooth_le_1_decade": true,
+            "spread": 0.1375
+          }
+        },
+        "rows": [
+          {
+            "probe": 4.5,
+            "slot_13": null,
+            "slot_14": null,
+            "slot_15": 0.0,
+            "slot_16": null
+          },
+          {
+            "probe": 5.0,
+            "slot_13": -15.9546,
+            "slot_14": 0.0,
+            "slot_15": 0.0,
+            "slot_16": 55.3219
+          },
+          {
+            "probe": 5.5,
+            "slot_13": -15.9546,
+            "slot_14": 0.0,
+            "slot_15": 0.0,
+            "slot_16": 55.4594
+          }
+        ]
+      },
+      "cube_root": {
+        "per_slot_smoothness": {
+          "slot_13": {
+            "max": -15.6536,
+            "min": -15.9546,
+            "smooth_le_1_decade": true,
+            "spread": 0.301
+          },
+          "slot_14": {
+            "ok": null,
+            "spread": null
+          },
+          "slot_15": {
+            "max": 1.0,
+            "min": 0.0,
+            "smooth_le_1_decade": true,
+            "spread": 1.0
+          },
+          "slot_16": {
+            "max": 52.3785,
+            "min": 51.4854,
+            "smooth_le_1_decade": true,
+            "spread": 0.8931
+          }
+        },
+        "rows": [
+          {
+            "probe": 0.65,
+            "slot_13": -15.9546,
+            "slot_14": null,
+            "slot_15": 0.0,
+            "slot_16": 52.3785
+          },
+          {
+            "probe": 0.7,
+            "slot_13": -15.6536,
+            "slot_14": 0.1249,
+            "slot_15": 1.0,
+            "slot_16": 51.4854
+          },
+          {
+            "probe": 0.75,
+            "slot_13": null,
+            "slot_14": null,
+            "slot_15": 0.0,
+            "slot_16": null
+          }
+        ]
+      },
+      "pure_algebraic": {
+        "per_slot_smoothness": {
+          "slot_13": {
+            "ok": null,
+            "spread": null
+          },
+          "slot_14": {
+            "ok": null,
+            "spread": null
+          },
+          "slot_15": {
+            "max": 1.0,
+            "min": 0.0,
+            "smooth_le_1_decade": true,
+            "spread": 1.0
+          },
+          "slot_16": {
+            "ok": null,
+            "spread": null
+          }
+        },
+        "rows": [
+          {
+            "probe": 0.65,
+            "slot_13": null,
+            "slot_14": null,
+            "slot_15": 0.0,
+            "slot_16": null
+          },
+          {
+            "probe": 0.7,
+            "slot_13": -16.2556,
+            "slot_14": null,
+            "slot_15": 1.0,
+            "slot_16": 53.4854
+          },
+          {
+            "probe": 0.75,
+            "slot_13": null,
+            "slot_14": null,
+            "slot_15": 0.0,
+            "slot_16": null
+          }
+        ]
+      }
+    },
+    "smoothness_violations": []
+  },
+  "verdict": "barcode_hypothesis_not_supported_at_phase_gamma"
+}

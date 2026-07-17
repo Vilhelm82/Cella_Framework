@@ -1,0 +1,493 @@
+{
+  "E_threshold_summaries": {
+    "pure_algebraic_four_form": {
+      "abs_contrast": 0.35714285714285715,
+      "best_E_threshold_log2": -0.7522511595445539,
+      "frac_above": 0.35714285714285715,
+      "frac_below": 0.0,
+      "n_above": 56,
+      "n_below": 81,
+      "phase_2d_interpretation": "strong_threshold_contrast_0.357_at_E_-0.752 \u2014 candidate threshold relation supported"
+    },
+    "schwarzschild_four_form": {
+      "abs_contrast": 0.6731225296442688,
+      "best_E_threshold_log2": -0.7504804006406878,
+      "frac_above": 0.6818181818181818,
+      "frac_below": 0.008695652173913044,
+      "n_above": 22,
+      "n_below": 115,
+      "phase_2d_interpretation": "strong_threshold_contrast_0.673_at_E_-0.750 \u2014 candidate threshold relation supported"
+    },
+    "sr_four_form": {
+      "abs_contrast": 0.30526315789473685,
+      "best_E_threshold_log2": -0.9487184368651196,
+      "frac_above": 0.30526315789473685,
+      "frac_below": 0.0,
+      "n_above": 95,
+      "n_below": 42,
+      "phase_2d_interpretation": "strong_threshold_contrast_0.305_at_E_-0.949 \u2014 candidate threshold relation supported"
+    },
+    "threshold_cluster_near_sterbenz_boundary": "All three fixture-best E thresholds cluster in [-0.949, -0.750], corresponding to |base_operand| in [0.518, 0.594] \u2014 near the Sterbenz boundary at |base_operand| ~ 0.5 where BACL's hypothesis transitions from always-satisfied to potentially marginal.",
+    "threshold_range_log2": [
+      -0.9487184368651196,
+      -0.7504804006406878
+    ],
+    "threshold_spread": 0.1982380362244318
+  },
+  "E_vs_C_covariate_correlations": {
+    "pure_algebraic_four_form": {
+      "finite_difference_stability_distribution": {
+        "stable": 137
+      },
+      "n_records": 137,
+      "pearson_E_vs_J_condition": -0.776053811514034,
+      "pearson_E_vs_endpoint_distance": 0.898959716226642,
+      "pearson_E_vs_hessian_abs": -0.6231049441456448
+    },
+    "schwarzschild_four_form": {
+      "finite_difference_stability_distribution": {
+        "stable": 137
+      },
+      "n_records": 137,
+      "pearson_E_vs_J_condition": -0.7740309073979244,
+      "pearson_E_vs_endpoint_distance": 0.7132494659549548,
+      "pearson_E_vs_hessian_abs": -0.6259242758302326
+    },
+    "sr_four_form": {
+      "finite_difference_stability_distribution": {
+        "stable": 137
+      },
+      "n_records": 137,
+      "pearson_E_vs_J_condition": -0.6670109698751987,
+      "pearson_E_vs_endpoint_distance": 0.7123304702641217,
+      "pearson_E_vs_hessian_abs": -0.6583358676624702
+    }
+  },
+  "F1_to_F2_phase_behavior_by_E": {
+    "pure_algebraic_four_form": {
+      "E_quintile_edges_log2": [
+        -2.2894123264828248,
+        -1.3251140256062102,
+        -0.7348455422918369,
+        -0.33017284887156634
+      ],
+      "n": 137,
+      "per_E_bin": {
+        "E_bin_0": {
+          "E_range_log2": [
+            -6.6438561897747235,
+            -2.3411500748248804
+          ],
+          "half_phase_candidate": 0,
+          "half_phase_fraction": 0.0,
+          "n": 27,
+          "phase_drift": 0,
+          "phase_unobservable": 0,
+          "same_phase": 27
+        },
+        "E_bin_1": {
+          "E_range_log2": [
+            -2.2894123264828248,
+            -1.3513992133785262
+          ],
+          "half_phase_candidate": 0,
+          "half_phase_fraction": 0.0,
+          "n": 27,
+          "phase_drift": 0,
+          "phase_unobservable": 0,
+          "same_phase": 27
+        },
+        "E_bin_2": {
+          "E_range_log2": [
+            -1.3251140256062102,
+            -0.7522511595445539
+          ],
+          "half_phase_candidate": 1,
+          "half_phase_fraction": 0.03571428571428571,
+          "n": 28,
+          "phase_drift": 0,
+          "phase_unobservable": 0,
+          "same_phase": 27
+        },
+        "E_bin_3": {
+          "E_range_log2": [
+            -0.7348455422918369,
+            -0.3433017456799294
+          ],
+          "half_phase_candidate": 14,
+          "half_phase_fraction": 0.5185185185185185,
+          "n": 27,
+          "phase_drift": 0,
+          "phase_unobservable": 0,
+          "same_phase": 13
+        },
+        "E_bin_4": {
+          "E_range_log2": [
+            -0.33017284887156634,
+            -0.014499569695115089
+          ],
+          "half_phase_candidate": 5,
+          "half_phase_fraction": 0.17857142857142858,
+          "n": 28,
+          "phase_drift": 21,
+          "phase_unobservable": 0,
+          "same_phase": 2
+        }
+      }
+    },
+    "schwarzschild_four_form": {
+      "E_quintile_edges_log2": [
+        -6.090076156922759,
+        -4.774188058122404,
+        -2.896164189015461,
+        -1.2319467280496967
+      ],
+      "n": 137,
+      "per_E_bin": {
+        "E_bin_0": {
+          "E_range_log2": [
+            -8.647458426454946,
+            -6.134589587711823
+          ],
+          "half_phase_candidate": 0,
+          "half_phase_fraction": 0.0,
+          "n": 27,
+          "phase_drift": 0,
+          "phase_unobservable": 0,
+          "same_phase": 27
+        },
+        "E_bin_1": {
+          "E_range_log2": [
+            -6.090076156922759,
+            -4.87246843108755
+          ],
+          "half_phase_candidate": 0,
+          "half_phase_fraction": 0.0,
+          "n": 27,
+          "phase_drift": 0,
+          "phase_unobservable": 0,
+          "same_phase": 27
+        },
+        "E_bin_2": {
+          "E_range_log2": [
+            -4.774188058122404,
+            -3.0131354021891332
+          ],
+          "half_phase_candidate": 0,
+          "half_phase_fraction": 0.0,
+          "n": 28,
+          "phase_drift": 0,
+          "phase_unobservable": 0,
+          "same_phase": 28
+        },
+        "E_bin_3": {
+          "E_range_log2": [
+            -2.896164189015461,
+            -1.384663850235325
+          ],
+          "half_phase_candidate": 0,
+          "half_phase_fraction": 0.0,
+          "n": 27,
+          "phase_drift": 0,
+          "phase_unobservable": 0,
+          "same_phase": 27
+        },
+        "E_bin_4": {
+          "E_range_log2": [
+            -1.2319467280496967,
+            -0.3219280948873623
+          ],
+          "half_phase_candidate": 16,
+          "half_phase_fraction": 0.5714285714285714,
+          "n": 28,
+          "phase_drift": 3,
+          "phase_unobservable": 0,
+          "same_phase": 9
+        }
+      }
+    },
+    "sr_four_form": {
+      "E_quintile_edges_log2": [
+        -1.4957867091562147,
+        -0.6626170573762642,
+        -0.25574953256044564,
+        -0.06288505892307263
+      ],
+      "n": 137,
+      "per_E_bin": {
+        "E_bin_0": {
+          "E_range_log2": [
+            -12.287784516105445,
+            -1.5443950737416774
+          ],
+          "half_phase_candidate": 0,
+          "half_phase_fraction": 0.0,
+          "n": 27,
+          "phase_drift": 0,
+          "phase_unobservable": 0,
+          "same_phase": 27
+        },
+        "E_bin_1": {
+          "E_range_log2": [
+            -1.4957867091562147,
+            -0.6830568532277981
+          ],
+          "half_phase_candidate": 7,
+          "half_phase_fraction": 0.25925925925925924,
+          "n": 27,
+          "phase_drift": 0,
+          "phase_unobservable": 0,
+          "same_phase": 20
+        },
+        "E_bin_2": {
+          "E_range_log2": [
+            -0.6626170573762642,
+            -0.2659835442697222
+          ],
+          "half_phase_candidate": 15,
+          "half_phase_fraction": 0.5357142857142857,
+          "n": 28,
+          "phase_drift": 5,
+          "phase_unobservable": 0,
+          "same_phase": 8
+        },
+        "E_bin_3": {
+          "E_range_log2": [
+            -0.25574953256044564,
+            -0.06750290672063079
+          ],
+          "half_phase_candidate": 4,
+          "half_phase_fraction": 0.14814814814814814,
+          "n": 27,
+          "phase_drift": 22,
+          "phase_unobservable": 0,
+          "same_phase": 1
+        },
+        "E_bin_4": {
+          "E_range_log2": [
+            -0.06288505892307263,
+            -0.00014427671804501932
+          ],
+          "half_phase_candidate": 3,
+          "half_phase_fraction": 0.10714285714285714,
+          "n": 28,
+          "phase_drift": 23,
+          "phase_unobservable": 0,
+          "same_phase": 2
+        }
+      }
+    }
+  },
+  "audit_name": "mcg_geometry_first_phase_2g_cdef1_calibration",
+  "authority": "Build_Docs/Agent_tasks/mcg_geometry_first_discovery_campaign_2026_05_19.md",
+  "calibration_ladder_conclusion": {
+    "all_five_conditions_met": true,
+    "classification": "cdef1_operational_extractor_validated_1d",
+    "five_conditions": {
+      "condition_1_E_computable_and_stable_across_fixtures": {
+        "met": true,
+        "per_fixture": {
+          "pure_algebraic_four_form": true,
+          "schwarzschild_four_form": true,
+          "sr_four_form": true
+        }
+      },
+      "condition_2_E_organizes_F1_to_F2_phase": {
+        "criterion": "half_phase_fraction spread across E-quintiles > 0.10",
+        "met": true,
+        "per_fixture": {
+          "pure_algebraic_four_form": true,
+          "schwarzschild_four_form": true,
+          "sr_four_form": true
+        }
+      },
+      "condition_3_same_route_controls_clean": {
+        "met": true,
+        "per_fixture": {
+          "pure_algebraic_four_form": true,
+          "schwarzschild_four_form": true,
+          "sr_four_form": true
+        }
+      },
+      "condition_4_F3_calibration_clean": {
+        "met": true,
+        "per_fixture": {
+          "pure_algebraic_four_form": true,
+          "schwarzschild_four_form": true,
+          "sr_four_form": true
+        }
+      },
+      "condition_5_grid_artifacts_accounted_for": {
+        "artifacts_addressed": [
+          "phase_2e_schwarzschild_residual_grid_driven",
+          "phase_2f_pure_algebraic_grammar_sampling_artifact"
+        ],
+        "met": true
+      }
+    },
+    "rationale": "All five conditions met: E computable across all three 1D primary fixtures; E organizes F1_to_F2 phase behavior (per-fixture half_phase_fraction spreads exceed 0.10 across E-quintiles); same-route controls 100% same_phase across all fixtures; F3 calibration cleanly zero across all fixtures; known grid artifacts (Schwarzschild residual, pure_algebraic apparent grammar) are accounted for via Phase 2e/2f rather than mistaken for primitive behavior."
+  },
+  "campaign": "mcg_geometry_first_discovery",
+  "candidate_ledger_update_summary": {
+    "C-def-1": {
+      "calibration_classification": "cdef1_operational_extractor_validated_1d",
+      "current_ledger_state": "unresolved_candidate",
+      "proposed_state_after_phase_2g": "unresolved_candidate",
+      "proposed_tag": "phase_2g_cdef1_operational_extractor_validated_1d",
+      "rationale_no_state_change": "No allowed C-extractor state exists in handoff \u00a77. Per user direction, C-def-1 stays at unresolved_candidate; add tag phase_2g_cdef1_operational_extractor_validated_1d."
+    },
+    "G-curv-1": {
+      "current_ledger_state": "C_confounded",
+      "proposed_state_after_phase_2g": "C_confounded",
+      "rationale": "Unchanged from Phase 2d."
+    },
+    "G-curv-3": {
+      "current_ledger_state": "unresolved_candidate",
+      "proposed_state_after_phase_2g": "unresolved_candidate",
+      "rationale": "Unchanged from Phase 2f demotion."
+    },
+    "no_G_candidate_promoted": true,
+    "other_candidates_unchanged": [
+      "G-curv-2",
+      "G-route-1",
+      "C-def-2",
+      "C-def-3"
+    ]
+  },
+  "closeout_questions": {
+    "Q1_what_does_E_explain": "In 1D scope: F1_to_F2 BACL phase readback half_phase_fraction is organized by E in all three primary fixtures (threshold relation with abs_contrast 0.305-0.673; per-fixture E-quintile spreads exceed 0.10). The threshold clusters near the Sterbenz/BACL boundary at |base_operand| ~ 0.5.",
+    "Q2_what_does_E_not_explain": "Multi-D geometric features (principal-curvature ratio, null-tangent alignment, Hessian spectral spread) are 1D-degenerate and structurally untestable. Transition grammar within E-bins is either E-reducible (SR, Schwarzschild) or sampling-artifact of the canonical grid (pure_algebraic, refuted in Phase 2f). The G-route-1 zero-operand-offset gap (\u00a71.4) is orthogonal and unresolved.",
+    "Q3_threshold_stable_enough": "Per-fixture E thresholds in [-0.9487184368651196, -0.7504804006406878]; spread 0.1982380362244318. Threshold relation is grid_stable (pure_algebraic) to grid_modestly_unstable (SR, Schwarzschild) per Phase 2c; the modest instability is concentrated in the T3 large-radicand bin (<= 9pp), not in the threshold direction itself. C-extractor is operationally stable in 1D scope.",
+    "Q4_controls_across_E": "Same-route controls: 100% same_phase in every fixture and every E-bin (canonical and jittered grids). F3 calibration: exactly 0.0 in every record. F4 stressor: active per fixture, rate varies by E-bin (Schwarzschild T1 ~98% nonzero -> T3 ~21%).",
+    "Q5_phase_2f_changed_interpretation": "Phase 2f's E-uniform alternative grid showed that the Phase 2e E-resistance in pure_algebraic was a sampling artifact of the canonical x-uniform grid (0/5 bins above null p95 under the alternative grid). The campaign no longer has a candidate second-primitive in 1D scope. G-curv-3 demoted back to unresolved_candidate.",
+    "Q6_unsupported_or_unresolved_g_candidates": "G-curv-1: C_confounded (signature-driven hypothesis refuted in 1D scope). G-curv-2: unresolved_candidate, structurally rate-limited in 1D (principal_curvature_ratio is 1D-degenerate). G-curv-3: unresolved_candidate after Phase 2f demotion. G-route-1: unresolved_candidate, gated on \u00a71.4 zero-operand-offset.",
+    "Q7_ready_for_v3_diagnostic_bridge": "Yes. C-def-1 is operationally validated in 1D scope. The campaign's reframed goal \u2014 bridge IEEE 754 to V3 diagnostic methods \u2014 is now actionable. A descriptive V3-bridge artifact mapping E (and its threshold) to V3's K_G / condition_number / near_umbilic / lifted-singularity vocabulary is the natural next deliverable. CLAUDE.md \u00a74 discipline: lv3 is confirmation oracle only, not design source.",
+    "Q8_ready_for_multi_d_g_testing": "Deferred unless explicit user direction. Multi-D extension is the only path to testing G-curv-2, G-curv-3 (null-tangent side), and C-def-2. It is a sense-(B) restructure with significant investment. The 1D scope has produced what 1D can produce; multi-D is the structural next step but is not in scope here."
+  },
+  "control_summaries": {
+    "pure_algebraic_four_form": {
+      "F3_calibration_clean": true,
+      "F3_to_F3_n": 137,
+      "F3_value_exactly_zero_count": 137,
+      "F4_active_stressor": true,
+      "F4_nonzero_count": 40,
+      "F4_to_F4_n": 137,
+      "same_route_n": 548,
+      "same_route_same_phase_count": 548,
+      "same_route_same_phase_fraction": 1.0
+    },
+    "schwarzschild_four_form": {
+      "F3_calibration_clean": true,
+      "F3_to_F3_n": 137,
+      "F3_value_exactly_zero_count": 137,
+      "F4_active_stressor": true,
+      "F4_nonzero_count": 92,
+      "F4_to_F4_n": 137,
+      "same_route_n": 548,
+      "same_route_same_phase_count": 548,
+      "same_route_same_phase_fraction": 1.0
+    },
+    "sr_four_form": {
+      "F3_calibration_clean": true,
+      "F3_to_F3_n": 137,
+      "F3_value_exactly_zero_count": 137,
+      "F4_active_stressor": true,
+      "F4_nonzero_count": 27,
+      "F4_to_F4_n": 137,
+      "same_route_n": 548,
+      "same_route_same_phase_count": 548,
+      "same_route_same_phase_fraction": 1.0
+    }
+  },
+  "declared_classifications": [
+    "cdef1_operational_extractor_validated_1d",
+    "cdef1_operational_extractor_underpowered",
+    "cdef1_operational_extractor_unstable",
+    "cdef1_rejected"
+  ],
+  "fixture_E_distributions": {
+    "pure_algebraic_four_form": {
+      "E_max": -0.014499569695115089,
+      "E_mean": -1.4043222452948572,
+      "E_median": -1.0,
+      "E_min": -6.6438561897747235,
+      "E_p25": -1.9714308478032292,
+      "E_p75": -0.42468766931256313,
+      "E_range": 6.629356620079609,
+      "n": 137
+    },
+    "schwarzschild_four_form": {
+      "E_max": -0.3219280948873623,
+      "E_mean": -3.821666358719296,
+      "E_median": -3.8568235983219052,
+      "E_min": -8.647458426454946,
+      "E_p25": -5.81278744400659,
+      "E_p75": -1.7311832415722002,
+      "E_range": 8.325530331567585,
+      "n": 137
+    },
+    "sr_four_form": {
+      "E_max": -0.00014427671804501932,
+      "E_mean": -0.9449421503243387,
+      "E_median": -0.4246382941617751,
+      "E_min": -12.287784516105445,
+      "E_p25": -1.2047097542762453,
+      "E_p75": -0.09895877626537604,
+      "E_range": 12.2876402393874,
+      "n": 137
+    }
+  },
+  "fixtures_in_scope": [
+    "sr_four_form",
+    "schwarzschild_four_form",
+    "pure_algebraic_four_form"
+  ],
+  "grid_stability_summary": {
+    "phase_2e_schwarzschild_residual_correction": "Phase 2e secondary test classified Schwarzschild endpoint_distance residual as schwarzschild_residual_grid_driven (balanced partial 0.142 < null p95 0.239 after horizon_approach downsample). The apparent Phase 2d residual was grid concentration artifact, not a second axis.",
+    "phase_2f_correction": {
+      "schwarzschild_residual_finding": "Phase 2f tested pure_algebraic with E-uniform alternative grid; the apparent Phase 2e E-resistance was sampling artifact. G-curv-3 demoted back to unresolved_candidate."
+    },
+    "phase_2f_pure_algebraic_grammar_correction": "Phase 2f tested pure_algebraic with E-uniform alternative grid; 0/5 bins above null p95 under both canonical-edges and recomputed-edges binning. The Phase 2e E-resistance was sampling artifact of the canonical x-uniform grid. G-curv-3 demoted back to unresolved_candidate.",
+    "pure_algebraic_four_form": {
+      "phase_2c_classification": "grid_stable",
+      "phase_2c_max_abs_delta_half_phase_fraction": 0.043478260869565216
+    },
+    "schwarzschild_four_form": {
+      "phase_2c_classification": "grid_modestly_unstable",
+      "phase_2c_max_abs_delta_half_phase_fraction": 0.08510638297872342
+    },
+    "sr_four_form": {
+      "phase_2c_classification": "grid_modestly_unstable",
+      "phase_2c_max_abs_delta_half_phase_fraction": 0.0851063829787234
+    }
+  },
+  "log_base": 2,
+  "n_records_per_fixture": {
+    "pure_algebraic_four_form": 137,
+    "schwarzschild_four_form": 137,
+    "sr_four_form": 137
+  },
+  "phase": "Phase 2g \u2014 C-def-1 calibration ladder closeout",
+  "primitive_definition": {
+    "id": "endpoint_distance_substrate_image",
+    "label": "E := log2(|base_operand(coord)|)",
+    "per_fixture_formula": {
+      "pure_algebraic_four_form": "E(x) = log2(|1 - x|)",
+      "schwarzschild_four_form": "E(r) = log2(|1 - 2/r|)",
+      "sr_four_form": "E(\u03b2) = log2(|1 - \u03b2\u00b7\u03b2|)"
+    }
+  },
+  "source_artifact_hashes": {
+    "candidate_ledger.json": "f83169e3034561c3745fb58b3cb9194b162db02fa36cfc39703f4b7634c44cda",
+    "phase_1_geometry_table.json": "6502e942558f699d24011ae1d78601a07dea835c9ec9441fe42185a9df42df54",
+    "phase_2_joined_readback_table.json": "6a212ee610d80893afd9a2629820006b2a74d34a373f9e7dd334e2042f28cc33",
+    "phase_2b_c_profile.json": "e4268f25ebdd743dd9a463d32c53bf470843ba09852df1164e272a68962afd31",
+    "phase_2c_grid_stability.json": "62d86e0b081231abd37679b5e393de0f7fb1b16284fdff48d4d996d5b8887b85",
+    "phase_2d_solve_for_scout.json": "ea4f29798a14484a17f06273673871b53ce7900520c16083c65ffd312ce43942",
+    "phase_2e_e_reducibility.json": "549f0a9b0b811f078a4b64ccb0d9c11ca9d61fa36e4bac8905d0019ba28489ca",
+    "phase_2f_pa_e_resistance_disambig.json": "286e8b62eeb610a6849169371dabe0070227c637d780d96fc2f9d5dbc798a7ed"
+  },
+  "source_filename_mapping": {
+    "phase_2e_transition_e_reducibility.json": "phase_2e_e_reducibility.json"
+  }
+}

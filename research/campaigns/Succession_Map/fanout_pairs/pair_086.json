@@ -1,0 +1,41 @@
+{
+  "rank": 86,
+  "lift": 4.21,
+  "count": 2,
+  "families": 1,
+  "a": {
+    "id": "OBJ:explicit-surface-monge-patch",
+    "label": "Explicit surface (Monge patch)",
+    "standard_term": "Monge patch / graph hypersurface x_n = f(x_1,...,x_{n-1})",
+    "nomenclature": "identical-to",
+    "symbols": []
+  },
+  "b": {
+    "id": "OBJ:self-coupling-hessian-split-h-h-c-h-s",
+    "label": "Self/coupling Hessian split H = H_c + H_s",
+    "standard_term": "diagonal-plus-hollow (diagonal / zero-diagonal) matrix decomposition of the Hessian",
+    "nomenclature": "variant-of",
+    "symbols": [
+      "h_c",
+      "h_s"
+    ]
+  },
+  "evidence": [
+    {
+      "uid": "U-0302",
+      "type": "theorem",
+      "claim_status": "proved",
+      "label": "Hessian structure argument (proof)",
+      "summary": "The Hessian of F = x_n − f(x₁, ..., x_{n-1}) has a zero n-th row and n-th column (except for the diagonal entry H_nn which is also zero for explicit surfaces). This structure causes all H_c · H_s cross-products to vanish",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/02_theorems_and_lemmas/geometric_fault_localization_and_decomposition/Interaction Curvature Vanishes on Explicit Surfaces.md"
+    },
+    {
+      "uid": "U-1049",
+      "type": "definition",
+      "claim_status": null,
+      "label": "Hessian structure for explicit surfaces F = z − f(x,y)",
+      "summary": "For any constraint of the form F(x,y,z) = z − f(x,y) = 0, the interaction curvature vanishes exactly. This is because the Hessian has the structure: H = | −f_xx  −f_xy   0 | | −f_xy  −f_yy   0 | |   0      0     0 | The ",
+      "path": "/home/wlloyd/Cella Framework/Papers_Library/05_expository_companions_and_research_maps/geometric_fault_localization_and_decomposition/decomposition_integration_report.md"
+    }
+  ]
+}

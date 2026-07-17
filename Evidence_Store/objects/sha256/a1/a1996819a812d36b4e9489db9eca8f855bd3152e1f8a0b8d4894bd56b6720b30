@@ -1,0 +1,149 @@
+"""
+Stage B -- Campaign H O-parity versus tensor-swap parity.
+
+P-B1  reconstruct Campaign H O-space (Sym_3/Im(G_g) ~= Q^3) and reproduce the
+      regression:  r=1 density ODD under O->-O,  r=2 density EVEN.  (gate)
+P-B2  lift the O-coordinates into the tensor model std_3 (x) std_3, explicitly,
+      and record which space is used and why.
+P-B3  test whether the swap tau induces  tau_O = -I  (then O-parity IS tau) or
+      tau_O = +I  (then O-parity is a SEPARATE 2-primary parity) or a third matrix.
+
+B_VERDICT in {tau_is_O_parity, O_parity_not_tau, parity_mismatch}.  Do not force a pass.
+
+Uses the Campaign H engine (src) for the regression, the independent rep_utils /
+dbp_carrier for the tensor model.  Exact symbolic (sympy) throughout.
+
+Run: cd evals/dbp_involution && PYTHONPATH=../../src python3 stageB_O_parity_vs_tau.py
+"""
+
+from __future__ import annotations
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(
+    os.path.abspath(__file__)))), "src"))
+
+import sympy as sp
+
+import rep_utils as RU
+import dbp_carrier as E
+from harness import Recorder, COMPUTER_VERIFIED, PROVEN, REFUTED, BRANCHED, OPEN
+
+from lloyd_v4.evals.rolechspec_symbolic_proof_extraction import symbols as SY
+from lloyd_v4.evals.rolechspec_symbolic_proof_extraction import rolechspec_symbolic as RC
+
+
+def run(rec: Recorder):
+    o12, o13, o23 = sp.symbols("O12 O13 O23")
+    Ovec = sp.Matrix([o12, o13, o23])
+    g = SY.g_vec()
+    Hp = SY.H_perp_mat(o12, o13, o23)        # gauge-normal Hessian: zero diag, off-diag = O
+    neg = {o12: -o12, o13: -o13, o23: -o23}
+    comp = RC.rolechspec_components(g, Hp)
+
+    # ---------------- P-B1  parity regression ----------------
+    all_r1_odd, all_r2_even = True, True
+    detail = {}
+    for role in (2, 0, 1):
+        r1, r2 = comp[role]["r1"], comp[role]["r2"]
+        r1_odd = all(sp.simplify(v.subs(neg) + v) == 0 for v in r1.values())
+        r2_even = all(sp.simplify(v.subs(neg) - v) == 0 for v in r2.values())
+        all_r1_odd = all_r1_odd and r1_odd
+        all_r2_even = all_r2_even and r2_even
+        detail[f"role_{role}"] = {"r1_odd": bool(r1_odd), "r2_even": bool(r2_even)}
+    rec.record(
+        "P-B1: Campaign H O-space reproduced; r=1 density ODD, r=2 density EVEN under O->-O",
+        COMPUTER_VERIFIED if (all_r1_odd and all_r2_even) else REFUTED,
+        {"space": "Sym_3/Im(G_g) ~= Q^3 (off-diagonal obstruction O=(O12,O13,O23))",
+         "per_role": detail, "all_r1_odd": all_r1_odd, "all_r2_even": all_r2_even},
+        tier="[computer-verified, reproduced from Campaign H engine]", gate=True,
+    )
+
+    # ---------------- P-B2  lift O into the tensor model ----------------
+    # At the symmetric jet g=(1,1,1) the obstruction is O_ij = H_ij - 1/2 H_ii - 1/2 H_jj.
+    # The gauge-normal H_perp is a symmetric 3x3 matrix with zero diagonal and off-diags O;
+    # embed it as a symmetric tensor in R^3 (x) R^3 and project with q (x) q into std (x) std.
+    # The off-diagonal sym2 columns of carrier_into_tensor(3) ARE this lift.
+    Phi = E.carrier_into_tensor(3)               # Sym^2(R^3) -> std (x) std  (4 x 6)
+    offdiag_cols = [1, 2, 4]                      # sym2 basis (0,1),(0,2),(1,2)
+    iota = Phi[:, offdiag_cols]                  # 4 x 3 : O -> std_3 (x) std_3
+    rank_iota = iota.rank()
+    Pp, Pm = E.projectors(3)
+    in_symmetric_half = (Pm * iota == sp.zeros(4, 3))
+    rec.record(
+        "P-B2: explicit lift O -> Sym^2(std_3) subset std_3 (x) std_3 (matrix iota, rank 3)",
+        COMPUTER_VERIFIED if (rank_iota == 3 and in_symmetric_half) else REFUTED,
+        {"target_space": "Sym^2(std_3) = im(P_+) inside std_3 (x) std_3",
+         "why": "at the symmetric jet g=1, O is the gauge-normal carrier = the n=3 carrier "
+                "Im(L); q(x)q sends the symmetric Hessian into the +1 eigenspace of tau",
+         "iota_matrix": [[int(iota[r, c]) if iota[r, c].is_integer else str(iota[r, c])
+                          for c in range(3)] for r in range(4)],
+         "rank_iota": int(rank_iota), "P_-(iota)==0_(lands_in_symmetric_half)": in_symmetric_half},
+    )
+
+    # ---------------- P-B3  test tau parity ----------------
+    tau = E.tau_matrix(3)
+    # induced action tau_O on the O-space:  tau . iota = iota . tau_O  =>  tau_O = iota^+ (tau iota)
+    tau_iota = tau * iota
+    tau_O = iota.solve(tau_iota)                 # exact 3x3
+    is_plus_I = (tau_O == sp.eye(3))
+    is_minus_I = (tau_O == -sp.eye(3))
+
+    # density behaviour: r=1 (linear, odd), r=2 (quadratic, even) -- using Campaign H densities
+    # tau_O acts on O by the matrix tau_O; build the substitution O -> tau_O O.
+    def subs_from_matrix(M):
+        newO = M * Ovec
+        return {o12: newO[0], o13: newO[1], o23: newO[2]}
+    sub_tau = subs_from_matrix(tau_O)
+    # compare D_r(tau_O . O) with D_r(O) and with D_r(-O), for r=1 and r=2 (Product role)
+    r1 = comp[2]["r1"]; r2 = comp[2]["r2"]
+    r1_tau_equals_plus = all(sp.simplify(v.subs(sub_tau) - v) == 0 for v in r1.values())
+    r1_tau_equals_minus = all(sp.simplify(v.subs(sub_tau) + v) == 0 for v in r1.values())
+    r2_tau_equals_plus = all(sp.simplify(v.subs(sub_tau) - v) == 0 for v in r2.values())
+    # the O-negation reference parity
+    r1_neg_is_minus = all(sp.simplify(v.subs(neg) + v) == 0 for v in r1.values())
+
+    # Verdict logic (campaign-defined)
+    if is_minus_I and r1_neg_is_minus and r1_tau_equals_minus:
+        bverdict = "tau_is_O_parity"
+    elif is_plus_I and not r1_tau_equals_minus:
+        bverdict = "O_parity_not_tau"
+    else:
+        bverdict = "parity_mismatch"
+
+    rec.record(
+        "P-B3: induced swap action tau_O on the O-space, and density parity comparison",
+        COMPUTER_VERIFIED,
+        {"tau_O_matrix": [[int(tau_O[r, c]) for c in range(3)] for r in range(3)],
+         "tau_O == +I": is_plus_I, "tau_O == -I": is_minus_I,
+         "r1_under_tau_O: equals +D_r": r1_tau_equals_plus,
+         "r1_under_tau_O: equals -D_r": r1_tau_equals_minus,
+         "r2_under_tau_O: equals +D_r": r2_tau_equals_plus,
+         "r1_under_O->-O: equals -D_r (reference O-parity)": r1_neg_is_minus},
+        tier="[computer-verified]",
+    )
+
+    rec.record(
+        "B_VERDICT",
+        COMPUTER_VERIFIED,
+        {"verdict": bverdict,
+         "interpretation": (
+             "tau acts as +I on the symmetric carrier where O lives; the O-parity O->-O "
+             "is the degree-parity of the densities (odd r=1 / even r=2), a SEPARATE "
+             "2-primary sign parity, not the tensor-swap involution. The genuine tau=-1 "
+             "half is wedge^2(std_3)=sign, which the carrier O does not touch."
+             if bverdict == "O_parity_not_tau" else
+             "tau IS the O-parity involution" if bverdict == "tau_is_O_parity" else
+             "neither clean +I nor -I; see tau_O matrix")},
+        tier="[computer-verified]",
+    )
+    return {"B_VERDICT": bverdict, "tau_O_is_plus_I": bool(is_plus_I),
+            "tau_O_is_minus_I": bool(is_minus_I)}
+
+
+if __name__ == "__main__":
+    rec = Recorder("StageB")
+    summary = run(rec)
+    for r in rec.records:
+        flag = "" if r["verdict"] not in (REFUTED, BRANCHED) else f"  <<< {r['verdict']}"
+        print(f"[{r['verdict']:17}] {r['claim']}{flag}")
+    print(f"\nB_VERDICT = {summary['B_VERDICT']}  (tau_O=+I: {summary['tau_O_is_plus_I']}, "
+          f"tau_O=-I: {summary['tau_O_is_minus_I']})")

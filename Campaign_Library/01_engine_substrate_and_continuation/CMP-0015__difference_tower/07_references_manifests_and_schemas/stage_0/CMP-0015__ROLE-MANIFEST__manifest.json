@@ -1,0 +1,828 @@
+{
+ "annex_lane_refusal_demo": {
+  "expected": "DTRefusal('annex_not_q_exact') from eval_lane \u2014 sqrt TRUE is not Q-carried; enclosure grading is the annex seam (brief section 0 rule 1)",
+  "fixture_id": "C1",
+  "point": "0x1.8000000000000p-1"
+ },
+ "arbiter_rules": {
+  "annex_side": "mpmath mp.diff under dps ladder (60, 120, 240); accept highest iff consecutive levels agree to relative 1e-30; else honest refusal (None)",
+  "coherence_acceptance": "on the rational overlap: relative gap (vs max(1,|exact|)) <= 1e-25 (arbiter-graded side; band lawful per brief section 0 rule 1)",
+  "exact_side": "symbolic-Q differentiation at a point; one-sided abs rule at an argument zero: d\u00b1|u|(x) = \u00b1|d\u00b1u(x)| (derived from the difference quotient at u(x)=0); higher orders via Q Taylor jets; jets REFUSE at an abs-argument zero (never guess across a kink)"
+ },
+ "authority": "Build_Docs/Agent_tasks/CAMPAIGN_DIFFERENCE_TOWER.md (GO 2026-06-12); HR132 lane exactness (TRUE definition, brief section 6); HR129 (H1 framed as implementation gate)",
+ "campaign": "difference_tower",
+ "determinism": "fixtures and grids are pinned literals; zero RNG; byte-stable re-run (sha256 over records) required before any verdict is reported; any FAIL stops the stage for Will (K1 on H1).",
+ "environment_pins": {
+  "dependencies": "stdlib (fractions, math incl. math.fma) + mpmath (annex arbiter only, never verdict-side for Q-claims) + consumed V4 instruments (bigraded_jet._two_sum / RESIDUAL_FLOOR, typed_ulp)",
+  "python": "3.14.4"
+ },
+ "fixtures": [
+  {
+   "class": "P",
+   "degree": 0,
+   "fixture_id": "P0",
+   "gate_grid": [
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.8000000000000p-1"
+    },
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.4000000000000p+0"
+    }
+   ],
+   "gate_m": [
+    1
+   ],
+   "gate_schemes": [
+    "forward",
+    "backward",
+    "centered"
+   ],
+   "sexpr": "22/7",
+   "true_class": "rational"
+  },
+  {
+   "class": "P",
+   "degree": 1,
+   "fixture_id": "P1",
+   "gate_grid": [
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.8000000000000p-1"
+    },
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "-0x1.8000000000000p+0"
+    }
+   ],
+   "gate_m": [
+    1,
+    2
+   ],
+   "gate_schemes": [
+    "forward",
+    "backward",
+    "centered"
+   ],
+   "sexpr": "(sub (mul 3/7 x) 22/7)",
+   "true_class": "rational"
+  },
+  {
+   "class": "P",
+   "degree": 2,
+   "fixture_id": "P2",
+   "gate_grid": [
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.8000000000000p-1"
+    },
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.4000000000000p+0"
+    },
+    {
+     "j": [
+      8,
+      10,
+      12
+     ],
+     "point": "0x1.999999999999ap-4"
+    }
+   ],
+   "gate_m": [
+    1,
+    2,
+    3
+   ],
+   "gate_schemes": [
+    "forward",
+    "backward",
+    "centered"
+   ],
+   "sexpr": "(add (sub (pow x 2) (mul 1/3 x)) 1/9)",
+   "true_class": "rational"
+  },
+  {
+   "class": "P",
+   "degree": 3,
+   "fixture_id": "P3",
+   "gate_grid": [
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.0000000000000p-1"
+    },
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.4000000000000p+1"
+    }
+   ],
+   "gate_m": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "gate_schemes": [
+    "forward",
+    "backward",
+    "centered"
+   ],
+   "sexpr": "(sub (add (sub (pow x 3) (mul 2/1 (pow x 2))) (mul 1/7 x)) 5/1)",
+   "true_class": "rational"
+  },
+  {
+   "class": "P",
+   "degree": 4,
+   "fixture_id": "P4",
+   "gate_grid": [
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.8000000000000p-1"
+    },
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "-0x1.8000000000000p+0"
+    }
+   ],
+   "gate_m": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "gate_schemes": [
+    "forward",
+    "backward",
+    "centered"
+   ],
+   "sexpr": "(add (sub (add (sub (mul 2/3 (pow x 4)) (pow x 3)) (mul 1/5 (pow x 2))) x) 4/11)",
+   "true_class": "rational"
+  },
+  {
+   "class": "P",
+   "degree": 10,
+   "fixture_id": "P10",
+   "gate_grid": [
+    {
+     "j": [
+      2,
+      5,
+      9
+     ],
+     "point": "0x1.0000000000000p-1"
+    },
+    {
+     "j": [
+      2,
+      5,
+      9
+     ],
+     "point": "0x1.4000000000000p+0"
+    }
+   ],
+   "gate_m": [
+    1,
+    2,
+    3,
+    11
+   ],
+   "gate_schemes": [
+    "forward",
+    "backward",
+    "centered"
+   ],
+   "sexpr": "(sub (add (sub (pow x 10) (mul 5/2 (pow x 7))) (mul 1/3 (pow x 3))) 1/3)",
+   "true_class": "rational"
+  },
+  {
+   "class": "R",
+   "fixture_id": "R1a",
+   "gate_grid": [
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.8000000000000p-1"
+    },
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.4000000000000p+1"
+    }
+   ],
+   "gate_m": [
+    1,
+    2,
+    3
+   ],
+   "gate_schemes": [
+    "forward",
+    "backward",
+    "centered"
+   ],
+   "route": "expanded",
+   "route_family": "R1",
+   "sexpr": "(div (sub (pow x 2) 1/1) (add x 2/1))",
+   "true_class": "rational"
+  },
+  {
+   "class": "R",
+   "fixture_id": "R1b",
+   "gate_grid": [
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.8000000000000p-1"
+    },
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.4000000000000p+1"
+    }
+   ],
+   "gate_m": [
+    1,
+    2,
+    3
+   ],
+   "gate_schemes": [
+    "forward",
+    "backward",
+    "centered"
+   ],
+   "route": "factored",
+   "route_family": "R1",
+   "sexpr": "(div (mul (sub x 1/1) (add x 1/1)) (add x 2/1))",
+   "true_class": "rational"
+  },
+  {
+   "class": "R",
+   "fixture_id": "R2a",
+   "gate_grid": [
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.0000000000000p-1"
+    },
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.4000000000000p+0"
+    }
+   ],
+   "gate_m": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "gate_schemes": [
+    "forward",
+    "backward",
+    "centered"
+   ],
+   "route": "horner",
+   "route_family": "R2",
+   "sexpr": "(add (mul x (add (mul x (add (mul x 1/3) -2/1)) 1/7)) 3/5)",
+   "true_class": "rational"
+  },
+  {
+   "class": "R",
+   "fixture_id": "R2b",
+   "gate_grid": [
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.0000000000000p-1"
+    },
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.4000000000000p+0"
+    }
+   ],
+   "gate_m": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "gate_schemes": [
+    "forward",
+    "backward",
+    "centered"
+   ],
+   "route": "expanded",
+   "route_family": "R2",
+   "sexpr": "(add (add (add (mul 1/3 (pow x 3)) (mul -2/1 (pow x 2))) (mul 1/7 x)) 3/5)",
+   "true_class": "rational"
+  },
+  {
+   "class": "R",
+   "fixture_id": "R3",
+   "gate_grid": [
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.0000000000000p-1"
+    },
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.4000000000000p+1"
+    }
+   ],
+   "gate_m": [
+    1,
+    2,
+    3
+   ],
+   "gate_schemes": [
+    "forward",
+    "backward",
+    "centered"
+   ],
+   "sexpr": "(div 1/1 (add 1/1 (div 1/1 (add 1/1 x))))",
+   "true_class": "rational"
+  },
+  {
+   "class": "R",
+   "fixture_id": "C1",
+   "gate_grid": [
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.8000000000000p-1"
+    },
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.4000000000000p+1"
+    }
+   ],
+   "gate_m": [
+    1,
+    2
+   ],
+   "gate_schemes": [
+    "forward",
+    "backward",
+    "centered"
+   ],
+   "route": "sqrt_then_square",
+   "route_family": "C",
+   "sexpr": "(mul (sqrt x) (sqrt x))",
+   "true_class": "annex"
+  },
+  {
+   "class": "R",
+   "fixture_id": "C2",
+   "gate_grid": [
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.8000000000000p-1"
+    },
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.4000000000000p+1"
+    }
+   ],
+   "gate_m": [
+    1,
+    2
+   ],
+   "gate_schemes": [
+    "forward",
+    "backward",
+    "centered"
+   ],
+   "route": "square_then_sqrt",
+   "route_family": "C",
+   "sexpr": "(sqrt (mul x x))",
+   "true_class": "annex"
+  },
+  {
+   "class": "K",
+   "fixture_id": "K1",
+   "gate_grid": [
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.8000000000000p-1"
+    },
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.0000000000000p+0"
+    },
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.4000000000000p+0"
+    }
+   ],
+   "gate_m": [
+    1,
+    2
+   ],
+   "gate_schemes": [
+    "forward",
+    "backward",
+    "centered"
+   ],
+   "kink_locations": [
+    "1/1"
+   ],
+   "note": "2026-06-12 field-screen fixture",
+   "sexpr": "(sub (abs (sub x 1/1)) 1/2)",
+   "true_class": "rational"
+  },
+  {
+   "class": "K",
+   "fixture_id": "K2",
+   "gate_grid": [
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "-0x1.8000000000000p+0"
+    },
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x0.0p+0"
+    },
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.0000000000000p-1"
+    }
+   ],
+   "gate_m": [
+    1,
+    2
+   ],
+   "gate_schemes": [
+    "forward",
+    "backward",
+    "centered"
+   ],
+   "kink_locations": [
+    "0/1"
+   ],
+   "note": "C1-not-C2 (H4: \u03941 smooth, \u03942 kink)",
+   "sexpr": "(mul x (abs x))",
+   "true_class": "rational"
+  },
+  {
+   "class": "K",
+   "fixture_id": "K3",
+   "gate_grid": [
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x0.0p+0"
+    },
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.0000000000000p+0"
+    },
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.0000000000000p-1"
+    }
+   ],
+   "gate_m": [
+    1,
+    2
+   ],
+   "gate_schemes": [
+    "forward",
+    "backward",
+    "centered"
+   ],
+   "kink_locations": [
+    "0/1",
+    "1/1"
+   ],
+   "note": "tangency-at-kink at 0 (double root); genuine kink at 1",
+   "sexpr": "(abs (mul (pow x 2) (sub x 1/1)))",
+   "true_class": "rational"
+  },
+  {
+   "class": "T",
+   "fixture_id": "T1",
+   "gate_grid": [
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.0000000000000p-1"
+    },
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.4000000000000p+0"
+    }
+   ],
+   "gate_m": [
+    1,
+    2
+   ],
+   "gate_schemes": [
+    "forward",
+    "backward",
+    "centered"
+   ],
+   "sexpr": "(sin x)",
+   "true_class": "annex"
+  },
+  {
+   "class": "T",
+   "fixture_id": "T2",
+   "gate_grid": [
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.0000000000000p-1"
+    },
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "-0x1.8000000000000p+0"
+    }
+   ],
+   "gate_m": [
+    1,
+    2
+   ],
+   "gate_schemes": [
+    "forward",
+    "backward",
+    "centered"
+   ],
+   "sexpr": "(exp x)",
+   "true_class": "annex"
+  },
+  {
+   "class": "T",
+   "fixture_id": "T3",
+   "gate_grid": [
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.0000000000000p-1"
+    },
+    {
+     "j": [
+      2,
+      5,
+      9,
+      14,
+      20
+     ],
+     "point": "0x1.4000000000000p+1"
+    }
+   ],
+   "gate_m": [
+    1,
+    2
+   ],
+   "gate_schemes": [
+    "forward",
+    "backward",
+    "centered"
+   ],
+   "sexpr": "(log x)",
+   "true_class": "annex"
+  }
+ ],
+ "freeze_note": "freeze + sha pin applied ONLY on Will's sign-off (brief: D3 gates on Will at the marked point)",
+ "frozen": true,
+ "lane_lift_laws": "unordered TwoSum (consumed literally: bigraded_jet._two_sum) / FMA TwoProd / div residual pair r = fma(-q,b,a); residual-representability sufficient condition RESIDUAL_FLOOR (HR132 amendment 2026-06-10) consumed: below it the lift REFUSES the Q-claim (typed refusal), no silent degrade; citations: results/bigraded_jet/CITATIONS.md E1/E3/E4 - cited, never re-derived",
+ "object_conventions": {
+  "j_max": "largest j with 2^-j >= ulp(x), via typed_ulp (consumed)",
+  "lane_tower": "iterative pairwise differencing over lane-carried TRUE (eft_eval.eval_lane), all arithmetic in Q",
+  "lattice_realizability": "every node checked exact-representable in Q (node_q == Q(RN(node_q))); violation => DTRefusal('stencil_not_realizable'), NEVER silent rounding",
+  "raw_tower": "iterative pairwise differencing in float64 over eval_raw values; final /h^m via math.ldexp (exact power-of-two scaling); association order pinned left-to-right",
+  "referee_tower": "one-shot binomial sum over the independent pure-Q referee (eft_eval.eval_exact)",
+  "stencils": "forward nodes x+k\u00b7h k=0..m; backward x-k\u00b7h; centered x+(m/2-k)\u00b7h k=0..m (half-grid when m odd); cell = m-th difference / h^m; ascending-node iterative differencing == one-shot binomial with coefficient (-1)^(m-k)\u00b7C(m,k) (Jordan, Calculus of Finite Differences - cited convention, not re-derived)",
+  "step": "h = 2^-j, dyadic only"
+ },
+ "performance_budget": "180 s wall for the full Stage-0 gate run on this host; telemetry recorded, permanently non-verdict-bearing (brief section 0 rule 3)",
+ "realizability_refusal_demo": {
+  "expected": "DTRefusal('stencil_not_realizable') \u2014 RN(1/10) has a full 53-bit significand; +2\u00b72^-2 exceeds the binade headroom",
+  "fixture_id": "P2",
+  "j": 2,
+  "m": 2,
+  "point": "0x1.999999999999ap-4",
+  "scheme": "forward"
+ },
+ "rows_served": "B3/B4/B5 (leveraged), A6 indirect (brief section 2)",
+ "stage": "0",
+ "stage0_h1_gate_rule": "for every fixture with true_class == 'rational', every gate point x, every gate scheme, every gate j, every gate m: lane_tower_cell == referee_tower_cell, bit-for-bit in Q. Zero violations. Any violation = K1: HALT campaign for Will. Units: (fixture, point, scheme, j, m) cells.",
+ "version": 1
+}

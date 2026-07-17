@@ -1,0 +1,47 @@
+# Early Operand Phase-Lock Search
+
+Accepted outcome: `early_operand_same_phase_clean_only`
+Headline classification: `early_operand_same_phase_clean_only`
+
+## Test Design
+
+The campaign searches only algebraically valid early operand routes for `q - 1 == -f`.
+The clean arm is `A = (R * R) - f`; the candidate arm is `B = (R * R) + early_operand_route`.
+The load-bearing score is pointwise `phase((B - A) / ulp(f))` on matched coordinates, with support masks by binade and fixture region.
+
+## Required Findings
+
+1. Stable early operand phase-lock supported: `False`.
+2. Support-mask candidate found: `False`.
+3. Near miss found: `False`.
+4. Same-phase only: `True`.
+5. Best route: fixture `schwarzschild`, route `two_minus_r_times_inverse`, mask `full_support`, half fraction `0.0`, coherent lattice fraction `1.0`.
+6. Pure control promoted a half-lock: `False`.
+7. Synthetic detector fired and same-route controls stayed clean: `True` / `True`.
+8. Double precision language justified: `False`.
+
+## Fixture Findings
+
+- `schwarzschild` (primary): outcome `early_operand_same_phase_clean_only`; best `two_minus_r_times_inverse` on `full_support` with relation `same_phase_clean_duplicate`, half fraction `0.0`, coherent lattice fraction `1.0`.
+- `sr` (secondary): outcome `early_operand_same_phase_clean_only`; best `beta_minus_one_times_beta_plus_one` on `full_support` with relation `same_phase_clean_duplicate`, half fraction `0.0`, coherent lattice fraction `1.0`.
+- `pure_affine_control` (control): outcome `early_operand_same_phase_clean_only`; best `sqrt_roundtrip_minus_one` on `full_support` with relation `same_phase_clean_duplicate`, half fraction `0.0`, coherent lattice fraction `1.0`.
+
+## Interpretation
+
+The search did not promote a usable early-operand half-comb. The strongest route should be treated according to the accepted outcome above; stable support would require pointwise half separation and coherent final lattice behavior together.
+
+A same-phase clean result means early reassociation is still useful as a global alignment lever, but it does not increase lattice sampling density. A near miss means the next step should target the winning binade or region with a more constrained route law instead of broad route enumeration.
+
+## Verification
+
+- `PYTHONPATH=src python -m lloyd_v4.evals.early_operand_phase_lock_search`
+  Result: passed; generated artifact_early_operand_phase_lock_search.json and early_operand_phase_lock_search_report.md.
+- `PYTHONPATH=src python -m pytest tests/test_early_operand_phase_lock_search.py -q`
+  Result: passed; focused campaign tests.
+- `PYTHONPATH=src python -m pytest tests/test_early_operand_phase_lock_search.py tests/test_early_rounding_comb_utilization.py tests/test_f2_operand_route_search.py -q`
+  Result: passed; focused compatibility subset.
+
+## Artifacts
+
+- `Build_Docs/Reports/early_operand_phase_lock_search/artifact_early_operand_phase_lock_search.json`
+- `Build_Docs/Reports/early_operand_phase_lock_search/early_operand_phase_lock_search_report.md`

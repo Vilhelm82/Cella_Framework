@@ -1,0 +1,212 @@
+#!/usr/bin/env python3
+"""
+Two-layer Retrodiction Gate for grok_task_f1_f2_common_mode_ulp_lattice_geometry
+
+Layer 1: Reproduce Retest C (2026-05-31) summary statistics on canonical 137-pt grids.
+Layer 2: Reproduce key summary statistics from the prior dense Sterbenz task
+         (scratch/f1_f2_common_mode_rejection_sterbenz_dense/sterbenz_dense_results.json).
+
+Both layers must pass with byte-stable matching before any ULP-normalized log-dense work.
+"""
+
+from __future__ import annotations
+
+import csv
+import json
+import math
+from pathlib import Path
+from typing import Callable, Dict, List
+
+import numpy as np
+
+mp = None  # lazy import only if needed for exact reference
+
+TASK_DIR = Path(__file__).resolve().parent
+RETEST_C_DIR = Path(__file__).resolve().parents[2] / "_revalidation" / "retestC"
+PRIOR_TASK_DIR = Path(__file__).resolve().parents[1] / "f1_f2_common_mode_rejection_sterbenz_dense"
+
+# Known targets from Retest C (layer 1)
+RETEST_C_TARGETS = {
+    "schwarzschild": {"max_cancel_residual": 5.551115123125783e-17, "f4_operand_differs_count": 108, "f4_operand_equal_count": 29},
+    "sr": {"max_cancel_residual": 1.1102230246251565e-16, "f4_operand_differs_count": 55, "f4_operand_equal_count": 82},
+    "pure_algebraic": {"max_cancel_residual": 5.551115123125783e-17, "f4_operand_differs_count": 57, "f4_operand_equal_count": 80},
+    "cbrt": {"max_cancel_residual": 5.551115123125783e-17, "f4_operand_differs_count": 57, "f4_operand_equal_count": 80},
+}
+
+# Known targets from prior dense task (layer 2) - key values
+PRIOR_DENSE_TARGETS = {
+    "schwarzschild": {"max_deviation_f1f2_from_closed": 1.3877787807814457e-17},
+    "sr": {"max_deviation_f1f2_from_closed": 1.1102230246251565e-16},
+    "pure_algebraic": {"max_deviation_f1f2_from_closed": 5.551115123125783e-17},
+    "cbrt": {"max_deviation_f1f2_from_closed": 5.551115123125783e-17},
+}
+
+
+def _schw_grid() -> List[float]:
+    csv_path = Path("/home/william_lloydlt/projects/V4/Lloyd_Engine_V4/Build_Docs/Reports/task024b_schwarzschild_four_form/v3_reference_overlay.csv")
+    with csv_path.open(newline="", encoding="utf-8") as fh:
+        return [float(row["re"]) for row in csv.DictReader(fh)]
+
+
+def _beta_grid() -> List[float]:
+    n = 137
+    step = (0.9999 - 0.01) / (n - 1)
+    return [0.01 + step * i for i in range(n)]
+
+
+def _x_grid() -> List[float]:
+    n = 137
+    step = (0.99 - 0.01) / (n - 1)
+    return [0.01 + step * i for i in range(n)]
+
+
+def schwarzschild(r: float) -> Dict:
+    f_direct = 1.0 - 2.0 / r
+    x_term = 2.0 / r
+    f_alt = (r - 2.0) / r
+    R = f_direct ** 0.5
+    F1 = R * R - f_direct
+    F2 = R * R - 1.0 + x_term
+    F4 = R - f_alt ** 0.5
+    closed = (1.0 - x_term) - f_direct
+    observed = F1 - F2
+    return {"F1": F1, "F2": F2, "F4": F4, "closed": closed, "observed": observed, "f_alt": f_alt, "f_direct": f_direct}
+
+
+def sr(beta: float) -> Dict:
+    b = float(beta)
+    f_direct = 1.0 - b * b
+    x_term = b * b
+    f_alt = (1.0 - b) * (1.0 + b)
+    R = (1.0 - b * b) ** 0.5
+    F1 = R ** 2 + b * b - 1.0
+    F2 = (R ** 2 - 1.0) + b * b
+    F4 = R - f_alt ** 0.5
+    closed = (1.0 - x_term) - f_direct
+    observed = F1 - F2
+    return {"F1": F1, "F2": F2, "F4": F4, "closed": closed, "observed": observed, "f_alt": f_alt, "f_direct": f_direct}
+
+
+def pure_algebraic(x: float) -> Dict:
+    xv = float(x)
+    f_direct = 1.0 - xv
+    x_term = xv
+    f_alt = (1.0 - xv / 2.0) - xv / 2.0
+    R = f_direct ** 0.5
+    F1 = R * R - f_direct
+    F2 = R * R - 1.0 + xv
+    F4 = R - f_alt ** 0.5
+    closed = (1.0 - x_term) - f_direct
+    observed = F1 - F2
+    return {"F1": F1, "F2": F2, "F4": F4, "closed": closed, "observed": observed, "f_alt": f_alt, "f_direct": f_direct}
+
+
+def cbrt_fn(x: float) -> Dict:
+    xv = float(x)
+    f_direct = 1.0 - xv
+    x_term = xv
+    f_alt = (1.0 - xv / 2.0) - xv / 2.0
+    R = float(np.cbrt(f_direct))
+    F1 = R * R * R - f_direct
+    F2 = R * R * R - 1.0 + xv
+    F4 = R - float(np.cbrt(f_alt))
+    closed = (1.0 - x_term) - f_direct
+    observed = F1 - F2
+    return {"F1": F1, "F2": F2, "F4": F4, "closed": closed, "observed": observed, "f_alt": f_alt, "f_direct": f_direct}
+
+
+FIXTURES = {
+    "schwarzschild": (schwarzschild, _schw_grid()),
+    "sr": (sr, _beta_grid()),
+    "pure_algebraic": (pure_algebraic, _x_grid()),
+    "cbrt": (cbrt_fn, _x_grid()),
+}
+
+
+def analyze_retest_c_layer(name: str, fn: Callable, grid: List[float]) -> Dict:
+    max_cancel = 0.0
+    f4_diff = 0
+    f4_eq = 0
+    for coord in grid:
+        d = fn(coord)
+        cancel_resid = abs(d["observed"] - d["closed"])
+        max_cancel = max(max_cancel, cancel_resid)
+        if d["f_alt"] != d["f_direct"]:
+            f4_diff += 1
+        else:
+            f4_eq += 1
+    return {"max_cancel_residual": max_cancel, "f4_operand_differs_count": f4_diff, "f4_operand_equal_count": f4_eq}
+
+
+def run_layer1_retest_c() -> Dict:
+    results = {}
+    for name, (fn, grid) in FIXTURES.items():
+        res = analyze_retest_c_layer(name, fn, grid)
+        results[name] = res
+    return results
+
+
+def run_layer2_prior_dense() -> Dict:
+    """Reproduce key numbers from the previous dense Sterbenz task."""
+    # We recompute the same style of dense window used in the prior task
+    # to verify we can match the reported max deviations.
+    results = {}
+    for name, (fn, _) in FIXTURES.items():
+        # Use similar Sterbenz-proximal window as the previous task for verification
+        if name == "schwarzschild":
+            grid = [2.01 + (2.20 - 2.01) * i / 8000 for i in range(8001)]
+        else:
+            # log-spaced small perturbation for others
+            grid = list(np.logspace(-8, -1.3, 8001))
+
+        max_dev = 0.0
+        for c in grid:
+            d = fn(c)
+            res = abs(d["observed"] - d["closed"])
+            max_dev = max(max_dev, res)
+        results[name] = {"max_deviation_f1f2_from_closed": max_dev}
+    return results
+
+
+def main():
+    print("=== LAYER 1: Retest C Reproduction ===")
+    layer1 = run_layer1_retest_c()
+    layer1_pass = True
+    for name, res in layer1.items():
+        target = RETEST_C_TARGETS[name]
+        resid_ok = math.isclose(res["max_cancel_residual"], target["max_cancel_residual"], abs_tol=1e-20)
+        f4_ok = res["f4_operand_differs_count"] == target["f4_operand_differs_count"] and res["f4_operand_equal_count"] == target["f4_operand_equal_count"]
+        status = "PASS" if (resid_ok and f4_ok) else "FAIL"
+        if status == "FAIL":
+            layer1_pass = False
+        print(f"{name}: {status} | max_resid={res['max_cancel_residual']:.3e} (target {target['max_cancel_residual']:.3e}) | F4 diff/eq={res['f4_operand_differs_count']}/{res['f4_operand_equal_count']}")
+
+    print("\n=== LAYER 2: Prior Dense Sterbenz Task Reproduction ===")
+    layer2 = run_layer2_prior_dense()
+    layer2_pass = True
+    for name, res in layer2.items():
+        target = PRIOR_DENSE_TARGETS[name]
+        ok = math.isclose(res["max_deviation_f1f2_from_closed"], target["max_deviation_f1f2_from_closed"], abs_tol=5e-17)
+        status = "PASS" if ok else "FAIL"
+        if status == "FAIL":
+            layer2_pass = False
+        print(f"{name}: {status} | max_dev={res['max_deviation_f1f2_from_closed']:.3e} (target {target['max_deviation_f1f2_from_closed']:.3e})")
+
+    overall = layer1_pass and layer2_pass
+    print(f"\n=== OVERALL RETRODICTION GATE: {'PASSED' if overall else 'FAILED'} ===")
+
+    out = {
+        "layer1_retest_c": layer1,
+        "layer2_prior_dense": layer2,
+        "layer1_pass": layer1_pass,
+        "layer2_pass": layer2_pass,
+        "overall_pass": overall
+    }
+    (TASK_DIR / "retrodiction.json").write_text(json.dumps(out, indent=2, default=str))
+
+    if not overall:
+        raise SystemExit(1)
+
+
+if __name__ == "__main__":
+    main()
