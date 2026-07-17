@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "submission_id": "SUB-SUCCESSION-DIGEST-RECONCILE-20260718",
+  "base_revision": "sha256:a27831ef40ade466b6b8ae4903df137d712939c979d117ca1b4869a23e211107",
+  "idempotency_key": "succession-map-digest-after-pap-0513-20260718",
+  "submitted_by": "will+codex",
+  "summary": "Reconcile the ROI immediate-support report node to the succession map digest produced by the PAP-0513 closeout update.",
+  "artifacts": [
+    {
+      "schema_version": 1,
+      "artifact_id": "PAP-0511",
+      "artifact_type": "report",
+      "title": "ROI Immediate Support Closeout",
+      "summary": "Auditable succession closeout for Paper I, Paper III, the CCE-2 public route algebra, and the SQG citation refresh; Paper IV and k=4 work are explicitly excluded from that 2026-07-17 closeout tranche.",
+      "subject_families": [
+        "cross_program_and_unclassified",
+        "dbp_role_channel_and_orbit_geometry",
+        "dbp_periods_landen_and_elliptic_structure",
+        "cella_residue_and_coupling_theory"
+      ],
+      "claim_status": "demonstrated",
+      "lifecycle_status": "released",
+      "provenance": {
+        "authors": [
+          "Will Lloyd"
+        ],
+        "created_utc": "2026-07-17T10:30:00Z",
+        "origin_repository": "Cella Framework",
+        "source_pointer": "cella:research/campaigns/Succession_Map/DBP_PAPER_SUCCESSION_AND_REDUNDANCY_MAP_v1.0.md"
+      },
+      "files": [
+        {
+          "role": "succession_report",
+          "path": "research/campaigns/Succession_Map/DBP_PAPER_SUCCESSION_AND_REDUNDANCY_MAP_v1.0.md",
+          "sha256": "2d03559322e2e479b579c95a577362efce36d64d6eee214480c5744ca2d14a6a",
+          "media_type": "text/markdown"
+        },
+        {
+          "role": "restriction_ledger",
+          "path": "Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/DBP_CCE_ARTIFICIAL_RESTRICTION_LIVE_RECONCILIATION_v1.0.md",
+          "sha256": "2aa2e57b4005e15b86986264724fa7a4fa746100cd8e150fca45657971bb7138",
+          "media_type": "text/markdown"
+        },
+        {
+          "role": "gap_ledger",
+          "path": "research/campaigns/CELLA_CONTINUATION_ENGINE/03_cce2_corridors/CCE_2_GAP_LEDGER_v1.0.md",
+          "sha256": "1cea8a2dfca0196886050778a40e45a840422e8c9a32d9c5b0eacf5d2ece1812",
+          "media_type": "text/markdown"
+        }
+      ],
+      "claims": [
+        {
+          "claim_id": "ROI-CLOSE-REPORT",
+          "statement": "The immediate low-risk ROI tranche closes I1-I3, III1-III4 and V1, with Paper IV and k=4 work excluded from that tranche.",
+          "hypotheses": [],
+          "scope": "Repository and DAG succession status of the 2026-07-17 immediate-support closeout.",
+          "claim_status": "demonstrated",
+          "proof_ids": [],
+          "evidence_ids": []
+        }
+      ],
+      "relations": [],
+      "external_ids": {
+        "paper_artifacts": [
+          "PAP-0511"
+        ]
+      },
+      "declared_impacts": [
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:report:roi_immediate_support_closeout",
+          "note": "Reconcile the report node to the current append-only succession-map digest without changing the historical tranche's scope."
+        }
+      ],
+      "llm": {
+        "one_sentence_purpose": "Record exactly which easy ROI support tasks were completed in the 2026-07-17 tranche and which mathematical walls then remained.",
+        "key_terms": [
+          "ROI closeout",
+          "succession",
+          "Paper I",
+          "Paper III",
+          "CCE-2",
+          "SQG"
+        ],
+        "retrieval_questions": [
+          "Which immediate ROI tasks were closed?",
+          "Was Paper IV or k=4 part of the 2026-07-17 tranche?",
+          "Which gaps remained after that support tranche?"
+        ],
+        "context_priority": "high",
+        "context_role": "core"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "closeout_date": "2026-07-17",
+        "paper_iv_excluded": true,
+        "source_sha256": "2d03559322e2e479b579c95a577362efce36d64d6eee214480c5744ca2d14a6a",
+        "digest_reconciled_after_append_only_pap_0513_update": true
+      }
+    }
+  ],
+  "graph_delta": {
+    "upsert_nodes": [
+      {
+        "id": "DBP:report:roi_immediate_support_closeout",
+        "label": "ROI Immediate Support Closeout",
+        "type": "report",
+        "claim_status": "demonstrated",
+        "lifecycle_status": "released",
+        "reachability": null,
+        "tracked": false,
+        "layer": "succession",
+        "summary": "Verified closeout of Paper I gaps I1-I3, Paper III gaps III1-III4, and SQG gap V1; Paper IV and k=4 work explicitly excluded.",
+        "source_refs": [
+          {
+            "pointer": "cella:research/campaigns/Succession_Map/DBP_PAPER_SUCCESSION_AND_REDUNDANCY_MAP_v1.0.md",
+            "sha256": "2d03559322e2e479b579c95a577362efce36d64d6eee214480c5744ca2d14a6a"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [],
+          "paper_artifacts": [
+            "PAP-0511"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0511"
+          ]
+        },
+        "facets": {
+          "subject_family": "cross_program_and_unclassified",
+          "report": "roi_immediate_support_closeout",
+          "source_id": "cella-submissions-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [
+            "ROI closeout",
+            "Paper I",
+            "Paper III",
+            "CCE-2",
+            "SQG"
+          ],
+          "retrieval_questions": [
+            "Which immediate ROI gaps were closed?",
+            "Was k=4 touched?"
+          ],
+          "context_priority": "high",
+          "context_role": "core"
+        },
+        "extensions": {
+          "artifact_id": "PAP-0511",
+          "paper_iv_excluded": true
+        }
+      }
+    ],
+    "upsert_edges": [],
+    "retire_nodes": [],
+    "remove_edges": []
+  },
+  "declared_impacts": [
+    {
+      "kind": "reevaluate",
+      "target_id": "DBP:report:roi_immediate_support_closeout",
+      "note": "Refresh only the source digest after the succession map gained the separately scoped PAP-0513 closeout record."
+    }
+  ],
+  "extensions": {
+    "content_claims_changed": false,
+    "digest_reconciliation": true
+  }
+}
