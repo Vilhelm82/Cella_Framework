@@ -253,7 +253,9 @@ def verify() -> None:
 
     kummer = decoration["kummer"]
     assert kummer == load("matrices/decoration_kummer_parity.json")
-    assert kummer["normalization"] == "gamma_R9=2*(P+e4(w))"
+    assert kummer["normalization"] == "gamma_R9=2*(e4(w)+u*e2(w)+u^2+P)"
+    assert kummer["alpha"] == "e4(w)+u*e2(w)+u^2"
+    assert kummer["beta"] == "e3(w)+u*e1(w)"
     assert kummer["N"] == [1, 2, 4, 8]
     assert kummer["a_equals_N_squared"] == decoration["a"]
     assert kummer["P"] == 64
@@ -275,7 +277,8 @@ def verify() -> None:
 
     report = (HERE / "reports/AHV1_K4_CLEAN_EXECUTION_v1.0.md").read_text()
     assert "does **not** prove the arbitrary-k relation module vanishes" in report
-    assert "gamma_R9=2(P+e_4(w))" in report
+    assert "gamma_R9=2(alpha+P)=2(e_4(w)+u e_2(w)+u^2+P)" in report
+    assert "specializes to `2(P+e_4(w))`" in report
     assert "gamma=P+e_4(w)" not in report
     print("PASS: clean AHV-1 k=4 exact, Hurwitz, lattice, and Kummer certificates")
 

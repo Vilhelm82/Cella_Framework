@@ -39,8 +39,12 @@ if result.returncode:
     raise AssertionError(result.stdout + result.stderr)
 
 summary = json.loads((PACKAGE / "certificates/decoration_live.json").read_text())
-if summary["kummer"]["normalization"] != "gamma_R9=2*(P+e4(w))":
+if summary["kummer"]["normalization"] != "gamma_R9=2*(e4(w)+u*e2(w)+u^2+P)":
     raise AssertionError("noncanonical gamma normalization entered the clean certificate")
+if summary["kummer"].get("alpha") != "e4(w)+u*e2(w)+u^2":
+    raise AssertionError("the global alpha identity is missing from the clean certificate")
+if summary["kummer"].get("beta") != "e3(w)+u*e1(w)":
+    raise AssertionError("the global beta identity is missing from the clean certificate")
 if summary["scope"]["closes_all_k_IV3"] is not False:
     raise AssertionError("instance evidence must not close the all-k IV3 gap")
 

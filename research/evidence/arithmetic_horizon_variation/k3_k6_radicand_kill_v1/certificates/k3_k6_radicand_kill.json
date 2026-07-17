@@ -1,0 +1,341 @@
+{
+  "canonicity_criterion": {
+    "candidate_exhaustion": "the opposite cross-term gamma_minus has square class [u]*[gamma_plus] and supplies no third channel",
+    "definition": "gamma_k=A_plus+A_minus+2P=(sqrt(A_plus)+sqrt(A_minus))^2",
+    "requirements": [
+      "formed functorially from the two axial product branches A_plus and A_minus",
+      "fixed by the axial reflection m->-m",
+      "no tunable coefficients or auxiliary divisor search",
+      "specializes at k=4 to the published gamma_R9"
+    ]
+  },
+  "cases": {
+    "3": {
+      "A_minus": "product_i(w_i-m)",
+      "A_plus": "product_i(w_i+m)",
+      "P": 8,
+      "alpha": "e3(w)+u*e1(w)",
+      "base_group": "S4",
+      "beta": "e2(w)+u",
+      "charges": [
+        1,
+        2,
+        4
+      ],
+      "delta_k": 4,
+      "descent": "w_i in K=F(u), hence alpha,beta,gamma_plus in K",
+      "even_contact": {
+        "beta_contact": "14",
+        "four_M": 7,
+        "gamma_minus_contact": 0,
+        "gamma_plus_contact": 32,
+        "mass_norm_at_zero": "0",
+        "mass_norm_coefficients_low_first": [
+          "0",
+          "-564480",
+          "44352",
+          "-1120",
+          "9"
+        ],
+        "mass_norm_content_removed": "1",
+        "mass_norm_degree": 4,
+        "mass_norm_derivative_at_zero": "-564480",
+        "matching_signed_walls": [
+          [
+            1,
+            1,
+            1
+          ]
+        ],
+        "reciprocal_sum": "7/4",
+        "sign_product": 1,
+        "signed_wall_is_unique": true,
+        "signs": [
+          1,
+          1,
+          1
+        ],
+        "u_zero_is_simple": true,
+        "valuation_parity_u_gamma_plus": [
+          1,
+          0
+        ]
+      },
+      "formal_identity_checks": {
+        "A_minus_equals_alpha_minus_m_beta": true,
+        "A_plus_A_minus_equals_product_wi_squared_minus_u": true,
+        "A_plus_equals_alpha_plus_m_beta": true,
+        "alpha_squared_minus_u_beta_squared_equals_A_plus_A_minus": true
+      },
+      "gamma_minus": "2*(e3(w)+u*e1(w)-P)",
+      "gamma_plus": "2*(e3(w)+u*e1(w)+P)",
+      "k": 3,
+      "normal_closure_group": "C2^2 wr S4",
+      "normal_closure_group_order": "6144",
+      "odd_contact": {
+        "beta_contact": "2",
+        "four_M": 5,
+        "gamma_minus_contact": -32,
+        "gamma_plus_contact": 0,
+        "mass_norm_at_zero": "0",
+        "mass_norm_coefficients_low_first": [
+          "0",
+          "-11520",
+          "5184",
+          "-448",
+          "9"
+        ],
+        "mass_norm_content_removed": "1",
+        "mass_norm_degree": 4,
+        "mass_norm_derivative_at_zero": "-11520",
+        "matching_signed_walls": [
+          [
+            -1,
+            1,
+            1
+          ]
+        ],
+        "reciprocal_sum": "-1/4",
+        "sign_product": -1,
+        "signed_wall_is_unique": true,
+        "signs": [
+          -1,
+          1,
+          1
+        ],
+        "u_zero_is_simple": true,
+        "valuation_parity_u_gamma_plus": [
+          1,
+          1
+        ]
+      },
+      "off_contact_parity": "even by gamma_plus*gamma_minus=4*u*beta^2 when u is a unit",
+      "orbit_saturated_matrix": "B tensor I_4",
+      "reflection": "m->-m exchanges A_plus and A_minus and fixes gamma_plus",
+      "sheet_level_B": [
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "sheet_level_rank_F2": 2,
+      "square_class_rank": 8,
+      "square_class_relation": "[gamma_minus]=[u]*[gamma_plus]",
+      "verdict": "SURVIVES"
+    },
+    "6": {
+      "A_minus": "product_i(w_i-m)",
+      "A_plus": "product_i(w_i+m)",
+      "P": 32768,
+      "alpha": "e6(w)+u*e4(w)+u^2*e2(w)+u^3",
+      "base_group": "S22",
+      "beta": "e5(w)+u*e3(w)+u^2*e1(w)",
+      "charges": [
+        1,
+        2,
+        4,
+        8,
+        16,
+        32
+      ],
+      "delta_k": 22,
+      "descent": "w_i in K=F(u), hence alpha,beta,gamma_plus in K",
+      "even_contact": {
+        "beta_contact": "64512",
+        "four_M": 63,
+        "gamma_minus_contact": 0,
+        "gamma_plus_contact": 131072,
+        "mass_norm_at_zero": "0",
+        "mass_norm_coefficients_low_first": [
+          "0",
+          "-3531062484020887396761832561292006645954767815173545008719462400000000000000",
+          "835899455997602236748159804899535118577836678614114572104105984000000000000",
+          "-76911065202276541922248411726067046381868131080327250575360000000000000000",
+          "3595411347388157760285782708582673534970652953835533199516631040000000000",
+          "-95998449402631991767438735961798061014527530649036811466178560000000000",
+          "1597642381610677716755573358602341301822391367547804391256883200000000",
+          "-17817818423509722471549764683581705781963712480088015503360000000000",
+          "140645725277129258129525412472826650720418715429337753976832000000",
+          "-817298608989556578848064574499609807674440902347163959296000000",
+          "3594680904053030686930564209073378784185640344545908490240000",
+          "-12197123480992421445881020005051468719556784015225651200000",
+          "32328806891876806270643831425460019088105806168221286400",
+          "-67412584988921206771432907831789611168275157665382400",
+          "110851509720824481345942753152975805583818270044160",
+          "-143424937704548249879817662769818336124589863680",
+          "144959354684631533209254352329762345319119817",
+          "-112924127467532553158502718925530930829280",
+          "66330914726762393862670483866440838912",
+          "-28358081188806000414759398894223360",
+          "8312934901109143918665151217664",
+          "-1491791871661602915106160640",
+          "123410307017276135571456"
+        ],
+        "mass_norm_content_removed": "5097788613920013529415946338304",
+        "mass_norm_degree": 22,
+        "mass_norm_derivative_at_zero": "-3531062484020887396761832561292006645954767815173545008719462400000000000000",
+        "matching_signed_walls": [
+          [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        ],
+        "reciprocal_sum": "63/32",
+        "sign_product": 1,
+        "signed_wall_is_unique": true,
+        "signs": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "u_zero_is_simple": true,
+        "valuation_parity_u_gamma_plus": [
+          1,
+          0
+        ]
+      },
+      "formal_identity_checks": {
+        "A_minus_equals_alpha_minus_m_beta": true,
+        "A_plus_A_minus_equals_product_wi_squared_minus_u": true,
+        "A_plus_equals_alpha_plus_m_beta": true,
+        "alpha_squared_minus_u_beta_squared_equals_A_plus_A_minus": true
+      },
+      "gamma_minus": "2*(e6(w)+u*e4(w)+u^2*e2(w)+u^3-P)",
+      "gamma_plus": "2*(e6(w)+u*e4(w)+u^2*e2(w)+u^3+P)",
+      "k": 6,
+      "normal_closure_group": "C2^2 wr S22",
+      "normal_closure_group_order": "19773629917122657266558702714880000",
+      "odd_contact": {
+        "beta_contact": "1024",
+        "four_M": 61,
+        "gamma_minus_contact": -131072,
+        "gamma_plus_contact": 0,
+        "mass_norm_at_zero": "0",
+        "mass_norm_coefficients_low_first": [
+          "0",
+          "-1055957077807505343324775949646875276939250091176507138532149961876072489707110400000000000000",
+          "6935532704925141203693961572123245840859493110293031466032637309073478205208264704000000000000",
+          "-1814503849408492715276899395193996421118633372940768729545349997163807168604636446720000000000",
+          "155686579515511813994896589950584936878333558724732136549839345768175964391884193792000000000",
+          "-6109638055252957378727572849086790663777880026336469776549899282841436797873107763200000000",
+          "133407009425407292561889656422966276943428233073386174220416694090542718480463953920000000",
+          "-1841857952894433086427971266338898181337156378047318391109849772934680672131350528000000",
+          "17427036789652543581570672013750513977657087330806442440547809103882611719982284800000",
+          "-119019207233454602416375036152665017007512331231513454898375817643925579895930880000",
+          "607150252831787491222460992061629897219338812163000743210646825274492361637888000",
+          "-2366454439879601220006872578866809924728379273582120271699000128769361969152000",
+          "7150430265575309894132568590476861925821587447026679340744242935904652492800",
+          "-16889565180402843461356191038116279895022033550034305985864106188641075200",
+          "31283992190325919557816564069842339754208248022117745727303788014202880",
+          "-45362189094082793123451343378243945059790596534562045536476293451520",
+          "51137500822743584447907384773617984753944453005868722099490538113",
+          "-44233419792918046492128061007572473470697195353514185588214240",
+          "28726977038517612096056271163666069877126676156298817603328",
+          "-13523464969988583044984724957880175123698869828935761920",
+          "4348296754302311064626902678748088671309912816418816",
+          "-852782337190849332939202195835583875219288227840",
+          "76835001765969311522745091639767339047583744"
+        ],
+        "mass_norm_content_removed": "4294967296",
+        "mass_norm_degree": 22,
+        "mass_norm_derivative_at_zero": "-1055957077807505343324775949646875276939250091176507138532149961876072489707110400000000000000",
+        "matching_signed_walls": [
+          [
+            -1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ]
+        ],
+        "reciprocal_sum": "-1/32",
+        "sign_product": -1,
+        "signed_wall_is_unique": true,
+        "signs": [
+          -1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "u_zero_is_simple": true,
+        "valuation_parity_u_gamma_plus": [
+          1,
+          1
+        ]
+      },
+      "off_contact_parity": "even by gamma_plus*gamma_minus=4*u*beta^2 when u is a unit",
+      "orbit_saturated_matrix": "B tensor I_22",
+      "reflection": "m->-m exchanges A_plus and A_minus and fixes gamma_plus",
+      "sheet_level_B": [
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "sheet_level_rank_F2": 2,
+      "square_class_rank": 44,
+      "square_class_relation": "[gamma_minus]=[u]*[gamma_plus]",
+      "verdict": "SURVIVES"
+    }
+  },
+  "consequence": "the canonical second channel is not killed by odd/even charge parity; both probes yield the full two-channel conjugate Kummer module",
+  "date": "2026-07-18",
+  "question": "Does the canonical norm-derived second radicand survive one odd and one even charge count?",
+  "schema": "cella.ahv1.k3_k6_radicand_kill.v1",
+  "scope": {
+    "arbitrary_k_identity_derived": true,
+    "arbitrary_k_theorem_claimed": false,
+    "k3_generic_closure_claimed": true,
+    "k6_generic_closure_claimed": true,
+    "reason": "this falsifier run probes k=3 and k=6; promotion of the displayed all-k identity to a corpus theorem is a separate proof-and-audit action"
+  },
+  "source_refs": {
+    "all_k_base_monodromy": {
+      "path": "Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md",
+      "sha256": "6b3250883afcb98ef513027d9eeb5a626e2b5ef2c676e82215a057c26283d7fe"
+    },
+    "all_k_base_monodromy_proof_authority": {
+      "path": "Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/GENERIC_SYMMETRIC_MONODROMY_OF_WEIGHTED_MULTIQUADRATIC_SUMS_v1.0.md",
+      "sha256": "3cefa244a61d701a9f0184ae5756e62c71efbbb7f30274ca12f951ae351df6fd"
+    },
+    "generic_reflection_descent": {
+      "path": "Papers_Library/03_proofs_derivations_and_audits/galois_horizon_and_kummer_covers/AUDIT_REPORT_R6_R7_GENERIC_DESCENT.md",
+      "sha256": "7a93cb8720d53220bbf8a5b9c358a422168abd0acc56807bbb3d5eb3deb14ad7"
+    },
+    "k4_canonical_normalization": {
+      "path": "Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/galois_horizon_cover_v1_0.tex",
+      "sha256": "777daf7b60d337709587606f0974f8d4c8ff9c79473b609aadd54827223613ce"
+    },
+    "kummer_wreath_lift": {
+      "path": "Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/KUMMER_MODULE_WREATH_LIFT_THEOREM_2026-07-10.md",
+      "sha256": "ee9ef7e7a64ad7e2737094e1a3097e326fb33bc8ccff4490a9189f6b5448e293"
+    }
+  },
+  "universal_identity": {
+    "A_plus_minus": "A_plus=alpha_k+m*beta_k; A_minus=alpha_k-m*beta_k",
+    "alpha_k": "sum_{j congruent k mod 2} u^((k-j)/2)*e_j(w)",
+    "beta_k": "sum_{j not congruent k mod 2} u^((k-j-1)/2)*e_j(w)",
+    "norm": "alpha_k^2-u*beta_k^2=P^2",
+    "parity_identity": "gamma_k*(gamma_k-4*P)=4*u*beta_k^2",
+    "radicand": "gamma_k=2*(alpha_k+P)"
+  },
+  "verdict": "SURVIVES_K3_AND_K6"
+}

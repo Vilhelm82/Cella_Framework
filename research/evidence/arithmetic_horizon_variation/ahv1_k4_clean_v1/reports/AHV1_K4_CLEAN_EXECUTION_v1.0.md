@@ -9,7 +9,7 @@
 This package deliberately uses two instances and does not merge their claims.
 
 1. The **topological control** is `a=(0,2,3,7)`. It certifies the finite branch system, explicit Hurwitz transpositions, genus, integral homology, and thimble lattice. Because `a_1=0`, it is not used for the R9 contact/Kummer channel.
-2. The **decoration-live instance** is `N=(1,2,4,8)`, hence `a=N^2=(1,4,16,64)`. It independently repeats the topology calculation and supplies the canonical R9 channels `r_1=u` and `r_2=gamma_R9=2(P+e_4(w))`.
+2. The **decoration-live instance** is `N=(1,2,4,8)`, hence `a=N^2=(1,4,16,64)`. It independently repeats the topology calculation and supplies the canonical R9 channels `r_1=u` and `r_2=gamma_R9=2(e_4(w)+u e_2(w)+u^2+P)`.
 
 ## 2. Exact eliminants and finite branching
 
@@ -58,7 +58,15 @@ There is no integral index defect and no hidden 2-torsion in this presentation.
 
 Only the decoration-live instance is used here. With `P=64`,
 
-`gamma_R9=2(P+e_4(w))`, and `gamma_R9(gamma_R9-4P)=4u beta^2`.
+Globally, `alpha=e_4(w)+u e_2(w)+u^2`, `beta=e_3(w)+u e_1(w)`, and
+
+`gamma_R9=2(alpha+P)=2(e_4(w)+u e_2(w)+u^2+P)`.
+
+The exact factorization `prod_i(w_i+sqrt(u))=alpha+sqrt(u) beta` gives
+`alpha^2-u beta^2=P^2`, hence
+`gamma_R9(gamma_R9-4P)=4u beta^2`. At a signed contact `u=0`, this global
+radicand specializes to `2(P+e_4(w))`; only that specialization was used to
+compute the two parity rows below.
 
 The all-plus contact has `y=15`, reciprocal sum `15/8`, `beta=120`, and parity row `(1,0)`. The odd contact `(-,+,+,+)` has `y=13`, reciprocal sum `-1/8`, `beta=8`, and parity row `(1,1)`. Exact evaluation of the degree-18 branch polynomial at both contact values is nonzero, so these specialized contacts are away from the finite mass branch locus.
 

@@ -1,0 +1,549 @@
+{
+  "schema_version": 1,
+  "submission_id": "SUB-K3-K6-RADICAND-KILL-20260718",
+  "base_revision": "sha256:ad38ecc7825b4a6767a19c7da5e0d8c50bbbb81ca75ea6e6bed5a3d373a21b41",
+  "idempotency_key": "k3-k6-canonical-radicand-kill-20260718-v1",
+  "submitted_by": "will+codex",
+  "summary": "Admit the exact k=3/k=6 canonical-radicand kill test and correct the clean k=4 certificate's global gamma_R9 normalization while preserving its already valid contact-parity conclusions.",
+  "artifacts": [
+    {
+      "schema_version": 1,
+      "artifact_id": "EVD-AHV1-k4-CLEAN-2026-07-18-v1.1",
+      "artifact_type": "evidence",
+      "title": "AHV-1 k=4 clean certificate normalization correction v1.1",
+      "summary": "Corrects the global R9 radicand from the u=0 specialization 2(P+e4(w)) to gamma_R9=2(e4(w)+u e2(w)+u^2+P). The contact specialization, parity matrix, rank 10 and k=4 closure are unchanged and replay-gated.",
+      "subject_families": [
+        "galois_horizon_and_kummer_covers",
+        "picard_lefschetz_and_integral_lattices"
+      ],
+      "claim_status": "machine-verified",
+      "lifecycle_status": "released",
+      "provenance": {
+        "authors": [
+          "William Lloyd",
+          "OpenAI Codex"
+        ],
+        "created_utc": "2026-07-18T00:00:00+10:00",
+        "origin_repository": "Cella Framework",
+        "source_pointer": "cella:research/evidence/arithmetic_horizon_variation/ahv1_k4_clean_v1/reports/AHV1_K4_CLEAN_EXECUTION_v1.0.md"
+      },
+      "files": [
+        {
+          "role": "builder",
+          "path": "research/evidence/arithmetic_horizon_variation/ahv1_k4_clean_v1/build_ahv1_k4_clean.py",
+          "sha256": "281a4639bcad0e1294bfb25cb683b2546fd268db12222d8125a152a86f51b4ff",
+          "media_type": "text/x-python"
+        },
+        {
+          "role": "verifier",
+          "path": "research/evidence/arithmetic_horizon_variation/ahv1_k4_clean_v1/verify_ahv1_k4_clean.py",
+          "sha256": "0fe9823a087ab096d775fee6f3b039972d63690c10cf72a012618c23ad6c70b2",
+          "media_type": "text/x-python"
+        },
+        {
+          "role": "certificate",
+          "path": "research/evidence/arithmetic_horizon_variation/ahv1_k4_clean_v1/certificates/decoration_live.json",
+          "sha256": "621f8720d60ffec7c135acc53703d079f20d95336012e8f83563bdda8ce486d0",
+          "media_type": "application/json"
+        },
+        {
+          "role": "matrix",
+          "path": "research/evidence/arithmetic_horizon_variation/ahv1_k4_clean_v1/matrices/decoration_kummer_parity.json",
+          "sha256": "4b85bfa6a7601909bf7995ecab57f40fe9dc9ca3d5699b507bf9eade7f06f94f",
+          "media_type": "application/json"
+        },
+        {
+          "role": "report",
+          "path": "research/evidence/arithmetic_horizon_variation/ahv1_k4_clean_v1/reports/AHV1_K4_CLEAN_EXECUTION_v1.0.md",
+          "sha256": "a9217bd10054ef8c1f427588fafd660773bd7f7df3ab0ae15a4f2a4284c9a525",
+          "media_type": "text/markdown"
+        },
+        {
+          "role": "gate",
+          "path": "engine/tests/gate_ahv1_k4_clean.py",
+          "sha256": "2a9e0ddca2fe7a3737949df35abc5cff2e30558f39d9ab85423f403a04bae612",
+          "media_type": "text/x-python"
+        }
+      ],
+      "claims": [
+        {
+          "claim_id": "AHV1-K4-NORM-C1",
+          "statement": "The global four-charge R9 functions are alpha=e4(w)+u e2(w)+u^2, beta=e3(w)+u e1(w), gamma_R9=2(alpha+P), and gamma_R9(gamma_R9-4P)=4u beta^2; at u=0 gamma_R9 specializes to 2(P+e4(w)).",
+          "hypotheses": [
+            "w_i^2=u+N_i^2",
+            "P=product_i N_i"
+          ],
+          "scope": "global k=4 identity and its signed-contact specialization",
+          "claim_status": "proved",
+          "proof_ids": [],
+          "evidence_ids": [
+            "decoration_live.json",
+            "decoration_kummer_parity.json"
+          ]
+        },
+        {
+          "claim_id": "AHV1-K4-NORM-C2",
+          "statement": "The normalization correction leaves the signed-contact rows [[1,0],[1,1]], orbit-saturated rank 10 and closure C2^2 wr S5 unchanged because the omitted u-terms vanish at contact.",
+          "hypotheses": [
+            "the two exact signed-contact witnesses",
+            "the Kummer Module Wreath Lift Theorem"
+          ],
+          "scope": "the decoration-live k=4 certificate",
+          "claim_status": "machine-verified",
+          "proof_ids": [
+            "DBP:thm:kummer_wreath_lift"
+          ],
+          "evidence_ids": [
+            "decoration_live.json",
+            "decoration_kummer_parity.json"
+          ]
+        }
+      ],
+      "relations": [
+        {
+          "target_id": "DBP:evidence:ahv1_k4_clean_execution",
+          "relation": "supersedes",
+          "basis": "Replaces the contact-only gamma string with the published global R9 normalization while preserving the valid k=4 computations.",
+          "source_pointer": "cella:research/evidence/arithmetic_horizon_variation/ahv1_k4_clean_v1/reports/AHV1_K4_CLEAN_EXECUTION_v1.0.md"
+        }
+      ],
+      "external_ids": {
+        "evidence": [
+          "AHV1-K4-CLEAN-v1.1"
+        ]
+      },
+      "declared_impacts": [
+        {
+          "kind": "correction",
+          "target_id": "DBP:evidence:ahv1_k4_clean_execution",
+          "note": "Correct the global radicand serialization; no topology, lattice, parity-rank or group conclusion changes."
+        }
+      ],
+      "llm": {
+        "one_sentence_purpose": "Keep the clean k=4 evidence globally normalized without altering its valid contact computation.",
+        "key_terms": [
+          "gamma_R9",
+          "alpha",
+          "beta",
+          "signed contact",
+          "normalization correction"
+        ],
+        "retrieval_questions": [
+          "What is the correct global gamma_R9 formula?",
+          "Does the correction change the k=4 Kummer rank?"
+        ],
+        "context_priority": "high",
+        "context_role": "frontier"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "supersedes_artifact": "EVD-AHV1-k4-CLEAN-2026-07-18",
+        "contact_results_changed": false
+      }
+    },
+    {
+      "schema_version": 1,
+      "artifact_id": "EVD-K3-K6-RADICAND-KILL-2026-07-18",
+      "artifact_type": "evidence",
+      "title": "The k=3/k=6 canonical-radicand kill test",
+      "summary": "Exact odd/even falsifier run for the norm-derived radicand gamma_k=A_k^++A_k^-+2P. Degree-4 and degree-22 mass norms have simple unique even/odd signed contacts with B=[[1,0],[1,1]], giving ranks 8 and 44 and generic closures C2^2 wr S4 and C2^2 wr S22. The run derives an all-k product identity but does not promote it to an arbitrary-k theorem.",
+      "subject_families": [
+        "galois_horizon_and_kummer_covers"
+      ],
+      "claim_status": "machine-verified",
+      "lifecycle_status": "released",
+      "provenance": {
+        "authors": [
+          "William Lloyd",
+          "OpenAI Codex"
+        ],
+        "created_utc": "2026-07-18T00:00:00+10:00",
+        "origin_repository": "Cella Framework",
+        "source_pointer": "cella:research/evidence/arithmetic_horizon_variation/k3_k6_radicand_kill_v1/reports/K3_K6_RADICAND_KILL_TEST_v1.0.md"
+      },
+      "files": [
+        {
+          "role": "builder",
+          "path": "research/evidence/arithmetic_horizon_variation/k3_k6_radicand_kill_v1/build_k3_k6_radicand_kill.py",
+          "sha256": "563ce89b535428b9b32a0528164dcba2cd24d1535de56b1f27ac350fa7b0e761",
+          "media_type": "text/x-python"
+        },
+        {
+          "role": "verifier",
+          "path": "research/evidence/arithmetic_horizon_variation/k3_k6_radicand_kill_v1/verify_k3_k6_radicand_kill.py",
+          "sha256": "582733c39d67079bebb85cc16ad1c737cf225898023145d2afaa3c8d2f2bf21e",
+          "media_type": "text/x-python"
+        },
+        {
+          "role": "certificate",
+          "path": "research/evidence/arithmetic_horizon_variation/k3_k6_radicand_kill_v1/certificates/k3_k6_radicand_kill.json",
+          "sha256": "99017bf0cab00ee87efd99b882c38f8e36971151014993c0ed025709ed7b6824",
+          "media_type": "application/json"
+        },
+        {
+          "role": "report",
+          "path": "research/evidence/arithmetic_horizon_variation/k3_k6_radicand_kill_v1/reports/K3_K6_RADICAND_KILL_TEST_v1.0.md",
+          "sha256": "cf56d56a6b8867cac1e62a16a7913122267776b9d46d03daa13ab0687e6673dc",
+          "media_type": "text/markdown"
+        },
+        {
+          "role": "gate",
+          "path": "engine/tests/gate_k3_k6_radicand_kill.py",
+          "sha256": "bf5c201e1ac0f10f874a4d6a511491991d8ae321a9dc9637b89f0ebd09110d97",
+          "media_type": "text/x-python"
+        }
+      ],
+      "claims": [
+        {
+          "claim_id": "RAD-K36-C1",
+          "statement": "For k=3 and k=6, exact expansion gives A_k^+=alpha_k+m beta_k, A_k^-=alpha_k-m beta_k and gamma_k(gamma_k-4P)=4u beta_k^2 for the coefficient-free canonical radicand gamma_k=A_k^++A_k^-+2P.",
+          "hypotheses": [
+            "w_i^2=u+N_i^2",
+            "m^2=u",
+            "P=product_i N_i"
+          ],
+          "scope": "k=3 and k=6 symbolic identities",
+          "claim_status": "machine-verified",
+          "proof_ids": [],
+          "evidence_ids": [
+            "k3_k6_radicand_kill.json"
+          ]
+        },
+        {
+          "claim_id": "RAD-K36-C2",
+          "statement": "At N=(1,2,4) for k=3 and N=(1,2,4,8,16,32) for k=6, exact even and odd signed walls give simple unique u=0 roots and parity rows (1,0) and (1,1).",
+          "hypotheses": [
+            "the stated charge tuples",
+            "the exact mass norms recorded in the certificate"
+          ],
+          "scope": "two exact contact witnesses for each tested k",
+          "claim_status": "machine-verified",
+          "proof_ids": [],
+          "evidence_ids": [
+            "k3_k6_radicand_kill.json"
+          ]
+        },
+        {
+          "claim_id": "RAD-K36-C3",
+          "statement": "The invertible sheet matrix orbit-saturates under the certified base groups S4 and S22 to square-class ranks 8 and 44, yielding generic normal closures C2^2 wr S4 and C2^2 wr S22.",
+          "hypotheses": [
+            "generic base groups S4 and S22",
+            "generic reflection descent",
+            "the Kummer Module Wreath Lift Theorem"
+          ],
+          "scope": "generic k=3 and k=6 norm-derived two-channel covers",
+          "claim_status": "proved",
+          "proof_ids": [
+            "DBP:paper:weighted_multiquadratic_monodromy",
+            "DBP:thm:kummer_wreath_lift"
+          ],
+          "evidence_ids": [
+            "k3_k6_radicand_kill.json"
+          ]
+        }
+      ],
+      "relations": [
+        {
+          "target_id": "DBP:gap:IV3",
+          "relation": "supplements",
+          "basis": "The odd/even kill test survives and exposes the exact all-k candidate identity, but leaves formal arbitrary-k promotion as a separate action.",
+          "source_pointer": "cella:research/evidence/arithmetic_horizon_variation/k3_k6_radicand_kill_v1/reports/K3_K6_RADICAND_KILL_TEST_v1.0.md"
+        },
+        {
+          "target_id": "DBP:paper:weighted_multiquadratic_monodromy",
+          "relation": "cites",
+          "basis": "Uses the released all-k symmetric base-monodromy theorem at degrees 4 and 22.",
+          "source_pointer": "cella:research/evidence/arithmetic_horizon_variation/k3_k6_radicand_kill_v1/reports/K3_K6_RADICAND_KILL_TEST_v1.0.md"
+        },
+        {
+          "target_id": "DBP:thm:kummer_wreath_lift",
+          "relation": "cites",
+          "basis": "Applies the invertible sheet-level parity criterion and orbit saturation.",
+          "source_pointer": "cella:research/evidence/arithmetic_horizon_variation/k3_k6_radicand_kill_v1/reports/K3_K6_RADICAND_KILL_TEST_v1.0.md"
+        }
+      ],
+      "external_ids": {
+        "evidence": [
+          "K3-K6-RADICAND-KILL-v1"
+        ]
+      },
+      "declared_impacts": [
+        {
+          "kind": "evidence_only",
+          "target_id": "DBP:gap:IV3",
+          "note": "Strongly supports the all-k second-radicand route and isolates a short universal proof target; IV3 remains open in this submission."
+        }
+      ],
+      "llm": {
+        "one_sentence_purpose": "Decide whether the canonical four-charge radicand mechanism dies at odd k=3 or even k=6.",
+        "key_terms": [
+          "k=3",
+          "k=6",
+          "radicand kill test",
+          "gamma_k",
+          "Kummer parity",
+          "S4",
+          "S22",
+          "wreath closure"
+        ],
+        "retrieval_questions": [
+          "Did the k=3/k=6 radicand kill test survive?",
+          "What are alpha_3 beta_3 alpha_6 beta_6?",
+          "What Kummer ranks and closure groups result?"
+        ],
+        "context_priority": "high",
+        "context_role": "frontier"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "scope_guard": {
+          "arbitrary_k_theorem_claimed": false
+        },
+        "tested_k": [
+          3,
+          6
+        ],
+        "verdict": "SURVIVES_K3_AND_K6"
+      }
+    }
+  ],
+  "graph_delta": {
+    "upsert_nodes": [
+      {
+        "id": "DBP:evidence:ahv1_k4_clean_execution",
+        "label": "AHV-1 k=4 clean two-instance execution",
+        "type": "certificate",
+        "claim_status": "machine-verified",
+        "lifecycle_status": "released",
+        "reachability": null,
+        "tracked": false,
+        "layer": "frontier",
+        "summary": "Replayable two-instance k=4 certificate: exact degree-18 simple branch locus, explicit S5 Hurwitz systems, H1=Z^10 and full integral thimble generation; globally corrected gamma_R9=2(e4(w)+u e2(w)+u^2+P), with the unchanged contact parity matrix giving rank 10 and C2^2 wr S5.",
+        "source_refs": [
+          {
+            "pointer": "cella:research/evidence/arithmetic_horizon_variation/ahv1_k4_clean_v1/reports/AHV1_K4_CLEAN_EXECUTION_v1.0.md",
+            "sha256": "a9217bd10054ef8c1f427588fafd660773bd7f7df3ab0ae15a4f2a4284c9a525"
+          },
+          {
+            "pointer": "cella:research/evidence/arithmetic_horizon_variation/ahv1_k4_clean_v1/certificates/decoration_live.json",
+            "sha256": "621f8720d60ffec7c135acc53703d079f20d95336012e8f83563bdda8ce486d0"
+          }
+        ],
+        "external_ids": {
+          "artifacts": [
+            "EVD-AHV1-k4-CLEAN-2026-07-18-v1.1"
+          ]
+        },
+        "facets": {
+          "paper": "IV",
+          "source_id": "dbp-frontier-v1",
+          "subject_family": "galois_horizon_and_kummer_covers"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [
+            "AHV-1",
+            "k=4",
+            "Hurwitz system",
+            "integral thimbles",
+            "gamma_R9",
+            "rank 10"
+          ],
+          "retrieval_questions": [
+            "What does the corrected clean k=4 AHV-1 certificate establish?"
+          ],
+          "context_priority": "high",
+          "context_role": "frontier"
+        },
+        "extensions": {
+          "scope_guard": {
+            "closes_all_k_IV3": false
+          },
+          "artifact_version": "1.1"
+        }
+      },
+      {
+        "id": "DBP:evidence:k3_k6_radicand_kill",
+        "label": "k=3/k=6 canonical-radicand kill test",
+        "type": "certificate",
+        "claim_status": "machine-verified",
+        "lifecycle_status": "released",
+        "reachability": null,
+        "tracked": false,
+        "layer": "frontier",
+        "summary": "The coefficient-free norm-derived gamma_k survives both probes. Exact degree-4 and degree-22 contact norms give B=[[1,0],[1,1]], square-class ranks 8 and 44, and generic closures C2^2 wr S4 and C2^2 wr S22. An all-k identity emerges, but arbitrary-k theorem promotion remains separate.",
+        "source_refs": [
+          {
+            "pointer": "cella:research/evidence/arithmetic_horizon_variation/k3_k6_radicand_kill_v1/reports/K3_K6_RADICAND_KILL_TEST_v1.0.md",
+            "sha256": "cf56d56a6b8867cac1e62a16a7913122267776b9d46d03daa13ab0687e6673dc"
+          },
+          {
+            "pointer": "cella:research/evidence/arithmetic_horizon_variation/k3_k6_radicand_kill_v1/certificates/k3_k6_radicand_kill.json",
+            "sha256": "99017bf0cab00ee87efd99b882c38f8e36971151014993c0ed025709ed7b6824"
+          }
+        ],
+        "external_ids": {
+          "artifacts": [
+            "EVD-K3-K6-RADICAND-KILL-2026-07-18"
+          ]
+        },
+        "facets": {
+          "paper": "IV",
+          "subject_family": "galois_horizon_and_kummer_covers",
+          "scope": "k=3 and k=6 falsifier"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [
+            "radicand kill test",
+            "gamma_k",
+            "k=3",
+            "k=6",
+            "rank 8",
+            "rank 44",
+            "S4",
+            "S22"
+          ],
+          "retrieval_questions": [
+            "Did the canonical radicand survive k=3 and k=6?",
+            "What closure groups did the kill test produce?"
+          ],
+          "context_priority": "high",
+          "context_role": "frontier"
+        },
+        "extensions": {
+          "scope_guard": {
+            "arbitrary_k_theorem_claimed": false
+          },
+          "verdict": "SURVIVES_K3_AND_K6"
+        }
+      }
+    ],
+    "upsert_edges": [
+      {
+        "id": "e::DBP:evidence:ahv1_k4_clean_execution::cites::DBP:thm:kummer_wreath_lift",
+        "from": "DBP:evidence:ahv1_k4_clean_execution",
+        "to": "DBP:thm:kummer_wreath_lift",
+        "relation": "cites",
+        "label": "Corrected clean AHV-1 k=4 certificate applies the Kummer wreath-lift theorem",
+        "basis": "The global gamma normalization is corrected; its exact even/odd contact rows still form B=[[1,0],[1,1]], and orbit saturation gives rank 10.",
+        "source_refs": [
+          {
+            "pointer": "cella:research/evidence/arithmetic_horizon_variation/ahv1_k4_clean_v1/reports/AHV1_K4_CLEAN_EXECUTION_v1.0.md",
+            "sha256": "a9217bd10054ef8c1f427588fafd660773bd7f7df3ab0ae15a4f2a4284c9a525"
+          }
+        ],
+        "facets": {
+          "scope": "k=4-static"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:gap:IV3::evidenced_by::DBP:evidence:ahv1_k4_clean_execution",
+        "from": "DBP:gap:IV3",
+        "to": "DBP:evidence:ahv1_k4_clean_execution",
+        "relation": "evidenced_by",
+        "label": "IV3 supported, but not closed, by the corrected clean k=4 AHV-1 certificate",
+        "basis": "The corrected package supplies the exact k=4 base case while explicitly leaving arbitrary-k promotion open.",
+        "source_refs": [
+          {
+            "pointer": "cella:research/evidence/arithmetic_horizon_variation/ahv1_k4_clean_v1/reports/AHV1_K4_CLEAN_EXECUTION_v1.0.md",
+            "sha256": "a9217bd10054ef8c1f427588fafd660773bd7f7df3ab0ae15a4f2a4284c9a525"
+          }
+        ],
+        "facets": {
+          "scope": "k=4-only"
+        },
+        "extensions": {
+          "does_not_resolve_target": true
+        }
+      },
+      {
+        "id": "e::DBP:gap:IV3::evidenced_by::DBP:evidence:k3_k6_radicand_kill",
+        "from": "DBP:gap:IV3",
+        "to": "DBP:evidence:k3_k6_radicand_kill",
+        "relation": "evidenced_by",
+        "label": "IV3 strongly supported by the surviving k=3/k=6 radicand kill test",
+        "basis": "The canonical candidate survives odd and even probes with maximal two-channel ranks; the displayed all-k identity is not promoted to a theorem in this artifact.",
+        "source_refs": [
+          {
+            "pointer": "cella:research/evidence/arithmetic_horizon_variation/k3_k6_radicand_kill_v1/reports/K3_K6_RADICAND_KILL_TEST_v1.0.md",
+            "sha256": "cf56d56a6b8867cac1e62a16a7913122267776b9d46d03daa13ab0687e6673dc"
+          }
+        ],
+        "facets": {
+          "scope": "k=3,k=6"
+        },
+        "extensions": {
+          "does_not_resolve_target": true
+        }
+      },
+      {
+        "id": "e::DBP:evidence:k3_k6_radicand_kill::cites::DBP:paper:weighted_multiquadratic_monodromy",
+        "from": "DBP:evidence:k3_k6_radicand_kill",
+        "to": "DBP:paper:weighted_multiquadratic_monodromy",
+        "relation": "cites",
+        "label": "Radicand kill test uses the released all-k base-monodromy theorem",
+        "basis": "The base groups at delta_3=4 and delta_6=22 are S4 and S22.",
+        "source_refs": [
+          {
+            "pointer": "cella:research/evidence/arithmetic_horizon_variation/k3_k6_radicand_kill_v1/reports/K3_K6_RADICAND_KILL_TEST_v1.0.md",
+            "sha256": "cf56d56a6b8867cac1e62a16a7913122267776b9d46d03daa13ab0687e6673dc"
+          }
+        ],
+        "facets": {},
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:evidence:k3_k6_radicand_kill::cites::DBP:thm:kummer_wreath_lift",
+        "from": "DBP:evidence:k3_k6_radicand_kill",
+        "to": "DBP:thm:kummer_wreath_lift",
+        "relation": "cites",
+        "label": "Radicand kill test applies the conjugate Kummer wreath-lift theorem",
+        "basis": "The exact parity rows form an invertible sheet matrix and orbit-saturate to ranks 8 and 44.",
+        "source_refs": [
+          {
+            "pointer": "cella:research/evidence/arithmetic_horizon_variation/k3_k6_radicand_kill_v1/reports/K3_K6_RADICAND_KILL_TEST_v1.0.md",
+            "sha256": "cf56d56a6b8867cac1e62a16a7913122267776b9d46d03daa13ab0687e6673dc"
+          }
+        ],
+        "facets": {},
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:evidence:k3_k6_radicand_kill::supplements::DBP:evidence:ahv1_k4_clean_execution",
+        "from": "DBP:evidence:k3_k6_radicand_kill",
+        "to": "DBP:evidence:ahv1_k4_clean_execution",
+        "relation": "supplements",
+        "label": "Odd/even radicand test extends the corrected k=4 base case",
+        "basis": "The same canonical product identity and contact matrix occur at k=3,4,6.",
+        "source_refs": [
+          {
+            "pointer": "cella:research/evidence/arithmetic_horizon_variation/k3_k6_radicand_kill_v1/reports/K3_K6_RADICAND_KILL_TEST_v1.0.md",
+            "sha256": "cf56d56a6b8867cac1e62a16a7913122267776b9d46d03daa13ab0687e6673dc"
+          }
+        ],
+        "facets": {},
+        "extensions": {}
+      }
+    ],
+    "retire_nodes": [],
+    "remove_edges": []
+  },
+  "declared_impacts": [
+    {
+      "kind": "correction",
+      "target_id": "DBP:evidence:ahv1_k4_clean_execution",
+      "note": "Global formula corrected; prior contact and topology results retained."
+    },
+    {
+      "kind": "evidence_only",
+      "target_id": "DBP:gap:IV3",
+      "note": "Adds exact k=3/k=6 maximal-rank evidence and an all-k identity candidate without closing the tracked gap."
+    }
+  ],
+  "extensions": {
+    "auto_commit_requested": true,
+    "scope_guard": "IV3 remains open until the general identity and divisor hypotheses are promoted as a separate theorem."
+  }
+}
