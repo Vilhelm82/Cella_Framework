@@ -1,0 +1,28 @@
+{
+  "schema": "cella-dag-service-v1",
+  "submission_id": "SUB-AHV1-k4-CLEAN-20260718",
+  "idempotency_key": "ahv1-k4-clean-two-instance-20260718-v1",
+  "submission_digest": "sha256:288e8612a0e03bd433a8aa7f72ad50667a31eb7c3982de160123b2f149b482ec",
+  "base_revision": "sha256:63f1e297477a25b5021f854f5b64313f13674783f6a3ff0847dd76aab5b01261",
+  "applied_revision": "sha256:ad38ecc7825b4a6767a19c7da5e0d8c50bbbb81ca75ea6e6bed5a3d373a21b41",
+  "applied_utc": "2026-07-17T14:44:40.505647+00:00",
+  "changes": {
+    "nodes_added": [
+      "DBP:evidence:ahv1_k4_clean_execution"
+    ],
+    "nodes_updated": [],
+    "nodes_retired": [],
+    "edges_added": [
+      "e::DBP:gap:IV3::evidenced_by::DBP:evidence:ahv1_k4_clean_execution",
+      "e::DBP:evidence:ahv1_k4_clean_execution::cites::DBP:thm:kummer_wreath_lift"
+    ],
+    "edges_updated": [],
+    "edges_removed": [],
+    "changed_node_ids": [
+      "DBP:evidence:ahv1_k4_clean_execution",
+      "DBP:gap:IV3",
+      "DBP:thm:kummer_wreath_lift"
+    ]
+  },
+  "applied_submission_path": "/home/williaml/Cella Framework/DAG_Library/submissions/applied/SUB-AHV1-k4-CLEAN-20260718.json"
+}

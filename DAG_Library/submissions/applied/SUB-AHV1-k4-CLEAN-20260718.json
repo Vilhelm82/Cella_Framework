@@ -1,0 +1,321 @@
+{
+  "schema_version": 1,
+  "submission_id": "SUB-AHV1-k4-CLEAN-20260718",
+  "base_revision": "sha256:63f1e297477a25b5021f854f5b64313f13674783f6a3ff0847dd76aab5b01261",
+  "idempotency_key": "ahv1-k4-clean-two-instance-20260718-v1",
+  "submitted_by": "will+codex",
+  "summary": "Admit the independently rebuilt two-instance AHV-1 k=4 package: exact eliminants, explicit S5 Hurwitz systems, integral homology and thimble certificates, and the canonically normalized rank-10 R9 Kummer matrix, with IV3 explicitly left open for arbitrary k.",
+  "artifacts": [
+    {
+      "schema_version": 1,
+      "artifact_id": "EVD-AHV1-k4-CLEAN-2026-07-18",
+      "artifact_type": "evidence",
+      "title": "AHV-1 at k=4: clean two-instance execution",
+      "summary": "Independent exact and high-precision reconstruction on a topology-only control a=(0,2,3,7) and a decoration-live point N=(1,2,4,8). Both yield 18 simple finite folds, explicit S5 Hurwitz systems, genus 5, H1=Z^10, and integral thimble generation; the decoration-live point gives the canonical gamma_R9=2(P+e4(w)) rank-10 Kummer certificate. This is k=4 evidence only and does not close all-k IV3.",
+      "subject_families": [
+        "galois_horizon_and_kummer_covers",
+        "picard_lefschetz_and_integral_lattices"
+      ],
+      "claim_status": "machine-verified",
+      "lifecycle_status": "released",
+      "provenance": {
+        "authors": [
+          "William Lloyd",
+          "OpenAI Codex"
+        ],
+        "created_utc": "2026-07-18T00:00:00+10:00",
+        "origin_repository": "Cella Framework",
+        "source_pointer": "cella:research/evidence/arithmetic_horizon_variation/ahv1_k4_clean_v1/reports/AHV1_K4_CLEAN_EXECUTION_v1.0.md"
+      },
+      "files": [
+        {
+          "role": "builder",
+          "path": "research/evidence/arithmetic_horizon_variation/ahv1_k4_clean_v1/build_ahv1_k4_clean.py",
+          "sha256": "0402f8c54e1958e4ee31989c8b3df1b1d57cdc85c0c7a0a7ee3cbc333b26d59b",
+          "media_type": "text/x-python"
+        },
+        {
+          "role": "verifier",
+          "path": "research/evidence/arithmetic_horizon_variation/ahv1_k4_clean_v1/verify_ahv1_k4_clean.py",
+          "sha256": "558c56167d22c6509c8837fc9b62fc74a5979986cee784ce9114e3ab5f4c1736",
+          "media_type": "text/x-python"
+        },
+        {
+          "role": "certificate",
+          "path": "research/evidence/arithmetic_horizon_variation/ahv1_k4_clean_v1/certificates/topological_control.json",
+          "sha256": "1f31925807544deb213afb0802d994920ca34836f306f7e16428c9a5a2c6319e",
+          "media_type": "application/json"
+        },
+        {
+          "role": "certificate",
+          "path": "research/evidence/arithmetic_horizon_variation/ahv1_k4_clean_v1/certificates/decoration_live.json",
+          "sha256": "182bd4a4dd646ad362e61b23c64dafe2c2acb86422ef4f5992bc16a81b17aa31",
+          "media_type": "application/json"
+        },
+        {
+          "role": "matrix",
+          "path": "research/evidence/arithmetic_horizon_variation/ahv1_k4_clean_v1/matrices/control_chain_matrices.json",
+          "sha256": "fb7a4939c6ad848bcc2a727e2b16dd1081fc924534ce5771cc0e990136a94fa8",
+          "media_type": "application/json"
+        },
+        {
+          "role": "matrix",
+          "path": "research/evidence/arithmetic_horizon_variation/ahv1_k4_clean_v1/matrices/control_thimbles.json",
+          "sha256": "3ad0536fe2e5d862e85109b5f47045e531b7774c2bce802876c840a0ce56c3bd",
+          "media_type": "application/json"
+        },
+        {
+          "role": "matrix",
+          "path": "research/evidence/arithmetic_horizon_variation/ahv1_k4_clean_v1/matrices/decoration_chain_matrices.json",
+          "sha256": "23dc4ef4d3302d2e36ad5fa642123c00badfc5019dc453bffed6f3a04d54771f",
+          "media_type": "application/json"
+        },
+        {
+          "role": "matrix",
+          "path": "research/evidence/arithmetic_horizon_variation/ahv1_k4_clean_v1/matrices/decoration_thimbles.json",
+          "sha256": "c8e62f27c669ea3897b2ca6c7e9206c91526401c56d541af77abf4f3d414e469",
+          "media_type": "application/json"
+        },
+        {
+          "role": "matrix",
+          "path": "research/evidence/arithmetic_horizon_variation/ahv1_k4_clean_v1/matrices/decoration_kummer_parity.json",
+          "sha256": "26df76799aeef7e8bc70768f47f0aaedcd94790abc3983d4d6e91a20c3036391",
+          "media_type": "application/json"
+        },
+        {
+          "role": "report",
+          "path": "research/evidence/arithmetic_horizon_variation/ahv1_k4_clean_v1/reports/AHV1_K4_CLEAN_EXECUTION_v1.0.md",
+          "sha256": "073dd28f31169294594269a10062c49097a080456d002c9216fac051b3b55de3",
+          "media_type": "text/markdown"
+        },
+        {
+          "role": "gate",
+          "path": "engine/tests/gate_ahv1_k4_clean.py",
+          "sha256": "2c9be3abebc30ee31c8fe5cf7fc50f8481691fecfb08b30956789bb5ba4e41f2",
+          "media_type": "text/x-python"
+        }
+      ],
+      "claims": [
+        {
+          "claim_id": "AHV1-K4-CLEAN-C1",
+          "statement": "For each of a=(0,2,3,7) and a=(1,4,16,64), the exact norm has 18 distinct finite simple branch values whose explicit Hurwitz transpositions have identity ordered product and generate S5.",
+          "hypotheses": [
+            "w_i^2=u+a_i",
+            "y=sum_i w_i",
+            "the stated fixed parameter tuple"
+          ],
+          "scope": "two explicit k=4 instances",
+          "claim_status": "machine-verified",
+          "proof_ids": [],
+          "evidence_ids": [
+            "topological_control.json",
+            "decoration_live.json"
+          ]
+        },
+        {
+          "claim_id": "AHV1-K4-CLEAN-C2",
+          "statement": "The integral chain and thimble matrices give H0=Z, H1=Z^10, H2=Z, relative lattice Z^14, vanishing-cycle SNF (1,1,1,1), full integral thimble generation, and Gram SNF (1,1,1,5).",
+          "hypotheses": [
+            "the certified ordered Hurwitz systems"
+          ],
+          "scope": "both explicit k=4 instances",
+          "claim_status": "machine-verified",
+          "proof_ids": [],
+          "evidence_ids": [
+            "control_chain_matrices.json",
+            "control_thimbles.json",
+            "decoration_chain_matrices.json",
+            "decoration_thimbles.json"
+          ]
+        },
+        {
+          "claim_id": "AHV1-K4-CLEAN-C3",
+          "statement": "At N=(1,2,4,8), the canonical channels u and gamma_R9=2(P+e4(w)) have orbit-saturated parity matrix [[I5,0],[I5,I5]] of F2-rank 10, giving the static k=4 closure C2^2 wr S5 of order 122880.",
+          "hypotheses": [
+            "the exact even and odd contact witnesses",
+            "the independently certified transitive S5 base action",
+            "the Kummer Module Wreath Lift Theorem"
+          ],
+          "scope": "the decoration-live k=4 instance only",
+          "claim_status": "proved",
+          "proof_ids": [
+            "DBP:thm:kummer_wreath_lift"
+          ],
+          "evidence_ids": [
+            "decoration_kummer_parity.json"
+          ]
+        }
+      ],
+      "relations": [
+        {
+          "target_id": "DBP:gap:IV3",
+          "relation": "supplements",
+          "basis": "Supplies a fully replayable k=4 base case and falsifier result while explicitly leaving arbitrary-k relation-module vanishing open.",
+          "source_pointer": "cella:research/evidence/arithmetic_horizon_variation/ahv1_k4_clean_v1/reports/AHV1_K4_CLEAN_EXECUTION_v1.0.md"
+        },
+        {
+          "target_id": "DBP:thm:kummer_wreath_lift",
+          "relation": "cites",
+          "basis": "Applies the orbit valuation matrix and maximal conjugate Kummer lift at d=5 and s=2.",
+          "source_pointer": "cella:research/evidence/arithmetic_horizon_variation/ahv1_k4_clean_v1/reports/AHV1_K4_CLEAN_EXECUTION_v1.0.md"
+        }
+      ],
+      "external_ids": {
+        "evidence": [
+          "AHV1-K4-CLEAN-v1"
+        ]
+      },
+      "declared_impacts": [
+        {
+          "kind": "evidence_only",
+          "target_id": "DBP:gap:IV3",
+          "note": "Strengthens the k=4 base case but does not change IV3 from open."
+        }
+      ],
+      "llm": {
+        "one_sentence_purpose": "Provide the replayable two-instance k=4 AHV-1 topology, lattice, and canonical Kummer base case without overclaiming arbitrary-k closure.",
+        "key_terms": [
+          "AHV-1",
+          "Hurwitz system",
+          "S5 monodromy",
+          "Lefschetz thimbles",
+          "Smith normal form",
+          "Kummer parity",
+          "gamma_R9",
+          "IV3"
+        ],
+        "retrieval_questions": [
+          "What does the clean k=4 AHV-1 run prove?",
+          "Where are the explicit k=4 Hurwitz transpositions and chain matrices?",
+          "Why does the k=4 evidence not close all-k IV3?"
+        ],
+        "context_priority": "high",
+        "context_role": "frontier"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "scope_guard": "closes_all_k_IV3=false",
+        "instances": {
+          "topological_control": [
+            0,
+            2,
+            3,
+            7
+          ],
+          "decoration_live_N": [
+            1,
+            2,
+            4,
+            8
+          ]
+        }
+      }
+    }
+  ],
+  "graph_delta": {
+    "upsert_nodes": [
+      {
+        "id": "DBP:evidence:ahv1_k4_clean_execution",
+        "label": "AHV-1 k=4 clean two-instance execution",
+        "type": "certificate",
+        "claim_status": "machine-verified",
+        "lifecycle_status": "released",
+        "reachability": null,
+        "tracked": false,
+        "layer": "frontier",
+        "summary": "Replayable two-instance k=4 certificate: exact degree-18 simple branch locus, explicit S5 Hurwitz systems, H1=Z^10 and full integral thimble generation on both instances; canonical gamma_R9 rank-10 Kummer closure on N=(1,2,4,8). IV3 remains open for arbitrary k.",
+        "source_refs": [
+          {
+            "pointer": "cella:research/evidence/arithmetic_horizon_variation/ahv1_k4_clean_v1/reports/AHV1_K4_CLEAN_EXECUTION_v1.0.md",
+            "sha256": "073dd28f31169294594269a10062c49097a080456d002c9216fac051b3b55de3"
+          },
+          {
+            "pointer": "cella:research/evidence/arithmetic_horizon_variation/ahv1_k4_clean_v1/certificates/decoration_live.json",
+            "sha256": "182bd4a4dd646ad362e61b23c64dafe2c2acb86422ef4f5992bc16a81b17aa31"
+          }
+        ],
+        "external_ids": {
+          "artifacts": [
+            "EVD-AHV1-k4-CLEAN-2026-07-18"
+          ]
+        },
+        "facets": {
+          "paper": "IV",
+          "source_id": "dbp-frontier-v1",
+          "subject_family": "galois_horizon_and_kummer_covers"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [
+            "AHV-1",
+            "k=4",
+            "Hurwitz system",
+            "integral thimbles",
+            "gamma_R9",
+            "rank 10"
+          ],
+          "retrieval_questions": [
+            "What does the clean k=4 AHV-1 certificate establish?"
+          ],
+          "context_priority": "high",
+          "context_role": "frontier"
+        },
+        "extensions": {
+          "scope_guard": {
+            "closes_all_k_IV3": false
+          }
+        }
+      }
+    ],
+    "upsert_edges": [
+      {
+        "id": "e::DBP:gap:IV3::evidenced_by::DBP:evidence:ahv1_k4_clean_execution",
+        "from": "DBP:gap:IV3",
+        "to": "DBP:evidence:ahv1_k4_clean_execution",
+        "relation": "evidenced_by",
+        "label": "IV3 supported, but not closed, by the clean k=4 AHV-1 certificate",
+        "basis": "The two-instance package supplies an exact and replayable k=4 base case while explicitly leaving arbitrary-k relation-module vanishing open.",
+        "source_refs": [
+          {
+            "pointer": "cella:research/evidence/arithmetic_horizon_variation/ahv1_k4_clean_v1/reports/AHV1_K4_CLEAN_EXECUTION_v1.0.md",
+            "sha256": "073dd28f31169294594269a10062c49097a080456d002c9216fac051b3b55de3"
+          }
+        ],
+        "facets": {
+          "scope": "k=4-only"
+        },
+        "extensions": {
+          "does_not_resolve_target": true
+        }
+      },
+      {
+        "id": "e::DBP:evidence:ahv1_k4_clean_execution::cites::DBP:thm:kummer_wreath_lift",
+        "from": "DBP:evidence:ahv1_k4_clean_execution",
+        "to": "DBP:thm:kummer_wreath_lift",
+        "relation": "cites",
+        "label": "Clean AHV-1 k=4 certificate applies the Kummer wreath-lift theorem",
+        "basis": "The exact even/odd contact rows form B=[[1,0],[1,1]], and orbit saturation gives B tensor I5 of rank 10.",
+        "source_refs": [
+          {
+            "pointer": "cella:research/evidence/arithmetic_horizon_variation/ahv1_k4_clean_v1/reports/AHV1_K4_CLEAN_EXECUTION_v1.0.md",
+            "sha256": "073dd28f31169294594269a10062c49097a080456d002c9216fac051b3b55de3"
+          }
+        ],
+        "facets": {
+          "scope": "k=4-static"
+        },
+        "extensions": {}
+      }
+    ],
+    "retire_nodes": [],
+    "remove_edges": []
+  },
+  "declared_impacts": [
+    {
+      "kind": "evidence_only",
+      "target_id": "DBP:gap:IV3",
+      "note": "Adds a strong k=4 certificate; the gap remains open for arbitrary k."
+    }
+  ],
+  "extensions": {}
+}
