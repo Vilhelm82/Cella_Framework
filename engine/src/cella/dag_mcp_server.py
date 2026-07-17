@@ -153,8 +153,11 @@ def call_dag_apply(submission_id: str, confirm: bool = False) -> dict:
     """Step 2 of a mutation -- actually write a previously staged submission into the canonical graph.
     Requires the submission_id from a successful dry_run=false submit AND confirm=true (without
     confirm it is a deliberate no-op safeguard). It re-checks base_revision under a lock, applies the
-    delta, records before/after revisions, and writes an audit receipt. This is the ONLY call that
-    mutates the canonical graph."""
+    delta, records before/after revisions, and writes an audit receipt. A successful apply then attempts
+    one LOCAL Git commit containing only the artifact-declared source files, canonical graph, applied
+    submission and receipt; it never pushes or absorbs unrelated worktree changes. Git failure does not
+    undo valid mathematics: git_commit.status is git_publication_pending with the intended paths and
+    error. This is the ONLY call that mutates the canonical graph."""
     return _safe(apply_bundle, submission_id, confirm=confirm)
 
 
@@ -274,7 +277,9 @@ def build_dag_mcp_server(*, host: str = "127.0.0.1", port: int = 8000,
             "WRITING (only if asked to change the graph): cella_dag_validate -> cella_dag_impact "
             "(preview blast radius) -> cella_dag_submit (dry_run=true to preview, then dry_run=false "
             "to stage) -> cella_dag_apply (confirm=true). base_revision must match the live revision "
-            "or the write is rejected. Nodes are retired/superseded, never deleted.\n"
+            "or the write is rejected. Apply attempts a scoped local Git commit and reports "
+            "git_publication_pending on Git failure; it never pushes. Nodes are retired/superseded, "
+            "never deleted.\n"
             "TWO STATUS FIELDS, never conflate them: claim_status is mathematical truth "
             "(proved/refuted/open/...); lifecycle_status is document state (released/superseded/...). "
             "Layouts (cella_dag_view_*) are geometry for rendering, not content."

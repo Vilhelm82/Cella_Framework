@@ -41,7 +41,14 @@ MCP mutations are deliberately transactional:
 1. `cella_dag_submit(..., dry_run=true)` previews validation and impact.
 2. `cella_dag_submit(..., dry_run=false)` stages an accepted submission.
 3. `cella_dag_apply(submission_id, confirm=true)` applies it only if the base
-   revision still matches and emits a receipt.
+   revision still matches, emits a receipt, and attempts a local Git commit
+   containing only the artifact-declared source files, canonical graph, applied
+   submission and receipt.
+
+Apply never pushes and never absorbs unrelated worktree changes. A Git failure
+does not roll back the valid DAG transaction: the result reports
+`git_commit.status = git_publication_pending` with the intended paths and error,
+so publication cannot disappear behind a successful mathematical receipt.
 
 Nodes are retired or superseded, never destructively deleted. Edge removal must
 name an exact stable edge id.

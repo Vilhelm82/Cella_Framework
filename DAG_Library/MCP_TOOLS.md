@@ -13,7 +13,7 @@ Response schema: `cella-dag-service-v1`
 | `cella_dag_validate` | read | Validate the canonical graph or a supplied graph/artifact record. |
 | `cella_dag_impact` | read | Relation-aware reevaluation closure for changed nodes or source digests. |
 | `cella_dag_submit` | staged write | Preview by default; optionally stage a revision-bound mutation bundle. |
-| `cella_dag_apply` | confirmed write | Apply a staged bundle only with `confirm=true`; emit an audit receipt. |
+| `cella_dag_apply` | confirmed write | Apply a staged bundle only with `confirm=true`; emit an audit receipt and attempt a scoped local Git commit. Git failure returns `git_publication_pending`; apply never pushes. |
 | `cella_dag_export` | derived write/read | Produce canonical JSON, node/edge JSON, DOT, GraphML or Cytoscape JSON. |
 | `cella_dag_view_capabilities` | read | Report layout algorithms and live CPU/CUDA availability. |
 | `cella_dag_view_compute` | derived write/read | Compute a revision-bound layout and optionally persist it by content digest. |

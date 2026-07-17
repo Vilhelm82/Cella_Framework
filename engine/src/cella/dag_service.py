@@ -1,9 +1,10 @@
 """Renderer-neutral, revisioned research-DAG service.
 
-This module is organizational tooling, not a mathematical verdict path.  It uses
-only the standard library and keeps all writes inside ``DAG_Library``.  The
-canonical JSON graph is authoritative; MCP, CLI, DOT, GraphML and Cytoscape are
-adapters over the same record.
+This module is organizational tooling, not a mathematical verdict path. It uses
+only the standard library. DAG records stay inside ``DAG_Library``; a successful
+apply additionally creates a path-scoped local Git commit for the declared source
+files and transaction records. The canonical JSON graph is authoritative; MCP,
+CLI, DOT, GraphML and Cytoscape are adapters over the same record.
 """
 from __future__ import annotations
 
@@ -12,6 +13,7 @@ import hashlib
 import json
 import os
 import re
+import subprocess
 import tempfile
 from collections import defaultdict, deque
 from contextlib import contextmanager
@@ -774,6 +776,92 @@ def _safe_name(value: str) -> str:
     return safe[:128]
 
 
+def _repository_relative_path(path: str | Path, root: Path) -> str:
+    """Return a Git path without following symlinks or permitting root escape."""
+    candidate = Path(path)
+    if not candidate.is_absolute():
+        candidate = root / candidate
+    candidate = Path(os.path.abspath(candidate))
+    try:
+        relative = candidate.relative_to(root)
+    except ValueError as exc:
+        raise DagError(
+            "GIT_PATH_OUTSIDE_REPOSITORY",
+            f"DAG publication path escapes the repository: {path}",
+            path=str(path),
+            repository_root=str(root),
+        ) from exc
+    if not candidate.exists() and not candidate.is_symlink():
+        raise DagError(
+            "GIT_PUBLICATION_PATH_MISSING",
+            f"DAG publication path is missing: {relative.as_posix()}",
+            path=relative.as_posix(),
+        )
+    return relative.as_posix()
+
+
+def _submission_commit_paths(submission: dict, applied_path: Path, receipt_path: Path) -> list[str]:
+    root = repository_root().resolve()
+    candidates: list[str | Path] = [canonical_graph_path(), applied_path, receipt_path]
+    for artifact in submission.get("artifacts", []):
+        for file_record in artifact.get("files", []):
+            if file_record.get("path"):
+                candidates.append(file_record["path"])
+    return sorted({_repository_relative_path(path, root) for path in candidates})
+
+
+def _git_commit_applied_submission(submission: dict, applied_path: Path, receipt_path: Path) -> dict:
+    """Commit only one applied submission's owned paths; never roll back DAG state."""
+    root = repository_root().resolve()
+    paths: list[str] = []
+    try:
+        paths = _submission_commit_paths(submission, applied_path, receipt_path)
+        top_level = subprocess.run(
+            ["git", "-C", str(root), "rev-parse", "--show-toplevel"],
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        if Path(top_level).resolve() != root:
+            raise DagError(
+                "GIT_REPOSITORY_MISMATCH",
+                "configured Cella repository root is not the Git worktree root",
+                repository_root=str(root),
+                git_top_level=top_level,
+            )
+        subprocess.run(
+            ["git", "-C", str(root), "add", "--", *paths],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        message = f"dag: apply {_safe_name(submission['submission_id'])}"
+        subprocess.run(
+            ["git", "-C", str(root), "commit", "--only", "-m", message, "--", *paths],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        commit = subprocess.run(
+            ["git", "-C", str(root), "rev-parse", "HEAD"],
+            check=True,
+            capture_output=True,
+            text=True,
+        ).stdout.strip()
+        return {"ok": True, "status": "committed", "commit": commit, "paths": paths}
+    except (DagError, OSError, subprocess.CalledProcessError) as exc:
+        if isinstance(exc, subprocess.CalledProcessError):
+            error = (exc.stderr or exc.stdout or str(exc)).strip()
+        else:
+            error = str(exc)
+        return {
+            "ok": False,
+            "status": "git_publication_pending",
+            "error": error,
+            "paths": paths,
+        }
+
+
 def _atomic_json(path: Path, value: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     payload = json.dumps(value, indent=2, ensure_ascii=False) + "\n"
@@ -847,7 +935,15 @@ def apply_bundle(submission_id: str, *, confirm: bool = False) -> dict:
         }
         receipt_path = dag_root() / "receipts" / f"{_safe_name(submission_id)}.receipt.json"
         _atomic_json(receipt_path, receipt)
-        return {"schema": SERVICE_SCHEMA, "ok": True, "applied": True, "receipt": receipt, "receipt_path": str(receipt_path)}
+        git_commit = _git_commit_applied_submission(submission, applied_path, receipt_path)
+        return {
+            "schema": SERVICE_SCHEMA,
+            "ok": True,
+            "applied": True,
+            "receipt": receipt,
+            "receipt_path": str(receipt_path),
+            "git_commit": git_commit,
+        }
 
 
 def _filtered_graph(filters: dict | None) -> dict:

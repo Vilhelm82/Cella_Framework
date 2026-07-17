@@ -132,6 +132,7 @@ with tempfile.TemporaryDirectory() as temp:
         check("accepted bundle stages without mutating canonical graph", staged["staged"] and len(load_graph()["nodes"]) == base_count)
         applied = apply_bundle("gate-transaction", confirm=True)
         check("explicit apply mutates graph and emits receipt", applied["applied"] and len(load_graph()["nodes"]) == base_count + 1 and Path(applied["receipt_path"]).is_file())
+        check("detached test DAG reports Git publication pending", applied["git_commit"]["status"] == "git_publication_pending")
         stale = submit_bundle(submission, dry_run=True)
         check("optimistic revision rejects stale submissions", not stale["accepted"] and any(issue["token"] == "STALE_BASE_REVISION" for issue in stale["validation"]["errors"]))
         check("post-apply graph still validates", dag_status()["ok"])
