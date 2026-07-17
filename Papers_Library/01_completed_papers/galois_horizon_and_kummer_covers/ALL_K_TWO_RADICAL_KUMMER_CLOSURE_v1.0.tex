@@ -1,0 +1,772 @@
+% =====================================================================
+%  ALL-k TWO-RADICAL KUMMER CLOSURE -- COMPLETED PROOF v1.0
+%  Author: Will Lloyd (Lloyd Geometric Diagnostics)
+%  Date: 18 July 2026
+% =====================================================================
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[margin=1.05in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!60!black,citecolor=blue!60!black,
+            urlcolor=blue!60!black]{hyperref}
+
+\setlist[itemize]{nosep,leftmargin=*,topsep=2pt,partopsep=0pt}
+\setlist[enumerate]{nosep,leftmargin=*,topsep=2pt,partopsep=0pt}
+\widowpenalty=10000
+\clubpenalty=10000
+\brokenpenalty=10000
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Ftwo}{\mathbf F_2}
+\newcommand{\Gal}{\operatorname{Gal}}
+\newcommand{\Hom}{\operatorname{Hom}}
+\newcommand{\Spec}{\operatorname{Spec}}
+\newcommand{\ord}{\operatorname{ord}}
+\newcommand{\wrp}{\mathop{\mathrm{wr}}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\gammam}{\gamma_k^{-}}
+
+\title{\textbf{All-$k$ Two-Radical Kummer Closures}\\[4pt]
+\large A canonical norm-derived radicand and maximal wreath monodromy\\[6pt]
+\normalsize\fbox{Completed proof --- v1.0 --- 18 July 2026}}
+\author{Will Lloyd\\
+\small Lloyd Geometric Diagnostics Pty Ltd, Coffs Harbour, NSW, Australia}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+For the generic multiquadratic mass cover
+\[
+  w_i^2=u+N_i^2,\qquad 4M=\sum_{i=1}^k w_i,
+\]
+the base mass field has degree
+\[
+\delta_k=
+\begin{cases}
+2^{k-1},&k\text{ odd},\\
+2^{k-1}-\frac12\binom{k}{k/2},&k\text{ even},
+\end{cases}
+\]
+and generic normal-closure group $S_{\delta_k}$.  We construct, for every
+$k\geq3$, a coefficient-free second radicand
+\[
+ \gamma_k=2\left(
+ \sum_{r=0}^{\lfloor k/2\rfloor}u^r e_{k-2r}(w)
+ +\prod_{i=1}^kN_i\right)
+\]
+that specializes at $k=4$ to the static horizon radicand.  Its companion
+polynomial $\beta_k$ satisfies the uniform identity
+\[
+ \gamma_k(\gamma_k-4P)=4u\beta_k^2,
+ \qquad P=\prod_iN_i.
+\]
+Even and odd signed-contact divisors give valuation rows $(1,0)$ and
+$(1,1)$ for the channels $(u,\gamma_k)$.  We prove that all off-sheet
+entries are even, so their Galois orbits form
+$B\otimes I_{\delta_k}$ with
+$B=\left(\begin{smallmatrix}1&0\\1&1\end{smallmatrix}\right)$.
+Consequently all $2\delta_k$ conjugate square classes are independent.
+The normal closure of
+$K(\sqrt u,\sqrt{\gamma_k})/F$ therefore has the exact group
+\[
+ C_2^2\wrp S_{\delta_k}
+\]
+and order $2^{2\delta_k}\delta_k!$.  This proves the all-$k$ static
+two-channel Kummer closure.  The theorem is algebraic for arbitrary $k$;
+only the four-charge member is asserted here to carry the established
+black-hole entropy interpretation.
+\end{abstract}
+
+\section{Introduction}
+
+The four-charge horizon cover carries two quadratic channels above its
+quintic mass field: the axial class $[u]$ and an entropy-sum class
+$[\gamma_4]$.  Signed contact divisors separate these channels and yield the
+static closure group $C_2^2\wrp S_5$ \cite{HorizonCover,KummerLift}.  It was
+not previously clear whether the second class was forced by the general
+multiquadratic norm structure or was an accident of the four-charge
+truncation.
+
+The issue is subtle only if ``second radicand'' is constrained.  An arbitrary
+function field has many independent square classes, so searching for some
+additional class would say nothing about the horizon construction.  The
+candidate used here is instead forced by the two axial products
+\[
+ A_k^+=\prod_i(w_i+m),\qquad A_k^-=\prod_i(w_i-m),
+ \qquad m^2=u.
+\]
+Their product is the square $P^2$, where $P=\prod_iN_i$.  Thus the
+sum-compatible expression
+\[
+ A_k^++A_k^-+2P
+\]
+is the square of a sum after adjoining compatible square roots of $A_k^+$
+and $A_k^-$.  It is invariant under $m\mapsto-m$, uses no adjustable
+coefficients or selected auxiliary divisor, and recovers the published
+four-charge normalization.  These properties pin the relevant algebraic
+generalization.
+
+Exact $k=3$ and $k=6$ falsifier computations first exposed the uniform
+identity used below \cite{KillTest}.  The proof itself does not interpolate
+from those cases.  It works for arbitrary $k\geq3$, proves the required local
+valuation statements directly, and then invokes the already established
+all-$k$ symmetric base monodromy \cite{WeightedMonodromy} and generic
+reflection descent \cite{ReflectionDescent}.
+
+\paragraph{Scope.}
+The result is a theorem about the generic equal-weight multiquadratic mass
+cover and its canonical norm-derived decoration.  At $k=4$ the decoration is
+the physical static entropy-sum channel.  For other values of $k$, the theorem
+asserts the algebraic closure of the displayed cover; it does not invent a
+black-hole solution with an arbitrary number of independent charges.
+
+\section{The generic mass cover}
+\label{sec:setup}
+
+Fix an integer $k\geq3$.  Let
+\[
+ F_0=\Q(N_1,\ldots,N_k),\qquad F=F_0(M),
+\]
+where the $N_i$ and $M$ are algebraically independent.  On the
+multiquadratic curve over $F_0$ put
+\begin{equation}
+ w_i^2=u+N_i^2\quad(1\leq i\leq k),
+ \qquad \sigma=\sum_{i=1}^kw_i.
+ \label{eq:curve}
+\end{equation}
+The mass fibre is $\sigma=4M$.  Let $\mathcal N_k(u;M)$ denote the irreducible
+mass polynomial, let $u$ be one of its roots, and put
+\[
+ K=F(u).
+\]
+
+We use two established results.  They are stated here in precisely the form
+needed by the new argument.
+
+\begin{theorem}[All-$k$ base monodromy \cite{WeightedMonodromy}]
+\label{thm:base}
+The extension $K/F$ is generically separable of degree
+\begin{equation}
+ \delta_k=
+ \begin{cases}
+ 2^{k-1},&k\text{ odd},\\[2mm]
+ 2^{k-1}-\dfrac12\binom{k}{k/2},&k\text{ even}.
+ \end{cases}
+ \label{eq:delta}
+\end{equation}
+Its normal closure $E/F$ has Galois group
+\[
+ \Gal(E/F)\cong S_{\delta_k},
+\]
+acting in the natural way on the $\delta_k$ embeddings of $K$ into $E$.
+\end{theorem}
+
+\begin{theorem}[Reflection descent \cite{ReflectionDescent}]
+\label{thm:descent}
+Let $m^2=u$ and let $W$ be the generic signed mass field containing
+$m,w_1,\ldots,w_k$.  The involution
+\[
+ \tau(m)=-m,\qquad \tau(w_i)=w_i
+\]
+has fixed field $K$.  In particular,
+\[
+ w_i\in K\qquad(1\leq i\leq k).
+\]
+\end{theorem}
+
+The descent statement is crucial: the symmetric expressions constructed
+below are not merely functions on an auxiliary radical sheet.  They belong to
+the degree-$\delta_k$ mass field itself.
+
+\section{The canonical second radicand}
+\label{sec:radicand}
+
+Write $e_j(w)=e_j(w_1,\ldots,w_k)$ for the $j$th elementary symmetric
+polynomial, with $e_0(w)=1$, and put
+\begin{align}
+ \alpha_k
+ &=\sum_{r=0}^{\lfloor k/2\rfloor}u^r e_{k-2r}(w),
+ \label{eq:alpha}\\
+ \beta_k
+ &=\sum_{r=0}^{\lfloor(k-1)/2\rfloor}u^r e_{k-1-2r}(w).
+ \label{eq:beta}
+\end{align}
+By Theorem~\ref{thm:descent}, both elements lie in $K$.
+
+\begin{lemma}[Parity decomposition]
+\label{lem:decomposition}
+In $K(m)$ one has
+\begin{equation}
+ A_k^+:=\prod_{i=1}^k(w_i+m)=\alpha_k+m\beta_k,
+ \qquad
+ A_k^-:=\prod_{i=1}^k(w_i-m)=\alpha_k-m\beta_k.
+ \label{eq:Apm}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Expanding the first product by elementary symmetric functions gives
+\[
+ \prod_{i=1}^k(w_i+m)
+ =\sum_{j=0}^k m^{k-j}e_j(w).
+\]
+The terms with $k-j$ even are exactly
+\[
+ u^{(k-j)/2}e_j(w),\qquad j\equiv k\pmod2,
+\]
+and their sum is $\alpha_k$.  The remaining terms contain one factor of $m$;
+after removing it, their sum is $\beta_k$.  Replacing $m$ by $-m$ fixes the
+even part and negates the odd part, proving both identities.
+\end{proof}
+
+\begin{proposition}[Uniform norm identity]
+\label{prop:normidentity}
+Let
+\[
+ P=\prod_{i=1}^kN_i.
+\]
+Then
+\begin{equation}
+ \alpha_k^2-u\beta_k^2=P^2.
+ \label{eq:pell}
+\end{equation}
+Consequently, for
+\begin{equation}
+ \gamma_k=2(\alpha_k+P),
+ \label{eq:gamma}
+\end{equation}
+one has
+\begin{equation}
+ \boxed{\gamma_k(\gamma_k-4P)=4u\beta_k^2.}
+ \label{eq:masteridentity}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Multiplying the two products in \eqref{eq:Apm} gives
+\[
+ A_k^+A_k^-
+ =\prod_{i=1}^k(w_i^2-m^2)
+ =\prod_{i=1}^kN_i^2
+ =P^2,
+\]
+because $w_i^2-m^2=(u+N_i^2)-u=N_i^2$.  The left-hand side is
+$\alpha_k^2-u\beta_k^2$, proving \eqref{eq:pell}.  Finally,
+\[
+ \gamma_k(\gamma_k-4P)
+ =4(\alpha_k+P)(\alpha_k-P)
+ =4(\alpha_k^2-P^2)
+ =4u\beta_k^2.
+\]
+\end{proof}
+
+\begin{proposition}[Canonicity and exhaustion of the cross-term choices]
+\label{prop:canonicity}
+Choose square roots $x_\pm^2=A_k^\pm$ compatibly so that $x_+x_-=P$.
+Then
+\[
+ \gamma_k=(x_++x_-)^2.
+\]
+The opposite cross-term
+\[
+ \gammam:=A_k^++A_k^--2P=2(\alpha_k-P)=\gamma_k-4P
+\]
+satisfies, in $K^*/K^{*2}$,
+\begin{equation}
+ [\gammam]=[u][\gamma_k].
+ \label{eq:minusclass}
+\end{equation}
+Thus the two sum/difference choices generate no square class beyond
+$[u]$ and $[\gamma_k]$.
+\end{proposition}
+
+\begin{proof}
+The first assertion follows from
+\[
+ (x_++x_-)^2=A_k^++A_k^-+2P=2(\alpha_k+P).
+\]
+Equation~\eqref{eq:masteridentity} reads
+$\gamma_k\gammam=4u\beta_k^2$.  Since $4\beta_k^2$ is a square, taking
+square classes gives \eqref{eq:minusclass} wherever the displayed elements
+are nonzero.  Since $\gamma_k$ is a unit at the even contact constructed
+below, it is not the zero element of $K$; the same identity then shows that
+the generic square-class statement is well defined.
+\end{proof}
+
+\begin{remark}
+For $k=4$, equations \eqref{eq:alpha}--\eqref{eq:gamma} give
+\[
+ \alpha_4=e_4(w)+ue_2(w)+u^2,\qquad
+ \beta_4=e_3(w)+ue_1(w),\qquad
+ \gamma_4=2\bigl(e_4(w)+ue_2(w)+u^2+P\bigr),
+\]
+which is exactly the globally normalized static R9 radicand.  The shorter
+expression $2(P+e_4(w))$ is only its specialization at $u=0$.
+\end{remark}
+
+\section{Signed-contact divisors}
+\label{sec:contacts}
+
+For a sign vector $\eps=(\eps_1,\ldots,\eps_k)\in\{\pm1\}^k$, define
+\begin{equation}
+ \ell_\eps=4M-\sum_{i=1}^k\eps_iN_i,
+ \qquad s_\eps=\prod_{i=1}^k\eps_i.
+ \label{eq:wall}
+\end{equation}
+The base divisor $D_\eps$ is the generic point of $\ell_\eps=0$, localized
+away from
+\begin{equation}
+ P\prod_{\eta\neq\eps}\ell_\eta
+ \left(\sum_{i=1}^k\frac{\eps_i}{N_i}\right)=0.
+ \label{eq:localization}
+\end{equation}
+The distinct linear forms $\ell_\eta$ define distinct divisors.  The final
+factor in \eqref{eq:localization} is not the zero rational function: after
+multiplication by $P$ it is a sum of distinct monomials
+$\eps_i\prod_{j\neq i}N_j$.  Hence this localization is nonempty for every
+sign vector.
+
+\begin{lemma}[Simple signed contact]
+\label{lem:simplecontact}
+Above $D_\eps$ there is a unique mass sheet on which
+\begin{equation}
+ u=0,\qquad w_i=\eps_iN_i.
+ \label{eq:contactpoint}
+\end{equation}
+On that sheet $u$ is a uniformizer.  Equivalently, its valuation satisfies
+$v_\eps(u)=1$.
+\end{lemma}
+
+\begin{proof}
+On the branch through \eqref{eq:contactpoint}, the binomial expansion gives
+\[
+ w_i
+ =\eps_iN_i\left(1+\frac{u}{N_i^2}\right)^{1/2}
+ =\eps_iN_i+\frac{\eps_i}{2N_i}u+O(u^2).
+\]
+Substitution in $4M=\sum_iw_i$ yields
+\begin{equation}
+ \ell_\eps
+ =\frac{u}{2}\sum_{i=1}^k\frac{\eps_i}{N_i}+O(u^2).
+ \label{eq:localexpansion}
+\end{equation}
+The coefficient of $u$ is a unit by \eqref{eq:localization}; hence the local
+implicit-function theorem, or equivalently formal inversion of
+\eqref{eq:localexpansion}, shows that $u$ and $\ell_\eps$ have the same order.
+Thus $v_\eps(u)=1$.
+
+At $u=0$, every signed radical branch has mass value
+$\sum_i\eta_iN_i$.  On $D_\eps$, the other values differ by the units
+$\ell_\eta$.  Therefore no other mass sheet has $u=0$ at the generic point of
+$D_\eps$, proving uniqueness.
+\end{proof}
+
+\begin{lemma}[Contact values of $\alpha_k$ and $\beta_k$]
+\label{lem:contactvalues}
+At the contact \eqref{eq:contactpoint},
+\begin{equation}
+ \alpha_k(0)=s_\eps P,\qquad
+ \beta_k(0)=s_\eps P\sum_{i=1}^k\frac{\eps_i}{N_i}.
+ \label{eq:contactvalues}
+\end{equation}
+In particular, $\beta_k$ is a unit in the localization
+\eqref{eq:localization}.
+\end{lemma}
+
+\begin{proof}
+Every term in \eqref{eq:alpha} except $e_k(w)$ is divisible by $u$, and every
+term in \eqref{eq:beta} except $e_{k-1}(w)$ is divisible by $u$.  Hence
+\[
+ \alpha_k(0)=\prod_i\eps_iN_i=s_\eps P.
+\]
+Moreover,
+\begin{align*}
+ \beta_k(0)
+ &=e_{k-1}(\eps_1N_1,\ldots,\eps_kN_k)\\
+ &=\sum_{i=1}^k\prod_{j\neq i}\eps_jN_j
+ =s_\eps P\sum_{i=1}^k\frac{\eps_i}{N_i}.
+\end{align*}
+The claimed unit statement follows from \eqref{eq:localization}.
+\end{proof}
+
+\begin{proposition}[The two universal parity rows]
+\label{prop:rows}
+At an even signed contact, $s_\eps=+1$, one has
+\[
+ \bigl(v_\eps(u),v_\eps(\gamma_k)\bigr)\equiv(1,0)\pmod2.
+\]
+At an odd signed contact, $s_\eps=-1$, one has
+\[
+ \bigl(v_\eps(u),v_\eps(\gamma_k)\bigr)\equiv(1,1)\pmod2.
+\]
+Thus the sheet-level valuation matrix is
+\begin{equation}
+ B=
+ \begin{pmatrix}
+ 1&0\\
+ 1&1
+ \end{pmatrix}\in\operatorname{GL}_2(\Ftwo).
+ \label{eq:B}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Lemma~\ref{lem:simplecontact} gives $v_\eps(u)=1$ in both cases.  If
+$s_\eps=+1$, then Lemma~\ref{lem:contactvalues} gives
+\[
+ \gamma_k(0)=2(P+P)=4P,
+\]
+which is a unit; hence $v_\eps(\gamma_k)=0$.
+
+If $s_\eps=-1$, then $\gamma_k(0)=0$, while
+$\gamma_k(0)-4P=-4P$ is a unit.  Taking valuations in
+\eqref{eq:masteridentity}, and using that $\beta_k$ is a unit, gives
+\[
+ v_\eps(\gamma_k)
+ =v_\eps(u)+2v_\eps(\beta_k)=1.
+\]
+These are the two rows of \eqref{eq:B}; its determinant is one in $\Ftwo$.
+\end{proof}
+
+\section{Off-sheet parity and orbit saturation}
+\label{sec:orbit}
+
+Let $E/F$ be the normal closure of $K/F$ and let
+\[
+ I=\Hom_F(K,E),\qquad |I|=\delta_k.
+\]
+For $i\in I$, write
+\[
+ u_i=i(u),\qquad \gamma_i=i(\gamma_k),\qquad \beta_i=i(\beta_k).
+\]
+Choose a prime of $E$ above the even or odd divisor $D_\eps$ and above the
+distinguished contact branch of Lemma~\ref{lem:simplecontact}.  The next lemma
+is the point that prevents hidden conjugate entries from corrupting the local
+matrix.
+
+\begin{lemma}[Off-sheet entries are even]
+\label{lem:offsheet}
+At such a prime, every off-sheet axial element $u_j$ is a unit.  Every
+off-sheet entropy element $\gamma_j$ has even valuation.  Hence all
+off-sheet entries in the valuation-parity row are zero.
+\end{lemma}
+
+\begin{proof}
+The unique-contact statement in Lemma~\ref{lem:simplecontact} says that only
+the distinguished mass root vanishes at the generic point of $D_\eps$.
+Therefore $v(u_j)=0$ for every off-sheet index $j$.
+
+All $u_j,w_{r,j}$ and $\gamma_j$ are regular after the localization
+\eqref{eq:localization}: the mass polynomial has nonzero leading coefficient
+there, each $w_{r,j}$ is integral over the corresponding local ring, and
+$\gamma_j$ is polynomial in these elements.  Thus $v(\gamma_j)\geq0$.
+If $v(\gamma_j)=0$, there is nothing to prove.  If it is positive, then
+$P$ being a unit implies that $\gamma_j-4P$ is a unit.  Applying the conjugate
+of \eqref{eq:masteridentity} gives
+\[
+ v(\gamma_j)
+ =v(u_j)+2v(\beta_j)=2v(\beta_j),
+\]
+which is even.
+\end{proof}
+
+\begin{proposition}[Full conjugate parity matrix]
+\label{prop:fullmatrix}
+There exist $2\delta_k$ divisorial valuations of $E$ whose parity matrix on
+the ordered conjugate radicands
+\[
+ (u_i)_{i\in I}\mid(\gamma_i)_{i\in I}
+\]
+is, after ordering rows and columns,
+\begin{equation}
+ \mathcal V=B\otimes I_{\delta_k}
+ =
+ \begin{pmatrix}
+ I_{\delta_k}&0\\
+ I_{\delta_k}&I_{\delta_k}
+ \end{pmatrix}.
+ \label{eq:fullmatrix}
+\end{equation}
+In particular,
+\[
+ \operatorname{rank}_{\Ftwo}(\mathcal V)=2\delta_k.
+\]
+\end{proposition}
+
+\begin{proof}
+Choose one even sign vector and one odd sign vector.  Proposition~\ref{prop:rows}
+and Lemma~\ref{lem:offsheet} produce the two rows of $B$, supported on one
+distinguished embedding.  By Theorem~\ref{thm:base}, the group
+$\Gal(E/F)=S_{\delta_k}$ acts transitively on $I$.  Acting on the selected primes transports each row to
+every embedding without mixing the two channel coordinates.  The resulting
+matrix is exactly \eqref{eq:fullmatrix}.  Since $B$ and
+$I_{\delta_k}$ are invertible over $\Ftwo$, so is their Kronecker product.
+\end{proof}
+
+\section{The all-\texorpdfstring{$k$}{k} Kummer closure}
+\label{sec:closure}
+
+Define the decorated sheet field
+\begin{equation}
+ H_k=K(\sqrt u,\sqrt{\gamma_k})
+ \label{eq:H}
+\end{equation}
+and its conjugate radical composite
+\begin{equation}
+ L_k=E\bigl(\sqrt{u_i},\sqrt{\gamma_i}:i\in I\bigr).
+ \label{eq:L}
+\end{equation}
+The field $L_k$ is the normal closure of $H_k/F$: every $F$-embedding sends
+each displayed square root to a signed square root of another displayed
+radicand, while $L_k$ contains all such conjugates.
+
+\begin{lemma}[Valuation rank detects all square classes]
+\label{lem:kummerrank}
+The $2\delta_k$ classes
+\[
+ [u_i],\ [\gamma_i]\in E^*/E^{*2}\qquad(i\in I)
+\]
+are linearly independent over $\Ftwo$.
+\end{lemma}
+
+\begin{proof}
+Suppose a product
+\[
+ \prod_{i\in I}u_i^{a_i}\gamma_i^{b_i}
+\]
+is a square in $E$, with $a_i,b_i\in\Ftwo$.  Evaluating its valuation modulo
+two at each of the $2\delta_k$ primes in
+Proposition~\ref{prop:fullmatrix} says
+\[
+ \mathcal V(a_i,b_i)_{i\in I}^{\mathsf T}=0.
+\]
+The matrix $\mathcal V$ is invertible, so every $a_i$ and $b_i$ is zero.
+\end{proof}
+
+\begin{theorem}[All-$k$ two-radical Kummer closure]
+\label{thm:main}
+For every $k\geq3$, on the generic locus described above,
+\begin{align}
+ [H_k:K]&=4, & [H_k:F]&=4\delta_k,\label{eq:sheetdegree}\\
+ \Gal(L_k/E)&\cong(C_2^2)^{\delta_k},
+ &
+ \Gal(L_k/F)&\cong C_2^2\wrp S_{\delta_k}.
+ \label{eq:groups}
+\end{align}
+Consequently,
+\begin{equation}
+ |\Gal(L_k/F)|=2^{2\delta_k}\delta_k!.
+ \label{eq:order}
+\end{equation}
+Equivalently, the conjugate Kummer relation module is zero.
+\end{theorem}
+
+\begin{proof}
+Lemma~\ref{lem:kummerrank} proves that the span in $E^*/E^{*2}$ of the
+$2\delta_k$ conjugate radicands has full dimension $2\delta_k$.  Kummer
+theory in characteristic different from two therefore gives
+\[
+ \Gal(L_k/E)\cong(C_2)^{2\delta_k}\cong(C_2^2)^{\delta_k}.
+\]
+In particular, the two classes $[u]$ and $[\gamma_k]$ are independent in
+$K^*/K^{*2}$, proving $[H_k:K]=4$ and hence \eqref{eq:sheetdegree}.
+
+Restriction to $E$ gives an exact sequence
+\[
+ 1\longrightarrow(C_2^2)^{\delta_k}
+ \longrightarrow\Gal(L_k/F)
+ \longrightarrow S_{\delta_k}\longrightarrow1.
+\]
+Every automorphism permutes the embedding labels and may change the signs of
+the two square roots above each label.  Thus $\Gal(L_k/F)$ embeds in the
+permutational wreath product
+\[
+ (C_2^2)^{\delta_k}\rtimes S_{\delta_k}.
+\]
+Its kernel is the full base group $(C_2^2)^{\delta_k}$ and its projection to
+$S_{\delta_k}$ is surjective.  A subgroup of a semidirect product that
+contains the full normal factor and surjects onto the quotient is the whole
+semidirect product.  This proves \eqref{eq:groups}; taking orders gives
+\eqref{eq:order}.  The relation module is the kernel of the map from the free
+$2\delta_k$-dimensional permutation module to the conjugate square-class
+span, and Lemma~\ref{lem:kummerrank} shows that kernel is zero.
+\end{proof}
+
+\begin{corollary}[No additional cross-term channel]
+\label{cor:nothird}
+Adjoining $\sqrt{\gammam}$ to $H_k$ does not enlarge it:
+\[
+ K(\sqrt u,\sqrt{\gamma_k},\sqrt{\gammam})
+ =K(\sqrt u,\sqrt{\gamma_k}).
+\]
+\end{corollary}
+
+\begin{proof}
+Equation~\eqref{eq:masteridentity} gives
+\[
+ \sqrt{\gammam}=\frac{2\beta_k\sqrt u}{\sqrt{\gamma_k}}
+\]
+after a compatible choice of signs.
+\end{proof}
+
+\section{Low-\texorpdfstring{$k$}{k} specializations}
+\label{sec:specializations}
+
+The first four nontrivial members are shown in Table~\ref{tab:lowk}.  The
+$k=3,5,6$ contact calculations are exact checks of the uniform proof; the
+$k=4$ row recovers the established static horizon crown.
+
+\begin{table}[htbp]
+\centering
+\caption{First all-$k$ two-channel closures.}
+\label{tab:lowk}
+\renewcommand{\arraystretch}{1.18}
+\begin{tabular}{@{}c c c c l@{}}
+\toprule
+$k$ & $\delta_k$ & Kummer rank & $[H_k:F]$ & Normal-closure group\\
+\midrule
+3 & 4  & 8  & 16 & $C_2^2\wrp S_4$\\
+4 & 5  & 10 & 20 & $C_2^2\wrp S_5$\\
+5 & 16 & 32 & 64 & $C_2^2\wrp S_{16}$\\
+6 & 22 & 44 & 88 & $C_2^2\wrp S_{22}$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+For reference, the explicit symmetric expressions are
+\begin{align*}
+ \alpha_3&=e_3+ue_1,
+ &\beta_3&=e_2+u,\\
+ \alpha_4&=e_4+ue_2+u^2,
+ &\beta_4&=e_3+ue_1,\\
+ \alpha_5&=e_5+ue_3+u^2e_1,
+ &\beta_5&=e_4+ue_2+u^2,\\
+ \alpha_6&=e_6+ue_4+u^2e_2+u^3,\\
+ \beta_6&=e_5+ue_3+u^2e_1.
+\end{align*}
+The alternating pattern is not empirical: it is exactly the parity
+decomposition proved in Lemma~\ref{lem:decomposition}.
+
+\section{Exceptional loci and theorem boundary}
+\label{sec:exceptions}
+
+The theorem is generic, and its proof identifies the excluded set rather
+than hiding it in a single unspecified discriminant.  The argument localizes
+away from the following divisors and their higher intersections:
+
+\begin{enumerate}
+\item $P=0$, where one or more charge parameters vanish and the norm square
+      $P^2$ degenerates;
+\item $N_i^2=N_j^2$, where the multiquadratic degree or normalized sheet
+      structure can drop;
+\item the reciprocal sub-balance loci
+      $\sum_i\eps_i/N_i=0$, where the chosen signed contact ceases to be
+      simple or $\beta_k$ ceases to be a unit;
+\item intersections $\ell_\eps=\ell_\eta=0$ of distinct signed walls, where
+      more than one contact root can occur simultaneously;
+\item the base discriminant and leading-coefficient loci of the mass
+      polynomial; and
+\item characteristic two, where valuation parity and ordinary quadratic
+      Kummer theory require replacement.
+\end{enumerate}
+
+Each exclusion is proper.  In particular, the reciprocal sub-balance
+function is not identically zero, and the signed wall forms are pairwise
+distinct.  Thus the open locus used by the proof is nonempty.  Because the
+base group and Kummer rank are generic open conditions, the intersection of
+their nonempty open loci is again nonempty in the irreducible parameter
+space.
+
+For even $k$, balanced sign classes alter the pole count at infinity and are
+responsible for the binomial correction in $\delta_k$.  They do not affect the
+finite signed-contact calculation: the local expansion
+\eqref{eq:localexpansion}, the matrix $B$, and the off-sheet identity remain
+unchanged.
+
+\section{Consequences}
+
+The theorem closes the static all-$k$ Kummer relation-module problem for the
+canonical norm-derived two-channel cover.  Once the symmetric base group is
+known, no new large Galois computation is required: the full result is forced
+by two sheet-local contact types and the global identity
+\eqref{eq:masteridentity}.
+
+The formula also explains why the $k=4$ calculation was reusable.  The
+published relation
+\[
+ [\gamma_4-4P]=[u][\gamma_4]
+\]
+is not a special multiplicative coincidence.  It is the $k=4$ member of
+\[
+ [\gamma_k-4P]=[u][\gamma_k]
+\]
+for every $k$.  What is special at four charges is the established physical
+entropy interpretation, not the underlying Kummer algebra.
+
+The same architecture can be applied to further decorated channels.  For any
+additional canonical radicand, the remaining work is sharply constrained:
+identify its divisor types, prove regularity, compute the new sheet-level
+parity rows, and test whether the enlarged matrix remains invertible.  The
+base permutation group and the two channels proved here need not be rebuilt.
+
+\section*{Reproducibility note}
+
+The exact $k=3$ and $k=6$ symbolic identities, contact mass norms, simple-root
+checks and parity matrices are recorded in the machine-verifiable evidence
+package \cite{KillTest}.  The $k=5$ specialization was independently replayed
+with the same exact builder, giving degree $16$, contact rows $(1,0)$ and
+$(1,1)$, and Kummer rank $32$.  These calculations are checks of the theorem,
+not premises of its proof.
+
+{\small
+\begin{thebibliography}{9}
+
+\bibitem{WeightedMonodromy}
+W.~Lloyd,
+\emph{Generic Symmetric Monodromy of Weighted Multiquadratic Sums: A Complete
+All-$k$ Theorem with a Kummer--Wreath Lifting Criterion},
+completed theorem-and-proof paper, v1.0, 16 July 2026.
+
+\bibitem{ReflectionDescent}
+W.~Lloyd,
+\emph{Audit Report---R6 + R7 Generic Birationality and Reflection Descent},
+proof audit, 2026.
+
+\bibitem{KummerLift}
+W.~Lloyd,
+\emph{Conjugate Kummer Modules and Wreath-Product Closures},
+general theorem and proof, 10 July 2026.
+
+\bibitem{HorizonCover}
+W.~Lloyd,
+\emph{Galois Theory of the Horizon Cover: Abel--Ruffini Obstruction,
+Kummer Lifts, and Wreath-Product Monodromy at Four Charges},
+technical preprint, v1.0, 11 July 2026.
+
+\bibitem{KillTest}
+W.~Lloyd and OpenAI Codex,
+\emph{The $k=3/k=6$ Radicand Kill Test},
+exact machine-verifiable evidence report, v1.0, 18 July 2026.
+
+\end{thebibliography}
+}
+
+\end{document}

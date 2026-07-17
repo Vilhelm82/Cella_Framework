@@ -56,7 +56,7 @@ references. **No mathematical retirement has occurred.** This audit sits *above*
 byte-level dedup: the library resolved exact mirrors and render pairs; succession is a
 mathematical relation the byte layer cannot decide.
 
-### Post-audit corpus delta — 2026-07-16/17
+### Post-audit corpus delta — 2026-07-16/18
 
 The session added the completed paper
 `GENERIC_SYMMETRIC_MONODROMY_OF_WEIGHTED_MULTIQUADRATIC_SUMS_v1.0.md` under
@@ -89,6 +89,15 @@ declared relations say that the new paper:
 - **cites** `DBP:proof:gs_morse` as a retained proof source; and
 - **supplements** `DBP:thm:kummer_wreath_lift` by fixing its exact square-class/rank interface.
 
+On 2026-07-18 the remaining static all-\(k\) square-class obligation was discharged by
+`ALL_K_TWO_RADICAL_KUMMER_CLOSURE_v1.0.tex` (with its render-verified PDF), registered as
+artifact `PAP-0513` and DAG node `DBP:paper:all_k_two_radical_kummer_closure`.  It constructs
+the canonical norm-derived radicand \(\gamma_k=2(\alpha_k+P)\), proves
+\(\gamma_k(\gamma_k-4P)=4u\beta_k^2\), extracts the two universal signed-contact rows
+\((1,0)\) and \((1,1)\), and hence proves rank \(2\delta_k\) and closure
+\(C_2^2\wr S_{\delta_k}\) for every \(k\geq3\).  This closes `DBP:gap:IV3`; only the
+four-charge member currently carries the established physical entropy interpretation.
+
 ### Immediate ROI support closeout — 2026-07-17
 
 The first low-risk support tranche identified by the ROI outlook is now complete, except for
@@ -118,8 +127,9 @@ The closeout is recorded by
 receipt. It intentionally makes no change to Paper IV or `DBP:gap:IV2`.
 
 The `_catalogue/LEDGER` has not yet been rebuilt, so its 508-artifact figure remains the
-2026-07-15 generated snapshot. Counting the admitted paper gives an effective current corpus of
-**509 unique artifacts**; generated catalogue totals should be refreshed before publication.
+2026-07-15 generated snapshot.  With post-snapshot admissions `PAP-0509` through `PAP-0513`,
+the effective current corpus contains **513 unique artifacts**; generated catalogue totals should
+be refreshed before publication.
 
 ### DBP-relevant census
 
@@ -132,7 +142,7 @@ Five subject families carry the DBP ensemble. Deduplicated by content:
 | `dbp_periods_landen_and_elliptic_structure` | Paper III | 24 |
 | `galois_horizon_and_kummer_covers` | Paper IV + weighted all-\(k\) successor | 82 |
 | `cella_residue_and_coupling_theory` | Paper V / cross-program | 62 |
-| **Total** | | **340 unique** (339 in the generated ledger + post-audit `PAP-0509`) |
+| **Total** | | **340 in the adjudicated census snapshot**; cross-family `PAP-0510`--`PAP-0513` are tracked above but not redistributed into these mutually exclusive rows |
 
 Generated-snapshot extension mix (before `PAP-0509`): 165 `.md`, **87 `.py`** (verifiers → computational supplements), 27
 `.json`, 24 `.txt`, 13 `.pdf`, 9 `.tex`, 9 `.m2`, 3 `.zip`, 2 `.bak`. Roughly **79 distinct
@@ -183,7 +193,8 @@ adjudicated here.
    │         (arbitrary nonzero weights, exact degree/genus/ramification, generic geometric + arithmetic S_d)
    │         independent companion: self_glue_monodromy.tex (imprimitive wreath monodromy)
    │         retained development sources: ALL_K_MONODROMY_NOTE + GS_GENERIC_MORSE_LEMMA_PROOF
-   │         remaining all-k wall: concrete Kummer/crown square-class independence R=0
+   │         all-k Kummer successor: ALL_K_TWO_RADICAL_KUMMER_CLOSURE_v1.0.tex [RELEASED]
+   │         (canonical norm radicand, full square-class rank, C2^2 wr S_delta_k; IV3 closed)
    │
  Paper V  ── Selected Quotient Groupoids (capstone) ....... DOES NOT EXIST — held conjecture   [NOT A PAPER]
              foundations proved & on disk: SQG foundation, R3 AC-fold realization, CCE-8
@@ -210,8 +221,10 @@ adjudicated here.
    for its base-monodromy front: it proves the exact degree, genus and ramification, and generic
    geometric and arithmetic `S_d` for every `k≥3` and every fixed nonzero weight vector. The
    older ALL_K note is superseded as proof authority but retained for development provenance and
-   low-`k` computations. Maximal Kummer/wreath closure is still conditional on proving `R=0` for
-   the concrete conjugate radicands.
+   low-`k` computations. The companion `ALL_K_TWO_RADICAL_KUMMER_CLOSURE_v1.0` now proves
+   `R=0` for the canonical norm-derived two-channel radicands and therefore supplies the maximal
+   Kummer/wreath closure.  This algebraic statement is all-`k`; its physical entropy reading is
+   asserted only at `k=4`.
 5. **Paper V does not exist.** It is a held capstone conjecture; its foundations (SQG category, R3
    realization, CCE-8) are proved, but the equivalence/closure/coherence theorems are open.
 
@@ -385,6 +398,7 @@ source and no constant/sign/ring contradiction was found. The unresolved items i
 |---|---|---|
 | `01_…/galois_horizon_cover_v1_0.tex` (+`.pdf`) + `[docs] …publication_package/` | CANONICAL_RETAIN | released paper + package |
 | `01_…/GENERIC_SYMMETRIC_MONODROMY_OF_WEIGHTED_MULTIQUADRATIC_SUMS_v1.0.md` (`PAP-0509`) | CANONICAL_RETAIN | reusable all-`k`, all-nonzero-weight proof authority; DAG-released |
+| `01_…/ALL_K_TWO_RADICAL_KUMMER_CLOSURE_v1.0.tex` + `.pdf` (`PAP-0513`) | CANONICAL_RETAIN | canonical all-`k` Kummer-rank and `C_2^2\wr S_{\delta_k}` closure proof; closes IV3 |
 | `KUMMER_MODULE_WREATH_LIFT`, `ROTATING_KUMMER_RANK_JUMP`, `R9_STATIC_CLOSURE`, `ROTATING_THREE_CHANNEL_WREATH`, `WREATH_COVER_INERTIA_BRANCH_STRATIFICATION_v1_1` | PROOF_SUPPLEMENT_RETAIN (×5) | proofs the preprint summarizes (bundled in package) |
 | `ALL_K_MONODROMY_THEOREM_NOTE_2026-07-10.md` | COMPUTATIONAL_SUPPLEMENT_RETAIN | superseded as proof authority; preserves low-`k` certificates and development record |
 | `GS_GENERIC_MORSE_LEMMA_PROOF_2026-07-10.md` | PROOF_SUPPLEMENT_RETAIN | cited independent route and provenance; no longer sole proof authority |
@@ -642,18 +656,13 @@ source so consolidation cannot accidentally declare it closed.
    `CCE_6_WHOLE_SURFACE_TOPOLOGY_OBSTRUCTION_v1.0.md`; Paper III §9 "Not claimed".
 5. **Primary↔dual Landen transformation** `I_primary(λ)=α(√2)·I_dual(1−λ)+correction` (Paper III).
    Source: `LANDEN_TYPE_THEOREM_SOURCE.md`.
-6. **All-k Kummer/crown instantiation** (Paper IV): the universal base group is now
-   `S_{d(c)}`, but maximal decorated closure still requires proving independence of the concrete
-   `sd(c)` conjugate square classes, equivalently `R=0`. A valuation-parity matrix of full column
-   rank is sufficient, not automatic. Sources: `GENERIC_SYMMETRIC_MONODROMY…v1.0.md §10–11`;
-   `KUMMER_MODULE_WREATH_LIFT_THEOREM_2026-07-10.md`; DAG gap `DBP:gap:IV3`.
-7. **Generic complex Paper-IV monodromy / braid route** (Paper IV): exact complex loop
+6. **Generic complex Paper-IV monodromy / braid route** (Paper IV): exact complex loop
    representatives, braid execution, refinement independence, and CCE-5-route cross-transport
    compatibility. The normalized-incidence cover + inertia catalogue are *established*; the
    residual is the braid campaign over them. Sources:
    `08_cce7_horizon/CCE_7_NORMALIZED_INCIDENCE_INERTIA_IMPORT_REPORT_v1.0.md`,
    `CCE_7_STAGE_REPORT_v1.0.md`, `CCE_7_GAP_LEDGER_v1.0.md`.
-8. **Paper V category-equivalence walls**: missing DBP-arm reduction functors (P8-17); three-way
+7. **Paper V category-equivalence walls**: missing DBP-arm reduction functors (P8-17); three-way
    coherence (P8-18); general categorical closure (Theorem C); componentwise comparison diagrams.
    Full unreduced carrier equivalence is **refuted** (P8-16) — any positive theorem must concern
    explicit reductions or a common selected skeleton. Sources:
@@ -682,11 +691,13 @@ Each step is independently safe and reversible; no source is deleted — "retire
 3. **Paper II tidy.** Move the `COMPANION.md` §9 dual-constants block to the Paper III dual-constant
    close-off; retire `COMPANION.md` and the `.txt` roadmap to historical. Fix the broken verifier
    runpath. Byte-verify `lead7_kn_n3_dbp_metric_v2.pdf` before filing it superseded.
-4. **Paper IV publication integration — maintainer-reserved.** The ALL_K status splice and v1.6 map cleanup are complete.
+4. **Paper IV publication integration — maintainer-reserved.** The ALL_K status splice, v1.6 map cleanup,
+   and the standalone all-`k` two-radical closure proof are complete.
    Next, revise the released Paper IV TeX, PDF and publication-package copies as one render-verified
    unit so they cite the weighted all-`k` paper and route reusable base-monodromy claims to it.
-   Preserve the ALL_K note as a low-`k` computational and historical supplement. Leave IV3 open
-   until a concrete full-rank square-class/valuation proof establishes `R=0`.
+   Preserve the ALL_K note as a low-`k` computational and historical supplement. `IV3` is now
+   closed by the standalone full-rank square-class/valuation proof; the remaining action here is
+   citation and publication-package integration, not mathematics.
 5. **Variant-twin cleanup.** For each `__<hash>` twin resolved in §5(c), move the superseded copy
    to `09_historical…`; fix the DUAL_CONSTANT misfile (the `cella_residue` copy is the older
    revision). Resolve the spine naming trap (the `(2)` file is the newer v0.3).

@@ -1,0 +1,36 @@
+{
+  "schema": "cella-dag-service-v1",
+  "submission_id": "SUB-ALL-K-TWO-RADICAL-KUMMER-20260718",
+  "idempotency_key": "all-k-two-radical-kummer-closure-20260718-v1",
+  "submission_digest": "sha256:6c859c76a792919ad8d1263dd0aacc49378b43b56bc93a158c4051b718d18705",
+  "base_revision": "sha256:2e4684f353ac7ce8b1312798d0eb2b2008fe799a190d9426ebe58035fb3337f2",
+  "applied_revision": "sha256:a27831ef40ade466b6b8ae4903df137d712939c979d117ca1b4869a23e211107",
+  "applied_utc": "2026-07-17T15:36:05.949148+00:00",
+  "changes": {
+    "nodes_added": [
+      "DBP:paper:all_k_two_radical_kummer_closure"
+    ],
+    "nodes_updated": [
+      "DBP:gap:IV3"
+    ],
+    "nodes_retired": [],
+    "edges_added": [
+      "e::DBP:paper:all_k_two_radical_kummer_closure::proves::DBP:gap:IV3",
+      "e::DBP:paper:all_k_two_radical_kummer_closure::cites::DBP:paper:weighted_multiquadratic_monodromy",
+      "e::DBP:paper:all_k_two_radical_kummer_closure::cites::DBP:thm:kummer_wreath_lift",
+      "e::DBP:paper:all_k_two_radical_kummer_closure::supplements::DBP:evidence:k3_k6_radicand_kill",
+      "e::DBP:paper:all_k_two_radical_kummer_closure::supplements::DBP:paper:IV"
+    ],
+    "edges_updated": [],
+    "edges_removed": [],
+    "changed_node_ids": [
+      "DBP:evidence:k3_k6_radicand_kill",
+      "DBP:gap:IV3",
+      "DBP:paper:IV",
+      "DBP:paper:all_k_two_radical_kummer_closure",
+      "DBP:paper:weighted_multiquadratic_monodromy",
+      "DBP:thm:kummer_wreath_lift"
+    ]
+  },
+  "applied_submission_path": "/home/williaml/Cella Framework/DAG_Library/submissions/applied/SUB-ALL-K-TWO-RADICAL-KUMMER-20260718.json"
+}

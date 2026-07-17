@@ -1,0 +1,431 @@
+{
+  "schema_version": 1,
+  "submission_id": "SUB-ALL-K-TWO-RADICAL-KUMMER-20260718",
+  "base_revision": "sha256:2e4684f353ac7ce8b1312798d0eb2b2008fe799a190d9426ebe58035fb3337f2",
+  "idempotency_key": "all-k-two-radical-kummer-closure-20260718-v1",
+  "submitted_by": "will+codex",
+  "summary": "Admit the complete all-k two-radical Kummer-closure proof, its clean PDF and exact replay gate; register PAP-0513 and close DBP:gap:IV3.",
+  "artifacts": [
+    {
+      "schema_version": 1,
+      "artifact_id": "PAP-0513",
+      "artifact_type": "paper",
+      "title": "All-k Two-Radical Kummer Closure",
+      "summary": "A self-contained proof for every k>=3. It constructs the canonical norm-derived radicand gamma_k=2(alpha_k+P), proves gamma_k(gamma_k-4P)=4u beta_k^2, derives universal signed-contact rows (1,0) and (1,1), establishes square-class rank 2 delta_k, and obtains generic normal closure C2^2 wr S_delta_k. The physical entropy interpretation is asserted only for k=4.",
+      "subject_families": [
+        "galois_horizon_and_kummer_covers"
+      ],
+      "claim_status": "proved",
+      "lifecycle_status": "released",
+      "provenance": {
+        "authors": [
+          "William Lloyd",
+          "OpenAI Codex"
+        ],
+        "created_utc": "2026-07-18T00:00:00+10:00",
+        "origin_repository": "Cella Framework",
+        "source_pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/ALL_K_TWO_RADICAL_KUMMER_CLOSURE_v1.0.tex"
+      },
+      "files": [
+        {
+          "role": "source",
+          "path": "Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/ALL_K_TWO_RADICAL_KUMMER_CLOSURE_v1.0.tex",
+          "sha256": "2bb83f1246b02491dae3f8ec6b94c90f568c99ff576d12707a4fc04a208c4fac",
+          "media_type": "application/x-tex"
+        },
+        {
+          "role": "rendered-paper",
+          "path": "Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/ALL_K_TWO_RADICAL_KUMMER_CLOSURE_v1.0.pdf",
+          "sha256": "0102b55a9e9d8e8155c129aa11ecb08ec1ed47846635d956023608c1e92a21fc",
+          "media_type": "application/pdf"
+        },
+        {
+          "role": "gate",
+          "path": "engine/tests/gate_all_k_two_radical_kummer.py",
+          "sha256": "e473890c91767bc685c2c05385665be112795fa01bbb8311174ac69acab556e3",
+          "media_type": "text/x-python"
+        },
+        {
+          "role": "succession-map",
+          "path": "research/campaigns/Succession_Map/DBP_PAPER_SUCCESSION_AND_REDUNDANCY_MAP_v1.0.md",
+          "sha256": "2d03559322e2e479b579c95a577362efce36d64d6eee214480c5744ca2d14a6a",
+          "media_type": "text/markdown"
+        }
+      ],
+      "claims": [
+        {
+          "claim_id": "ALLK-2RAD-C1",
+          "statement": "For every k>=3, alpha_k=sum_r u^r e_{k-2r}(w), beta_k=sum_r u^r e_{k-1-2r}(w), and gamma_k=2(alpha_k+P) lie in the normalized mass field and satisfy alpha_k^2-u beta_k^2=P^2 and gamma_k(gamma_k-4P)=4u beta_k^2.",
+          "hypotheses": [
+            "characteristic zero",
+            "algebraically independent generic parameters",
+            "w_i^2=u+N_i^2",
+            "4M=sum_i w_i",
+            "P=product_i N_i"
+          ],
+          "scope": "canonical norm-derived second radicand for every k>=3",
+          "claim_status": "proved",
+          "proof_ids": [
+            "DBP:paper:weighted_multiquadratic_monodromy"
+          ],
+          "evidence_ids": [
+            "DBP:evidence:k3_k6_radicand_kill"
+          ]
+        },
+        {
+          "claim_id": "ALLK-2RAD-C2",
+          "statement": "Even and odd signed contact divisors give valuation rows (1,0) and (1,1); all off-sheet entries are even, so orbit saturation makes the 2 delta_k conjugate square classes independent.",
+          "hypotheses": [
+            "the nonempty generic open locus excluding the explicitly listed contact, collision, discriminant and characteristic-two divisors",
+            "generic base monodromy S_delta_k"
+          ],
+          "scope": "Kummer relation module over the splitting field",
+          "claim_status": "proved",
+          "proof_ids": [
+            "DBP:thm:kummer_wreath_lift"
+          ],
+          "evidence_ids": [
+            "DBP:evidence:k3_k6_radicand_kill"
+          ]
+        },
+        {
+          "claim_id": "ALLK-2RAD-C3",
+          "statement": "The two-radical extension K(sqrt(u),sqrt(gamma_k)) has degree 4 over K, its normal closure has degree 2^(2 delta_k) delta_k! over F, and its Galois group is C2^2 wr S_delta_k.",
+          "hypotheses": [
+            "the hypotheses and generic open locus of ALLK-2RAD-C1 and ALLK-2RAD-C2",
+            "delta_k=2^(k-1) for odd k and delta_k=2^(k-1)-binom(k,k/2)/2 for even k"
+          ],
+          "scope": "generic canonical two-channel cover for every k>=3",
+          "claim_status": "proved",
+          "proof_ids": [
+            "DBP:paper:weighted_multiquadratic_monodromy",
+            "DBP:thm:kummer_wreath_lift"
+          ],
+          "evidence_ids": [
+            "DBP:evidence:k3_k6_radicand_kill"
+          ]
+        }
+      ],
+      "relations": [
+        {
+          "target_id": "DBP:gap:IV3",
+          "relation": "proves",
+          "basis": "The paper supplies the missing concrete all-k radicand, full-rank valuation matrix and R=0 proof.",
+          "source_pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/ALL_K_TWO_RADICAL_KUMMER_CLOSURE_v1.0.tex"
+        },
+        {
+          "target_id": "DBP:paper:weighted_multiquadratic_monodromy",
+          "relation": "cites",
+          "basis": "Uses the released all-k base degree and generic symmetric monodromy theorem.",
+          "source_pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/ALL_K_TWO_RADICAL_KUMMER_CLOSURE_v1.0.tex"
+        },
+        {
+          "target_id": "DBP:thm:kummer_wreath_lift",
+          "relation": "cites",
+          "basis": "Instantiates the general Kummer-module wreath criterion after proving the concrete relation module has full rank.",
+          "source_pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/ALL_K_TWO_RADICAL_KUMMER_CLOSURE_v1.0.tex"
+        },
+        {
+          "target_id": "DBP:evidence:k3_k6_radicand_kill",
+          "relation": "supplements",
+          "basis": "Promotes the exact low-k falsifier pattern to a complete arbitrary-k proof while retaining the low-k package as independent evidence.",
+          "source_pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/ALL_K_TWO_RADICAL_KUMMER_CLOSURE_v1.0.tex"
+        },
+        {
+          "target_id": "DBP:paper:IV",
+          "relation": "supplements",
+          "basis": "Generalizes the algebraic two-channel Kummer closure beyond the released four-charge case without extending its physical entropy interpretation.",
+          "source_pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/ALL_K_TWO_RADICAL_KUMMER_CLOSURE_v1.0.tex"
+        }
+      ],
+      "external_ids": {
+        "paper_artifacts": [
+          "PAP-0513"
+        ]
+      },
+      "declared_impacts": [
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:IV3",
+          "note": "Close the all-k Kummer/crown instantiation gap: the concrete square-class relation module is proved to have rank 2 delta_k."
+        }
+      ],
+      "llm": {
+        "one_sentence_purpose": "Turn the surviving k=3/k=5/k=6 radicand pattern into a complete reusable all-k Kummer-closure theorem.",
+        "key_terms": [
+          "all-k Kummer closure",
+          "canonical norm radicand",
+          "gamma_k",
+          "signed contacts",
+          "valuation parity",
+          "square-class rank",
+          "wreath product",
+          "R=0"
+        ],
+        "retrieval_questions": [
+          "What is the canonical second radicand for arbitrary k?",
+          "Why do the conjugate radicands have full square-class rank?",
+          "What is the generic normal-closure group of the all-k two-channel cover?",
+          "Which part of the result has a physical entropy interpretation?"
+        ],
+        "context_priority": "critical",
+        "context_role": "core"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "theorem_scope": "algebraic all-k for k>=3",
+        "physical_scope_guard": "entropy interpretation established only at k=4",
+        "render": {
+          "pages": 9,
+          "paper_size": "A4",
+          "warnings": 0
+        }
+      }
+    }
+  ],
+  "graph_delta": {
+    "upsert_nodes": [
+      {
+        "id": "DBP:paper:all_k_two_radical_kummer_closure",
+        "label": "All-k Two-Radical Kummer Closure",
+        "type": "paper",
+        "claim_status": "proved",
+        "lifecycle_status": "released",
+        "reachability": null,
+        "tracked": false,
+        "layer": "succession",
+        "summary": "Complete all-k proof for the canonical norm-derived two-channel cover: gamma_k=2(alpha_k+P), universal contact matrix B=[[1,0],[1,1]], square-class rank 2 delta_k, and generic closure C2^2 wr S_delta_k for every k>=3. Physical entropy meaning is retained only at k=4.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/ALL_K_TWO_RADICAL_KUMMER_CLOSURE_v1.0.tex",
+            "sha256": "2bb83f1246b02491dae3f8ec6b94c90f568c99ff576d12707a4fc04a208c4fac"
+          },
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/ALL_K_TWO_RADICAL_KUMMER_CLOSURE_v1.0.pdf",
+            "sha256": "0102b55a9e9d8e8155c129aa11ecb08ec1ed47846635d956023608c1e92a21fc"
+          }
+        ],
+        "external_ids": {
+          "paper_artifacts": [
+            "PAP-0513"
+          ],
+          "artifacts": [
+            "PAP-0513"
+          ]
+        },
+        "facets": {
+          "paper": "IV",
+          "subject_family": "galois_horizon_and_kummer_covers",
+          "scope": "all-k canonical two-radical Kummer closure",
+          "reusable": true,
+          "source_id": "cella-submissions-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [
+            "all-k Kummer closure",
+            "gamma_k",
+            "alpha_k",
+            "beta_k",
+            "signed contact",
+            "square-class independence",
+            "C2^2 wr S_delta_k"
+          ],
+          "retrieval_questions": [
+            "How is the all-k second radicand constructed?",
+            "Why is the Kummer relation module free?",
+            "What closes DBP gap IV3?"
+          ],
+          "context_priority": "critical",
+          "context_role": "core"
+        },
+        "extensions": {
+          "artifact_id": "PAP-0513",
+          "proof_authority": true,
+          "physical_scope_guard": "entropy interpretation established only at k=4"
+        }
+      },
+      {
+        "id": "DBP:gap:IV3",
+        "label": "All-k Kummer/crown wreath closure (resolved)",
+        "type": "gap",
+        "claim_status": "proved",
+        "lifecycle_status": "released",
+        "reachability": "MODERATE",
+        "tracked": false,
+        "layer": "frontier",
+        "summary": "Resolved 2026-07-18 by PAP-0513: the canonical norm-derived second radicand has universal contact matrix B=[[1,0],[1,1]], full square-class rank 2 delta_k and generic closure C2^2 wr S_delta_k for every k>=3.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/02_theorems_and_lemmas/galois_horizon_and_kummer_covers/KUMMER_MODULE_WREATH_LIFT_THEOREM_2026-07-10.md#L437",
+            "sha256": "ee9ef7e7a64ad7e2737094e1a3097e326fb33bc8ccff4490a9189f6b5448e293"
+          },
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/ALL_K_TWO_RADICAL_KUMMER_CLOSURE_v1.0.tex",
+            "sha256": "2bb83f1246b02491dae3f8ec6b94c90f568c99ff576d12707a4fc04a208c4fac"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0114",
+            "E-0125",
+            "U-1289",
+            "U-1305",
+            "U-1306",
+            "U-1311",
+            "U-1313",
+            "U-1338",
+            "U-1346",
+            "U-1358",
+            "U-1373",
+            "U-1383",
+            "U-1394",
+            "U-1403",
+            "U-1422",
+            "U-1429",
+            "U-1430",
+            "U-1433"
+          ],
+          "paper_artifacts": [
+            "PAP-0043",
+            "PAP-0513"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "cce_ledger": [
+            "Kummer-§11"
+          ],
+          "artifacts": [
+            "PAP-0513"
+          ]
+        },
+        "facets": {
+          "paper": "IV",
+          "subject_family": "galois_horizon_and_kummer_covers",
+          "reachability_class": "MODERATE",
+          "source_id": "dbp-frontier-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [
+            "all-k Kummer closure",
+            "resolved IV3",
+            "R=0",
+            "valuation parity"
+          ],
+          "retrieval_questions": [
+            "What closed DBP gap IV3?"
+          ],
+          "context_priority": "high",
+          "context_role": "frontier"
+        },
+        "extensions": {
+          "next_object": "Integrate PAP-0513 as a citation into the released Paper IV source and publication package without broadening the k=4 entropy claim.",
+          "tracked_ref": "Kummer-§11",
+          "resolution": "Canonical norm-derived all-k two-channel relation module has full rank 2 delta_k",
+          "resolved_utc": "2026-07-18T00:00:00+10:00"
+        }
+      }
+    ],
+    "upsert_edges": [
+      {
+        "id": "e::DBP:paper:all_k_two_radical_kummer_closure::proves::DBP:gap:IV3",
+        "from": "DBP:paper:all_k_two_radical_kummer_closure",
+        "to": "DBP:gap:IV3",
+        "relation": "proves",
+        "label": "All-k two-radical paper proves IV3 closure",
+        "basis": "The paper constructs the concrete radicands and proves the full-rank 2 delta_k valuation matrix required for R=0.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/ALL_K_TWO_RADICAL_KUMMER_CLOSURE_v1.0.tex",
+            "sha256": "2bb83f1246b02491dae3f8ec6b94c90f568c99ff576d12707a4fc04a208c4fac"
+          }
+        ],
+        "facets": {
+          "scope": "all-k canonical two-channel cover"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:paper:all_k_two_radical_kummer_closure::cites::DBP:paper:weighted_multiquadratic_monodromy",
+        "from": "DBP:paper:all_k_two_radical_kummer_closure",
+        "to": "DBP:paper:weighted_multiquadratic_monodromy",
+        "relation": "cites",
+        "label": "All-k Kummer paper uses the weighted base-monodromy theorem",
+        "basis": "The cited paper supplies degree delta_k, reflection descent and generic base group S_delta_k.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/ALL_K_TWO_RADICAL_KUMMER_CLOSURE_v1.0.tex",
+            "sha256": "2bb83f1246b02491dae3f8ec6b94c90f568c99ff576d12707a4fc04a208c4fac"
+          }
+        ],
+        "facets": {},
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:paper:all_k_two_radical_kummer_closure::cites::DBP:thm:kummer_wreath_lift",
+        "from": "DBP:paper:all_k_two_radical_kummer_closure",
+        "to": "DBP:thm:kummer_wreath_lift",
+        "relation": "cites",
+        "label": "All-k Kummer paper instantiates the general wreath-lift theorem",
+        "basis": "The paper proves the concrete relation module has the full rank required by the general theorem.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/ALL_K_TWO_RADICAL_KUMMER_CLOSURE_v1.0.tex",
+            "sha256": "2bb83f1246b02491dae3f8ec6b94c90f568c99ff576d12707a4fc04a208c4fac"
+          }
+        ],
+        "facets": {},
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:paper:all_k_two_radical_kummer_closure::supplements::DBP:evidence:k3_k6_radicand_kill",
+        "from": "DBP:paper:all_k_two_radical_kummer_closure",
+        "to": "DBP:evidence:k3_k6_radicand_kill",
+        "relation": "supplements",
+        "label": "All-k proof promotes the surviving low-k radicand pattern",
+        "basis": "The exact k=3 and k=6 package remains an independent replay check of the theorem's odd/even specializations.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/ALL_K_TWO_RADICAL_KUMMER_CLOSURE_v1.0.tex",
+            "sha256": "2bb83f1246b02491dae3f8ec6b94c90f568c99ff576d12707a4fc04a208c4fac"
+          }
+        ],
+        "facets": {},
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:paper:all_k_two_radical_kummer_closure::supplements::DBP:paper:IV",
+        "from": "DBP:paper:all_k_two_radical_kummer_closure",
+        "to": "DBP:paper:IV",
+        "relation": "supplements",
+        "label": "All-k algebraic closure supplements released Paper IV",
+        "basis": "It generalizes the two-channel Kummer algebra while explicitly fencing the physical entropy interpretation to k=4.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/galois_horizon_and_kummer_covers/ALL_K_TWO_RADICAL_KUMMER_CLOSURE_v1.0.tex",
+            "sha256": "2bb83f1246b02491dae3f8ec6b94c90f568c99ff576d12707a4fc04a208c4fac"
+          }
+        ],
+        "facets": {},
+        "extensions": {}
+      }
+    ],
+    "retire_nodes": [],
+    "remove_edges": []
+  },
+  "declared_impacts": [
+    {
+      "kind": "reevaluate",
+      "target_id": "DBP:gap:IV3",
+      "note": "Promote IV3 from open/proposed to proved/released and stop tracking it as an active frontier gap."
+    }
+  ],
+  "extensions": {
+    "render_verified": true,
+    "gate": "engine/tests/gate_all_k_two_radical_kummer.py"
+  }
+}
