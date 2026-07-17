@@ -1,0 +1,3723 @@
+{
+  "schema_version": 1,
+  "submission_id": "submit-source-digest-reconciliation-2026-07-17",
+  "base_revision": "sha256:e0293b521bea39dc9d2258550b159f5fe57d5277b49a41bdd8d591ca8bbd7e71",
+  "idempotency_key": "source-digest-reconciliation:roi-closeout:2026-07-17:v1",
+  "submitted_by": "codex.claire",
+  "summary": "Reconcile every canonical DAG node and edge that cites a source authority changed by the ROI immediate-support closeout, so strict file verification returns to zero errors.",
+  "artifacts": [
+    {
+      "schema_version": 1,
+      "artifact_id": "PAP-0189",
+      "artifact_type": "paper",
+      "title": "Active Role-Jet Orbit Calculus",
+      "summary": "Canonical Paper I strengthened with the symbolic n=3 RoleChSpec quotient converse, an all-finite-order active-rechart recurrence, and the ambient-n channel law with explicit n=4 grid.",
+      "subject_families": [
+        "dbp_role_channel_and_orbit_geometry"
+      ],
+      "claim_status": "proved",
+      "lifecycle_status": "released",
+      "provenance": {
+        "authors": [
+          "Will Lloyd"
+        ],
+        "created_utc": null,
+        "origin_repository": "Cella Framework",
+        "source_pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex"
+      },
+      "files": [
+        {
+          "role": "paper_source",
+          "path": "Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+          "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc",
+          "media_type": "application/x-tex"
+        }
+      ],
+      "claims": [
+        {
+          "claim_id": "ROI-CLOSE-I1",
+          "statement": "On the regular n=3 locus, equality of full RoleChSpec fingerprints is equivalent to equality modulo the gauge image Im G_g; the recovery minor has determinant 32/(g1 g2 g3).",
+          "hypotheses": [],
+          "scope": "Paper I, regular same-gradient n=3 Hessian gauge quotient.",
+          "claim_status": "proved",
+          "proof_ids": [],
+          "evidence_ids": []
+        },
+        {
+          "claim_id": "ROI-CLOSE-I2",
+          "statement": "The homogeneous recurrence q_d=-a^-1 R_d constructs every finite inverse jet and commutes with truncation for every finite word in the active-role generators.",
+          "hypotheses": [],
+          "scope": "Paper I, finite jets on regular charts with nonzero first-order role denominator.",
+          "claim_status": "proved",
+          "proof_ids": [],
+          "evidence_ids": []
+        },
+        {
+          "claim_id": "ROI-CLOSE-I3",
+          "statement": "The sigma_2 channel law is a sum of coordinate-triple contributions in ambient n, and the complete n=4 Gaussian-Kronecker row has four explicit Newton channels.",
+          "hypotheses": [],
+          "scope": "Paper I ambient channel decomposition; no n>=4 RoleChSpec injectivity or singular-stratum claim.",
+          "claim_status": "proved",
+          "proof_ids": [],
+          "evidence_ids": []
+        }
+      ],
+      "relations": [],
+      "external_ids": {
+        "paper_artifacts": [
+          "PAP-0189"
+        ]
+      },
+      "declared_impacts": [
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:I1",
+          "note": "Close the immediate Paper I support gap while preserving its explicit higher-dimensional and singular walls."
+        },
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:I2",
+          "note": "Close the immediate Paper I support gap while preserving its explicit higher-dimensional and singular walls."
+        },
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:I3",
+          "note": "Close the immediate Paper I support gap while preserving its explicit higher-dimensional and singular walls."
+        }
+      ],
+      "llm": {
+        "one_sentence_purpose": "Provide the reusable symbolic orbit, recurrence, and ambient-channel results now absorbed by canonical Paper I.",
+        "key_terms": [
+          "Paper I",
+          "RoleChSpec",
+          "gauge quotient",
+          "finite jet",
+          "ambient dimension",
+          "Gaussian-Kronecker grid"
+        ],
+        "retrieval_questions": [
+          "What closes Paper I gaps I1 through I3?",
+          "What remains open beyond the n=3 RoleChSpec converse?"
+        ],
+        "context_priority": "high",
+        "context_role": "core"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "closeout_date": "2026-07-17",
+        "source_sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+      }
+    },
+    {
+      "schema_version": 1,
+      "artifact_id": "PAP-0012",
+      "artifact_type": "paper",
+      "title": "DBP Curvature Periods of the DBP Quadric",
+      "summary": "Canonical Paper III now incorporates CCE-5 absolute corridor calibration and matrices plus CCE-6 exact native-sweep clearance, while retaining whole-surface, Landen and transcendence boundaries.",
+      "subject_families": [
+        "dbp_periods_landen_and_elliptic_structure"
+      ],
+      "claim_status": "proved",
+      "lifecycle_status": "released",
+      "provenance": {
+        "authors": [
+          "Will Lloyd"
+        ],
+        "created_utc": null,
+        "origin_repository": "Cella Framework",
+        "source_pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md"
+      },
+      "files": [
+        {
+          "role": "paper_source",
+          "path": "Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md",
+          "sha256": "69365626e738b900c85c2f03ac65c89287b4d193f439449bd3867686b9b1d805",
+          "media_type": "text/markdown"
+        }
+      ],
+      "claims": [
+        {
+          "claim_id": "ROI-CLOSE-III123",
+          "statement": "On the two released corridors, lambda_up=B_- and lambda_down=-B_-, the route-specific relative matrices and trace coordinates are exact, and native surface sweeps have the certified discriminant/resultant clearance with epsilon_*=1/105186307200.",
+          "hypotheses": [],
+          "scope": "Paper III corridor-restricted native image; excludes whole-surface saturation and scalar special-value relations.",
+          "claim_status": "proved",
+          "proof_ids": [],
+          "evidence_ids": []
+        }
+      ],
+      "relations": [],
+      "external_ids": {
+        "paper_artifacts": [
+          "PAP-0012"
+        ]
+      },
+      "declared_impacts": [
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:III1",
+          "note": "Close the stale Paper III editorial gap by incorporating its released proof authority."
+        },
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:III2",
+          "note": "Close the stale Paper III editorial gap by incorporating its released proof authority."
+        },
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:III3",
+          "note": "Close the stale Paper III editorial gap by incorporating its released proof authority."
+        }
+      ],
+      "llm": {
+        "one_sentence_purpose": "Consolidate the exact CCE-5 and CCE-6 corridor results into canonical Paper III without broadening their topology scope.",
+        "key_terms": [
+          "Paper III",
+          "CCE-5",
+          "CCE-6",
+          "Picard-Lefschetz",
+          "surface sweep",
+          "clearance"
+        ],
+        "retrieval_questions": [
+          "Which CCE-5 and CCE-6 results are now inside Paper III?",
+          "Which whole-surface claims remain open?"
+        ],
+        "context_priority": "high",
+        "context_role": "core"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "closeout_date": "2026-07-17",
+        "source_sha256": "69365626e738b900c85c2f03ac65c89287b4d193f439449bd3867686b9b1d805"
+      }
+    },
+    {
+      "schema_version": 1,
+      "artifact_id": "PAP-0010",
+      "artifact_type": "theorem",
+      "title": "Selected Quotient Groupoids Foundation",
+      "summary": "SQG foundation refreshed so Proposition 4.2 and its minimal-ring table cite the released CCE-5 absolute calibration and exact CPV half-sum.",
+      "subject_families": [
+        "dbp_role_channel_and_orbit_geometry",
+        "cella_residue_and_coupling_theory"
+      ],
+      "claim_status": "proved",
+      "lifecycle_status": "released",
+      "provenance": {
+        "authors": [
+          "Will Lloyd"
+        ],
+        "created_utc": null,
+        "origin_repository": "Cella Framework",
+        "source_pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/SELECTED_QUOTIENT_GROUPOIDS_FOUNDATION_v1.0.md"
+      },
+      "files": [
+        {
+          "role": "theorem_source",
+          "path": "Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/SELECTED_QUOTIENT_GROUPOIDS_FOUNDATION_v1.0.md",
+          "sha256": "7a0bb32bf1642c3cd772ae150bffb5297bb92773c5e50743018a748e792f9043",
+          "media_type": "text/markdown"
+        }
+      ],
+      "claims": [
+        {
+          "claim_id": "ROI-CLOSE-V1",
+          "statement": "The SQG minimal coefficient-ring classification is supported by exact integral lateral transport with lambda_up=B_-, lambda_down=-B_- and the rational CPV half-sum.",
+          "hypotheses": [],
+          "scope": "SQG Proposition 4.2 at the calibrated CCE-5 corridor scope.",
+          "claim_status": "proved",
+          "proof_ids": [],
+          "evidence_ids": []
+        }
+      ],
+      "relations": [],
+      "external_ids": {
+        "paper_artifacts": [
+          "PAP-0010"
+        ]
+      },
+      "declared_impacts": [
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:V1",
+          "note": "Replace the stale unresolved-correction citation with the released calibration theorem."
+        }
+      ],
+      "llm": {
+        "one_sentence_purpose": "Bind the SQG coefficient-ring classification to the exact released CCE-5 transport theorem.",
+        "key_terms": [
+          "SQG",
+          "coefficient rings",
+          "CCE-5",
+          "CPV midpoint",
+          "integral transport"
+        ],
+        "retrieval_questions": [
+          "What proof authority supports SQG Proposition 4.2?"
+        ],
+        "context_priority": "high",
+        "context_role": "core"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "closeout_date": "2026-07-17",
+        "source_sha256": "7a0bb32bf1642c3cd772ae150bffb5297bb92773c5e50743018a748e792f9043"
+      }
+    },
+    {
+      "schema_version": 1,
+      "artifact_id": "PAP-0511",
+      "artifact_type": "report",
+      "title": "ROI Immediate Support Closeout",
+      "summary": "Auditable succession closeout for Paper I, Paper III, the CCE-2 public route algebra, and the SQG citation refresh; Paper IV and k=4 work are explicitly excluded.",
+      "subject_families": [
+        "cross_program_and_unclassified",
+        "dbp_role_channel_and_orbit_geometry",
+        "dbp_periods_landen_and_elliptic_structure",
+        "cella_residue_and_coupling_theory"
+      ],
+      "claim_status": "demonstrated",
+      "lifecycle_status": "released",
+      "provenance": {
+        "authors": [
+          "Will Lloyd"
+        ],
+        "created_utc": "2026-07-17T10:30:00Z",
+        "origin_repository": "Cella Framework",
+        "source_pointer": "cella:research/campaigns/Succession_Map/DBP_PAPER_SUCCESSION_AND_REDUNDANCY_MAP_v1.0.md"
+      },
+      "files": [
+        {
+          "role": "succession_report",
+          "path": "research/campaigns/Succession_Map/DBP_PAPER_SUCCESSION_AND_REDUNDANCY_MAP_v1.0.md",
+          "sha256": "311e7f231da44dc644d4dc378409aab1d4ba5b5f24e430607889d00842f3a242",
+          "media_type": "text/markdown"
+        },
+        {
+          "role": "restriction_ledger",
+          "path": "Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/DBP_CCE_ARTIFICIAL_RESTRICTION_LIVE_RECONCILIATION_v1.0.md",
+          "sha256": "2aa2e57b4005e15b86986264724fa7a4fa746100cd8e150fca45657971bb7138",
+          "media_type": "text/markdown"
+        },
+        {
+          "role": "gap_ledger",
+          "path": "research/campaigns/CELLA_CONTINUATION_ENGINE/03_cce2_corridors/CCE_2_GAP_LEDGER_v1.0.md",
+          "sha256": "1cea8a2dfca0196886050778a40e45a840422e8c9a32d9c5b0eacf5d2ece1812",
+          "media_type": "text/markdown"
+        }
+      ],
+      "claims": [
+        {
+          "claim_id": "ROI-CLOSE-REPORT",
+          "statement": "The immediate low-risk ROI tranche closes I1-I3, III1-III4 and V1, with Paper IV and k=4 work excluded from the bundle.",
+          "hypotheses": [],
+          "scope": "Repository and DAG succession status after exact source and gate verification.",
+          "claim_status": "demonstrated",
+          "proof_ids": [],
+          "evidence_ids": []
+        }
+      ],
+      "relations": [],
+      "external_ids": {
+        "paper_artifacts": [
+          "PAP-0511"
+        ]
+      },
+      "declared_impacts": [
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:I1",
+          "note": "Record the verified immediate support closeout and its preserved scope fences."
+        },
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:I2",
+          "note": "Record the verified immediate support closeout and its preserved scope fences."
+        },
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:I3",
+          "note": "Record the verified immediate support closeout and its preserved scope fences."
+        },
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:III1",
+          "note": "Record the verified immediate support closeout and its preserved scope fences."
+        },
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:III2",
+          "note": "Record the verified immediate support closeout and its preserved scope fences."
+        },
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:III3",
+          "note": "Record the verified immediate support closeout and its preserved scope fences."
+        },
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:III4",
+          "note": "Record the verified immediate support closeout and its preserved scope fences."
+        },
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:V1",
+          "note": "Record the verified immediate support closeout and its preserved scope fences."
+        }
+      ],
+      "llm": {
+        "one_sentence_purpose": "Record exactly which easy ROI support tasks were completed and which mathematical walls remain.",
+        "key_terms": [
+          "ROI closeout",
+          "succession",
+          "Paper I",
+          "Paper III",
+          "CCE-2",
+          "SQG"
+        ],
+        "retrieval_questions": [
+          "Which immediate ROI tasks were closed?",
+          "Was Paper IV or k=4 changed?",
+          "Which gaps remain after the support tranche?"
+        ],
+        "context_priority": "high",
+        "context_role": "core"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "closeout_date": "2026-07-17",
+        "paper_iv_excluded": true,
+        "source_sha256": "311e7f231da44dc644d4dc378409aab1d4ba5b5f24e430607889d00842f3a242"
+      }
+    },
+    {
+      "schema_version": 1,
+      "artifact_id": "PAP-0512",
+      "artifact_type": "certificate",
+      "title": "CCE-2 Public Route Composition and Reversal Certificate",
+      "summary": "Production API and exact 14-assertion gate for replay-verified composition and reversal in the released U,L,u,l corridor groupoid.",
+      "subject_families": [
+        "dbp_periods_landen_and_elliptic_structure",
+        "cross_program_and_unclassified"
+      ],
+      "claim_status": "machine-verified",
+      "lifecycle_status": "released",
+      "provenance": {
+        "authors": [
+          "Will Lloyd"
+        ],
+        "created_utc": "2026-07-17T10:30:00Z",
+        "origin_repository": "Cella Framework",
+        "source_pointer": "cella:engine/tests/gate_continuation_cce2_route_api.py"
+      },
+      "files": [
+        {
+          "role": "implementation",
+          "path": "engine/src/cella/continuation/api.py",
+          "sha256": "7335c04ae8f303ee769b79f58808b8a1a69cd828390390a56258777163240f6f",
+          "media_type": "text/x-python"
+        },
+        {
+          "role": "verification_gate",
+          "path": "engine/tests/gate_continuation_cce2_route_api.py",
+          "sha256": "16c6f843b6abb65f04dbcd8e1407e29aea1bcee22ff71b7a3434307e3d1fe2e6",
+          "media_type": "text/x-python"
+        }
+      ],
+      "claims": [
+        {
+          "claim_id": "CCE2-ROUTE-API",
+          "statement": "compose_routes and reverse_route accept only replay-valid CCE-5 groupoid certificates, produce canonical certified words, and refuse uncertified, tampered, or noncomposable inputs.",
+          "hypotheses": [],
+          "scope": "Released two-corridor U,L,u,l groupoid only; no admission of new geometric routes.",
+          "claim_status": "machine-verified",
+          "proof_ids": [],
+          "evidence_ids": [
+            "gate_continuation_cce2_route_api:14"
+          ]
+        }
+      ],
+      "relations": [],
+      "external_ids": {
+        "paper_artifacts": [
+          "PAP-0512"
+        ]
+      },
+      "declared_impacts": [
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:III4",
+          "note": "Promote the already-proved word algebra through the public CCE-2 API with replay guards."
+        }
+      ],
+      "llm": {
+        "one_sentence_purpose": "Expose certified route composition and reversal without weakening geometric route-admission guards.",
+        "key_terms": [
+          "CCE-2",
+          "route composition",
+          "route reversal",
+          "certificate replay",
+          "typed refusal"
+        ],
+        "retrieval_questions": [
+          "How are public CCE routes composed and reversed safely?",
+          "What inputs does the public route API refuse?"
+        ],
+        "context_priority": "high",
+        "context_role": "core"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "gate_assertions": 14,
+        "implementation_sha256": "7335c04ae8f303ee769b79f58808b8a1a69cd828390390a56258777163240f6f",
+        "gate_sha256": "16c6f843b6abb65f04dbcd8e1407e29aea1bcee22ff71b7a3434307e3d1fe2e6"
+      }
+    }
+  ],
+  "graph_delta": {
+    "upsert_nodes": [
+      {
+        "id": "DBP:gap:V4",
+        "label": "SQG closure under quotient/base-change/fibre-product",
+        "type": "gap",
+        "claim_status": "open",
+        "lifecycle_status": "proposed",
+        "reachability": "MODERATE",
+        "tracked": true,
+        "layer": "frontier",
+        "summary": "",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/SELECTED_QUOTIENT_GROUPOIDS_FOUNDATION_v1.0.md#L419",
+            "sha256": "7a0bb32bf1642c3cd772ae150bffb5297bb92773c5e50743018a748e792f9043"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [],
+          "paper_artifacts": [
+            "PAP-0010"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "cce_ledger": [
+            "AR-24"
+          ]
+        },
+        "facets": {
+          "paper": "V",
+          "subject_family": "cella_residue_and_coupling_theory",
+          "reachability_class": "MODERATE",
+          "source_id": "dbp-frontier-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "normal",
+          "retrieval_questions": [],
+          "context_role": "frontier"
+        },
+        "extensions": {
+          "next_object": "Prove the four named closure defs: normal-symmetry subgroupoid quotient; admissible base change w/ section preservation; fibre-product transversality; functorial inertia/wall/valuation labels.",
+          "tracked_ref": "AR-24"
+        }
+      },
+      {
+        "id": "DBP:wall:III_transcendence",
+        "label": "Scalar relation between the two special values / 2nd real dual region / transcendence",
+        "type": "gap",
+        "claim_status": "open",
+        "lifecycle_status": "active",
+        "reachability": "WALL",
+        "tracked": false,
+        "layer": "frontier",
+        "summary": "Genuinely open: needs new relative-homology path comparison. Paper III 'Not claimed'.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md#L1968",
+            "sha256": "69365626e738b900c85c2f03ac65c89287b4d193f439449bd3867686b9b1d805"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [],
+          "paper_artifacts": [
+            "PAP-0012"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "paper": "III",
+          "subject_family": "dbp_periods_landen_and_elliptic_structure",
+          "reachability_class": "WALL",
+          "source_id": "dbp-frontier-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "normal",
+          "retrieval_questions": [],
+          "context_role": "frontier"
+        },
+        "extensions": {
+          "tracked_ref": "NEW"
+        }
+      },
+      {
+        "id": "DBP:wall:I_ambient",
+        "label": "Ambient background curvature does not channelise (KC8)",
+        "type": "gap",
+        "claim_status": "refuted",
+        "lifecycle_status": "active",
+        "reachability": "WALL",
+        "tracked": false,
+        "layer": "frontier",
+        "summary": "R̄ is nonlinear in the metric; channelisation needs bilinearity. Proven wall / validity boundary.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex#L313",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "paper": "I",
+          "subject_family": "dbp_role_channel_and_orbit_geometry",
+          "reachability_class": "WALL",
+          "source_id": "dbp-frontier-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "normal",
+          "retrieval_questions": [],
+          "context_role": "frontier"
+        },
+        "extensions": {
+          "tracked_ref": "NEW"
+        }
+      },
+      {
+        "id": "DBP:wall:I_singular",
+        "label": "Singular-strata classification theorem",
+        "type": "gap",
+        "claim_status": "open",
+        "lifecycle_status": "active",
+        "reachability": "WALL",
+        "tracked": false,
+        "layer": "frontier",
+        "summary": "Chart-failure -> characteristic channel/orbit behaviour is a real open theorem, not a replay.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex#L406",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "paper": "I",
+          "subject_family": "dbp_role_channel_and_orbit_geometry",
+          "reachability_class": "WALL",
+          "source_id": "dbp-frontier-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "normal",
+          "retrieval_questions": [],
+          "context_role": "frontier"
+        },
+        "extensions": {
+          "tracked_ref": "NEW"
+        }
+      },
+      {
+        "id": "U-0007",
+        "label": "Abstract reduction law (channel exact sequence)",
+        "type": "theorem",
+        "claim_status": "proved",
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "Let $C_r$ be a channel-account space at order $r$ and let $\\Sigma:C_r\\to I_r$ be a surjective reduction onto an invariant range. Then\n\\[\n0\\longrightarrow\\ker\\Sigma\\longrightarrow C_r\\xrightarrow{\\ \\Sigma\\ }I_r\\longrightarrow0\n\\]\nis exact, and $C_r/\\ker\\Sigma\\cong I_r$ is the invariant. The fibre over a fixed value of $I_r$ is the channel account: a representative may move inside the fibre under chart or gauge change while the reduced invariant is fixed.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "three-channel-curvature-decomposition",
+          "reusable": true,
+          "kind": "proposition",
+          "cluster_role": "member",
+          "cluster_id": "U-1593",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "6c0de0302197",
+          "loc": "§6.1 Abstract reduction law",
+          "tag_from_source": "[proven]"
+        }
+      },
+      {
+        "id": "U-0009",
+        "label": "Active Role-Jet Orbit Theorem (thm:orbit)",
+        "type": "theorem",
+        "claim_status": "proved",
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "On the regular active-role locus, let $G=S_3$ act on $X_r$ by the active finite-jet recharting maps of §3, and let $\\pi:X_r\\to X_r/G$ be the orbit quotient. Then $\\phi:X_r\\to Y$ is a local order-$r$ DBP invariant if and only if there is a unique $\\psi:X_r/G\\to Y$ with $\\phi=\\psi\\circ\\pi$. Equivalently, the value of any order-$r$ DBP invariant at $x_0$ is a function of the active orbit $\\mathfrak R_r(x_0)=G\\cdot J_r(x_0)$. The same holds for value-plus-jet functionals with $X_r^{+}$ and $\\mathfrak R_r^{+}(x_0)$.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "role-jet-orbit-invariants",
+          "reusable": true,
+          "kind": "theorem",
+          "cluster_role": "canonical",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "201092eea798",
+          "loc": "§4 Theorem [Active Role-Jet Orbit Theorem], thm:orbit",
+          "tag_from_source": "[proven]"
+        }
+      },
+      {
+        "id": "U-0016",
+        "label": "Anisotropy as squared norm of standard-irrep part, $\\Ac=3\\lVert P_{\\mathbf 2}O\\rVert^2$",
+        "type": "formula",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "Under the permutation action of the role $S_3$ on $O\\in\\mathbb R^3$ (permuting the three components), $\\mathbb R^3$ splits as trivial $\\oplus$ standard, and a direct computation gives $\\Ac=3\\,\\lVert P_{\\mathbf 2}O\\rVert^2$, the squared norm of the standard-irrep part: $\\Ac$ is the intrinsic isotropy defect of the coupling carrier.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "role-jet-orbit-invariants",
+          "reusable": true,
+          "kind": "formula",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "3e94336343c0",
+          "loc": "§7.2 Named coupling channels and the anisotropy scalar",
+          "tag_from_source": "[proven]"
+        }
+      },
+      {
+        "id": "U-0027",
+        "label": "Boxed compact-form summary statement",
+        "type": "formula",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "\\boxed{\\;\n\\begin{gathered}\n\\text{DBP invariant data is carried by the active role-jet orbit;}\\\\\n\\text{DBP channel data is the fibre over its invariant reduction.}\n\\end{gathered}\\;}",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "role-jet-orbit-invariants",
+          "reusable": true,
+          "kind": "formula",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "be1cb92f5f0e",
+          "loc": "§9 Scope and summary, boxed statement"
+        }
+      },
+      {
+        "id": "U-0092",
+        "label": "Completeness criterion",
+        "type": "theorem",
+        "claim_status": "proved",
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "A finite tuple $K_r$ is a complete order-$r$ DBP kernel only if it separates the same active role orbits as the quotient map:\n\\[\nK_r(\\xi_1)=K_r(\\xi_2)\\quad\\Longleftrightarrow\\quad \\pi(\\xi_1)=\\pi(\\xi_2)\n\\]\non the intended domain. A preferred kernel cannot be assumed complete merely because its entries are invariant; completeness requires orbit separation.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "role-jet-orbit-invariants",
+          "reusable": true,
+          "kind": "proposition",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "abc1ea4a8210",
+          "loc": "§5.1 Completeness criterion",
+          "tag_from_source": "[proven]"
+        }
+      },
+      {
+        "id": "U-0134",
+        "label": "Curvature-channel projection (channel-density polynomial, normalised channel curvatures, reduced elementary curvature invariant)",
+        "type": "definition",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "For a hypersurface relation $F=0$ at a regular point set $g=\\nabla F$, $H=\\nabla^2F$, $q=g^{\\mathsf T}g\\ne0$. In the distinguished coordinate basis split\n\\[\nH=H_c+H_s,\\qquad H_s=\\operatorname{diag}(H),\\qquad H_c=H-H_s .\n\\]\nFor $1\\le r\\le n-1$ define the channel-density polynomial\n\\[\n\\widehat{\\mathcal C}_r(t,u)\n=(-1)^{r+1}\\sum_{|I|=r+1}\\det\n\\begin{pmatrix}0 & g_I^{\\mathsf T}\\\\ g_I & (tH_c+uH_s)_I\\end{pmatrix}\n=\\sum_{p+q=r}t^p u^q\\,\\widehat\\kappa_{r;p,q}.\n\\]\nThe normalised channel curvatures are $\\kappa_{r;p,q}=\\widehat\\kappa_{r;p,q}/q^{(r+2)/2}$, and the reduced elementary curvature invariant is\n\\[\n\\sigma_r=\\sum_{p+q=r}\\kappa_{r;p,q}=\\frac{\\widehat{\\mathcal C}_r(1,1)}{q^{(r+2)/2}} .\n\\]\nThus the reduction is summation, $\\Sigma:C_r\\mapsto\\sum_{p+q=r}\\kappa_{r;p,q}=\\sigma_r$: the channel vector is the representative, its sum is the invariant.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "three-channel-curvature-decomposition",
+          "reusable": true,
+          "kind": "construction",
+          "cluster_role": "member",
+          "cluster_id": "U-1592",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "189cf446980e",
+          "loc": "§6.2 Curvature-channel projection",
+          "tag_from_source": "[proven]"
+        }
+      },
+      {
+        "id": "U-0135",
+        "label": "Curved-ambient extension (Gauss equation channel split)",
+        "type": "theorem",
+        "claim_status": "proved",
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "The channel reduction extends to a curved ambient space through the Gauss equation, which reads schematically\n\\[\nR^\\Sigma=\\overline R^{\\,T}+S\\wedge S,\n\\]\nwhere $R^\\Sigma$ is the intrinsic curvature of the role surface, $\\overline R^{\\,T}$ is the tangential part of the ambient background curvature, and the extrinsic term is quadratic in the shape operator $S$. Applying the DBP split to the shape operator, $S=S_c+S_s$, the wedge is bilinear, so\n\\[\nS\\wedge S=S_c\\wedge S_c+\\bigl(S_c\\wedge S_s+S_s\\wedge S_c\\bigr)+S_s\\wedge S_s\n=R_{cc}+R_{\\mathrm{int}}+R_{ss}:\n\\]\nthe extrinsic contribution channelises into pure-coupling, interaction, and pure-self parts exactly as in the flat case. Hence\n\\[\n\\text{intrinsic invariant}=\\text{ambient input}+\\text{extrinsic DBP-channel account}. \n\\]\nThe ambient term $\\overline R^{\\,T}$ is \\emph{not} forced into the same self/coupling split, and this is a boundary of the construction with a named cause rather than a gap in it: the extrinsic term is a bilinear function of the shape operator and therefore splits along the role frame, whereas the ambient curvature is not a bilinear function of the same role data, so no channel split is available for it unless the application supplies a separate role frame for the ambient geometry itself.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "three-channel-curvature-decomposition",
+          "reusable": true,
+          "kind": "proposition",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "03f1aa2207d3",
+          "loc": "§6.5 Curved-ambient extension",
+          "tag_from_source": "[proven]"
+        }
+      },
+      {
+        "id": "U-0154",
+        "label": "Descent classes",
+        "type": "theorem",
+        "claim_status": "proved",
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "Invariants separate by the orbit data they require. \\emph{Value-only} invariants descend to the quotient of coordinate values alone; \\emph{jet-only} coupling invariants descend to the quotient of the jet without values; \\emph{mixed} value-jet invariants require the value-plus-jet orbit $\\mathfrak R_r^{+}$. The curvature channels of §6 are jet-only; the power-law degree spectra of Appendix B are value-only in log-role form.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "role-jet-orbit-invariants",
+          "reusable": true,
+          "kind": "proposition",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "d25a450e606c",
+          "loc": "§5.3 Descent classes",
+          "tag_from_source": "[proven]"
+        }
+      },
+      {
+        "id": "U-0191",
+        "label": "Exact rational closure",
+        "type": "theorem",
+        "claim_status": "proved",
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "If the original finite jet has entries in a field $\\mathbb K$ and all active role denominators are nonzero, every active role-transposed jet has entries in the localisation obtained by inverting those denominators. In particular\n\\[\nJ_r(x_0)\\in\\mathbb Q\\quad\\Longrightarrow\\quad G\\cdot J_r(x_0)\\subset\\mathbb Q[\\Delta^{-1}],\n\\]\nwhere $\\Delta$ is the product of the role denominators used by the active charts.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "role-jet-orbit-invariants",
+          "reusable": true,
+          "kind": "proposition",
+          "cluster_role": "canonical",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "698d4ecb3a30",
+          "loc": "§5.2 Exact rational closure",
+          "tag_from_source": "[proven]"
+        }
+      },
+      {
+        "id": "U-0222",
+        "label": "faithful coupling carrier (cor:faithful)",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "On the regular role locus, the coupling-carrier map of the second jet,\n\\[\n(A,B,C)\\longmapsto O=(\\kcrole{P},\\kcrole{D},\\kcrole{S}),\n\\]\nhas Jacobian determinant\n\\[\n\\det\\frac{\\partial O}{\\partial(A,B,C)}=\\frac{8\\,\\Lambda_P\\Lambda_D\\Lambda_S}{q_0^{6}} .\n\\]\nHence the carrier map has rank $3$ wherever $\\Lambda_P\\Lambda_D\\Lambda_S\\ne0$; it is then a local diffeomorphism and therefore separates active role orbits locally, so by the completeness criterion $O$ is a complete order-$2$ coupling kernel off the channel-isotropy loci. The carrier degenerates exactly where a coupling numerator vanishes, i.e.\\ on the loci where the corresponding channel is isotropic.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "role-jet-orbit-invariants",
+          "reusable": true,
+          "kind": "corollary",
+          "cluster_role": "canonical",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "68ed3ac81f31",
+          "loc": "§7.3 Corollary [faithful coupling carrier], cor:faithful",
+          "tag_from_source": "[symbolic]"
+        }
+      },
+      {
+        "id": "U-0235",
+        "label": "First-order active $S_3$ action",
+        "type": "theorem",
+        "claim_status": "proved",
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "For a graph chart $P=f(D,S)$ with $a=f_D,\\ b=f_S$, the input swap $s=(D\\;S)$ and the active transposition $t=(D\\;P)$ act by\n\\[\ns(a,b)=(b,a),\n\\qquad\nt(a,b)=\\Bigl(\\tfrac1a,\\,-\\tfrac ba\\Bigr),\n\\]\nobtained by re-solving $F=0$ for $D$ as output. These satisfy\n\\[\ns^2=t^2=e,\\qquad (st)^3=e,\n\\]\nso active role transposition is an exact birational representation of $S_3$ on the regular jet locus, localised at the role denominators.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "role-jet-orbit-invariants",
+          "reusable": true,
+          "kind": "proposition",
+          "cluster_role": "canonical",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "4e8688075eca",
+          "loc": "§3.1 First-order action",
+          "tag_from_source": "[proven]"
+        }
+      },
+      {
+        "id": "U-0260",
+        "label": "Gauge transport of channel triple",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "The reduction $\\Sigma$ of §6 has a nontrivial kernel: the zero-sum plane for the Gaussian case. A channel representative is therefore gauge- and frame-relative, free to move inside the fibre over the fixed invariant. Concretely, while the graph-channel formula sets $\\kint=0$ in any graph gauge, transport between graph sections of the same relation, or passage to a non-graph implicit gauge, moves weight between $\\kc$, $\\kint$ and $\\ks$ along $\\ker\\Sigma$, with $\\KG=\\sigma_2$ held fixed. The interaction channel is therefore live precisely when the working gauge is not a graph gauge; the keystone of Appendix B exhibits an implicit relation whose entire curvature is carried by $\\kint$.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "three-channel-curvature-decomposition",
+          "reusable": true,
+          "kind": "proposition",
+          "cluster_role": "member",
+          "cluster_id": "U-1641",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "46a84f12cb39",
+          "loc": "§7 Gauge transport",
+          "tag_from_source": "[symbolic]"
+        }
+      },
+      {
+        "id": "U-0262",
+        "label": "Gauge transport on the keystone",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "A defining-function gauge $\\widetilde F=\\mu F$ with $\\mu(p)=1$ and $a=\\nabla\\log\\mu(p)$ fixes the gradient and shifts the Hessian by\n\\[\n\\widetilde g=g,\\qquad \\widetilde H=H+ga^{\\mathsf T}+ag^{\\mathsf T}.\n\\]\nWriting the gauge vector as $a=(u,v,w)$ on the keystone surface above, the channels transport by the exact rational laws\n\\begin{align*}\n\\kc(u,v,w)&=\\tfrac1{49}\\bigl(12uv+6uw+18vw+6w-1\\bigr),\\\\\n\\ks(u,v,w)&=\\tfrac1{49}\\bigl(12uv+6uw+3u+18vw+13v+2w+1\\bigr),\\\\\n\\kint(u,v,w)&=-\\tfrac1{49}\\bigl(24uv+12uw+3u+36vw+13v+8w+3\\bigr),\n\\end{align*}\nand for every rational gauge vector\n\\[\n\\kc(u,v,w)+\\ks(u,v,w)+\\kint(u,v,w)=-\\tfrac3{49}.\n\\]\nThe channel triple therefore moves inside the affine zero-sum plane $\\Delta\\kc+\\Delta\\ks+\\Delta\\kint=0$ while the Gaussian curvature is held fixed, concretely realising the kernel of the reduction $\\Sigma$ (§6) and the gauge transport of §7. The pure coupling channel is pinned, $\\kc=-\\tfrac1{49}$, exactly on the locus\n\\[\nw(u+3v+1)+2uv=0,\n\\]\nso channel pinning is a structural condition on the gauge, not an accident: a generic gauge moves every channel, a special gauge fixes a chosen one.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "three-channel-curvature-decomposition",
+          "reusable": true,
+          "kind": "worked-result",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "917b0e2620b1",
+          "loc": "Appendix B.3 Gauge transport on the keystone",
+          "tag_from_source": "[symbolic]"
+        }
+      },
+      {
+        "id": "U-0291",
+        "label": "Graph-channel formula",
+        "type": "formula",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "For any local graph $z=h(x,y)$ with $\\alpha=h_x,\\ \\beta=h_y$, $L=h_{xx},\\ M=h_{xy},\\ N=h_{yy}$ and $Q=1+\\alpha^2+\\beta^2$,\n\\[\n\\kc=-\\frac{M^2}{Q^2},\\qquad \\ks=\\frac{LN}{Q^2},\\qquad \\kint=0,\\qquad\n\\KG=\\frac{LN-M^2}{Q^2}.\n\\]\nEvery graph-normalised output chart therefore has zero graph-channel interaction; interaction reappears in non-graph implicit gauges or under gauge transport between graph sections (§7).",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "three-channel-curvature-decomposition",
+          "reusable": true,
+          "kind": "formula",
+          "cluster_role": "singleton",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "46064f0f5693",
+          "loc": "§6.4 Graph-channel formula",
+          "tag_from_source": "[proven]"
+        }
+      },
+      {
+        "id": "U-0303",
+        "label": "Higher-order transposition (rationality at every order)",
+        "type": "formula",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "The active transposition $t=(D\\;P)$ on the order-$r$ jet is obtained from $D=q(P,S)$ by the finite inverse-function theorem: each $q$-derivative is a rational function of the original $f$-jet with denominators a power of $a=f_D$. The first two orders are given in §3; the third-order reach proceeds identically, differentiating the relations $q_P=1/a$, $q_S=-b/a$ once more and substituting, so that every order-$r$ component lies in $\\mathbb Q[\\,\\text{jet},a^{-1}]$ in agreement with §5. The input swap acts at every order by the index transposition $D\\leftrightarrow S$, e.g.\\ $s(a,b,A,B,C)=(b,a,C,B,A)$ at order $2$.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "role-jet-orbit-invariants",
+          "reusable": true,
+          "kind": "formula",
+          "cluster_role": "canonical",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "04065ca82023",
+          "loc": "Appendix A: Higher-order transposition",
+          "tag_from_source": "[proven]"
+        }
+      },
+      {
+        "id": "U-0352",
+        "label": "jet carrier (active role-jet orbit)",
+        "type": "definition",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "Let $J_r(x_0)$ be the order-$r$ jet of the chosen local graph representative at $x_0$. The active order-$r$ role-jet orbit is $\\mathfrak R_r(x_0)=G\\cdot J_r(x_0)$, where the action is active role recharting. Retaining the coordinate values gives the value-plus-jet orbit $\\mathfrak R_r^{+}(x_0)=G\\cdot(x_0,J_r(x_0))$.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "role-jet-orbit-invariants",
+          "reusable": true,
+          "kind": "definition",
+          "cluster_role": "canonical",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "b23b6acfbe9b",
+          "loc": "§4 Definition [jet carrier]"
+        }
+      },
+      {
+        "id": "U-0353",
+        "label": "Jet notation and q0",
+        "type": "definition",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "For a graph $P=f(D,S)$ we write the first and second jet as $(a,b,A,B,C)=(f_D,f_S,f_{DD},f_{DS},f_{SS})$ and set $q_0=1+a^2+b^2$; for the implicit relation $F=P-f$ one has $g=\\nabla F$ and $q_0=g^{\\mathsf T}g$, so the graph normaliser and the implicit gradient norm coincide in the graph gauge. We distinguish two ``three-channel'' structures and never conflate them: the channel \\emph{types} $\\kc,\\kint,\\ks$ (coupling, interaction, self) decompose $\\KG$ \\emph{within one chart}; the chart-indexed coupling channels $\\kcrole{\\rho}$, $\\rho\\in\\{P,D,S\\}$, are the coupling type evaluated in the three output-role \\emph{charts}, and the anisotropy $\\Ac$ is their spread.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "role-jet-orbit-invariants",
+          "reusable": true,
+          "kind": "notation",
+          "cluster_role": "canonical",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "2309db238a56",
+          "loc": "Notation paragraph, before §Introduction"
+        }
+      },
+      {
+        "id": "U-0406",
+        "label": "local DBP invariant",
+        "type": "definition",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "Let $X_r$ be the order-$r$ jet space on the regular role locus and $Y$ any target set. A functional $\\phi:X_r\\to Y$ is an order-$r$ DBP invariant if $\\phi(\\mathcal T_\\sigma\\xi)=\\phi(\\xi)$ for all $\\sigma\\in S_3$ wherever both sides are defined. For value-plus-jet invariants, replace $X_r$ by $X_r^{+}$.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "role-jet-orbit-invariants",
+          "reusable": true,
+          "kind": "definition",
+          "cluster_role": "canonical",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "aa4e02bd6786",
+          "loc": "§4 Definition [local DBP invariant]"
+        }
+      },
+      {
+        "id": "U-0443",
+        "label": "Named coupling channels $\\Lambda_P,\\Lambda_D,\\Lambda_S$, coupling carrier $O$, anisotropy scalar $\\Ac$",
+        "type": "definition",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "Define the output-role mixed numerators\n\\[\n\\Lambda_P=B,\\qquad\n\\Lambda_D=\\frac{Ab-aB}{a},\\qquad\n\\Lambda_S=\\frac{Ca-bB}{b},\n\\]\nso that the chart-indexed coupling channels are $\\kcrole{\\rho}=-\\Lambda_\\rho^2/q_0^2$ for $\\rho\\in\\{P,D,S\\}$. The coupling carrier is $O=(\\kcrole{P},\\kcrole{D},\\kcrole{S})$. The role anisotropy scalar is\n\\[\n\\Ac=(\\kcrole{P}-\\kcrole{D})^2+(\\kcrole{D}-\\kcrole{S})^2+(\\kcrole{S}-\\kcrole{P})^2,\n\\]\nwhich vanishes exactly when all three output-role coupling channels agree.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "role-jet-orbit-invariants",
+          "reusable": true,
+          "kind": "definition",
+          "cluster_role": "canonical",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "861fd8e8ee81",
+          "loc": "§7.2 Named coupling channels and the anisotropy scalar",
+          "tag_from_source": "[proven]"
+        }
+      },
+      {
+        "id": "U-0466",
+        "label": "Output-role coupling channel quadruples $C_P, C_D, C_S$ and OutputRoleCurvSpec",
+        "type": "definition",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "For $P=f(D,S)$ with $q_0=1+a^2+b^2$, the three output-role charts carry the channel quadruples $(\\KG,\\kc,\\ks,\\kint)$\n\\begin{align*}\nC_P&=\\Bigl(K,\\ -\\tfrac{B^2}{q_0^2},\\ \\tfrac{AC}{q_0^2},\\ 0\\Bigr),\\\\\nC_D&=\\Bigl(K,\\ -\\tfrac{(Ab-aB)^2}{a^2q_0^2},\\ \\tfrac{A(Ab^2-2abB+a^2C)}{a^2q_0^2},\\ 0\\Bigr),\\\\\nC_S&=\\Bigl(K,\\ -\\tfrac{(Ca-bB)^2}{b^2q_0^2},\\ \\tfrac{C(Ca^2-2abB+b^2A)}{b^2q_0^2},\\ 0\\Bigr),\n\\end{align*}\nwith the common Gaussian curvature $K=(AC-B^2)/q_0^2$. The scalar output-role curvature spectrum is $\\operatorname{OutputRoleCurvSpec}(f)=\\{C_P,C_D,C_S\\}$; retaining ordered input labels gives the honest sixfold labelled role-jet curvature object.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "role-jet-orbit-invariants",
+          "reusable": true,
+          "kind": "construction",
+          "cluster_role": "canonical",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "566f60decb54",
+          "loc": "§7.1 The three output-role charts",
+          "tag_from_source": "[symbolic]"
+        }
+      },
+      {
+        "id": "U-0517",
+        "label": "Power-law charts: exponent orbit and role-degree spectrum",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "For a power-law coupling $P=D^mS^n$ pass to log coordinates, $\\log P=m\\log D+n\\log S$, with exponent normal $\\ell=(-m,-n,1)$. Role transposition permutes the entries of this projective normal, giving the exponent-pair orbit\n\\[\n\\mathcal E(m,n)=\\Bigl\\{(m,n),(n,m),\\bigl(\\tfrac1m,-\\tfrac nm\\bigr),\\bigl(-\\tfrac nm,\\tfrac1m\\bigr),\n\\bigl(-\\tfrac mn,\\tfrac1n\\bigr),\\bigl(\\tfrac1n,-\\tfrac mn\\bigr)\\Bigr\\}\n\\]\nand the role-degree spectrum\n\\[\n\\operatorname{DegSpec}(m,n)=\\Bigl\\{m+n,\\ m+n,\\ \\tfrac{1-n}{m},\\ \\tfrac{1-n}{m},\\ \\tfrac{1-m}{n},\\\n\\tfrac{1-m}{n}\\Bigr\\}.\n\\]\nFor ordinary multiplication $P=DS$, $(m,n)=(1,1)$ gives $\\operatorname{DegSpec}(1,1)=\\{2,2,0,0,0,0\\}$: the forward chart has degree $2$ while inverse charts $D=P/S$ have degree $0$ in log-role form. For the cubic mixed power $P=D^2S$, $(m,n)=(2,1)$ gives $\\operatorname{DegSpec}(2,1)=\\{3,3,0,0,-1,-1\\}$, distinguishing it from ordinary multiplication though both are monomial.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "role-jet-orbit-invariants",
+          "reusable": true,
+          "kind": "worked-result",
+          "cluster_role": "canonical",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "722a22dca942",
+          "loc": "Appendix B.1 Power-law charts: value-only role spectra",
+          "tag_from_source": "[symbolic]"
+        }
+      },
+      {
+        "id": "U-0522",
+        "label": "Product-role excess diagnostic $E_P$",
+        "type": "formula",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "A product-role excess diagnostic is $E_P=\\kcrole{P}-\\tfrac12(\\kcrole{D}+\\kcrole{S})$, with analogues for $D$ and $S$.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "role-jet-orbit-invariants",
+          "reusable": true,
+          "kind": "formula",
+          "cluster_role": "canonical",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "a858e347aad7",
+          "loc": "§7.2 Named coupling channels and the anisotropy scalar"
+        }
+      },
+      {
+        "id": "U-0525",
+        "label": "Proof of Active Role-Jet Orbit Theorem",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "The maps $\\mathcal T_\\sigma$ define an action of $S_3$ on the regular active-role locus. By definition a DBP invariant is constant on its orbits. The quotient map $\\pi$ identifies exactly the elements lying in the same orbit; hence a functional is constant on active role orbits iff it factors uniquely through the quotient. The value-plus-jet statement is identical with $X_r^{+}$. The quotient step is formal; the mathematical content is the prior construction of the active finite-jet action, in which the representatives in different output roles are rational inverse-function transforms, not passive relabellings.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "role-jet-orbit-invariants",
+          "reusable": false,
+          "kind": "proposition",
+          "cluster_role": "member",
+          "cluster_id": "U-0009",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "normal",
+          "retrieval_questions": [],
+          "context_role": "supporting"
+        },
+        "extensions": {
+          "claim_key": "1ef2dad108dd",
+          "loc": "§4 Proof of thm:orbit"
+        }
+      },
+      {
+        "id": "U-0526",
+        "label": "Proof of faithful coupling carrier",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "With $\\kcrole{P}=-B^2/q_0^2$, $\\kcrole{D}=-(Ab-aB)^2/(a^2q_0^2)$, $\\kcrole{S}=-(Ca-bB)^2/(b^2q_0^2)$ and $q_0$ independent of $(A,B,C)$, the Jacobian has a single nonzero entry in the first column (from $\\kcrole{D}$) and in the third column (from $\\kcrole{S}$). Expanding and simplifying gives the stated determinant; the factorisation is $8\\Lambda_P\\Lambda_D\\Lambda_S/q_0^6$ on substituting $Ab-aB=a\\Lambda_D$, $Ca-bB=b\\Lambda_S$, $B=\\Lambda_P$. Full column rank is equivalent to a nonzero determinant, and a nonzero Jacobian gives a local diffeomorphism, hence local orbit separation; the completeness criterion then applies. The identity was confirmed in exact symbolic arithmetic.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "role-jet-orbit-invariants",
+          "reusable": false,
+          "kind": "proposition",
+          "cluster_role": "member",
+          "cluster_id": "U-0222",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "normal",
+          "retrieval_questions": [],
+          "context_role": "supporting"
+        },
+        "extensions": {
+          "claim_key": "17ba62286dac",
+          "loc": "§7.3 Proof of cor:faithful"
+        }
+      },
+      {
+        "id": "U-0563",
+        "label": "Regular active-role locus (\\Reg_1, \\Reg_r)",
+        "type": "definition",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "Define the first-order regular role locus\n\\[\n\\Reg_1=\\{x\\in U: F(x)=0,\\ F_D(x)F_S(x)F_P(x)\\ne0\\},\n\\]\nand more generally let $\\Reg_r$ denote the locus on which all output charts needed for the order-$r$ active role object exist. In graph form $P=f(D,S)$ with $a=f_D,\\ b=f_S$, full first-order active recharting is defined where\n\\[\na\\ne0,\\qquad b\\ne0 .\n\\]",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "role-jet-orbit-invariants",
+          "reusable": true,
+          "kind": "definition",
+          "cluster_role": "canonical",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "4cab632bb051",
+          "loc": "§2.2 Regular active-role locus"
+        }
+      },
+      {
+        "id": "U-0592",
+        "label": "Scale-free exponent invariants $I_1^\\ell, I_2^\\ell$ and exponent discriminant",
+        "type": "formula",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "Scale-free exponent invariants are\n\\[\nI_1^\\ell=\\frac{(1-m-n)(mn-m-n)}{mn},\\qquad\nI_2^\\ell=\\frac{(1-m-n)^3}{mn},\n\\]\nwith exponent discriminant $\\Delta_\\ell=(m-n)^2(m+1)^2(n+1)^2$. At multiplication the coupling channel is flat, so $\\Ac=0$; the keystone below is nowhere flat.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "role-jet-orbit-invariants",
+          "reusable": true,
+          "kind": "formula",
+          "cluster_role": "canonical",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "4f25feda1ff3",
+          "loc": "Appendix B.1 Power-law charts: value-only role spectra",
+          "tag_from_source": "[symbolic]"
+        }
+      },
+      {
+        "id": "U-0595",
+        "label": "Second-order generator (active transposition on second jet)",
+        "type": "formula",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "With $A=f_{DD},\\ B=f_{DS},\\ C=f_{SS}$, the input swap acts by\n\\[\ns(a,b,A,B,C)=(b,a,C,B,A).\n\\]\nUnder $t=(D\\;P)$ the chart $D=q(P,S)$ has\n\\[\nq_P=\\frac1a,\\qquad q_S=-\\frac ba,\\qquad\nq_{PP}=-\\frac{A}{a^3},\\qquad\nq_{PS}=\\frac{Ab-aB}{a^3},\\qquad\nq_{SS}=\\frac{-Ab^2+2abB-a^2C}{a^3},\n\\]\nso that\n\\[\nt(a,b,A,B,C)=\n\\left(\\frac1a,\\,-\\frac ba,\\,-\\frac{A}{a^3},\\,\\frac{Ab-aB}{a^3},\\,\n\\frac{-Ab^2+2abB-a^2C}{a^3}\\right).\n\\]\nThe maps again satisfy the $S_3$ relations on the regular locus.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "role-jet-orbit-invariants",
+          "reusable": true,
+          "kind": "formula",
+          "cluster_role": "canonical",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "8afb085d8490",
+          "loc": "§3.2 Second-order generator",
+          "tag_from_source": "[proven]"
+        }
+      },
+      {
+        "id": "U-0612",
+        "label": "Singular strata typology",
+        "type": "definition",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "The active maps are defined only where their denominators are nonzero. Where a required denominator vanishes the corresponding output chart does not exist, and the correct object is a typed singular stratum, not a coerced scalar. Typical cases:\n\\begin{enumerate}\n\\item a coordinate cannot be solved locally as output;\n\\item a projective normal coordinate vanishes;\n\\item a curvature denominator degenerates;\n\\item a requested channel representative is not defined in the chosen frame.\n\\end{enumerate}\nA singular stratum may encode a symmetry, a boundary, a chart failure, or a refusal condition; in all cases it is part of the role-jet structure rather than an exception to be removed.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "role-jet-orbit-invariants",
+          "reusable": true,
+          "kind": "definition",
+          "cluster_role": "canonical",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "2a3cd98fb90e",
+          "loc": "§8 Singular strata",
+          "tag_from_source": "[proven]"
+        }
+      },
+      {
+        "id": "U-0640",
+        "label": "The keystone: interaction-only curvature",
+        "type": "theorem",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "Consider the implicit relation\n\\[\nF=x_1^2+x_1x_2+x_3^2-3\\qquad\\text{at}\\qquad p=(1,1,1).\n\\]\nThen $g=(3,1,2)$, $q=14$, and\n\\[\nH=\\begin{pmatrix}2&1&0\\\\1&0&0\\\\0&0&2\\end{pmatrix}.\n\\]\nThe channel-density polynomial of §6 gives\n\\[\n\\kc=-\\tfrac1{49},\\qquad \\ks=\\tfrac1{49},\\qquad \\kint=-\\tfrac3{49},\n\\qquad\\text{so}\\qquad \\KG=\\kc+\\kint+\\ks=-\\tfrac3{49}.\n\\]\nThe coupling and self channels cancel exactly and the surviving curvature is interaction curvature. Any non-negative scalar proxy, or any single-channel account that omits $\\kint$, cannot represent this object; the keystone is the discriminating witness that the three-channel decomposition is not reducible to a single number. (Channels confirmed in exact arithmetic against the direct Gauss--Kronecker value $\\KG=-3/49$.)",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "three-channel-curvature-decomposition",
+          "reusable": true,
+          "kind": "worked-result",
+          "cluster_role": "member",
+          "cluster_id": "U-1441",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "4d6ac2dd3023",
+          "loc": "Appendix B.2 The keystone: interaction-only curvature",
+          "tag_from_source": "[symbolic]"
+        }
+      },
+      {
+        "id": "U-0658",
+        "label": "Three-variable Gaussian decomposition $\\KG=\\kc+\\kint+\\ks$",
+        "type": "formula",
+        "claim_status": null,
+        "lifecycle_status": null,
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "For $n=3$, $r=2$ the sum has three terms; writing $\\kc=\\kappa_{2;2,0}$ (the $t^2$, pure-coupling term), $\\kint=\\kappa_{2;1,1}$ (the $tu$ cross term), $\\ks=\\kappa_{2;0,2}$ (the $u^2$, pure-self term),\n\\[\nC_2=(\\kc,\\kint,\\ks),\\qquad \\KG=\\kc+\\kint+\\ks .\n\\]\nThe zero-sum transport plane is $\\ker\\Sigma=\\{(u,v,w):u+v+w=0\\}$: a gauge or chart change may move the channel triple within the affine plane over $\\KG$, but cannot change the reduced Gaussian curvature.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": []
+        },
+        "facets": {
+          "subject": "three-channel-curvature-decomposition",
+          "reusable": true,
+          "kind": "formula",
+          "cluster_role": "member",
+          "cluster_id": "U-1728",
+          "source_id": "encyclopedia-units-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {
+          "claim_key": "7a1eff81e8bd",
+          "loc": "§6.3 The three-variable Gaussian case",
+          "tag_from_source": "[proven]"
+        }
+      }
+    ],
+    "upsert_edges": [
+      {
+        "id": "e::DBP:gap:I2::depends_on::DBP:thm:cce8_naturality",
+        "from": "DBP:gap:I2",
+        "to": "DBP:thm:cce8_naturality",
+        "relation": "depends_on",
+        "label": "DBP:gap:I2 depends_on DBP:thm:cce8_naturality",
+        "basis": "CCE-8 already proves the all-order recurrence. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex#L450",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "facets": {
+          "source_id": "dbp-frontier-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:gap:I2::opens_gap::DBP:paper:I",
+        "from": "DBP:gap:I2",
+        "to": "DBP:paper:I",
+        "relation": "opens_gap",
+        "label": "DBP:gap:I2 opens_gap DBP:paper:I",
+        "basis": "Unfinished App.A induction in the released paper. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex#L450",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "facets": {
+          "source_id": "dbp-frontier-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:gap:III1::blocked_by::DBP:gate:editorial",
+        "from": "DBP:gap:III1",
+        "to": "DBP:gate:editorial",
+        "relation": "blocked_by",
+        "label": "DBP:gap:III1 blocked_by DBP:gate:editorial",
+        "basis": "Paper insertion requires authorized editorial workflow (AR-20). DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md#L1543",
+            "sha256": "69365626e738b900c85c2f03ac65c89287b4d193f439449bd3867686b9b1d805"
+          }
+        ],
+        "facets": {
+          "source_id": "dbp-frontier-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:gap:III1::depends_on::DBP:thm:cce5_calibration",
+        "from": "DBP:gap:III1",
+        "to": "DBP:thm:cce5_calibration",
+        "relation": "depends_on",
+        "label": "DBP:gap:III1 depends_on DBP:thm:cce5_calibration",
+        "basis": "CCE-5 proved lambda + traces; merge into the paper. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md#L1543",
+            "sha256": "69365626e738b900c85c2f03ac65c89287b4d193f439449bd3867686b9b1d805"
+          }
+        ],
+        "facets": {
+          "source_id": "dbp-frontier-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:gap:III1::opens_gap::DBP:paper:III",
+        "from": "DBP:gap:III1",
+        "to": "DBP:paper:III",
+        "relation": "opens_gap",
+        "label": "DBP:gap:III1 opens_gap DBP:paper:III",
+        "basis": "Paper III leaves lambda unresolved at L1543. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md#L1543",
+            "sha256": "69365626e738b900c85c2f03ac65c89287b4d193f439449bd3867686b9b1d805"
+          }
+        ],
+        "facets": {
+          "source_id": "dbp-frontier-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:gap:III2::depends_on::DBP:gap:III1",
+        "from": "DBP:gap:III2",
+        "to": "DBP:gap:III1",
+        "relation": "depends_on",
+        "label": "DBP:gap:III2 depends_on DBP:gap:III1",
+        "basis": "Follows the lambda insertion. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md#L1965",
+            "sha256": "69365626e738b900c85c2f03ac65c89287b4d193f439449bd3867686b9b1d805"
+          }
+        ],
+        "facets": {
+          "source_id": "dbp-frontier-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:gap:III2::depends_on::DBP:thm:cce5_calibration",
+        "from": "DBP:gap:III2",
+        "to": "DBP:thm:cce5_calibration",
+        "relation": "depends_on",
+        "label": "DBP:gap:III2 depends_on DBP:thm:cce5_calibration",
+        "basis": "CCE-5 relative matrices refute the two nonclaims. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md#L1965",
+            "sha256": "69365626e738b900c85c2f03ac65c89287b4d193f439449bd3867686b9b1d805"
+          }
+        ],
+        "facets": {
+          "source_id": "dbp-frontier-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:gap:III3::blocked_by::DBP:gate:editorial",
+        "from": "DBP:gap:III3",
+        "to": "DBP:gate:editorial",
+        "relation": "blocked_by",
+        "label": "DBP:gap:III3 blocked_by DBP:gate:editorial",
+        "basis": "Paper insertion requires authorized editorial workflow (AR-20). DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md#L1559",
+            "sha256": "69365626e738b900c85c2f03ac65c89287b4d193f439449bd3867686b9b1d805"
+          }
+        ],
+        "facets": {
+          "source_id": "dbp-frontier-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:gap:III3::depends_on::DBP:thm:cce6_sweep",
+        "from": "DBP:gap:III3",
+        "to": "DBP:thm:cce6_sweep",
+        "relation": "depends_on",
+        "label": "DBP:gap:III3 depends_on DBP:thm:cce6_sweep",
+        "basis": "CCE-6 clearance lemma replaces the thin-tube placeholder. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md#L1559",
+            "sha256": "69365626e738b900c85c2f03ac65c89287b4d193f439449bd3867686b9b1d805"
+          }
+        ],
+        "facets": {
+          "source_id": "dbp-frontier-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:gap:III4::depends_on::DBP:thm:cce5_calibration",
+        "from": "DBP:gap:III4",
+        "to": "DBP:thm:cce5_calibration",
+        "relation": "depends_on",
+        "label": "DBP:gap:III4 depends_on DBP:thm:cce5_calibration",
+        "basis": "CCE-5 word algebra backs the public API. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+        "source_refs": [
+          {
+            "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/03_cce2_corridors/CCE_2_GAP_LEDGER_v1.0.md",
+            "sha256": "1cea8a2dfca0196886050778a40e45a840422e8c9a32d9c5b0eacf5d2ece1812"
+          }
+        ],
+        "facets": {
+          "source_id": "dbp-frontier-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:gap:V1::depends_on::DBP:gap:III2",
+        "from": "DBP:gap:V1",
+        "to": "DBP:gap:III2",
+        "relation": "depends_on",
+        "label": "DBP:gap:V1 depends_on DBP:gap:III2",
+        "basis": "Citation refresh follows the Paper III update. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/SELECTED_QUOTIENT_GROUPOIDS_FOUNDATION_v1.0.md#L329",
+            "sha256": "7a0bb32bf1642c3cd772ae150bffb5297bb92773c5e50743018a748e792f9043"
+          }
+        ],
+        "facets": {
+          "source_id": "dbp-frontier-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:gap:V4::depends_on::DBP:thm:sqg_foundation",
+        "from": "DBP:gap:V4",
+        "to": "DBP:thm:sqg_foundation",
+        "relation": "depends_on",
+        "label": "DBP:gap:V4 depends_on DBP:thm:sqg_foundation",
+        "basis": "Close SQG under the four named operations. DBP succession+frontier audit v1.0 (2026-07-15); anchored to live Papers_Library + CCE ledgers.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/SELECTED_QUOTIENT_GROUPOIDS_FOUNDATION_v1.0.md#L419",
+            "sha256": "7a0bb32bf1642c3cd772ae150bffb5297bb92773c5e50743018a748e792f9043"
+          }
+        ],
+        "facets": {
+          "source_id": "dbp-frontier-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:thm:sqg_foundation::supplements::DBP:paper:V",
+        "from": "DBP:thm:sqg_foundation",
+        "to": "DBP:paper:V",
+        "relation": "supplements",
+        "label": "DBP:thm:sqg_foundation supplements DBP:paper:V",
+        "basis": "Foundation for the held capstone. DBP succession audit v1.0; disposition + proof-location analysis.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/SELECTED_QUOTIENT_GROUPOIDS_FOUNDATION_v1.0.md",
+            "sha256": "7a0bb32bf1642c3cd772ae150bffb5297bb92773c5e50743018a748e792f9043"
+          }
+        ],
+        "facets": {
+          "source_id": "dbp-frontier-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::U-0007::same_content_as::U-1593",
+        "from": "U-0007",
+        "to": "U-1593",
+        "relation": "same_content_as",
+        "label": "U-0007 same_content_as U-1593",
+        "basis": "Cluster fold: 'restatement' of the canonical statement. Encyclopedia consolidated/*.json.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "facets": {
+          "source_id": "encyclopedia-units-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::U-0134::same_content_as::U-1592",
+        "from": "U-0134",
+        "to": "U-1592",
+        "relation": "same_content_as",
+        "label": "U-0134 same_content_as U-1592",
+        "basis": "Cluster fold: 'restatement' of the canonical statement. Encyclopedia consolidated/*.json.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "facets": {
+          "source_id": "encyclopedia-units-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::U-0235::supersedes::U-0757",
+        "from": "U-0235",
+        "to": "U-0757",
+        "relation": "supersedes",
+        "label": "U-0235 supersedes U-0757",
+        "basis": "Cluster fold: canonical supersedes earlier 'earlier-conjecture'. Encyclopedia consolidated/*.json.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "facets": {
+          "source_id": "encyclopedia-units-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::U-0260::same_content_as::U-1641",
+        "from": "U-0260",
+        "to": "U-1641",
+        "relation": "same_content_as",
+        "label": "U-0260 same_content_as U-1641",
+        "basis": "Cluster fold: 'restatement' of the canonical statement. Encyclopedia consolidated/*.json.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "facets": {
+          "source_id": "encyclopedia-units-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::U-0517::supersedes::U-1031",
+        "from": "U-0517",
+        "to": "U-1031",
+        "relation": "supersedes",
+        "label": "U-0517 supersedes U-1031",
+        "basis": "Cluster fold: canonical supersedes earlier 'earlier-conjecture'. Encyclopedia consolidated/*.json.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "facets": {
+          "source_id": "encyclopedia-units-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::U-0525::same_content_as::U-0009",
+        "from": "U-0525",
+        "to": "U-0009",
+        "relation": "same_content_as",
+        "label": "U-0525 same_content_as U-0009",
+        "basis": "Cluster fold: 'restatement' of the canonical statement. Encyclopedia consolidated/*.json.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "facets": {
+          "source_id": "encyclopedia-units-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::U-0526::same_content_as::U-0222",
+        "from": "U-0526",
+        "to": "U-0222",
+        "relation": "same_content_as",
+        "label": "U-0526 same_content_as U-0222",
+        "basis": "Cluster fold: 'restatement' of the canonical statement. Encyclopedia consolidated/*.json.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "facets": {
+          "source_id": "encyclopedia-units-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::U-0595::supersedes::U-0758",
+        "from": "U-0595",
+        "to": "U-0758",
+        "relation": "supersedes",
+        "label": "U-0595 supersedes U-0758",
+        "basis": "Cluster fold: canonical supersedes earlier 'earlier-conjecture'. Encyclopedia consolidated/*.json.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "facets": {
+          "source_id": "encyclopedia-units-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::U-0640::same_content_as::U-1441",
+        "from": "U-0640",
+        "to": "U-1441",
+        "relation": "same_content_as",
+        "label": "U-0640 same_content_as U-1441",
+        "basis": "Cluster fold: 'restatement' of the canonical statement. Encyclopedia consolidated/*.json.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "facets": {
+          "source_id": "encyclopedia-units-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::U-0658::same_content_as::U-1728",
+        "from": "U-0658",
+        "to": "U-1728",
+        "relation": "same_content_as",
+        "label": "U-0658 same_content_as U-1728",
+        "basis": "Cluster fold: 'restatement' of the canonical statement. Encyclopedia consolidated/*.json.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "facets": {
+          "source_id": "encyclopedia-units-v1"
+        },
+        "extensions": {}
+      }
+    ],
+    "retire_nodes": [],
+    "remove_edges": []
+  },
+  "declared_impacts": [
+    {
+      "kind": "reevaluate",
+      "target_id": "DBP:gap:V4",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "DBP:wall:III_transcendence",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "DBP:wall:I_ambient",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "DBP:wall:I_singular",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0007",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0009",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0016",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0027",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0092",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0134",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0135",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0154",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0191",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0222",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0235",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0260",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0262",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0291",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0303",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0352",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0353",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0406",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0443",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0466",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0517",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0522",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0525",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0526",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0563",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0592",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0595",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0612",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0640",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "U-0658",
+      "note": "Refresh the source digest only; claim content and relationships are unchanged."
+    }
+  ],
+  "extensions": {
+    "trigger": "post-apply validate --verify-files",
+    "source_refs_reconciled": 57,
+    "node_refs_updated": 34,
+    "edge_refs_updated": 23
+  }
+}
