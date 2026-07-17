@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "submission_id": "submit-roi-closeout-edge-cleanup-2026-07-17",
+  "base_revision": "sha256:88037ff18d5218b5a55f76e20781698d6b3c5bb0abaaaff69c3d831247c7ff89",
+  "idempotency_key": "roi-closeout-edge-cleanup:2026-07-17:v1",
+  "submitted_by": "codex.claire",
+  "summary": "Remove obsolete opens-gap and editorial-blocker edges from immediate support gaps that are now proved and released.",
+  "artifacts": [],
+  "graph_delta": {
+    "upsert_nodes": [],
+    "upsert_edges": [],
+    "retire_nodes": [],
+    "remove_edges": [
+      "e::DBP:gap:I2::opens_gap::DBP:paper:I",
+      "e::DBP:gap:I3::opens_gap::DBP:paper:I",
+      "e::DBP:gap:III1::blocked_by::DBP:gate:editorial",
+      "e::DBP:gap:III1::opens_gap::DBP:paper:III",
+      "e::DBP:gap:III3::blocked_by::DBP:gate:editorial"
+    ]
+  },
+  "declared_impacts": [
+    {
+      "kind": "reevaluate",
+      "target_id": "DBP:gap:I2",
+      "note": "The canonical paper now contains the finite-order recurrence."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "DBP:gap:I3",
+      "note": "The canonical paper now contains the ambient-n and n=4 channel grid."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "DBP:gap:III1",
+      "note": "The calibrated lambda insertion has passed editorial admission."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "DBP:gap:III3",
+      "note": "The CCE-6 clearance insertion has passed editorial admission."
+    }
+  ],
+  "extensions": {
+    "status_cleanup": true,
+    "removed_obsolete_edges": 5
+  }
+}
