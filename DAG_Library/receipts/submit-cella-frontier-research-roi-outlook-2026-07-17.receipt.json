@@ -1,0 +1,42 @@
+{
+  "schema": "cella-dag-service-v1",
+  "submission_id": "submit-cella-frontier-research-roi-outlook-2026-07-17",
+  "idempotency_key": "frontier-roi-outlook:d13be6393460a393",
+  "submission_digest": "sha256:c886dce2e84e6148d05f13394b1202c7d0ba4f52a36bc28a51db77b8c1cc2079",
+  "base_revision": "sha256:00ef143b0e00f29f8a8f97ee4583907262db1c829ff6ba8c236cb71a3719fec1",
+  "applied_revision": "sha256:2de9a37823053b4d4b635661fb59ebdd4bb77c1d8554b93bf9d7d199037107b3",
+  "applied_utc": "2026-07-17T09:02:57.800673+00:00",
+  "changes": {
+    "nodes_added": [
+      "XPR:report:frontier_roi_2026_07_17"
+    ],
+    "nodes_updated": [],
+    "nodes_retired": [],
+    "edges_added": [
+      "e::XPR:report:frontier_roi_2026_07_17::supplements::DBP:paper:III",
+      "e::XPR:report:frontier_roi_2026_07_17::supplements::DBP:paper:IV",
+      "e::XPR:report:frontier_roi_2026_07_17::cites::DBP:paper:weighted_multiquadratic_monodromy",
+      "e::XPR:report:frontier_roi_2026_07_17::about::DBP:gap:III6",
+      "e::XPR:report:frontier_roi_2026_07_17::about::DBP:gap:IV3",
+      "e::XPR:report:frontier_roi_2026_07_17::about::DBP:gap:IV7",
+      "e::XPR:report:frontier_roi_2026_07_17::about::DBP:wall:IV_collision",
+      "e::XPR:report:frontier_roi_2026_07_17::about::DBP:gap:II2",
+      "e::XPR:report:frontier_roi_2026_07_17::about::DBP:gap:V2"
+    ],
+    "edges_updated": [],
+    "edges_removed": [],
+    "changed_node_ids": [
+      "DBP:gap:II2",
+      "DBP:gap:III6",
+      "DBP:gap:IV3",
+      "DBP:gap:IV7",
+      "DBP:gap:V2",
+      "DBP:paper:III",
+      "DBP:paper:IV",
+      "DBP:paper:weighted_multiquadratic_monodromy",
+      "DBP:wall:IV_collision",
+      "XPR:report:frontier_roi_2026_07_17"
+    ]
+  },
+  "applied_submission_path": "/home/williaml/Cella Framework/DAG_Library/submissions/applied/submit-cella-frontier-research-roi-outlook-2026-07-17.json"
+}
