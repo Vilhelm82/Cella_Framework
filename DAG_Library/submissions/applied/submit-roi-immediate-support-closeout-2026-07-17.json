@@ -1,0 +1,1533 @@
+{
+  "schema_version": 1,
+  "submission_id": "submit-roi-immediate-support-closeout-2026-07-17",
+  "base_revision": "sha256:2de9a37823053b4d4b635661fb59ebdd4bb77c1d8554b93bf9d7d199037107b3",
+  "idempotency_key": "roi-immediate-support-closeout:2026-07-17:v1",
+  "submitted_by": "codex.claire",
+  "summary": "Admit the verified immediate ROI support closeout for Papers I and III, the public CCE-2 certified route algebra, and the SQG citation refresh; exclude Paper IV and k=4 work.",
+  "artifacts": [
+    {
+      "schema_version": 1,
+      "artifact_id": "PAP-0189",
+      "artifact_type": "paper",
+      "title": "Active Role-Jet Orbit Calculus",
+      "summary": "Canonical Paper I strengthened with the symbolic n=3 RoleChSpec quotient converse, an all-finite-order active-rechart recurrence, and the ambient-n channel law with explicit n=4 grid.",
+      "subject_families": [
+        "dbp_role_channel_and_orbit_geometry"
+      ],
+      "claim_status": "proved",
+      "lifecycle_status": "released",
+      "provenance": {
+        "authors": [
+          "Will Lloyd"
+        ],
+        "created_utc": null,
+        "origin_repository": "Cella Framework",
+        "source_pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex"
+      },
+      "files": [
+        {
+          "role": "paper_source",
+          "path": "Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+          "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc",
+          "media_type": "application/x-tex"
+        }
+      ],
+      "claims": [
+        {
+          "claim_id": "ROI-CLOSE-I1",
+          "statement": "On the regular n=3 locus, equality of full RoleChSpec fingerprints is equivalent to equality modulo the gauge image Im G_g; the recovery minor has determinant 32/(g1 g2 g3).",
+          "hypotheses": [],
+          "scope": "Paper I, regular same-gradient n=3 Hessian gauge quotient.",
+          "claim_status": "proved",
+          "proof_ids": [],
+          "evidence_ids": []
+        },
+        {
+          "claim_id": "ROI-CLOSE-I2",
+          "statement": "The homogeneous recurrence q_d=-a^-1 R_d constructs every finite inverse jet and commutes with truncation for every finite word in the active-role generators.",
+          "hypotheses": [],
+          "scope": "Paper I, finite jets on regular charts with nonzero first-order role denominator.",
+          "claim_status": "proved",
+          "proof_ids": [],
+          "evidence_ids": []
+        },
+        {
+          "claim_id": "ROI-CLOSE-I3",
+          "statement": "The sigma_2 channel law is a sum of coordinate-triple contributions in ambient n, and the complete n=4 Gaussian-Kronecker row has four explicit Newton channels.",
+          "hypotheses": [],
+          "scope": "Paper I ambient channel decomposition; no n>=4 RoleChSpec injectivity or singular-stratum claim.",
+          "claim_status": "proved",
+          "proof_ids": [],
+          "evidence_ids": []
+        }
+      ],
+      "relations": [],
+      "external_ids": {
+        "paper_artifacts": [
+          "PAP-0189"
+        ]
+      },
+      "declared_impacts": [
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:I1",
+          "note": "Close the immediate Paper I support gap while preserving its explicit higher-dimensional and singular walls."
+        },
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:I2",
+          "note": "Close the immediate Paper I support gap while preserving its explicit higher-dimensional and singular walls."
+        },
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:I3",
+          "note": "Close the immediate Paper I support gap while preserving its explicit higher-dimensional and singular walls."
+        }
+      ],
+      "llm": {
+        "one_sentence_purpose": "Provide the reusable symbolic orbit, recurrence, and ambient-channel results now absorbed by canonical Paper I.",
+        "key_terms": [
+          "Paper I",
+          "RoleChSpec",
+          "gauge quotient",
+          "finite jet",
+          "ambient dimension",
+          "Gaussian-Kronecker grid"
+        ],
+        "retrieval_questions": [
+          "What closes Paper I gaps I1 through I3?",
+          "What remains open beyond the n=3 RoleChSpec converse?"
+        ],
+        "context_priority": "high",
+        "context_role": "core"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "closeout_date": "2026-07-17",
+        "source_sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+      }
+    },
+    {
+      "schema_version": 1,
+      "artifact_id": "PAP-0012",
+      "artifact_type": "paper",
+      "title": "DBP Curvature Periods of the DBP Quadric",
+      "summary": "Canonical Paper III now incorporates CCE-5 absolute corridor calibration and matrices plus CCE-6 exact native-sweep clearance, while retaining whole-surface, Landen and transcendence boundaries.",
+      "subject_families": [
+        "dbp_periods_landen_and_elliptic_structure"
+      ],
+      "claim_status": "proved",
+      "lifecycle_status": "released",
+      "provenance": {
+        "authors": [
+          "Will Lloyd"
+        ],
+        "created_utc": null,
+        "origin_repository": "Cella Framework",
+        "source_pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md"
+      },
+      "files": [
+        {
+          "role": "paper_source",
+          "path": "Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md",
+          "sha256": "69365626e738b900c85c2f03ac65c89287b4d193f439449bd3867686b9b1d805",
+          "media_type": "text/markdown"
+        }
+      ],
+      "claims": [
+        {
+          "claim_id": "ROI-CLOSE-III123",
+          "statement": "On the two released corridors, lambda_up=B_- and lambda_down=-B_-, the route-specific relative matrices and trace coordinates are exact, and native surface sweeps have the certified discriminant/resultant clearance with epsilon_*=1/105186307200.",
+          "hypotheses": [],
+          "scope": "Paper III corridor-restricted native image; excludes whole-surface saturation and scalar special-value relations.",
+          "claim_status": "proved",
+          "proof_ids": [],
+          "evidence_ids": []
+        }
+      ],
+      "relations": [],
+      "external_ids": {
+        "paper_artifacts": [
+          "PAP-0012"
+        ]
+      },
+      "declared_impacts": [
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:III1",
+          "note": "Close the stale Paper III editorial gap by incorporating its released proof authority."
+        },
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:III2",
+          "note": "Close the stale Paper III editorial gap by incorporating its released proof authority."
+        },
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:III3",
+          "note": "Close the stale Paper III editorial gap by incorporating its released proof authority."
+        }
+      ],
+      "llm": {
+        "one_sentence_purpose": "Consolidate the exact CCE-5 and CCE-6 corridor results into canonical Paper III without broadening their topology scope.",
+        "key_terms": [
+          "Paper III",
+          "CCE-5",
+          "CCE-6",
+          "Picard-Lefschetz",
+          "surface sweep",
+          "clearance"
+        ],
+        "retrieval_questions": [
+          "Which CCE-5 and CCE-6 results are now inside Paper III?",
+          "Which whole-surface claims remain open?"
+        ],
+        "context_priority": "high",
+        "context_role": "core"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "closeout_date": "2026-07-17",
+        "source_sha256": "69365626e738b900c85c2f03ac65c89287b4d193f439449bd3867686b9b1d805"
+      }
+    },
+    {
+      "schema_version": 1,
+      "artifact_id": "PAP-0010",
+      "artifact_type": "theorem",
+      "title": "Selected Quotient Groupoids Foundation",
+      "summary": "SQG foundation refreshed so Proposition 4.2 and its minimal-ring table cite the released CCE-5 absolute calibration and exact CPV half-sum.",
+      "subject_families": [
+        "dbp_role_channel_and_orbit_geometry",
+        "cella_residue_and_coupling_theory"
+      ],
+      "claim_status": "proved",
+      "lifecycle_status": "released",
+      "provenance": {
+        "authors": [
+          "Will Lloyd"
+        ],
+        "created_utc": null,
+        "origin_repository": "Cella Framework",
+        "source_pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/SELECTED_QUOTIENT_GROUPOIDS_FOUNDATION_v1.0.md"
+      },
+      "files": [
+        {
+          "role": "theorem_source",
+          "path": "Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/SELECTED_QUOTIENT_GROUPOIDS_FOUNDATION_v1.0.md",
+          "sha256": "7a0bb32bf1642c3cd772ae150bffb5297bb92773c5e50743018a748e792f9043",
+          "media_type": "text/markdown"
+        }
+      ],
+      "claims": [
+        {
+          "claim_id": "ROI-CLOSE-V1",
+          "statement": "The SQG minimal coefficient-ring classification is supported by exact integral lateral transport with lambda_up=B_-, lambda_down=-B_- and the rational CPV half-sum.",
+          "hypotheses": [],
+          "scope": "SQG Proposition 4.2 at the calibrated CCE-5 corridor scope.",
+          "claim_status": "proved",
+          "proof_ids": [],
+          "evidence_ids": []
+        }
+      ],
+      "relations": [],
+      "external_ids": {
+        "paper_artifacts": [
+          "PAP-0010"
+        ]
+      },
+      "declared_impacts": [
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:V1",
+          "note": "Replace the stale unresolved-correction citation with the released calibration theorem."
+        }
+      ],
+      "llm": {
+        "one_sentence_purpose": "Bind the SQG coefficient-ring classification to the exact released CCE-5 transport theorem.",
+        "key_terms": [
+          "SQG",
+          "coefficient rings",
+          "CCE-5",
+          "CPV midpoint",
+          "integral transport"
+        ],
+        "retrieval_questions": [
+          "What proof authority supports SQG Proposition 4.2?"
+        ],
+        "context_priority": "high",
+        "context_role": "core"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "closeout_date": "2026-07-17",
+        "source_sha256": "7a0bb32bf1642c3cd772ae150bffb5297bb92773c5e50743018a748e792f9043"
+      }
+    },
+    {
+      "schema_version": 1,
+      "artifact_id": "PAP-0511",
+      "artifact_type": "report",
+      "title": "ROI Immediate Support Closeout",
+      "summary": "Auditable succession closeout for Paper I, Paper III, the CCE-2 public route algebra, and the SQG citation refresh; Paper IV and k=4 work are explicitly excluded.",
+      "subject_families": [
+        "cross_program_and_unclassified",
+        "dbp_role_channel_and_orbit_geometry",
+        "dbp_periods_landen_and_elliptic_structure",
+        "cella_residue_and_coupling_theory"
+      ],
+      "claim_status": "demonstrated",
+      "lifecycle_status": "released",
+      "provenance": {
+        "authors": [
+          "Will Lloyd"
+        ],
+        "created_utc": "2026-07-17T10:30:00Z",
+        "origin_repository": "Cella Framework",
+        "source_pointer": "cella:research/campaigns/Succession_Map/DBP_PAPER_SUCCESSION_AND_REDUNDANCY_MAP_v1.0.md"
+      },
+      "files": [
+        {
+          "role": "succession_report",
+          "path": "research/campaigns/Succession_Map/DBP_PAPER_SUCCESSION_AND_REDUNDANCY_MAP_v1.0.md",
+          "sha256": "311e7f231da44dc644d4dc378409aab1d4ba5b5f24e430607889d00842f3a242",
+          "media_type": "text/markdown"
+        },
+        {
+          "role": "restriction_ledger",
+          "path": "Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/DBP_CCE_ARTIFICIAL_RESTRICTION_LIVE_RECONCILIATION_v1.0.md",
+          "sha256": "2aa2e57b4005e15b86986264724fa7a4fa746100cd8e150fca45657971bb7138",
+          "media_type": "text/markdown"
+        },
+        {
+          "role": "gap_ledger",
+          "path": "research/campaigns/CELLA_CONTINUATION_ENGINE/03_cce2_corridors/CCE_2_GAP_LEDGER_v1.0.md",
+          "sha256": "1cea8a2dfca0196886050778a40e45a840422e8c9a32d9c5b0eacf5d2ece1812",
+          "media_type": "text/markdown"
+        }
+      ],
+      "claims": [
+        {
+          "claim_id": "ROI-CLOSE-REPORT",
+          "statement": "The immediate low-risk ROI tranche closes I1-I3, III1-III4 and V1, with Paper IV and k=4 work excluded from the bundle.",
+          "hypotheses": [],
+          "scope": "Repository and DAG succession status after exact source and gate verification.",
+          "claim_status": "demonstrated",
+          "proof_ids": [],
+          "evidence_ids": []
+        }
+      ],
+      "relations": [],
+      "external_ids": {
+        "paper_artifacts": [
+          "PAP-0511"
+        ]
+      },
+      "declared_impacts": [
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:I1",
+          "note": "Record the verified immediate support closeout and its preserved scope fences."
+        },
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:I2",
+          "note": "Record the verified immediate support closeout and its preserved scope fences."
+        },
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:I3",
+          "note": "Record the verified immediate support closeout and its preserved scope fences."
+        },
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:III1",
+          "note": "Record the verified immediate support closeout and its preserved scope fences."
+        },
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:III2",
+          "note": "Record the verified immediate support closeout and its preserved scope fences."
+        },
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:III3",
+          "note": "Record the verified immediate support closeout and its preserved scope fences."
+        },
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:III4",
+          "note": "Record the verified immediate support closeout and its preserved scope fences."
+        },
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:V1",
+          "note": "Record the verified immediate support closeout and its preserved scope fences."
+        }
+      ],
+      "llm": {
+        "one_sentence_purpose": "Record exactly which easy ROI support tasks were completed and which mathematical walls remain.",
+        "key_terms": [
+          "ROI closeout",
+          "succession",
+          "Paper I",
+          "Paper III",
+          "CCE-2",
+          "SQG"
+        ],
+        "retrieval_questions": [
+          "Which immediate ROI tasks were closed?",
+          "Was Paper IV or k=4 changed?",
+          "Which gaps remain after the support tranche?"
+        ],
+        "context_priority": "high",
+        "context_role": "core"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "closeout_date": "2026-07-17",
+        "paper_iv_excluded": true,
+        "source_sha256": "311e7f231da44dc644d4dc378409aab1d4ba5b5f24e430607889d00842f3a242"
+      }
+    },
+    {
+      "schema_version": 1,
+      "artifact_id": "PAP-0512",
+      "artifact_type": "certificate",
+      "title": "CCE-2 Public Route Composition and Reversal Certificate",
+      "summary": "Production API and exact 14-assertion gate for replay-verified composition and reversal in the released U,L,u,l corridor groupoid.",
+      "subject_families": [
+        "dbp_periods_landen_and_elliptic_structure",
+        "cross_program_and_unclassified"
+      ],
+      "claim_status": "machine-verified",
+      "lifecycle_status": "released",
+      "provenance": {
+        "authors": [
+          "Will Lloyd"
+        ],
+        "created_utc": "2026-07-17T10:30:00Z",
+        "origin_repository": "Cella Framework",
+        "source_pointer": "cella:engine/tests/gate_continuation_cce2_route_api.py"
+      },
+      "files": [
+        {
+          "role": "implementation",
+          "path": "engine/src/cella/continuation/api.py",
+          "sha256": "7335c04ae8f303ee769b79f58808b8a1a69cd828390390a56258777163240f6f",
+          "media_type": "text/x-python"
+        },
+        {
+          "role": "verification_gate",
+          "path": "engine/tests/gate_continuation_cce2_route_api.py",
+          "sha256": "16c6f843b6abb65f04dbcd8e1407e29aea1bcee22ff71b7a3434307e3d1fe2e6",
+          "media_type": "text/x-python"
+        }
+      ],
+      "claims": [
+        {
+          "claim_id": "CCE2-ROUTE-API",
+          "statement": "compose_routes and reverse_route accept only replay-valid CCE-5 groupoid certificates, produce canonical certified words, and refuse uncertified, tampered, or noncomposable inputs.",
+          "hypotheses": [],
+          "scope": "Released two-corridor U,L,u,l groupoid only; no admission of new geometric routes.",
+          "claim_status": "machine-verified",
+          "proof_ids": [],
+          "evidence_ids": [
+            "gate_continuation_cce2_route_api:14"
+          ]
+        }
+      ],
+      "relations": [],
+      "external_ids": {
+        "paper_artifacts": [
+          "PAP-0512"
+        ]
+      },
+      "declared_impacts": [
+        {
+          "kind": "reevaluate",
+          "target_id": "DBP:gap:III4",
+          "note": "Promote the already-proved word algebra through the public CCE-2 API with replay guards."
+        }
+      ],
+      "llm": {
+        "one_sentence_purpose": "Expose certified route composition and reversal without weakening geometric route-admission guards.",
+        "key_terms": [
+          "CCE-2",
+          "route composition",
+          "route reversal",
+          "certificate replay",
+          "typed refusal"
+        ],
+        "retrieval_questions": [
+          "How are public CCE routes composed and reversed safely?",
+          "What inputs does the public route API refuse?"
+        ],
+        "context_priority": "high",
+        "context_role": "core"
+      },
+      "visual_hints": {},
+      "extensions": {
+        "gate_assertions": 14,
+        "implementation_sha256": "7335c04ae8f303ee769b79f58808b8a1a69cd828390390a56258777163240f6f",
+        "gate_sha256": "16c6f843b6abb65f04dbcd8e1407e29aea1bcee22ff71b7a3434307e3d1fe2e6"
+      }
+    }
+  ],
+  "graph_delta": {
+    "upsert_nodes": [
+      {
+        "id": "DBP:paper:I",
+        "label": "Paper I — Active Role-Jet Orbit Calculus",
+        "type": "paper",
+        "claim_status": "proved",
+        "lifecycle_status": "released",
+        "reachability": null,
+        "tracked": false,
+        "layer": "succession",
+        "summary": "Canonical Paper I with the S3 orbit calculus, symbolic n=3 RoleChSpec quotient converse, all-finite-order active recharting, and ambient-n channel decomposition including the explicit n=4 grid.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0189"
+          ]
+        },
+        "facets": {
+          "paper": "I",
+          "subject_family": "dbp_role_channel_and_orbit_geometry",
+          "source_id": "dbp-frontier-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [
+            "role jet",
+            "orbit calculus",
+            "S3",
+            "channel decomposition"
+          ],
+          "context_priority": "normal",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "DBP:paper:III",
+        "label": "Paper III — DBP Curvature Periods of the DBP Quadric",
+        "type": "paper",
+        "claim_status": "proved",
+        "lifecycle_status": "released",
+        "reachability": null,
+        "tracked": false,
+        "layer": "succession",
+        "summary": "Consolidated Paper III including CCE-2 corridors, CCE-5 absolute calibration and route matrices, and CCE-6 exact native-sweep clearance; whole-surface saturation, Landen comparison and transcendence remain outside scope.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md",
+            "sha256": "69365626e738b900c85c2f03ac65c89287b4d193f439449bd3867686b9b1d805"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [],
+          "paper_artifacts": [
+            "PAP-0012"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0012"
+          ]
+        },
+        "facets": {
+          "paper": "III",
+          "subject_family": "dbp_periods_landen_and_elliptic_structure",
+          "source_id": "dbp-frontier-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [
+            "Landen",
+            "period",
+            "corridor",
+            "native transfer"
+          ],
+          "context_priority": "normal",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "DBP:thm:sqg_foundation",
+        "label": "Selected Quotient Groupoids Foundation",
+        "type": "theorem",
+        "claim_status": "proved",
+        "lifecycle_status": "released",
+        "reachability": null,
+        "tracked": false,
+        "layer": "succession",
+        "summary": "Selected quotient groupoid foundation with Proposition 4.2 tied to the exact CCE-5 calibrated integral transports and CPV half-sum.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/SELECTED_QUOTIENT_GROUPOIDS_FOUNDATION_v1.0.md",
+            "sha256": "7a0bb32bf1642c3cd772ae150bffb5297bb92773c5e50743018a748e792f9043"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [],
+          "paper_artifacts": [
+            "PAP-0010"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0010"
+          ]
+        },
+        "facets": {
+          "paper": "V",
+          "subject_family": "dbp_role_channel_and_orbit_geometry",
+          "source_id": "dbp-frontier-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "normal",
+          "retrieval_questions": [],
+          "context_role": "core"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "DBP:ledger:AR",
+        "label": "Artificial-Restriction Live Reconciliation (AR-01..26, PI-01..12)",
+        "type": "report",
+        "claim_status": "demonstrated",
+        "lifecycle_status": "active",
+        "reachability": null,
+        "tracked": false,
+        "layer": "succession",
+        "summary": "Live artificial-restriction ledger updated to promote replay-verified public route composition and reversal on the released corridor groupoid.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/DBP_CCE_ARTIFICIAL_RESTRICTION_LIVE_RECONCILIATION_v1.0.md",
+            "sha256": "2aa2e57b4005e15b86986264724fa7a4fa746100cd8e150fca45657971bb7138"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [],
+          "paper_artifacts": [
+            "PAP-0160"
+          ],
+          "campaigns": [
+            "CMP-0004"
+          ],
+          "campaign_artifacts": [
+            "CMA-000051"
+          ],
+          "reports": [
+            "RPT-000615"
+          ],
+          "evidence": [
+            "EVD-001085"
+          ],
+          "retirement_packages": [],
+          "cce_ledger": [
+            "AR-00"
+          ],
+          "artifacts": [
+            "PAP-0511"
+          ]
+        },
+        "facets": {
+          "paper": "III/IV/V",
+          "source_id": "dbp-frontier-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [
+            "artificial restriction",
+            "expansion",
+            "promotion"
+          ],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "supporting"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "DBP:gap:I1",
+        "label": "Frozen-atlas RoleChSpec converse (general n=3)",
+        "type": "gap",
+        "claim_status": "proved",
+        "lifecycle_status": "released",
+        "reachability": "EASY",
+        "tracked": false,
+        "layer": "frontier",
+        "summary": "Closed: Theorem H proves the full regular-locus n=3 RoleChSpec gauge-orbit biconditional; n>=4 survival remains a named wall.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [],
+          "paper_artifacts": [
+            "PAP-0397"
+          ],
+          "campaigns": [
+            "CMP-0029"
+          ],
+          "campaign_artifacts": [
+            "CMA-000598"
+          ],
+          "reports": [
+            "RPT-000200"
+          ],
+          "evidence": [
+            "EVD-000090"
+          ],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0189"
+          ]
+        },
+        "facets": {
+          "paper": "I",
+          "subject_family": "dbp_role_channel_and_orbit_geometry",
+          "reachability_class": "EASY",
+          "source_id": "dbp-frontier-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "frontier"
+        },
+        "extensions": {
+          "resolved_utc": "2026-07-17",
+          "resolution_artifact": "PAP-0189"
+        }
+      },
+      {
+        "id": "DBP:gap:I2",
+        "label": "All-finite-order active-role induction (written out)",
+        "type": "gap",
+        "claim_status": "proved",
+        "lifecycle_status": "released",
+        "reachability": "EASY",
+        "tracked": false,
+        "layer": "frontier",
+        "summary": "Closed: the homogeneous inverse recurrence and truncation induction cover every finite order and every finite role word on regular charts.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0032",
+            "E-0033",
+            "U-0007",
+            "U-0009",
+            "U-0016",
+            "U-0027",
+            "U-0092",
+            "U-0134",
+            "U-0135",
+            "U-0154",
+            "U-0191",
+            "U-0222",
+            "U-0235",
+            "U-0260",
+            "U-0262",
+            "U-0291",
+            "U-0303",
+            "U-0352",
+            "U-0353",
+            "U-0406",
+            "U-0443",
+            "U-0466",
+            "U-0517",
+            "U-0522",
+            "U-0525",
+            "U-0526",
+            "U-0563",
+            "U-0592",
+            "U-0595",
+            "U-0612",
+            "U-0640",
+            "U-0658"
+          ],
+          "paper_artifacts": [
+            "PAP-0189"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0189"
+          ]
+        },
+        "facets": {
+          "paper": "I",
+          "subject_family": "dbp_role_channel_and_orbit_geometry",
+          "reachability_class": "EASY",
+          "source_id": "dbp-frontier-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "frontier"
+        },
+        "extensions": {
+          "resolved_utc": "2026-07-17",
+          "resolution_artifact": "PAP-0189"
+        }
+      },
+      {
+        "id": "DBP:gap:I3",
+        "label": "n>=4 / ambient-n channel grid into canonical paper",
+        "type": "gap",
+        "claim_status": "proved",
+        "lifecycle_status": "released",
+        "reachability": "EASY",
+        "tracked": false,
+        "layer": "frontier",
+        "summary": "Closed: Paper I now contains the ambient-n sigma_2 coordinate-triple law and explicit n=4 Gaussian-Kronecker grid, without claiming n>=4 RoleChSpec injectivity.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/01_completed_papers/dbp_role_channel_and_orbit_geometry/dbp_orbit_calculus.tex",
+            "sha256": "863eb65ea8019de0522bb6351d86cc0b6cadad7d0ee0a80844c75e279801c7fc"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [
+            "E-0036",
+            "E-0038",
+            "U-0004",
+            "U-0005",
+            "U-0006",
+            "U-0011",
+            "U-0015",
+            "U-0018",
+            "U-0020",
+            "U-0025",
+            "U-0038",
+            "U-0052",
+            "U-0053",
+            "U-0057",
+            "U-0058",
+            "U-0063",
+            "U-0064",
+            "U-0065",
+            "U-0066",
+            "U-0068",
+            "U-0069",
+            "U-0089",
+            "U-0096",
+            "U-0119",
+            "U-0133",
+            "U-0172",
+            "U-0192",
+            "U-0195",
+            "U-0199",
+            "U-0217",
+            "U-0233",
+            "U-0254",
+            "U-0258",
+            "U-0265",
+            "U-0273",
+            "U-0277",
+            "U-0288",
+            "U-0289",
+            "U-0355",
+            "U-0357",
+            "U-0359",
+            "U-0360",
+            "U-0361",
+            "U-0362",
+            "U-0363",
+            "U-0364",
+            "U-0377",
+            "U-0382",
+            "U-0408",
+            "U-0419",
+            "U-0424",
+            "U-0431",
+            "U-0438",
+            "U-0469",
+            "U-0470",
+            "U-0471",
+            "U-0472",
+            "U-0476",
+            "U-0516",
+            "U-0572",
+            "U-0597",
+            "U-0636",
+            "U-0659",
+            "U-0661",
+            "U-0664",
+            "U-0665",
+            "U-0692",
+            "U-0693",
+            "U-0695",
+            "U-0696",
+            "U-0697",
+            "U-0698",
+            "U-0699",
+            "U-0702",
+            "U-0703",
+            "U-0706",
+            "U-0707",
+            "U-0708",
+            "U-0709",
+            "U-0710",
+            "U-0711",
+            "U-0712"
+          ],
+          "paper_artifacts": [
+            "PAP-0197"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0189"
+          ]
+        },
+        "facets": {
+          "paper": "I",
+          "subject_family": "dbp_role_channel_and_orbit_geometry",
+          "reachability_class": "EASY",
+          "source_id": "dbp-frontier-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "frontier"
+        },
+        "extensions": {
+          "resolved_utc": "2026-07-17",
+          "resolution_artifact": "PAP-0189"
+        }
+      },
+      {
+        "id": "DBP:gap:III1",
+        "label": "Insert calibrated lambda into Paper III §7F",
+        "type": "gap",
+        "claim_status": "proved",
+        "lifecycle_status": "released",
+        "reachability": "EASY",
+        "tracked": false,
+        "layer": "frontier",
+        "summary": "Closed: Paper III now states lambda_up=B_- and lambda_down=-B_- with the certified route matrices and trace coordinates.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md",
+            "sha256": "69365626e738b900c85c2f03ac65c89287b4d193f439449bd3867686b9b1d805"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [],
+          "paper_artifacts": [
+            "PAP-0012"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "cce_ledger": [
+            "AR-13"
+          ],
+          "artifacts": [
+            "PAP-0012"
+          ]
+        },
+        "facets": {
+          "paper": "III",
+          "subject_family": "dbp_periods_landen_and_elliptic_structure",
+          "reachability_class": "EASY",
+          "source_id": "dbp-frontier-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "frontier"
+        },
+        "extensions": {
+          "resolved_utc": "2026-07-17",
+          "resolution_artifact": "PAP-0012"
+        }
+      },
+      {
+        "id": "DBP:gap:III2",
+        "label": "De-stale Paper III 'Not claimed' block",
+        "type": "gap",
+        "claim_status": "proved",
+        "lifecycle_status": "released",
+        "reachability": "EASY",
+        "tracked": false,
+        "layer": "frontier",
+        "summary": "Closed: the stale A/B coefficient and route-matrix nonclaims were replaced by the exact CCE-5 result; broader full-plane generators remain open.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md",
+            "sha256": "69365626e738b900c85c2f03ac65c89287b4d193f439449bd3867686b9b1d805"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [],
+          "paper_artifacts": [
+            "PAP-0012"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0012"
+          ]
+        },
+        "facets": {
+          "paper": "III",
+          "subject_family": "dbp_periods_landen_and_elliptic_structure",
+          "reachability_class": "EASY",
+          "source_id": "dbp-frontier-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "frontier"
+        },
+        "extensions": {
+          "resolved_utc": "2026-07-17",
+          "resolution_artifact": "PAP-0012"
+        }
+      },
+      {
+        "id": "DBP:gap:III3",
+        "label": "Insert CCE-6 clearance lemma into Paper III §7F",
+        "type": "gap",
+        "claim_status": "proved",
+        "lifecycle_status": "released",
+        "reachability": "EASY",
+        "tracked": false,
+        "layer": "frontier",
+        "summary": "Closed: Lemma 7F.B incorporates the CCE-6 discriminant/resultant clearance and exact epsilon_* for both released native sweeps.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_periods_landen_and_elliptic_structure/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md",
+            "sha256": "69365626e738b900c85c2f03ac65c89287b4d193f439449bd3867686b9b1d805"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [],
+          "paper_artifacts": [
+            "PAP-0012"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "cce_ledger": [
+            "AR-06"
+          ],
+          "artifacts": [
+            "PAP-0012"
+          ]
+        },
+        "facets": {
+          "paper": "III",
+          "subject_family": "dbp_periods_landen_and_elliptic_structure",
+          "reachability_class": "EASY",
+          "source_id": "dbp-frontier-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "frontier"
+        },
+        "extensions": {
+          "resolved_utc": "2026-07-17",
+          "resolution_artifact": "PAP-0012"
+        }
+      },
+      {
+        "id": "DBP:gap:III4",
+        "label": "Expose route reversal/composition in public CCE-2 API",
+        "type": "gap",
+        "claim_status": "proved",
+        "lifecycle_status": "released",
+        "reachability": "EASY",
+        "tracked": false,
+        "layer": "frontier",
+        "summary": "Closed at released-groupoid scope: public composition and reversal replay certified U,L,u,l routes and retain typed refusals for unsupported or invalid inputs.",
+        "source_refs": [
+          {
+            "pointer": "cella:research/campaigns/CELLA_CONTINUATION_ENGINE/03_cce2_corridors/CCE_2_GAP_LEDGER_v1.0.md",
+            "sha256": "1cea8a2dfca0196886050778a40e45a840422e8c9a32d9c5b0eacf5d2ece1812"
+          },
+          {
+            "pointer": "cella:engine/src/cella/continuation/api.py",
+            "sha256": "7335c04ae8f303ee769b79f58808b8a1a69cd828390390a56258777163240f6f"
+          },
+          {
+            "pointer": "cella:engine/tests/gate_continuation_cce2_route_api.py",
+            "sha256": "16c6f843b6abb65f04dbcd8e1407e29aea1bcee22ff71b7a3434307e3d1fe2e6"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [],
+          "paper_artifacts": [],
+          "campaigns": [
+            "CMP-0004"
+          ],
+          "campaign_artifacts": [
+            "CMA-000072"
+          ],
+          "reports": [
+            "RPT-000007"
+          ],
+          "evidence": [
+            "EVD-000069"
+          ],
+          "retirement_packages": [],
+          "cce_ledger": [
+            "AR-03"
+          ],
+          "artifacts": [
+            "PAP-0512"
+          ]
+        },
+        "facets": {
+          "paper": "III",
+          "reachability_class": "EASY",
+          "source_id": "dbp-frontier-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "frontier"
+        },
+        "extensions": {
+          "resolved_utc": "2026-07-17",
+          "resolution_artifact": "PAP-0512"
+        }
+      },
+      {
+        "id": "DBP:gap:V1",
+        "label": "SQG Prop 4.2 citation refresh",
+        "type": "gap",
+        "claim_status": "proved",
+        "lifecycle_status": "released",
+        "reachability": "EASY",
+        "tracked": false,
+        "layer": "frontier",
+        "summary": "Closed: SQG Proposition 4.2 now cites the calibrated CCE-5 integral transport and exact CPV half-sum.",
+        "source_refs": [
+          {
+            "pointer": "cella:Papers_Library/05_expository_companions_and_research_maps/dbp_role_channel_and_orbit_geometry/SELECTED_QUOTIENT_GROUPOIDS_FOUNDATION_v1.0.md",
+            "sha256": "7a0bb32bf1642c3cd772ae150bffb5297bb92773c5e50743018a748e792f9043"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [],
+          "paper_artifacts": [
+            "PAP-0010"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0010"
+          ]
+        },
+        "facets": {
+          "paper": "V",
+          "subject_family": "cella_residue_and_coupling_theory",
+          "reachability_class": "EASY",
+          "source_id": "dbp-frontier-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [],
+          "context_priority": "high",
+          "retrieval_questions": [],
+          "context_role": "frontier"
+        },
+        "extensions": {
+          "resolved_utc": "2026-07-17",
+          "resolution_artifact": "PAP-0010"
+        }
+      },
+      {
+        "id": "DBP:report:roi_immediate_support_closeout",
+        "label": "ROI Immediate Support Closeout",
+        "type": "report",
+        "claim_status": "demonstrated",
+        "lifecycle_status": "released",
+        "reachability": null,
+        "tracked": false,
+        "layer": "succession",
+        "summary": "Verified closeout of Paper I gaps I1-I3, Paper III gaps III1-III4, and SQG gap V1; Paper IV and k=4 work explicitly excluded.",
+        "source_refs": [
+          {
+            "pointer": "cella:research/campaigns/Succession_Map/DBP_PAPER_SUCCESSION_AND_REDUNDANCY_MAP_v1.0.md",
+            "sha256": "311e7f231da44dc644d4dc378409aab1d4ba5b5f24e430607889d00842f3a242"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [],
+          "paper_artifacts": [
+            "PAP-0511"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0511"
+          ]
+        },
+        "facets": {
+          "subject_family": "cross_program_and_unclassified",
+          "report": "roi_immediate_support_closeout",
+          "source_id": "cella-submissions-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [
+            "ROI closeout",
+            "Paper I",
+            "Paper III",
+            "CCE-2",
+            "SQG"
+          ],
+          "retrieval_questions": [
+            "Which immediate ROI gaps were closed?",
+            "Was k=4 touched?"
+          ],
+          "context_priority": "high",
+          "context_role": "core"
+        },
+        "extensions": {
+          "artifact_id": "PAP-0511",
+          "paper_iv_excluded": true
+        }
+      },
+      {
+        "id": "DBP:certificate:cce2_public_route_algebra",
+        "label": "CCE-2 public route composition and reversal",
+        "type": "certificate",
+        "claim_status": "machine-verified",
+        "lifecycle_status": "released",
+        "reachability": null,
+        "tracked": false,
+        "layer": "substrate",
+        "summary": "Fourteen-assertion exact gate for canonical composition, reversal, associativity, double reversal, and refusal of invalid public corridor routes.",
+        "source_refs": [
+          {
+            "pointer": "cella:engine/src/cella/continuation/api.py",
+            "sha256": "7335c04ae8f303ee769b79f58808b8a1a69cd828390390a56258777163240f6f"
+          },
+          {
+            "pointer": "cella:engine/tests/gate_continuation_cce2_route_api.py",
+            "sha256": "16c6f843b6abb65f04dbcd8e1407e29aea1bcee22ff71b7a3434307e3d1fe2e6"
+          }
+        ],
+        "external_ids": {
+          "encyclopedia": [],
+          "paper_artifacts": [
+            "PAP-0512"
+          ],
+          "campaigns": [],
+          "campaign_artifacts": [],
+          "reports": [],
+          "evidence": [],
+          "retirement_packages": [],
+          "artifacts": [
+            "PAP-0512"
+          ]
+        },
+        "facets": {
+          "subject_family": "dbp_periods_landen_and_elliptic_structure",
+          "engine": "CCE-2",
+          "source_id": "cella-submissions-v1"
+        },
+        "visual_hints": {},
+        "retrieval": {
+          "key_terms": [
+            "CCE-2",
+            "composition",
+            "reversal",
+            "certificate replay"
+          ],
+          "retrieval_questions": [
+            "What certifies the public CCE-2 route algebra?"
+          ],
+          "context_priority": "high",
+          "context_role": "core"
+        },
+        "extensions": {
+          "artifact_id": "PAP-0512",
+          "assertions": 14
+        }
+      }
+    ],
+    "upsert_edges": [
+      {
+        "id": "e::DBP:report:roi_immediate_support_closeout::about::DBP:gap:I1",
+        "from": "DBP:report:roi_immediate_support_closeout",
+        "to": "DBP:gap:I1",
+        "relation": "about",
+        "label": "ROI immediate support closeout records DBP:gap:I1",
+        "basis": "The source edit and exact verification recorded by PAP-0511/PAP-0512 close this immediate support obligation within its stated scope.",
+        "source_refs": [],
+        "facets": {
+          "source_id": "cella-submissions-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:report:roi_immediate_support_closeout::about::DBP:gap:I2",
+        "from": "DBP:report:roi_immediate_support_closeout",
+        "to": "DBP:gap:I2",
+        "relation": "about",
+        "label": "ROI immediate support closeout records DBP:gap:I2",
+        "basis": "The source edit and exact verification recorded by PAP-0511/PAP-0512 close this immediate support obligation within its stated scope.",
+        "source_refs": [],
+        "facets": {
+          "source_id": "cella-submissions-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:report:roi_immediate_support_closeout::about::DBP:gap:I3",
+        "from": "DBP:report:roi_immediate_support_closeout",
+        "to": "DBP:gap:I3",
+        "relation": "about",
+        "label": "ROI immediate support closeout records DBP:gap:I3",
+        "basis": "The source edit and exact verification recorded by PAP-0511/PAP-0512 close this immediate support obligation within its stated scope.",
+        "source_refs": [],
+        "facets": {
+          "source_id": "cella-submissions-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:report:roi_immediate_support_closeout::about::DBP:gap:III1",
+        "from": "DBP:report:roi_immediate_support_closeout",
+        "to": "DBP:gap:III1",
+        "relation": "about",
+        "label": "ROI immediate support closeout records DBP:gap:III1",
+        "basis": "The source edit and exact verification recorded by PAP-0511/PAP-0512 close this immediate support obligation within its stated scope.",
+        "source_refs": [],
+        "facets": {
+          "source_id": "cella-submissions-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:report:roi_immediate_support_closeout::about::DBP:gap:III2",
+        "from": "DBP:report:roi_immediate_support_closeout",
+        "to": "DBP:gap:III2",
+        "relation": "about",
+        "label": "ROI immediate support closeout records DBP:gap:III2",
+        "basis": "The source edit and exact verification recorded by PAP-0511/PAP-0512 close this immediate support obligation within its stated scope.",
+        "source_refs": [],
+        "facets": {
+          "source_id": "cella-submissions-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:report:roi_immediate_support_closeout::about::DBP:gap:III3",
+        "from": "DBP:report:roi_immediate_support_closeout",
+        "to": "DBP:gap:III3",
+        "relation": "about",
+        "label": "ROI immediate support closeout records DBP:gap:III3",
+        "basis": "The source edit and exact verification recorded by PAP-0511/PAP-0512 close this immediate support obligation within its stated scope.",
+        "source_refs": [],
+        "facets": {
+          "source_id": "cella-submissions-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:report:roi_immediate_support_closeout::about::DBP:gap:III4",
+        "from": "DBP:report:roi_immediate_support_closeout",
+        "to": "DBP:gap:III4",
+        "relation": "about",
+        "label": "ROI immediate support closeout records DBP:gap:III4",
+        "basis": "The source edit and exact verification recorded by PAP-0511/PAP-0512 close this immediate support obligation within its stated scope.",
+        "source_refs": [],
+        "facets": {
+          "source_id": "cella-submissions-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:report:roi_immediate_support_closeout::about::DBP:gap:V1",
+        "from": "DBP:report:roi_immediate_support_closeout",
+        "to": "DBP:gap:V1",
+        "relation": "about",
+        "label": "ROI immediate support closeout records DBP:gap:V1",
+        "basis": "The source edit and exact verification recorded by PAP-0511/PAP-0512 close this immediate support obligation within its stated scope.",
+        "source_refs": [],
+        "facets": {
+          "source_id": "cella-submissions-v1"
+        },
+        "extensions": {}
+      },
+      {
+        "id": "e::DBP:certificate:cce2_public_route_algebra::proves::DBP:gap:III4",
+        "from": "DBP:certificate:cce2_public_route_algebra",
+        "to": "DBP:gap:III4",
+        "relation": "proves",
+        "label": "CCE-2 public route certificate proves gap III4 closure",
+        "basis": "The 14-assertion gate replays valid certificates and exercises canonical composition, reversal and refusal boundaries.",
+        "source_refs": [],
+        "facets": {
+          "source_id": "cella-submissions-v1"
+        },
+        "extensions": {}
+      }
+    ],
+    "retire_nodes": [],
+    "remove_edges": []
+  },
+  "declared_impacts": [
+    {
+      "kind": "reevaluate",
+      "target_id": "DBP:gap:I1",
+      "note": "Mark the verified immediate support obligation resolved within its explicit scope."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "DBP:gap:I2",
+      "note": "Mark the verified immediate support obligation resolved within its explicit scope."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "DBP:gap:I3",
+      "note": "Mark the verified immediate support obligation resolved within its explicit scope."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "DBP:gap:III1",
+      "note": "Mark the verified immediate support obligation resolved within its explicit scope."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "DBP:gap:III2",
+      "note": "Mark the verified immediate support obligation resolved within its explicit scope."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "DBP:gap:III3",
+      "note": "Mark the verified immediate support obligation resolved within its explicit scope."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "DBP:gap:III4",
+      "note": "Mark the verified immediate support obligation resolved within its explicit scope."
+    },
+    {
+      "kind": "reevaluate",
+      "target_id": "DBP:gap:V1",
+      "note": "Mark the verified immediate support obligation resolved within its explicit scope."
+    }
+  ],
+  "extensions": {
+    "paper_iv_excluded": true,
+    "k4_excluded": true,
+    "verification": {
+      "cce2_public_route_api": 14,
+      "cce5": 61,
+      "cce6_clearance": 77,
+      "cce6_topology": 19,
+      "cce8": 65
+    }
+  }
+}

@@ -1,13 +1,15 @@
 # DBP Paper Succession and Redundancy Map v1.0
 
 **Original audit date:** 2026-07-15  
-**Updated through:** 2026-07-17 (weighted all-\(k\) monodromy succession and DAG admission)  
+**Updated through:** 2026-07-17 (ROI support closeout: Papers I/III, CCE-2 API, SQG citation)
 **Scope:** the DBP-related paper and theorem corpus across the Cella Framework and Lloyd
 Mathematics Encyclopedia repositories.
 **Nature:** repository-led succession audit, followed by a non-destructive session update. The
 original 2026-07-15 audit was read-only. The 2026-07-16/17 update added one completed paper and
-admitted it through the transactional Cella DAG submission path; no prior paper was edited,
-moved, retired, or deleted. "Retire" throughout means *eligible to move to a historical archive
+admitted it through the transactional Cella DAG submission path. A later 2026-07-17 support
+closeout strengthened Papers I and III in place, exposed the already-proved CCE route algebra,
+and refreshed the SQG citation; no paper was moved, retired, or deleted. "Retire" throughout
+means *eligible to move to a historical archive
 after maintainer review*, never automatic deletion.
 
 This report is self-contained. It answers one question per artifact: **does a newer canonical
@@ -78,7 +80,7 @@ submission `submit-k5-certificate-succession-notice-2026-07-17`; its graph impac
 the canonical revision correctly remained unchanged. The applied record and receipt are
 `DAG_Library/submissions/applied/submit-k5-certificate-succession-notice-2026-07-17.json` and
 `DAG_Library/receipts/submit-k5-certificate-succession-notice-2026-07-17.receipt.json`.
-The live graph validates at **2,294 nodes / 4,311 edges / 0 errors / 0 warnings**. Its four
+At that admission point the graph validated at **2,294 nodes / 4,311 edges / 0 errors / 0 warnings**. Its four
 declared relations say that the new paper:
 
 - **supersedes** `DBP:note:allk_monodromy` as proof authority;
@@ -86,6 +88,34 @@ declared relations say that the new paper:
   theorem;
 - **cites** `DBP:proof:gs_morse` as a retained proof source; and
 - **supplements** `DBP:thm:kummer_wreath_lift` by fixing its exact square-class/rank interface.
+
+### Immediate ROI support closeout — 2026-07-17
+
+The first low-risk support tranche identified by the ROI outlook is now complete, except for
+Paper IV integration, which is reserved for the maintainer's concurrent \(k=4\) work and was
+deliberately left untouched.
+
+- **Paper I:** `DBP:gap:I1`, `I2`, and `I3` are closed. The canonical paper now contains the
+  symbolic RoleChSpec gauge-orbit biconditional on the regular \(n=3\) locus, an explicit
+  all-finite-order inverse-jet recurrence and word induction, and the ambient-\(n\)
+  \(\sigma_2\) channel triple with the full \(n=4\) Gaussian--Kronecker grid. The walls
+  `I_n4`, `I_mixed`, and `I_singular` remain explicit.
+- **Paper III:** `DBP:gap:III1`, `III2`, and `III3` are closed. The paper now incorporates
+  CCE-5 absolute calibration \(\lambda_\uparrow=B_-\),
+  \(\lambda_\downarrow=-B_-\), both route matrices and trace coordinates, plus the CCE-6
+  discriminant/resultant clearance theorem and exact \(\varepsilon_*\). Whole-surface
+  surjectivity remains refuted by the rank \(4\)-in-\(12\) obstruction; saturation, Smith
+  factors, Landen comparison, and transcendence remain open.
+- **CCE-2 public API:** `DBP:gap:III4` is closed at the already-released groupoid scope.
+  `compose_routes` and `reverse_route` replay CCE-5 certificates and return canonical
+  certificates for words in `U,L,u,l`; uncertified, tampered, noncomposable, and genuinely
+  new geometric routes still refuse.
+- **SQG:** `DBP:gap:V1` is closed. Proposition 4.2 and the minimal-ring table now cite the
+  calibrated CCE-5 integral transport rather than an unresolved compact correction.
+
+The closeout is recorded by
+`DAG_Library/submissions/applied/submit-roi-immediate-support-closeout-2026-07-17.json` and its
+receipt. It intentionally makes no change to Paper IV or `DBP:gap:IV2`.
 
 The `_catalogue/LEDGER` has not yet been rebuilt, so its 508-artifact figure remains the
 2026-07-15 generated snapshot. Counting the admitted paper gives an effective current corpus of
@@ -132,8 +162,9 @@ adjudicated here.
                          DBP PAPER ENSEMBLE (post-audit)
                          ═══════════════════════════════
 
- Paper I  ── Active Role-Jet Orbit Calculus ................ dbp_orbit_calculus.tex   [RELEASED]
-   │         (S3 birational action, Orbit Thm, 3-channel K_G split, gauge transport)
+ Paper I  ── Active Role-Jet Orbit Calculus ................ dbp_orbit_calculus.tex   [RELEASED, STRENGTHENED]
+   │         (S3 birational action, Orbit Thm, RoleChSpec quotient, all finite jet orders,
+   │          ambient-n channel triple and explicit n=4 grid)
    │         companion: theorem_8_1.tex (abstract Invariant-Preservation)
    │         strengthened across the finite truncation tower by CCE-8 naturality
    │
@@ -143,8 +174,8 @@ adjudicated here.
    │         newest strengthening: LEAD7_VARIABLE_TRANSVERSE_WEIGHTED_JET_THEOREM_v1.0
    │
  Paper III ─ DBP Curvature Periods of the DBP Quadric ..... DBP_CURVATURE_PERIODS_…_v1.0.md
-   │         (Landen–Trace, native route, surface-to-link, dual-surface Stages 1–3, CCE-2)   [CONSOLIDATED,
-   │         ⚠ contains CCE-2 but NOT CCE-5 / CCE-6 — two proven theorems await insertion]     INCOMPLETE]
+   │         (Landen–Trace, native route, surface-to-link, dual Stages 1–3,
+   │          CCE-2 corridors, CCE-5 calibration, CCE-6 exact native-sweep clearance) [RELEASED, CONSOLIDATED]
    │
  Paper IV ── Galois Theory of the Horizon Cover .......... galois_horizon_cover_v1_0.tex + pub package  [RELEASED]
    │         (splitting/temperature, S5 obstruction, Kummer modules, wreath closures, realization poset)
@@ -162,18 +193,18 @@ adjudicated here.
 
 **Headline facts the audit establishes or corrects:**
 
-1. **Paper I** — `dbp_orbit_calculus.tex` is the released, standalone canonical paper. The
+1. **Paper I** — `dbp_orbit_calculus.tex` is the released, standalone canonical paper and now
+   absorbs the three immediate support results I1--I3. The
    frozen `DBP_PAPER_ENSEMBLE_ARCHITECTURE_v1.0.md` marks it `RELEASE-INDEPENDENT` and rules the
    unified spine an *internal ledger, "never cited as the proof source."*
 2. **Paper II is two independent companion papers** (hypothesis confirmed): `pfc_normal_forms`
    (general theory) and `lead7_kn_n3_dbp_metric` (Kerr–Newman realization). KN cites pfc, not
    vice versa. Neither subsumes the other.
-3. **Paper III exists on disk but is mathematically incomplete**: it consolidates the Landen–
-   Trace theorem, native route, surface-to-link close-off, dual-surface Stages 1–3, and CCE-2,
-   but it still records λ↑/λ↓ as *unresolved* (§7F.10, verified live at line 1543) and carries an
-   informal *"choose thin tubular neighbourhoods"* (§7F.5, line 1559). The **CCE-5** calibration
-   (λ↑=B₋, λ↓=−B₋; (a,b,c)=(1,0,0)) and **CCE-6** sweep-clearance theorem resolve exactly these
-   and are proven — but live *outside* Paper III.
+3. **Paper III is now complete at its claimed corridor/native-image scope**: it consolidates the
+   Landen--Trace theorem, native route, surface-to-link close-off, dual-surface Stages 1--3,
+   CCE-2, CCE-5 absolute calibration, and CCE-6 exact native-sweep clearance. It does not claim
+   whole-surface saturation, a primary--dual scalar Landen identity, or transcendence; those are
+   genuine surviving walls, not editorial omissions.
 4. **Paper IV** — `galois_horizon_cover_v1_0` + its byte-identical publication package remains
    the released case-specific paper. The new weighted paper is the canonical reusable successor
    for its base-monodromy front: it proves the exact degree, genus and ramification, and generic
@@ -200,6 +231,9 @@ Each row: a mathematical unit, its current home, and where a canonical successor
 | Orbit theorem | φ order-r DBP-invariant ⟺ factors through `X_r/S₃` | `:187` | ✅ orbit_calculus §4 |
 | Exact rational closure | `J_r∈ℚ ⇒ G·J_r ⊂ ℚ[Δ⁻¹]` | `:221` | ✅ §5.2 |
 | Channel reduction / exact sequence | `σ_r=Ĉ_r(1,1)/q^{(r+2)/2}`; `0→kerΣ→C_r→I_r→0` | `Canonical_Invariant_Reduction_Theorem.md`; `:259` | ✅ §6 |
+| RoleChSpec gauge-orbit converse | equal fingerprints iff `O_g(H₂−H₁)=0` iff `H₂−H₁∈Im G_g`; recovery determinant `32/(g₁g₂g₃)` | orbit_calculus §7 | ✅ closes I1 on regular `n=3` locus |
+| All-finite-order active recharting | homogeneous recurrence `q_d=−a⁻¹R_d`; triangular truncation naturality for every finite word in `⟨s,t⟩` | orbit_calculus App.A; CCE-8 | ✅ closes I2 |
+| Ambient-`n` / `n=4` channel grid | coordinate-triple sum for `σ₂`; explicit `K_{3,0},K_{2,1},K_{1,2},K_{0,3}` Newton grid | orbit_calculus §6 | ✅ closes I3; no `n≥4` injectivity claim |
 | Gaussian 3-channel | `K_G=κc+κint+κs`; graph gauge `κc=−M²/Q², κs=LN/Q², κint=0` | `:274` | ✅ §6.3 |
 | Named channels / faithfulness | `Λ_P=B, Λ_D=(Ab−aB)/a, Λ_S=(Ca−bB)/b`; Jacobian `det=8Λ_PΛ_DΛ_S/q₀⁶` | `:336` | ✅ §7 |
 | Keystone | at (1,1,1): `κc=−1/49, κs=1/49, κint=−3/49, K_G=−3/49` | `:485` | ✅ App.B |
@@ -238,8 +272,8 @@ Each row: a mathematical unit, its current home, and where a canonical successor
 | Primary surface→link→period | `∫_{S₁}K_G dA=−2L(Γ₁⁺)=I_primary` | §7A | ⚠ statement; boundary proof in `DBP_SURFACE_TO_LINK_CLOSEOFF_v1.0.md` |
 | Dual boundary + surface-cycle lift + PL transport | `𝓑₋`, `L_ℤ`, `δ₋↑−δ₋↓=−μ₋` | §7B/7C/7D | ⚠ statements; proofs in Stages 1/2/3 (gates 22/17/22) |
 | Exact corridor reps (CCE-2) | words `a₊ / a₋⁻¹`; radius-1/8 tube; 29-disk cover | §7F Lemma 7F.A | ⚠ statement; segment/disk proof in `DBP_EXACT_CORRIDOR_POSITIVE_CLEARANCE_THEOREM_v1.0.md` |
-| **λ resolution + braid matrices (CCE-5)** | **λ↑=B₋, λ↓=−B₋**; `M↑/M↓`; `(a,b,c)=(1,0,0)` | `DBP_CCE5_ABSOLUTE_CALIBRATION_THEOREM_v1.0.md` | ❌ **NOT in Paper III** (III §7F.10 unresolved) |
-| **Native surface-sweep clearance (CCE-6)** | `Disc_Ξ(N)=−4(1−c)TD₂`; `Res=c²D₁²`; `ε∗=1/105186307200` | `DBP_NATIVE_SURFACE_SWEEP_CLEARANCE_THEOREM_v1.0.md` | ❌ **NOT in Paper III** (III §7F.5 informal thin-tube) |
+| **λ resolution + braid matrices (CCE-5)** | **λ↑=B₋, λ↓=−B₋**; `M↑/M↓`; trace coordinates `(1,0,0)/(1,0,1)` | `DBP_CCE5_ABSOLUTE_CALIBRATION_THEOREM_v1.0.md` | ✅ incorporated in §7F |
+| **Native surface-sweep clearance (CCE-6)** | `Disc_Ξ(N)=−4(1−c)TD₂`; `Res=c²D₁²`; `ε∗=1/105186307200` | `DBP_NATIVE_SURFACE_SWEEP_CLEARANCE_THEOREM_v1.0.md` | ✅ incorporated in Lemma 7F.B |
 | Dual constant closed form + branch | `I_dual=−2^{7/4}[K(k′²)−(3−2√2)Π(2√2−2;k′²)]`; PSLQ refutes lattice completion | `DUAL_CONSTANT_CLOSEOFF.md` (dbp_role_channel) | ⚠ branch in III §6/§8; closed form + certs unique to close-off |
 | Rank obstruction | `rank H₂(X,Y;ℤ)=12, rank im L_ℤ≤4` | `CCE_6_WHOLE_SURFACE_TOPOLOGY_OBSTRUCTION_v1.0.md` | ❌ open-wall record, unique |
 
@@ -333,10 +367,10 @@ source and no constant/sign/ring contradiction was found. The unresolved items i
 
 | Artifact | Disposition | Successor / note |
 |---|---|---|
-| `05_…/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md` | CANONICAL_RETAIN | consolidated Paper III (hash matches corpus-cited canonical) |
+| `05_…/DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md` | CANONICAL_RETAIN | consolidated Paper III; CCE-5/6 incorporated 2026-07-17 |
 | `02_…/DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md` (un-suffixed) | CANONICAL_RETAIN (atomic) | named proof-authority dependency across corpus (fails subsumption cond. 6) |
-| `DBP_CCE5_ABSOLUTE_CALIBRATION_THEOREM_v1.0.md` | INDEPENDENT_COMPANION → pending insertion | proves λ↑=B₋, λ↓=−B₋, (a,b,c)=(1,0,0); not yet in III |
-| `DBP_NATIVE_SURFACE_SWEEP_CLEARANCE_THEOREM_v1.0.md` | INDEPENDENT_COMPANION → pending insertion | divisor reduction replacing III's thin-tube; not yet in III |
+| `DBP_CCE5_ABSOLUTE_CALIBRATION_THEOREM_v1.0.md` | PROOF_SUPPLEMENT_RETAIN | proof authority for the calibrated §7F insertion |
+| `DBP_NATIVE_SURFACE_SWEEP_CLEARANCE_THEOREM_v1.0.md` | PROOF_SUPPLEMENT_RETAIN | proof authority for Lemma 7F.B and its exact bounds |
 | `CCE_6_WHOLE_SURFACE_TOPOLOGY_OBSTRUCTION_v1.0.md` | INDEPENDENT_COMPANION | unique rank-4-in-12 open-wall record |
 | `03_…/DBP_SURFACE_TO_LINK_CLOSEOFF_v1.0.md` | PROOF_SUPPLEMENT_RETAIN | III §7A delegates the Stokes boundary + link-length proof |
 | `04_…/DBP_DUAL_SURFACE_CYCLE_STAGE1/2/3_v0.1.md` | PROOF_SUPPLEMENT_RETAIN (×3) | III §7B/7C/7D delegate; gates 22/17/22 live here |
@@ -438,10 +472,10 @@ Released papers, atomic theorem sources, and sole live ledgers — the spine of 
 3. `lead7_kn_n3_dbp_metric.tex` — **Paper II KN realization**.
 4. `LOCAL_CURVATURE_CALCULUS_COMPLETE_v1.0.md` — Paper II full proof spine.
 5. `LEAD7_VARIABLE_TRANSVERSE_WEIGHTED_JET_THEOREM_v1.0.md` — newest Paper II strengthening.
-6. `DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md` — **Paper III** (incomplete; see §11/§13).
+6. `DBP_CURVATURE_PERIODS_OF_THE_DBP_QUADRIC_v1.0.md` — **Paper III**, complete at its stated corridor/native-image scope.
 7. `DBP_LANDEN_TRACE_THEOREM_COMPLETE_v1.1.md` (un-suffixed) — atomic proof authority.
-8. `DBP_CCE5_ABSOLUTE_CALIBRATION_THEOREM_v1.0.md` — proven λ/(a,b,c) resolution (awaits insertion).
-9. `DBP_NATIVE_SURFACE_SWEEP_CLEARANCE_THEOREM_v1.0.md` — proven divisor reduction (awaits insertion).
+8. `DBP_CCE5_ABSOLUTE_CALIBRATION_THEOREM_v1.0.md` — retained proof authority for the incorporated λ/(a,b,c) resolution.
+9. `DBP_NATIVE_SURFACE_SWEEP_CLEARANCE_THEOREM_v1.0.md` — retained proof authority for the incorporated divisor reduction.
 10. `galois_horizon_cover_v1_0.tex` (+ publication package) — **Paper IV**.
 11. `GENERIC_SYMMETRIC_MONODROMY_OF_WEIGHTED_MULTIQUADRATIC_SUMS_v1.0.md` — **canonical
     weighted all-`k` base-monodromy successor** (`PAP-0509`).
@@ -470,7 +504,7 @@ Overlap in vocabulary or topic, but a distinct mathematical role — **not** red
 - `LANDEN_TYPE_THEOREM_SOURCE.md` — targets the still-open primary↔dual Landen relation.
 - `R3_AC_FOLD_INDEPENDENT_REALIZATION_THEOREM_v1.0.md` — independent AC-fold (also CANONICAL).
 - `DBP_CCE5_ABSOLUTE_CALIBRATION_THEOREM_v1.0.md`, `DBP_NATIVE_SURFACE_SWEEP_CLEARANCE_THEOREM_v1.0.md`
-  — pending insertion into Paper III (companion until absorbed).
+  — proof supplements now absorbed into Paper III at statement level.
 - Galois strategic memo, emergence ledger, prior-art report — meta/provenance companions.
 
 ---
@@ -556,17 +590,16 @@ and boundary conventions are consistent across sources (e.g. keystone `κc=−1/
 Galois `Ŝ₊Ŝ₋=P`). The open items are **editorial / filing / reproducibility**, not conflicts of
 theorem content:
 
-1. **Paper III canonical-completeness gap (highest priority).** The on-disk Paper III contains
-   CCE-2 but **not CCE-5 or CCE-6** (verified: λ still "unresolved" at line 1543; informal
-   thin-tube at line 1559). The proven `CCE5_ABSOLUTE_CALIBRATION` and
-   `NATIVE_SURFACE_SWEEP_CLEARANCE` theorems must be **retained**, and a **CCE-5 Paper III
-   insertion note is missing** (only a CCE-6 insertion note exists). This is a live editorial
-   obligation, not a redundancy.
-2. **Missing successor for two proven theorems.** Because of (1), subsumption condition 8 ("the
-   successor is canonical and present on disk") is satisfied for CCE-5/CCE-6 only as *standalone*
-   theorem files — Paper III is not yet their successor. They stay `INDEPENDENT_COMPANION` until
-   inserted.
-3. **Paper-IV manuscript integration debt (proof-status cleanup completed).** The completed
+1. **Paper III canonical-completeness gap — closed 2026-07-17.** CCE-5 absolute calibration and
+   CCE-6 native-sweep clearance are now incorporated in the on-disk paper. The two standalone
+   theorems remain `PROOF_SUPPLEMENT_RETAIN` because they carry the detailed proof and replay
+   authority. No separate CCE-5 insertion memo is needed to establish succession: this map, the
+   applied DAG submission, and the source diff provide the audit trail.
+2. **Paper-I immediate support gaps — closed 2026-07-17.** The symbolic RoleChSpec quotient,
+   all-finite-order recurrence, and ambient-\(n\)/\(n=4\) grid are now in the canonical paper.
+   Higher-dimensional RoleChSpec survival, mixed-bidegree classification, and singular strata
+   remain open by explicit scope fences.
+3. **Paper-IV manuscript integration debt (reserved for maintainer \(k=4\) work).** The completed
    weighted paper supersedes `ALL_K_MONODROMY_THEOREM_NOTE` as proof authority; the note now marks
    Theorem D proved and identifies its successor, and the live v1.6 research map records R8/R9/R10/R11
    at their current statuses. The released k=4,5 Paper IV has not yet cited or absorbed the new
@@ -633,14 +666,14 @@ source so consolidation cannot accidentally declare it closed.
 Each step is independently safe and reversible; no source is deleted — "retire" = move to
 `09_historical…` after the transfer lands and the maintainer approves.
 
-1. **Paper III completion (do first — it closes the only theorem-level gap).**
-   (a) Insert CCE-5 (`λ↑=B₋, λ↓=−B₋`, braid `M↑/M↓`, `(a,b,c)=(1,0,0)`) into Paper III §7F.10,
-   replacing the "unresolved corrections" text; author the **missing** CCE-5 Paper III insertion
-   note. (b) Apply the existing CCE-6 insertion note: replace the §7F.5 informal thin-tube with
-   the `NATIVE_SURFACE_SWEEP_CLEARANCE` divisor reduction. (c) Re-hash Paper III; update the
-   authority manifest. **Then** the two theorem files drop `INDEPENDENT_COMPANION →
-   PROOF_SUPPLEMENT_RETAIN`.
-2. **Paper I proof-transfers.** Copy units U10 (Lorentzian coupling-edge lemma) and U11
+1. **Paper III completion — completed 2026-07-17.** CCE-5 calibration, route matrices and trace
+   coordinates, plus CCE-6 exact native-sweep clearance, are incorporated and re-hashed. The
+   standalone theorem files are retained as proof supplements. The next Paper III work is
+   mathematical rather than editorial: Smith factors/saturation, Landen comparison, and the
+   remaining whole-surface boundaries.
+2. **Paper I proof-transfers — immediate tranche completed 2026-07-17.** The symbolic
+   RoleChSpec quotient, finite-order recurrence, and ambient-\(n\) channel grid have landed.
+   Copy units U10 (Lorentzian coupling-edge lemma) and U11
    (gauge-normal-form quotient) into `dbp_orbit_calculus.tex` (or a permanently-linked proof
    appendix). Only after they land may `Canonical_Invariant_Reduction_Theorem.md`,
    `Gauge_Channel_Transport_Law.md`, `GAUGE_NORMAL_FORM_PROOF.md` be reduced from proof-supplement
@@ -649,7 +682,7 @@ Each step is independently safe and reversible; no source is deleted — "retire
 3. **Paper II tidy.** Move the `COMPANION.md` §9 dual-constants block to the Paper III dual-constant
    close-off; retire `COMPANION.md` and the `.txt` roadmap to historical. Fix the broken verifier
    runpath. Byte-verify `lead7_kn_n3_dbp_metric_v2.pdf` before filing it superseded.
-4. **Paper IV publication integration.** The ALL_K status splice and v1.6 map cleanup are complete.
+4. **Paper IV publication integration — maintainer-reserved.** The ALL_K status splice and v1.6 map cleanup are complete.
    Next, revise the released Paper IV TeX, PDF and publication-package copies as one render-verified
    unit so they cite the weighted all-`k` paper and route reusable base-monodromy claims to it.
    Preserve the ALL_K note as a low-`k` computational and historical supplement. Leave IV3 open

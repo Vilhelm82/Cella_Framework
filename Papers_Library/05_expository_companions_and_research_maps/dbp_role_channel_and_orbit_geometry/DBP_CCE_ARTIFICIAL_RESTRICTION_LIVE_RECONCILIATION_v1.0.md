@@ -1,6 +1,6 @@
 # DBP/CCE artificial-restriction live reconciliation v1.0
 
-**Date:** 2026-07-14  
+**Date:** 2026-07-14; revised 2026-07-17
 **Input:** `agent_tasks/DBP_CCE_HANDOFF_SCOPE_REVISION_AND_ARTIFICIAL_RESTRICTION_LEDGER_v1.0.md`  
 **Method:** checked against the live repository, current theorem sources,
 production adapters, exact gates, and expanded release bundle.
@@ -32,7 +32,7 @@ not present, and the live v0.2 handoff is under
 |---|---|---|
 | AR-01 | POLICY ADOPTED | Release checklists are regression floors; expansions may promote or be refuted. |
 | AR-02 | PARTIAL PROMOTION | The two calibrated CCE-5 corridors generate an exact groupoid. Arbitrary new geometric corridors still need sheet, clearance, isotopy, and class-action certificates. |
-| AR-03 | PARTIAL PROMOTION | CCE-5 has exact identity/composition/inverses for `U,L,u,l`; the older public CCE-1/2 `compose_routes` and `reverse_route` entrypoints still return typed refusals. |
+| AR-03 | PROMOTED ON RELEASED GROUPOID | Public `compose_routes` and `reverse_route` now replay both source certificates and return a canonical certificate for the composed or inverse word in `U,L,u,l`. Uncertified, tampered, noncomposable, and geometrically new routes retain typed refusals. |
 | AR-04 | ACTIVE PROOF | Full-plane/custom curve paths need domain-specific divisor manifests, lift continuation, and exact homotopy data. |
 | AR-05 | ACTIVE PROOF | Current manifests close the released families; enlargement is tied to each new route/family rather than admitted generically. |
 | AR-06 | PROMOTED FOR TWO CORRIDORS | The user-supplied CCE-6 package proves native surface-sweep clearance for both exact DBP corridors. Generic routes retain a justified guard. |
@@ -97,6 +97,7 @@ domain audit and source closure.
 ```text
 CCE-4 bounded evaluation                 73 assertions passed
 CCE-5 corridor and generated groupoid    61 assertions passed
+CCE-2 public composition/reversal API     14 assertions passed
 CCE-6 completed-package import           16 assertions passed
 CCE-6 whole-surface topology             19 assertions passed
 CCE-7 static chamber and contact wall    47 assertions passed
@@ -110,8 +111,9 @@ The expanded implementation and mathematical gap details are in
 
 ## Immediate work queue after reconciliation
 
-1. CCE-2 route reversal/concatenation certificates and public API, without
-   conflating algebraic word composition with new geometric route admission.
+1. **Completed 2026-07-17:** CCE-2 route reversal/concatenation public API on
+   replay-verified `U,L,u,l` certificates, without conflating algebraic word
+   composition with new geometric route admission.
 2. CCE-4 generic DAG analytic semantics.
 3. CCE-5 local generator calibration at `m=0,1/2,1,infinity`.
 4. CCE-6 integral intersection matrix / Smith form of the native inclusion.

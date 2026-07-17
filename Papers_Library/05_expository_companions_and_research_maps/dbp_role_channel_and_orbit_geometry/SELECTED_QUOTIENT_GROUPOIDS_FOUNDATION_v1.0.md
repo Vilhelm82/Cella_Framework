@@ -3,7 +3,7 @@
 ## Coefficient-typed objects, native morphisms, and category formation, v1.0
 
 **Date:** 2026-07-14  
-**Version:** 1.0  
+**Version:** 1.1 (2026-07-17 CCE-5 citation refresh)
 **Role:** Step 3 foundation for the DBP paper ensemble  
 **Status:** the category, native morphisms, presentation equivalences, and
 flat scalar-extension functors are defined and proved. Equivalence of the
@@ -326,20 +326,38 @@ are flat; so are \(\mathbb Z\to\mathbb Q\to\mathbb C\).
 
 ### Proposition 4.2 — minimal DBP coefficient rings
 
-In the curve-level Picard--Lefschetz quotient proved in Paper III, let
-\(\delta^\uparrow,\delta^\downarrow\) be the two integral lateral classes and
-\(\mu\) the primitive meridian, with
+In the curve-level Picard--Lefschetz quotient proved in Paper III and
+absolutely calibrated by the **DBP CCE-5 absolute calibration theorem v1.0**,
+let \(\delta^\uparrow,\delta^\downarrow\) be the two integral lateral classes
+and \(\mu\) the primitive meridian, with
 
 \[
 \delta^\uparrow-\delta^\downarrow=-\mu.
 \tag{4.6}
 \]
 
+The calibration theorem fixes the compact corrections rather than leaving
+them as unresolved representatives:
+
+\[
+\lambda_\uparrow=B_-,\qquad \lambda_\downarrow=-B_-,
+\qquad
+\frac{G_\uparrow(\delta_+)+G_\downarrow(\delta_+)}2
+=\delta_-^{\rm CPV}.
+\tag{4.7}
+\]
+
+Thus the coefficient-ring classification below is backed by the exact
+integral upper/lower transport matrices and their rational half-sum.  The
+proof authority is
+`Papers_Library/02_theorems_and_lemmas/dbp_role_channel_and_orbit_geometry/DBP_CCE5_ABSOLUTE_CALIBRATION_THEOREM_v1.0.md`;
+the midpoint statement uses no unresolved compact correction.
+
 Then the coefficient types are:
 
 | selected class | minimal displayed coefficient ring | reason |
 |---|---:|---|
-| \(\delta^\uparrow,\delta^\downarrow\) | \(\mathbb Z\) | integral transport |
+| \(\delta^\uparrow,\delta^\downarrow\) | \(\mathbb Z\) | CCE-5 calibrated integral transport |
 | \(\delta^{\rm CPV}=\tfrac12(\delta^\uparrow+\delta^\downarrow)\) | \(\mathbb Z[1/2]\) | primitive half-meridian |
 | \(i\delta^\uparrow,i\delta^\downarrow\) | \(\mathbb Z[i]\) | phase \(i\) |
 | \(i\delta^{\rm CPV}\) | \(\mathbb Z[1/2,i]\) | midpoint and phase |

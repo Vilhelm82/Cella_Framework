@@ -13,7 +13,8 @@ convergence, residue, and lattice reports, together with their exact
 verification scripts  
 **Verification:** Landen--Trace 75 exact gates; surface-cycle Stages 1--3
 22/22, 17/17, and 22/22 exact gates; native-route verifier retained with its
-source theorem
+source theorem; CCE-5 absolute-calibration gate 61/61; CCE-6 native-sweep
+clearance replay 77/77 and whole-surface topology audit 19/19
 
 ---
 
@@ -30,15 +31,15 @@ This consolidated paper proves:
 7. the primary scalar interface from the original DBP curvature integral to
    the period \(I_{\rm primary}\), using the surface-to-link close-off;
 8. the dual metric-quartic boundary chains and integral swept surface lift;
-9. the two integral Picard--Lefschetz transports modulo ordinary compact
-   periods;
+9. the two absolutely calibrated integral Picard--Lefschetz transports, with
+   their full route-specific relative matrices and compact corrections;
 10. the exact coefficient separation
     \(\mathbb Z,\mathbb Z[1/2],\mathbb Z[i],\mathbb Z[1/2,i]\) on the curve
     lattice and native swept surface lattice;
 11. two pole-free finite-interval kernels for native evaluation of the fixed
     DBP path claims;
 12. the corridor-restricted native morphism from relative boundary transport
-    to the swept surface subsystem.
+    to the swept surface subsystem, with exact native-sweep clearance.
 
 The corrected result is:
 
@@ -56,7 +57,12 @@ The corrected result is:
 
 The trace term is a non-torsion third-kind period on \(E_{128}\). The anti-translation term is logarithmic and elementary.
 
-This theorem does **not** assert a scalar algebraic relation directly between the two different path values \(I_{\rm primary}\) and \(I_{\rm dual,CPV}\). Such a relation would additionally require a theorem comparing the two relative trace paths \(\Gamma_+\) and \(\Gamma_-\).
+This theorem does **not** assert a scalar algebraic relation directly between
+the two different path values \(I_{\rm primary}\) and
+\(I_{\rm dual,CPV}\).  CCE-5 now gives their exact relative trace-path
+comparison, but that comparison contains a compact elliptic cycle and a pole
+meridian; it is not a scalar algebraic relation between the two special
+values.
 
 ---
 
@@ -1540,23 +1546,77 @@ tube avoiding \(\sigma=0\) and \(\rho=0\); its lift from
 \(G_\downarrow[\delta_+]=[\delta_-^\downarrow]\) modulo
 \(\mathbb Z[A_-]+\mathbb Z[B_-]\).
 
-For absolute representatives retain the independent unresolved corrections
+For absolute representatives, the CCE-5 calibration fixes the former compact
+ambiguity in the standard endpoint marking:
 
 \[
-G_\uparrow(\delta_+)=\delta_-^\uparrow+\lambda_\uparrow,
+G_\uparrow(\delta_+)=\delta_-^\uparrow+B_-,
 \qquad
-G_\downarrow(\delta_+)=\delta_-^\downarrow+\lambda_\downarrow,
+G_\downarrow(\delta_+)=\delta_-^\downarrow-B_-,
 \qquad
-\lambda_\uparrow,\lambda_\downarrow\in
-\mathbb Z[A_-]+\mathbb Z[B_-].
+\boxed{\lambda_\uparrow=B_-,\quad\lambda_\downarrow=-B_-.}
 \tag{7F.5a}
 \]
 
-This is a curve-level corridor statement; it does not certify a surface sweep.
-The exact representatives and clearance witnesses are the CCE-2 manifests and
-route certificates.
+In the route-specific ordered endpoint bases
+\((A_-,B_-,\mu_-,\delta_-^\uparrow)\) and
+\((A_-,B_-,\mu_-,\delta_-^\downarrow)\), the corresponding column-action
+matrices are
 
-Choose thin tubular neighbourhoods on which
+\[
+M_\uparrow=
+\begin{pmatrix}
+1&0&0&0\\
+2&1&0&1\\
+0&0&1&0\\
+0&0&0&1
+\end{pmatrix},
+\qquad
+M_\downarrow=
+\begin{pmatrix}
+1&0&0&0\\
+-2&1&0&-1\\
+0&0&1&0\\
+0&0&0&1
+\end{pmatrix}.
+\tag{7F.5b}
+\]
+
+They preserve the primitive boundary vector, restrict to symplectic compact
+matrices \(A\mapsto A\pm2B,\ B\mapsto B\), and give
+
+\[
+G_\uparrow(\delta_+)-G_\downarrow(\delta_+)=2B_- -\mu_-,
+\qquad
+\frac{G_\uparrow(\delta_+)+G_\downarrow(\delta_+)}2
+=\delta_-^{\rm CPV}.
+\tag{7F.5c}
+\]
+
+On the fixed trace curve \(E_{128}^{\circ}\), let \(A_E\) be the primitive
+real-projective-circle class used in the CCE-5 marking and let \(\mu_E\) be
+the positive pole meridian.  Then
+
+\[
+[\Gamma_-^\uparrow]=[\Gamma_+]+[A_E],
+\qquad
+[\Gamma_-^\downarrow]=[\Gamma_+]+[A_E]+[\mu_E].
+\tag{7F.5d}
+\]
+
+Thus the frozen-marking comparison coordinates are \((a,b,c)=(1,0,0)\) for
+the upper lateral path and \((1,0,1)\) for the lower.  These are exact
+route-specific relative-homology statements; they do not claim calibrated
+geometric generators on the whole regular parameter plane or a scalar
+algebraic relation between the two special values.
+
+Lemma 7F.A itself is a curve-level corridor statement.  Its exact
+representatives and curve-level clearance witnesses are the CCE-2 manifests
+and route certificates; the independent surface-sweep clearance is supplied
+by the next lemma.
+
+On either released corridor take the refined representative in the curve
+complement of \(x_p,1,\infty\).  It satisfies
 
 \[
 m\notin\{0,1,\infty\},
@@ -1564,9 +1624,84 @@ m\notin\{0,1,\infty\},
 \]
 
 the two third-kind poles remain distinct from each other and the marked
-endpoints, and the swept boundary chain avoids \(v=1/c,1/c^2\), the norm
-discriminant, and the polar divisor. These are the **admissible corridors**
-in the theorem below.
+endpoints, and the curve track avoids the marked divisors corresponding to
+the pole, the remaining Legendre branch point, and infinity.  These are the
+**admissible corridors** in the theorem below.
+
+**Lemma 7F.B — native-sweep clearance is inherited from refined curve
+admissibility.** Put \(A=\rho+1\), \(B=\rho-1\), \(c=B/A\), and use
+homogeneous angular and fibre coordinates \([V:T]\), \([\Xi:H]\).  With
+\(D_1=T-cV\) and \(D_2=T-c^2V\), the norm and polar pullbacks are
+
+\[
+N=D_2\Xi^2+(1-c)TH^2,
+\qquad
+T(\Xi^2+H^2)=0.
+\]
+
+Their fibre discriminant and resultant are
+
+\[
+\operatorname{Disc}_{\Xi}(N)=-4(1-c)TD_2,
+\qquad
+\operatorname{Res}_{[\Xi:H]}(N,\Xi^2+H^2)=c^2D_1^2.
+\]
+
+Under the Stage-1 birational coordinate, \(T=0,D_1=0,D_2=0\) are,
+respectively, \(x=x_p,x=1,x=\infty\).  The certified corridor bounds give
+
+\[
+|c|\ge\frac1{320},
+\qquad
+|1-c|\ge\frac25,
+\qquad
+|1+c|\ge\frac15.
+\]
+
+Therefore transport of the primary relative representative in the curve
+complement of \(x_p,1,\infty\) has a collision-free four-quadrant angular
+and relative-fibre sweep over either exact corridor.  At \(V=0\) only the
+\(C\)-branches glue; at \(V=T\) only the \(S\)-branches glue; the norm
+endpoints remain distinct on both faces.  Thus the native swept chains form
+an integral isotopy, and surface lift commutes with the two certified
+Gauss--Manin transports.
+
+More quantitatively, if a normalized refined representative has exact
+witnesses
+
+\[
+|T|\ge\varepsilon_\infty,
+\qquad
+|D_1|\ge\varepsilon_1,
+\qquad
+|D_2|\ge\varepsilon_2,
+\]
+
+then
+
+\[
+|\operatorname{Disc}_{\Xi}(N)|
+\ge\frac85\varepsilon_\infty\varepsilon_2,
+\qquad
+|\operatorname{Res}_{[\Xi:H]}(N,\Xi^2+H^2)|
+\ge\frac1{102400}\varepsilon_1^2.
+\]
+
+On both released corridors one may take
+
+\[
+\boxed{
+\varepsilon_\infty=\varepsilon_1=\varepsilon_2
+=\frac1{105186307200},
+}
+\]
+
+obtained from exact chordal separation of
+\([1:0],[1:c],[1:c^2],[0:1],[1:1]\).
+This clearance result applies to
+\(\mathscr S_{\mathbb Z}^{\rm nat}=\operatorname{im}L_{\mathbb Z}\); it
+neither identifies that image with whole surface homology nor makes
+\((1/4)R_{\mathbb Z}\) integral.
 
 For \(u\) on either corridor define
 
@@ -1615,21 +1750,27 @@ Fix a Gauss--Manin marking of the ordinary elliptic lattice
 
 On each admissible corridor the following hold.
 
-1. **Integral lateral transport.** The Gauss--Manin isomorphisms
+1. **Absolutely calibrated integral lateral transport.** The
+   Gauss--Manin isomorphisms
    \(G_\uparrow,G_\downarrow:\mathscr H_{\mathbb Z}(u_+)\to
    \mathscr H_{\mathbb Z}(u_-)\) satisfy
 
    \[
    \begin{aligned}
    G_\uparrow(\delta_+)
-   &=\delta_-^\uparrow+\lambda_\uparrow,\\
+   &=\delta_-^\uparrow+B_-,\\
    G_\downarrow(\delta_+)
-   &=\delta_-^\downarrow+\lambda_\downarrow,
+   &=\delta_-^\downarrow-B_-,
    \end{aligned}
    \qquad
-   \lambda_\uparrow,\lambda_\downarrow\in\Lambda_-^{\rm ell}.
+   \lambda_\uparrow=B_-,
+   \quad
+   \lambda_\downarrow=-B_-.
    \tag{7F.10}
    \]
+
+   Their full route-specific relative matrices are (7F.5b), and their exact
+   fixed-curve trace comparison is (7F.5d).
 
 2. **Integral swept transfer.** The Stage-2 construction restricts to a
    homomorphism
@@ -1745,11 +1886,14 @@ On each admissible corridor the following hold.
 
 #### Proof
 
-Part 1 is the pole-side calculation of Section 7D. The return stem about
-\(+i\) approaches the dual pole from below and selects the upper indentation;
-the return stem about \(-i\) selects the lower indentation. Gauss--Manin
-transport is integral, and the unspecified closed correction lies in the
-marked \(A/B\) module, proving (7F.10).
+For Part 1, the pole-side calculation of Section 7D fixes the two lateral
+indentations.  The CCE-5 exact braid calculation then shows that the moving
+branch section \(q=1/m\) crosses the selected contour once from below to
+above on the upper corridor and once from above to below on the lower
+corridor.  The open contour therefore acquires \(+B_-\) and \(-B_-\),
+respectively, while its compact double acts by
+\(A\mapsto A+2B\) and \(A\mapsto A-2B\).  This proves (7F.5b) and (7F.10);
+the same marked-chain calculation on \(E_{128}^{\circ}\) gives (7F.5d).
 
 For Part 2, the swept chain uses the four angular sign branches, a primitive
 oriented relative fiber interval, and coefficients \(\pm1\). All angular
@@ -1791,13 +1935,13 @@ injective. Notice that \(\tfrac14R_{\mathbb Z}\) is a left inverse only
 after inverting 2. Equation (7F.14) alone does not make a lifted meridian
 primitive in the whole surface lattice.
 
-For Part 3 choose a Gauss--Manin-flat family of boundary representatives
-along either corridor. Conditions (7F.5) and the admissibility requirements
-ensure that the two fiber endpoints stay distinct, the relative fiber class
-stays flat, and the four angular branches retain their gluing pattern. The
-swept chains therefore form an isotopy of integral relative chains. Sweeping
-before or after transport gives the same class, proving (7F.15). Fiber
-integration, with the primary orientation calibration, is exactly (7F.16).
+For Part 3 choose the refined Gauss--Manin-flat family from Lemma 7F.B.
+Its discriminant and resultant bounds keep the two fibre endpoints distinct,
+the relative fibre class flat, and the four angular branches in their fixed
+gluing pattern.  The swept chains therefore form an isotopy of integral
+relative chains. Sweeping before or after transport gives the same class,
+proving (7F.15). Fiber integration, with the primary orientation calibration,
+is exactly (7F.16).
 
 Part 4 now follows directly. Equation (7F.15) says that
 \(L_{\mathbb Z}\) is a natural transformation; it sends
@@ -1845,11 +1989,23 @@ Part 6. \(\square\)
 ### Exact scope of the surface conclusion
 
 The theorem proves coefficient non-descent inside the actual native image
-\(\mathscr S_{\mathbb Z}^{\rm nat}\). It does not prove that the lifted
-meridian is primitive or that the CPV midpoint is nonintegral in the whole
-group \(H_2(X_-,Y_-;\mathbb Z)\). Extending the conclusion to arbitrary
-surface classes requires an integral extension of \(R_{\mathbb Z}\), or an
-equivalent local-product/intersection functional, on that full group.
+\(\mathscr S_{\mathbb Z}^{\rm nat}\).  Whole-surface surjectivity is
+refuted, not merely unproved:
+
+\[
+\operatorname{rank}H_2(X_-,Y_-;\mathbb Z)=12,
+\qquad
+\operatorname{rank}\mathscr S_{\mathbb Z}^{\rm nat}\le4,
+\]
+
+so \(\mathscr S_{\mathbb Z}^{\rm nat}\ne
+H_2(X_-,Y_-;\mathbb Z)\).  The rank obstruction does not decide whether the
+native sublattice is saturated.  In particular, it does not prove that the
+lifted meridian is primitive or that the CPV midpoint is nonintegral in the
+whole group.  Extending the non-descent conclusion to arbitrary surface
+classes still requires the Smith factors of the native inclusion, an
+integral extension of \(R_{\mathbb Z}\), or an equivalent
+local-product/intersection functional on the full group.
 
 ---
 
@@ -1931,15 +2087,18 @@ and \(\alpha_\epsilon=R_\epsilon d\log f_\epsilon\).
 14. Integral swept surface transfer on the norm double cover, including the
     fiber pushforward, lateral image classes, and coefficient-extended CPV
     half-sum.
-15. Upper and lower integral Picard--Lefschetz transport classes modulo
-    ordinary compact periods.
+15. Upper and lower integral Picard--Lefschetz transport classes with absolute
+    compact corrections \(\lambda_\uparrow=B_-\),
+    \(\lambda_\downarrow=-B_-\), full route-specific relative matrices, and
+    fixed-curve trace comparison integers \((1,0,0)\) and \((1,0,1)\).
 16. Primitive curve-meridian proof that the CPV midpoint is defined over
     \(\mathbb Z[1/2]\) but not \(\mathbb Z\), and its transfer to the native
     swept surface lattice by injectivity.
 17. Boundary-lattice obstruction to replacing the normalization factor
     \(i\) by an integral curve class or native swept surface class modulo
     the corresponding closed-period submodule.
-18. Corridor-restricted native-morphism theorem, including
+18. Corridor-restricted native-morphism theorem, including the exact CCE-6
+    native-sweep clearance transfer,
     \(R_{\mathbb Z}L_{\mathbb Z}=4\operatorname{id}\), lift naturality, and
     the exact coefficient-ring diamond.
 19. Pole-free primary and dual finite-interval kernels, including exact
@@ -1956,18 +2115,29 @@ I_{\rm primary}
 +\text{elementary correction}.
 \]
 
-Equations (7.4) and (7.6) involve different relative paths of the non-torsion differential \(\Theta\). Comparing those paths is a separate relative-homology problem. Non-torsion alone neither proves nor disproves every possible scalar relation between their special values.
+Equations (7.4) and (7.6) involve different relative paths of the non-torsion
+differential \(\Theta\).  CCE-5 now solves their relative-homology comparison
+in the fixed marking by (7F.5d).  The comparison includes the compact class
+\(A_E\) and, for the lower lateral path, the pole meridian \(\mu_E\); it does
+not turn the two path values into scalar algebraic multiples.  Non-torsion
+alone neither proves nor disproves every possible scalar relation between
+their special values.
+
+Now proved on the two released corridors are the exact \(A/B\) coefficients
+comparing \(\Gamma_+\) with the two lateral \(\Gamma_-\) paths and the full
+route-specific matrices on \((A,B,\mu,\delta)\).  This does not supply
+calibrated geometric generators for the whole regular parameter-plane
+groupoid.
 
 More exactly, the open or excluded claims are:
 
 ```text
 OPEN / NOT CLAIMED
-  exact A/B coefficients comparing Gamma_+ and Gamma_-
-  complete A/B monodromy matrices on the full relative basis
   a scalar algebraic relation between the two special values
   a second real dual surface region
   transcendence or algebraic independence
   the local curvature-valuation interface
+  calibrated geometric generators for the whole regular parameter-plane groupoid
   coefficient non-descent for arbitrary classes in the full surface lattice
 ```
 
@@ -1989,6 +2159,9 @@ claim:
 | boundary metric quartic | `verify_dbp_dual_surface_cycle_stage1.py` | 22/22 |
 | swept surface transfer | `verify_dbp_dual_surface_cycle_stage2.py` | 17/17 |
 | lateral Picard--Lefschetz lattice | `verify_dbp_dual_surface_cycle_stage3.py` | 22/22 |
+| CCE-5 absolute calibration and route matrices | `gate_continuation_cce5.py` | 61/61 |
+| CCE-6 native surface-sweep clearance | `verify_dbp_native_surface_sweep_clearance.py` | 77/77 |
+| CCE-6 whole-surface rank obstruction | `verify_cce6_whole_surface_topology.py` | 19/19 |
 
 The Landen verifier checks, among other identities:
 
@@ -2005,11 +2178,11 @@ The Landen verifier checks, among other identities:
 - the exact residue normalization;
 - the two endpoint values.
 
-All reported gates are exact. They do not by themselves verify the new
-topological statements (7F.14)--(7F.17); those follow from the signed-transfer
-and isotopy proofs in Section 7F. No special-function package,
-floating-point comparison, imported Landen formula, or transcendence
-assumption is used in the exact gates.
+All reported gates are exact. They do not replace the proof-bearing
+signed-transfer, calibrated braid, clearance, isotopy, and rank arguments
+used in Section 7F. No special-function package, floating-point comparison,
+imported Landen formula, or transcendence assumption is used in the exact
+gates.
 
 ---
 

@@ -292,6 +292,51 @@ Every graph-normalised output chart therefore has zero graph-channel interaction
 reappears in non-graph implicit gauges or under gauge transport between graph sections
 (\S\ref{sec:transport}). \Proven
 
+\subsection{Ambient-dimension channel grid}
+The bordered-minor law is already an ambient-$n$ statement, not merely a surface identity.  At
+$r=2$, let $\widehat{\mathcal C}^{\,I}_2(t,u)$ denote its summand for a coordinate triple
+$I=\{i,j,k\}$.  Coefficient extraction gives the local-to-ambient triple
+\[
+\bigl(\widehat\kappa_{2;2,0},\widehat\kappa_{2;1,1},\widehat\kappa_{2;0,2}\bigr)
+=\sum_{i<j<k}
+\bigl([t^2]\widehat{\mathcal C}^{\,ijk}_2,
+      [tu]\widehat{\mathcal C}^{\,ijk}_2,
+      [u^2]\widehat{\mathcal C}^{\,ijk}_2\bigr),
+\]
+and division by $q^2$ gives the corresponding normalised channels.  Hence the familiar
+$n=3$ Gaussian triple is the atomic coordinate-triple contribution to $\sigma_2$ in every ambient
+dimension. \Proven
+
+For the full Gaussian--Kronecker row in ambient dimension $n=4$, the tangent space has dimension $3$.
+Let $A=S_c$ and $B=S_s$ be the tangent shape-operator pieces induced by $H_c$ and $H_s$, and set
+\[
+\begin{gathered}
+a_1=\operatorname{tr}A,\quad b_1=\operatorname{tr}B,\quad
+a_2=\operatorname{tr}A^2,\quad b_2=\operatorname{tr}B^2,\quad
+c=\operatorname{tr}(AB),\\
+a_3=\operatorname{tr}A^3,\quad b_3=\operatorname{tr}B^3,\quad
+d=\operatorname{tr}(A^2B),\quad e=\operatorname{tr}(AB^2).
+\end{gathered}
+\]
+Newton's identities give the explicit four-channel grid
+\begin{align*}
+K_{3,0}&=\frac{a_1^3-3a_1a_2+2a_3}{6},\\
+K_{2,1}&=\frac{a_1^2b_1-2a_1c-b_1a_2+2d}{2},\\
+K_{1,2}&=\frac{a_1b_1^2-a_1b_2-2b_1c+2e}{2},\\
+K_{0,3}&=\frac{b_1^3-3b_1b_2+2b_3}{6},
+\end{align*}
+with
+\[
+K_{GK}=K_{3,0}+K_{2,1}+K_{1,2}+K_{0,3}.
+\]
+Thus the two mixed orders---two coupling directions against one self direction, and one coupling
+direction against two self directions---remain distinct. \Proven
+
+These coefficient identities establish the ambient-$n$ channel account and the explicit $n=4$ row.
+They do \emph{not} establish RoleChSpec survival or injectivity for $n\ge4$, classify the general-$n$
+mixed-bidegree grid as a representation, or extend an active output chart across a vanishing role
+denominator.  Those are separate orbit-separation, mixed-grid, and singular-stratum problems.
+
 \subsection{Curved-ambient extension}
 The channel reduction extends to a curved ambient space through the Gauss equation, which reads
 schematically
@@ -332,6 +377,53 @@ C_S&=\Bigl(K,\ -\tfrac{(Ca-bB)^2}{b^2q_0^2},\ \tfrac{C(Ca^2-2abB+b^2A)}{b^2q_0^2
 with the common Gaussian curvature $K=(AC-B^2)/q_0^2$. The scalar output-role curvature spectrum is
 $\operatorname{OutputRoleCurvSpec}(f)=\{C_P,C_D,C_S\}$; retaining ordered input labels gives the
 honest sixfold labelled role-jet curvature object. \Symbolic
+
+\subsection{The \texorpdfstring{$n=3$}{n=3} RoleChSpec gauge-obstruction converse}
+The preceding chart data may be assembled at orders $1$ and $2$ into the full output-role channel
+fingerprint $\operatorname{RoleChSpec}_g(H)$ of a fixed-gradient implicit Hessian: the fingerprint is
+the three labelled output-role channel vectors at those two curvature orders.  To distinguish its
+gauge-class carrier from the coupling carrier $O$ introduced below, define
+\[
+\mathcal O_g(H)=(\mathcal O_{12},\mathcal O_{13},\mathcal O_{23}),\qquad
+\mathcal O_{ij}=H_{ij}-\frac{g_iH_{jj}}{2g_j}-\frac{g_jH_{ii}}{2g_i},
+\]
+and $G_g(v)=gv^{\mathsf T}+vg^{\mathsf T}$.
+
+\begin{theorem}[RoleChSpec gauge-obstruction converse in ambient dimension $3$]
+\label{thm:rolechspec-converse}
+Let $g_1g_2g_3\ne0$ and let $H_1,H_2\in\operatorname{Sym}_3(\mathbb K)$, where
+$\operatorname{char}\mathbb K\ne2$.  Then
+\[
+\operatorname{RoleChSpec}_g(H_1)=\operatorname{RoleChSpec}_g(H_2)
+\quad\Longleftrightarrow\quad
+\mathcal O_g(H_2-H_1)=0
+\quad\Longleftrightarrow\quad
+H_2-H_1\in\operatorname{Im}G_g .
+\]
+Thus the full RoleChSpec is a faithful invariant of the same-gradient gauge quotient
+$\operatorname{Sym}_3(\mathbb K)/\operatorname{Im}G_g$ on the regular locus. \Symbolic
+\end{theorem}
+
+\begin{proof}
+For any $H$, set $v_i=H_{ii}/(2g_i)$.  The representative
+$H_\perp=H-G_g(v)$ has zero diagonal and off-diagonal entries
+$(\mathcal O_{12},\mathcal O_{13},\mathcal O_{23})$, uniquely; hence
+$\ker\mathcal O_g=\operatorname{Im}G_g$.  Direct chart transport shows that RoleChSpec is unchanged by
+$G_g(v)$, proving the reverse implication.  Conversely, the six order-$1$ channel components are
+linear forms in the three entries of $\mathcal O_g(H)$.  The $3\times3$ minor formed from the three
+coupling rows has determinant
+\[
+\frac{32}{g_1g_2g_3},
+\]
+which is nonzero on the stated locus when $2$ is invertible.  Equality of the full RoleChSpec therefore
+forces equality of the order-$1$ components, and the invertible minor recovers
+$\mathcal O_g(H_1)=\mathcal O_g(H_2)$.  Applying linearity to $H_2-H_1$ completes the equivalence.
+\end{proof}
+
+This symbolic converse contains the previously frozen $5298$-class exact atlas as a finite
+specialisation: the measured survival/collapse biconditional is therefore no longer an open
+$n=3$ assertion.  No conclusion is drawn here about RoleChSpec injectivity for $n\ge4$; the rank-$3$
+recovery above is dimension-specific.
 
 \subsection{Named coupling channels and the anisotropy scalar}
 Define the output-role mixed numerators
@@ -444,14 +536,45 @@ active role orbits of the relevant datum.
 \section{Higher-order transposition}
 \label{app:higher}
 
-The active transposition $t=(D\;P)$ on the order-$r$ jet is obtained from $D=q(P,S)$ by the finite
-inverse-function theorem: each $q$-derivative is a rational function of the original $f$-jet with
-denominators a power of $a=f_D$. The first two orders are given in \S\ref{sec:transpose}; the
-third-order reach proceeds identically, differentiating the relations
-$q_P=1/a$, $q_S=-b/a$ once more and substituting, so that every order-$r$ component lies in
-$\mathbb Q[\,\text{jet},a^{-1}]$ in agreement with \S\ref{sec:consequences}. The input swap acts at
-every order by the index transposition $D\leftrightarrow S$, e.g.\ $s(a,b,A,B,C)=(b,a,C,B,A)$ at
-order $2$. \Proven
+The active transposition $t=(D\;P)$ on the order-$r$ jet is obtained from $D=q(P,S)$ by a homogeneous
+inverse recurrence.  Translate the base point to the origin and write
+\[
+f(D,S)=aD+bS+\sum_{d=2}^{r}f_d(D,S),
+\qquad
+q(P,S)=a^{-1}P-\frac baS+\sum_{d=2}^{r}q_d(P,S),
+\]
+where $f_d$ and $q_d$ are homogeneous of total degree $d$ and $a=f_D\ne0$.  Suppose
+$q_2,\ldots,q_{d-1}$ have been chosen and put
+\[
+q_{<d}=a^{-1}P-\frac baS+\sum_{j=2}^{d-1}q_j,
+\qquad
+R_d=[\,f(q_{<d}(P,S),S)-P\,]_d .
+\]
+Here $[\,\cdot\,]_d$ denotes the homogeneous degree-$d$ part.  Replacing $q_{<d}$ by
+$q_{<d}+q_d$ changes that degree-$d$ residual by exactly $a q_d$: inserting $q_d$ into any nonlinear
+$f_j$, $j\ge2$, has degree at least $d+1$.  The unique cancelling choice is therefore
+\[
+q_d=-a^{-1}R_d.
+\]
+Induction on $d=2,\ldots,r$ constructs the unique inverse jet and shows
+\[
+q_d\in\mathbb Q[\,\text{coefficients of }f_1,\ldots,f_d,\ a^{-1}],
+\]
+so every order-$r$ component is rational in the original jet, with only powers of the first-order role
+denominator.  In particular $q_d$ depends on no input coefficient above degree $d$.  If
+$\tau_{N,r}$ denotes truncation from order $N$ to order $r$, this triangular dependence gives
+\[
+\tau_{N,r}(t f)=t\tau_{N,r}(f).
+\]
+The input swap $s$ preserves total degree and likewise commutes with truncation.  An induction on the
+length of a word $w\in\langle s,t\rangle$ then yields
+\[
+\tau_{N,r}(w f)=w\tau_{N,r}(f)
+\qquad(N\ge r\ge2),
+\]
+which writes out the all-finite-order active-role induction.  The first two orders are the formulas of
+\S\ref{sec:transpose}; the recurrence covers every finite order on the same regular chart locus.
+\Proven
 
 %==================================================================
 \section{Worked examples}
@@ -579,15 +702,19 @@ when a monomial that is simple in one role becomes inverse, neutral, or singular
 \section*{Provenance of claims}
 \addcontentsline{toc}{section}{Provenance of claims}
 
-The $S_3$ relations and the first- and second-order transposition formulas are explicit rational
-identities (\Proven, symbolic-CAS confirmable). Theorem~\ref{thm:orbit}, the completeness criterion,
-the exact rational closure, the channel-reduction exact sequence, the Gaussian decomposition
+The $S_3$ relations, the first- and second-order transposition formulas, and the homogeneous
+all-finite-order inverse recurrence are explicit rational identities (\Proven, independently replayed
+coefficient-by-coefficient). Theorem~\ref{thm:orbit}, the completeness criterion,
+the exact rational closure, the channel-reduction exact sequence, the ambient-$n$ bordered-minor
+channel law, the explicit $n=4$ Gaussian--Kronecker grid, the Gaussian decomposition
 $\KG=\kc+\kint+\ks$, the graph-channel formula, the bilinear curved-ambient split
 $S\wedge S=R_{cc}+R_{\mathrm{int}}+R_{ss}$ with its named ambient boundary, and the definitions and
 identities of the named channels and $\Ac=3\lVert P_{\mathbf 2}O\rVert^2$ are \Proven.
-Corollary~\ref{cor:faithful} (the carrier Jacobian determinant $8\Lambda_P\Lambda_D\Lambda_S/q_0^6$
-and rank $3$), the keystone channel values, and the keystone gauge-transport laws were established and
-confirmed in exact symbolic arithmetic, \Symbolic. The construction is self-contained: no external
+Theorem~\ref{thm:rolechspec-converse}, Corollary~\ref{cor:faithful} (the carrier Jacobian determinant
+$8\Lambda_P\Lambda_D\Lambda_S/q_0^6$ and rank $3$), the keystone channel values, and the keystone
+gauge-transport laws were established and confirmed in exact symbolic arithmetic, \Symbolic. The
+RoleChSpec converse is confined to ambient dimension $3$ and makes no $n\ge4$ injectivity claim. The
+construction is self-contained: no external
 named theorem is load-bearing, and every transported quantity is exact-$\mathbb Q$ on the regular
 locus by \S\ref{sec:consequences}.
 

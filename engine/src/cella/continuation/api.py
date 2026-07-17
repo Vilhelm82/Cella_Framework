@@ -1,4 +1,4 @@
-"""Single-pass public API for the PF-0-authorized CCE-1 scope."""
+"""Public continuation API for PF-0/CCE-1 and certified CCE-2 route algebra."""
 
 from __future__ import annotations
 
@@ -21,6 +21,12 @@ from .model import (
 from .pathfinder import construct_corridor_plan, construct_plan, plan_fits_budget, released_corridor_request, released_request
 from .canonical import canonical_digest
 from .corridors import CORRIDORS, exact_certificate_digest, verify_manifest
+from .cce5 import (
+    CCE5GroupoidRequest,
+    CertifiedCorridorGroupoidTransport,
+    continue_corridor_groupoid_certified,
+    verify_cce5_groupoid_certificate,
+)
 from .verifier import verify_continuation_certificate
 
 
@@ -163,25 +169,61 @@ def verify_corridor_certificate(certificate: CorridorRouteCertificate):
 
 
 def compose_routes(left, right):
-    return Refusal(
-        "unsupported_path",
-        "route_composition_not_in_cce1",
-        "cella.continuation.api.compose_routes",
-        False,
-        True,
-        "CCE-1 wraps terminal fixed routes; exact continuation composition begins at CCE-2",
-    )
+    if not isinstance(left, CertifiedCorridorGroupoidTransport) or not isinstance(right, CertifiedCorridorGroupoidTransport):
+        return Refusal(
+            "UnsupportedOperation",
+            "certified_cce2_route_inputs",
+            "cella.continuation.api.compose_routes",
+            False,
+            False,
+            "composition accepts only certified routes in the released two-corridor groupoid",
+        )
+    if verify_cce5_groupoid_certificate(left.certificate) is not True or verify_cce5_groupoid_certificate(right.certificate) is not True:
+        return Refusal(
+            "CertificateReplayFailed",
+            "source_route_certificate_replay",
+            "cella.continuation.api.compose_routes",
+            False,
+            False,
+            "both source route certificates must reconstruct exactly before composition",
+        )
+    word = left.request.corridor_word + right.request.corridor_word
+    try:
+        request = CCE5GroupoidRequest(f"cce2-public-route-{word}-v1", word)
+    except ValueError as exc:
+        return Refusal(
+            getattr(exc, "code", "RouteMismatch"),
+            getattr(exc, "obligation", "composable_corridor_word"),
+            "cella.continuation.api.compose_routes",
+            False,
+            True,
+            str(exc),
+        )
+    return continue_corridor_groupoid_certified(request)
 
 
 def reverse_route(route):
-    return Refusal(
-        "unsupported_path",
-        "route_reversal_not_in_cce1",
-        "cella.continuation.api.reverse_route",
-        False,
-        True,
-        "CCE-1 does not claim an inverse for a terminal evaluator route",
-    )
+    if not isinstance(route, CertifiedCorridorGroupoidTransport):
+        return Refusal(
+            "UnsupportedOperation",
+            "certified_cce2_route_input",
+            "cella.continuation.api.reverse_route",
+            False,
+            False,
+            "reversal accepts only a certified route in the released two-corridor groupoid",
+        )
+    if verify_cce5_groupoid_certificate(route.certificate) is not True:
+        return Refusal(
+            "CertificateReplayFailed",
+            "source_route_certificate_replay",
+            "cella.continuation.api.reverse_route",
+            False,
+            False,
+            "the source route certificate must reconstruct exactly before reversal",
+        )
+    inverse_letter = {"U": "u", "u": "U", "L": "l", "l": "L"}
+    word = "".join(inverse_letter[letter] for letter in reversed(route.request.corridor_word))
+    return continue_corridor_groupoid_certified(CCE5GroupoidRequest(f"cce2-public-route-{word}-v1", word))
 
 
 def explain_outcome(outcome: object) -> str:

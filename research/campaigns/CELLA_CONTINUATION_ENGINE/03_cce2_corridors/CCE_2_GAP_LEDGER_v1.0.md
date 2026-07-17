@@ -10,11 +10,11 @@
 | Upper/lower pole-side selection | PROVED | Exact algebraic sign for `0<h<=1` |
 | Stage-3 corridor identity | PROVED at quotient scope | Exact replacement/refinement; compact Picard--Lefschetz correction retained |
 | Deterministic CCE-2 route certificates | PROVED | Two source-bound Pathfinder plans and replaying route certificates |
-| Absolute compact correction | OPEN | `lambda_up,lambda_down in Z[A]+Z[B]` deliberately retained |
-| General route composition and reversal | OPEN | Only the two theorem-bound routes are admitted |
+| Absolute compact correction | CLOSED BY CCE-5 | `lambda_up=B`, `lambda_down=-B`; full route matrices and trace coordinates are certified and incorporated into Paper III |
+| General route composition and reversal | PROMOTED ON RELEASED GROUPOID (2026-07-17) | Public `compose_routes` and `reverse_route` now accept replay-verified certificates for words in `U,L,u,l`; noncomposable, uncertified, tampered, or geometrically new routes still refuse |
 | Arbitrary-precision period evaluation along these corridors | OPEN | CCE-2 is route/class transport, not a new numeric evaluator |
-| Surface-sweep clearance | DEFERRED TO CCE-6 | No `v=1/c`, `v=1/c^2`, norm-discriminant, polar, or swept-boundary certificate |
-| Paper III incorporation | REVIEW REQUIRED | Separate insertion note supplied; paper source was not edited |
+| Surface-sweep clearance | CLOSED BY CCE-6 | Exact discriminant/resultant reduction, transferred corridor bounds, and `epsilon_*=1/105186307200` now certify both released native sweeps |
+| Paper III incorporation | COMPLETED (2026-07-17) | CCE-5 absolute calibration and CCE-6 native-sweep clearance are incorporated; whole-surface rank/saturation boundaries remain explicit |
 
 The curve result must not be promoted to whole-surface connectivity or an
 absolute-period equality until the corresponding open obligations are closed.
