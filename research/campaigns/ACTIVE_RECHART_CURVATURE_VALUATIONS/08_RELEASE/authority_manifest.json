@@ -1,0 +1,73 @@
+{
+  "release": "ACTIVE_RECHART_CURVATURE_VALUATIONS v1.0",
+  "date": "2026-07-30",
+  "completion_standard": "plan section 13: bridge closed as Branch B (controlled defect, pair-form generation, obstruction class zero); valuation naturality proved; legacy results recovered as corollaries",
+  "theorems": {
+    "A_role_cover_groupoid": {
+      "statement": "07_PAPER/active_rechart_curvature_valuations.tex #thm:A",
+      "gates": ["05_VERIFICATION_NEW/role_cover_groupoid/verify_output_role_groupoid_r2.py",
+                 "05_VERIFICATION_NEW/role_cover_groupoid/verify_output_role_groupoid_r3.py",
+                 "05_VERIFICATION_NEW/role_cover_groupoid/verify_three_role_recovery.py"],
+      "obligations": ["PO-1", "PO-2", "PO-3", "PO-4"]
+    },
+    "B_channel_normalization": {
+      "statement": "#thm:B",
+      "gates": ["05_VERIFICATION_NEW/channel_normalization/verify_sigma2_channel_split.py"],
+      "obligations": ["PO-5", "PO-6", "PO-7", "PO-8"]
+    },
+    "C_affine_kernel_transport": {
+      "statement": "#thm:C",
+      "gates": ["05_VERIFICATION_NEW/channel_transport/verify_channel_transport_generic_n2.py",
+                 "05_VERIFICATION_NEW/channel_transport/verify_output_role_quadruples.py",
+                 "05_VERIFICATION_NEW/channel_transport/verify_channel_cocycle.py"],
+      "obligations": ["PO-13", "PO-14", "PO-17"]
+    },
+    "GNF_gauge_normal_form_all_n": {
+      "statement": "#thm:gnf",
+      "gates": ["05_VERIFICATION_NEW/channel_transport/verify_gauge_normal_form_all_dimensions.py"],
+      "obligations": ["PO-15", "PO-16"]
+    },
+    "E_descent_falsified_pair_form_generation": {
+      "statement": "#thm:E and 06_DERIVATIONS/metric_descent/REPORT_01_METRIC_DESCENT_OR_OBSTRUCTION.md",
+      "gates": ["05_VERIFICATION_NEW/strict_descent_gate/verify_metric_rechart_defect_generic_n2.py",
+                 "05_VERIFICATION_NEW/strict_descent_gate/verify_metric_rechart_defect_exact_examples.py",
+                 "05_VERIFICATION_NEW/defect_cocycle/verify_defect_cocycle.py"],
+      "obligations": ["PO-9", "PO-10", "PO-11", "PO-12"]
+    },
+    "CLASS_framed_germ_class": {
+      "statement": "#thm:class",
+      "gates": ["05_VERIFICATION_NEW/off_diagonal_germs/verify_offdiag_frame_normal_form.py",
+                 "05_VERIFICATION_NEW/off_diagonal_germs/verify_inverse_metric_valuations.py",
+                 "05_VERIFICATION_NEW/off_diagonal_germs/verify_curvature_initial_form_random_exact.py",
+                 "05_VERIFICATION_NEW/off_diagonal_germs/find_offdiag_cancellation_counterexamples.py"],
+      "obligations": ["PO-18", "PO-19", "PO-20", "PO-21"]
+    },
+    "D_valuation_naturality": {
+      "statement": "#thm:D",
+      "gates": ["05_VERIFICATION_NEW/valuation_naturality/verify_principal_coefficient_rechart.py",
+                 "05_VERIFICATION_NEW/valuation_naturality/verify_defining_function_weight.py",
+                 "05_VERIFICATION_NEW/valuation_naturality/verify_weighted_jet_finiteness.py",
+                 "05_VERIFICATION_NEW/valuation_naturality/regress_variable_transverse_theorem.py"],
+      "obligations": ["PO-22", "PO-23", "PO-24", "PO-25", "PO-26"]
+    },
+    "COR_diagonal_corner_recovery": {
+      "statement": "paper section 9",
+      "gates": ["05_VERIFICATION_NEW/regression/verify_diagonal_corner_recovery.py"],
+      "legacy": ["04_VERIFICATION_LEGACY/local_curvature/pfc_test1_local_normal_forms.py",
+                  "04_VERIFICATION_LEGACY/local_curvature/pfc_test2_corner_valuation.py",
+                  "04_VERIFICATION_LEGACY/local_curvature/pfc_test3_vertex_rule.py",
+                  "04_VERIFICATION_LEGACY/local_curvature/lead7_test10_reflection_lemma.py"]
+    },
+    "KN_replay": {
+      "statement": "paper section 11",
+      "gates": ["05_VERIFICATION_NEW/regression/verify_kn_replay.py"],
+      "legacy": ["04_VERIFICATION_LEGACY/kerr_newman/lead7_test4_masscharge_zeros.py",
+                  "04_VERIFICATION_LEGACY/kerr_newman/lead7_test6_pole_coeffs_n3.py",
+                  "04_VERIFICATION_LEGACY/kerr_newman/lead7_test9_corner.py"],
+      "obligations": ["PO-27"]
+    }
+  },
+  "entry_point": "08_RELEASE/verification/run_all.py",
+  "known_missing": ["dbp_curvature_reduction_harness.py", "char2_generalization.py",
+                     "verify_campaignH_parity.py", "verify_against_paper.py"]
+}

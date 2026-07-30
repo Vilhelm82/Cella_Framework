@@ -26,8 +26,21 @@ verifier directly, never through the shim. (Discharged by 05_VERIFICATION_NEW/re
 
 ## Proof obligations (PO-1 .. PO-27)
 
-Tracked in PROOF_OBLIGATION_LEDGER.md beside this file; each PO closes only with a passing
-gate verifier or a written proof in 06_DERIVATIONS.
+Tracked in PROOF_OBLIGATION_LEDGER.md beside this file. FINAL STATE 2026-07-30: all 27
+closed, retained-with-witness, or resolved-vacuous (PO-12: obstruction class is zero, so
+the strong no-descent theorem is unnecessary — see REPORT_01).
+
+## Remaining open walls (successor-campaign targets, each with cause)
+
+| wall | cause |
+|---|---|
+| off-diagonal codimension >= 2 | determinant/inverse/cancellation control not established |
+| r >= 3 channel transport faithfulness | kernel geometry unproved beyond n=4 grid identity |
+| all-n carrier faithfulness | RoleChSpec rank recovery is dimension-3-specific |
+| n > 4 pair-form generation | proved at 3 and 4 roles; general-n statement has a one-line combinatorial proof sketch in REPORT_01 but NO gate |
+| characteristic p <= r | divided-power jets required |
+| curved-ambient channelization | ambient curvature not bilinear in role data |
+| global gluing / monodromy of the role cover | local theory only |
 
 ## Standing red lines
 
