@@ -4,6 +4,18 @@ Live ledger. An obligation leaves this file only by being (a) discharged with a 
 verifier, (b) converted into a typed stratum/hypothesis, or (c) explicitly moved out of scope
 with its mathematical cause stated.
 
+## GOVERNANCE CORRECTION (2026-07-30, post-release)
+
+**Rule, effective immediately and for every successor campaign:** a manifest item named
+by the plan that cannot be located in the repository is a **HALT condition at Stage 0**,
+not a record-and-proceed event. The campaign owner produces or dispositions the item
+before formal consolidation begins. The v1.0 release below proceeded past four missing
+scripts (one from the REQUIRED 5.4 list, three conditional); the resulting scope
+narrowing (all-n carrier demoted to frontier evidence; general-n pair-form generation
+gated only at 3 and 4 roles) is a consequence of that process error, not a mathematical
+necessity. Awaiting the owner-produced scripts; on arrival: hash into MANIFEST, run,
+wire into run_all.py, and re-open the affected walls.
+
 ## Missing computational supplements (Stage 0 finding)
 
 | Item | Status | Cause |
