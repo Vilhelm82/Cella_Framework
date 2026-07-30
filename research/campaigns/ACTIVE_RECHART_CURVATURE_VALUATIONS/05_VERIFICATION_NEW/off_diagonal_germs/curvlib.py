@@ -43,6 +43,37 @@ def scalar_curvature(g, coords):
     return sp.cancel(sp.together(R))
 
 
+def diagonal_scalar_curvature(entries, coords):
+    """Exact scalar curvature of a DIAGONAL metric via the directional-channel
+    formula (LOCAL_CURVATURE_CALCULUS_COMPLETE eq. 2.2-2.3):
+
+        u_i = (1/2) log g_i,
+        Q_j(u) = sum_{i != j} [d_j^2 u_i + (d_j u_i)^2 - (d_j u_j)(d_j u_i)]
+                 + sum_{r<s, r,s != j} (d_j u_r)(d_j u_s),
+        R = -2 sum_j Q_j / g_j.
+
+    Far cheaper than the full tensor route for symbolic function coefficients.
+    Cross-validated against scalar_curvature() (see Stage 6 gate C, check J0).
+    """
+    n = len(coords)
+    du = [[sp.cancel(sp.diff(entries[i], coords[j]) / (2 * entries[i]))
+           for j in range(n)] for i in range(n)]
+    R = 0
+    for j in range(n):
+        Qj = 0
+        for i in range(n):
+            if i == j:
+                continue
+            Qj += sp.diff(du[i][j], coords[j]) + du[i][j]**2 - du[j][j] * du[i][j]
+        for r in range(n):
+            for s in range(r + 1, n):
+                if r == j or s == j:
+                    continue
+                Qj += du[r][j] * du[s][j]
+        R += Qj / entries[j]
+    return sp.together(-2 * R)
+
+
 def leading_laurent(expr, z, max_pole=12, max_van=12):
     """Exact leading Laurent term of expr at z=0: returns (order, coefficient)
     with expr = coeff * z^order * (1 + O(z)).  Works on rational expressions.
