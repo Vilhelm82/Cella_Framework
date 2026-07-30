@@ -16,18 +16,24 @@ gated only at 3 and 4 roles) is a consequence of that process error, not a mathe
 necessity. Awaiting the owner-produced scripts; on arrival: hash into MANIFEST, run,
 wire into run_all.py, and re-open the affected walls.
 
-## Missing computational supplements (Stage 0 finding)
+## Missing computational supplements (Stage 0 finding — CORRECTED by staleness audit, 2026-07-30)
 
-| Item | Status | Cause |
+**Stage 0's search was path-only and never looked inside archives. That was an audit error.**
+The V4 retirement manifest (`V4PKG-0034__legacy_engine_source.json`) records the harness and
+the Campaign H suite inside the git-tracked cold-recovery tarball; recovered and hash-verified:
+
+| Item | Status | Detail |
 |---|---|---|
-| `dbp_curvature_reduction_harness.py` | MISSING from repository | named in plan 5.4; no copy exists anywhere in the repo tree |
-| `char2_generalization.py` | MISSING | named in plan 5.4 (all-n scaffold); referenced by dbp_four_role_calc_log_v8.md |
-| `verify_campaignH_parity.py` | MISSING | same |
-| `verify_against_paper.py` | MISSING | same |
+| `dbp_curvature_reduction_harness.py` | **RECOVERED** | sha256 matches V4PKG-0034 byte-exact; stdlib-only; runs standalone; n=3/4/5 sweep PASSES (25/25 surfaces each) |
+| `test_campaign_h_*.py` (9 scripts) + `run_campaign_h.py` | **RECOVERED** | full Campaign H executable suite from cold storage, packaged under 04_VERIFICATION_LEGACY/campaign_h/ |
+| `char2_generalization.py` | MISSING under this name | no file by this name anywhere incl. cold storage; nearest survivor `test_campaign_h_char2_boundary.py` — owner to confirm substitution |
+| `verify_campaignH_parity.py` | MISSING under this name | nearest survivors: Campaign H suite — owner to confirm |
+| `verify_against_paper.py` | MISSING under this name | nearest survivor `test_campaign_h_retrodict_campaign_g.py` — owner to confirm |
 
-Consequence: the all-`n` carrier claims of the four-role log remain frontier evidence with NO
-executable support in this package. They are not load-bearing for the first paper (plan 5.4
-"optional"), and nothing below cites them as proof.
+Consequence update: the all-`n` role/channel invariant sweep now HAS executable support in
+the package (the recovered harness passes at n=3,4,5). The all-n wall is partially reopened;
+full reopening awaits owner confirmation of the Campaign H substitutions and any newer
+owner-side maturation not present in this repository.
 
 ## Broken shim path (plan 5.4 audit flag)
 

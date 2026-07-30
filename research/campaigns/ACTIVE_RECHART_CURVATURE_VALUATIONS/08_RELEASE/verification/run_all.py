@@ -44,6 +44,7 @@ NEW_GATES = [
 ]
 
 LEGACY = [
+    "role_rechart/dbp_curvature_reduction_harness.py",
     "local_curvature/pfc_test1_local_normal_forms.py",
     "local_curvature/pfc_test2_corner_valuation.py",
     "local_curvature/pfc_test3_vertex_rule.py",
