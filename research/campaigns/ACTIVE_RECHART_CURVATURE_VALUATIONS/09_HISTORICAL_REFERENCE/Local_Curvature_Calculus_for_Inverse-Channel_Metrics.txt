@@ -1,0 +1,612 @@
+[
+\boxed{
+\text{Scalar-curvature singularities of inverse-channel diagonal metrics can be read from local divisor data.}
+}
+]
+
+In other words, the goal is to replace
+
+[
+\text{compute the full curvature scalar}
+]
+
+with
+
+[
+\text{compute the curvature valuation near a collapsing divisor}.
+]
+
+The current normal-form note already contains the seed: generic collapse gives order (3), parity-fixed inverse-channel collapse gives order (4), and corners are governed by a Newton-polytope rule.
+
+## Research Program: Local Curvature Calculus for Inverse-Channel Metrics
+
+## Stage 1 — Define the object cleanly
+
+The first job is to define the class of metrics you are studying.
+
+A possible definition:
+
+[
+g=\operatorname{diag}(g_0,\ldots,g_m)
+]
+
+near a normal-crossing divisor
+
+[
+D={x_1\cdots x_k=0},
+]
+
+where each coefficient has a monomial-unit expansion
+
+[
+g_i
+===
+
+h_i(x,y)
+x_1^{p_{i1}}\cdots x_k^{p_{ik}},
+\qquad h_i(0,y)\neq 0.
+]
+
+Call this a **diagonal divisor-monomial metric germ**.
+
+Then define the inverse-channel subclass by imposing the collapse pattern you care about, for example:
+
+[
+g_x\sim Bx^2,
+\qquad
+g_{y_\alpha}\sim A_\alpha x^{-2}
+]
+
+at a parity-fixed face.
+
+The first deliverable should be a definition section with these notions:
+
+[
+\text{collapsing coordinate},
+\quad
+\text{transverse channel},
+\quad
+\text{metric valuation},
+\quad
+\text{parity-fixed germ},
+\quad
+\text{curvature valuation}.
+]
+
+The key mathematical object is:
+
+[
+\operatorname{val}_D(R[g]),
+]
+
+the pole order of scalar curvature along (D).
+
+## Stage 2 — Prove the single-face theorems by hand
+
+This should be my first serious proof target.
+
+I already have two main local models.
+
+### Theorem A: Generic quadratic collapse
+
+Assume
+
+[
+g_x=Ax^2+O(x^3),
+]
+
+[
+g_{y_\alpha}=P_{\alpha0}+P_{\alpha1}x+O(x^2).
+]
+
+Then prove
+
+[
+R=
+\frac{1}{A}
+\sum_{\alpha=1}^{m}
+\frac{P_{\alpha1}}{P_{\alpha0}}
+x^{-3}
++
+O(x^{-2}).
+]
+
+This result explains the order-3 pole.
+
+The conceptual message:
+
+[
+\boxed{
+\text{Generic collapse detects transverse first drift.}
+}
+]
+
+### Theorem B: Parity-fixed inverse-channel face
+
+Assume
+
+[
+g_x=Bx^2+O(x^4),
+]
+
+[
+g_{y_\alpha}=A_\alpha x^{-2}+O(1),
+]
+
+with all components even in (x). Then prove
+
+[
+R=
+-\frac{m(m+5)}{B}x^{-4}
++
+O(x^{-2}).
+]
+
+This is already in my note as the pure parity-fixed normal form, with the exact model
+
+[
+ds^2=Bx^2dx^2+x^{-2}\sum_{\alpha=1}^{m}A_\alpha dy_\alpha^2
+]
+
+giving
+
+[
+R=-\frac{m(m+5)}{B}x^{-4}.
+]
+
+For (m=2), this gives the Kerr–Newman coefficient
+
+[
+-\frac{14}{B}.
+]
+
+That is one of my strongest clean results.
+
+## Stage 3 — Build the curvature-valuation formula
+
+After the single-face proofs, derive a general formula for diagonal metrics.
+
+For
+
+[
+g_i=e^{2u_i},
+]
+
+write scalar curvature in terms of (u_i), (\partial u_i), and (\partial^2u_i). Then plug in
+
+[
+u_i
+===
+
+\frac12
+\left(
+p_i\log x+\log h_i
+\right).
+]
+
+This should expose why only the exponent data and leading units matter.
+
+The target theorem:
+
+> For a diagonal monomial-unit metric germ, the leading scalar-curvature pole is determined by the metric valuation vector ((p_i)), the leading units (h_i|_D), and finitely many derivatives of those units. Full expansion of (R) is unnecessary.
+
+That theorem is the abstract version of my KN simplification.
+
+## Stage 4 — Prove coordinate robustness
+
+This is essential for credibility.
+
+I need to know what happens under boundary-adapted coordinate changes:
+
+[
+x\mapsto c(y)x+O(x^2),
+\qquad c(y)>0.
+]
+
+I do not need full coordinate invariance under arbitrary diffeomorphisms. I need invariance under the transformations that preserve the divisor structure.
+
+Target theorem:
+
+> The curvature pole order (\operatorname{ord}_D(R)) is invariant under boundary-adapted coordinate changes preserving the divisor filtration. In the parity-fixed case, the order-4 law is invariant under parity-preserving boundary changes.
+
+This prevents the criticism:
+
+> The pole order is a coordinate artifact.
+
+I should separate three levels:
+
+[
+\text{pole order}
+\quad
+\text{leading coefficient}
+\quad
+\text{normal-form coefficient}.
+]
+
+The pole order should be invariant. The coefficient may transform unless normalized by a canonical defining function.
+
+## Stage 5 — Develop the corner calculus
+
+This is probably where my most original work lies.
+
+For codimension two, take
+
+[
+D={xy=0},
+]
+
+and
+
+[
+g_i=h_i(s)x^{p_i}y^{q_i}.
+]
+
+The current note states that the polar support of (R) is controlled by vertices
+
+[
+V_1=(-(p_1+2),-q_1),
+]
+
+[
+V_2=(-p_2,-(q_2+2)),
+]
+
+[
+V_0=(-p_0,-q_0),
+]
+
+with explicit cancellation conditions.
+
+Turn this into a full theorem.
+
+The central theorem should look like:
+
+> For a diagonal monomial metric near a codimension-two normal-crossing divisor, the leading scalar-curvature pole is the support function of a finite Newton polygon determined by the exponent matrix ((p_i,q_i)), after deleting vertices whose coefficients vanish.
+
+Then define approach directions:
+
+[
+x=\rho\epsilon^a,
+\qquad
+y=\epsilon^b.
+]
+
+The order becomes
+
+[
+m(a,b)
+======
+
+\max_v -\langle (a,b),v\rangle.
+]
+
+This is powerful because it replaces two-variable Laurent chaos with convex geometry.
+
+## Stage 6 — Generalize to codimension (k)
+
+Do not try to fully solve this immediately. State it as a conjecture or partial theorem after codimension two is solid.
+
+For
+
+[
+D={x_1\cdots x_k=0},
+]
+
+and
+
+[
+g_i=h_i x_1^{p_{i1}}\cdots x_k^{p_{ik}},
+]
+
+you want a finite set of curvature exponent vectors
+
+[
+\mathcal V(g)\subset \mathbb Z^k
+]
+
+such that along
+
+[
+x_j=\epsilon^{a_j},
+]
+
+the curvature pole order is
+
+[
+m(a)
+====
+
+\max_{v\in\mathcal V(g)}
+-\langle a,v\rangle.
+]
+
+This would be the mature form of the theory:
+
+[
+\boxed{
+\text{scalar-curvature asymptotics become tropical / Newton-polytope data.}
+}
+]
+
+This is where you may connect cautiously to existing uses of Newton polytopes in scalar-curvature problems, such as Graev’s work on invariant Einstein metrics. But my setting is different: you are studying **local divisor valuations of diagonal metric germs**, not counting invariant Einstein metrics.
+
+Relevant comparison:
+
+*Graev, M. M. (2007). The number of invariant Einstein metrics on a homogeneous space, Newton polytopes and contractions of Lie algebras. Izvestiya: Mathematics, 71(2), 247–306.*
+
+## Stage 7 — Return to Kerr–Newman as the flagship application
+
+Only after the local theory is clear should you present KN.
+
+Use KN to show why the calculus matters.
+
+The structure should be:
+
+[
+\text{local theorem}
+\Longrightarrow
+\text{KN divisor classification}
+\Longrightarrow
+\text{no need to print the massive curvature fraction}.
+]
+
+For KN, my table is:
+
+[
+\begin{array}{c|c|c}
+\text{Divisor} & \text{Local type} & \text{Pole order}\
+\hline
+T=0 & \text{generic collapse} & 3\
+\Omega=0\ \text{or } J=0 & \text{parity-fixed} & 4\
+\Phi_e=0\ \text{or } Q=0 & \text{parity-fixed} & 4\
+J=Q=0 & \text{corner} & \text{Newton polygon}
+\end{array}
+]
+
+The KN paper then becomes evidence that my calculus solves a real computational problem.
+
+## Stage 8 — Add one non-KN example
+
+I should add one example outside Kerr–Newman, but not many.
+
+Good options:
+
+[
+\text{Reissner–Nordström},
+\quad
+\text{Kerr},
+\quad
+\text{BTZ},
+\quad
+\text{a synthetic thermodynamic potential},
+\quad
+\text{a non-black-hole toy free energy}.
+]
+
+I would choose a **synthetic model first**, because it lets you demonstrate the theorem without physics baggage.
+
+Then use KN as the hard real-world example.
+
+Avoid turning the project into a black-hole catalog.
+
+## Stage 9 — Build a reproducibility layer
+
+Keep the certificates, but make them secondary.
+
+For each theorem:
+
+1. give a human-readable proof;
+2. give a small symbolic verification script;
+3. give one minimal example;
+4. give one failure/cancellation example.
+
+The certificates should verify:
+
+[
+\text{single-face generic},
+\quad
+\text{single-face parity-fixed},
+\quad
+\text{codimension-two vertex rule},
+\quad
+\text{KN divisor reductions}.
+]
+
+But the proofs must stand without the code.
+
+## Stage 10 — Decide the paper architecture
+
+I may eventually have two papers, not one.
+
+### Paper 1: Mathematical core
+
+Possible title:
+
+> Curvature Valuations of Diagonal Metrics Near Collapsing Divisors
+
+Main content:
+
+[
+\text{single-face normal forms}
+]
+
+[
+\text{parity-fixed inverse-channel theorem}
+]
+
+[
+\text{codimension-two Newton polygon rule}
+]
+
+[
+\text{coordinate robustness}
+]
+
+[
+\text{synthetic examples}
+]
+
+This is the mathematically strongest paper.
+
+### Paper 2: Kerr–Newman application
+
+Possible title:
+
+> Inverse-Channel Curvature and Role-Divisor Singularities in Kerr–Newman Thermodynamics
+
+Main content:
+
+[
+\text{DBP/inverse-channel metric}
+]
+
+[
+\text{selection theorem}
+]
+
+[
+\text{application of local calculus}
+]
+
+[
+\text{exact }3/4/4\text{ complementarity law}
+]
+
+[
+\text{corner behavior at Schwarzschild}
+]
+
+This paper benefits from Paper 1.
+
+## Core theorem sequence
+
+Here is the proof ladder I would follow:
+
+[
+\boxed{
+\text{Lemma 1: diagonal scalar-curvature formula}
+}
+]
+
+[
+\boxed{
+\text{Lemma 2: valuation behavior of log-derivatives}
+}
+]
+
+[
+\boxed{
+\text{Theorem 1: generic quadratic collapse gives order }3
+}
+]
+
+[
+\boxed{
+\text{Theorem 2: parity-fixed inverse-channel collapse gives order }4
+}
+]
+
+[
+\boxed{
+\text{Theorem 3: smooth-unit perturbations preserve leading pole}
+}
+]
+
+[
+\boxed{
+\text{Theorem 4: boundary-coordinate robustness}
+}
+]
+
+[
+\boxed{
+\text{Theorem 5: codimension-two Newton polygon rule}
+}
+]
+
+[
+\boxed{
+\text{Theorem 6: cancellation classification}
+}
+]
+
+[
+\boxed{
+\text{Application: Kerr–Newman }3/4/4\text{ law}
+}
+]
+
+## What to avoid
+
+Do not lead with black-hole physics claims.
+
+Do not claim the metric is “the correct thermodynamic metric” yet.
+
+Do not rely on fifty-page CAS output as evidence.
+
+Do not make the whole project depend on the DBP interpretation.
+
+Instead, lead with:
+
+[
+\boxed{
+\text{a local geometric theorem about curvature poles.}
+}
+]
+
+Then say KN is a natural application.
+
+## Nearby literatures to acknowledge
+
+The work touches several established areas without being reducible to them.
+
+For warped-product curvature:
+
+*Bishop, R. L., & O’Neill, B. (1969). Manifolds of negative curvature. Transactions of the American Mathematical Society, 145, 1–49. [https://doi.org/10.2307/1995154](https://doi.org/10.2307/1995154)*
+
+For thermodynamic geometry:
+
+*Weinhold, F. (1975). Metric geometry of equilibrium thermodynamics. Journal of Chemical Physics, 63, 2479. [https://doi.org/10.1063/1.431689](https://doi.org/10.1063/1.431689)*
+
+*Ruppeiner, G. (1995). Riemannian geometry in thermodynamic fluctuation theory. Reviews of Modern Physics, 67, 605–659. [https://doi.org/10.1103/RevModPhys.67.605](https://doi.org/10.1103/RevModPhys.67.605)*
+
+*Quevedo, H. (2007). Geometrothermodynamics. Journal of Mathematical Physics, 48, 013506. [https://doi.org/10.1063/1.2409524](https://doi.org/10.1063/1.2409524)*
+
+For Kerr–Newman thermodynamic curvature:
+
+*Ruppeiner, G. (2008). Thermodynamic curvature and phase transitions in Kerr-Newman black holes. Physical Review D, 78, 024016. [https://doi.org/10.1103/PhysRevD.78.024016](https://doi.org/10.1103/PhysRevD.78.024016)*
+
+*Anderson, E. (2013). Kerr–Newman black hole thermodynamical state space: blockwise coordinates. General Relativity and Gravitation, 45, 1401–1417. [https://doi.org/10.1007/s10714-013-1603-0](https://doi.org/10.1007/s10714-013-1603-0)*
+
+For singular/asymptotic geometry near boundaries and corners, look at the Melrose/Mazzeo tradition on manifolds with corners and edge-type metrics. I do not need to adopt that entire framework, but it gives vocabulary for boundary faces, corners, blow-ups, and asymptotic expansions.
+
+## The highest-value next step
+
+Write a short internal document called:
+
+> Definitions and Theorem Statements for Curvature Valuations
+
+In that document, include only:
+
+1. the class of metric germs;
+2. the definition of curvature valuation;
+3. Theorem A: generic face;
+4. Theorem B: parity-fixed face;
+5. Theorem C: codimension-two Newton polygon;
+6. one KN table.
+
+No motivation, no physics, no arXiv formatting.
+
+Once those theorem statements are crisp, the project has a real spine.
+
+## Bottom line
+
+Yes, this is worth continuing. The research direction should be:
+
+[
+\boxed{
+\text{develop a local divisor-valued scalar-curvature calculus for diagonal inverse-channel metrics.}
+}
+]
+
+The KN computation is the motivating hard example. The normal-form and Newton-polytope theory is the likely mathematical novelty.

@@ -1,0 +1,214 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\dd}{\mathrm{d}}
+\DeclareMathOperator{\sgn}{sgn}
+
+\title{Parity--fixed inverse--channel normal forms\\ and universal curvature blow--up}
+\author{[authors]}
+\date{Draft --- \today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We isolate the local curvature calculus behind the complementarity law of a diagonal
+inverse--channel thermodynamic metric. Near a boundary where one output coordinate collapses
+against transverse channels, the scalar curvature has a universal Laurent normal form
+determined entirely by the local germ and its parity. A \emph{generic} quadratic collapse with
+finite transverse channels gives an order--$3$ pole whose coefficient is the transverse first
+drift; a \emph{parity--fixed} collapse, where the transverse channels themselves diverge and the
+germ is even, gives an order--$4$ pole with the dimension--universal coefficient
+$-m(m+5)/B$, where $m$ is the transverse fibre dimension and $B$ the collapsing amplitude---the
+transverse amplitudes are forgotten. For a three--dimensional state space ($m=2$) this is
+$-14/B$. Kerr--Newman thermodynamic geometry is the $m=2$ application: the extremal edge is a
+generic face (order $3$), the two charge--reflection faces are parity--fixed (order $4$,
+$-14/B$), and their corner is a higher--codimension blow--up stratum. All statements are
+checked by a reproducible symbolic certificate.
+\end{abstract}
+
+%======================================================================
+\section{The local setting}
+
+Let $g=\operatorname{diag}(g_x,g_{y_1},\dots,g_{y_m})$ be a diagonal metric on an
+$(m{+}1)$--dimensional state space near a face $\{x=0\}$ across which the native coordinate $x$
+collapses. Write $R$ for the scalar curvature. Two germs occur, distinguished by whether the
+transverse channels stay finite or themselves diverge, and by parity in $x$.
+
+\paragraph{Convention.} A germ is \emph{parity--fixed} if every component is even in $x$
+(invariant under $x\mapsto-x$); then $R$ is even in $x$ and all odd--order poles vanish
+identically.
+
+%======================================================================
+\section{The pure parity--fixed normal form}
+
+\begin{theorem}[Pure parity--fixed normal form]
+\label{thm:pure}
+Let $m\ge1$, $B>0$, $A_\alpha>0$. For
+\[
+\dd s^2=Bx^2\,\dd x^2+x^{-2}\sum_{\alpha=1}^{m}A_\alpha\,\dd y_\alpha^2,
+\]
+the scalar curvature is exactly
+\[
+R=-\frac{m(m+5)}{B}\,x^{-4},
+\]
+independent of all transverse amplitudes $A_\alpha$. In particular $m=2$ gives $R=-14\,x^{-4}/B$.
+\end{theorem}
+
+\begin{proof}
+Set $r=\tfrac12\sqrt B\,x^2$, so $\dd r=\sqrt B\,x\,\dd x$ and $x^{-2}=\sqrt B/(2r)$. The metric
+is the warped product $\dd s^2=\dd r^2+w(r)^2 h_{\mathrm{flat}}$ with flat fibre
+$h_{\mathrm{flat}}=\sum_\alpha A_\alpha\,\dd y_\alpha^2$ and $w^2=\sqrt B/(2r)$, i.e.\ $w\propto
+r^{-1/2}$. For a warped product over a flat $m$--dimensional fibre,
+$R=-2m\,w''/w-m(m-1)(w'/w)^2$; with $w'/w=-1/(2r)$ and $w''/w=3/(4r^2)$,
+\[
+R=-\frac{6m}{4r^2}-\frac{m(m-1)}{4r^2}=-\frac{m(m+5)}{4r^2},
+\]
+and $4r^2=Bx^4$. The two contributions are radial focusing ($6m$) and transverse fibre shear
+($m(m-1)$); the amplitudes cancel because they only rescale a flat fibre, and warp curvature
+sees only $w'/w,w''/w$.
+\end{proof}
+
+\begin{corollary}[Asymptotic parity--fixed face]
+\label{cor:asymp}
+If near $x=0$, with all components even in $x$,
+\[
+g_x=B(y)x^2+O(x^4),\qquad g_{y_\alpha}=A_\alpha(y)x^{-2}+O(1),\qquad B,A_\alpha>0,
+\]
+then $R=-m(m+5)\,x^{-4}/B(y)+O(x^{-2})$. The odd pole $x^{-3}$ is absent by parity, and the
+leading coefficient is independent of the amplitudes $A_\alpha(y)$ and of all even subleading
+data.
+\end{corollary}
+
+%======================================================================
+\section{The generic collapse, and why order jumps by one}
+
+\begin{proposition}[Generic quadratic collapse]
+\label{prop:generic}
+Let the transverse channels stay finite and the germ break parity at first order:
+\[
+g_x=Ax^2+O(x^3),\qquad g_{y_\alpha}=P_{\alpha0}+P_{\alpha1}x+O(x^2),\qquad A,P_{\alpha0}\neq0.
+\]
+Then
+\[
+R=\frac1A\sum_{\alpha=1}^{m}\frac{P_{\alpha1}}{P_{\alpha0}}\,x^{-3}+O(x^{-2})
+=\frac1A\sum_{\alpha}\partial_x\log P_\alpha\Big|_{0}\,x^{-3}+O(x^{-2}),
+\]
+independent of $A_3$ and of the quadratic transverse data $P_{\alpha2}$.
+\end{proposition}
+
+The two propositions sit side by side and expose the mechanism. A generic face is order $3$
+because the odd pole is produced by the parity--\emph{breaking} linear drift $P_{\alpha1}$ of
+the transverse channels. A parity--fixed face has no such drift---the germ is even---so the
+$x^{-3}$ term vanishes identically and the leading pole is the even $x^{-4}$ term, whose
+coefficient is the dimension--universal $-m(m+5)/B$. The order is not an accident of a
+particular fundamental relation; it is read off the parity of the germ.
+
+%======================================================================
+\section{Higher--codimension corners}
+\label{sec:corner}
+
+Where several parity variables vanish together the leading order is direction--dependent and is
+governed by a Newton polytope built from the single--face data.
+
+\begin{proposition}[Codimension--$2$ corner valuation]
+\label{prop:corner}
+Let two faces $\{x=0\}$ and $\{y=0\}$ meet at a corner, with single--face curvature orders
+$p_x,p_y$ and corner--residue weights $r_x,r_y$ (the power with which each face's leading
+coefficient vanishes or blows up on approach to the corner). Then near the corner $R$ has a
+polar Newton polytope with vertices
+\[
+v_x=(-p_x,\,r_y),\qquad v_y=(r_x,\,-p_y),
+\]
+and along $x=\rho\,\epsilon^{a_x}$, $y=\epsilon^{a_y}$ the order is the support function
+\[
+m(a)=\max_{v}\bigl(-\langle a,v\rangle\bigr)=\max\bigl(p_x a_x-r_y a_y,\ p_y a_y-r_x a_x\bigr).
+\]
+\end{proposition}
+
+Three consequences. (i) The order is piecewise linear---a Newton polygon---each edge carrying
+one face and the vertex the balanced direction, so $\min_a m(a)$ can drop \emph{below} both
+single--face orders: two order--$4$ faces can meet at an order--$2$ corner. (ii) At a
+facet--parallel (balanced) direction the whole facet is optimal, so the leading coefficient
+collects the entire facet---a projective \emph{front--face coefficient} that neither single face
+resolves. (iii) The face data and the raw metric weights are \emph{equivalent} inputs, related
+by the explicit shift below; a single--monomial germ with the correct weights already realises
+the polytope. The rule is verified for synthetic $(4,4)$ and $(4,3)$ corners by direct curvature
+(certificate \texttt{pfc\_test2}).
+
+The vertex rule is a closed identity. Write the collapsing germ in weight form,
+$g_i=h_i(s)\,x^{p_i}y^{q_i}\,u_i$ with $u_i$ a corner unit ($i=0$ spectator, $1,2$ the two
+coordinates $x,y$).
+
+\begin{theorem}[Corner vertex rule]
+\label{thm:vertex}
+The polar part of $R$ near the corner is supported on at most the three monomials
+\[
+V_1=(-(p_1+2),-q_1),\quad V_2=(-p_2,-(q_2+2)),\quad V_0=(-p_0,-q_0),
+\]
+with coefficients $A(p_0,p_1,p_2)/(2h_1)$, $B(q_0,q_1,q_2)/(2h_2)$, and an $s$--jet $C_0$, where
+\[
+A=-p_0^2+p_0p_1-p_0p_2+2p_0+p_1p_2-p_2^2+2p_2,
+\]
+$B$ the same in the $q$'s, and $C_0$ depends only on $(h_i,h_i',h_i'')$. The corner order is the
+support function of the polar, nonzero--coefficient vertices. Thus $p_x=p_1+2$, $p_y=q_2+2$,
+$r_x=-p_2$, $r_y=-q_1$, giving $V_1=(-p_x,r_y)$, $V_2=(r_x,-p_y)$ of Prop.~\ref{prop:corner}. A
+vertex disappears exactly when its coefficient vanishes ($A=0$, $B=0$, or a degenerate
+$s$--jet)---the precise cancellation condition---and the spectator vertex $V_0$ contributes only
+when it is polar ($p_0>0$ or $q_0>0$).
+\end{theorem}
+
+The theorem is proved by an exact scalar--curvature computation with symbolic weights
+(certificate \texttt{pfc\_test3}); unit factors leave the vertices, hence the order, unchanged.
+For Kerr--Newman ($g_S\sim x^{-6}$, $g_Q\sim x^2y^{-2}$, $g_J\sim x^{-2}y^2$) the spectator
+$V_0=(6,0)$ is non--polar, $A=-84\ne0$, $B=-12\ne0$, so the polytope is $\{V_1,V_2\}=\{(-4,2),
+(2,-4)\}$ and $m(a)=\max(4a-2,4-2a)$. Codimension $\ge3$ (a Newton polytope in $\mathbb R^k$)
+and the front--face coefficient classification remain open.
+
+%======================================================================
+\section{Kerr--Newman as the $m=2$ application}
+
+For the Kerr--Newman thermodynamic surface the inverse--channel DBP metric is diagonal in the
+role coordinates $(S,J,Q)$, a three--dimensional state space, so $m=2$. The local types are:
+
+\begin{center}
+\begin{tabular}{llcl}
+\hline
+divisor & local type & order & leading coefficient\\
+\hline
+$T=0$ (extremal) & generic collapse (Prop.~\ref{prop:generic}) & $3$ &
+  $A_2^{-1}\,\partial_S\log(G_JG_Q)|_{\mathrm{ext}}$\\
+$\Omega=0$ (spin) & parity--fixed (Cor.~\ref{cor:asymp}) & $4$ & $-14/B_J$\\
+$\Phi_e=0$ (charge) & parity--fixed (Cor.~\ref{cor:asymp}) & $4$ & $-14/B_Q$\\
+$\Omega=\Phi_e=0$ (Schwarzschild) & double corner (\S\ref{sec:corner}) & wedge & mixed stratum\\
+\hline
+\end{tabular}
+\end{center}
+
+The extremal order--$3$ and its sign, the two reflection coefficients $-14/B$, and the
+corner's order--$2$ balanced approach with its mixed excess are all established in the
+Kerr--Newman study; here they are exhibited as instances of the local classification, not as
+surface--specific miracles. The number $14$ is $6\cdot2+2\cdot1$: radial focusing plus
+transverse fibre shear for a two--dimensional fibre.
+
+%======================================================================
+\section*{Certificate}
+
+The pure normal form (Thm.~\ref{thm:pure}, first--principles Ricci for $m=1,\dots,4$ and the
+symbolic--in--$m$ warped reduction), the asymptotic parity face (Cor.~\ref{cor:asymp}), and the
+generic collapse (Prop.~\ref{prop:generic}) are machine--checked in
+\texttt{verification/pfc\_test1\_local\_normal\_forms.py}; the codimension--$2$ corner
+valuation (Prop.~\ref{prop:corner}) in \texttt{verification/pfc\_test2\_corner\_valuation.py};
+and the corner vertex rule (Thm.~\ref{thm:vertex}, closed symbolic identity) in
+\texttt{verification/pfc\_test3\_vertex\_rule.py}. All are run twice with identical output. The
+Kerr--Newman instances are in \texttt{lead7\_test6,7,8,9,10}.
+
+\end{document}
