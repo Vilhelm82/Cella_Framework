@@ -1,0 +1,1363 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Two-Tape Fence Cuts</title>
+<meta name="description" content="Cut-to-fit calculator for sheet metal fencing on sloping ground: two tape readings per bay give every sheet's cut.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+:root {
+  --ground: #E8ECE8;
+  --surface: #F7F9F6;
+  --well: #DCE2DC;
+  --ink: #16201B;
+  --ink-2: #4E5B54;
+  --rule: #C6CEC7;
+  --tape: #F4C20D;
+  --tape-ink: #1B1A10;
+  --tape-edge: #C29600;
+  --chalk: #1D5FD1;
+  --chalk-soft: rgba(29, 95, 209, 0.08);
+  --steel: #A7B2AC;
+  --steel-line: #8C9891;
+  --rail: #33403A;
+  --warn: #8F5B00;
+  --bad: #B8321C;
+  --display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --body: "Barlow", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #111513;
+    --surface: #19201C;
+    --well: #232B27;
+    --ink: #E3E9E5;
+    --ink-2: #9DAAA2;
+    --rule: #303A35;
+    --tape-edge: #B38A00;
+    --chalk: #72A5FF;
+    --chalk-soft: rgba(114, 165, 255, 0.10);
+    --steel: #4F5B55;
+    --steel-line: #66736C;
+    --rail: #C9D2CC;
+    --warn: #E2B04E;
+    --bad: #FF7B63;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #111513;
+  --surface: #19201C;
+  --well: #232B27;
+  --ink: #E3E9E5;
+  --ink-2: #9DAAA2;
+  --rule: #303A35;
+  --tape-edge: #B38A00;
+  --chalk: #72A5FF;
+  --chalk-soft: rgba(114, 165, 255, 0.10);
+  --steel: #4F5B55;
+  --steel-line: #66736C;
+  --rail: #C9D2CC;
+  --warn: #E2B04E;
+  --bad: #FF7B63;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font: 400 15px/1.5 var(--body);
+  -webkit-text-size-adjust: 100%;
+}
+.wrap {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding-inline: 16px;
+  padding-block: 22px 56px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+}
+.wrap > *, .top > * { min-width: 0; }
+h1, h2, h3, h4 { text-wrap: balance; }
+button, input, select { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--chalk); outline-offset: 2px; }
+
+/* ---------- header ---------- */
+.top { display: grid; gap: 14px; }
+.eyebrow {
+  margin: 0 0 6px;
+  font: 600 0.76rem/1 var(--body);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+h1 {
+  margin: 0;
+  font: 700 clamp(2.2rem, 7vw, 3.4rem)/0.95 var(--display);
+  letter-spacing: 0.005em;
+}
+.lede { margin: 10px 0 0; max-width: 58ch; color: var(--ink-2); font-size: 1.02rem; }
+.bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.chip {
+  display: inline-flex; align-items: baseline; gap: 6px;
+  padding: 5px 11px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 0.9rem;
+}
+.chip b { font: 600 0.98rem var(--mono); font-variant-numeric: tabular-nums; }
+.chip.is-wait { border-color: var(--warn); color: var(--warn); }
+.bar .spacer { flex: 1 1 0; min-width: 0; }
+.btn {
+  appearance: none;
+  border: 1.5px solid var(--ink);
+  background: var(--ink);
+  color: var(--surface);
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn.ghost { background: transparent; color: var(--ink); }
+.btn.small { padding: 5px 10px; font-size: 0.88rem; }
+.btn.is-armed { background: var(--bad); border-color: var(--bad); color: #fff; }
+.linkish {
+  appearance: none; border: 0; background: none; padding: 0;
+  color: var(--chalk); font-weight: 600; text-decoration: underline; cursor: pointer;
+}
+.banner {
+  margin: 0;
+  padding: 10px 14px;
+  border: 1.5px dashed var(--tape-edge);
+  border-radius: 8px;
+  background: var(--surface);
+}
+.status { margin: 0; font-size: 0.9rem; color: var(--ink-2); }
+.status:empty { display: none; }
+
+/* ---------- elevation ---------- */
+.elev {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding-block: 12px 10px;
+}
+.elev-scroll { overflow-x: auto; padding-inline: 12px; }
+.elev svg { display: block; }
+.elev .hit { fill: transparent; }
+.elev .bay-g { cursor: pointer; }
+.elev .bay-g:hover .hit, .elev .bay-g:focus-visible .hit { fill: var(--chalk-soft); }
+.elev .bay-g:focus-visible { outline: none; }
+.elev .sheet { fill: var(--steel); stroke: var(--surface); stroke-width: 1; }
+.elev .sheet.alt { fill: var(--steel-line); }
+.elev .rib { stroke: var(--surface); stroke-width: 0.6; opacity: 0.55; }
+.elev .rail { stroke: var(--rail); stroke-width: 4; stroke-linecap: square; fill: none; }
+.elev .cut { stroke: var(--chalk); stroke-width: 2.2; fill: none; }
+.elev .post { fill: var(--rail); }
+.elev .missing { fill: none; stroke: var(--ink-2); stroke-dasharray: 4 4; }
+.elev text { fill: var(--ink-2); font: 500 11px var(--mono); }
+.elev text.plabel { fill: var(--ink); font: 700 12px var(--display); letter-spacing: 0.04em; }
+.elev text.blabel { fill: var(--ink-2); font: 600 11px var(--body); letter-spacing: 0.08em; text-transform: uppercase; }
+.elev text.q { fill: var(--ink-2); font: 700 22px var(--display); }
+.legend {
+  display: flex; flex-wrap: wrap; gap: 4px 16px;
+  padding: 8px 16px 0;
+  font-size: 0.82rem; color: var(--ink-2);
+}
+.legend i { display: inline-block; width: 18px; height: 0; vertical-align: middle; margin-right: 6px; }
+.legend .l-rail { border-top: 4px solid var(--rail); }
+.legend .l-cut { border-top: 2.5px solid var(--chalk); }
+.legend .l-sheet { height: 10px; background: var(--steel); }
+
+/* ---------- columns ---------- */
+.cols { display: grid; gap: 18px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 920px) {
+  .cols { grid-template-columns: minmax(310px, 370px) minmax(0, 1fr); align-items: start; }
+}
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 16px;
+}
+h2 {
+  margin: 0;
+  font: 700 1.4rem/1.05 var(--display);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.hint { margin: 6px 0 0; color: var(--ink-2); font-size: 0.93rem; }
+.hint b { color: var(--ink); font-weight: 600; }
+
+/* ---------- the run (posts and bays) ---------- */
+.run { list-style: none; margin: 16px 0 0; padding: 0; }
+.run > li { display: grid; grid-template-columns: 40px minmax(0, 1fr); column-gap: 12px; }
+.post-mark { position: relative; display: flex; justify-content: center; align-items: center; }
+.post-mark span {
+  display: grid; place-items: center;
+  width: 32px; height: 32px;
+  border-radius: 3px;
+  background: var(--rail);
+  color: var(--surface);
+  font: 700 0.95rem/1 var(--display);
+  letter-spacing: 0.03em;
+}
+.post-body { padding-block: 4px; min-width: 0; }
+.bay-rails {
+  justify-self: center;
+  width: 12px;
+  border-left: 2px solid var(--rail);
+  border-right: 2px solid var(--rail);
+  opacity: 0.55;
+}
+.bay-body {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px;
+  padding-block: 12px;
+  min-width: 0;
+}
+.bay-name { font: 700 1rem/1 var(--display); letter-spacing: 0.05em; text-transform: uppercase; }
+.bay-w { display: inline-flex; align-items: center; gap: 6px; font-size: 0.85rem; color: var(--ink-2); }
+.bay-w input {
+  width: 5.6em;
+  padding: 5px 7px;
+  border: 1px solid var(--rule);
+  border-radius: 5px;
+  background: var(--ground);
+  font: 500 0.95rem var(--mono);
+  color: var(--ink);
+}
+.bay-derived { font: 500 0.86rem var(--mono); color: var(--chalk); }
+.bay-derived.is-wait { color: var(--ink-2); font-family: var(--body); }
+
+.tapes { display: flex; flex-wrap: wrap; gap: 8px; }
+.tape-field { display: grid; gap: 3px; flex: 1 1 128px; min-width: 0; }
+.lbl {
+  font: 600 0.7rem/1.2 var(--body);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+}
+.tape {
+  position: relative;
+  display: flex; align-items: center;
+  background: var(--tape);
+  border-radius: 4px 4px 3px 3px;
+  box-shadow: inset 0 -3px 0 var(--tape-edge);
+  overflow: hidden;
+}
+.tape::before {
+  content: "";
+  position: absolute; left: 0; right: 0; top: 0; height: 11px;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, var(--tape-ink) 1.5px, transparent 1.5px) 0 0 / 40px 11px repeat-x,
+    linear-gradient(90deg, var(--tape-ink) 1px, transparent 1px) 20px 0 / 40px 8px repeat-x,
+    linear-gradient(90deg, var(--tape-ink) 1px, transparent 1px) 0 0 / 4px 4px repeat-x;
+  opacity: 0.5;
+}
+.tape input {
+  flex: 1 1 auto; min-width: 0; width: 100%;
+  border: 0; background: transparent;
+  padding: 16px 2px 8px 10px;
+  color: var(--tape-ink);
+  font: 600 1.3rem/1 var(--mono);
+  font-variant-numeric: tabular-nums;
+}
+.tape input:focus { outline: none; }
+.tape input::placeholder { color: rgba(27, 26, 16, 0.42); }
+.tape .unit { padding: 9px 10px 0 0; font: 600 0.78rem var(--mono); color: var(--tape-ink); opacity: 0.65; }
+.tape:focus-within { outline: 2px solid var(--chalk); outline-offset: 2px; }
+.tape.is-interp {
+  background: repeating-linear-gradient(135deg, var(--well) 0 6px, var(--surface) 6px 12px);
+  box-shadow: inset 0 0 0 1px var(--rule);
+}
+.tape.is-interp::before { opacity: 0.12; }
+.tape.is-interp input, .tape.is-interp .unit { color: var(--ink-2); font-style: italic; }
+.tape.is-interp input::placeholder { color: var(--ink-2); opacity: 1; }
+.opts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
+.opt {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 9px 3px 7px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  font-size: 0.82rem; color: var(--ink-2);
+  cursor: pointer;
+}
+.opt input { margin: 0; accent-color: var(--chalk); }
+.opt:has(input:checked) { border-color: var(--chalk); color: var(--chalk); }
+.run-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; padding-left: 52px; }
+
+/* ---------- cut cards ---------- */
+.cuts-col { display: grid; gap: 14px; min-width: 0; }
+.cuts-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 14px; }
+.cuts-head p { margin: 0; color: var(--ink-2); font-size: 0.9rem; max-width: 52ch; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  overflow: hidden;
+  scroll-margin-top: calc(env(safe-area-inset-top, 0px) + 12px);
+}
+.card.flash { animation: flash 1.1s ease-out; }
+@keyframes flash { from { box-shadow: 0 0 0 3px var(--chalk); } to { box-shadow: 0 0 0 3px transparent; } }
+@media (prefers-reduced-motion: reduce) { .card.flash { animation: none; } }
+.card-head {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--rule);
+}
+.card-head h3 { margin: 0; font: 700 1.35rem/1 var(--display); letter-spacing: 0.02em; }
+.card-head h3 small { margin-left: 8px; font: 500 0.9rem var(--body); color: var(--ink-2); letter-spacing: 0; }
+.pill {
+  padding: 4px 8px;
+  border: 1.5px solid currentColor;
+  border-radius: 4px;
+  font: 600 0.72rem/1 var(--body);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--chalk);
+}
+.pill.m-square { color: var(--ink-2); }
+.pill.m-error { color: var(--bad); }
+.step { margin-left: auto; text-align: right; line-height: 1.1; }
+.step b { display: block; font: 600 1.15rem var(--mono); color: var(--chalk); font-variant-numeric: tabular-nums; }
+.step span { font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); }
+.card-body { display: grid; gap: 12px; padding: 12px 16px 16px; }
+.card-body p { margin: 0; }
+.meta { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 0.88rem; color: var(--ink-2); }
+.meta b { font: 600 0.9rem var(--mono); color: var(--ink); }
+.how { color: var(--ink); }
+.table-wrap { overflow-x: auto; margin-inline: -4px; }
+table.cuts { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.cuts th {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--rule);
+  font: 600 0.7rem/1.2 var(--body);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--ink-2);
+  text-align: left;
+  white-space: nowrap;
+}
+.cuts th.num, .cuts td.mark { text-align: right; }
+.cuts td { padding: 7px 8px; border-bottom: 1px solid var(--rule); vertical-align: middle; }
+.cuts tr:last-child td { border-bottom: 0; }
+.cuts .sid { font: 700 1.05rem var(--display); letter-spacing: 0.03em; white-space: nowrap; }
+.cuts .w { font-size: 0.86rem; color: var(--ink-2); white-space: nowrap; }
+.cuts .w.rip { color: var(--warn); font-weight: 600; }
+.cuts td.mark { font: 600 1.18rem var(--mono); white-space: nowrap; }
+.cuts td.mark.dim { color: var(--ink-2); font-weight: 500; }
+.cuts td.shape-cell { width: 40px; padding-block: 3px; }
+.cuts tr.is-short td.mark { color: var(--bad); }
+.shape { display: block; width: 30px; height: 42px; }
+.shape .body { fill: var(--steel); }
+.shape .cutline { stroke: var(--chalk); stroke-width: 2.2; fill: none; }
+.shape .factory { stroke: var(--ink); stroke-width: 2.2; fill: none; }
+.shortcuts { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+.sc {
+  padding: 10px 12px;
+  border: 1.5px dashed var(--chalk);
+  border-radius: 8px;
+  background: var(--chalk-soft);
+}
+.sc h4 {
+  margin: 0 0 4px;
+  font: 700 0.76rem/1.2 var(--body);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--chalk);
+}
+.sc p { font-size: 0.93rem; }
+.sc b, .note b { font: 600 0.95em var(--mono); }
+.how b { font-weight: 600; }
+.note { font-size: 0.9rem; color: var(--ink-2); }
+.warn { color: var(--warn); font-size: 0.92rem; }
+.warn::before { content: "Check: "; font-weight: 600; }
+.err { color: var(--bad); }
+
+/* ---------- setup ---------- */
+details.panel > summary {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  cursor: pointer;
+  list-style: none;
+}
+details.panel > summary::-webkit-details-marker { display: none; }
+details.panel > summary::after { content: "Show"; font: 600 0.85rem var(--body); color: var(--chalk); }
+details.panel[open] > summary::after { content: "Hide"; }
+details.panel > summary .sum-note { font-size: 0.88rem; color: var(--ink-2); flex: 1 1 auto; }
+.set-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 16px 20px;
+  margin-top: 16px;
+}
+.field { display: grid; gap: 5px; align-content: start; }
+.field input[type="text"] {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: var(--ground);
+  font: 500 1rem var(--mono);
+}
+.field small { color: var(--ink-2); font-size: 0.83rem; line-height: 1.4; }
+.seg { display: flex; flex-wrap: wrap; border: 1px solid var(--rule); border-radius: 7px; overflow: hidden; width: max-content; max-width: 100%; }
+.seg label { position: relative; flex: 1 1 auto; }
+.seg input { position: absolute; opacity: 0; pointer-events: none; }
+.seg span { display: block; padding: 7px 12px; font-weight: 600; font-size: 0.9rem; text-align: center; cursor: pointer; white-space: nowrap; }
+.seg input:checked + span { background: var(--ink); color: var(--surface); }
+.seg input:focus-visible + span { outline: 2px solid var(--chalk); outline-offset: -3px; }
+
+/* ---------- explainer ---------- */
+.explain { display: grid; gap: 14px; margin-top: 14px; max-width: 70ch; }
+.explain h3 { margin: 0; font: 700 1.1rem/1.2 var(--display); letter-spacing: 0.03em; }
+.explain p { margin: 4px 0 0; }
+.formula {
+  display: inline-block;
+  margin-top: 6px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: var(--well);
+  font: 500 0.95rem var(--mono);
+}
+.ranked { margin: 6px 0 0; padding-left: 1.3em; }
+.ranked li { margin-top: 4px; }
+footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
+.copy-fallback { width: 100%; min-height: 12em; font: 500 0.85rem var(--mono); padding: 10px; border: 1px solid var(--rule); border-radius: 8px; background: var(--surface); color: var(--ink); }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <p class="eyebrow">Sheet fencing · cut to fit on sloping ground</p>
+      <h1>Two-Tape Fence Cuts</h1>
+      <p class="lede">Measure the gap between the rails at each post. That's it. Every sheet's cut in the bay follows from those two numbers.</p>
+    </div>
+    <div class="bar">
+      <div class="bar" id="summary" aria-live="polite"></div>
+      <span class="spacer"></span>
+      <button class="btn" type="button" id="copy-list">Copy cut list</button>
+      <button class="btn ghost" type="button" id="new-job">New job</button>
+    </div>
+    <p class="banner" id="example-banner">This is an example job. Type your own readings over the yellow tapes, or <button class="linkish" type="button" id="example-clear">start a new job</button>.</p>
+    <p class="status" id="status" aria-live="polite"></p>
+    <textarea class="copy-fallback" id="copy-fallback" readonly hidden aria-label="Cut list text"></textarea>
+  </header>
+
+  <section class="elev" aria-label="Fence elevation">
+    <div class="elev-scroll"><svg id="elev" role="img" aria-label="Elevation of the fence run with each sheet and its cut line"></svg></div>
+    <div class="legend"><span><i class="l-rail"></i>Rails</span><span><i class="l-sheet"></i>Sheets</span><span><i class="l-cut"></i>Cut line</span><span>Tap a bay to jump to its cuts</span></div>
+  </section>
+
+  <div class="cols">
+    <section class="panel" aria-labelledby="readings-h">
+      <h2 id="readings-h">Readings</h2>
+      <p class="hint" id="measure-hint"></p>
+      <ol class="run" id="run"></ol>
+      <div class="run-actions">
+        <button class="btn small" type="button" id="add-bay">Add bay</button>
+        <button class="btn small ghost" type="button" id="remove-bay">Remove last bay</button>
+      </div>
+    </section>
+
+    <section class="cuts-col" aria-labelledby="cuts-h">
+      <div class="cuts-head">
+        <h2 id="cuts-h">Cut list</h2>
+        <p>Marks are in mm, measured from the factory end along each edge. Left and right are as you face the fence from where you measured.</p>
+      </div>
+      <div class="cuts-col" id="cards"></div>
+    </section>
+  </div>
+
+  <details class="panel" id="setup">
+    <summary><h2>Setup</h2><span class="sum-note" id="setup-note"></span></summary>
+    <div class="set-grid">
+      <div class="field">
+        <span class="lbl">How you measure</span>
+        <div class="seg" role="radiogroup" aria-label="How you measure">
+          <label><input type="radio" name="mode" id="set-mode-gap" value="gap"><span>Gap between rails</span></label>
+          <label><input type="radio" name="mode" id="set-mode-string" value="string"><span>From a string line</span></label>
+        </div>
+        <small>Gap: one reading per post. Use it when one rail is level. String line: two readings per post, for when both rails slope.</small>
+      </div>
+      <div class="field" id="field-level">
+        <span class="lbl">Which rail is level</span>
+        <div class="seg" role="radiogroup" aria-label="Which rail is level">
+          <label><input type="radio" name="levelRail" id="set-level-top" value="top"><span>Top rail</span></label>
+          <label><input type="radio" name="levelRail" id="set-level-bottom" value="bottom"><span>Bottom rail</span></label>
+        </div>
+        <small>The factory end of each sheet goes against the level rail. The other end gets the angled cut.</small>
+      </div>
+      <div class="field">
+        <span class="lbl">Which end to cut</span>
+        <div class="seg" role="radiogroup" aria-label="Which end to cut">
+          <label><input type="radio" name="cutEnds" id="set-cut-auto" value="auto"><span>Auto</span></label>
+          <label><input type="radio" name="cutEnds" id="set-cut-bottom" value="bottom"><span>Bottom</span></label>
+          <label><input type="radio" name="cutEnds" id="set-cut-top" value="top"><span>Top</span></label>
+          <label><input type="radio" name="cutEnds" id="set-cut-both" value="both"><span>Both</span></label>
+        </div>
+        <small>Auto cuts whichever end meets a sloping rail, and leaves an end square when its corner gap is within the tolerance below.</small>
+      </div>
+      <div class="field">
+        <label class="lbl" for="set-bayWidth">Standard bay width (mm)</label>
+        <input type="text" inputmode="decimal" id="set-bayWidth" autocomplete="off">
+        <small>Post face to post face, where the first and last sheet edges sit. Measure your rails if unsure.</small>
+      </div>
+      <div class="field">
+        <label class="lbl" for="set-sheetsPerBay">Sheets in a standard bay</label>
+        <input type="text" inputmode="numeric" id="set-sheetsPerBay" autocomplete="off">
+        <small id="cover-note"></small>
+      </div>
+      <div class="field">
+        <label class="lbl" for="set-lap">Sheet lap (mm)</label>
+        <input type="text" inputmode="decimal" id="set-lap" autocomplete="off">
+        <small>How far each sheet overlaps the next. Marks are given at the true sheet edges. 0 is fine if you don't know it.</small>
+      </div>
+      <div class="field">
+        <label class="lbl" for="set-allowance">Add to every reading (mm)</label>
+        <input type="text" inputmode="decimal" id="set-allowance" autocomplete="off">
+        <small>0 if you measure the sheet length itself: from where the sheet sits in the bottom rail to where it stops in the top rail, less clearance. If you measure the visible gap between rails, add how far the sheet goes into both rails, minus clearance.</small>
+      </div>
+      <div class="field">
+        <label class="lbl" for="set-stock">Stock sheet length (mm)</label>
+        <input type="text" inputmode="decimal" id="set-stock" autocomplete="off" placeholder="optional">
+        <small>Flags any sheet that comes up short.</small>
+      </div>
+      <div class="field">
+        <label class="lbl" for="set-floatTol">Corner gap tolerance (mm)</label>
+        <input type="text" inputmode="decimal" id="set-floatTol" autocomplete="off">
+        <small>A square end on a sloping rail touches at one corner and leaves a gap at the other. Auto accepts gaps up to this size, since the rail channel hides them.</small>
+      </div>
+      <div class="field">
+        <label class="lbl" for="set-spreadTol">Skip rips under (mm)</label>
+        <input type="text" inputmode="decimal" id="set-spreadTol" autocomplete="off">
+        <small>If an odd bay is within this much of a whole number of sheets, the laps take it up and no sheet is ripped.</small>
+      </div>
+    </div>
+  </details>
+
+  <details class="panel" id="explain">
+    <summary><h2>Why two readings are enough</h2></summary>
+    <div class="explain">
+      <div>
+        <h3>1. Straight rails make a straight line of lengths</h3>
+        <p>Between two posts each rail is straight, so the length a sheet needs changes steadily from one post to the next. A straight line is fixed by two points, so a reading at each post tells you everything. A post shared by two bays gives one reading to both, so a run of N bays needs N + 1 readings. Measuring each sheet edge on site takes two readings per sheet.</p>
+      </div>
+      <div>
+        <h3>2. The same step from sheet to sheet</h3>
+        <p>The sheets are identical and evenly spaced, so the length changes by the same amount from one sheet to the next:</p>
+        <span class="formula">step = (right reading − left reading) ÷ sheets in the bay</span>
+        <p>So every sheet in the bay gets the same cut angle, and each sheet's long edge equals the next sheet's short edge. The marks run 1500, 1520, 1540, 1560. You can check the list in your head.</p>
+      </div>
+      <div>
+        <h3>3. Cut the end that meets the sloping rail</h3>
+        <p>A square end only sits flush on a level rail. On a rail that slopes, it touches at one corner and gaps at the other by the slope times the sheet width. If you use the rail-to-rail length with the square end on the sloping rail, the far corner jams by that same amount. Put the factory end on the level rail and cut the other end. If both rails slope, measure from a string line and cut both ends, unless the corner gap is small enough to hide in the channel.</p>
+      </div>
+      <div>
+        <h3>4. Getting the marks onto the steel, fewest steps first</h3>
+        <ol class="ranked">
+          <li><b>Chalk line.</b> Lay the bay's sheets face up, lapped as they'll be fitted, factory ends against a straight edge. They now sit exactly as in the fence, so one line from the left reading to the right reading marks every sheet. Two marks, one snap, no sums.</li>
+          <li><b>Stack.</b> Nest the sheets and slide each one's factory end out by the step. Every cut line then lands in the same place, so one cut through the stack does the whole bay. Only do this if your saw and blade are rated for the stack.</li>
+          <li><b>Sheet by sheet.</b> Mark the left and right numbers from the cut list on each sheet, join them, cut.</li>
+        </ol>
+      </div>
+    </div>
+  </details>
+
+  <footer>
+    All sizes in millimetres. Cut and offer up the first sheet of each bay before cutting the rest. Your readings stay in this browser on this device.
+  </footer>
+</div>
+
+<script id="fence-core">
+/* Two-Tape Fence Cuts: calculation core. Pure functions, no DOM, so it can be
+   exercised directly by tests/test_core.js. Units: millimetres.
+   Frame: x runs along the fence from the bay's start post, y is up. Sheets hang plumb. */
+(function (root) {
+  'use strict';
+
+  var DEFAULTS = Object.freeze({
+    mode: 'gap',        // 'gap': one reading per post (rail-to-rail); 'string': drops to both rails from a level line
+    levelRail: 'top',   // gap mode only: the rail that is level (the factory end sits against it)
+    cutEnds: 'auto',    // 'auto' | 'bottom' | 'top' | 'both'
+    bayWidth: 2365,     // standard bay, post face to post face
+    sheetsPerBay: 3,
+    lap: 0,             // overlap between neighbouring sheets
+    allowance: 0,       // added to every reading to turn it into a sheet length
+    stock: 0,           // stock sheet length; 0 = unknown
+    floatTol: 5,        // largest corner gap accepted at a square end
+    spreadTol: 20       // an odd bay within this of a whole sheet count is spread, not ripped
+  });
+
+  function num(v) {
+    if (v === null || v === undefined) return null;
+    if (typeof v === 'number') return Number.isFinite(v) ? v : null;
+    var t = String(v).replace(/[\s,]/g, '');
+    if (t === '') return null;
+    var n = Number(t);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  function resolveSettings(raw) {
+    var s = Object.assign({}, DEFAULTS);
+    var r = raw || {};
+    if (r.mode === 'gap' || r.mode === 'string') s.mode = r.mode;
+    if (r.levelRail === 'top' || r.levelRail === 'bottom') s.levelRail = r.levelRail;
+    if (['auto', 'bottom', 'top', 'both'].indexOf(r.cutEnds) >= 0) s.cutEnds = r.cutEnds;
+    ['bayWidth', 'sheetsPerBay', 'lap', 'allowance', 'stock', 'floatTol', 'spreadTol'].forEach(function (k) {
+      var n = num(r[k]);
+      if (n !== null) s[k] = n;
+    });
+    if (!(s.bayWidth > 0)) s.bayWidth = DEFAULTS.bayWidth;
+    s.sheetsPerBay = Math.max(1, Math.round(s.sheetsPerBay));
+    s.lap = Math.max(0, s.lap);
+    s.stock = Math.max(0, s.stock);
+    s.floatTol = Math.max(0, s.floatTol);
+    s.spreadTol = Math.max(0, s.spreadTol);
+    s.cover = (s.bayWidth - s.lap) / s.sheetsPerBay;       // sheet pitch in a standard bay
+    if (!(s.cover > 0)) { s.lap = 0; s.cover = s.bayWidth / s.sheetsPerBay; }
+    s.sheetWidth = s.cover + s.lap;                          // physical sheet width
+    return s;
+  }
+
+  // Rail heights at one station: T = top rail stop line, B = bottom rail seat line.
+  // Any constant datum works; only differences and slopes matter. null if a reading is missing.
+  function railsAt(r, s) {
+    if (!r) return null;
+    if (s.mode === 'string') {
+      var t = num(r.t), b = num(r.b);
+      if (t === null || b === null) return null;
+      return { T: -t, B: -b - s.allowance };
+    }
+    var g = num(r.g);
+    if (g === null) return null;
+    var gap = g + s.allowance;
+    return s.levelRail === 'bottom' ? { T: gap, B: 0 } : { T: 0, B: -gap };
+  }
+
+  // Sheet spans [a, b] across a bay of width W. Sheets are laid from the start post;
+  // an odd bay either spreads its sheets (within spreadTol) or rips the last one.
+  function layoutSheets(W, s) {
+    var c = s.cover, lap = s.lap, w = s.sheetWidth;
+    var k = (W - lap) / c;
+    var nr = Math.round(k);
+    var spans = [], i;
+    if (nr >= 1 && Math.abs(k - nr) * c <= s.spreadTol) {
+      if (nr === 1) return { spans: [{ a: 0, b: W, rip: 0 }], pitch: W, even: true };
+      var p = (W - w) / (nr - 1);
+      for (i = 0; i < nr; i++) spans.push({ a: i * p, b: i * p + w, rip: 0 });
+      return { spans: spans, pitch: p, even: true };
+    }
+    var n = Math.max(1, Math.ceil(k));
+    for (i = 0; i < n; i++) {
+      var a = i * c;
+      var last = i === n - 1;
+      var b = last ? W : a + w;
+      spans.push({ a: a, b: b, rip: last ? w - (b - a) : 0 });
+    }
+    return { spans: spans, pitch: c, even: false };
+  }
+
+  function planBay(W, r0, r1, s) {
+    var out = { width: W, errors: [], warnings: [], sheets: [], stacks: [], chalk: null, mode: null, delta: 0 };
+    if (!(W > 0)) { out.errors.push('Bay width has to be more than 0 mm.'); return out; }
+    var sT = (r1.T - r0.T) / W, sB = (r1.B - r0.B) / W;
+    var T = function (x) { return r0.T + sT * x; };
+    var B = function (x) { return r0.B + sB * x; };
+    var g0 = r0.T - r0.B, g1 = r1.T - r1.B;
+    out.sT = sT; out.sB = sB; out.g0 = g0; out.g1 = g1;
+    out.rails = { T0: r0.T, T1: r1.T, B0: r0.B, B1: r1.B };
+    if (!(g0 > 0) || !(g1 > 0)) { out.errors.push('The gap between the rails has to be more than 0 mm at both posts.'); return out; }
+    if (Math.abs(g1 - g0) / W > 0.15) {
+      out.warnings.push('The gap changes by ' + Math.round(Math.abs(g1 - g0)) + ' mm across one bay. Check both readings.');
+    }
+
+    var lay = layoutSheets(W, s);
+    var w = s.sheetWidth;
+    var gapTop = Math.abs(sT) * w, gapBot = Math.abs(sB) * w;   // corner gap a square end would leave
+    var cutTop, cutBot;
+    if (s.cutEnds === 'top') { cutTop = true; cutBot = false; }
+    else if (s.cutEnds === 'bottom') { cutTop = false; cutBot = true; }
+    else if (s.cutEnds === 'both') { cutTop = true; cutBot = true; }
+    else { cutTop = gapTop > s.floatTol; cutBot = gapBot > s.floatTol; }
+    var mode = cutTop && cutBot ? 'both' : cutTop ? 'top' : cutBot ? 'bottom' : 'square';
+    out.mode = mode;
+    out.even = lay.even;
+    out.pitch = lay.pitch;
+    out.delta = (g1 - g0) * lay.pitch / W;
+    if (!cutTop && gapTop > s.floatTol + 1e-9) {
+      out.warnings.push('Square tops leave up to ' + gapTop.toFixed(1) + ' mm of gap under the top rail at one corner.');
+    }
+    if (!cutBot && gapBot > s.floatTol + 1e-9) {
+      out.warnings.push('Square bottoms leave up to ' + gapBot.toFixed(1) + ' mm of gap above the bottom rail at one corner.');
+    }
+
+    out.sheets = lay.spans.map(function (sp, i) {
+      var a = sp.a, b = sp.b;
+      var Ta = T(a), Tb = T(b), Ba = B(a), Bb = B(b);
+      // A square top stops at the lowest point of the top rail over the sheet;
+      // a square bottom sits on the highest point of the bottom rail.
+      var top = cutTop ? [Ta, Tb] : [Math.min(Ta, Tb), Math.min(Ta, Tb)];
+      var bot = cutBot ? [Ba, Bb] : [Math.max(Ba, Bb), Math.max(Ba, Bb)];
+      var lenL = top[0] - bot[0], lenR = top[1] - bot[1];
+      var ref, lines;
+      if (mode === 'bottom') {
+        ref = 'top';
+        lines = [{ end: 'bottom', l: lenL, r: lenR }];
+      } else if (mode === 'both') {
+        var lo = Math.min(Ba, Bb);
+        ref = 'bottom';
+        lines = [{ end: 'top', l: Ta - lo, r: Tb - lo }, { end: 'bottom', l: Ba - lo, r: Bb - lo }];
+      } else {
+        ref = 'bottom';
+        lines = [{ end: 'top', l: lenL, r: lenR }];
+      }
+      var need = 0;
+      lines.forEach(function (li) { need = Math.max(need, li.l, li.r); });
+      return {
+        n: i + 1, a: a, b: b, width: b - a, rip: sp.rip,
+        top: top, bot: bot, lenL: lenL, lenR: lenR,
+        ref: ref, lines: lines, need: need,
+        gapTop: cutTop ? 0 : Math.abs(Ta - Tb),
+        gapBot: cutBot ? 0 : Math.abs(Ba - Bb),
+        short: s.stock > 0 && need > s.stock + 0.5 ? need - s.stock : 0
+      };
+    });
+
+    out.sheets.forEach(function (sh) {
+      if (!(sh.lenL > 0) || !(sh.lenR > 0)) out.errors.push('Sheet ' + sh.n + ' comes out with no length. Check the readings.');
+      if (sh.short) out.warnings.push('Sheet ' + sh.n + ' needs ' + Math.round(sh.need) + ' mm but the stock is ' + Math.round(s.stock) + ' mm.');
+      if (sh.rip > 0 && sh.width < 100) out.warnings.push('The last sheet is only ' + Math.round(sh.width) + ' mm wide after ripping.');
+    });
+
+    // Stack: stagger each sheet's factory end by its difference from the first, and every
+    // sheet's cut line lands on the first sheet's line, because in its own frame each sheet's
+    // line has the same slope (the rail's slope against a plumb edge).
+    var first = out.sheets[0];
+    out.stacks = first ? first.lines.map(function (base, j) {
+      return { end: base.end, offsets: out.sheets.map(function (sh) { return sh.lines[j].l - base.l; }) };
+    }) : [];
+
+    // Chalk line: with the factory end on a level rail, laying the sheets out as fitted
+    // puts every mark on one straight line from g0 at x = 0 to g1 at x = W.
+    if (mode === 'bottom' || mode === 'top') {
+      var err = 0;
+      out.sheets.forEach(function (sh) {
+        err = Math.max(err,
+          Math.abs(sh.lines[0].l - (g0 + (g1 - g0) * sh.a / W)),
+          Math.abs(sh.lines[0].r - (g0 + (g1 - g0) * sh.b / W)));
+      });
+      if (err <= 1) out.chalk = { l: g0, r: g1, width: W, err: err };
+    }
+    return out;
+  }
+
+  // job = { settings, posts: [{g,t,b, g2,t2,b2, step, skip}], bays: [{width}] }
+  // Post k's g/t/b is the reading on its left side (end of bay k-1); with step set, g2/t2/b2
+  // is its right side (start of bay k). A skipped post is interpolated from its neighbours.
+  function planRun(job) {
+    var s = resolveSettings(job && job.settings);
+    var posts = (job && job.posts) || [];
+    var bayIn = (job && job.bays) || [];
+    var nb = Math.max(0, posts.length - 1);
+    var widths = [], X = [0], k;
+    for (k = 0; k < nb; k++) {
+      var wv = num(bayIn[k] && bayIn[k].width);
+      widths.push(wv !== null ? wv : s.bayWidth);
+      X.push(X[k] + Math.max(0, widths[k]));
+    }
+    var perReading = s.mode === 'string' ? 2 : 1;
+    var st = posts.map(function (p, i) {
+      p = p || {};
+      var inner = i > 0 && i < posts.length - 1;
+      var step = inner && !!p.step;
+      var skip = inner && !!p.skip && !step;
+      var left = skip ? null : railsAt(p, s);
+      var right = skip ? null : step ? railsAt({ g: p.g2, t: p.t2, b: p.b2 }, s) : left;
+      return { x: X[i], step: step, skip: skip, interp: false, left: left, right: right,
+               readings: skip ? 0 : (step ? 2 : 1) * perReading };
+    });
+    st.forEach(function (p, i) {
+      if (!p.skip) return;
+      var a = i - 1, b = i + 1;
+      while (a >= 0 && st[a].skip) a--;
+      while (b < st.length && st[b].skip) b++;
+      var A = a >= 0 ? st[a].right : null, Z = b < st.length ? st[b].left : null;
+      if (A && Z && st[b].x > st[a].x) {
+        var f = (p.x - st[a].x) / (st[b].x - st[a].x);
+        p.left = p.right = { T: A.T + (Z.T - A.T) * f, B: A.B + (Z.B - A.B) * f };
+        p.interp = true;
+      }
+    });
+    var bays = [];
+    for (k = 0; k < nb; k++) {
+      var r0 = st[k].right, r1 = st[k + 1].left, bay;
+      if (!r0 || !r1) {
+        var need = [];
+        [[k, r0], [k + 1, r1]].forEach(function (e) {
+          if (e[1]) return;
+          need.push(st[e[0]].skip
+            ? 'P' + (e[0] + 1) + ' takes its value from the posts either side. Enter those first.'
+            : 'Enter the reading' + (perReading > 1 ? 's' : '') + ' at P' + (e[0] + 1) + '.');
+        });
+        bay = { width: widths[k], errors: need, warnings: [], sheets: [], stacks: [], chalk: null, mode: null, delta: 0 };
+      } else {
+        bay = planBay(widths[k], r0, r1, s);
+      }
+      bay.index = k;
+      bays.push(bay);
+    }
+    var totals = { bays: nb, sheets: 0, readings: 0, waiting: 0, angledCuts: 0 };
+    st.forEach(function (p) { totals.readings += p.readings; });
+    bays.forEach(function (b) {
+      if (b.errors.length) { totals.waiting++; return; }
+      totals.sheets += b.sheets.length;
+      totals.angledCuts += b.sheets.length * (b.mode === 'both' ? 2 : b.mode === 'square' ? 0 : 1);
+    });
+    return { settings: s, stations: st, X: X, bays: bays, totals: totals };
+  }
+
+  var api = { DEFAULTS: DEFAULTS, num: num, resolveSettings: resolveSettings, railsAt: railsAt,
+              layoutSheets: layoutSheets, planBay: planBay, planRun: planRun };
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else root.FenceCore = api;
+})(typeof globalThis !== 'undefined' ? globalThis : this);
+</script>
+
+<script>
+(function () {
+  'use strict';
+  var C = window.FenceCore;
+  var KEY = 'two-tape-fence-cuts/v1';
+  var MINUS = '−';
+  var SETTING_KEYS = ['bayWidth', 'sheetsPerBay', 'lap', 'allowance', 'stock', 'floatTol', 'spreadTol'];
+  var DEFAULT_SETTINGS = {
+    mode: 'gap', levelRail: 'top', cutEnds: 'auto',
+    bayWidth: '2365', sheetsPerBay: '3', lap: '0', allowance: '0', stock: '', floatTol: '5', spreadTol: '20'
+  };
+
+  function $(sel) { return document.querySelector(sel); }
+  function esc(v) { return String(v).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function mm(x) { var r = Math.round(x); return (r < 0 ? MINUS : '') + Math.abs(r); }
+  function one(x) { var v = Math.round(x * 10) / 10; return (v > 0 ? '+' : v < 0 ? MINUS : '') + Math.abs(v).toFixed(1); }
+  function plural(n, a, b) { return n === 1 ? a : b; }
+
+  function blankPost() { return { g: '', t: '', b: '', g2: '', t2: '', b2: '', step: false, skip: false }; }
+  function exampleJob() {
+    var posts = ['1500', '1560', '1605', '1590'].map(function (g) { var p = blankPost(); p.g = g; return p; });
+    return { v: 1, example: true, settings: Object.assign({}, DEFAULT_SETTINGS), posts: posts,
+             bays: [{ width: '' }, { width: '' }, { width: '1400' }] };
+  }
+  function normalize(j) {
+    var out = { v: 1, example: !!j.example, settings: Object.assign({}, DEFAULT_SETTINGS), posts: [], bays: [] };
+    Object.keys(DEFAULT_SETTINGS).forEach(function (k) {
+      if (j.settings && j.settings[k] !== undefined && j.settings[k] !== null) out.settings[k] = String(j.settings[k]);
+    });
+    (Array.isArray(j.posts) ? j.posts : []).forEach(function (p) {
+      var q = blankPost();
+      ['g', 't', 'b', 'g2', 't2', 'b2'].forEach(function (f) { if (p && p[f] != null) q[f] = String(p[f]); });
+      q.step = !!(p && p.step); q.skip = !!(p && p.skip) && !q.step;
+      out.posts.push(q);
+    });
+    while (out.posts.length < 2) out.posts.push(blankPost());
+    for (var k = 0; k < out.posts.length - 1; k++) {
+      var b = (j.bays || [])[k];
+      out.bays.push({ width: b && b.width != null ? String(b.width) : '' });
+    }
+    return out;
+  }
+  function load() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (raw) {
+        var j = JSON.parse(raw);
+        if (j && j.v === 1 && Array.isArray(j.posts)) return normalize(j);
+      }
+    } catch (e) { /* storage unavailable: start from the example */ }
+    return exampleJob();
+  }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(job)); } catch (e) { /* ignore */ } }
+
+  var job = load();
+  var plan = C.planRun(job);
+
+  /* ---------- readings list ---------- */
+  function tapeField(id, label, value) {
+    return '<div class="tape-field"><label class="lbl" for="' + id + '">' + esc(label) + '</label>' +
+      '<div class="tape"><input id="' + id + '" type="text" inputmode="decimal" enterkeyhint="next" autocomplete="off" spellcheck="false" value="' + esc(value) + '">' +
+      '<span class="unit">mm</span></div></div>';
+  }
+  function postFields(k, p, side) {
+    var sfx = side === 2 ? '2' : '';
+    var where = side === 1 ? ' · left' : side === 2 ? ' · right' : '';
+    if (job.settings.mode === 'string') {
+      return tapeField('p' + k + '-t' + sfx, 'Down to top rail' + where, p['t' + sfx]) +
+             tapeField('p' + k + '-b' + sfx, 'Down to bottom rail' + where, p['b' + sfx]);
+    }
+    return tapeField('p' + k + '-g' + sfx, 'Rail to rail' + where, p['g' + sfx]);
+  }
+  function renderRun() {
+    var html = '';
+    var n = job.posts.length;
+    job.posts.forEach(function (p, k) {
+      var inner = k > 0 && k < n - 1;
+      html += '<li class="post"><div class="post-mark"><span>P' + (k + 1) + '</span></div><div class="post-body">';
+      html += '<div class="tapes">';
+      if (inner && p.step) html += postFields(k, p, 1) + postFields(k, p, 2);
+      else html += postFields(k, p, 0);
+      html += '</div>';
+      if (inner) {
+        html += '<div class="opts">' +
+          '<label class="opt"><input type="checkbox" id="p' + k + '-step"' + (p.step ? ' checked' : '') + '>Rails step here</label>' +
+          '<label class="opt"><input type="checkbox" id="p' + k + '-skip"' + (p.skip ? ' checked' : '') + '>Rails run straight through</label>' +
+          '</div>';
+      }
+      html += '</div></li>';
+      if (k < n - 1) {
+        html += '<li class="bay"><div class="bay-rails" aria-hidden="true"></div><div class="bay-body">' +
+          '<span class="bay-name">Bay ' + (k + 1) + '</span>' +
+          '<label class="bay-w" for="b' + k + '-w">Width <input id="b' + k + '-w" type="text" inputmode="decimal" autocomplete="off" value="' + esc(job.bays[k].width) + '" placeholder="' + esc(plan.settings.bayWidth) + '"> mm</label>' +
+          '<span class="bay-derived" id="bd' + k + '"></span></div></li>';
+      }
+    });
+    $('#run').innerHTML = html;
+    $('#remove-bay').disabled = job.posts.length <= 2;
+  }
+  function interpText(r) {
+    var s = plan.settings;
+    if (s.mode === 'string') return { t: mm(-r.T), b: mm(-r.B - s.allowance) };
+    return { g: mm(r.T - r.B - s.allowance) };
+  }
+  function renderRunDerived() {
+    plan.stations.forEach(function (st, k) {
+      ['g', 't', 'b'].forEach(function (f) {
+        var el = document.getElementById('p' + k + '-' + f);
+        if (!el) return;
+        var tape = el.parentNode;
+        tape.classList.toggle('is-interp', st.skip);
+        el.disabled = st.skip;
+        if (st.skip) {
+          el.value = '';
+          el.placeholder = st.interp ? '~' + interpText(st.left)[f] : 'from P' + k + ' & P' + (k + 2);
+        } else {
+          el.placeholder = '';
+        }
+      });
+    });
+    plan.bays.forEach(function (bay, k) {
+      var el = document.getElementById('bd' + k);
+      if (!el) return;
+      if (bay.errors.length) { el.textContent = 'waiting on readings'; el.className = 'bay-derived is-wait'; return; }
+      var n = bay.sheets.length;
+      var rip = bay.sheets.some(function (s) { return s.rip > 0; });
+      el.className = 'bay-derived';
+      el.textContent = n + ' ' + plural(n, 'sheet', 'sheets') + (rip ? ' (1 ripped)' : '') +
+        (n > 1 ? ' · ' + one(bay.delta) + ' each' : '');
+    });
+    var sw = plan.settings.bayWidth;
+    job.bays.forEach(function (b, k) { var el = document.getElementById('b' + k + '-w'); if (el) el.placeholder = String(sw); });
+  }
+
+  /* ---------- summary ---------- */
+  function renderSummary() {
+    var t = plan.totals;
+    var html = '<span class="chip"><b>' + t.bays + '</b>' + plural(t.bays, 'bay', 'bays') + '</span>' +
+      '<span class="chip"><b>' + t.sheets + '</b>' + plural(t.sheets, 'sheet', 'sheets') + '</span>' +
+      '<span class="chip"><b>' + t.readings + '</b>tape ' + plural(t.readings, 'reading', 'readings') + '</span>';
+    if (t.waiting) html += '<span class="chip is-wait"><b>' + t.waiting + '</b>' + plural(t.waiting, 'bay needs', 'bays need') + ' readings</span>';
+    $('#summary').innerHTML = html;
+    $('#example-banner').hidden = !job.example;
+    var s = plan.settings;
+    var how = s.mode === 'string'
+      ? 'Set a level string line along the run. At each post, measure <b>down from the string</b> to the top rail and to the bottom rail.'
+      : 'At each post, measure plumb from the <b>bottom rail to the top rail</b>, on the face where the sheets start. The ' + (s.levelRail === 'top' ? 'top' : 'bottom') + ' rail is level.';
+    if (s.allowance) how += ' ' + mm(s.allowance) + ' mm gets added to each reading.';
+    how += ' Standard bay ' + mm(s.bayWidth) + ' mm, ' + s.sheetsPerBay + ' ' + plural(s.sheetsPerBay, 'sheet', 'sheets') + '. <button class="linkish" type="button" id="open-setup">Change</button>';
+    $('#measure-hint').innerHTML = how;
+    $('#setup-note').textContent = (s.mode === 'string' ? 'String line' : (s.levelRail === 'top' ? 'Top rail level' : 'Bottom rail level')) +
+      ' · ' + mm(s.bayWidth) + ' mm bay · ' + s.sheetsPerBay + ' sheets · cut ' + s.cutEnds;
+    $('#cover-note').textContent = 'Each sheet covers ' + (Math.round(s.cover * 10) / 10) + ' mm of fence, ' + (Math.round(s.sheetWidth * 10) / 10) + ' mm wide with its lap.';
+  }
+
+  /* ---------- cut cards ---------- */
+  var MODE_LABEL = { bottom: 'Cut bottom', top: 'Cut top', both: 'Cut both ends', square: 'Square cut' };
+  var MODE_HOW = {
+    bottom: 'Factory end goes up against the top rail. Measure <b>down from the factory end</b> to both marks, join them and cut. The cut end sits in the bottom rail.',
+    top: 'Factory end sits in the bottom rail. Measure <b>up from the factory end</b> to both marks, join them and cut. The cut end goes into the top rail.',
+    both: 'Both rails slope here. Measure <b>both lines from the factory end</b>. Cut the top line first, then the bottom line.',
+    square: 'Both rails are close enough to level here. <b>Square-cut</b> each sheet to length, no angle needed.'
+  };
+
+  function shapeSVG(sh, bay) {
+    var full = plan.settings.sheetWidth;
+    var wpx = Math.max(10, Math.round(24 * Math.min(1, sh.width / full)));
+    var x0 = 3, x1 = x0 + wpx, yT = 6, yB = 36, tilt = 5;
+    function tip(d) { return Math.abs(d) < 0.5 ? 0 : (d > 0 ? tilt : -tilt); }
+    var dT = sh.top[1] - sh.top[0], dB = sh.bot[1] - sh.bot[0];
+    var tl = yT + Math.max(0, tip(dT)), tr = yT + Math.max(0, -tip(dT));
+    var bl = yB - Math.max(0, -tip(dB)), br = yB - Math.max(0, tip(dB));
+    var cutTop = bay.mode === 'top' || bay.mode === 'both';
+    var cutBot = bay.mode === 'bottom' || bay.mode === 'both';
+    var topCls = cutTop ? 'cutline' : (sh.ref === 'top' ? 'factory' : 'cutline');
+    var botCls = cutBot ? 'cutline' : (sh.ref === 'bottom' ? 'factory' : 'cutline');
+    if (bay.mode === 'square') { topCls = 'cutline'; botCls = 'factory'; }
+    return '<svg class="shape" viewBox="0 0 30 42" aria-hidden="true">' +
+      '<polygon class="body" points="' + x0 + ',' + tl + ' ' + x1 + ',' + tr + ' ' + x1 + ',' + br + ' ' + x0 + ',' + bl + '"/>' +
+      '<line class="' + topCls + '" x1="' + x0 + '" y1="' + tl + '" x2="' + x1 + '" y2="' + tr + '"/>' +
+      '<line class="' + botCls + '" x1="' + x0 + '" y1="' + bl + '" x2="' + x1 + '" y2="' + br + '"/></svg>';
+  }
+
+  function sheetId(k, sh) { return (k + 1) + '.' + sh.n; }
+  function widthCell(sh) {
+    return sh.rip > 0.5 ? '<td class="w rip">rip to ' + mm(sh.width) + '</td>' : '<td class="w">full</td>';
+  }
+
+  function stackText(bay, k, j) {
+    var st = bay.stacks[j];
+    var min = Math.min.apply(null, st.offsets);
+    var outs = st.offsets.map(function (o) { return o - min; });
+    if (outs.every(function (o) { return Math.abs(o) < 0.5; })) {
+      return 'Every sheet has the same line, so stack them flush and cut once.';
+    }
+    var list = bay.sheets.map(function (sh, i) { return sheetId(k, sh) + '&nbsp;<b>' + mm(outs[i]) + '</b>'; }).join(' · ');
+    return 'Nest the sheets face up. Slide each one so its factory end sticks out past the shortest by: ' + list +
+      '. Mark the top sheet with its own numbers and cut through the lot once.';
+  }
+
+  function cardHTML(bay, k) {
+    var head = '<h3>Bay ' + (k + 1) + '<small>P' + (k + 1) + ' → P' + (k + 2) + '</small></h3>';
+    if (bay.errors.length) {
+      return '<article class="card" id="bay-card-' + k + '"><header class="card-head">' + head +
+        '<span class="pill m-error">Needs readings</span></header><div class="card-body">' +
+        bay.errors.map(function (e) { return '<p class="err">' + esc(e) + '</p>'; }).join('') + '</div></article>';
+    }
+    var n = bay.sheets.length;
+    var ripSheet = bay.sheets.filter(function (s) { return s.rip > 0.5; })[0];
+    var html = '<article class="card" id="bay-card-' + k + '"><header class="card-head">' + head +
+      '<span class="pill m-' + bay.mode + '">' + MODE_LABEL[bay.mode] + '</span>';
+    if (n > 1) html += '<span class="step"><b>' + one(bay.delta) + '</b><span>mm per sheet</span></span>';
+    html += '</header><div class="card-body">';
+    html += '<div class="meta"><span>Width <b>' + mm(bay.width) + '</b></span><span><b>' + n + '</b> ' + plural(n, 'sheet', 'sheets') + '</span>' +
+      '<span>Gap <b>' + mm(bay.g0) + '</b> → <b>' + mm(bay.g1) + '</b></span></div>';
+    html += '<p class="how">' + MODE_HOW[bay.mode] + '</p>';
+
+    // table
+    var cols;
+    if (bay.mode === 'both') cols = ['Top left', 'Top right', 'Btm left', 'Btm right'];
+    else if (bay.mode === 'square') cols = ['Length'];
+    else cols = ['Left', 'Right'];
+    html += '<div class="table-wrap"><table class="cuts"><thead><tr><th>Sheet</th><th>Width</th>' +
+      cols.map(function (c) { return '<th class="num">' + c + '</th>'; }).join('') + '<th><span hidden>Shape</span></th></tr></thead><tbody>';
+    bay.sheets.forEach(function (sh) {
+      html += '<tr' + (sh.short ? ' class="is-short"' : '') + '><td class="sid">' + sheetId(k, sh) + '</td>' + widthCell(sh);
+      if (bay.mode === 'square') {
+        html += '<td class="mark">' + mm(sh.lines[0].l) + '</td>';
+      } else {
+        sh.lines.forEach(function (li) {
+          var dim = li.end === 'bottom' && bay.mode === 'both';
+          html += '<td class="mark' + (dim && Math.round(li.l) === 0 ? ' dim' : '') + '">' + mm(li.l) + '</td>' +
+                  '<td class="mark' + (dim && Math.round(li.r) === 0 ? ' dim' : '') + '">' + mm(li.r) + '</td>';
+        });
+      }
+      html += '<td class="shape-cell">' + shapeSVG(sh, bay) + '</td></tr>';
+    });
+    html += '</tbody></table></div>';
+
+    // shortcuts
+    if (n > 1) {
+      html += '<div class="shortcuts">';
+      if (bay.chalk) {
+        html += '<div class="sc"><h4>Fastest: one chalk line</h4><p>Lay sheets ' + sheetId(k, bay.sheets[0]) + '–' + sheetId(k, bay.sheets[n - 1]) +
+          ' face up, lapped as fitted, factory ends hard against a straight edge. Mark <b>' + mm(bay.chalk.l) + '</b> on the left edge and <b>' +
+          mm(bay.chalk.r) + '</b> at ' + mm(bay.chalk.width) + ' across' + (ripSheet ? ' (on the last sheet, that is its rip line)' : ' (the right edge)') +
+          '. Snap one line through every sheet.</p></div>';
+      }
+      if (bay.mode === 'both') {
+        html += '<div class="sc"><h4>Stack: top line</h4><p>' + stackText(bay, k, 0) + '</p></div>';
+        html += '<div class="sc"><h4>Stack: bottom line</h4><p>' + stackText(bay, k, 1) + '</p></div>';
+      } else {
+        html += '<div class="sc"><h4>' + (bay.chalk ? 'Or: one cut through a stack' : 'Fastest: one cut through a stack') + '</h4><p>' + stackText(bay, k, 0) + '</p></div>';
+      }
+      html += '</div>';
+      if (ripSheet) {
+        html += '<p class="note">Sheet ' + sheetId(k, ripSheet) + ' can be marked and cut at full width with the others, then ripped to <b>' +
+          mm(ripSheet.width) + '</b>, keeping its left edge.</p>';
+      }
+    }
+    bay.warnings.forEach(function (w) { html += '<p class="warn">' + esc(w) + '</p>'; });
+    html += '</div></article>';
+    return html;
+  }
+  function renderCards() {
+    $('#cards').innerHTML = plan.bays.map(cardHTML).join('') ||
+      '<p class="note">Add a bay to get started.</p>';
+  }
+
+  /* ---------- elevation ---------- */
+  function drawElevation() {
+    var svg = $('#elev');
+    var st = plan.stations, X = plan.X, s = plan.settings;
+    var hi = -Infinity, lo = Infinity;
+    st.forEach(function (p) { [p.left, p.right].forEach(function (r) { if (r) { hi = Math.max(hi, r.T); lo = Math.min(lo, r.B); } }); });
+    if (!isFinite(hi)) { hi = 0; lo = -1500; }
+    if (hi - lo < 600) lo = hi - 600;
+    var below = 160, padT = 30, padB = 44, padX = 30;
+    var total = X[X.length - 1] || s.bayWidth;
+    var span = hi - lo + below;
+    var k = 176 / span;                                   // 250 px tall by default
+    var room = svg.parentNode.clientWidth - 24 - padX * 2;
+    if (room > total * k) k = Math.min(room / total, 340 / span);   // widen to fit, up to ~414 px tall
+    var H = Math.round(span * k + padT + padB);
+    var Wpx = Math.round(total * k + padX * 2);
+    function sx(x) { return +(padX + x * k).toFixed(1); }
+    function sy(y) { return +(padT + (hi - y) * k).toFixed(1); }
+    var out = '';
+    plan.bays.forEach(function (bay, i) {
+      var x0 = X[i], x1 = X[i + 1];
+      out += '<g class="bay-g" data-k="' + i + '" tabindex="0" role="link" aria-label="Bay ' + (i + 1) + ' cuts">';
+      out += '<rect class="hit" x="' + sx(x0) + '" y="' + (padT - 8) + '" width="' + Math.max(1, sx(x1) - sx(x0)) + '" height="' + (H - padT - 16) + '"/>';
+      if (bay.errors.length || !bay.sheets.length) {
+        out += '<rect class="missing" x="' + (sx(x0) + 6) + '" y="' + sy(hi) + '" width="' + Math.max(1, sx(x1) - sx(x0) - 12) + '" height="' + Math.max(1, sy(lo) - sy(hi)) + '"/>';
+        out += '<text class="q" x="' + ((sx(x0) + sx(x1)) / 2) + '" y="' + ((sy(hi) + sy(lo)) / 2 + 8) + '" text-anchor="middle">?</text>';
+      } else {
+        var cutTop = bay.mode === 'top' || bay.mode === 'both';
+        var cutBot = bay.mode === 'bottom' || bay.mode === 'both';
+        bay.sheets.forEach(function (sh, j) {
+          var a = x0 + sh.a, b = x0 + sh.b;
+          out += '<polygon class="sheet' + (j % 2 ? ' alt' : '') + '" points="' + sx(a) + ',' + sy(sh.bot[0]) + ' ' + sx(b) + ',' + sy(sh.bot[1]) + ' ' +
+            sx(b) + ',' + sy(sh.top[1]) + ' ' + sx(a) + ',' + sy(sh.top[0]) + '"/>';
+          for (var q = 1; q < 6; q++) {
+            var f = q / 6, xr = a + (b - a) * f;
+            out += '<line class="rib" x1="' + sx(xr) + '" y1="' + sy(sh.bot[0] + (sh.bot[1] - sh.bot[0]) * f) + '" x2="' + sx(xr) + '" y2="' + sy(sh.top[0] + (sh.top[1] - sh.top[0]) * f) + '"/>';
+          }
+          if (cutTop) out += '<line class="cut" x1="' + sx(a) + '" y1="' + sy(sh.top[0]) + '" x2="' + sx(b) + '" y2="' + sy(sh.top[1]) + '"/>';
+          if (cutBot) out += '<line class="cut" x1="' + sx(a) + '" y1="' + sy(sh.bot[0]) + '" x2="' + sx(b) + '" y2="' + sy(sh.bot[1]) + '"/>';
+        });
+        var R = bay.rails;
+        out += '<line class="rail" x1="' + sx(x0) + '" y1="' + (sy(R.T0) - 2) + '" x2="' + sx(x1) + '" y2="' + (sy(R.T1) - 2) + '"/>';
+        out += '<line class="rail" x1="' + sx(x0) + '" y1="' + (sy(R.B0) + 2) + '" x2="' + sx(x1) + '" y2="' + (sy(R.B1) + 2) + '"/>';
+      }
+      out += '<text class="blabel" x="' + ((sx(x0) + sx(x1)) / 2) + '" y="' + (H - 8) + '" text-anchor="middle">Bay ' + (i + 1) + '</text>';
+      out += '</g>';
+    });
+    st.forEach(function (p, i) {
+      var rs = [p.left, p.right].filter(Boolean);
+      var top = rs.length ? Math.max.apply(null, rs.map(function (r) { return r.T; })) : hi;
+      var bot = rs.length ? Math.min.apply(null, rs.map(function (r) { return r.B; })) : lo;
+      var pw = Math.max(5, 50 * k);
+      out += '<rect class="post" x="' + (sx(p.x) - pw / 2).toFixed(1) + '" y="' + (sy(top) - 4) + '" width="' + pw.toFixed(1) + '" height="' + ((top - (bot - below)) * k + 4).toFixed(1) + '"/>';
+      out += '<text class="plabel" x="' + sx(p.x) + '" y="' + (padT - 12) + '" text-anchor="middle">P' + (i + 1) + '</text>';
+      var label = '';
+      if (rs.length) {
+        var gl = p.left ? p.left.T - p.left.B : null, gr = p.right ? p.right.T - p.right.B : null;
+        label = (p.interp ? '~' : '') + (p.step && gl !== null && gr !== null ? mm(gl) + '|' + mm(gr) : mm(gl !== null ? gl : gr));
+      }
+      out += '<text x="' + sx(p.x) + '" y="' + (sy(bot - below) + 14) + '" text-anchor="middle">' + esc(label) + '</text>';
+    });
+    svg.setAttribute('viewBox', '0 0 ' + Wpx + ' ' + H);
+    svg.setAttribute('width', Wpx);
+    svg.setAttribute('height', H);
+    svg.innerHTML = out;
+  }
+
+  /* ---------- update cycle ---------- */
+  function update() {
+    plan = C.planRun(job);
+    renderSummary();
+    renderRunDerived();
+    renderCards();
+    drawElevation();
+    save();
+  }
+  function touched() { if (job.example) job.example = false; }
+  function flashStatus(msg) {
+    var el = $('#status');
+    el.textContent = msg;
+    clearTimeout(flashStatus.t);
+    flashStatus.t = setTimeout(function () { el.textContent = ''; }, 3500);
+  }
+
+  /* ---------- setup panel ---------- */
+  function syncSetup() {
+    var s = job.settings;
+    ['mode', 'levelRail', 'cutEnds'].forEach(function (name) {
+      document.querySelectorAll('input[name="' + name + '"]').forEach(function (r) { r.checked = r.value === s[name]; });
+    });
+    SETTING_KEYS.forEach(function (key) { var el = document.getElementById('set-' + key); if (el) el.value = s[key]; });
+    $('#field-level').hidden = s.mode === 'string';
+  }
+  $('#setup').addEventListener('change', function (e) {
+    var t = e.target;
+    if (t.type === 'radio') {
+      job.settings[t.name] = t.value;
+      touched();
+      if (t.name === 'mode' || t.name === 'levelRail') { plan = C.planRun(job); renderRun(); }
+      syncSetup();
+      update();
+    }
+  });
+  $('#setup').addEventListener('input', function (e) {
+    var t = e.target;
+    if (t.id && t.id.indexOf('set-') === 0 && t.type === 'text') {
+      job.settings[t.id.slice(4)] = t.value;
+      touched();
+      update();
+    }
+  });
+
+  /* ---------- readings events ---------- */
+  var run = $('#run');
+  run.addEventListener('input', function (e) {
+    var id = e.target.id || '', m;
+    if ((m = /^p(\d+)-(g2?|t2?|b2?)$/.exec(id))) job.posts[+m[1]][m[2]] = e.target.value;
+    else if ((m = /^b(\d+)-w$/.exec(id))) job.bays[+m[1]].width = e.target.value;
+    else return;
+    touched();
+    update();
+  });
+  run.addEventListener('change', function (e) {
+    var m = /^p(\d+)-(step|skip)$/.exec(e.target.id || '');
+    if (!m) return;
+    var p = job.posts[+m[1]];
+    p[m[2]] = e.target.checked;
+    if (m[2] === 'step' && p.step) p.skip = false;
+    if (m[2] === 'skip' && p.skip) p.step = false;
+    touched();
+    plan = C.planRun(job);
+    renderRun();
+    update();
+    var again = document.getElementById(e.target.id);
+    if (again) again.focus();
+  });
+  run.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' || e.target.tagName !== 'INPUT' || e.target.type !== 'text') return;
+    e.preventDefault();
+    var fields = Array.prototype.filter.call(run.querySelectorAll('.tape input'), function (el) { return !el.disabled; });
+    var i = fields.indexOf(e.target);
+    if (i >= 0 && i < fields.length - 1) fields[i + 1].focus(); else e.target.blur();
+  });
+  $('#add-bay').addEventListener('click', function () {
+    job.posts.push(blankPost());
+    job.bays.push({ width: '' });
+    touched();
+    plan = C.planRun(job);
+    renderRun();
+    update();
+    var last = job.posts.length - 1;
+    var el = document.getElementById('p' + last + (job.settings.mode === 'string' ? '-t' : '-g'));
+    if (el) el.focus();
+  });
+  $('#remove-bay').addEventListener('click', function () {
+    if (job.posts.length <= 2) return;
+    job.posts.pop();
+    job.bays.pop();
+    var lastPost = job.posts[job.posts.length - 1];
+    lastPost.step = false; lastPost.skip = false;
+    touched();
+    plan = C.planRun(job);
+    renderRun();
+    update();
+  });
+  $('#measure-hint').addEventListener('click', function (e) {
+    if (e.target.id !== 'open-setup') return;
+    var d = $('#setup');
+    d.open = true;
+    d.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  /* ---------- elevation → card ---------- */
+  function jumpToBay(k) {
+    var card = document.getElementById('bay-card-' + k);
+    if (!card) return;
+    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    card.classList.remove('flash');
+    void card.offsetWidth;
+    card.classList.add('flash');
+  }
+  $('#elev').addEventListener('click', function (e) {
+    var g = e.target.closest && e.target.closest('.bay-g');
+    if (g) jumpToBay(+g.getAttribute('data-k'));
+  });
+  $('#elev').addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    var g = e.target.closest && e.target.closest('.bay-g');
+    if (g) { e.preventDefault(); jumpToBay(+g.getAttribute('data-k')); }
+  });
+
+  /* ---------- new job / copy ---------- */
+  function newJob() {
+    job = { v: 1, example: false, settings: job.settings, posts: [blankPost(), blankPost()], bays: [{ width: '' }] };
+    plan = C.planRun(job);
+    renderRun();
+    update();
+    var el = document.getElementById(job.settings.mode === 'string' ? 'p0-t' : 'p0-g');
+    if (el) el.focus();
+    flashStatus('New job started. Your setup is kept.');
+  }
+  var armed = null;
+  var newBtn = $('#new-job');
+  newBtn.addEventListener('click', function () {
+    if (job.example) { newJob(); return; }
+    if (armed) {
+      clearTimeout(armed); armed = null;
+      newBtn.textContent = 'New job'; newBtn.classList.remove('is-armed');
+      newJob();
+      return;
+    }
+    newBtn.textContent = 'Tap again to clear readings';
+    newBtn.classList.add('is-armed');
+    armed = setTimeout(function () { armed = null; newBtn.textContent = 'New job'; newBtn.classList.remove('is-armed'); }, 4000);
+  });
+  $('#example-clear').addEventListener('click', newJob);
+
+  function cutListText() {
+    var s = plan.settings, t = plan.totals;
+    var lines = ['TWO-TAPE FENCE CUTS',
+      t.bays + ' ' + plural(t.bays, 'bay', 'bays') + ', ' + t.sheets + ' sheets. Marks in mm from the factory end. Left/right as seen from the measuring side.', ''];
+    plan.bays.forEach(function (bay, k) {
+      var head = 'Bay ' + (k + 1) + ' (P' + (k + 1) + '-P' + (k + 2) + ', ' + mm(bay.width) + ' wide)';
+      if (bay.errors.length) { lines.push(head + ': waiting on readings', ''); return; }
+      lines.push(head + ': ' + MODE_LABEL[bay.mode].toLowerCase() + (bay.sheets.length > 1 ? ', ' + one(bay.delta).replace(MINUS, '-') + ' mm per sheet' : ''));
+      bay.sheets.forEach(function (sh) {
+        var row = '  ' + sheetId(k, sh) + (sh.rip > 0.5 ? ' (rip to ' + mm(sh.width) + ')' : '') + '  ';
+        if (bay.mode === 'square') row += 'length ' + mm(sh.lines[0].l);
+        else row += sh.lines.map(function (li) { return (bay.mode === 'both' ? li.end + ' ' : '') + 'L ' + mm(li.l) + '  R ' + mm(li.r); }).join('   ');
+        lines.push(row.replace(new RegExp(MINUS, 'g'), '-'));
+      });
+      if (bay.chalk && bay.sheets.length > 1) lines.push('  Chalk line: ' + mm(bay.chalk.l) + ' at left edge to ' + mm(bay.chalk.r) + ' at ' + mm(bay.chalk.width) + ' across');
+      bay.warnings.forEach(function (w) { lines.push('  Check: ' + w); });
+      lines.push('');
+    });
+    return lines.join('\n').replace(/\n+$/, '\n');
+  }
+  $('#copy-list').addEventListener('click', function () {
+    var text = cutListText();
+    var fb = $('#copy-fallback');
+    function fallback() {
+      fb.hidden = false; fb.value = text; fb.focus(); fb.select();
+      flashStatus('Copying is blocked here. The cut list is selected below, ready to copy.');
+    }
+    try {
+      navigator.clipboard.writeText(text).then(function () { fb.hidden = true; flashStatus('Cut list copied.'); }, fallback);
+    } catch (e) { fallback(); }
+  });
+
+  var lastW = 0;
+  window.addEventListener('resize', function () {
+    var w = $('#elev').parentNode.clientWidth;
+    if (w !== lastW) { lastW = w; drawElevation(); }
+  });
+
+  /* ---------- boot ---------- */
+  syncSetup();
+  renderRun();
+  update();
+})();
+</script>
