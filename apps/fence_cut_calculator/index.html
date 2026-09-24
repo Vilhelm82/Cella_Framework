@@ -625,7 +625,7 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
   function pos(v) { var n = num(v); return n !== null && n > 0 ? n : null; }
   function plural(n, a, b) { return n === 1 ? a : b; }
 
-  var DEFAULT_SETUP = { sheetsPerBay: '3', bayWidth: '2365', allowance: '0' };
+  var DEFAULT_SETUP = { sheetsPerBay: '3', bayWidth: '2365' };
   function blankPost() { return { g: '', g2: '', step: false }; }
   function freshJob(setup) {
     return { setup: Object.assign({}, DEFAULT_SETUP, setup || {}), posts: [blankPost(), blankPost()], bays: [{ width: '' }] };
@@ -651,7 +651,7 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
   function baseSettings() {
     var su = state.job.setup;
     return { mode: 'gap', levelRail: 'raked', topRise: '0', cutEnds: 'both', widthMode: 'each',
-             bayWidth: su.bayWidth, sheetsPerBay: su.sheetsPerBay, allowance: su.allowance, lap: 0 };
+             bayWidth: su.bayWidth, sheetsPerBay: su.sheetsPerBay, allowance: 0, lap: 0 };
   }
   function settings() { return C.resolveSettings(baseSettings()); }
   function bayRise(k) {            // top rail rise from P(k+1) to P(k+2), mm; null until measured
@@ -777,10 +777,10 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
       '<line class="hs-rail" x1="46" y1="128" x2="274" y2="111"/>' +
       '<text class="hs-pl" x="40" y="13" text-anchor="middle">' + left + '</text>' +
       '<text class="hs-pl" x="280" y="13" text-anchor="middle">' + right + '</text>' +
-      arrowV(60, 40, 124, L[0], L[1], 'start') +
-      arrowV(260, 30, 107, R[0], R[1], 'end') +
+      arrowV(60, 36, 128, L[0], L[1], 'start') +
+      arrowV(260, 26, 111, R[0], R[1], 'end') +
       arrowH(48, 272, 170, Wd[0], Wd[1]) +
-      (Dg ? arrowD(48, 40, 272, 109, Dg[0], Dg[1]) : '') + '</svg>';
+      (Dg ? arrowD(48, 36, 272, 111, Dg[0], Dg[1]) : '') + '</svg>';
   }
 
   /* ---------- pieces ---------- */
@@ -802,7 +802,7 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
       '<h1>Two-Tape Fence Cuts</h1>' +
       '<p class="instr">Measure each post and each bay, not every sheet. Each bay gets <b>four marks and two string lines</b>, which mark the top and bottom cut on every sheet in it.</p>' +
       '<ol class="steps3">' +
-      '<li><b>Each post:</b> the gap between the rails, tape held upright.</li>' +
+      '<li><b>Each post:</b> inside the bottom rail to inside the top rail, tape held upright.</li>' +
       '<li><b>Each bay:</b> the width from post to post, then corner to corner.</li>' +
       '<li><b>Cutting:</b> lay a bay\u2019s sheets out, make four marks, run two strings, cut top and bottom.</li></ol>' +
       '<div class="actions">';
@@ -827,8 +827,6 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
       '<p class="instr">These stay the same for the whole job.</p>' +
       field('s-sheetsPerBay', 'Sheets in a full bay', su.sheetsPerBay) +
       field('s-bayWidth', 'Full bay width, post to post (mm)', su.bayWidth) +
-      field('s-allowance', 'Extra length added to each reading (mm)', su.allowance,
-        'You measure the gap between the rails, but each sheet also goes into the rails. Enter how much extra length that needs. If you lift each sheet into the top rail and drop it into the bottom rail, use the top rail\'s channel depth less 5 mm. Leave 0 if your readings are already sheet lengths.') +
       navButtons('Start measuring →') + '</section>';
   }
 
@@ -837,7 +835,7 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
     var canStep = k > 0 && !isLast;
     var html = '<section class="card">' +
       '<p class="eyebrow">Post ' + (k + 1) + ' · straight up</p><h1>P' + (k + 1) + ' gap</h1>' +
-      '<p class="instr">Hold the tape <b>upright</b> right beside the post. Measure from the <b>top of the bottom rail</b> up to the <b>underside of the top rail</b>.</p>' +
+      '<p class="instr">Hold the tape <b>upright</b> right beside the post. Measure from the <b>flat base inside the bottom rail</b> up to the <b>same spot inside the top rail</b>.</p>' +
       '<div class="pic">' + picture('post', k) + '</div>';
     if (canStep && p.step) {
       html += bigInput('f-g', p.g, 'v', 'Bay ' + k + ' side of P' + (k + 1)) +
@@ -876,8 +874,8 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
     var b = state.job.bays[k];
     return '<section class="card">' +
       '<p class="eyebrow">Bay ' + (k + 1) + ' · corner to corner</p><h1>Bay ' + (k + 1) + ' diagonal</h1>' +
-      '<p class="instr">Pull the tape straight across the open bay, like checking for square. Go from the <b>underside of the top rail at P' + (k + 1) +
-      '</b> to the <b>top of the bottom rail at P' + (k + 2) + '</b>, both right beside the posts.</p>' +
+      '<p class="instr">Pull the tape straight across the open bay, like checking for square. Use the same inside spots as the gaps: from <b>inside the top rail at P' + (k + 1) +
+      '</b> to the <b>flat base inside the bottom rail at P' + (k + 2) + '</b>, both right beside the posts.</p>' +
       '<div class="pic">' + picture('diag', k) + '</div>' +
       bigInput('f-d', b.diag || '', 'h', null) +
       '<p class="note" id="live-diag"></p>' +

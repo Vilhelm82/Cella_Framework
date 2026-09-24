@@ -28,18 +28,16 @@ The page walks you through the job one screen at a time. Each screen asks for on
 measurement, and its picture shows that measurement as a red arrow. **Both ends of every
 sheet are cut:** the top to the top rail and the bottom to the bottom rail.
 
-1. **Setup, once per job:**
-   - sheets in a full bay;
-   - full bay width;
-   - any extra length added to every reading.
-
-   The 2365 mm / 3 sheet defaults are placeholders, so set them from your own sheets.
-2. **P1 gap:** hold the tape upright beside the post. Measure from the top of the bottom
-   rail to the underside of the top rail.
+1. **Setup, once per job:** sheets in a full bay and the full bay width. The 2365 mm /
+   3 sheet defaults are placeholders, so set them from your own sheets.
+2. **P1 gap:** hold the tape upright beside the post. Measure from the flat base inside
+   the bottom rail up to the same spot inside the top rail. That reading is the sheet
+   length at that edge, so nothing gets added to it.
 3. **Bay 1 width:** post face to post face, with the tape level. *Full bay* fills in the
    standard width.
 4. **Bay 1 diagonal:** corner to corner across the open bay, like checking for square.
-   Measure from the underside of the top rail at P1 to the top of the bottom rail at P2.
+   Use the same inside spots as the gaps: from inside the top rail at P1 to the flat
+   base inside the bottom rail at P2.
 5. **P2 gap**, then either *Another bay* or *That's the last post*. If the rails change
    height at a post, that post takes a reading on each side. A corner is just another
    post.
