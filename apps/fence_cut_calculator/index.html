@@ -2,7 +2,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Two-Tape Fence Cuts</title>
-<meta name="description" content="Step-by-step cut calculator for sheet metal fencing on sloping ground: measure each post and bay, get one number per sheet and a bevel for the angle.">
+<meta name="description" content="Step-by-step cut calculator for sheet metal fencing on sloping ground: measure each post and bay, then mark a whole bay's sheets with two marks and a string line.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
@@ -248,7 +248,6 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
 /* results */
 .bay-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; }
 .bay-head span { color: var(--ink-2); font-size: 0.95rem; }
-.bevel { padding: 10px 12px; border-radius: 8px; background: var(--well); }
 .sheets { list-style: none; margin: 0; padding: 0; display: grid; }
 .sheets li {
   display: grid;
@@ -262,6 +261,8 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
 .sid { font: 700 1.15rem var(--display); letter-spacing: 0.03em; }
 .num { font: 600 1.9rem/1 var(--mono); text-align: right; font-variant-numeric: tabular-nums; }
 .chk { grid-column: 1 / -1; color: var(--ink-2); font-size: 0.9rem; text-align: right; }
+.pair { display: flex; justify-content: flex-end; gap: 16px; font: 600 1.35rem/1 var(--mono); font-variant-numeric: tabular-nums; }
+.pair small { font: 500 0.75rem var(--body); color: var(--ink-2); }
 .rip { grid-column: 1 / -1; color: var(--warn); font-weight: 600; font-size: 0.92rem; }
 .howcut { margin: 0; padding-left: 1.3em; display: grid; gap: 6px; }
 .whole { display: grid; gap: 10px; padding: 14px; border: 1.5px dashed var(--chalk); border-radius: 10px; background: var(--chalk-soft); }
@@ -590,8 +591,8 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
 </script>
 
 <script>
-/* Step-by-step screens. One measurement per screen; the cut list gives one number per
-   sheet, with the angle carried by a sliding bevel set at the post. */
+/* Step-by-step screens. One measurement per screen; the cut list gives two marks per bay
+   (a string between them marks every sheet), or two numbers per sheet. */
 (function () {
   'use strict';
   var C = window.FenceCore;
@@ -605,7 +606,7 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
   function pos(v) { var n = num(v); return n !== null && n > 0 ? n : null; }
   function plural(n, a, b) { return n === 1 ? a : b; }
 
-  var DEFAULT_SETUP = { sheetsPerBay: '3', bayWidth: '2365', allowance: '0', topSlopes: false };
+  var DEFAULT_SETUP = { sheetsPerBay: '3', bayWidth: '2365', allowance: '0' };
   function blankPost() { return { g: '', g2: '', step: false }; }
   function freshJob(setup) {
     return { setup: Object.assign({}, DEFAULT_SETUP, setup || {}), posts: [blankPost(), blankPost()], bays: [{ width: '' }] };
@@ -625,9 +626,9 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
   function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* ignore */ } }
 
   /* ---------- the job, as the calculation core sees it ---------- */
-  // Lengths are measured from the top edge (factory top, or the bevelled top when the top
-  // rail slopes), so the core runs with a level top and the bottom cut: every sheet's
-  // edge length is then the rail-to-rail gap at that edge.
+  // Each sheet's factory top stays square and its bottom is cut. Its length at any edge is
+  // the rail-to-rail gap there, which is fixed by the gaps at the two posts because both
+  // rails are straight, whatever either rail's slope. So the core runs with the gaps alone.
   function coreJob() {
     var su = state.job.setup;
     return {
@@ -776,10 +777,6 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
       '<p class="instr">These stay the same for the whole job.</p>' +
       field('s-sheetsPerBay', 'Sheets in a full bay', su.sheetsPerBay) +
       field('s-bayWidth', 'Full bay width, post to post (mm)', su.bayWidth) +
-      '<div class="fld"><span class="lbl">Top rail</span><div class="seg" role="group" aria-label="Top rail">' +
-      '<button type="button" data-act="top" data-arg="level" aria-pressed="' + !su.topSlopes + '">Level</button>' +
-      '<button type="button" data-act="top" data-arg="slopes" aria-pressed="' + !!su.topSlopes + '">Slopes</button></div>' +
-      '<small>If it slopes, you bevel the top of each sheet as well as the bottom.</small></div>' +
       field('s-allowance', 'Extra length added to each reading (mm)', su.allowance,
         'You measure the gap between the rails, but each sheet also goes into the rails. Enter how much extra length that needs. If you lift each sheet into the top rail and drop it into the bottom rail, use the top rail\'s channel depth less 5 mm. Leave 0 if your readings are already sheet lengths.') +
       navButtons('Start measuring →') + '</section>';
@@ -825,12 +822,8 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
       navButtons('Next: P' + (k + 2) + ' gap →') + '</section>';
   }
 
-  function bevelText(k, slopes) {
-    return '<b>Bevel:</b> at P' + (k + 1) + ', on the bay ' + (k + 1) + ' side, hold the handle flat on the post and swing the blade onto the <b>top of the bottom rail</b>. Lock it.' +
-      (slopes ? ' Set a second bevel the same way against the <b>underside of the top rail</b>.' : '');
-  }
   function resultsHTML() {
-    var pl = C.planRun(coreJob()), su = state.job.setup, slopes = !!su.topSlopes;
+    var pl = C.planRun(coreJob()), su = state.job.setup;
     var ready = pl.bays.filter(function (b) { return !b.errors.length; });
     var sheets = ready.reduce(function (n, b) { return n + b.sheets.length; }, 0);
     var html = '<section class="card">' +
@@ -859,23 +852,21 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
         '<div class="marks"><div><span class="lbl">Left edge of ' + first + '</span><span class="num">' + mm(bay.g0) + '</span></div>' +
         '<div><span class="lbl">' + (rip ? mm(bay.width) + ' across' : 'Right edge of ' + last) + '</span><span class="num">' + mm(bay.g1) + '</span></div></div>' +
         '<ol class="howcut">' +
-        (slopes ? '<li><b>Rake the tops first.</b> Set a bevel at P' + (k + 1) + ' against the underside of the top rail. Every sheet gets the same rake, so you can nest ' +
-          (n > 1 ? 'all ' + n + ' sheets flush and cut the rake through them at once' : 'the sheet') + ', starting at the top corner that keeps them longest.</li>' : '') +
         '<li>Lay ' + (n > 1 ? 'sheets ' + first + ' to ' + last + ' side by side, lapped exactly as they go in' : 'sheet ' + first) +
-        ', with the ' + (slopes ? 'raked tops lined up along one straight string' : 'tops lined up along a straight string or board') + '.</li>' +
+        ', with the tops lined up along a straight string or board.</li>' +
         '<li>From the top, mark <b>' + mm(bay.g0) + '</b> down the left edge of ' + first + ' and <b>' + mm(bay.g1) + '</b> ' +
           (rip ? mm(bay.width) + ' across from that edge (on ' + last + ', that’s its rip line)' : 'down the right edge of ' + last) + '.</li>' +
         '<li>Pull a string tight between the two marks and tick every pan under it. Cut each sheet on its ticks.</li>' +
-        (rip ? '<li>Rip ' + last + ' to <b>' + mm(rip.width) + '</b> wide, keeping its left edge.</li>' : '') + '</ol></div>';
+        (rip ? '<li>Rip ' + last + ' to <b>' + mm(rip.width) + '</b> wide, keeping its left edge.</li>' : '') + '</ol>' +
+        '<p class="note">These are the same marks you’d get measuring both sides of every sheet at the fence.</p></div>';
 
       // One sheet at a time, when there isn't room to lay the bay out.
       html += '<details class="each"><summary>Or one sheet at a time</summary>' +
-        '<p class="bevel">' + bevelText(k, slopes) + '</p>' +
-        '<p class="note">Mark each sheet’s number down its left edge from the ' + (slopes ? 'raked ' : '') + 'top, lay the bevel through the mark and cut. The right edge should come out at the grey number.</p>' +
+        '<p class="note">From the top, mark the left number down the left edge and the right number down the right edge. Join them and cut.</p>' +
         '<ol class="sheets">';
       bay.sheets.forEach(function (sh) {
-        html += '<li><span class="sid">Sheet ' + (k + 1) + '.' + sh.n + '</span><span class="num">' + mm(sh.lenL) + '</span>' +
-          '<span class="chk">right edge ≈ ' + mm(sh.lenR) + '</span>' +
+        html += '<li><span class="sid">Sheet ' + (k + 1) + '.' + sh.n + '</span>' +
+          '<span class="pair"><span><small>left</small> ' + mm(sh.lenL) + '</span><span><small>right</small> ' + mm(sh.lenR) + '</span></span>' +
           (sh.rip > 0.5 ? '<span class="rip">Part sheet: cut it like the others, then rip it to ' + mm(sh.width) + ' wide, keeping the left edge.</span>' : '') + '</li>';
       });
       html += '</ol></details>';
@@ -996,7 +987,6 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
       var nb = document.querySelector('#screen [data-primary]');
       if (nb) nb.focus();
     }
-    else if (name === 'top') { state.job.setup.topSlopes = arg === 'slopes'; render(false); }
     else if (name === 'copy') { copyList(); }
     else if (name === 'newjob') {
       if (armed) {
@@ -1037,15 +1027,15 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
 
   /* ---------- copy ---------- */
   function listText() {
-    var pl = C.planRun(coreJob()), slopes = !!state.job.setup.topSlopes;
-    var out = ['TWO-TAPE FENCE CUTS', 'Marks measured down from the ' + (slopes ? 'raked top' : 'top') + '. Sheets face up, tops away, lower-numbered post side on the left.', ''];
+    var pl = C.planRun(coreJob());
+    var out = ['TWO-TAPE FENCE CUTS', 'Marks measured down from the top. Sheets face up, tops away, lower-numbered post side on the left.', ''];
     pl.bays.forEach(function (bay, k) {
       if (bay.errors.length) { out.push('Bay ' + (k + 1) + ': not measured yet', ''); return; }
       out.push('Bay ' + (k + 1) + ' (P' + (k + 1) + '-P' + (k + 2) + ', ' + mm(bay.width) + ' wide, ' + bay.sheets.length + ' sheets)');
       out.push('  Whole bay: ' + mm(bay.g0) + ' at the left edge, ' + mm(bay.g1) + ' at ' + mm(bay.width) + ' across. String between, tick every pan.');
-      out.push('  One at a time (bevel set at P' + (k + 1) + '):');
+      out.push('  One at a time:');
       bay.sheets.forEach(function (sh) {
-        out.push('  Sheet ' + (k + 1) + '.' + sh.n + '   ' + mm(sh.lenL) + '   (right edge ~' + mm(sh.lenR) + ')' +
+        out.push('  Sheet ' + (k + 1) + '.' + sh.n + '   left ' + mm(sh.lenL) + '   right ' + mm(sh.lenR) +
           (sh.rip > 0.5 ? '   rip to ' + mm(sh.width) + ' wide' : ''));
       });
       out.push('');

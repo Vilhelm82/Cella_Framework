@@ -30,8 +30,7 @@ measurement, and its picture shows that measurement as a red arrow.
 1. **Setup, once per job:**
    - sheets in a full bay;
    - full bay width;
-   - whether the top rail is level or slopes;
-   - any extra length to add to every reading.
+   - any extra length added to every reading.
 
    The 2365 mm / 3 sheet defaults are placeholders, so set them from your own sheets.
    With the rails already up, each sheet is lifted into the top rail and dropped into the
@@ -44,37 +43,26 @@ measurement, and its picture shows that measurement as a red arrow.
 4. **P2 gap**, then either *Another bay* or *That's the last post*. If the rails change
    height at a post, that post takes a reading on each side. A corner is just another
    post.
-5. **Cut list:** each bay opens with **two marks**. Lay the bay's sheets face up, side by
-   side and lapped as they go in, with the tops against a straight string. Mark the left
-   number on the first sheet's left edge and the right number on the last sheet's right
-   edge (or at the bay width, on a part sheet's rip line). Pull a string between the two
-   marks, tick every pan under it, and cut.
-   - That's 2 marks per bay, instead of measuring both sides of every sheet at the fence.
-   - It works because laid out as fitted, the sheets sit where they will in the fence.
-   - For a full bay with a level top rail, the two marks are simply the post readings plus
-     the allowance.
-   - *Or one sheet at a time* gives each sheet **one number**, plus a grey check number for
-     its other edge, for marking with a bevel.
+5. **Cut list:** each bay opens with **two marks**.
+   1. Lay the bay's sheets face up, side by side and lapped as they go in, with the tops
+      against a straight string.
+   2. Mark the left number on the first sheet's left edge and the right number on the last
+      sheet's right edge (or at the bay width, on a part sheet's rip line).
+   3. Pull a string between the two marks, tick every pan under it, and cut.
 
-**Cutting with a bevel.** At the first post of each bay, set a sliding bevel with its
-handle flat on the post and its blade on the top of the bottom rail. If the top rail
-slopes, set a second bevel against the underside of the top rail. The rails are straight,
-so that angle is the same for every sheet in the bay. Then, for each sheet:
-1. Lay it face up with its top away from you.
-2. If the top slopes, bevel the top first.
-3. Measure the sheet's number down the left edge from the top. Mark it.
-4. Lay the bottom bevel through the mark and cut.
-5. Check the right edge against the grey number.
+   *Or one sheet at a time* gives each sheet's left and right numbers.
 
-Measuring the angle alone isn't enough. It doesn't say where on each sheet the cut goes,
-and a 1° error is about 14 mm across a sheet and 41 mm across a bay. The tape readings
-fix the positions to a millimetre or two, and the bevel carries the angle without any
-numbers. Because the bevel carries the slope of each rail, the app never needs the top
-rail's rake.
+**No questions about the top rail.** Top rails are never level, and it doesn't matter.
+The factory top stays square and only the bottom is cut, the same as marking each sheet's
+two sides at the fence. Each sheet's length at an edge is the rail-to-rail gap there.
+Both rails are straight, so that gap changes in a straight line from one post to the
+next, whatever the slope of either rail. The two post readings therefore fix every
+sheet's marks, and laid out as fitted, the sheets put those marks on one string line.
+That's 2 marks per bay, instead of 2 measurements per sheet at the fence.
 
 The calculation core in `index.html` also supports string-line readings, raked-rail rise
-inputs, laps, stack and chalk-line shortcuts, and stock-length checks. The gate below
-tests all of them. The step-by-step screens use only the gap-at-each-post path.
+inputs, laps, stack cutting, and stock-length checks. The gate below tests all of them.
+The step-by-step screens use only the gap-at-each-post path.
 
 ## Why two readings are enough (the derivation)
 
