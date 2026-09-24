@@ -44,8 +44,17 @@ measurement, and its picture shows that measurement as a red arrow.
 4. **P2 gap**, then either *Another bay* or *That's the last post*. If the rails change
    height at a post, that post takes a reading on each side. A corner is just another
    post.
-5. **Cut list:** each sheet gets **one number**, plus a grey check number for its other
-   edge.
+5. **Cut list:** each bay opens with **two marks**. Lay the bay's sheets face up, side by
+   side and lapped as they go in, with the tops against a straight string. Mark the left
+   number on the first sheet's left edge and the right number on the last sheet's right
+   edge (or at the bay width, on a part sheet's rip line). Pull a string between the two
+   marks, tick every pan under it, and cut.
+   - That's 2 marks per bay, instead of measuring both sides of every sheet at the fence.
+   - It works because laid out as fitted, the sheets sit where they will in the fence.
+   - For a full bay with a level top rail, the two marks are simply the post readings plus
+     the allowance.
+   - *Or one sheet at a time* gives each sheet **one number**, plus a grey check number for
+     its other edge, for marking with a bevel.
 
 **Cutting with a bevel.** At the first post of each bay, set a sliding bevel with its
 handle flat on the post and its blade on the top of the bottom rail. If the top rail
