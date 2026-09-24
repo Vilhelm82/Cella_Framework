@@ -145,6 +145,41 @@ const between = (lo, hi) => lo + (hi - lo) * rnd();
   check('allowance: added to every mark', near(a.sheets[0].lines[0].l, 1540) && near(a.chalk.r, 1600));
 }
 
+// 9b. Raked top rail in gap mode.
+{
+  // One rise across a sheet, measured with a sheet held plumb: gives the whole top rail.
+  const job = { settings: { levelRail: 'raked', topRise: 30, topRiseDir: 'up' },
+    posts: [post(1500), post(1440), post(1470)], bays: [{ width: '' }, { width: '' }] };
+  const p = C.planRun(job);
+  const s = p.settings;
+  const bay = p.bays[0];
+  check('raked: top rail rises 30 per sheet', near(bay.sT * s.sheetWidth, 30), bay.sT);
+  check('raked: both ends cut', bay.mode === 'both', bay.mode);
+  check('raked: top trim 30 at the left corner, 0 at the right', near(bay.sheets[0].lines[0].l, 30) && near(bay.sheets[0].lines[0].r, 0), bay.sheets[0].lines[0]);
+  check('raked: lengths from the raked top are the gap readings', near(bay.sheets[0].lines[1].l, 1500) && near(bay.sheets[2].lines[1].r, 1440));
+  check('raked: 3 readings + 1 rise', p.totals.readings === 3, p.totals.readings);
+  // Same fence described with a string line gives the same sheets.
+  const W = s.bayWidth, rise = 30 / s.sheetWidth * W;
+  const str = C.planRun({ settings: { mode: 'string' },
+    // Drops from a level string: the top rail rises (drop shrinks), bottom = top drop + gap.
+    posts: [{ t: 400, b: 400 + 1500 }, { t: 400 - rise, b: 400 - rise + 1440 }, { t: 400 - 2 * rise, b: 400 - 2 * rise + 1470 }],
+    bays: [{}, {}] });
+  str.bays[0].sheets.forEach((sh, i) => {
+    const o = bay.sheets[i];
+    check('raked gap == string line, sheet ' + i, near(sh.lenL, o.lenL, 1e-6) && near(sh.lenR, o.lenR, 1e-6) && str.bays[0].mode === bay.mode, [sh.lenL, o.lenL]);
+  });
+  // Per-bay override and direction.
+  job.bays[1] = { width: '', rise: '12', riseDir: 'down' };
+  const q = C.planRun(job);
+  check('raked: per-bay rise override', near(q.bays[1].rise, -12) && near(q.bays[1].sT * s.sheetWidth, -12), q.bays[1].rise);
+  check('raked: small rise within tolerance keeps the top square', C.planRun({ settings: { levelRail: 'raked', topRise: 4 },
+    posts: [post(1500), post(1560)], bays: [{}] }).bays[0].mode === 'bottom');
+  // Straight-through post: the rake carries on and only the bottom rail is interpolated.
+  const sk = C.planRun({ settings: { levelRail: 'raked', topRise: 30 },
+    posts: [post(1500), { skip: true }, post(1620)], bays: [{}, {}] });
+  check('raked: interpolated post keeps the gap straight', near(sk.stations[1].left.T - sk.stations[1].left.B, 1560, 1e-9));
+}
+
 // 10. Input parsing.
 {
   check('num: thousands comma', C.num('1,500') === 1500);
@@ -168,7 +203,7 @@ function placeAndCheck(tag, bay, rails, W, s) {
     // Marks are distances from the factory end, so they can't fall off the sheet,
     // and a rake cut off the factory end should start right at it (no wasted strip).
     check(tag + ' marks lie on the sheet', sh.lines.every(li => li.l >= -tol && li.r >= -tol), sh.lines);
-    if (bay.mode === 'both') check(tag + ' bottom rake starts at the factory end', near(Math.min(sh.lines[1].l, sh.lines[1].r), 0, tol), sh.lines[1]);
+    if (bay.mode === 'both') check(tag + ' top rake leaves the high corner untouched', near(Math.min(sh.lines[0].l, sh.lines[0].r), 0, tol), sh.lines[0]);
     // Outline in the sheet's own frame: y measured from the factory end, toward the other end.
     // Rebuild the finished sheet's four corner heights in the fence from the marks alone.
     let top, bot;
@@ -182,11 +217,13 @@ function placeAndCheck(tag, bay, rails, W, s) {
       bot = [y0, y0];
       top = [y0 + sh.lines[0].l, y0 + sh.lines[0].r];
     } else {
-      // Both: factory (bottom) end sits below; place it so the bottom line lands on the rail.
-      const yl = B(xa) - sh.lines[1].l, yr = B(xb) - sh.lines[1].r;
-      check(tag + ' both: bottom line is straight in the rail', near(yl, yr, tol), [yl, yr]);
-      bot = [B(xa), B(xb)];
-      top = [yl + sh.lines[0].l, yl + sh.lines[0].r];
+      // Both: factory end up, raised until the raked top meets the rail at the high corner.
+      // The trims must describe one straight line in the rail; the lengths hang from it.
+      const yf = T(xa) + sh.lines[0].l;
+      check(tag + ' both: top rake is straight in the rail', near(yf, T(xb) + sh.lines[0].r, tol), [yf, T(xb) + sh.lines[0].r]);
+      top = [yf - sh.lines[0].l, yf - sh.lines[0].r];
+      bot = [top[0] - sh.lines[1].l, top[1] - sh.lines[1].r];
+      check(tag + ' both: stock covers the sheet', near(sh.need, Math.max(sh.lines[0].l + sh.lines[1].l, sh.lines[0].r + sh.lines[1].r), 1e-9));
     }
     const cutTop = bay.mode === 'top' || bay.mode === 'both';
     const cutBot = bay.mode === 'bottom' || bay.mode === 'both';
@@ -213,6 +250,16 @@ function placeAndCheck(tag, bay, rails, W, s) {
   const w = s.sheetWidth;
   bay.stacks.forEach((stack, j) => {
     const base = bay.sheets[0].lines[j];
+    if (bay.mode === 'both' && j === 0) {
+      // Top rake: the same trim line on every sheet cut at full width, so the stack is flush.
+      bay.sheets.forEach((sh, i) => {
+        const li = sh.lines[0];
+        check(tag + ' top rake stack is flush', stack.offsets[i] === 0);
+        check(tag + ' top rake same slope', near((li.r - li.l) / sh.width, (base.r - base.l) / bay.sheets[0].width, 1e-9));
+        if (sh.rip === 0) check(tag + ' top rake identical on full sheets', near(li.l, base.l, 1e-9) && near(li.r, base.r, 1e-9));
+      });
+      return;
+    }
     const baseW = bay.sheets[0].width;
     const baseSlope = (base.r - base.l) / baseW;
     bay.sheets.forEach((sh, i) => {
@@ -225,13 +272,16 @@ function placeAndCheck(tag, bay, rails, W, s) {
     });
   });
 
-  // Chalk-line claim: every mark lies on the straight line g0 -> g1.
+  // Chalk-line claim: every edge length lies on the straight line g0 -> g1, and those lengths
+  // are the marks measured from the reference edge (factory end, or raked top).
   if (bay.chalk) {
     bay.sheets.forEach(sh => {
       const line = x => bay.g0 + (bay.g1 - bay.g0) * x / W;
-      check(tag + ' chalk line hits every mark', Math.abs(sh.lines[0].l - line(sh.a)) <= 1 && Math.abs(sh.lines[0].r - line(sh.b)) <= 1);
+      const marks = bay.mode === 'both' ? sh.lines[1] : sh.lines[0];
+      check(tag + ' chalk line hits every mark', Math.abs(marks.l - line(sh.a)) <= 1 && Math.abs(marks.r - line(sh.b)) <= 1);
     });
   }
+  if (bay.mode === 'both') check(tag + ' both ends: chalk line always offered', !!bay.chalk);
 }
 
 let sweeps = 0;
