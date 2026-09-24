@@ -41,17 +41,17 @@ sheet are cut:** the top to the top rail and the bottom to the bottom rail.
 5. **P2 gap**, then either *Another bay* or *That's the last post*. If the rails change
    height at a post, that post takes a reading on each side. A corner is just another
    post.
-6. **Cut list:** each bay gets **four marks**.
-   1. Lay the bay's sheets face up, side by side and lapped as they go in, with the factory
-      tops against a string pulled square across them.
-   2. **Top cut:** mark the top-cut numbers at the left edge of the first sheet and the
-      right edge of the last (or at the bay width, on a part sheet's rip line). String
-      between them, tick every pan.
-   3. **Bottom cut:** mark the bottom-cut numbers the same way. String, tick.
-   4. Cut every sheet on both lines.
+6. **Cut list:** each bay shows a picture of one sheet (face up, top away) with both
+   cuts drawn on it, then two steps:
+   1. **Top cut, every sheet the same:** "cut 71 mm off the top left corner, running out
+      to nothing at the top right corner". Stack the bay's sheets and cut once.
+   2. **Bottom cut, measured down from the cut top:** each sheet's left and right
+      lengths. They're simply the rail-to-rail gaps at that sheet's edges, the same
+      numbers you'd measure at the fence.
 
-   *Or one sheet at a time* gives each sheet its top and bottom marks at both edges,
-   measured from its own factory top.
+   *Quicker:* after the top cut, lay the bay's sheets out lapped as they go in, with the
+   cut tops running on in one straight line. Mark the first post's gap on the left edge
+   and the next post's gap on the right edge, string between, tick every pan.
 
 **Why the diagonal.** The two post gaps give each sheet's length at every edge. They
 can't say how the slope is shared between the rails, and cutting the top as well as the
