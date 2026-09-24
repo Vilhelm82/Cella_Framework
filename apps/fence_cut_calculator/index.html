@@ -264,15 +264,18 @@ h2 {
 }
 .tape input {
   flex: 1 1 auto; min-width: 0; width: 100%;
-  border: 0; background: transparent;
-  padding: 16px 2px 8px 10px;
+  margin: 14px 4px 7px 8px;
+  padding: 7px 9px;
+  border: 1.5px solid rgba(27, 26, 16, 0.55);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.85);
   color: var(--tape-ink);
   font: 600 1.3rem/1 var(--mono);
   font-variant-numeric: tabular-nums;
 }
-.tape input:focus { outline: none; }
-.tape input::placeholder { color: rgba(27, 26, 16, 0.42); }
-.tape .unit { padding: 9px 10px 0 0; font: 600 0.78rem var(--mono); color: var(--tape-ink); opacity: 0.65; }
+.tape input:focus { outline: none; border-color: var(--tape-ink); background: #fff; }
+.tape input::placeholder { color: rgba(27, 26, 16, 0.5); font: 500 0.95rem var(--body); }
+.tape .unit { padding: 7px 10px 0 2px; font: 600 0.8rem var(--mono); color: var(--tape-ink); opacity: 0.75; }
 .tape:focus-within { outline: 2px solid var(--chalk); outline-offset: 2px; }
 .tape.is-interp {
   background: repeating-linear-gradient(135deg, var(--well) 0 6px, var(--surface) 6px 12px);
@@ -280,6 +283,7 @@ h2 {
 }
 .tape.is-interp::before { opacity: 0.12; }
 .tape.is-interp input, .tape.is-interp .unit { color: var(--ink-2); font-style: italic; }
+.tape.is-interp input { background: transparent; border-color: var(--rule); }
 .tape.is-interp input::placeholder { color: var(--ink-2); opacity: 1; }
 .opts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 7px; }
 .opt {
@@ -392,6 +396,16 @@ details.panel > summary::-webkit-details-marker { display: none; }
 details.panel > summary::after { content: "Show"; font: 600 0.85rem var(--body); color: var(--chalk); }
 details.panel[open] > summary::after { content: "Hide"; }
 details.panel > summary .sum-note { font-size: 0.88rem; color: var(--ink-2); flex: 1 1 auto; }
+.stepno {
+  display: inline-grid; place-items: center;
+  width: 1.35em; height: 1.35em;
+  margin-right: 0.4em;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--surface);
+  font-size: 0.8em;
+  vertical-align: 0.08em;
+}
 .set-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
@@ -469,28 +483,8 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
     <div class="legend"><span><i class="l-rail"></i>Rails</span><span><i class="l-sheet"></i>Sheets</span><span><i class="l-cut"></i>Cut line</span><span>Tap a bay to jump to its cuts</span></div>
   </section>
 
-  <div class="cols">
-    <section class="panel" aria-labelledby="readings-h">
-      <h2 id="readings-h">Readings</h2>
-      <p class="hint" id="measure-hint"></p>
-      <ol class="run" id="run"></ol>
-      <div class="run-actions">
-        <button class="btn small" type="button" id="add-bay">Add bay</button>
-        <button class="btn small ghost" type="button" id="remove-bay">Remove last bay</button>
-      </div>
-    </section>
-
-    <section class="cuts-col" aria-labelledby="cuts-h">
-      <div class="cuts-head">
-        <h2 id="cuts-h">Cut list</h2>
-        <p>Marks are in mm, measured from the factory end along each edge. Left and right are as you face the fence from where you measured.</p>
-      </div>
-      <div class="cuts-col" id="cards"></div>
-    </section>
-  </div>
-
   <details class="panel" id="setup">
-    <summary><h2>Setup</h2><span class="sum-note" id="setup-note"></span></summary>
+    <summary><h2><span class="stepno">1</span>Setup</h2><span class="sum-note" id="setup-note"></span></summary>
     <div class="set-grid">
       <div class="field">
         <span class="lbl">How you measure</span>
@@ -567,6 +561,26 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
       </div>
     </div>
   </details>
+
+  <div class="cols">
+    <section class="panel" aria-labelledby="readings-h">
+      <h2 id="readings-h"><span class="stepno">2</span>Readings</h2>
+      <p class="hint" id="measure-hint"></p>
+      <ol class="run" id="run"></ol>
+      <div class="run-actions">
+        <button class="btn small" type="button" id="add-bay">Add bay</button>
+        <button class="btn small ghost" type="button" id="remove-bay">Remove last bay</button>
+      </div>
+    </section>
+
+    <section class="cuts-col" aria-labelledby="cuts-h">
+      <div class="cuts-head">
+        <h2 id="cuts-h"><span class="stepno">3</span>Cut list</h2>
+        <p>Marks are in mm, measured from the factory end along each edge. Left and right are as you face the fence from where you measured.</p>
+      </div>
+      <div class="cuts-col" id="cards"></div>
+    </section>
+  </div>
 
   <details class="panel" id="explain">
     <summary><h2>Why two readings are enough</h2></summary>
@@ -959,12 +973,12 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
   }
   function postFields(k, p, side) {
     var sfx = side === 2 ? '2' : '';
-    var where = side === 1 ? ' · left' : side === 2 ? ' · right' : '';
+    var where = side === 1 ? ', left side' : side === 2 ? ', right side' : '';
     if (job.settings.mode === 'string') {
-      return tapeField('p' + k + '-t' + sfx, 'Down to top rail' + where, p['t' + sfx]) +
-             tapeField('p' + k + '-b' + sfx, 'Down to bottom rail' + where, p['b' + sfx]);
+      return tapeField('p' + k + '-t' + sfx, 'P' + (k + 1) + ' string to top rail' + where, p['t' + sfx]) +
+             tapeField('p' + k + '-b' + sfx, 'P' + (k + 1) + ' string to bottom rail' + where, p['b' + sfx]);
     }
-    return tapeField('p' + k + '-g' + sfx, 'Rail to rail' + where, p['g' + sfx]);
+    return tapeField('p' + k + '-g' + sfx, 'Vertical gap at P' + (k + 1) + where, p['g' + sfx]);
   }
   function renderRun() {
     var html = '';
@@ -1013,7 +1027,7 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
           el.value = '';
           el.placeholder = st.interp ? '~' + interpText(st.left)[f] : 'from P' + k + ' & P' + (k + 2);
         } else {
-          el.placeholder = '';
+          el.placeholder = 'tap to type';
         }
       });
     });
@@ -1053,8 +1067,8 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
     $('#example-banner').hidden = !job.example;
     var s = plan.settings;
     var how = s.mode === 'string'
-      ? 'Set a level string line along the run. At each post, measure <b>down from the string</b> to the top rail and to the bottom rail. Measure each bay\'s <b>width</b> too if the posts aren\'t evenly spaced.'
-      : 'At each post, measure plumb from the <b>bottom rail to the top rail</b>, on the face where the sheets start. ' +
+      ? 'Type each measurement into the <b>yellow boxes</b> below. Set a level string line along the run. At each post, measure <b>down from the string</b> to the top rail and to the bottom rail. Measure each bay\'s <b>width</b> too if the posts aren\'t evenly spaced.'
+      : 'Type each post\'s <b>vertical gap</b> into its <b>yellow box</b> below: measure straight up from the top of the bottom rail to the underside of the top rail, right beside the post. ' +
         (s.levelRail === 'raked' ? 'The top rail is raked, ' + (s.topRiseDir === 'down' ? 'falling ' : 'rising ') + mm(s.topRise) + ' mm across a sheet to the right.'
           : 'The ' + (s.levelRail === 'top' ? 'top' : 'bottom') + ' rail is level.');
     how += ' If your posts aren\'t evenly spaced, also measure each bay\'s <b>width</b>, post face to post face. A corner is just another post.';
