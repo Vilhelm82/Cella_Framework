@@ -24,44 +24,48 @@ node apps/fence_cut_calculator/tests/test_core.js
 
 ## Using it
 
-The page guides you. Every measurement it still needs glows red, and the next one
-pulses. The map pinned at the top fills in as values arrive. A red **?** marks each spot
-still to measure, and tapping it jumps to its box. A bay with everything it needs turns
-solid, with its sheets and cut lines. A bay still waiting stays dashed, with its name in
-red. **Next: …** above the map always names the next measurement, and Enter moves
-straight to it. The walking order is: the top rail's rise (if raked), then P1, bay 1's
-width, P2, bay 2's width, and so on.
+The page walks you through the job one screen at a time. Each screen asks for one
+measurement, and its picture shows that measurement as a red arrow.
 
-1. **Setup** (once per job): standard bay width, sheets per bay, and the top rail: level,
-   raked, or (rarely) the bottom rail level. Defaults: 2365 mm bay, 3 sheets, top rail
-   level. These are placeholders; set them from your own sheets and rails.
-   - **Raked top rail:** enter its rise across one sheet. To measure it, hold a sheet plumb
-     against the top rail with its square top touching at one corner. The gap at the other
-     corner is the number, and that side is where the rail rises. A bay whose rake differs
-     (after a corner, say) can override it.
-   - **Rails already up:** each sheet is lifted into the top rail, then dropped into the
-     bottom rail. Measure the visible gap and set *Add to every reading* to the top rail's
-     channel depth less about 5 mm. The sheet then just clears the bottom rail on the way
-     in, and it engages the top rail by (top depth − 5 − bottom depth) once dropped.
-2. **Readings**: at each post, measure plumb from the bottom rail to the top rail, on the
-   face where the sheets start. Type the reading into that post's yellow tape field.
-   - A corner is just another post. Each bay is flat, so the turn doesn't change the maths.
-   - *Rails step here*: the rails jump at this post, so it takes a reading on each side.
-   - *Rails run straight through*: both rails continue in a straight line through this
-     post, so it needs no reading. The value is interpolated from the posts either side.
-     A long run on one steady grade needs only its two end readings.
-   - If the posts aren't evenly spaced, enter each bay's width: post face to post face,
-     with the tape level. Along the rail is close enough on gentle slopes (about 12 mm
-     over on a 2.4 m bay at a 10% slope). A bay with no width uses the standard width and
-     is flagged *standard, not measured*. The app fits the sheets: small differences go
-     into the laps, bigger ones get one sheet ripped, and it gives that sheet's width.
-3. **Cut list**: each bay card gives every sheet's left and right marks, measured from the
-   factory end. It also gives the two shortcuts below.
+1. **Setup, once per job:**
+   - sheets in a full bay;
+   - full bay width;
+   - whether the top rail is level or slopes;
+   - any extra length to add to every reading.
 
-If both rails slope, the gap alone can't tell how the slope is split between them, so one
-more number is needed. A raked top rail's rise across a sheet is the cheapest to measure:
-one reading for a whole run on one rake. For anything irregular, switch Setup to *From a
-string line* and take two readings per post (down to each rail).
+   The 2365 mm / 3 sheet defaults are placeholders, so set them from your own sheets.
+   With the rails already up, each sheet is lifted into the top rail and dropped into the
+   bottom rail. Set the extra length to the top rail's channel depth less about 5 mm.
+2. **P1 gap:** hold the tape upright beside the post. Measure from the top of the bottom
+   rail to the underside of the top rail.
+3. **Bay 1 width:** post face to post face, with the tape level. *Full bay* fills in the
+   standard width. The screen tells you how many sheets the bay takes, and whether one
+   needs ripping.
+4. **P2 gap**, then either *Another bay* or *That's the last post*. If the rails change
+   height at a post, that post takes a reading on each side. A corner is just another
+   post.
+5. **Cut list:** each sheet gets **one number**, plus a grey check number for its other
+   edge.
+
+**Cutting with a bevel.** At the first post of each bay, set a sliding bevel with its
+handle flat on the post and its blade on the top of the bottom rail. If the top rail
+slopes, set a second bevel against the underside of the top rail. The rails are straight,
+so that angle is the same for every sheet in the bay. Then, for each sheet:
+1. Lay it face up with its top away from you.
+2. If the top slopes, bevel the top first.
+3. Measure the sheet's number down the left edge from the top. Mark it.
+4. Lay the bottom bevel through the mark and cut.
+5. Check the right edge against the grey number.
+
+Measuring the angle alone isn't enough. It doesn't say where on each sheet the cut goes,
+and a 1° error is about 14 mm across a sheet and 41 mm across a bay. The tape readings
+fix the positions to a millimetre or two, and the bevel carries the angle without any
+numbers. Because the bevel carries the slope of each rail, the app never needs the top
+rail's rake.
+
+The calculation core in `index.html` also supports string-line readings, raked-rail rise
+inputs, laps, stack and chalk-line shortcuts, and stock-length checks. The gate below
+tests all of them. The step-by-step screens use only the gap-at-each-post path.
 
 ## Why two readings are enough (the derivation)
 

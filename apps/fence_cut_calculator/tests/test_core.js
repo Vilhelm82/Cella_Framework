@@ -200,6 +200,22 @@ const between = (lo, hi) => lo + (hi - lo) * rnd();
   check('stations carry the top rail height for drawing', r.stations.every(s => typeof s.tTop === 'number'));
 }
 
+// 9e. The step-by-step screens' settings: level top, bottom cut forced, every width measured.
+//     Each sheet's number is the gap at its left edge (plus allowance), even when the slope
+//     is tiny enough that Auto would have picked a square cut.
+{
+  const set = { mode: 'gap', levelRail: 'top', cutEnds: 'bottom', widthMode: 'each', allowance: '10' };
+  const p = C.planRun({ settings: set, posts: [post(1500), post(1503), post(1560)], bays: [{ width: 2365 }, { width: 2350 }] });
+  p.bays.forEach((bay, k) => {
+    check('wizard: bay ' + k + ' cuts the bottom', bay.mode === 'bottom', bay.mode);
+    bay.sheets.forEach(sh => {
+      const g = x => bay.g0 + (bay.g1 - bay.g0) * x / bay.width;
+      check('wizard: bay ' + k + ' sheet ' + sh.n + ' number is the gap at its left edge', near(sh.lenL, g(sh.a), 1e-9) && near(sh.lenR, g(sh.b), 1e-9));
+    });
+  });
+  check('wizard: allowance included', near(p.bays[0].sheets[0].lenL, 1510, 1e-9));
+}
+
 // 10. Input parsing.
 {
   check('num: thousands comma', C.num('1,500') === 1500);
