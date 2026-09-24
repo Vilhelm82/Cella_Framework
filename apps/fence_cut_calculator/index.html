@@ -197,6 +197,18 @@ h2 {
 .hint b { color: var(--ink); font-weight: 600; }
 
 /* ---------- the run (posts and bays) ---------- */
+.howto { margin: 12px 0 0; }
+.howto svg { display: block; width: 100%; max-width: 380px; height: auto; }
+.howto .h-post { fill: var(--ink); font: 700 12px var(--display); letter-spacing: 0.04em; }
+.howto .h-rail { stroke: var(--rail); stroke-width: 5; }
+.howto .h-rail-fill { fill: var(--rail); }
+.howto .h-gap { stroke: var(--chalk); stroke-width: 2; }
+.howto .h-gap-fill { fill: var(--chalk); }
+.howto .h-gap-t { fill: var(--chalk); font: 600 12px var(--body); }
+.howto .h-note { fill: var(--ink-2); font: 500 11px var(--body); }
+.howto .h-width { stroke: var(--ink-2); stroke-width: 1.5; }
+.howto .h-width-fill { fill: var(--ink-2); }
+.howto .h-width-t { fill: var(--ink-2); font: 600 12px var(--body); }
 .run { list-style: none; margin: 16px 0 0; padding: 0; }
 .run > li { display: grid; grid-template-columns: 40px minmax(0, 1fr); column-gap: 12px; }
 .post-mark { position: relative; display: flex; justify-content: center; align-items: center; }
@@ -254,17 +266,17 @@ h2 {
 }
 .tape::before {
   content: "";
-  position: absolute; left: 0; right: 0; top: 0; height: 11px;
+  position: absolute; left: 0; top: 0; bottom: 0; width: 13px;
   pointer-events: none;
   background:
-    linear-gradient(90deg, var(--tape-ink) 1.5px, transparent 1.5px) 0 0 / 40px 11px repeat-x,
-    linear-gradient(90deg, var(--tape-ink) 1px, transparent 1px) 20px 0 / 40px 8px repeat-x,
-    linear-gradient(90deg, var(--tape-ink) 1px, transparent 1px) 0 0 / 4px 4px repeat-x;
-  opacity: 0.5;
+    linear-gradient(180deg, var(--tape-ink) 1.5px, transparent 1.5px) 0 2px / 13px 20px repeat-y,
+    linear-gradient(180deg, var(--tape-ink) 1px, transparent 1px) 0 12px / 9px 20px repeat-y,
+    linear-gradient(180deg, var(--tape-ink) 1px, transparent 1px) 0 2px / 5px 4px repeat-y;
+  opacity: 0.55;
 }
 .tape input {
   flex: 1 1 auto; min-width: 0; width: 100%;
-  margin: 14px 4px 7px 8px;
+  margin: 7px 4px 7px 19px;
   padding: 7px 9px;
   border: 1.5px solid rgba(27, 26, 16, 0.55);
   border-radius: 4px;
@@ -275,7 +287,7 @@ h2 {
 }
 .tape input:focus { outline: none; border-color: var(--tape-ink); background: #fff; }
 .tape input::placeholder { color: rgba(27, 26, 16, 0.5); font: 500 0.95rem var(--body); }
-.tape .unit { padding: 7px 10px 0 2px; font: 600 0.8rem var(--mono); color: var(--tape-ink); opacity: 0.75; }
+.tape .unit { padding: 0 10px 0 2px; font: 600 0.8rem var(--mono); color: var(--tape-ink); opacity: 0.75; }
 .tape:focus-within { outline: 2px solid var(--chalk); outline-offset: 2px; }
 .tape.is-interp {
   background: repeating-linear-gradient(135deg, var(--well) 0 6px, var(--surface) 6px 12px);
@@ -566,6 +578,30 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
     <section class="panel" aria-labelledby="readings-h">
       <h2 id="readings-h"><span class="stepno">2</span>Readings</h2>
       <p class="hint" id="measure-hint"></p>
+      <figure class="howto">
+        <svg viewBox="0 0 340 176" role="img" aria-label="What to measure: the vertical gap between the rails at each post, and the width between posts">
+          <text class="h-post" x="45" y="12" text-anchor="middle">P1</text>
+          <text class="h-post" x="295" y="12" text-anchor="middle">P2</text>
+          <rect class="h-rail-fill" x="40" y="18" width="10" height="124"/>
+          <rect class="h-rail-fill" x="290" y="18" width="10" height="124"/>
+          <line class="h-rail" x1="50" y1="42" x2="290" y2="30"/>
+          <line class="h-rail" x1="50" y1="128" x2="290" y2="112"/>
+          <line class="h-gap" x1="64" y1="47" x2="64" y2="123"/>
+          <polygon class="h-gap-fill" points="64,45 59.5,54 68.5,54"/>
+          <polygon class="h-gap-fill" points="64,125 59.5,116 68.5,116"/>
+          <line class="h-gap" x1="276" y1="35" x2="276" y2="107"/>
+          <polygon class="h-gap-fill" points="276,33 271.5,42 280.5,42"/>
+          <polygon class="h-gap-fill" points="276,109 271.5,100 280.5,100"/>
+          <text class="h-gap-t" x="74" y="84">&#8597; vertical gap</text>
+          <text class="h-gap-t" x="266" y="72" text-anchor="end">vertical gap &#8597;</text>
+          <text class="h-note" x="74" y="99">yellow box</text>
+          <text class="h-note" x="266" y="87" text-anchor="end">yellow box</text>
+          <line class="h-width" x1="52" y1="156" x2="288" y2="156"/>
+          <polygon class="h-width-fill" points="50,156 59,151.5 59,160.5"/>
+          <polygon class="h-width-fill" points="290,156 281,151.5 281,160.5"/>
+          <text class="h-width-t" x="170" y="172" text-anchor="middle">&#8596; width (Width box)</text>
+        </svg>
+      </figure>
       <ol class="run" id="run"></ol>
       <div class="run-actions">
         <button class="btn small" type="button" id="add-bay">Add bay</button>
@@ -975,10 +1011,10 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
     var sfx = side === 2 ? '2' : '';
     var where = side === 1 ? ', left side' : side === 2 ? ', right side' : '';
     if (job.settings.mode === 'string') {
-      return tapeField('p' + k + '-t' + sfx, 'P' + (k + 1) + ' string to top rail' + where, p['t' + sfx]) +
-             tapeField('p' + k + '-b' + sfx, 'P' + (k + 1) + ' string to bottom rail' + where, p['b' + sfx]);
+      return tapeField('p' + k + '-t' + sfx, '\u2195 P' + (k + 1) + ' string down to top rail' + where, p['t' + sfx]) +
+             tapeField('p' + k + '-b' + sfx, '\u2195 P' + (k + 1) + ' string down to bottom rail' + where, p['b' + sfx]);
     }
-    return tapeField('p' + k + '-g' + sfx, 'Vertical gap at P' + (k + 1) + where, p['g' + sfx]);
+    return tapeField('p' + k + '-g' + sfx, '\u2195 Vertical gap at P' + (k + 1) + where, p['g' + sfx]);
   }
   function renderRun() {
     var html = '';
@@ -1001,8 +1037,8 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
       if (k < n - 1) {
         html += '<li class="bay"><div class="bay-rails" aria-hidden="true"></div><div class="bay-body">' +
           '<span class="bay-name">Bay ' + (k + 1) + '</span>' +
-          '<label class="bay-w" for="b' + k + '-w">Width <input id="b' + k + '-w" type="text" inputmode="decimal" autocomplete="off" value="' + esc(job.bays[k].width) + '" placeholder="' + esc(plan.settings.bayWidth) + '"> mm</label>' +
-          (raked ? '<span class="bay-w"><label for="b' + k + '-rise">Top rise</label> <input class="rise" id="b' + k + '-rise" type="text" inputmode="decimal" autocomplete="off" value="' + esc(job.bays[k].rise) + '">' +
+          '<label class="bay-w" for="b' + k + '-w">\u2194 Width <input id="b' + k + '-w" type="text" inputmode="decimal" autocomplete="off" value="' + esc(job.bays[k].width) + '" placeholder="' + esc(plan.settings.bayWidth) + '"> mm</label>' +
+          (raked ? '<span class="bay-w"><label for="b' + k + '-rise">\u2195 Top rise</label> <input class="rise" id="b' + k + '-rise" type="text" inputmode="decimal" autocomplete="off" value="' + esc(job.bays[k].rise) + '">' +
             '<button type="button" class="dir" id="b' + k + '-dir"></button></span>' : '') +
           '<span class="bay-derived" id="bd' + k + '"></span></div></li>';
       }
@@ -1068,10 +1104,10 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
     var s = plan.settings;
     var how = s.mode === 'string'
       ? 'Type each measurement into the <b>yellow boxes</b> below. Set a level string line along the run. At each post, measure <b>down from the string</b> to the top rail and to the bottom rail. Measure each bay\'s <b>width</b> too if the posts aren\'t evenly spaced.'
-      : 'Type each post\'s <b>vertical gap</b> into its <b>yellow box</b> below: measure straight up from the top of the bottom rail to the underside of the top rail, right beside the post. ' +
+      : 'The yellow boxes take the <b>vertical</b> gap at each post: tape held upright, from the top of the bottom rail to the underside of the top rail, right beside the post. ' +
         (s.levelRail === 'raked' ? 'The top rail is raked, ' + (s.topRiseDir === 'down' ? 'falling ' : 'rising ') + mm(s.topRise) + ' mm across a sheet to the right.'
           : 'The ' + (s.levelRail === 'top' ? 'top' : 'bottom') + ' rail is level.');
-    how += ' If your posts aren\'t evenly spaced, also measure each bay\'s <b>width</b>, post face to post face. A corner is just another post.';
+    how += ' The only side-to-side measurement is each bay\'s <b>width</b>, post face to post face, which goes in its Width box. A corner is just another post.';
     if (s.allowance) how += ' ' + mm(s.allowance) + ' mm gets added to each reading.';
     how += ' Standard bay ' + mm(s.bayWidth) + ' mm, ' + s.sheetsPerBay + ' ' + plural(s.sheetsPerBay, 'sheet', 'sheets') + '. <button class="linkish" type="button" id="open-setup">Change</button>';
     $('#measure-hint').innerHTML = how;
