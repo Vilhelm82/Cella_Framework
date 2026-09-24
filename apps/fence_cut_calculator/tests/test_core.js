@@ -180,6 +180,13 @@ const between = (lo, hi) => lo + (hi - lo) * rnd();
   check('raked: interpolated post keeps the gap straight', near(sk.stations[1].left.T - sk.stations[1].left.B, 1560, 1e-9));
 }
 
+// 9c. A bay left without a width is flagged, since post spacing usually varies.
+{
+  const p = C.planRun(gapJob([1500, 1560, 1600], [null, 1850]));
+  check('width: blank bay flagged as assumed', p.bays[0].assumedWidth === true && p.bays[1].assumedWidth === false,
+        [p.bays[0].assumedWidth, p.bays[1].assumedWidth]);
+}
+
 // 10. Input parsing.
 {
   check('num: thousands comma', C.num('1,500') === 1500);

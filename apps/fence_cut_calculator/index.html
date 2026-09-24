@@ -378,6 +378,7 @@ table.cuts { width: 100%; border-collapse: collapse; font-variant-numeric: tabul
 .how b { font-weight: 600; }
 .note { font-size: 0.9rem; color: var(--ink-2); }
 .warn { color: var(--warn); font-size: 0.92rem; }
+.assumed { color: var(--warn); font-weight: 600; }
 .warn::before { content: "Check: "; font-weight: 600; }
 .err { color: var(--bad); }
 
@@ -806,10 +807,11 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
     var posts = (job && job.posts) || [];
     var bayIn = (job && job.bays) || [];
     var nb = Math.max(0, posts.length - 1);
-    var widths = [], X = [0], k;
+    var widths = [], assumed = [], X = [0], k;
     for (k = 0; k < nb; k++) {
       var wv = num(bayIn[k] && bayIn[k].width);
       widths.push(wv !== null ? wv : s.bayWidth);
+      assumed.push(wv === null);
       X.push(X[k] + Math.max(0, widths[k]));
     }
     var perReading = s.mode === 'string' ? 2 : 1;
@@ -865,6 +867,7 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
       }
       bay.index = k;
       bay.rise = rises[k];
+      bay.assumedWidth = assumed[k];   // no width entered: the standard bay was used
       bays.push(bay);
     }
     var totals = { bays: nb, sheets: 0, readings: 0, waiting: 0, angledCuts: 0 };
@@ -1050,11 +1053,11 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
     $('#example-banner').hidden = !job.example;
     var s = plan.settings;
     var how = s.mode === 'string'
-      ? 'Set a level string line along the run. At each post, measure <b>down from the string</b> to the top rail and to the bottom rail.'
+      ? 'Set a level string line along the run. At each post, measure <b>down from the string</b> to the top rail and to the bottom rail. Measure each bay\'s <b>width</b> too if the posts aren\'t evenly spaced.'
       : 'At each post, measure plumb from the <b>bottom rail to the top rail</b>, on the face where the sheets start. ' +
         (s.levelRail === 'raked' ? 'The top rail is raked, ' + (s.topRiseDir === 'down' ? 'falling ' : 'rising ') + mm(s.topRise) + ' mm across a sheet to the right.'
           : 'The ' + (s.levelRail === 'top' ? 'top' : 'bottom') + ' rail is level.');
-    how += ' A corner is just another post.';
+    how += ' If your posts aren\'t evenly spaced, also measure each bay\'s <b>width</b>, post face to post face. A corner is just another post.';
     if (s.allowance) how += ' ' + mm(s.allowance) + ' mm gets added to each reading.';
     how += ' Standard bay ' + mm(s.bayWidth) + ' mm, ' + s.sheetsPerBay + ' ' + plural(s.sheetsPerBay, 'sheet', 'sheets') + '. <button class="linkish" type="button" id="open-setup">Change</button>';
     $('#measure-hint').innerHTML = how;
@@ -1131,7 +1134,7 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
       '<span class="pill m-' + bay.mode + '">' + MODE_LABEL[bay.mode] + '</span>';
     if (n > 1) html += '<span class="step"><b>' + one(bay.delta) + '</b><span>mm per sheet</span></span>';
     html += '</header><div class="card-body">';
-    html += '<div class="meta"><span>Width <b>' + mm(bay.width) + '</b></span><span><b>' + n + '</b> ' + plural(n, 'sheet', 'sheets') + '</span>' +
+    html += '<div class="meta"><span>Width <b>' + mm(bay.width) + '</b>' + (bay.assumedWidth ? ' <span class="assumed">standard, not measured</span>' : '') + '</span><span><b>' + n + '</b> ' + plural(n, 'sheet', 'sheets') + '</span>' +
       '<span>Gap <b>' + mm(bay.g0) + '</b> → <b>' + mm(bay.g1) + '</b></span></div>';
     html += '<p class="how">' + (bay.mode === 'both' ? bothHow(bay) : MODE_HOW[bay.mode]) + '</p>';
 
@@ -1419,7 +1422,7 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
     var lines = ['TWO-TAPE FENCE CUTS',
       t.bays + ' ' + plural(t.bays, 'bay', 'bays') + ', ' + t.sheets + ' sheets. Marks in mm from the factory end. Left/right as seen from the measuring side.', ''];
     plan.bays.forEach(function (bay, k) {
-      var head = 'Bay ' + (k + 1) + ' (P' + (k + 1) + '-P' + (k + 2) + ', ' + mm(bay.width) + ' wide)';
+      var head = 'Bay ' + (k + 1) + ' (P' + (k + 1) + '-P' + (k + 2) + ', ' + mm(bay.width) + ' wide' + (bay.assumedWidth ? ', standard width, not measured' : '') + ')';
       if (bay.errors.length) { lines.push(head + ': waiting on readings', ''); return; }
       lines.push(head + ': ' + MODE_LABEL[bay.mode].toLowerCase() + (bay.sheets.length > 1 ? ', ' + one(bay.delta).replace(MINUS, '-') + ' mm per sheet' : ''));
       bay.sheets.forEach(function (sh) {

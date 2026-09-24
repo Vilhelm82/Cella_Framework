@@ -42,8 +42,11 @@ node apps/fence_cut_calculator/tests/test_core.js
    - *Rails run straight through*: both rails continue in a straight line through this
      post, so it needs no reading. The value is interpolated from the posts either side.
      A long run on one steady grade needs only its two end readings.
-   - If an odd bay isn't a whole number of sheets, enter its width. The last sheet gets a
-     rip width.
+   - If the posts aren't evenly spaced, enter each bay's width: post face to post face,
+     with the tape level. Along the rail is close enough on gentle slopes (about 12 mm
+     over on a 2.4 m bay at a 10% slope). A bay with no width uses the standard width and
+     is flagged *standard, not measured*. The app fits the sheets: small differences go
+     into the laps, bigger ones get one sheet ripped, and it gives that sheet's width.
 3. **Cut list**: each bay card gives every sheet's left and right marks, measured from the
    factory end. It also gives the two shortcuts below.
 
