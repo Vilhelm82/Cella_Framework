@@ -24,6 +24,11 @@
   --rail: #33403A;
   --warn: #8F5B00;
   --bad: #B8321C;
+  --need: #D2331C;
+  --need-soft: rgba(210, 51, 28, 0.08);
+  --need-glow: rgba(210, 51, 28, 0.35);
+  --on-need: #FFFFFF;
+  --good: #2A7A4B;
   --display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
   --body: "Barlow", "Segoe UI", system-ui, -apple-system, sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
@@ -45,6 +50,10 @@
     --rail: #C9D2CC;
     --warn: #E2B04E;
     --bad: #FF7B63;
+    --need: #FF6A55;
+    --need-soft: rgba(255, 106, 85, 0.10);
+    --need-glow: rgba(255, 106, 85, 0.40);
+    --good: #6CC990;
     color-scheme: dark;
   }
 }
@@ -63,6 +72,10 @@
   --rail: #C9D2CC;
   --warn: #E2B04E;
   --bad: #FF7B63;
+  --need: #FF6A55;
+  --need-soft: rgba(255, 106, 85, 0.10);
+  --need-glow: rgba(255, 106, 85, 0.40);
+  --good: #6CC990;
   color-scheme: dark;
 }
 
@@ -144,11 +157,40 @@ h1 {
 
 /* ---------- elevation ---------- */
 .elev {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 5;
   background: var(--surface);
   border: 1px solid var(--rule);
   border-radius: 10px;
-  padding-block: 12px 10px;
+  padding-block: 10px 8px;
+  box-shadow: 0 8px 18px -14px rgba(0, 0, 0, 0.45);
 }
+html { scroll-padding-top: calc(var(--elev-h, 0px) + 14px); }
+.progress { display: grid; gap: 8px; padding: 0 12px 8px; }
+.pg-top { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; }
+.pg-count { font-size: 0.86rem; color: var(--ink-2); }
+.pg-count b { font: 600 0.95rem var(--mono); color: var(--ink); }
+.pg-next {
+  appearance: none;
+  margin-left: auto;
+  max-width: 100%;
+  padding: 6px 12px;
+  border: 1.5px solid var(--need);
+  border-radius: 999px;
+  background: var(--need-soft);
+  color: var(--need);
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+.pg-next.is-done { border-color: var(--good); background: transparent; color: var(--good); }
+.pg-bar { display: flex; gap: 3px; }
+.pg-bar span { flex: 1 1 0; height: 5px; border-radius: 2px; background: var(--need); opacity: 0.3; }
+.pg-bar span.f { background: var(--chalk); opacity: 1; }
+.pg-bar span.n { opacity: 1; animation: blink 1.3s ease-in-out infinite; }
+@keyframes blink { 50% { opacity: 0.3; } }
+@media (max-width: 600px) { .elev .legend { display: none; } }
 .elev-scroll { overflow-x: auto; padding-inline: 12px; }
 .elev svg { display: block; }
 .elev .hit { fill: transparent; }
@@ -161,11 +203,36 @@ h1 {
 .elev .rail { stroke: var(--rail); stroke-width: 4; stroke-linecap: square; fill: none; }
 .elev .cut { stroke: var(--chalk); stroke-width: 2.2; fill: none; }
 .elev .post { fill: var(--rail); }
-.elev .missing { fill: none; stroke: var(--ink-2); stroke-dasharray: 4 4; }
+.elev .ghost { fill: none; stroke: var(--steel-line); stroke-width: 1; stroke-dasharray: 4 3; }
+.elev .rail.ghost { stroke: var(--steel-line); stroke-width: 3; stroke-dasharray: 7 5; }
+.elev .mhit { fill: transparent; }
+.elev .meas { cursor: pointer; }
+.elev .meas line { stroke-width: 1.8; }
+.elev .meas.ok line { stroke: var(--chalk); }
+.elev .meas.ok polygon { fill: var(--chalk); }
+.elev .meas.need line { stroke: var(--need); stroke-dasharray: 3 3; }
+.elev .meas.need polygon { fill: var(--need); }
+.elev .meas.interp line { stroke: var(--ink-2); stroke-dasharray: 2 3; }
+.elev .meas.interp polygon { fill: var(--ink-2); }
+.elev .meas.std line { stroke: var(--ink-2); }
+.elev .meas.std polygon { fill: var(--ink-2); }
+.elev .meas.focused line { stroke-width: 3.2; }
+.elev .pill { fill: var(--surface); stroke-width: 1.2; }
+.elev .ok .pill { stroke: var(--chalk); }
+.elev .std .pill, .elev .interp .pill { stroke: var(--rule); }
+.elev .need .pill { fill: var(--need); stroke: var(--need); }
+.elev text.pt { font: 600 10.5px var(--mono); }
+.elev .ok text.pt { fill: var(--chalk); }
+.elev .std text.pt, .elev .interp text.pt { fill: var(--ink-2); }
+.elev .need text.pt { fill: var(--on-need); font-family: var(--body); font-weight: 700; }
+.elev .focused .pill { stroke-width: 2.4; }
+.elev .next { animation: blink 1.3s ease-in-out infinite; }
+.elev text.blabel.waiting { fill: var(--need); }
+@media (prefers-reduced-motion: reduce) { .elev .next, .pg-bar span.n, .need-next { animation: none !important; } }
 .elev text { fill: var(--ink-2); font: 500 11px var(--mono); }
 .elev text.plabel { fill: var(--ink); font: 700 12px var(--display); letter-spacing: 0.04em; }
 .elev text.blabel { fill: var(--ink-2); font: 600 11px var(--body); letter-spacing: 0.08em; text-transform: uppercase; }
-.elev text.q { fill: var(--ink-2); font: 700 22px var(--display); }
+
 .legend {
   display: flex; flex-wrap: wrap; gap: 4px 16px;
   padding: 8px 16px 0;
@@ -289,6 +356,27 @@ h2 {
 .tape input::placeholder { color: rgba(27, 26, 16, 0.5); font: 500 0.95rem var(--body); }
 .tape .unit { padding: 0 10px 0 2px; font: 600 0.8rem var(--mono); color: var(--tape-ink); opacity: 0.75; }
 .tape:focus-within { outline: 2px solid var(--chalk); outline-offset: 2px; }
+.tape.need { box-shadow: inset 0 -3px 0 var(--tape-edge), 0 0 0 2px var(--need), 0 0 12px 2px var(--need-glow); }
+.tape.need input { border-color: var(--need); }
+.tape.need-next { animation: tapepulse 1.4s ease-in-out infinite; }
+@keyframes tapepulse {
+  50% { box-shadow: inset 0 -3px 0 var(--tape-edge), 0 0 0 3px var(--need), 0 0 22px 7px var(--need-glow); }
+}
+input.need { border-color: var(--need) !important; box-shadow: 0 0 0 2px var(--need-glow); }
+input.need-next { animation: fieldpulse 1.4s ease-in-out infinite; }
+@keyframes fieldpulse { 50% { box-shadow: 0 0 0 4px var(--need-glow), 0 0 16px 4px var(--need-glow); } }
+.todo { display: flex; flex-wrap: wrap; gap: 8px; }
+.todo-btn {
+  appearance: none;
+  padding: 7px 12px;
+  border: 1.5px solid var(--need);
+  border-radius: 6px;
+  background: var(--need-soft);
+  color: var(--need);
+  font-weight: 600;
+  cursor: pointer;
+}
+.sum-need { color: var(--need); font-weight: 600; }
 .tape.is-interp {
   background: repeating-linear-gradient(135deg, var(--well) 0 6px, var(--surface) 6px 12px);
   box-shadow: inset 0 0 0 1px var(--rule);
@@ -490,9 +578,16 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
     <textarea class="copy-fallback" id="copy-fallback" readonly hidden aria-label="Cut list text"></textarea>
   </header>
 
-  <section class="elev" aria-label="Fence elevation">
+  <section class="elev" id="elev-section" aria-label="Fence map and progress">
+    <div class="progress">
+      <div class="pg-top">
+        <span class="pg-count" id="pg-count" aria-live="polite"></span>
+        <button class="pg-next" type="button" id="pg-next"></button>
+      </div>
+      <div class="pg-bar" id="pg-bar" aria-hidden="true"></div>
+    </div>
     <div class="elev-scroll"><svg id="elev" role="img" aria-label="Elevation of the fence run with each sheet and its cut line"></svg></div>
-    <div class="legend"><span><i class="l-rail"></i>Rails</span><span><i class="l-sheet"></i>Sheets</span><span><i class="l-cut"></i>Cut line</span><span>Tap a bay to jump to its cuts</span></div>
+    <div class="legend"><span><i class="l-rail"></i>Rails</span><span><i class="l-sheet"></i>Sheets</span><span><i class="l-cut"></i>Cut line</span><span>Red ? = still to measure. Tap it to jump to its box.</span></div>
   </section>
 
   <details class="panel" id="setup">
@@ -540,6 +635,14 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
         <label class="lbl" for="set-bayWidth">Standard bay width (mm)</label>
         <input type="text" inputmode="decimal" id="set-bayWidth" autocomplete="off">
         <small>Post face to post face, where the first and last sheet edges sit. Measure your rails if unsure.</small>
+      </div>
+      <div class="field">
+        <span class="lbl">Bay widths</span>
+        <div class="seg" role="radiogroup" aria-label="Bay widths">
+          <label><input type="radio" name="widthMode" id="set-width-each" value="each"><span>Measure every bay</span></label>
+          <label><input type="radio" name="widthMode" id="set-width-standard" value="standard"><span>Standard unless entered</span></label>
+        </div>
+        <small>When post spacing varies, every bay's width is asked for. Choose standard only when the posts are evenly spaced.</small>
       </div>
       <div class="field">
         <label class="lbl" for="set-sheetsPerBay">Sheets in a standard bay</label>
@@ -670,7 +773,8 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
     allowance: 0,       // added to every reading to turn it into a sheet length
     stock: 0,           // stock sheet length; 0 = unknown
     floatTol: 5,        // largest corner gap accepted at a square end
-    spreadTol: 20       // an odd bay within this of a whole sheet count is spread, not ripped
+    spreadTol: 20,      // an odd bay within this of a whole sheet count is spread, not ripped
+    widthMode: 'standard' // 'standard': a blank bay width means the standard bay; 'each': every width must be entered
   });
 
   function num(v) {
@@ -688,6 +792,8 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
     if (r.mode === 'gap' || r.mode === 'string') s.mode = r.mode;
     if (['top', 'bottom', 'raked'].indexOf(r.levelRail) >= 0) s.levelRail = r.levelRail;
     if (r.topRiseDir === 'up' || r.topRiseDir === 'down') s.topRiseDir = r.topRiseDir;
+    if (r.widthMode === 'each' || r.widthMode === 'standard') s.widthMode = r.widthMode;
+    s.topRiseUnset = num(r.topRise) === null;       // a raked rail can't be drawn without its rise
     if (['auto', 'bottom', 'top', 'both'].indexOf(r.cutEnds) >= 0) s.cutEnds = r.cutEnds;
     ['bayWidth', 'sheetsPerBay', 'lap', 'allowance', 'stock', 'floatTol', 'spreadTol', 'topRise'].forEach(function (k) {
       var n = num(r[k]);
@@ -867,12 +973,13 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
     var perReading = s.mode === 'string' ? 2 : 1;
     // Raked top rail (gap mode): each bay's rise across one sheet, default or per-bay override.
     var raked = s.mode === 'gap' && s.levelRail === 'raked';
-    var rises = [], tTop = [0];
+    var rises = [], riseMissing = [], tTop = [0];
     for (k = 0; k < nb; k++) {
       var b = bayIn[k] || {};
       var mag = num(b.rise);
       var dir = b.riseDir === 'up' || b.riseDir === 'down' ? b.riseDir : s.topRiseDir;
       var rise = raked ? (mag !== null ? Math.abs(mag) : s.topRise) * (dir === 'down' ? -1 : 1) : 0;
+      riseMissing.push(raked && mag === null && s.topRiseUnset);
       rises.push(rise);
       tTop.push(tTop[k] + rise / s.sheetWidth * Math.max(0, widths[k]));
     }
@@ -883,7 +990,7 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
       var skip = inner && !!p.skip && !step;
       var left = skip ? null : railsAt(p, s, tTop[i]);
       var right = skip ? null : step ? railsAt({ g: p.g2, t: p.t2, b: p.b2 }, s, tTop[i]) : left;
-      return { x: X[i], step: step, skip: skip, interp: false, left: left, right: right,
+      return { x: X[i], tTop: tTop[i], step: step, skip: skip, interp: false, left: left, right: right,
                readings: skip ? 0 : (step ? 2 : 1) * perReading };
     });
     st.forEach(function (p, i) {
@@ -903,15 +1010,17 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
     var bays = [];
     for (k = 0; k < nb; k++) {
       var r0 = st[k].right, r1 = st[k + 1].left, bay;
-      if (!r0 || !r1) {
-        var need = [];
-        [[k, r0], [k + 1, r1]].forEach(function (e) {
-          if (e[1]) return;
-          need.push(st[e[0]].skip
-            ? 'P' + (e[0] + 1) + ' takes its value from the posts either side. Enter those first.'
-            : 'Enter the reading' + (perReading > 1 ? 's' : '') + ' at P' + (e[0] + 1) + '.');
-        });
-        bay = { width: widths[k], errors: need, warnings: [], sheets: [], stacks: [], chalk: null, mode: null, delta: 0 };
+      var need = [];
+      [[k, r0], [k + 1, r1]].forEach(function (e) {
+        if (e[1]) return;
+        need.push(st[e[0]].skip
+          ? 'P' + (e[0] + 1) + ' takes its value from the posts either side. Enter those first.'
+          : 'Enter the reading' + (perReading > 1 ? 's' : '') + ' at P' + (e[0] + 1) + '.');
+      });
+      if (s.widthMode === 'each' && assumed[k]) need.push('Enter the width of bay ' + (k + 1) + '.');
+      if (riseMissing[k]) need.push('Enter the top rail\'s rise across one sheet in Setup.');
+      if (need.length) {
+        bay = { width: widths[k], errors: need, missing: true, warnings: [], sheets: [], stacks: [], chalk: null, mode: null, delta: 0 };
       } else {
         bay = planBay(widths[k], r0, r1, s);
       }
@@ -945,8 +1054,8 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
   var MINUS = '−';
   var SETTING_KEYS = ['bayWidth', 'sheetsPerBay', 'lap', 'allowance', 'stock', 'floatTol', 'spreadTol', 'topRise'];
   var DEFAULT_SETTINGS = {
-    mode: 'gap', levelRail: 'top', cutEnds: 'auto', topRiseDir: 'up',
-    bayWidth: '2365', sheetsPerBay: '3', lap: '0', allowance: '0', stock: '', floatTol: '5', spreadTol: '20', topRise: '0'
+    mode: 'gap', levelRail: 'top', cutEnds: 'auto', topRiseDir: 'up', widthMode: 'each',
+    bayWidth: '2365', sheetsPerBay: '3', lap: '0', allowance: '0', stock: '', floatTol: '5', spreadTol: '20', topRise: ''
   };
   var UP = '\u2197', DOWN = '\u2198';
 
@@ -962,7 +1071,7 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
     var posts = ['1500', '1440', '1470', '1520'].map(function (g) { var p = blankPost(); p.g = g; return p; });
     var settings = Object.assign({}, DEFAULT_SETTINGS, { levelRail: 'raked', topRise: '30', topRiseDir: 'up' });
     return { v: 1, example: true, settings: settings, posts: posts,
-             bays: [blankBay(), blankBay(), Object.assign(blankBay(), { width: '1400' })] };
+             bays: ['2365', '2350', '1400'].map(function (w) { return Object.assign(blankBay(), { width: w }); }) };
   }
   function normalize(j) {
     var out = { v: 1, example: !!j.example, settings: Object.assign({}, DEFAULT_SETTINGS), posts: [], bays: [] };
@@ -1000,6 +1109,78 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
 
   var job = load();
   var plan = C.planRun(job);
+  var reqItems = [], nextItem = null, focusedId = null;
+
+  /* ---------- what still has to be measured, in walking order ---------- */
+  function sideTxt(side) { return side === 'L' ? ', left side' : side === 'R' ? ', right side' : ''; }
+  function requiredItems() {
+    var s = job.settings, items = [], n = job.posts.length;
+    if (s.mode === 'gap' && s.levelRail === 'raked' && job.bays.some(function (b) { return C.num(b.rise) === null; })) {
+      items.push({ id: 'set-topRise', kind: 'rise', label: '\u2195 Top rail rise across one sheet', short: 'rise \u2195',
+                   filled: C.num(s.topRise) !== null });
+    }
+    job.posts.forEach(function (p, k) {
+      var inner = k > 0 && k < n - 1;
+      var step = inner && p.step, skip = inner && p.skip && !step;
+      if (!skip) {
+        (step ? [['', 'L'], ['2', 'R']] : [['', 'B']]).forEach(function (g) {
+          (s.mode === 'string' ? ['t', 'b'] : ['g']).forEach(function (f) {
+            var key = f + g[0];
+            items.push({ id: 'p' + k + '-' + key, post: k, side: g[1],
+              label: s.mode === 'string'
+                ? '\u2195 P' + (k + 1) + ' string down to ' + (f === 't' ? 'top' : 'bottom') + ' rail' + sideTxt(g[1])
+                : '\u2195 Vertical gap at P' + (k + 1) + sideTxt(g[1]),
+              short: 'P' + (k + 1) + ' \u2195', filled: C.num(p[key]) !== null });
+          });
+        });
+      }
+      if (k < n - 1 && s.widthMode === 'each') {
+        items.push({ id: 'b' + k + '-w', bay: k, label: '\u2194 Width of bay ' + (k + 1), short: 'width \u2194',
+                     filled: C.num(job.bays[k].width) !== null });
+      }
+    });
+    return items;
+  }
+  function missingForBay(k) {
+    var seen = {};
+    return reqItems.filter(function (it) {
+      if (it.filled) return false;
+      var hit = it.kind === 'rise' ? C.num(job.bays[k].rise) === null
+        : it.bay === k || (it.post === k && it.side !== 'L') || (it.post === k + 1 && it.side !== 'R');
+      if (!hit || seen[it.short]) return false;
+      seen[it.short] = true;
+      return true;
+    });
+  }
+  function paintNeeds() {
+    Array.prototype.forEach.call(document.querySelectorAll('.need, .need-next'), function (el) { el.classList.remove('need', 'need-next'); });
+    reqItems.forEach(function (it) {
+      if (it.filled) return;
+      var el = document.getElementById(it.id);
+      if (!el) return;
+      var box = el.closest('.tape') || el;
+      box.classList.add('need');
+      if (nextItem && it.id === nextItem.id) box.classList.add('need-next');
+    });
+  }
+  function renderProgress() {
+    var total = reqItems.length, done = reqItems.filter(function (i) { return i.filled; }).length;
+    var ready = plan.bays.filter(function (b) { return !b.errors.length; }).length;
+    $('#pg-count').innerHTML = '<b>' + done + '</b> of ' + total + ' measured · <b>' + ready + '</b> of ' + plan.bays.length + ' ' + plural(plan.bays.length, 'bay', 'bays') + ' ready';
+    var btn = $('#pg-next');
+    if (nextItem) { btn.textContent = 'Next: ' + nextItem.label + ' \u2192'; btn.className = 'pg-next'; }
+    else { btn.textContent = 'All measured. Cut list ready \u2193'; btn.className = 'pg-next is-done'; }
+    $('#pg-bar').innerHTML = reqItems.map(function (it) {
+      return '<span class="' + (it.filled ? 'f' : nextItem && it.id === nextItem.id ? 'n' : 'm') + '"></span>';
+    }).join('');
+  }
+  function focusTarget(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    if (id.indexOf('set-') === 0) $('#setup').open = true;
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    try { el.focus({ preventScroll: true }); } catch (e) { el.focus(); }
+  }
 
   /* ---------- readings list ---------- */
   function tapeField(id, label, value) {
@@ -1070,7 +1251,12 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
     plan.bays.forEach(function (bay, k) {
       var el = document.getElementById('bd' + k);
       if (!el) return;
-      if (bay.errors.length) { el.textContent = 'waiting on readings'; el.className = 'bay-derived is-wait'; return; }
+      if (bay.errors.length) {
+        var miss = missingForBay(k);
+        el.textContent = miss.length ? 'waiting on ' + miss.map(function (m) { return m.short; }).join(', ') : 'check the readings';
+        el.className = 'bay-derived is-wait';
+        return;
+      }
       var n = bay.sheets.length;
       var rip = bay.sheets.some(function (s) { return s.rip > 0; });
       el.className = 'bay-derived';
@@ -1097,15 +1283,14 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
     var t = plan.totals;
     var html = '<span class="chip"><b>' + t.bays + '</b>' + plural(t.bays, 'bay', 'bays') + '</span>' +
       '<span class="chip"><b>' + t.sheets + '</b>' + plural(t.sheets, 'sheet', 'sheets') + '</span>' +
-      '<span class="chip"><b>' + t.readings + '</b>tape ' + plural(t.readings, 'reading', 'readings') + '</span>';
-    if (t.waiting) html += '<span class="chip is-wait"><b>' + t.waiting + '</b>' + plural(t.waiting, 'bay needs', 'bays need') + ' readings</span>';
+      '<span class="chip"><b>' + reqItems.length + '</b>' + plural(reqItems.length, 'measurement', 'measurements') + '</span>';
     $('#summary').innerHTML = html;
     $('#example-banner').hidden = !job.example;
     var s = plan.settings;
     var how = s.mode === 'string'
       ? 'Type each measurement into the <b>yellow boxes</b> below. Set a level string line along the run. At each post, measure <b>down from the string</b> to the top rail and to the bottom rail. Measure each bay\'s <b>width</b> too if the posts aren\'t evenly spaced.'
       : 'The yellow boxes take the <b>vertical</b> gap at each post: tape held upright, from the top of the bottom rail to the underside of the top rail, right beside the post. ' +
-        (s.levelRail === 'raked' ? 'The top rail is raked, ' + (s.topRiseDir === 'down' ? 'falling ' : 'rising ') + mm(s.topRise) + ' mm across a sheet to the right.'
+        (s.levelRail === 'raked' ? (s.topRiseUnset ? 'The top rail is raked: enter its rise in Setup.' : 'The top rail is raked, ' + (s.topRiseDir === 'down' ? 'falling ' : 'rising ') + mm(s.topRise) + ' mm across a sheet to the right.')
           : 'The ' + (s.levelRail === 'top' ? 'top' : 'bottom') + ' rail is level.');
     how += ' The only side-to-side measurement is each bay\'s <b>width</b>, post face to post face, which goes in its Width box. A corner is just another post.';
     if (s.allowance) how += ' ' + mm(s.allowance) + ' mm gets added to each reading.';
@@ -1115,6 +1300,8 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
         : s.levelRail === 'raked' ? 'Top rail raked ' + (s.topRiseDir === 'down' ? DOWN : UP) + mm(s.topRise)
         : s.levelRail === 'top' ? 'Top rail level' : 'Bottom rail level') +
       ' · ' + mm(s.bayWidth) + ' mm bay · ' + s.sheetsPerBay + ' sheets · cut ' + s.cutEnds;
+    var riseItem = reqItems.filter(function (i) { return i.kind === 'rise'; })[0];
+    if (riseItem && !riseItem.filled) $('#setup-note').innerHTML = '<span class="sum-need">Needs the top rail rise</span> · ' + esc($('#setup-note').textContent);
     $('#cover-note').textContent = 'Each sheet covers ' + (Math.round(s.cover * 10) / 10) + ' mm of fence, ' + (Math.round(s.sheetWidth * 10) / 10) + ' mm wide with its lap.';
   }
 
@@ -1174,9 +1361,14 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
   function cardHTML(bay, k) {
     var head = '<h3>Bay ' + (k + 1) + '<small>P' + (k + 1) + ' → P' + (k + 2) + '</small></h3>';
     if (bay.errors.length) {
+      var miss = missingForBay(k);
+      var body = miss.length
+        ? '<p>Still to measure for this bay:</p><div class="todo">' + miss.map(function (m) {
+            return '<button type="button" class="todo-btn" data-target="' + m.id + '">' + esc(m.label) + ' \u2192</button>';
+          }).join('') + '</div>'
+        : bay.errors.map(function (e) { return '<p class="err">' + esc(e) + '</p>'; }).join('');
       return '<article class="card" id="bay-card-' + k + '"><header class="card-head">' + head +
-        '<span class="pill m-error">Needs readings</span></header><div class="card-body">' +
-        bay.errors.map(function (e) { return '<p class="err">' + esc(e) + '</p>'; }).join('') + '</div></article>';
+        '<span class="pill m-error">' + (miss.length ? 'Waiting' : 'Check readings') + '</span></header><div class="card-body">' + body + '</div></article>';
     }
     var n = bay.sheets.length;
     var ripSheet = bay.sheets.filter(function (s) { return s.rip > 0.5; })[0];
@@ -1240,80 +1432,189 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
       '<p class="note">Add a bay to get started.</p>';
   }
 
-  /* ---------- elevation ---------- */
+  /* ---------- the map: fills in as measurements arrive ---------- */
+  function avg(a) { return a.reduce(function (x, y) { return x + y; }, 0) / a.length; }
+  function pill(x, y, text, minW) {
+    var w = Math.max(minW || 0, text.length * 6.6 + 10);
+    return '<rect class="pill" x="' + (x - w / 2).toFixed(1) + '" y="' + (y - 8) + '" width="' + w.toFixed(1) + '" height="16" rx="8"/>' +
+      '<text class="pt" x="' + x + '" y="' + (y + 3.8) + '" text-anchor="middle">' + esc(text) + '</text>';
+  }
   function drawElevation() {
     var svg = $('#elev');
     var st = plan.stations, X = plan.X, s = plan.settings;
+    var gapMode = s.mode === 'gap';
+    var itemById = {};
+    reqItems.forEach(function (it) { itemById[it.id] = it; });
+    var nextId = nextItem ? nextItem.id : null;
+
+    // Anything not measured yet is drawn at a nominal size so the whole run shows from the start.
+    var gaps = [], tops = [];
+    st.forEach(function (p) { [p.left, p.right].forEach(function (r) { if (r) { gaps.push(r.T - r.B); tops.push(r.T); } }); });
+    var gNom = gaps.length ? avg(gaps) : (s.stock > 0 ? s.stock : 1500);
+    var tNom = tops.length ? avg(tops) : 0;
+    function rails(p, side) {
+      var r = side === 'L' ? p.left : p.right;
+      if (r) return { T: r.T, B: r.B, known: true };
+      if (gapMode && s.levelRail === 'bottom') return { T: gNom, B: 0, known: false };
+      var T = gapMode ? p.tTop : tNom;
+      return { T: T, B: T - gNom, known: false };
+    }
     var hi = -Infinity, lo = Infinity;
-    st.forEach(function (p) { [p.left, p.right].forEach(function (r) { if (r) { hi = Math.max(hi, r.T); lo = Math.min(lo, r.B); } }); });
-    if (!isFinite(hi)) { hi = 0; lo = -1500; }
+    st.forEach(function (p) { ['L', 'R'].forEach(function (sd) { var r = rails(p, sd); hi = Math.max(hi, r.T); lo = Math.min(lo, r.B); }); });
     if (hi - lo < 600) lo = hi - 600;
-    var below = 160, padT = 30, padB = 44, padX = 30;
+
+    var narrow = window.innerWidth < 700;
+    var below = 120, padT = 30, padB = 46, padX = 34;
     var total = X[X.length - 1] || s.bayWidth;
     var span = hi - lo + below;
-    var k = 176 / span;                                   // 250 px tall by default
+    var k = (narrow ? 104 : 150) / span;
     var room = svg.parentNode.clientWidth - 24 - padX * 2;
-    if (room > total * k) k = Math.min(room / total, 340 / span);   // widen to fit, up to ~414 px tall
+    if (!narrow && room > total * k) k = Math.min(room / total, 220 / span);
     var H = Math.round(span * k + padT + padB);
     var Wpx = Math.round(total * k + padX * 2);
     function sx(x) { return +(padX + x * k).toFixed(1); }
     function sy(y) { return +(padT + (hi - y) * k).toFixed(1); }
+    var pw = Math.max(5, 50 * k);
     var out = '';
+
+    function measState(ids, known) {
+      var filled = ids.every(function (id) { return itemById[id] ? itemById[id].filled : known; });
+      var target = ids.filter(function (id) { return itemById[id] && !itemById[id].filled; })[0] || ids[0];
+      var cls = filled ? 'ok' : 'need';
+      if (ids.indexOf(nextId) >= 0) cls += ' next';
+      if (ids.indexOf(focusedId) >= 0) cls += ' focused';
+      return { cls: cls, target: target, filled: filled };
+    }
+    function vArrow(x, yTop, yBot, cls, target, ids, label) {
+      var mid = (yTop + yBot) / 2;
+      return '<g class="meas ' + cls + '" data-target="' + target + '" data-fields="' + ids.join(' ') + '" data-x="' + x + '">' +
+        '<rect class="mhit" x="' + (x - 14) + '" y="' + yTop + '" width="28" height="' + Math.max(1, yBot - yTop) + '"/>' +
+        '<line x1="' + x + '" y1="' + (yTop + 5) + '" x2="' + x + '" y2="' + (yBot - 5) + '"/>' +
+        '<polygon points="' + x + ',' + yTop + ' ' + (x - 3.5) + ',' + (yTop + 7) + ' ' + (x + 3.5) + ',' + (yTop + 7) + '"/>' +
+        '<polygon points="' + x + ',' + yBot + ' ' + (x - 3.5) + ',' + (yBot - 7) + ' ' + (x + 3.5) + ',' + (yBot - 7) + '"/>' +
+        pill(x, mid, label, 18) + '</g>';
+    }
+
     plan.bays.forEach(function (bay, i) {
-      var x0 = X[i], x1 = X[i + 1];
-      out += '<g class="bay-g" data-k="' + i + '" tabindex="0" role="link" aria-label="Bay ' + (i + 1) + ' cuts">';
+      var x0 = X[i], x1 = X[i + 1], W = Math.max(1, x1 - x0);
+      var a = rails(st[i], 'R'), b = rails(st[i + 1], 'L');
+      var ok = !bay.errors.length && bay.sheets.length;
+      var cx = (sx(x0) + sx(x1)) / 2;
+      out += '<g class="bay-g" data-k="' + i + '" tabindex="0" role="link" aria-label="Bay ' + (i + 1) + (ok ? ' cuts' : ' measurements') + '">';
       out += '<rect class="hit" x="' + sx(x0) + '" y="' + (padT - 8) + '" width="' + Math.max(1, sx(x1) - sx(x0)) + '" height="' + (H - padT - 16) + '"/>';
-      if (bay.errors.length || !bay.sheets.length) {
-        out += '<rect class="missing" x="' + (sx(x0) + 6) + '" y="' + sy(hi) + '" width="' + Math.max(1, sx(x1) - sx(x0) - 12) + '" height="' + Math.max(1, sy(lo) - sy(hi)) + '"/>';
-        out += '<text class="q" x="' + ((sx(x0) + sx(x1)) / 2) + '" y="' + ((sy(hi) + sy(lo)) / 2 + 8) + '" text-anchor="middle">?</text>';
-      } else {
+      if (ok) {
         var cutTop = bay.mode === 'top' || bay.mode === 'both';
         var cutBot = bay.mode === 'bottom' || bay.mode === 'both';
         bay.sheets.forEach(function (sh, j) {
-          var a = x0 + sh.a, b = x0 + sh.b;
-          out += '<polygon class="sheet' + (j % 2 ? ' alt' : '') + '" points="' + sx(a) + ',' + sy(sh.bot[0]) + ' ' + sx(b) + ',' + sy(sh.bot[1]) + ' ' +
-            sx(b) + ',' + sy(sh.top[1]) + ' ' + sx(a) + ',' + sy(sh.top[0]) + '"/>';
+          var xa = x0 + sh.a, xb = x0 + sh.b;
+          out += '<polygon class="sheet' + (j % 2 ? ' alt' : '') + '" points="' + sx(xa) + ',' + sy(sh.bot[0]) + ' ' + sx(xb) + ',' + sy(sh.bot[1]) + ' ' +
+            sx(xb) + ',' + sy(sh.top[1]) + ' ' + sx(xa) + ',' + sy(sh.top[0]) + '"/>';
           for (var q = 1; q < 6; q++) {
-            var f = q / 6, xr = a + (b - a) * f;
+            var f = q / 6, xr = xa + (xb - xa) * f;
             out += '<line class="rib" x1="' + sx(xr) + '" y1="' + sy(sh.bot[0] + (sh.bot[1] - sh.bot[0]) * f) + '" x2="' + sx(xr) + '" y2="' + sy(sh.top[0] + (sh.top[1] - sh.top[0]) * f) + '"/>';
           }
-          if (cutTop) out += '<line class="cut" x1="' + sx(a) + '" y1="' + sy(sh.top[0]) + '" x2="' + sx(b) + '" y2="' + sy(sh.top[1]) + '"/>';
-          if (cutBot) out += '<line class="cut" x1="' + sx(a) + '" y1="' + sy(sh.bot[0]) + '" x2="' + sx(b) + '" y2="' + sy(sh.bot[1]) + '"/>';
+          if (cutTop) out += '<line class="cut" x1="' + sx(xa) + '" y1="' + sy(sh.top[0]) + '" x2="' + sx(xb) + '" y2="' + sy(sh.top[1]) + '"/>';
+          if (cutBot) out += '<line class="cut" x1="' + sx(xa) + '" y1="' + sy(sh.bot[0]) + '" x2="' + sx(xb) + '" y2="' + sy(sh.bot[1]) + '"/>';
         });
         var R = bay.rails;
         out += '<line class="rail" x1="' + sx(x0) + '" y1="' + (sy(R.T0) - 2) + '" x2="' + sx(x1) + '" y2="' + (sy(R.T1) - 2) + '"/>';
         out += '<line class="rail" x1="' + sx(x0) + '" y1="' + (sy(R.B0) + 2) + '" x2="' + sx(x1) + '" y2="' + (sy(R.B1) + 2) + '"/>';
+      } else {
+        // Not enough to calculate yet: dashed sheets where they will go, and what the bay is waiting on.
+        var at = function (x, A, B) { return A + (B - A) * (x - x0) / W; };
+        C.layoutSheets(W, s).spans.forEach(function (sp) {
+          var xa = x0 + sp.a, xb = x0 + sp.b;
+          out += '<polygon class="ghost" points="' + sx(xa) + ',' + sy(at(xa, a.B, b.B)) + ' ' + sx(xb) + ',' + sy(at(xb, a.B, b.B)) + ' ' +
+            sx(xb) + ',' + sy(at(xb, a.T, b.T)) + ' ' + sx(xa) + ',' + sy(at(xa, a.T, b.T)) + '"/>';
+        });
+        out += '<line class="rail ghost" x1="' + sx(x0) + '" y1="' + (sy(a.T) - 2) + '" x2="' + sx(x1) + '" y2="' + (sy(b.T) - 2) + '"/>';
+        out += '<line class="rail ghost" x1="' + sx(x0) + '" y1="' + (sy(a.B) + 2) + '" x2="' + sx(x1) + '" y2="' + (sy(b.B) + 2) + '"/>';
       }
-      out += '<text class="blabel" x="' + ((sx(x0) + sx(x1)) / 2) + '" y="' + (H - 8) + '" text-anchor="middle">Bay ' + (i + 1) + '</text>';
+      // Raked top rail: its rise per sheet, or a red marker when it hasn't been given.
+      if (gapMode && s.levelRail === 'raked') {
+        var riseKnown = C.num(job.bays[i].rise) !== null || !s.topRiseUnset;
+        var rx = sx(x0 + W * 0.78), ry = sy(a.T + (b.T - a.T) * 0.78) + 14;
+        var rid = C.num(job.bays[i].rise) !== null ? 'b' + i + '-rise' : 'set-topRise';
+        var rcls = riseKnown ? 'std' : 'need' + (nextId === 'set-topRise' ? ' next' : '');
+        if (focusedId === rid) rcls += ' focused';
+        out += '<g class="meas ' + rcls + '" data-target="' + rid + '" data-fields="' + rid + '" data-x="' + rx + '">' +
+          pill(rx, ry, riseKnown ? (bay.rise < 0 ? DOWN : UP) + mm(Math.abs(bay.rise)) : 'rise?', 30) + '</g>';
+      }
+      // Width, measured side to side under the bay.
+      var wid = 'b' + i + '-w', wItem = itemById[wid];
+      var wFilled = C.num(job.bays[i].width) !== null;
+      var wcls = wItem && !wItem.filled ? 'need' : wFilled ? 'ok' : 'std';
+      if (nextId === wid) wcls += ' next';
+      if (focusedId === wid) wcls += ' focused';
+      var dy = H - padB + 14, dx0 = sx(x0) + pw / 2 + 2, dx1 = sx(x1) - pw / 2 - 2;
+      out += '<g class="meas ' + wcls + '" data-target="' + wid + '" data-fields="' + wid + '" data-x="' + cx + '">' +
+        '<rect class="mhit" x="' + dx0 + '" y="' + (dy - 12) + '" width="' + Math.max(1, dx1 - dx0) + '" height="24"/>' +
+        '<line x1="' + (dx0 + 5) + '" y1="' + dy + '" x2="' + (dx1 - 5) + '" y2="' + dy + '"/>' +
+        '<polygon points="' + dx0 + ',' + dy + ' ' + (dx0 + 7) + ',' + (dy - 3.5) + ' ' + (dx0 + 7) + ',' + (dy + 3.5) + '"/>' +
+        '<polygon points="' + dx1 + ',' + dy + ' ' + (dx1 - 7) + ',' + (dy - 3.5) + ' ' + (dx1 - 7) + ',' + (dy + 3.5) + '"/>' +
+        pill(cx, dy, wItem && !wItem.filled ? 'width?' : mm(W) + (wFilled ? '' : ' std'), 30) + '</g>';
+      out += '<text class="blabel' + (ok ? '' : ' waiting') + '" x="' + cx + '" y="' + (padT - 14) + '" text-anchor="middle">Bay ' + (i + 1) + '</text>';
       out += '</g>';
     });
+
     st.forEach(function (p, i) {
-      var rs = [p.left, p.right].filter(Boolean);
-      var top = rs.length ? Math.max.apply(null, rs.map(function (r) { return r.T; })) : hi;
-      var bot = rs.length ? Math.min.apply(null, rs.map(function (r) { return r.B; })) : lo;
-      var pw = Math.max(5, 50 * k);
+      var L = rails(p, 'L'), R = rails(p, 'R');
+      var top = Math.max(L.T, R.T), bot = Math.min(L.B, R.B);
       out += '<rect class="post" x="' + (sx(p.x) - pw / 2).toFixed(1) + '" y="' + (sy(top) - 4) + '" width="' + pw.toFixed(1) + '" height="' + ((top - (bot - below)) * k + 4).toFixed(1) + '"/>';
-      out += '<text class="plabel" x="' + sx(p.x) + '" y="' + (padT - 12) + '" text-anchor="middle">P' + (i + 1) + '</text>';
-      var label = '';
-      if (rs.length) {
-        var gl = p.left ? p.left.T - p.left.B : null, gr = p.right ? p.right.T - p.right.B : null;
-        label = (p.interp ? '~' : '') + (p.step && gl !== null && gr !== null ? mm(gl) + '|' + mm(gr) : mm(gl !== null ? gl : gr));
+      out += '<text class="plabel" x="' + sx(p.x) + '" y="' + (padT - 14) + '" text-anchor="middle">P' + (i + 1) + '</text>';
+      // The vertical gap at the post: red until measured, then its value.
+      var last = i === st.length - 1;
+      var fields = gapMode ? ['g'] : ['t', 'b'];
+      var sides = p.skip ? [] : p.step ? [['L', ''], ['R', '2']] : [[last ? 'L' : 'R', '']];
+      sides.forEach(function (sd) {
+        var r = rails(p, sd[0]);
+        var ids = fields.map(function (f) { return 'p' + i + '-' + f + sd[1]; });
+        var m = measState(ids, r.known);
+        var x = sx(p.x) + (sd[0] === 'L' ? -1 : 1) * (pw / 2 + 9);
+        var val = gapMode ? C.num(job.posts[i]['g' + sd[1]]) : (r.known ? r.T - r.B - s.allowance : null);
+        out += vArrow(x, sy(r.T), sy(r.B), m.cls, m.target, ids, m.filled && val !== null ? mm(val) : '?');
+      });
+      if (p.skip) {
+        var ri = rails(p, 'R');
+        var idsI = fields.map(function (f) { return 'p' + i + '-' + f; });
+        out += vArrow(sx(p.x) + pw / 2 + 9, sy(ri.T), sy(ri.B), 'interp', idsI[0], idsI, p.interp ? '~' + mm(ri.T - ri.B - s.allowance) : '~');
       }
-      out += '<text x="' + sx(p.x) + '" y="' + (sy(bot - below) + 14) + '" text-anchor="middle">' + esc(label) + '</text>';
     });
     svg.setAttribute('viewBox', '0 0 ' + Wpx + ' ' + H);
     svg.setAttribute('width', Wpx);
     svg.setAttribute('height', H);
     svg.innerHTML = out;
   }
+  function scrollMapTo(id) {
+    var m = $('#elev').querySelector('[data-fields~="' + id + '"]');
+    if (!m) return;
+    var box = $('#elev').parentNode;
+    var x = +m.getAttribute('data-x');
+    if (x < box.scrollLeft + 40 || x > box.scrollLeft + box.clientWidth - 40) {
+      box.scrollTo({ left: Math.max(0, x - box.clientWidth / 2), behavior: 'smooth' });
+    }
+  }
+  function markFocused() {
+    Array.prototype.forEach.call($('#elev').querySelectorAll('[data-fields]'), function (m) {
+      m.classList.toggle('focused', !!focusedId && m.getAttribute('data-fields').split(' ').indexOf(focusedId) >= 0);
+    });
+  }
+  function syncMapHeight() {
+    document.documentElement.style.setProperty('--elev-h', $('#elev-section').offsetHeight + 'px');
+  }
 
   /* ---------- update cycle ---------- */
   function update() {
     plan = C.planRun(job);
+    reqItems = requiredItems();
+    nextItem = reqItems.filter(function (i) { return !i.filled; })[0] || null;
     renderSummary();
     renderRunDerived();
+    paintNeeds();
+    renderProgress();
     renderCards();
     drawElevation();
+    syncMapHeight();
     save();
   }
   function touched() { if (job.example) job.example = false; }
@@ -1327,7 +1628,7 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
   /* ---------- setup panel ---------- */
   function syncSetup() {
     var s = job.settings;
-    ['mode', 'levelRail', 'cutEnds', 'topRiseDir'].forEach(function (name) {
+    ['mode', 'levelRail', 'cutEnds', 'topRiseDir', 'widthMode'].forEach(function (name) {
       document.querySelectorAll('input[name="' + name + '"]').forEach(function (r) { r.checked = r.value === s[name]; });
     });
     SETTING_KEYS.forEach(function (key) { var el = document.getElementById('set-' + key); if (el) el.value = s[key]; });
@@ -1386,12 +1687,31 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
     touched();
     update();
   });
-  run.addEventListener('keydown', function (e) {
+  document.addEventListener('keydown', function (e) {
     if (e.key !== 'Enter' || e.target.tagName !== 'INPUT' || e.target.type !== 'text') return;
+    var ids = reqItems.map(function (i) { return i.id; });
+    var at = ids.indexOf(e.target.id);
+    if (at < 0 && !/^b\d+-(w|rise)$/.test(e.target.id)) return;
     e.preventDefault();
-    var fields = Array.prototype.filter.call(run.querySelectorAll('.tape input'), function (el) { return !el.disabled; });
-    var i = fields.indexOf(e.target);
-    if (i >= 0 && i < fields.length - 1) fields[i + 1].focus(); else e.target.blur();
+    var open = reqItems.filter(function (it, j) { return !it.filled && it.id !== e.target.id && j > at; })[0] ||
+               reqItems.filter(function (it) { return !it.filled && it.id !== e.target.id; })[0];
+    if (open) focusTarget(open.id); else e.target.blur();
+  });
+  document.addEventListener('focusin', function (e) {
+    var id = e.target.id || '';
+    if (!/^(p\d+-[gtb]2?|b\d+-(w|rise)|set-topRise)$/.test(id)) return;
+    focusedId = id;
+    markFocused();
+    scrollMapTo(id);
+  });
+  document.addEventListener('focusout', function () { focusedId = null; markFocused(); });
+  $('#pg-next').addEventListener('click', function () {
+    if (nextItem) focusTarget(nextItem.id);
+    else $('#cuts-h').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+  $('#cards').addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('.todo-btn');
+    if (b) focusTarget(b.getAttribute('data-target'));
   });
   $('#add-bay').addEventListener('click', function () {
     job.posts.push(blankPost());
@@ -1431,14 +1751,22 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
     void card.offsetWidth;
     card.classList.add('flash');
   }
+  function openBay(k) {
+    if (!plan.bays[k]) return;
+    if (!plan.bays[k].errors.length) { jumpToBay(k); return; }
+    var miss = missingForBay(k);
+    if (miss.length) focusTarget(miss[0].id); else jumpToBay(k);
+  }
   $('#elev').addEventListener('click', function (e) {
+    var m = e.target.closest && e.target.closest('[data-target]');
+    if (m) { focusTarget(m.getAttribute('data-target')); return; }
     var g = e.target.closest && e.target.closest('.bay-g');
-    if (g) jumpToBay(+g.getAttribute('data-k'));
+    if (g) openBay(+g.getAttribute('data-k'));
   });
   $('#elev').addEventListener('keydown', function (e) {
     if (e.key !== 'Enter' && e.key !== ' ') return;
     var g = e.target.closest && e.target.closest('.bay-g');
-    if (g) { e.preventDefault(); jumpToBay(+g.getAttribute('data-k')); }
+    if (g) { e.preventDefault(); openBay(+g.getAttribute('data-k')); }
   });
 
   /* ---------- new job / copy ---------- */
@@ -1503,7 +1831,7 @@ footer { color: var(--ink-2); font-size: 0.85rem; max-width: 75ch; }
   var lastW = 0;
   window.addEventListener('resize', function () {
     var w = $('#elev').parentNode.clientWidth;
-    if (w !== lastW) { lastW = w; drawElevation(); }
+    if (w !== lastW) { lastW = w; drawElevation(); syncMapHeight(); }
   });
 
   /* ---------- boot ---------- */

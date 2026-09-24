@@ -187,6 +187,19 @@ const between = (lo, hi) => lo + (hi - lo) * rnd();
         [p.bays[0].assumedWidth, p.bays[1].assumedWidth]);
 }
 
+// 9d. Required inputs: widths when every bay is measured, and a raked rail's rise.
+{
+  const each = C.planRun({ settings: { widthMode: 'each' }, posts: [post(1500), post(1560), post(1580)], bays: [{ width: '' }, { width: '2100' }] });
+  check('widthMode each: blank width blocks the bay', each.bays[0].errors.some(e => /width of bay 1/.test(e)), each.bays[0].errors);
+  check('widthMode each: entered width computes', each.bays[1].errors.length === 0 && each.bays[1].sheets.length > 0, each.bays[1].errors);
+  const std = C.planRun({ settings: {}, posts: [post(1500), post(1560)], bays: [{ width: '' }] });
+  check('widthMode standard: blank width uses the standard bay', std.bays[0].errors.length === 0 && std.bays[0].width === 2365);
+  const r = C.planRun({ settings: { levelRail: 'raked', topRise: '' }, posts: [post(1500), post(1560), post(1580)], bays: [{}, { rise: '20' }] });
+  check('raked: missing rise blocks bays without their own', r.bays[0].errors.some(e => /rise/.test(e)), r.bays[0].errors);
+  check('raked: a bay with its own rise still computes', r.bays[1].errors.length === 0, r.bays[1].errors);
+  check('stations carry the top rail height for drawing', r.stations.every(s => typeof s.tTop === 'number'));
+}
+
 // 10. Input parsing.
 {
   check('num: thousands comma', C.num('1,500') === 1500);

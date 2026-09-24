@@ -24,6 +24,14 @@ node apps/fence_cut_calculator/tests/test_core.js
 
 ## Using it
 
+The page guides you. Every measurement it still needs glows red, and the next one
+pulses. The map pinned at the top fills in as values arrive. A red **?** marks each spot
+still to measure, and tapping it jumps to its box. A bay with everything it needs turns
+solid, with its sheets and cut lines. A bay still waiting stays dashed, with its name in
+red. **Next: …** above the map always names the next measurement, and Enter moves
+straight to it. The walking order is: the top rail's rise (if raked), then P1, bay 1's
+width, P2, bay 2's width, and so on.
+
 1. **Setup** (once per job): standard bay width, sheets per bay, and the top rail: level,
    raked, or (rarely) the bottom rail level. Defaults: 2365 mm bay, 3 sheets, top rail
    level. These are placeholders; set them from your own sheets and rails.
