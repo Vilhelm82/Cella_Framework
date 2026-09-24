@@ -216,6 +216,41 @@ const between = (lo, hi) => lo + (hi - lo) * rnd();
   check('wizard: allowance included', near(p.bays[0].sheets[0].lenL, 1510, 1e-9));
 }
 
+// 9f. Top and bottom both cut: the diagonal fixes the top rail, the layout marks hit every sheet.
+{
+  // A known fence: top rail falls 40 across the bay, bottom rail falls 100.
+  const W = 2365, T0 = 0, T1 = -40, g0 = 1500, g1 = 1560;
+  const B1 = T1 - g1, d = Math.sqrt(W * W + (T0 - B1) ** 2);
+  check('diagonal: recovers the top rail fall', near(C.diagonalRise(W, g1, d), T1 - T0, 1e-9), C.diagonalRise(W, g1, d));
+  check('diagonal: shorter than the width is refused', C.diagonalRise(W, g1, W - 1) === null);
+  for (let trial = 0; trial < 200; trial++) {
+    const Wr = between(700, 2600), a0 = between(-300, 300), gA = between(1200, 1900), gB = gA + between(-250, 250);
+    const tA = between(-100, 100), tB = tA + a0, bB = tB - gB;
+    const dr = Math.sqrt(Wr * Wr + (tA - bB) ** 2);
+    const rise = C.diagonalRise(Wr, gB, dr);
+    check('diagonal sweep ' + trial, near(rise, tB - tA, 1e-6), [rise, tB - tA]);
+    const settings = { levelRail: 'raked', topRise: '0', cutEnds: 'both', allowance: '15' };
+    const s = C.resolveSettings(settings);
+    const r = rise / Wr * s.sheetWidth;
+    const bay = C.planRun({ settings, posts: [post(gA), post(gB)],
+      bays: [{ width: Wr, rise: String(Math.abs(r)), riseDir: r < 0 ? 'down' : 'up' }] }).bays[0];
+    check('both ends: mode', bay.mode === 'both', bay.mode);
+    const L = bay.layout, R = bay.rails;
+    const line = (m, x) => m[0] + (m[1] - m[0]) * x / Wr;
+    const hi = Math.max(R.T0, R.T1);
+    bay.sheets.forEach(sh => {
+      [sh.a, sh.b].forEach(x => {
+        const T = R.T0 + (R.T1 - R.T0) * x / Wr, B = R.B0 + (R.B1 - R.B0) * x / Wr;
+        check('layout: top string hits the top rail at x', near(line(L.top, x), hi - T, 1e-9));
+        check('layout: bottom string hits the bottom rail at x', near(line(L.bottom, x), hi - B, 1e-9));
+      });
+    });
+    check('layout: one top mark sits at the factory top', near(Math.min(L.top[0], L.top[1]), 0, 1e-9));
+    check('layout: string lines are the gap (+ allowance) apart at the ends',
+      near(L.bottom[0] - L.top[0], gA + 15, 1e-9) && near(L.bottom[1] - L.top[1], gB + 15, 1e-9));
+  }
+}
+
 // 10. Input parsing.
 {
   check('num: thousands comma', C.num('1,500') === 1500);

@@ -2,7 +2,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Two-Tape Fence Cuts</title>
-<meta name="description" content="Step-by-step cut calculator for sheet metal fencing on sloping ground: measure each post and bay, then mark a whole bay's sheets with two marks and a string line.">
+<meta name="description" content="Step-by-step cut calculator for sheet metal fencing on sloping ground: measure each post and bay, then mark the top and bottom cuts on a whole bay's sheets with two string lines.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
@@ -261,6 +261,12 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
 .sid { font: 700 1.15rem var(--display); letter-spacing: 0.03em; }
 .num { font: 600 1.9rem/1 var(--mono); text-align: right; font-variant-numeric: tabular-nums; }
 .chk { grid-column: 1 / -1; color: var(--ink-2); font-size: 0.9rem; text-align: right; }
+.marks4 { display: grid; grid-template-columns: auto 1fr 1fr; gap: 8px 10px; align-items: baseline; padding: 10px; border-radius: 8px; background: var(--surface); }
+.marks4 .num { text-align: left; font-size: 1.6rem; }
+.marks4 .num small { font: 500 0.75rem var(--body); color: var(--ink-2); }
+.q4 { display: grid; grid-template-columns: auto 1fr 1fr; gap: 2px 14px; align-items: baseline; text-align: right; font: 600 1.2rem/1.2 var(--mono); font-variant-numeric: tabular-nums; }
+.q4 small { font: 500 0.75rem var(--body); color: var(--ink-2); }
+.q4 small:nth-child(3n+1) { text-align: left; }
 .pair { display: flex; justify-content: flex-end; gap: 16px; font: 600 1.35rem/1 var(--mono); font-variant-numeric: tabular-nums; }
 .pair small { font: 500 0.75rem var(--body); color: var(--ink-2); }
 .rip { grid-column: 1 / -1; color: var(--warn); font-weight: 600; font-size: 0.92rem; }
@@ -406,6 +412,11 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
     var g0 = r0.T - r0.B, g1 = r1.T - r1.B;
     out.sT = sT; out.sB = sB; out.g0 = g0; out.g1 = g1;
     out.rails = { T0: r0.T, T1: r1.T, B0: r0.B, B1: r1.B };
+    // Whole bay laid out as fitted, factory tops on one square line: both cut lines run
+    // straight across it. Marks at x = 0 and x = W, measured down from the factory tops,
+    // with the top rail's high end right at the tops.
+    var hiBay = Math.max(r0.T, r1.T);
+    out.layout = { width: W, top: [hiBay - r0.T, hiBay - r1.T], bottom: [hiBay - r0.B, hiBay - r1.B] };
     if (!(g0 > 0) || !(g1 > 0)) { out.errors.push('The gap between the rails has to be more than 0 mm at both posts.'); return out; }
     if (Math.abs(g1 - g0) / W > 0.15) {
       out.warnings.push('The gap changes by ' + Math.round(Math.abs(g1 - g0)) + ' mm across one bay. Check both readings.');
@@ -583,7 +594,15 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
     return { settings: s, stations: st, X: X, bays: bays, totals: totals };
   }
 
-  var api = { DEFAULTS: DEFAULTS, num: num, resolveSettings: resolveSettings, railsAt: railsAt,
+  // Top rail rise across a bay (end minus start) from a tape diagonal: from the underside of
+  // the top rail at the start post to the top of the bottom rail at the end post. With the
+  // bay width W and the end post's gap, the diagonal fixes how the slope splits between rails.
+  function diagonalRise(W, gEnd, d) {
+    if (!(W > 0) || !(d > W) || !(gEnd > 0)) return null;
+    return gEnd - Math.sqrt(d * d - W * W);
+  }
+
+  var api = { DEFAULTS: DEFAULTS, num: num, resolveSettings: resolveSettings, railsAt: railsAt, diagonalRise: diagonalRise,
               layoutSheets: layoutSheets, planBay: planBay, planRun: planRun };
   if (typeof module === 'object' && module.exports) module.exports = api;
   else root.FenceCore = api;
@@ -591,8 +610,8 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
 </script>
 
 <script>
-/* Step-by-step screens. One measurement per screen; the cut list gives two marks per bay
-   (a string between them marks every sheet), or two numbers per sheet. */
+/* Step-by-step screens. One measurement per screen; the cut list gives four marks per bay
+   (two strings mark the top and bottom cuts on every sheet), or four numbers per sheet. */
 (function () {
   'use strict';
   var C = window.FenceCore;
@@ -626,19 +645,30 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
   function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* ignore */ } }
 
   /* ---------- the job, as the calculation core sees it ---------- */
-  // Each sheet's factory top stays square and its bottom is cut. Its length at any edge is
-  // the rail-to-rail gap there, which is fixed by the gaps at the two posts because both
-  // rails are straight, whatever either rail's slope. So the core runs with the gaps alone.
-  function coreJob() {
+  // Both ends of every sheet are cut: the top to the top rail, the bottom to the bottom
+  // rail. The post gaps give each sheet's length; each bay's diagonal says how the slope
+  // splits between the rails (the top rail's rise across the bay).
+  function baseSettings() {
     var su = state.job.setup;
+    return { mode: 'gap', levelRail: 'raked', topRise: '0', cutEnds: 'both', widthMode: 'each',
+             bayWidth: su.bayWidth, sheetsPerBay: su.sheetsPerBay, allowance: su.allowance, lap: 0 };
+  }
+  function settings() { return C.resolveSettings(baseSettings()); }
+  function bayRise(k) {            // top rail rise from P(k+1) to P(k+2), mm; null until measured
+    var b = state.job.bays[k];
+    return C.diagonalRise(pos(b.width), incoming(k + 1), pos(b.diag));
+  }
+  function coreJob() {
+    var sw = settings().sheetWidth;
     return {
-      settings: { mode: 'gap', levelRail: 'top', cutEnds: 'bottom', widthMode: 'each',
-                  bayWidth: su.bayWidth, sheetsPerBay: su.sheetsPerBay, allowance: su.allowance, lap: 0 },
+      settings: baseSettings(),
       posts: state.job.posts.map(function (p) { return { g: p.g, g2: p.g2, step: p.step }; }),
-      bays: state.job.bays.map(function (b) { return { width: b.width }; })
+      bays: state.job.bays.map(function (b, k) {
+        var r = bayRise(k), perSheet = r === null ? 0 : r / pos(b.width) * sw;
+        return { width: b.width, rise: String(Math.abs(perSheet)), riseDir: perSheet < 0 ? 'down' : 'up' };
+      })
     };
   }
-  function settings() { return C.resolveSettings(coreJob().settings); }
   function lastPost() { return state.job.posts.length - 1; }
   function outgoing(k) { var p = state.job.posts[k]; return p.step && k > 0 && k < lastPost() ? pos(p.g2) : pos(p.g); }
   function incoming(k) { return pos(state.job.posts[k].g); }
@@ -648,7 +678,7 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
     var list = ['setup'];
     state.job.posts.forEach(function (p, k) {
       list.push('post:' + k);
-      if (k < lastPost()) list.push('bay:' + k);
+      if (k < lastPost()) list.push('bay:' + k, 'diag:' + k);
     });
     return list;
   }
@@ -660,13 +690,18 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
       return pos(p.g) !== null && (!(p.step && k > 0 && k < lastPost()) || pos(p.g2) !== null);
     }
     if ((m = /^bay:(\d+)$/.exec(sc))) return pos(state.job.bays[+m[1]].width) !== null;
+    if ((m = /^diag:(\d+)$/.exec(sc))) {
+      var bb = state.job.bays[+m[1]], d = pos(bb.diag), w = pos(bb.width);
+      return d !== null && (w === null || d > w);
+    }
     return true;
   }
   function firstOpen() { return seq().filter(function (sc) { return !screenDone(sc); })[0] || null; }
   function nextOf(sc) {
     var m;
     if (sc === 'setup') return 'post:0';
-    if ((m = /^bay:(\d+)$/.exec(sc))) return 'post:' + (+m[1] + 1);
+    if ((m = /^bay:(\d+)$/.exec(sc))) return 'diag:' + m[1];
+    if ((m = /^diag:(\d+)$/.exec(sc))) return 'post:' + (+m[1] + 1);
     if ((m = /^post:(\d+)$/.exec(sc))) {
       var k = +m[1];
       return k < lastPost() ? 'bay:' + k : 'results';
@@ -678,7 +713,8 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
     if (sc === 'setup') return 'start';
     if (sc === 'post:0') return 'setup';
     if ((m = /^bay:(\d+)$/.exec(sc))) return 'post:' + m[1];
-    if ((m = /^post:(\d+)$/.exec(sc))) return 'bay:' + (+m[1] - 1);
+    if ((m = /^diag:(\d+)$/.exec(sc))) return 'bay:' + m[1];
+    if ((m = /^post:(\d+)$/.exec(sc))) return 'diag:' + (+m[1] - 1);
     if (sc === 'results') return 'post:' + lastPost();
     return 'start';
   }
@@ -689,6 +725,7 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
     if (sc === 'setup') return 'Step 1 · Setup';
     if ((m = /^post:(\d+)$/.exec(sc))) return 'Step ' + i + ' · P' + (+m[1] + 1) + ' gap';
     if ((m = /^bay:(\d+)$/.exec(sc))) return 'Step ' + i + ' · Bay ' + (+m[1] + 1) + ' width';
+    if ((m = /^diag:(\d+)$/.exec(sc))) return 'Step ' + i + ' · Bay ' + (+m[1] + 1) + ' diagonal';
     return '';
   }
 
@@ -706,8 +743,18 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
       '<polygon points="' + x2 + ',' + y + ' ' + (x2 - 9) + ',' + (y - 4.5) + ' ' + (x2 - 9) + ',' + (y + 4.5) + '"/>' +
       (label ? '<text x="' + ((x1 + x2) / 2) + '" y="' + (y - 8) + '" text-anchor="middle">' + esc(label) + '</text>' : '') + '</g>';
   }
+  function arrowD(x1, y1, x2, y2, cls, label) {
+    var dx = x2 - x1, dy = y2 - y1, len = Math.sqrt(dx * dx + dy * dy), ux = dx / len, uy = dy / len, px = -uy, py = ux;
+    function head(x, y, sgn) {
+      var bx = x - sgn * ux * 10, by = y - sgn * uy * 10;
+      return '<polygon points="' + x + ',' + y + ' ' + (bx + px * 4.5).toFixed(1) + ',' + (by + py * 4.5).toFixed(1) + ' ' + (bx - px * 4.5).toFixed(1) + ',' + (by - py * 4.5).toFixed(1) + '"/>';
+    }
+    return '<g class="hs-a ' + cls + '"><line x1="' + (x1 + ux * 7).toFixed(1) + '" y1="' + (y1 + uy * 7).toFixed(1) + '" x2="' + (x2 - ux * 7).toFixed(1) + '" y2="' + (y2 - uy * 7).toFixed(1) + '"/>' +
+      head(x1, y1, -1) + head(x2, y2, 1) +
+      (label ? '<text x="' + ((x1 + x2) / 2 + 8) + '" y="' + ((y1 + y2) / 2 - 8) + '" text-anchor="start">' + esc(label) + '</text>' : '') + '</g>';
+  }
   function picture(kind, k) {
-    var left, right, L, R, Wd;
+    var left, right, L, R, Wd, Dg = null;
     if (kind === 'post' && k === 0) {
       left = 'P1'; right = 'P2';
       L = ['hot', 'measure this']; R = ['off', '']; Wd = ['off', ''];
@@ -717,8 +764,10 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
       L = lv ? ['done', mm(lv)] : ['off', '']; R = ['hot', 'measure this']; Wd = wv ? ['done', mm(wv)] : ['off', ''];
     } else {
       left = 'P' + (k + 1); right = 'P' + (k + 2);
-      var a = outgoing(k), b = incoming(k + 1);
-      L = a ? ['done', mm(a)] : ['off', '']; R = b ? ['done', mm(b)] : ['off', '']; Wd = ['hot', 'measure this'];
+      var a = outgoing(k), b = incoming(k + 1), w = pos(state.job.bays[k].width);
+      L = a ? ['done', mm(a)] : ['off', '']; R = b ? ['done', mm(b)] : ['off', ''];
+      if (kind === 'diag') { Wd = w ? ['done', mm(w)] : ['off', '']; Dg = ['hot', 'measure this']; }
+      else Wd = ['hot', 'measure this'];
     }
     return '<svg viewBox="0 0 320 180" role="img" aria-label="Fence bay between ' + left + ' and ' + right + '. The red arrow is what to measure.">' +
       '<polygon class="hs-sheet" points="46,39 274,29 274,108 46,125"/>' +
@@ -730,7 +779,8 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
       '<text class="hs-pl" x="280" y="13" text-anchor="middle">' + right + '</text>' +
       arrowV(60, 40, 124, L[0], L[1], 'start') +
       arrowV(260, 30, 107, R[0], R[1], 'end') +
-      arrowH(48, 272, 170, Wd[0], Wd[1]) + '</svg>';
+      arrowH(48, 272, 170, Wd[0], Wd[1]) +
+      (Dg ? arrowD(48, 40, 272, 109, Dg[0], Dg[1]) : '') + '</svg>';
   }
 
   /* ---------- pieces ---------- */
@@ -750,11 +800,11 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
     var html = '<section class="card">' +
       '<p class="eyebrow">Sheet fencing · cut to fit</p>' +
       '<h1>Two-Tape Fence Cuts</h1>' +
-      '<p class="instr">Measure the gap at each post and the width of each bay. No more measuring at every sheet. You get <b>two marks per bay</b>, and one string line marks every sheet in it.</p>' +
+      '<p class="instr">Measure each post and each bay, not every sheet. Each bay gets <b>four marks and two string lines</b>, which mark the top and bottom cut on every sheet in it.</p>' +
       '<ol class="steps3">' +
       '<li><b>Each post:</b> the gap between the rails, tape held upright.</li>' +
-      '<li><b>Each bay:</b> the width from post to post.</li>' +
-      '<li><b>Each bay:</b> lay its sheets out, make two marks, run one string line, cut.</li></ol>' +
+      '<li><b>Each bay:</b> the width from post to post, then corner to corner.</li>' +
+      '<li><b>Cutting:</b> lay a bay\u2019s sheets out, make four marks, run two strings, cut top and bottom.</li></ol>' +
       '<div class="actions">';
     if (measured) {
       html += '<button class="btn primary" type="button" data-act="continue" data-primary>Carry on with this job (' + measured + ' ' + plural(measured, 'post', 'posts') + ' measured)</button>' +
@@ -819,54 +869,81 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
       bigInput('f-w', b.width, 'h', null) +
       '<button class="chipbtn" type="button" data-act="fullbay">Full bay: ' + mm(s.bayWidth) + '</button>' +
       '<p class="note" id="live-fit"></p>' +
-      navButtons('Next: P' + (k + 2) + ' gap →') + '</section>';
+      navButtons('Next: bay ' + (k + 1) + ' diagonal \u2192') + '</section>';
   }
 
+  function diagHTML(k) {
+    var b = state.job.bays[k];
+    return '<section class="card">' +
+      '<p class="eyebrow">Bay ' + (k + 1) + ' · corner to corner</p><h1>Bay ' + (k + 1) + ' diagonal</h1>' +
+      '<p class="instr">Pull the tape straight across the open bay, like checking for square. Go from the <b>underside of the top rail at P' + (k + 1) +
+      '</b> to the <b>top of the bottom rail at P' + (k + 2) + '</b>, both right beside the posts.</p>' +
+      '<div class="pic">' + picture('diag', k) + '</div>' +
+      bigInput('f-d', b.diag || '', 'h', null) +
+      '<p class="note" id="live-diag"></p>' +
+      '<p class="note">This tells the app how much of the slope is in the top rail, so the top of each sheet can be cut to match it.</p>' +
+      navButtons('Next: P' + (k + 2) + ' gap \u2192') + '</section>';
+  }
+  function bayReady(k) {
+    return ['post:' + k, 'bay:' + k, 'diag:' + k, 'post:' + (k + 1)].every(screenDone) && bayRise(k) !== null;
+  }
   function resultsHTML() {
     var pl = C.planRun(coreJob()), su = state.job.setup;
-    var ready = pl.bays.filter(function (b) { return !b.errors.length; });
-    var sheets = ready.reduce(function (n, b) { return n + b.sheets.length; }, 0);
+    var sheets = 0;
+    pl.bays.forEach(function (b, k) { if (bayReady(k) && !b.errors.length) sheets += b.sheets.length; });
     var html = '<section class="card">' +
       '<p class="eyebrow">Cut list</p><h1>' + sheets + ' ' + plural(sheets, 'sheet', 'sheets') + ', ' + pl.bays.length + ' ' + plural(pl.bays.length, 'bay', 'bays') + '</h1>' +
-      '<p class="instr">Mark each bay’s sheets <b>all at once</b>: two marks and one string line per bay, not two measurements per sheet.</p>' +
-      '<p class="note">Lay sheets face up with their tops away from you, so the edge that faces the lower-numbered post is on your left.</p>' +
+      '<p class="instr">Every sheet is cut <b>top and bottom</b>. Mark a whole bay at once: four marks and two string lines per bay.</p>' +
+      '<p class="note">Lay sheets face up with their tops away from you, so the edge that faces the lower-numbered post is on your left. Every mark is measured down from the factory top.</p>' +
       '<div class="actions"><button class="btn primary" type="button" data-act="copy">Copy cut list</button></div>' +
       '<p class="status" id="status" aria-live="polite"></p>' +
       '<textarea class="copy-fallback" id="copy-fallback" readonly hidden aria-label="Cut list text"></textarea></section>';
 
     pl.bays.forEach(function (bay, k) {
+      var ready = bayReady(k) && !bay.errors.length;
       html += '<section class="card"><div class="bay-head"><h2>Bay ' + (k + 1) + '</h2><span>P' + (k + 1) + ' → P' + (k + 2) +
-        (bay.errors.length ? '' : ' · ' + mm(bay.width) + ' wide · ' + bay.sheets.length + ' ' + plural(bay.sheets.length, 'sheet', 'sheets')) + '</span></div>';
-      if (bay.errors.length) {
-        var open = seq().filter(function (sc) { return !screenDone(sc) && (sc === 'post:' + k || sc === 'bay:' + k || sc === 'post:' + (k + 1)); })[0];
+        (ready ? ' · ' + mm(bay.width) + ' wide · ' + bay.sheets.length + ' ' + plural(bay.sheets.length, 'sheet', 'sheets') : '') + '</span></div>';
+      if (!ready) {
+        var open = seq().filter(function (sc) {
+          return !screenDone(sc) && [ 'post:' + k, 'bay:' + k, 'diag:' + k, 'post:' + (k + 1) ].indexOf(sc) >= 0;
+        })[0] || 'diag:' + k;
         html += '<p class="err">Not measured yet.</p>' +
-          (open ? '<button class="btn primary" type="button" data-act="goto" data-arg="' + open + '">Measure it →</button>' : '') + '</section>';
+          '<button class="btn primary" type="button" data-act="goto" data-arg="' + open + '">Measure it →</button></section>';
         return;
       }
       var n = bay.sheets.length, first = (k + 1) + '.1', last = (k + 1) + '.' + n;
       var rip = bay.sheets[n - 1].rip > 0.5 ? bay.sheets[n - 1] : null;
+      var L = bay.layout, rise = bayRise(k);
+      var rightLbl = rip ? mm(bay.width) + ' across' : 'Right edge of ' + last;
+      function cell(v) { return '<span class="num">' + mm(v) + (Math.round(v) === 0 ? '<small> at the top</small>' : '') + '</span>'; }
 
-      // Whole bay at once: laid out as fitted, every mark lies on one straight line
-      // from the P reading at the left edge to the next P reading at the bay width.
+      // Whole bay at once: laid out as fitted with the factory tops square across, the top
+      // cut and the bottom cut are each one straight line through the whole bay.
       html += '<div class="whole"><p class="lbl">Whole bay at once</p>' +
-        '<div class="marks"><div><span class="lbl">Left edge of ' + first + '</span><span class="num">' + mm(bay.g0) + '</span></div>' +
-        '<div><span class="lbl">' + (rip ? mm(bay.width) + ' across' : 'Right edge of ' + last) + '</span><span class="num">' + mm(bay.g1) + '</span></div></div>' +
+        '<div class="marks4"><span></span><span class="lbl">Left edge of ' + first + '</span><span class="lbl">' + rightLbl + '</span>' +
+        '<span class="lbl">Top cut</span>' + cell(L.top[0]) + cell(L.top[1]) +
+        '<span class="lbl">Bottom cut</span>' + cell(L.bottom[0]) + cell(L.bottom[1]) + '</div>' +
         '<ol class="howcut">' +
         '<li>Lay ' + (n > 1 ? 'sheets ' + first + ' to ' + last + ' side by side, lapped exactly as they go in' : 'sheet ' + first) +
-        ', with the tops lined up along a straight string or board.</li>' +
-        '<li>From the top, mark <b>' + mm(bay.g0) + '</b> down the left edge of ' + first + ' and <b>' + mm(bay.g1) + '</b> ' +
-          (rip ? mm(bay.width) + ' across from that edge (on ' + last + ', that’s its rip line)' : 'down the right edge of ' + last) + '.</li>' +
-        '<li>Pull a string tight between the two marks and tick every pan under it. Cut each sheet on its ticks.</li>' +
+          ', factory tops pushed against a straight string pulled square across the sheets.</li>' +
+        '<li><b>Top cut:</b> from the tops, mark <b>' + mm(L.top[0]) + '</b> on the left edge of ' + first + ' and <b>' + mm(L.top[1]) + '</b> ' +
+          (rip ? 'at ' + mm(bay.width) + ' across' : 'on the right edge of ' + last) + '. String between them, tick every pan.</li>' +
+        '<li><b>Bottom cut:</b> from the tops, mark <b>' + mm(L.bottom[0]) + '</b> and <b>' + mm(L.bottom[1]) + '</b> the same way. String, tick every pan.</li>' +
+        '<li>Cut every sheet on both lines.</li>' +
         (rip ? '<li>Rip ' + last + ' to <b>' + mm(rip.width) + '</b> wide, keeping its left edge.</li>' : '') + '</ol>' +
-        '<p class="note">These are the same marks you’d get measuring both sides of every sheet at the fence.</p></div>';
+        '<p class="note">The top rail ' + (Math.abs(rise) < 0.5 ? 'is level' : (rise < 0 ? 'falls ' : 'rises ') + '<b>' + mm(Math.abs(rise)) + '</b> mm') +
+        ' across this bay. Laid out this way, each sheet needs to be at least <b>' + mm(Math.max(L.bottom[0], L.bottom[1])) + '</b> mm long.</p></div>';
 
-      // One sheet at a time, when there isn't room to lay the bay out.
+      // One sheet at a time: four marks, each from that sheet's own factory top.
       html += '<details class="each"><summary>Or one sheet at a time</summary>' +
-        '<p class="note">From the top, mark the left number down the left edge and the right number down the right edge. Join them and cut.</p>' +
+        '<p class="note">For each sheet, measure down from its factory top: mark the top cut at the left and right edges and join them, then the bottom cut the same way. Cut both.</p>' +
         '<ol class="sheets">';
       bay.sheets.forEach(function (sh) {
+        var t = sh.lines[0], bl = t.l + sh.lines[1].l, br = t.r + sh.lines[1].r;
         html += '<li><span class="sid">Sheet ' + (k + 1) + '.' + sh.n + '</span>' +
-          '<span class="pair"><span><small>left</small> ' + mm(sh.lenL) + '</span><span><small>right</small> ' + mm(sh.lenR) + '</span></span>' +
+          '<span class="q4"><span></span><small>left</small><small>right</small>' +
+          '<small>top</small><span>' + mm(t.l) + '</span><span>' + mm(t.r) + '</span>' +
+          '<small>bottom</small><span>' + mm(bl) + '</span><span>' + mm(br) + '</span></span>' +
           (sh.rip > 0.5 ? '<span class="rip">Part sheet: cut it like the others, then rip it to ' + mm(sh.width) + ' wide, keeping the left edge.</span>' : '') + '</li>';
       });
       html += '</ol></details>';
@@ -882,6 +959,7 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
         var k = +m[1], p = state.job.posts[k];
         label = 'P' + (k + 1) + ' gap'; val = p.step && k > 0 && k < lastPost() ? (p.g || '?') + ' / ' + (p.g2 || '?') : (p.g || '?');
       } else if ((m = /^bay:(\d+)$/.exec(sc))) { label = 'Bay ' + (+m[1] + 1) + ' width'; val = state.job.bays[+m[1]].width || '?'; }
+      else if ((m = /^diag:(\d+)$/.exec(sc))) { label = 'Bay ' + (+m[1] + 1) + ' diagonal'; val = state.job.bays[+m[1]].diag || '?'; }
       html += '<button type="button" data-act="goto" data-arg="' + sc + '"' + (screenDone(sc) ? '' : ' class="missing"') + '>' +
         esc(label) + ' <b>' + esc(val) + '</b></button>';
     });
@@ -899,6 +977,7 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
     else if (sc === 'setup') html = setupHTML();
     else if ((m = /^post:(\d+)$/.exec(sc))) html = postHTML(+m[1]);
     else if ((m = /^bay:(\d+)$/.exec(sc))) html = bayHTML(+m[1]);
+    else if ((m = /^diag:(\d+)$/.exec(sc))) html = diagHTML(+m[1]);
     else html = resultsHTML();
     $('#screen').innerHTML = html;
     $('#crumb').textContent = crumb(sc);
@@ -936,6 +1015,17 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
         msg = 'That’s ' + mm(Math.abs(now - prev)) + ' mm different from P' + k + '. Worth a second look.';
       }
       warn.textContent = msg; warn.hidden = !msg;
+    }
+    if ((m = /^diag:(\d+)$/.exec(sc))) {
+      var kd = +m[1], bd = state.job.bays[kd], dd = pos(bd.diag), wd = pos(bd.width), out = $('#live-diag'), txt = '';
+      if (dd !== null && wd !== null && dd <= wd) txt = '<span class="warn">The diagonal is always longer than the width (' + mm(wd) + '). Measure it again.</span>';
+      else if (dd !== null && wd !== null) {
+        var rr = bayRise(kd);
+        if (rr === null) txt = 'Enter the P' + (kd + 2) + ' gap next and the top rail\u2019s slope follows.';
+        else if (Math.abs(rr) > 0.35 * wd) txt = '<span class="warn">That makes the top rail very steep. Check the diagonal and the width.</span>';
+        else txt = 'The top rail ' + (Math.abs(rr) < 0.5 ? 'is level' : (rr < 0 ? 'falls ' : 'rises ') + '<b>' + mm(Math.abs(rr)) + '</b> mm') + ' across this bay.';
+      }
+      out.innerHTML = txt;
     }
     if ((m = /^bay:(\d+)$/.exec(sc))) {
       var W2 = pos(state.job.bays[+m[1]].width), fit = $('#live-fit');
@@ -1011,6 +1101,7 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
     if (id.indexOf('s-') === 0) state.job.setup[id.slice(2)] = e.target.value;
     else if ((m = /^post:(\d+)$/.exec(sc)) && (id === 'f-g' || id === 'f-g2')) state.job.posts[+m[1]][id.slice(2)] = e.target.value;
     else if ((m = /^bay:(\d+)$/.exec(sc)) && id === 'f-w') state.job.bays[+m[1]].width = e.target.value;
+    else if ((m = /^diag:(\d+)$/.exec(sc)) && id === 'f-d') state.job.bays[+m[1]].diag = e.target.value;
     else return;
     live();
     save();
@@ -1030,12 +1121,16 @@ h2 { font: 700 1.5rem/1 var(--display); letter-spacing: 0.02em; }
     var pl = C.planRun(coreJob());
     var out = ['TWO-TAPE FENCE CUTS', 'Marks measured down from the top. Sheets face up, tops away, lower-numbered post side on the left.', ''];
     pl.bays.forEach(function (bay, k) {
-      if (bay.errors.length) { out.push('Bay ' + (k + 1) + ': not measured yet', ''); return; }
+      if (bay.errors.length || !bayReady(k)) { out.push('Bay ' + (k + 1) + ': not measured yet', ''); return; }
       out.push('Bay ' + (k + 1) + ' (P' + (k + 1) + '-P' + (k + 2) + ', ' + mm(bay.width) + ' wide, ' + bay.sheets.length + ' sheets)');
-      out.push('  Whole bay: ' + mm(bay.g0) + ' at the left edge, ' + mm(bay.g1) + ' at ' + mm(bay.width) + ' across. String between, tick every pan.');
-      out.push('  One at a time:');
+      var L = bay.layout;
+      out.push('  Whole bay, from the factory tops (left edge / ' + mm(bay.width) + ' across):');
+      out.push('    top cut     ' + mm(L.top[0]) + ' / ' + mm(L.top[1]));
+      out.push('    bottom cut  ' + mm(L.bottom[0]) + ' / ' + mm(L.bottom[1]));
+      out.push('  One at a time, from each sheet\'s own top (left / right):');
       bay.sheets.forEach(function (sh) {
-        out.push('  Sheet ' + (k + 1) + '.' + sh.n + '   left ' + mm(sh.lenL) + '   right ' + mm(sh.lenR) +
+        out.push('    Sheet ' + (k + 1) + '.' + sh.n + '   top ' + mm(sh.lines[0].l) + ' / ' + mm(sh.lines[0].r) +
+          '   bottom ' + mm(sh.lines[0].l + sh.lines[1].l) + ' / ' + mm(sh.lines[0].r + sh.lines[1].r) +
           (sh.rip > 0.5 ? '   rip to ' + mm(sh.width) + ' wide' : ''));
       });
       out.push('');

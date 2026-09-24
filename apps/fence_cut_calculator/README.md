@@ -24,8 +24,9 @@ node apps/fence_cut_calculator/tests/test_core.js
 
 ## Using it
 
-The page walks you through the job one screen at a time. Each screen asks for one
-measurement, and its picture shows that measurement as a red arrow.
+The page walks you through the job one screen at a time. Each screen asks for one tape
+measurement, and its picture shows that measurement as a red arrow. **Both ends of every
+sheet are cut:** the top to the top rail and the bottom to the bottom rail.
 
 1. **Setup, once per job:**
    - sheets in a full bay;
@@ -33,36 +34,37 @@ measurement, and its picture shows that measurement as a red arrow.
    - any extra length added to every reading.
 
    The 2365 mm / 3 sheet defaults are placeholders, so set them from your own sheets.
-   With the rails already up, each sheet is lifted into the top rail and dropped into the
-   bottom rail. Set the extra length to the top rail's channel depth less about 5 mm.
 2. **P1 gap:** hold the tape upright beside the post. Measure from the top of the bottom
    rail to the underside of the top rail.
 3. **Bay 1 width:** post face to post face, with the tape level. *Full bay* fills in the
-   standard width. The screen tells you how many sheets the bay takes, and whether one
-   needs ripping.
-4. **P2 gap**, then either *Another bay* or *That's the last post*. If the rails change
+   standard width.
+4. **Bay 1 diagonal:** corner to corner across the open bay, like checking for square.
+   Measure from the underside of the top rail at P1 to the top of the bottom rail at P2.
+5. **P2 gap**, then either *Another bay* or *That's the last post*. If the rails change
    height at a post, that post takes a reading on each side. A corner is just another
    post.
-5. **Cut list:** each bay opens with **two marks**.
-   1. Lay the bay's sheets face up, side by side and lapped as they go in, with the tops
-      against a straight string.
-   2. Mark the left number on the first sheet's left edge and the right number on the last
-      sheet's right edge (or at the bay width, on a part sheet's rip line).
-   3. Pull a string between the two marks, tick every pan under it, and cut.
+6. **Cut list:** each bay gets **four marks**.
+   1. Lay the bay's sheets face up, side by side and lapped as they go in, with the factory
+      tops against a string pulled square across them.
+   2. **Top cut:** mark the top-cut numbers at the left edge of the first sheet and the
+      right edge of the last (or at the bay width, on a part sheet's rip line). String
+      between them, tick every pan.
+   3. **Bottom cut:** mark the bottom-cut numbers the same way. String, tick.
+   4. Cut every sheet on both lines.
 
-   *Or one sheet at a time* gives each sheet's left and right numbers.
+   *Or one sheet at a time* gives each sheet its top and bottom marks at both edges,
+   measured from its own factory top.
 
-**No questions about the top rail.** Top rails are never level, and it doesn't matter.
-The factory top stays square and only the bottom is cut, the same as marking each sheet's
-two sides at the fence. Each sheet's length at an edge is the rail-to-rail gap there.
-Both rails are straight, so that gap changes in a straight line from one post to the
-next, whatever the slope of either rail. The two post readings therefore fix every
-sheet's marks, and laid out as fitted, the sheets put those marks on one string line.
-That's 2 marks per bay, instead of 2 measurements per sheet at the fence.
+**Why the diagonal.** The two post gaps give each sheet's length at every edge. They
+can't say how the slope is shared between the rails, and cutting the top as well as the
+bottom needs exactly that. The width and the diagonal settle it, with the tape alone.
+Call the diagonal *d*, the bay width *W*, and the end post's gap *g₁*. The top rail's
+rise across the bay is *g₁ − √(d² − W²)*. So a bay costs three tape measurements (its
+width, its diagonal, and its end post's gap), and the first post's gap is shared with
+the bay before. That's all the information the two cut lines contain.
 
-The calculation core in `index.html` also supports string-line readings, raked-rail rise
-inputs, laps, stack cutting, and stock-length checks. The gate below tests all of them.
-The step-by-step screens use only the gap-at-each-post path.
+The calculation core in `index.html` also supports string-line readings, laps, stack
+cutting, and stock-length checks. The gate below tests all of them.
 
 ## Why two readings are enough (the derivation)
 
